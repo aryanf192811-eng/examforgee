@@ -1,0 +1,4 @@
+﻿src/lib/dompurify-config.ts(3,38): error TS2503: Cannot find namespace 'DOMPurify'.
+src/lib/dompurify-config.ts(23,3): error TS2352: Conversion of type 'TrustedHTML' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+src/pages/Dashboard.tsx(8,9): error TS6133: 'isLoading' is declared but its value is never read.
+src/pages/Practice.tsx(6,9): error TS6133: 'navigate' is declared but its value is never read.
