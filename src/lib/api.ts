@@ -4,7 +4,6 @@ import type {
   SubjectResponse,
   ChapterResponse,
   FlashcardResponse,
-  LeaderboardEntry,
   LeaderboardResponse,
   QuizSessionResponse,
   QuizSubmitResponse,
