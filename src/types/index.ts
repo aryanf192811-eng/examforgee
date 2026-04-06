@@ -176,11 +176,23 @@ export interface FlashcardReviewResponse {
 // ── Shared Types ───────────────────────────────────────────────────────
 
 export interface LeaderboardEntry {
+  rank: number;
   user_id: string;
-  display_name: string;
+  name: string;
+  avatar_url: string | null;
+  college: string | null;
   total_points: number;
   weekly_points: number;
-  rank: number;
+  is_current_user: boolean;
+}
+
+export interface LeaderboardResponse {
+  scope: string;
+  entries: LeaderboardEntry[];
+  total_entries: number;
+  current_user_rank: number | null;
+  page: number;
+  limit: number;
 }
 
 export interface DoubtCreateRequest {

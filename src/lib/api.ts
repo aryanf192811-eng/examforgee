@@ -5,6 +5,7 @@ import type {
   ChapterResponse,
   FlashcardResponse,
   LeaderboardEntry,
+  LeaderboardResponse,
   QuizSessionResponse,
   QuizSubmitResponse,
   BookmarkResponse,
@@ -147,8 +148,8 @@ export const createBookmark = (body: {
 export const deleteBookmark = (id: string) =>
   apiFetch<void>(`/api/bookmarks/${id}`, { method: "DELETE" });
 
-export const fetchLeaderboard = (branchSlug = "cse") =>
-  apiFetch<LeaderboardEntry[]>(`/api/leaderboard?branch_slug=${branchSlug}`);
+export const fetchLeaderboard = (scope = "weekly", page = 1) =>
+  apiFetch<LeaderboardResponse>(`/api/leaderboard?scope=${scope}&page=${page}`);
 
 export const fetchProfile = () => apiFetch<UserProfile>("/api/profile/me");
 

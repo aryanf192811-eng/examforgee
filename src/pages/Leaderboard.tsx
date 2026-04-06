@@ -11,7 +11,7 @@ export function Leaderboard() {
     async function load() {
       try {
         const data = await fetchLeaderboard(scope);
-        setLeaderboard(data);
+        setLeaderboard(data.entries || []);
       } catch (err) {
         console.error("Failed to load leaderboard:", err);
       } finally {
@@ -31,8 +31,9 @@ export function Leaderboard() {
     );
   }
 
-  const topThree = leaderboard.slice(0, 3);
-  const restEntries = leaderboard.slice(3);
+  const safeLeaderboard = Array.isArray(leaderboard) ? leaderboard : [];
+  const topThree = safeLeaderboard.slice(0, 3);
+  const restEntries = safeLeaderboard.slice(3);
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10 animate-fade-in relative min-h-[80vh]">
@@ -71,7 +72,7 @@ export function Leaderboard() {
               <div className="flex flex-col items-center pb-4 opacity-90">
                 <div className="w-16 h-16 rounded-full bg-secondary-container mb-3 border-4 border-surface shadow-md"></div>
                 <div className="font-bold text-sm max-w-[80px] truncate">
-                  {topThree[1].display_name}
+                  {topThree[1].name}
                 </div>
                 <div className="text-xs text-on-surface-variant">
                   {(topThree[1].total_points / 1000).toFixed(1)}k pts
@@ -89,7 +90,7 @@ export function Leaderboard() {
                 </div>
                 <div className="w-20 h-20 rounded-full bg-primary mb-3 border-4 border-surface shadow-lg"></div>
                 <div className="font-bold text-primary text-sm max-w-[100px] truncate">
-                  {topThree[0].display_name}
+                  {topThree[0].name}
                 </div>
                 <div className="text-xs text-on-surface-variant font-bold">
                   {(topThree[0].total_points / 1000).toFixed(1)}k pts
@@ -104,7 +105,7 @@ export function Leaderboard() {
               <div className="flex flex-col items-center pb-4 opacity-80">
                 <div className="w-16 h-16 rounded-full bg-tertiary-container mb-3 border-4 border-surface shadow-md"></div>
                 <div className="font-bold text-sm max-w-[80px] truncate">
-                  {topThree[2].display_name}
+                  {topThree[2].name}
                 </div>
                 <div className="text-xs text-on-surface-variant">
                   {(topThree[2].total_points / 1000).toFixed(1)}k pts
@@ -137,7 +138,7 @@ export function Leaderboard() {
                   </div>
                   <div className="w-10 h-10 rounded-full bg-surface-container-high"></div>
                   <div className="font-medium text-on-surface truncate">
-                    {entry.display_name}
+                    {entry.name}
                   </div>
                 </div>
                 <div className="font-mono text-sm text-on-surface-variant">
