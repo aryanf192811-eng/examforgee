@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import {
   getAuth,
   GoogleAuthProvider,
@@ -18,25 +18,35 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
+} as const;
 
-let app: ReturnType<typeof initializeApp>;
-let auth: ReturnType<typeof getAuth>;
-let googleProvider: GoogleAuthProvider;
+const requiredConfig = Object.entries(firebaseConfig).filter(([, value]) => !value?.trim());
 
-try {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  googleProvider = new GoogleAuthProvider();
-} catch (e) {
-  console.warn('Firebase initialization failed:', e);
-  // Create a minimal mock so the app doesn't crash
-  app = {} as any;
-  auth = {} as any;
-  googleProvider = {} as any;
+if (requiredConfig.length > 0) {
+  const missingKeys = requiredConfig.map(([key]) => key).join(', ');
+  throw new Error(
+    `ExamForge Firebase configuration is incomplete. Missing: ${missingKeys}. ` +
+      'Check Vercel Production environment variables and redeploy without build cache.',
+  );
 }
 
-export { auth, googleProvider };
+if (import.meta.env.DEV) {
+  console.log('[ExamForge] Firebase config check:', {
+    apiKey: firebaseConfig.apiKey ? 'set' : 'missing',
+    authDomain: firebaseConfig.authDomain ? 'set' : 'missing',
+    projectId: firebaseConfig.projectId ? 'set' : 'missing',
+    storageBucket: firebaseConfig.storageBucket ? 'set' : 'missing',
+    messagingSenderId: firebaseConfig.messagingSenderId ? 'set' : 'missing',
+    appId: firebaseConfig.appId ? 'set' : 'missing',
+  });
+}
+
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+export { app, auth, googleProvider };
+export default app;
 
 export const loginWithEmail = (email: string, password: string) =>
   signInWithEmailAndPassword(auth, email, password);

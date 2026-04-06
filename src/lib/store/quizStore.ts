@@ -1,15 +1,15 @@
 import { create } from 'zustand';
-import type { QuestionResponse } from '../../types';
+import type { QuizQuestion } from '../../types';
 
 interface QuizStore {
   sessionId: string | null;
-  questions: QuestionResponse[];
+  questions: QuizQuestion[];
   answers: Record<string, string | string[] | number>;
   flags: string[];
   currentIndex: number;
   timeLeft: number;
   isActive: boolean;
-  setSession: (sessionId: string, questions: QuestionResponse[], timeLeft: number) => void;
+  setSession: (sessionId: string, questions: QuizQuestion[], timeLeft: number) => void;
   setAnswer: (questionId: string, answer: string | string[] | number) => void;
   toggleFlag: (questionId: string) => void;
   setIndex: (index: number) => void;
