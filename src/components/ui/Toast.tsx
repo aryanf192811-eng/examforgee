@@ -23,7 +23,7 @@ export function ToastContainer() {
   return (
     <div className="fixed top-4 right-4 z-[200] flex flex-col gap-2 w-80">
       <AnimatePresence mode="popLayout">
-        {toasts.map((toast) => (
+        {toasts?.map((toast) => (
           <motion.div
             key={toast.id}
             layout

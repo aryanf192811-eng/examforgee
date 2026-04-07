@@ -34,7 +34,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 space-y-1 overflow-y-auto custom-scrollbar">
-        {navItems.map((item) => (
+        {navItems?.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

@@ -59,7 +59,7 @@ export function Landing() {
             </div>
             <div className="absolute -bottom-8 -left-8 bg-surface-container-lowest/80 backdrop-blur-md p-6 rounded-xl border border-outline-variant/40 max-w-xs">
               <div className="flex gap-2 mb-2 text-primary">
-                {[1,2,3,4,5].map(i => (
+                {[1,2,3,4,5]?.map(i => (
                   <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
                 ))}
               </div>

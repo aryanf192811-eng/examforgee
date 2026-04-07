@@ -127,7 +127,7 @@ export function Leaderboard() {
         {/* List */}
         {restEntries.length > 0 && (
           <div className="p-4 space-y-2">
-            {restEntries.map((entry, idx) => (
+            {restEntries?.map((entry, idx) => (
               <div
                 key={entry.user_id}
                 className="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-low transition-colors"

@@ -36,10 +36,10 @@ export function Notes() {
     if (subjectSlug && subjectSlug !== "intro") {
       async function loadChapters() {
         try {
-          const subject = subjects.find((s) => s.slug === subjectSlug);
+          const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
           if (subject) {
             const data = await fetchChapters(subject.id);
-            setChapters(data);
+            setChapters(Array.isArray(data) ? data : []);
           }
         } catch (err) {
           console.error("Failed to load chapters:", err);
@@ -100,10 +100,10 @@ export function Notes() {
         time_spent_s: timeSpent
       });
       // Refresh chapters to show checkmark
-      const subject = subjects.find((s) => s.slug === subjectSlug);
+      const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
       if (subject) {
         const data = await fetchChapters(subject.id);
-        setChapters(data);
+        setChapters(Array.isArray(data) ? data : []);
       }
       navigate(`/notes/${subjectSlug}/intro`);
     } catch (err) {
@@ -125,7 +125,7 @@ export function Notes() {
 
   // If viewing a specific note
   if (subjectSlug && chapterId && chapterId !== 'intro') {
-    const currentChapter = chapters.find(c => c.id === chapterId);
+    const currentChapter = (Array.isArray(chapters) ? chapters : []).find(c => c.id === chapterId);
     
     return (
       <div className="p-6 md:p-10 max-w-4xl mx-auto animate-fade-in relative pb-32">
@@ -202,7 +202,7 @@ export function Notes() {
 
   // If viewing a subject (show chapters list)
   if (subjectSlug && chapterId === "intro") {
-    const subject = subjects.find((s) => s.slug === subjectSlug);
+    const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
     return (
       <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10 animate-fade-in">
         <button
@@ -235,7 +235,7 @@ export function Notes() {
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {chapters.map((chapter) => (
+            {(Array.isArray(chapters) ? chapters : []).map((chapter) => (
               <div
                 key={chapter.id}
                 onClick={() => navigate(`/notes/${subjectSlug}/${chapter.id}`)}
@@ -290,7 +290,7 @@ export function Notes() {
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {subjects.map((sub) => (
+          {(Array.isArray(subjects) ? subjects : []).map((sub) => (
             <div
               key={sub.id}
               onClick={() => navigate(`/notes/${sub.slug}/intro`)}

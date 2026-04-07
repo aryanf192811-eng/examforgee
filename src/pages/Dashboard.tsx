@@ -32,7 +32,7 @@ export function Dashboard() {
   }, []);
 
   // Calculate overall mastery from top 3 subjects by progress
-  const topSubjects = subjects
+  const topSubjects = (Array.isArray(subjects) ? subjects : [])
     .filter((s) => s.is_published)
     .sort((a, b) => b.progress_pct - a.progress_pct)
     .slice(0, 3);
@@ -45,9 +45,9 @@ export function Dashboard() {
         )
       : 0;
 
-  const continueSubject = subjects
+  const continueSubject = (Array.isArray(subjects) ? subjects : [])
     .filter(s => s.progress_pct > 0 && s.progress_pct < 100)
-    .sort((a, b) => b.progress_pct - a.progress_pct)[0] || subjects[0];
+    .sort((a, b) => b.progress_pct - a.progress_pct)[0] || (Array.isArray(subjects) ? subjects[0] : undefined);
 
   if (loading) {
     return (
@@ -92,7 +92,7 @@ export function Dashboard() {
           </div>
 
           <div className="space-y-4 relative z-10">
-            {topSubjects.map((subject) => (
+            {topSubjects?.map((subject) => (
               <div key={subject.id}>
                 <div className="flex justify-between text-sm mb-2">
                   <span className="font-medium text-on-surface">
@@ -127,7 +127,7 @@ export function Dashboard() {
             <p className="text-on-surface-variant font-medium">Consecutive units of study</p>
           </div>
           <div className="flex gap-2 mt-8">
-            {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => {
+            {(Array.isArray(["M", "T", "W", "T", "F", "S", "S"]) ? ["M", "T", "W", "T", "F", "S", "S"] : []).map((day, i) => {
               const active = (profile?.current_streak || 0) > (6 - i);
               return (
                 <div

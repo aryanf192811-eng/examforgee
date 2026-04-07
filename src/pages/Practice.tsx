@@ -27,7 +27,7 @@ export function Practice() {
         try {
           setSubjectsLoading(true);
           const data = await fetchSubjects();
-          setSubjects(data.filter((s) => s.is_published));
+          setSubjects((Array.isArray(data) ? data : []).filter((s) => s.is_published));
         } catch (err) {
           console.error("Failed to load subjects:", err);
         } finally {
@@ -121,14 +121,14 @@ export function Practice() {
 
   const handleToggleFlag = (questionId: string) => {
     setFlags((prev) =>
-      prev.includes(questionId)
+      (Array.isArray(prev) ? prev : []).includes(questionId)
         ? prev.filter((q) => q !== questionId)
         : [...prev, questionId],
     );
   };
 
   const goToQuestion = (index: number) => {
-    if (index >= 0 && index < (quiz?.questions.length || 0)) {
+    if (index >= 0 && index < ((Array.isArray(quiz?.questions) ? quiz?.questions : []).length)) {
       setCurrentIndex(index);
     }
   };
@@ -166,7 +166,7 @@ export function Practice() {
         <div className="bg-white dark:bg-surface-container-low rounded-[2rem] p-8 border border-outline-variant/10">
           <h3 className="font-display text-xl font-bold mb-6">Subject Breakdown</h3>
           <div className="space-y-6">
-            {results.subject_analysis.map((s) => (
+            {(Array.isArray(results.subject_analysis) ? results.subject_analysis : []).map((s) => (
               <div key={s.subject} className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="font-bold">{s.subject}</span>
@@ -254,7 +254,7 @@ export function Practice() {
 
             <div className="space-y-3 mt-8">
               {currentQuestion.type === "MCQ" &&
-                currentQuestion.options.map((opt) => {
+                (Array.isArray(currentQuestion.options) ? currentQuestion.options : []).map((opt) => {
                   const selected = answers[currentQuestion.id] === opt.key;
                   return (
                     <button
@@ -324,7 +324,7 @@ export function Practice() {
                 Navigational Matrix
               </h3>
               <div className="grid grid-cols-5 gap-2">
-                {quiz.questions.map((q, idx) => (
+                {(Array.isArray(quiz.questions) ? quiz.questions : []).map((q, idx) => (
                   <button
                     key={q.id}
                     onClick={() => goToQuestion(idx)}
@@ -376,10 +376,10 @@ export function Practice() {
       </header>
 
       <div className="flex gap-2 p-1 bg-surface-container-low rounded-xl w-fit border border-outline-variant/10">
-        {(["daily", "subjects", "mocks"] as const).map((tab) => (
+        {(Array.isArray(["daily", "subjects", "mocks"]) ? ["daily", "subjects", "mocks"] : []).map((tab) => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => setActiveTab(tab as "daily" | "subjects" | "mocks")}
             className={`px-6 py-2.5 rounded-lg text-sm font-semibold capitalize transition-all ${
               activeTab === tab
                 ? "bg-white dark:bg-surface shadow-sm text-primary"
@@ -431,7 +431,7 @@ export function Practice() {
             </div>
           ) : subjects.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {subjects.map((subject) => (
+              {(Array.isArray(subjects) ? subjects : []).map((subject) => (
                 <div
                   key={subject.id}
                   className="bg-white dark:bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10 hover:shadow-lg transition-all"

@@ -12,7 +12,7 @@ const tabs = [
 export function BottomTabBar() {
   return (
     <div className="lg:hidden fixed bottom-0 left-0 w-full z-50 bg-surface/90 dark:bg-surface/90 backdrop-blur-2xl flex justify-around items-center px-4 pb-6 pt-3 shadow-[0_-10px_40px_rgba(104,52,235,0.08)] rounded-t-3xl border-t border-outline-variant/5">
-      {tabs.map((tab) => (
+      {tabs?.map((tab) => (
         <NavLink
           key={tab.to}
           to={tab.to}

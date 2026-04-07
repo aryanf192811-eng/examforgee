@@ -74,10 +74,10 @@ async function publicFetch<T>(path: string, init?: RequestInit): Promise<T> {
 // ── Public endpoints ──
 
 export const fetchSubjects = () =>
-  apiFetch<SubjectResponse[]>("/api/subjects"); // Requires auth for progress calculation
+  apiFetch<SubjectResponse[]>("/api/subjects").then((data) => (Array.isArray(data) ? data : [])); // Requires auth for progress calculation
 
 export const fetchChapters = (subjectId: string) =>
-  apiFetch<ChapterResponse[]>(`/api/chapters/${subjectId}`);
+  apiFetch<ChapterResponse[]>(`/api/chapters/${subjectId}`).then((data) => (Array.isArray(data) ? data : []));
 
 export const createSession = (idToken: string) =>
   publicFetch<SessionResponse>("/api/auth/session", {
@@ -132,7 +132,7 @@ export const reviewFlashcard = (flashcardId: string, quality: number) =>
   );
 
 export const fetchBookmarks = () =>
-  apiFetch<BookmarkResponse[]>("/api/bookmarks");
+  apiFetch<BookmarkResponse[]>("/api/bookmarks").then((data) => (Array.isArray(data) ? data : []));
 
 export const createBookmark = (body: {
   chapter_id: string;
