@@ -436,8 +436,14 @@ export function Practice() {
                   key={subject.id}
                   className="bg-white dark:bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10 hover:shadow-lg transition-all"
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center mb-6 text-2xl">
-                    {subject.icon || "📚"}
+                  <div className="w-14 h-14 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
+                    {subject.icon?.includes("<svg") ? (
+                      <div dangerouslySetInnerHTML={{ __html: subject.icon }} className="w-8 h-8" />
+                    ) : (
+                      <span className="material-symbols-outlined text-3xl">
+                        {subject.icon || "folder"}
+                      </span>
+                    )}
                   </div>
                   <h3 className="font-display text-xl font-bold text-on-surface mb-2">
                     {subject.name}

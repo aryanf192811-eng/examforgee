@@ -10,7 +10,6 @@ import type {
   BookmarkResponse,
   UserProfile,
   DoubtCreateRequest,
-  JudgeSubmitRequest,
   ProfileUpdateRequest,
   SessionResponse,
   NoteProgressRequest,
@@ -142,7 +141,12 @@ export const reviewFlashcard = (flashcardId: string, quality: number) =>
   );
 
 export const fetchBookmarks = () =>
-  apiFetch<BookmarkResponse[]>("/api/bookmarks").then((data) => (Array.isArray(data) ? data : []));
+  apiFetch<BookmarkResponse[] | any>("/api/bookmarks").then((res) => {
+    const data = res as any;
+    if (Array.isArray(data)) return data as BookmarkResponse[];
+    if (data && Array.isArray(data.bookmarks)) return data.bookmarks as BookmarkResponse[];
+    return [] as BookmarkResponse[];
+  });
 
 export const createBookmark = (body: {
   chapter_id: string;
@@ -234,19 +238,6 @@ export async function loadCachedNoteHtml(
   }
 }
 
-// ── Code execution — via backend proxy ──
-
-export async function runCode(
-  language: string,
-  source_code: string,
-  stdin = "",
-) {
-  const body: JudgeSubmitRequest = { language, source_code, stdin };
-  return apiFetch<{ stdout: string; stderr: string; exit_code: number }>(
-    "/api/judge/submit",
-    { method: "POST", body: JSON.stringify(body) },
-  );
-}
 
 // ── AI doubt answering — via backend proxy ──
 

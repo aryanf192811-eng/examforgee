@@ -101,6 +101,7 @@ export interface QuizQuestion {
   options: QuizOption[];
   subject: string;
   chapter?: string;
+  category?: string; // New field
   difficulty: "easy" | "medium" | "hard";
   is_pyq: boolean;
   gate_year?: number;
@@ -209,11 +210,6 @@ export interface BookmarkResponse {
   created_at: string;
 }
 
-export interface JudgeSubmitRequest {
-  language: string;
-  source_code: string;
-  stdin: string;
-}
 
 export type ToastType = "success" | "error" | "warning" | "info";
 

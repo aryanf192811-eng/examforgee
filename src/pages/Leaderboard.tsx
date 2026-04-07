@@ -11,7 +11,7 @@ export function Leaderboard() {
     async function load() {
       try {
         const data = await fetchLeaderboard(scope);
-        setLeaderboard(data.entries || []);
+        setLeaderboard((data && data.entries) ? data.entries : []);
       } catch (err) {
         console.error("Failed to load leaderboard:", err);
       } finally {
