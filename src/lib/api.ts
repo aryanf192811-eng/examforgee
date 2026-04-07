@@ -74,17 +74,19 @@ async function publicFetch<T>(path: string, init?: RequestInit): Promise<T> {
 // ── Public endpoints ──
 
 export const fetchSubjects = () =>
-  apiFetch<any>("/api/subjects").then((data) => {
-    if (Array.isArray(data)) return data;
-    if (data && Array.isArray(data.subjects)) return data.subjects;
-    return [];
+  apiFetch<SubjectResponse[] | any>("/api/subjects").then((res) => {
+    const data = res as any;
+    if (Array.isArray(data)) return data as SubjectResponse[];
+    if (data && Array.isArray(data.subjects)) return data.subjects as SubjectResponse[];
+    return [] as SubjectResponse[];
   }); // Requires auth for progress calculation
 
 export const fetchChapters = (subjectId: string) =>
-  apiFetch<any>(`/api/chapters/${subjectId}`).then((data) => {
-    if (Array.isArray(data)) return data;
-    if (data && Array.isArray(data.chapters)) return data.chapters;
-    return [];
+  apiFetch<ChapterResponse[] | any>(`/api/chapters/${subjectId}`).then((res) => {
+    const data = res as any;
+    if (Array.isArray(data)) return data as ChapterResponse[];
+    if (data && Array.isArray(data.chapters)) return data.chapters as ChapterResponse[];
+    return [] as ChapterResponse[];
   });
 
 export const createSession = (idToken: string) =>
