@@ -1,12 +1,31 @@
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '../lib/store/authStore';
 import { Button } from '../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { auth } from '../lib/firebase';
+import { fetchProfile } from '../lib/api';
+import type { UserProfile } from '../types';
 
 export function Profile() {
   const { user, clearUser } = useAuthStore();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchProfile();
+        setProfile(data);
+      } catch (err) {
+        console.error("Failed to load profile:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -23,15 +42,35 @@ export function Profile() {
       <div className="bg-white dark:bg-surface-container-low rounded-3xl p-8 shadow-sm border border-outline-variant/10 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
         <div className="relative z-10 w-24 h-24 md:w-32 md:h-32 rounded-full academic-gradient flex items-center justify-center border-4 border-surface shadow-lg text-white font-display text-5xl">
-           {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
+           {profile?.name?.[0]?.toUpperCase() || user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
         </div>
         <div className="relative z-10 flex-1 text-center md:text-left">
-          <h2 className="font-display text-3xl font-bold text-on-surface mb-2">{user?.displayName || 'Editorial Scholar'}</h2>
+          <h2 className="font-display text-3xl font-bold text-on-surface mb-2">{profile?.name || user?.displayName || 'Editorial Scholar'}</h2>
           <p className="text-on-surface-variant font-mono">{user?.email}</p>
           
+          <div className="mt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+             <div className="flex flex-col">
+                <span className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Total Points</span>
+                <span className="text-2xl font-display font-bold text-primary">
+                  {((profile?.total_points ?? 0) / 1000).toFixed(1)}k
+                </span>
+             </div>
+             <div className="w-px h-10 bg-outline-variant/20 hidden md:block"></div>
+             <div className="flex flex-col text-center md:text-left">
+                <span className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Solved</span>
+                <span className="text-2xl font-display font-bold text-on-surface">
+                  {profile?.quizzes_taken ?? 0}
+                </span>
+             </div>
+          </div>
+
           <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
-            <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-xs rounded-full uppercase tracking-widest border border-primary/20">Pro Tier Active</span>
-            <span className="px-3 py-1 bg-surface-variant text-on-surface-variant font-bold text-xs rounded-full uppercase tracking-widest">GATE CSE 2025</span>
+            <span className="px-3 py-1 bg-primary/10 text-primary font-bold text-xs rounded-full uppercase tracking-widest border border-primary/20">
+              {profile?.role === 'pro' ? 'Pro Tier' : 'Standard Member'}
+            </span>
+            <span className="px-3 py-1 bg-surface-variant text-on-surface-variant font-bold text-xs rounded-full uppercase tracking-widest">
+              GATE {profile?.gate_year ?? '202X'}
+            </span>
           </div>
         </div>
       </div>

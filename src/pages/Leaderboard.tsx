@@ -75,7 +75,7 @@ export function Leaderboard() {
                   {topThree[1].name}
                 </div>
                 <div className="text-xs text-on-surface-variant">
-                  {(topThree[1].total_points / 1000).toFixed(1)}k pts
+                  {((topThree[1].total_points ?? 0) / 1000).toFixed(1)}k pts
                 </div>
                 <div className="h-16 w-16 bg-surface-variant rounded-t-lg mt-4 flex items-center justify-center font-display font-bold text-xl text-on-surface-variant">
                   2
@@ -93,7 +93,7 @@ export function Leaderboard() {
                   {topThree[0].name}
                 </div>
                 <div className="text-xs text-on-surface-variant font-bold">
-                  {(topThree[0].total_points / 1000).toFixed(1)}k pts
+                  {((topThree[0].total_points ?? 0) / 1000).toFixed(1)}k pts
                 </div>
                 <div className="h-24 w-20 bg-primary/10 rounded-t-xl mt-4 flex items-center justify-center font-display font-bold text-3xl text-primary border border-primary/20 border-b-0">
                   1
@@ -108,7 +108,7 @@ export function Leaderboard() {
                   {topThree[2].name}
                 </div>
                 <div className="text-xs text-on-surface-variant">
-                  {(topThree[2].total_points / 1000).toFixed(1)}k pts
+                  {((topThree[2].total_points ?? 0) / 1000).toFixed(1)}k pts
                 </div>
                 <div className="h-12 w-16 bg-surface-variant rounded-t-lg mt-4 flex items-center justify-center font-display font-bold text-xl text-on-surface-variant">
                   3
@@ -142,7 +142,7 @@ export function Leaderboard() {
                   </div>
                 </div>
                 <div className="font-mono text-sm text-on-surface-variant">
-                  {(entry.total_points / 1000).toFixed(1)}k pts
+                  {((entry.total_points ?? 0) / 1000).toFixed(1)}k pts
                 </div>
               </div>
             ))}
