@@ -10,7 +10,6 @@ import type { UserProfile } from '../types';
 export function Profile() {
   const { user, clearUser } = useAuthStore();
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,8 +19,6 @@ export function Profile() {
         setProfile(data);
       } catch (err) {
         console.error("Failed to load profile:", err);
-      } finally {
-        setLoading(false);
       }
     }
     load();
