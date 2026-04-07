@@ -100,7 +100,12 @@ export const healthCheck = () => publicFetch<{ status: string }>("/health");
 
 export const fetchQuestions = (params: Record<string, string>) => {
   const qs = new URLSearchParams(params).toString();
-  return apiFetch<QuizSessionResponse>(`/api/quiz/questions?${qs}`);
+  return apiFetch<QuizSessionResponse | any>(`/api/quiz/questions?${qs}`).then((res) => {
+    // Robustly handle different response shapes
+    if (res && Array.isArray(res.questions)) return res as QuizSessionResponse;
+    if (Array.isArray(res)) return { questions: res, session_id: "temp", question_count: res.length } as QuizSessionResponse;
+    return res as QuizSessionResponse;
+  });
 };
 
 export const startQuiz = (params: Record<string, string>) => {
