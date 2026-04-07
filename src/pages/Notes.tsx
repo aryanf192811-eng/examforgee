@@ -4,9 +4,6 @@ import { fetchSubjects, fetchChapters, loadNoteHtml, updateNoteProgress } from "
 import type { SubjectResponse, ChapterResponse } from "../types";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Button } from "../components/ui/Button";
-// @ts-ignore
-import renderMathInElement from "katex/dist/contrib/auto-render";
-import "katex/dist/katex.min.css";
 
 export function Notes() {
   const { subjectSlug, chapterId } = useParams();
@@ -18,9 +15,10 @@ export function Notes() {
   const [noteLoading, setNoteLoading] = useState(false);
   const [progressSaving, setProgressSaving] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [iframeHeight, setIframeHeight] = useState("500px");
   
   const timeStarted = useRef<number>(Date.now());
-  const noteContentRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -60,13 +58,12 @@ export function Notes() {
       async function fetchNote() {
         setNoteLoading(true);
         try {
-          // chapterId is guaranteed non-null here due to if(chapterId)
           const html = await loadNoteHtml(chapterId as string);
           setNoteHtml(html);
           timeStarted.current = Date.now();
         } catch (err) {
           console.error(err);
-          setNoteHtml("<p class='text-error'>Failed to load note content.</p>");
+          setNoteHtml("<p style='color: red;'>Failed to load note content.</p>");
         } finally {
           setNoteLoading(false);
         }
@@ -77,22 +74,44 @@ export function Notes() {
     }
   }, [chapterId]);
 
-  // KaTeX Auto-render effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (noteHtml && noteContentRef.current) {
-        renderMathInElement(noteContentRef.current, {
-          delimiters: [
-            { left: "$$", right: "$$", display: true },
-            { left: "$", right: "$", display: false },
-            { left: "\\(", right: "\\)", display: false },
-            { left: "\\[", right: "\\]", display: true },
-          ],
-          throwOnError: false,
-        });
+  // Iframe auto-resize logic
+  const updateIframeHeight = () => {
+    if (iframeRef.current && iframeRef.current.contentWindow) {
+      const body = iframeRef.current.contentWindow.document.body;
+      const html = iframeRef.current.contentWindow.document.documentElement;
+      if (body && html) {
+        const height = Math.max(
+          body.scrollHeight,
+          body.offsetHeight,
+          html.clientHeight,
+          html.scrollHeight,
+          html.offsetHeight
+        );
+        setIframeHeight(`${height}px`);
       }
-    }, 100);
-    return () => clearTimeout(timer);
+    }
+  };
+
+  useEffect(() => {
+    if (!iframeRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      updateIframeHeight();
+    });
+
+    const iframe = iframeRef.current;
+    const handleLoad = () => {
+      updateIframeHeight();
+      if (iframe.contentWindow) {
+        observer.observe(iframe.contentWindow.document.body);
+      }
+    };
+
+    iframe.addEventListener('load', handleLoad);
+    return () => {
+      iframe.removeEventListener('load', handleLoad);
+      observer.disconnect();
+    };
   }, [noteHtml]);
 
   const handleMarkAsDone = async () => {
@@ -116,6 +135,68 @@ export function Notes() {
     }
   };
 
+  // Generate srcDoc with KaTeX support
+  const getIframeSrcDoc = () => {
+    if (!noteHtml) return "";
+    
+    return `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+          <style>
+            :root {
+              color-scheme: light dark;
+              --on-surface: #1d1b1e;
+              --on-surface-variant: #49454f;
+              --primary: #6750a4;
+            }
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+              line-height: 1.8;
+              color: var(--on-surface);
+              margin: 0;
+              padding: 0;
+              font-size: 1.1rem;
+              overflow: hidden;
+            }
+            h1, h2, h3 { color: var(--primary); margin-top: 2rem; }
+            ul, ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+            li { margin-bottom: 0.5rem; }
+            img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5rem 0; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+            th { background-color: #f8f9fa; }
+            blockquote { border-left: 4px solid var(--primary); padding-left: 1rem; font-style: italic; color: var(--on-surface-variant); }
+            code { background: #f1f1f1; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+          </style>
+          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              renderMathInElement(document.body, {
+                delimiters: [
+                  { left: "$$", right: "$$", display: true },
+                  { left: "$", right: "$", display: false },
+                  { left: "\\(", right: "\\)", display: false },
+                  { left: "\\[", right: "\\]", display: true },
+                ],
+                throwOnError: false,
+              });
+              // Inform parent about height
+              window.parent.postMessage({ type: 'height', height: document.body.scrollHeight }, '*');
+            });
+          </script>
+        </head>
+        <body>
+          ${noteHtml}
+        </body>
+      </html>
+    `;
+  };
+
   const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
   const currentChapter = chapters.find((c) => c.id === chapterId);
 
@@ -127,12 +208,12 @@ export function Notes() {
     );
   }
 
-  // List all subjects if no subject selected
+  // Subjects List View
   if (!subjectSlug || subjectSlug === "intro") {
     return (
       <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10 animate-fade-in">
-        <header className="space-y-4 mb-12">
-          <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface">
+        <header className="space-y-4 mb-12 text-center md:text-left">
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-on-surface">
             Curriculum Repository
           </h1>
           <p className="text-on-surface-variant text-lg font-notes italic">
@@ -226,11 +307,11 @@ export function Notes() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto relative bg-surface-container-lowest">
+      <main className="flex-1 overflow-y-auto relative bg-surface-container-lowest custom-scrollbar">
         {/* Toggle Sidebar Button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="absolute top-6 left-6 z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+          className="fixed top-20 left-6 z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
         >
           <span className="material-symbols-outlined">
             {sidebarOpen ? 'menu_open' : 'menu'}
@@ -276,12 +357,21 @@ export function Notes() {
                 </h1>
               </header>
 
-              <div 
-                id="note-content"
-                ref={noteContentRef}
-                className="gold-note-viewer"
-                dangerouslySetInnerHTML={{ __html: noteHtml || "" }}
-              />
+              <div className="relative w-full overflow-hidden">
+                <iframe
+                  ref={iframeRef}
+                  srcDoc={getIframeSrcDoc()}
+                  style={{ 
+                    height: iframeHeight,
+                    width: '100%',
+                    border: 'none',
+                    overflow: 'hidden'
+                  }}
+                  sandbox="allow-same-origin allow-scripts"
+                  title="Note Content"
+                  onLoad={updateIframeHeight}
+                />
+              </div>
 
               <footer className="mt-20 pt-10 border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="text-on-surface-variant text-sm italic">
