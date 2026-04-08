@@ -55,9 +55,9 @@ export function NotesViewer({ subjectSlug, chapterSlug, chapterTitle, subjectNam
         throw new Error('This chapter does not have static notes content yet.');
       }
 
-      // Step 2: Fetch raw HTML from local public directory
-      const contentUrl = `/content/notes/${metadata.notes_file}`;
-      console.log(`[NotesViewer] Fetching from: ${contentUrl}`);
+      // Step 2: Construct HTML path directly from chapter slug
+      const contentUrl = `/content/notes/${chapterSlug}.html`;
+      console.log(`[NotesViewer] Loading from: ${contentUrl}`);
       
       const response = await fetch(contentUrl);
       if (!response.ok) {

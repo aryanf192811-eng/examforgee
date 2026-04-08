@@ -145,11 +145,11 @@ export function startQuiz(
   subjectSlugs?: string,
   count: number = 20
 ): Promise<QuizSessionResponse> {
-  let path = `/api/quiz/questions?mode=${mode}&count=${count}`;
+  const params = new URLSearchParams({ mode, count: count.toString() });
   if (subjectSlugs) {
-    path += `&subject_slugs=${subjectSlugs}`;
+    params.append('subject_slugs', subjectSlugs);
   }
-  return request<QuizSessionResponse>('GET', path);
+  return request<QuizSessionResponse>('GET', `/api/quiz/questions?${params.toString()}`);
 }
 
 /** Submit a quiz session for grading */
@@ -236,9 +236,10 @@ export function updateProfile(payload: ProfileUpdateRequest): Promise<ProfileRes
 
 export const getProfile = getMe;
 export const getProgress = getMe; // Stats are now inside profile response
-export const markChapterProgress = (chapterId: string, completed: boolean) => {
+export const markChapterProgress = (chapterSlug: string, subjectSlug: string, completed: boolean) => {
   return updateNoteProgress({
-    chapter_id: chapterId,
+    chapter_slug: chapterSlug,
+    subject_slug: subjectSlug,
     status: completed ? 'done' : 'in_progress',
     time_spent_s: 0
   });

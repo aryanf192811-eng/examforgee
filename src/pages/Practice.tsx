@@ -53,10 +53,18 @@ export default function Practice() {
       addToast('Please select a subject.', 'warning');
       return;
     }
+    const subject = subjects.find(s => s.id === selectedSubjectId);
+    if (!subject) return;
+
     setIsStarting(true);
     try {
-      // API Signature: startQuiz(mode, subjectIds, count)
-      const session = await startQuiz(selectedMode, selectedSubjectId, questionCount);
+      // If mixed mode, send all slugs. Otherwise send the selected one.
+      const slugs = selectedMode === 'mixed' 
+        ? subjects.map(s => s.slug).join(',') 
+        : subject.slug;
+
+      // API Signature: startQuiz(mode, subjectSlugs, count)
+      const session = await startQuiz(selectedMode, slugs, questionCount);
       setSession(session.session_id);
       if (session.questions) {
         setQuestions(session.questions);
@@ -68,7 +76,7 @@ export default function Practice() {
     } finally {
       setIsStarting(false);
     }
-  }, [selectedSubjectId, selectedMode, questionCount, addToast, setSession, setQuestions]);
+  }, [subjects, selectedSubjectId, selectedMode, questionCount, addToast, setSession, setQuestions]);
 
   // Submit quiz
   const handleSubmit = useCallback(async () => {
@@ -310,9 +318,14 @@ export default function Practice() {
             </div>
 
             {/* Options (MCQ) */}
-            {currentQuestion.type === 'MCQ' && currentQuestion.options && (
+            {currentQuestion.type === 'MCQ' && (
               <div className="space-y-3 mb-6">
-                {currentQuestion.options.map((opt: { key: string; text: string }, i: number) => {
+                {[
+                  { key: 'a', text: currentQuestion.option_a },
+                  { key: 'b', text: currentQuestion.option_b },
+                  { key: 'c', text: currentQuestion.option_c },
+                  { key: 'd', text: currentQuestion.option_d },
+                ].map((opt, i) => {
                   const isSelected = answers[currentQuestion.id] === opt.key;
                   const labels = ['A', 'B', 'C', 'D'];
                   return (
@@ -332,7 +345,7 @@ export default function Practice() {
                         'w-8 h-8 rounded-lg flex items-center justify-center text-label-lg font-bold shrink-0',
                         isSelected ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface-variant'
                       )}>
-                        {labels[i] || opt.key}
+                        {labels[i]}
                       </span>
                       <span className="text-body-md">{opt.text}</span>
                     </motion.button>

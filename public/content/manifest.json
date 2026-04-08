@@ -377,11 +377,11 @@
       "chapters": [
         {
           "id": "cpp-ch-01",
-          "slug": "c-programming-complete-1",
-          "title": "C++ Foundations & Patterns",
+          "slug": "c-programming",
+          "title": "C Programming Complete",
           "order_index": 1,
           "has_notes": true,
-          "notes_file": "c-programming-complete-1.html",
+          "notes_file": "c-programming.html",
           "has_questions": false
         }
       ]

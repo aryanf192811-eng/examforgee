@@ -21,7 +21,7 @@ export default function Profile() {
   const [editName, setEditName] = useState(user?.name || '');
   const [editBio, setEditBio] = useState(user?.bio || '');
   const [editCollege, setEditCollege] = useState(user?.college || '');
-  const [editGateYear, setEditGateYear] = useState(user?.gate_year?.toString() || '2025');
+  const [editTargetYear, setEditTargetYear] = useState(user?.target_year?.toString() || '2025');
   const [editTargetScore, setEditTargetScore] = useState(user?.target_score?.toString() || '70');
   const [isSaving, setIsSaving] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -46,8 +46,8 @@ export default function Profile() {
         name: editName,
         bio: editBio,
         college: editCollege,
-        gate_year: parseInt(editGateYear),
-        target_score: parseFloat(editTargetScore)
+        target_year: parseInt(editTargetYear),
+        target_score: parseInt(editTargetScore)
       });
       setUser(updated);
       setIsEditing(false);
@@ -103,10 +103,10 @@ export default function Profile() {
               />
               <div className="grid grid-cols-2 gap-4">
                 <Input
-                  label="GATE Year"
+                  label="Target Year"
                   type="number"
-                  value={editGateYear}
-                  onChange={(e) => setEditGateYear(e.target.value)}
+                  value={editTargetYear}
+                  onChange={(e) => setEditTargetYear(e.target.value)}
                   icon="calendar_today"
                 />
                 <Input
@@ -149,7 +149,7 @@ export default function Profile() {
                   setEditName(user.name || '');
                   setEditBio(user.bio || '');
                   setEditCollege(user.college || '');
-                  setEditGateYear(user.gate_year?.toString() || '2025');
+                  setEditTargetYear(user.target_year?.toString() || '2025');
                   setEditTargetScore(user.target_score?.toString() || '70');
                   setIsEditing(true);
                 }}
@@ -193,8 +193,8 @@ export default function Profile() {
             <span className="text-body-md text-on-surface">{user.college || 'Not set'}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-label-lg text-on-surface-variant">GATE Year</span>
-            <span className="text-body-md text-on-surface">{user.gate_year || 'Not set'}</span>
+            <span className="text-label-lg text-on-surface-variant">Target Year</span>
+            <span className="text-body-md text-on-surface">{user.target_year || 'Not set'}</span>
           </div>
           <div className="flex items-center justify-between">
             <span className="text-label-lg text-on-surface-variant">Target Score</span>

@@ -7,6 +7,7 @@ import { Skeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/EmptyState';
 import { useBookmarks } from '../hooks/useBookmarks';
 import { getSubjects, getChapters } from '../lib/api';
+import { getManifest } from '../lib/manifest';
 import { cn } from '../lib/utils';
 import type { SubjectResponse, ChapterResponse } from '../types';
 
@@ -22,16 +23,23 @@ export default function Notes() {
 
   const { isBookmarked, addBookmark, removeBookmark } = useBookmarks();
 
-  // Load subjects
+  // Load subjects from manifest
   useEffect(() => {
     let cancelled = false;
     async function load() {
       setIsLoadingSubjects(true);
       try {
-        const data = await getSubjects();
-        if (!cancelled) setSubjects(data ?? []);
-      } catch {
-        // handled
+        const manifest = await getManifest();
+        if (!cancelled) {
+          // Combined subjects and skills (Subjects first)
+          const combined = [
+            ...manifest.subjects,
+            ...manifest.skills
+          ];
+          setSubjects(combined as any);
+        }
+      } catch (error) {
+        console.error('Failed to load manifest in Notes.tsx:', error);
       } finally {
         if (!cancelled) setIsLoadingSubjects(false);
       }

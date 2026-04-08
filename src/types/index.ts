@@ -9,7 +9,7 @@ export interface SessionRequest {
 }
 
 export interface SessionResponse {
-  profile_id: string;
+  uid: string;
   role: string;
   name: string;
   email: string;
@@ -17,15 +17,14 @@ export interface SessionResponse {
 }
 
 export interface ProfileResponse {
-  id: string;
-  firebase_uid: string;
+  uid: string;
   email: string;
   name: string;
   avatar_url: string | null;
   bio: string | null;
   role: string | 'free' | 'pro' | 'admin';
   college: string | null;
-  gate_year: number | null;
+  target_year: number | null;
   target_score: number | null;
   created_at?: string;
   // Computed stats
@@ -47,7 +46,7 @@ export interface ProfileUpdateRequest {
   name?: string;
   bio?: string;
   college?: string;
-  gate_year?: number;
+  target_year?: number;
   target_score?: number;
 }
 
@@ -100,7 +99,8 @@ export interface ChapterListResponse {
 // ── Notes ────────────────────────────────────────────────────────────
 
 export interface NoteProgressRequest {
-  chapter_id: string;
+  chapter_slug: string;
+  subject_slug: string;
   status: 'not_started' | 'in_progress' | 'done';
   time_spent_s: number;
 }
@@ -232,7 +232,7 @@ export interface FlashcardReviewResponse {
 
 export interface LeaderboardEntry {
   rank: number;
-  user_id: string;
+  uid: string;
   name: string;
   avatar_url?: string;
   college?: string;
