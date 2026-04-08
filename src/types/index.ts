@@ -115,12 +115,14 @@ export interface QuizOption {
 export interface QuizQuestion {
   id: string;
   question_text: string;
+  type: 'MCQ' | 'NAT';
   subject_slug: string;
   chapter_slug: string;
   difficulty: string;
   marks: number;
   is_pyq: boolean;
   gate_year?: number;
+  options: QuizOption[];
   option_a: string;
   option_b: string;
   option_c: string;

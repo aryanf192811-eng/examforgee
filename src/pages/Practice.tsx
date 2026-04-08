@@ -245,7 +245,7 @@ export default function Practice() {
                     </Badge>
                     <span className="text-label-md text-on-surface-variant">Q{i + 1}</span>
                   </div>
-                  <p className="text-body-md text-on-surface mb-3">{q.stem}</p>
+                  <p className="text-body-md text-on-surface mb-3">{q.question_text}</p>
                   {res.explanation && (
                     <p className="text-body-sm text-on-surface-variant italic">
                       {res.explanation}
@@ -305,14 +305,14 @@ export default function Practice() {
             {/* Stem */}
             <div className="rounded-2xl bg-surface-container p-6 mb-6">
               <p className="font-headline text-body-lg text-on-surface">
-                {currentQuestion.stem}
+                {currentQuestion.question_text}
               </p>
             </div>
 
             {/* Options (MCQ) */}
             {currentQuestion.type === 'MCQ' && currentQuestion.options && (
               <div className="space-y-3 mb-6">
-                {currentQuestion.options.map((opt, i) => {
+                {currentQuestion.options.map((opt: { key: string; text: string }, i: number) => {
                   const isSelected = answers[currentQuestion.id] === opt.key;
                   const labels = ['A', 'B', 'C', 'D'];
                   return (
