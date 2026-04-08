@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — Part 2 · Ch 4–6 · Arrays, Strings, Patterns</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New','Menlo',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,13px);
+  --fs-base:clamp(14px,3.2vw,17px);--fs-md:clamp(14px,3.4vw,16.5px);
+  --fs-lg:clamp(16px,3.8vw,19px);--fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(16px,4.2vw,21px);--fs-code:clamp(11px,2.6vw,13.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:860px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:530px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tg2{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.prob{background:var(--paper2);border:1.5px solid var(--ink);border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,20px);margin:14px 0;position:relative;}
+.prob::before{content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;border:1px solid var(--ink);border-radius:2px;}
+.prob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0 0 4px;line-height:1.82;}
+.prob p:last-child{margin:0;}
+.prob strong{color:var(--blue);}
+.io-row{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;}
+.io-box{flex:1;min-width:120px;background:var(--paper3);border:1px dashed #a09070;border-radius:3px;padding:8px 12px;}
+.io-box .io-lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;display:block;}
+.io-box code{font-family:var(--mono);font-size:var(--fs-code);color:var(--ink);background:none;border:none;padding:0;}
+.approach{background:#f0f4ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,20px);margin:14px 0;}
+.approach .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block;}
+.approach p{font-size:var(--fs-md);line-height:1.85;margin:0 0 6px;color:var(--ink2);}
+.approach p:last-child{margin:0;}
+.approach strong{color:var(--blue);}
+.trace{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,12.5px);line-height:2;color:var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.trace::-webkit-scrollbar{height:4px;}.trace::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.trace .t-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:block;}
+.trace .hi{background:var(--hl-y);border-radius:2px;padding:0 2px;}
+.trace .ok{color:var(--green);font-weight:700;}
+.trace .no{color:var(--red);font-weight:700;}
+.trace .cur{color:var(--blue);font-weight:700;}
+.trace .dim{color:var(--ink3);}
+.cb{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;color:var(--ink);line-height:1.85;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;position:relative;padding-top:36px !important;}
+.cb::-webkit-scrollbar{height:4px;}.cb::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .st{color:var(--green);}
+.cb .num{color:var(--orange);}
+.cb .fn{color:var(--teal);}
+.cb .pp{color:var(--red);}
+code{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+.copy-btn{position:absolute;top:6px;right:8px;background:var(--blue);color:var(--paper);border:none;border-radius:3px;padding:4px 8px;font-family:var(--hand);font-size:11px;cursor:pointer;transition:0.2s;z-index:10;}
+.copy-btn:hover{background:var(--ink);}.copy-btn.copied{background:var(--green);}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:14px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,13px);line-height:1.9;color:var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.gv .dv-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pnum{display:inline-flex;align-items:center;justify-content:center;font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);border-radius:3px;padding:2px 8px;margin-right:8px;letter-spacing:1px;}
+.pnum.easy{background:var(--green);}.pnum.med{background:var(--orange);}.pnum.hard{background:var(--red);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .sec{padding-left:clamp(28px,6vw,44px);}
+  h2.sh{font-size:clamp(15px,3.8vw,18px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10.5px,2.4vw,12.5px);padding:10px 12px;}
+  .trace{font-size:clamp(9.5px,2.1vw,11.5px);}
+  .io-row{flex-direction:column;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{box-shadow:3px 4px 0 #8a7a60;padding:18px 14px 16px;}
+  .cover::after{display:none;}.cover-inner{padding-left:0;}
+  .sec{padding-left:18px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(14px,4vw,17px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .cb{font-size:10.5px;padding:9px 10px;}.trace{font-size:9.5px;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;break-inside:avoid;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cb,.trace,.gv{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">09 · Problem Solving Pt.2</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Part 2 of 4 · Ch 4–6 · P29–P61</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery · Complete Edition</div>
+    <h1>Arrays · Strings<br><em>Pattern Printing</em></h1>
+    <p class="cover-desc">Chapters 4 through 6. Arrays with two-pointer and sliding window strategies. Strings with frequency, parsing, and manipulation. Pattern printing with the universal 3-question method. Every problem verified and cleaned.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 4 · Array Problems · P29–P40</span>
+      <span class="chip">Ch 5 · String Problems · P41–P53</span>
+      <span class="chip">Ch 6 · Pattern Printing · P54–P61</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CH4 ═══════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Array Problems — <em>The Most Common Interview Territory</em></div>
+  </div>
+  <div class="ch-body">
+
+    <!-- TWO POINTER TEMPLATE -->
+    <div class="sec" data-m="2ptr">
+      <h2 class="sh">Two Pointer Template <span class="tag tg">Mastery Concept</span></h2>
+      <div class="def-box">
+        <span class="lbl">When to use Two Pointers</span>
+        <p>Use when the array is sorted and you need to find pairs, triplets, or check symmetric properties. One pointer starts at the left, one at the right. They move toward each other. <strong>Signal words:</strong> "sorted array", "pair with sum", "palindrome check", "in-place reversal".</p>
+      </div>
+      <div class="cb"><pre><code><span class="cm">// Generalized Two Pointer Template</span>
+<span class="kw">int</span> left=0, right=n-1;
+<span class="kw">while</span>(left &lt; right){
+    <span class="kw">if</span>(condition_met){
+        <span class="cm">// process this pair</span>
+        left++; right--;
+    }
+    <span class="kw">else if</span>(need_larger) left++;
+    <span class="kw">else</span> right--;
+}</code></pre></div>
+    </div>
+
+    <div class="sec" data-m="p29">
+      <h2 class="sh"><span class="pnum easy">P29</span> Sum of Odd and Even Elements <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Given an array, find the sum of all odd elements and the sum of all even elements separately.</p>
+        <div class="io-row">
+          <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,3,4,5]</code></div>
+          <div class="io-box"><span class="io-lbl">Output</span><code>Odd=9, Even=6</code></div>
+        </div>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: [1, 2, 3, 4, 5]</span>
+<pre>x=1 (odd):  oddSum=1
+x=2 (even): evenSum=2
+x=3 (odd):  oddSum=4
+x=4 (even): evenSum=6
+x=5 (odd):  oddSum=9
+Result: <span class="ok">Odd=9, Even=6</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">void</span> oddEvenSum(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">long long</span> oddSum=0, evenSum=0;
+    <span class="kw">for</span>(<span class="kw">int</span> x:a){
+        <span class="kw">if</span>(x&amp;1) oddSum  += x;
+        <span class="kw">else</span>    evenSum += x;
+    }
+    cout &lt;&lt; <span class="st">"Odd="</span>  &lt;&lt; oddSum
+         &lt;&lt; <span class="st">" Even="</span> &lt;&lt; evenSum &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). Use <code>x &amp; 1</code> instead of <code>x % 2</code> — it works correctly for negative numbers too (negative % 2 can be −1 in C++).</p></div>
+    </div>
+
+    <div class="sec" data-m="p30">
+      <h2 class="sh"><span class="pnum easy">P30</span> Product of Array Elements <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Find the product of all elements in an array.</p>
+      </div>
+      <div class="warn-box"><span class="lbl">Overflow Warning</span><p>20 elements each equal to 10 gives a product of 10²⁰ — this overflows even <code>long long</code> (max ≈ 9.2×10¹⁸). Always check constraints. Use modular arithmetic if required.</p></div>
+      <div class="trace"><span class="t-label">Dry Run: [2, 3, 4]</span>
+<pre>prod=1 × 2 = 2
+prod=2 × 3 = 6
+prod=6 × 4 = <span class="ok">24</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">long long</span> arrayProduct(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">long long</span> prod=1;
+    <span class="kw">for</span>(<span class="kw">int</span> x:a) prod *= x;
+    <span class="kw">return</span> prod;
+}
+<span class="cm">// STL: accumulate(a.begin(),a.end(),1LL,multiplies&lt;long long&gt;())</span></code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). Initialize accumulator as <code>1LL</code> (long long literal) — starting with plain <code>1</code> causes int overflow before the first multiplication completes.</p></div>
+    </div>
+
+    <div class="sec" data-m="p31">
+      <h2 class="sh"><span class="pnum easy">P31</span> Print Alternate Elements <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Print elements at even indices (0, 2, 4…) and elements at odd indices (1, 3, 5…) on separate lines.</p>
+        <div class="io-row">
+          <div class="io-box"><span class="io-lbl">Input</span><code>[10,20,30,40,50]</code></div>
+          <div class="io-box"><span class="io-lbl">Output</span><code>Even: 10 30 50 | Odd: 20 40</code></div>
+        </div>
+      </div>
+      <div class="cb"><pre><code><span class="kw">void</span> alternateElements(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    cout &lt;&lt; <span class="st">"Even indices: "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;(<span class="kw">int</span>)a.size(); i+=2) cout &lt;&lt; a[i] &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\nOdd  indices: "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;(<span class="kw">int</span>)a.size(); i+=2) cout &lt;&lt; a[i] &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). Cast <code>a.size()</code> to <code>(int)</code> when comparing with an int loop variable — <code>size()</code> returns an unsigned type and comparing int vs unsigned causes subtle bugs.</p></div>
+    </div>
+
+    <div class="sec" data-m="p32">
+      <h2 class="sh"><span class="pnum easy">P32</span> Palindromic Array <span class="tag tc">Two Pointer</span></h2>
+      <div class="prob">
+        <p>Check if an array reads the same forwards and backwards. [1,2,3,2,1] → Yes. [1,2,3,4] → No.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Two Pointers from Both Ends</span>
+        <p>Place a left pointer at index 0 and a right pointer at the last index. If elements match, move both inward. If any pair mismatches, it's not a palindrome. Stop when left meets or crosses right.</p>
+      </div>
+      <div class="trace"><span class="t-label">Array: [1, 2, 3, 2, 1]</span>
+<pre>l=0, r=4: a[0]=<span class="hi">1</span> == a[4]=<span class="hi">1</span> ✓  →  l=1, r=3
+l=1, r=3: a[1]=<span class="hi">2</span> == a[3]=<span class="hi">2</span> ✓  →  l=2, r=2
+l=2, r=2: l &lt; r is false  →  <span class="ok">PALINDROME ✓</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">bool</span> isPalindromeArr(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">int</span> l=0, r=(<span class="kw">int</span>)a.size()-1;
+    <span class="kw">while</span>(l &lt; r){
+        <span class="kw">if</span>(a[l] != a[r]) <span class="kw">return false</span>;
+        l++; r--;
+    }
+    <span class="kw">return true</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). This exact two-pointer pattern also solves "palindrome string" — just replace array index access with string character access.</p></div>
+    </div>
+
+    <div class="sec" data-m="p33">
+      <h2 class="sh"><span class="pnum easy">P33</span> Second &amp; Third Largest — Single Pass <span class="tag tc">Single Pass</span></h2>
+      <div class="prob">
+        <p>Find the second and third largest <strong>distinct</strong> values in an array in a single O(n) pass.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Track Three Variables</span>
+        <p>Maintain <code>first</code>, <code>second</code>, <code>third</code> (all initialised to INT_MIN). For each element, update from the top down. Critical: use strict inequality and a distinct check (<code>x != first</code>) to avoid treating duplicates as separate ranks.</p>
+      </div>
+      <div class="trace"><span class="t-label">Array: [3, 1, 4, 1, 5, 9, 2, 6]</span>
+<pre>x=3: f=3
+x=1: 1&lt;f(3), 1&gt;s(MIN) → s=1
+x=4: 4&gt;f(3) → t=s(1), s=f(3), f=4
+x=1: 1==s(3)? No. 1==t(1)? Yes → skip (distinct check)
+x=5: 5&gt;f(4) → t=3, s=4, f=5
+x=9: 9&gt;f(5) → t=4, s=5, f=9
+x=2: 2&gt;t(4)? No → skip
+x=6: 6&gt;s(5), 6&lt;f(9) → t=5, s=6
+Result: <span class="ok">1st=9  2nd=6  3rd=5</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">void</span> topThree(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">int</span> f=INT_MIN, s=INT_MIN, t=INT_MIN;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a){
+        <span class="kw">if</span>(x &gt; f)              { t=s;  s=f;  f=x; }
+        <span class="kw">else if</span>(x &gt; s &amp;&amp; x!=f) { t=s;  s=x;       }
+        <span class="kw">else if</span>(x &gt; t &amp;&amp; x!=s) { t=x;              }
+    }
+    cout &lt;&lt; <span class="st">"1st="</span>&lt;&lt;f &lt;&lt; <span class="st">" 2nd="</span>&lt;&lt;s &lt;&lt; <span class="st">" 3rd="</span>&lt;&lt;t &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). The distinct check <code>x != f</code> (and <code>x != s</code>) is what separates "k-th largest value" from "k-th largest element counting duplicates". Know which one the problem wants.</p></div>
+    </div>
+
+    <div class="sec" data-m="p34">
+      <h2 class="sh"><span class="pnum med">P34</span> Perfect Number Array Check <span class="tag tc">Definition Check</span></h2>
+      <div class="prob">
+        <p>Check if an array is "perfect" — every element is a perfect number. A <strong>perfect number</strong> equals the sum of its proper divisors (6 = 1+2+3 ✓, 28 = 1+2+4+7+14 ✓).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach</span>
+        <p>For each element, sum all divisors from 1 to √n (using the pair-counting trick from P09). Exclude n itself (proper divisors only). Check if sum equals n.</p>
+      </div>
+      <div class="trace"><span class="t-label">isPerfect(6)</span>
+<pre>i=1: 6%1==0 → sum += 1 + 6/1=6? No, only add i (not n itself)
+     divisors of 6: 1, 2, 3  →  sum = 1+2+3 = <span class="ok">6 == n ✓</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">bool</span> isPerfectNum(<span class="kw">int</span> n){
+    <span class="kw">if</span>(n &lt; 2) <span class="kw">return false</span>;
+    <span class="kw">int</span> sum = 1;               <span class="cm">// 1 is always a proper divisor</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=2; i*i&lt;=n; i++){
+        <span class="kw">if</span>(n%i==0){
+            sum += i;
+            <span class="kw">if</span>(i != n/i) sum += n/i;
+        }
+    }
+    <span class="kw">return</span> sum == n;
+}
+<span class="kw">bool</span> isPerfectArray(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) <span class="kw">if</span>(!isPerfectNum(x)) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n√m) where m is max element | Space: O(1). Only four perfect numbers exist below 10,000: 6, 28, 496, 8128. This property is surprisingly rare.</p></div>
+    </div>
+
+    <div class="sec" data-m="p35">
+      <h2 class="sh"><span class="pnum med">P35</span> Check if Array is Sorted <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Determine if an array is sorted in non-decreasing order.</p>
+        <div class="io-row">
+          <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,2,4,5]</code></div>
+          <div class="io-box"><span class="io-lbl">Output</span><code>Yes</code></div>
+        </div>
+      </div>
+      <div class="trace"><span class="t-label">Array: [1, 3, 2, 4]</span>
+<pre>i=1: a[1]=3 &gt;= a[0]=1  ✓
+i=2: a[2]=2 &lt;  a[1]=3  →  <span class="no">NOT sorted ✗</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">bool</span> isSorted(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;(<span class="kw">int</span>)a.size(); i++)
+        <span class="kw">if</span>(a[i] &lt; a[i-1]) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}
+<span class="cm">// STL: is_sorted(a.begin(), a.end())</span></code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). For strictly increasing (no duplicates), use <code>a[i] &lt;= a[i-1]</code> as the fail condition instead of <code>&lt;</code>.</p></div>
+    </div>
+
+    <div class="sec" data-m="p36">
+      <h2 class="sh"><span class="pnum med">P36</span> Intersection &amp; Union of Two Sorted Arrays <span class="tag tc">Two Pointer</span></h2>
+      <div class="prob">
+        <p>Find the intersection (common elements) and union (all unique elements) of two sorted arrays without using sets.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Merge-Style Two Pointers</span>
+        <p><strong>Intersection:</strong> If a[i]==b[j], it's common — include and advance both. If a[i]&lt;b[j], advance i. Else advance j.</p>
+        <p><strong>Union:</strong> At each step take the smaller element; on equal take one copy and advance both. Append remaining elements at end.</p>
+      </div>
+      <div class="trace"><span class="t-label">a=[1,3,4,5,7] b=[2,3,5,6]</span>
+<pre>Intersection: 3==3 ✓, 5==5 ✓  →  [3, 5]
+Union:        [1,2,3,4,5,6,7]</pre></div>
+      <div class="cb"><pre><code>vector&lt;<span class="kw">int</span>&gt; intersection(vector&lt;<span class="kw">int</span>&gt;&amp; a, vector&lt;<span class="kw">int</span>&gt;&amp; b){
+    vector&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">int</span> i=0, j=0;
+    <span class="kw">while</span>(i&lt;(<span class="kw">int</span>)a.size() &amp;&amp; j&lt;(<span class="kw">int</span>)b.size()){
+        <span class="kw">if</span>     (a[i]==b[j]){ res.push_back(a[i]); i++; j++; }
+        <span class="kw">else if</span>(a[i]&lt;b[j])  i++;
+        <span class="kw">else</span>               j++;
+    }
+    <span class="kw">return</span> res;
+}
+
+vector&lt;<span class="kw">int</span>&gt; unionArr(vector&lt;<span class="kw">int</span>&gt;&amp; a, vector&lt;<span class="kw">int</span>&gt;&amp; b){
+    vector&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">int</span> i=0, j=0;
+    <span class="kw">while</span>(i&lt;(<span class="kw">int</span>)a.size() &amp;&amp; j&lt;(<span class="kw">int</span>)b.size()){
+        <span class="kw">if</span>     (a[i]&lt;b[j])  res.push_back(a[i++]);
+        <span class="kw">else if</span>(a[i]&gt;b[j])  res.push_back(b[j++]);
+        <span class="kw">else</span>{ res.push_back(a[i]); i++; j++; }  <span class="cm">// equal: take once</span>
+    }
+    <span class="kw">while</span>(i&lt;(<span class="kw">int</span>)a.size()) res.push_back(a[i++]);
+    <span class="kw">while</span>(j&lt;(<span class="kw">int</span>)b.size()) res.push_back(b[j++]);
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n+m) | Space: O(n+m) for result. This merge-pointer technique is the same logic used inside merge sort — understanding it deeply pays dividends.</p></div>
+    </div>
+
+    <!-- SLIDING WINDOW TEMPLATE -->
+    <div class="sec" data-m="sw">
+      <h2 class="sh">Fixed Sliding Window Template <span class="tag tg">Mastery Concept</span></h2>
+      <div class="def-box">
+        <span class="lbl">When to use Fixed Sliding Window</span>
+        <p>Use when you need the max/min/sum of a contiguous subarray of exactly size K. <strong>Signal words:</strong> "subarray of size K", "contiguous window". The key insight: instead of recomputing the sum from scratch each time, add the new element entering the window and subtract the element leaving it.</p>
+      </div>
+      <div class="cb"><pre><code><span class="cm">// Fixed size K sliding window — max sum</span>
+<span class="kw">int</span> maxSumK(vector&lt;<span class="kw">int</span>&gt;&amp; arr, <span class="kw">int</span> k){
+    <span class="kw">int</span> n=arr.size(), wsum=0, maxSum=INT_MIN;
+    <span class="cm">// Build first window</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;k; i++) wsum += arr[i];
+    maxSum = wsum;
+    <span class="cm">// Slide: add new tail, remove old head</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=k; i&lt;n; i++){
+        wsum += arr[i] - arr[i-k];
+        maxSum = max(maxSum, wsum);
+    }
+    <span class="kw">return</span> maxSum;
+}</code></pre></div>
+    </div>
+
+    <div class="sec" data-m="p37">
+      <h2 class="sh"><span class="pnum med">P37</span> Minimum Difference in K Elements <span class="tag tc">Sorting + Window</span></h2>
+      <div class="prob">
+        <p>Given an array and integer K, find the minimum difference between the max and min of any K elements chosen from the array.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Key Insight — Sort First</span>
+        <p>After sorting, the K elements with minimum range must be <strong>contiguous</strong> in the sorted array. Any non-contiguous K elements would have a larger or equal spread. So sort, then slide a window of size K and track <code>a[i+K-1] − a[i]</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">Array=[10,100,300,200,1000,20,30], K=3</span>
+<pre>Sorted: [10, 20, 30, 100, 200, 300, 1000]
+
+Window[10,20,30]:   300-10=20  → <span class="hi">diff=20</span>
+Window[20,30,100]:  100-20=80
+Window[30,100,200]: 200-30=170
+Window[100,200,300]:300-100=200
+...
+<span class="ok">Minimum difference = 20</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">int</span> minDiffK(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k){
+    sort(a.begin(), a.end());
+    <span class="kw">int</span> minDiff = INT_MAX;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i+k-1&lt;(<span class="kw">int</span>)a.size(); i++)
+        minDiff = min(minDiff, a[i+k-1] - a[i]);
+    <span class="kw">return</span> minDiff;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n log n) dominated by sort | Space: O(1). The sort + window trick appears constantly in problems asking about "optimal selection of K elements".</p></div>
+    </div>
+
+    <div class="sec" data-m="p38">
+      <h2 class="sh"><span class="pnum med">P38</span> Maximum Product of Two Numbers <span class="tag tc">Single Pass</span></h2>
+      <div class="prob">
+        <p>Find the maximum product of any two elements in an array. Important: two large-magnitude negatives may give the largest product.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Track Four Extremes</span>
+        <p>The answer is either <strong>(two largest positives)</strong> or <strong>(two most negative numbers)</strong>. Track max1, max2 (two largest) and min1, min2 (two smallest) in one pass. Return <code>max(max1×max2, min1×min2)</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">Array: [-10, -3, 5, 6, -2]</span>
+<pre>After pass: max1=6, max2=5, min1=-10, min2=-3
+max1*max2 = 6*5   =  30
+min1*min2 = (-10)*(-3) = <span class="ok">30</span>  (tie, either is answer)</pre></div>
+      <div class="cb"><pre><code><span class="kw">long long</span> maxProduct(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">long long</span> max1=LLONG_MIN, max2=LLONG_MIN;
+    <span class="kw">long long</span> min1=LLONG_MAX, min2=LLONG_MAX;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a){
+        <span class="kw">if</span>(x &gt; max1)      { max2=max1; max1=x; }
+        <span class="kw">else if</span>(x &gt; max2) { max2=x; }
+        <span class="kw">if</span>(x &lt; min1)      { min2=min1; min1=x; }
+        <span class="kw">else if</span>(x &lt; min2) { min2=x; }
+    }
+    <span class="kw">return</span> max(max1*max2, min1*min2);
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). The naive O(n²) nested loop works for small n, but this single-pass approach is the one to demonstrate in interviews.</p></div>
+    </div>
+
+    <div class="sec" data-m="p39">
+      <h2 class="sh"><span class="pnum med">P39</span> Find the Odd-Occurring Element <span class="tag tc">XOR Logic</span></h2>
+      <div class="prob">
+        <p>Every element in the array appears an even number of times <strong>except one</strong>. Find that element in O(n) time and O(1) space.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">XOR Magic</span>
+        <p>XOR of a number with itself is 0. XOR of any number with 0 is the number itself. XOR all elements together — all even-frequency pairs cancel out, leaving only the odd-count element.</p>
+      </div>
+      <div class="trace"><span class="t-label">Array: [2, 3, 5, 3, 2]</span>
+<pre>Start: xor=0
+xor ^ 2 = 2
+xor ^ 3 = 1  (2^3 = 01^10 = 11 = 3... wait: 2=010, 3=011, XOR=001=1)
+xor ^ 5 = 4  (1^5 = 001^101 = 100 = 4)
+xor ^ 3 = 7  (4^3 = 100^011 = 111 = 7)
+xor ^ 2 = 5  (7^2 = 111^010 = 101 = <span class="ok">5</span>)
+Answer: 5 (appears once; 2 and 3 each appear twice and cancel)</pre></div>
+      <div class="cb"><pre><code><span class="kw">int</span> oddOccurring(vector&lt;<span class="kw">int</span>&gt;&amp; a){
+    <span class="kw">int</span> result=0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) result ^= x;
+    <span class="kw">return</span> result;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). This is one of the most elegant tricks in programming. XOR is commutative and associative — order doesn't matter, all pairs cancel regardless of position.</p></div>
+    </div>
+
+    <div class="sec" data-m="p40">
+      <h2 class="sh"><span class="pnum med">P40</span> Extract All Integers from a Mixed String <span class="tag tc">Parsing</span></h2>
+      <div class="prob">
+        <p>Given a string like <code>"ab12cd34ef5"</code>, extract all integers: [12, 34, 5].</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Digit State Machine</span>
+        <p>Walk the string character by character. When you hit a digit, keep consuming digits and build the number (num = num×10 + digit). When you hit a non-digit after accumulating, save the number and reset.</p>
+      </div>
+      <div class="trace"><span class="t-label">"ab12cd34"</span>
+<pre>a → skip
+b → skip
+1 → digit, num=1
+2 → digit, num=12
+c → non-digit, save 12, reset num=0
+d → skip
+3 → digit, num=3
+4 → digit, num=34
+end → save 34
+Result: <span class="ok">[12, 34]</span></pre></div>
+      <div class="cb"><pre><code>vector&lt;<span class="kw">int</span>&gt; extractIntegers(string s){
+    vector&lt;<span class="kw">int</span>&gt; nums;
+    <span class="kw">int</span> i=0, n=s.size();
+    <span class="kw">while</span>(i &lt; n){
+        <span class="kw">if</span>(isdigit(s[i])){
+            <span class="kw">int</span> num=0;
+            <span class="kw">while</span>(i&lt;n &amp;&amp; isdigit(s[i]))
+                num = num*10 + (s[i++]-'0');
+            nums.push_back(num);
+        } <span class="kw">else</span> i++;
+    }
+    <span class="kw">return</span> nums;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(k) for k numbers found. The inner while loop never backtracks — the total work across both loops is still O(n).</p></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CH5 ═══════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">String Problems — <em>Frequency, Parsing, Manipulation &amp; Classic Checks</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="p41">
+      <h2 class="sh"><span class="pnum easy">P41</span> Remove Spaces <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Remove all space characters from a string. <code>"hello world"</code> → <code>"helloworld"</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">"hello world"</span>
+<pre>h e l l o   w o r l d
+         ↑ skip space
+Result: <span class="ok">"helloworld"</span></pre></div>
+      <div class="cb"><pre><code>string removeSpaces(string s){
+    string res;
+    <span class="kw">for</span>(<span class="kw">char</span> c : s)
+        <span class="kw">if</span>(c != ' ') res += c;
+    <span class="kw">return</span> res;
+}
+<span class="cm">// In-place STL: s.erase(remove(s.begin(),s.end(),' '),s.end());</span></code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(n) for result. The erase-remove idiom is a classic C++ pattern — <code>remove</code> shifts non-space chars to the front and returns an iterator to the new end; <code>erase</code> then trims the tail.</p></div>
+    </div>
+
+    <div class="sec" data-m="p42">
+      <h2 class="sh"><span class="pnum easy">P42</span> Remove Vowels <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Remove all vowels (a,e,i,o,u) from a string, case-insensitive. <code>"Hello World"</code> → <code>"Hll Wrld"</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">"Hello"</span>
+<pre>H → not vowel, keep
+e → vowel, skip
+l → keep
+l → keep
+o → vowel, skip
+Result: <span class="ok">"Hll"</span></pre></div>
+      <div class="cb"><pre><code>string removeVowels(string s){
+    string vowels = <span class="st">"aeiouAEIOU"</span>;
+    string res;
+    <span class="kw">for</span>(<span class="kw">char</span> c : s)
+        <span class="kw">if</span>(vowels.find(c) == string::npos) res += c;
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(n). For performance-critical code, use an <code>unordered_set&lt;char&gt;</code> for O(1) lookup instead of linear <code>string::find</code>.</p></div>
+    </div>
+
+    <div class="sec" data-m="p43">
+      <h2 class="sh"><span class="pnum easy">P43</span> Reverse Only the Vowels <span class="tag tc">Two Pointer</span></h2>
+      <div class="prob">
+        <p>Reverse only the vowel characters in a string, leaving all other characters in place. <code>"hello"</code> → <code>"holle"</code>.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Two Pointers, Skip Non-Vowels</span>
+        <p>Left pointer starts at 0, right at end. Move left forward past consonants. Move right backward past consonants. When both are on vowels, swap them and advance both inward.</p>
+      </div>
+      <div class="trace"><span class="t-label">"hello"  →  vowels at idx 1(e), 4(o)</span>
+<pre>l=0 'h' → not vowel, l++
+l=1 'e' → vowel ✓    r=4 'o' → vowel ✓
+swap → "holle"
+l=2, r=3: l &lt; r but no more vowels inside
+Result: <span class="ok">"holle"</span></pre></div>
+      <div class="cb"><pre><code>string reverseVowels(string s){
+    auto isVowel = [](char c){
+        return string(<span class="st">"aeiouAEIOU"</span>).find(c) != string::npos;
+    };
+    <span class="kw">int</span> l=0, r=(<span class="kw">int</span>)s.size()-1;
+    <span class="kw">while</span>(l &lt; r){
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isVowel(s[l])) l++;
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isVowel(s[r])) r--;
+        <span class="kw">if</span>(l &lt; r) swap(s[l++], s[r--]);
+    }
+    <span class="kw">return</span> s;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1) in-place. The inner while loops only ever advance pointers forward — total work across both is still O(n), not O(n²).</p></div>
+    </div>
+
+    <div class="sec" data-m="p44">
+      <h2 class="sh"><span class="pnum easy">P44</span> Count Character Types <span class="tag tc">Frequency</span></h2>
+      <div class="prob">
+        <p>Count uppercase letters, lowercase letters, digits, and special characters in a string.</p>
+        <div class="io-row">
+          <div class="io-box"><span class="io-lbl">Input</span><code>"Hello W0rld!"</code></div>
+          <div class="io-box"><span class="io-lbl">Output</span><code>Up=2 Lo=7 Dig=1 Sp=1</code></div>
+        </div>
+      </div>
+      <div class="cb"><pre><code><span class="kw">void</span> countCharTypes(string s){
+    <span class="kw">int</span> up=0, lo=0, dig=0, sp=0;
+    <span class="kw">for</span>(<span class="kw">char</span> c : s){
+        <span class="kw">if</span>     (isupper(c)) up++;
+        <span class="kw">else if</span>(islower(c)) lo++;
+        <span class="kw">else if</span>(isdigit(c)) dig++;
+        <span class="kw">else</span>                sp++;
+    }
+    cout &lt;&lt; <span class="st">"Upper="</span>   &lt;&lt; up
+         &lt;&lt; <span class="st">" Lower="</span>  &lt;&lt; lo
+         &lt;&lt; <span class="st">" Digits="</span> &lt;&lt; dig
+         &lt;&lt; <span class="st">" Special="</span>&lt;&lt; sp &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). <code>isupper</code>, <code>islower</code>, <code>isdigit</code> are from <code>&lt;cctype&gt;</code>. Pass them <code>(unsigned char)c</code> to be safe with signed char implementations.</p></div>
+    </div>
+
+    <div class="sec" data-m="p45">
+      <h2 class="sh"><span class="pnum easy">P45</span> Maximum Occurring Character <span class="tag tc">Frequency</span></h2>
+      <div class="prob">
+        <p>Find the character that appears most frequently in a string. On a tie, return the lexicographically smallest.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Frequency Array</span>
+        <p>Use an int array of size 256 (all ASCII values). Count each character. Then scan 0→255 to find the maximum frequency. Because we scan in ASCII order (A before B, a before b…), the first maximum found is automatically the lexicographically smallest.</p>
+      </div>
+      <div class="trace"><span class="t-label">"aababc"</span>
+<pre>freq['a']=3, freq['b']=2, freq['c']=1
+Scan 0→255: first max is 'a' (freq=3)
+Result: <span class="ok">'a'</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">char</span> maxOccChar(string s){
+    <span class="kw">int</span> freq[256] = {0};
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) freq[(<span class="kw">unsigned char</span>)c]++;
+    <span class="kw">int</span> maxF=0; <span class="kw">char</span> res='\0';
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;256; i++){
+        <span class="kw">if</span>(freq[i] &gt; maxF){
+            maxF = freq[i];
+            res  = (<span class="kw">char</span>)i;
+        }
+    }
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n + 256) = O(n) | Space: O(1) — 256 is a constant. Scanning in ASCII order gives tie-breaking for free, eliminating the need for a secondary comparison.</p></div>
+    </div>
+
+    <div class="sec" data-m="p46">
+      <h2 class="sh"><span class="pnum easy">P46</span> First Repeating Character <span class="tag tc">Frequency</span></h2>
+      <div class="prob">
+        <p>Find the first character in a string that appears more than once. <code>"abcdaef"</code> → <code>'a'</code>.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Two-Pass Approach</span>
+        <p>Pass 1: Build frequency array. Pass 2: Walk the string again left to right — the first character with frequency &gt; 1 is the answer. This preserves the order of first occurrence.</p>
+      </div>
+      <div class="trace"><span class="t-label">"abcba"</span>
+<pre>freq: a=2, b=2, c=1
+Walk: a → freq[a]=2 &gt; 1  →  <span class="ok">Answer: 'a'</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">char</span> firstRepeating(string s){
+    <span class="kw">int</span> freq[256] = {0};
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) freq[(<span class="kw">unsigned char</span>)c]++;
+    <span class="kw">for</span>(<span class="kw">char</span> c : s)
+        <span class="kw">if</span>(freq[(<span class="kw">unsigned char</span>)c] &gt; 1) <span class="kw">return</span> c;
+    <span class="kw">return</span> '\0';   <span class="cm">// no repeating character</span>
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). Do not return in the first pass — you need the full frequency table built before you can judge "first occurrence".</p></div>
+    </div>
+
+    <div class="sec" data-m="p47">
+      <h2 class="sh"><span class="pnum med">P47</span> Uncommon Characters Between Two Strings <span class="tag tc">Set Difference</span></h2>
+      <div class="prob">
+        <p>Find all characters present in exactly one of the two strings (not in both). <code>"aab"</code> and <code>"bba"</code> → only <code>'a'</code> appears in one not the other (actually both have 'a' and 'b', result is <code>""</code> for this). Better example: <code>"abc"</code> and <code>"bcd"</code> → <code>"ad"</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">"abc"  vs  "bcd"</span>
+<pre>fa: a=1, b=1, c=1   fb: b=1, c=1, d=1
+'a': fa&gt;0, fb==0  →  include 'a'
+'b': both &gt;0      →  skip
+'c': both &gt;0      →  skip
+'d': fa==0, fb&gt;0  →  include 'd'
+Result: <span class="ok">"ad"</span></pre></div>
+      <div class="cb"><pre><code>string uncommonChars(string a, string b){
+    <span class="kw">int</span> fa[26]={0}, fb[26]={0};
+    <span class="kw">for</span>(<span class="kw">char</span> c : a) fa[c-'a']++;
+    <span class="kw">for</span>(<span class="kw">char</span> c : b) fb[c-'a']++;
+    string res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;26; i++)
+        <span class="kw">if</span>((fa[i]&gt;0) != (fb[i]&gt;0))  <span class="cm">// XOR: one but not both</span>
+            res += (<span class="kw">char</span>)('a'+i);
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n+m+26) = O(n+m) | Space: O(1). The condition <code>(fa[i]&gt;0) != (fb[i]&gt;0)</code> is boolean XOR — true only when exactly one side has the character.</p></div>
+    </div>
+
+    <div class="sec" data-m="p48">
+      <h2 class="sh"><span class="pnum med">P48</span> Remove Consecutive Duplicates <span class="tag tc">String Logic</span></h2>
+      <div class="prob">
+        <p>Remove consecutive duplicate characters. <code>"aabbcc"</code> → <code>"abc"</code>. <code>"aababab"</code> → <code>"ababab"</code> (only consecutive runs are collapsed).</p>
+      </div>
+      <div class="trace"><span class="t-label">"aabbcc"</span>
+<pre>res="a"
+s[1]='a' == s[0]='a'  →  skip
+s[2]='b' != s[1]='a'  →  append 'b'
+s[3]='b' == s[2]='b'  →  skip
+s[4]='c' != s[3]='b'  →  append 'c'
+s[5]='c' == s[4]='c'  →  skip
+Result: <span class="ok">"abc"</span></pre></div>
+      <div class="cb"><pre><code>string removeConsDups(string s){
+    <span class="kw">if</span>(s.empty()) <span class="kw">return</span> s;
+    string res;
+    res += s[0];
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;(<span class="kw">int</span>)s.size(); i++)
+        <span class="kw">if</span>(s[i] != s[i-1]) res += s[i];
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(n). Compare each character only with its immediate predecessor — this is the minimal comparison needed to detect a consecutive run.</p></div>
+    </div>
+
+    <div class="sec" data-m="p49">
+      <h2 class="sh"><span class="pnum med">P49</span> Count Words in camelCase String <span class="tag tc">String Logic</span></h2>
+      <div class="prob">
+        <p>Count the number of words encoded in a camelCase string. <code>"helloWorldFoo"</code> → 3.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Logic</span>
+        <p>The first character always starts a word. Every uppercase letter after position 0 starts a new word. Count = 1 + (number of uppercase letters in positions 1 to n−1).</p>
+      </div>
+      <div class="trace"><span class="t-label">"helloWorldFoo"</span>
+<pre>Start count=1
+pos 5: 'W' is uppercase  →  count=2
+pos 10: 'F' is uppercase →  count=3
+Result: <span class="ok">3 words</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">int</span> camelCaseCount(string s){
+    <span class="kw">if</span>(s.empty()) <span class="kw">return</span> 0;
+    <span class="kw">int</span> cnt=1;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;(<span class="kw">int</span>)s.size(); i++)
+        <span class="kw">if</span>(isupper(s[i])) cnt++;
+    <span class="kw">return</span> cnt;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). Pattern: when a property change (uppercase transition) marks a boundary, count boundaries + 1.</p></div>
+    </div>
+
+    <div class="sec" data-m="p50">
+      <h2 class="sh"><span class="pnum med">P50</span> Is Digit-Sum a Palindrome? <span class="tag tc">Compose Logic</span></h2>
+      <div class="prob">
+        <p>Compute the digit sum of n, then check if that sum (as a string) is itself a palindrome. Example: n=121 → sum=4 → "4" → Yes. n=199 → sum=19 → "19" → No.</p>
+      </div>
+      <div class="trace"><span class="t-label">n = 1991</span>
+<pre>digit sum = 1+9+9+1 = 20
+"20" reversed = "02"
+"20" != "02"  →  <span class="no">Not palindrome</span>
+
+n = 10001
+digit sum = 1+0+0+0+1 = 2
+"2" reversed = "2"
+<span class="ok">Palindrome ✓</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">bool</span> digitSumPalindrome(<span class="kw">int</span> n){
+    <span class="kw">int</span> sum=0, tmp=abs(n);
+    <span class="kw">while</span>(tmp){ sum += tmp%10; tmp /= 10; }
+    string s = to_string(sum);
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    <span class="kw">return</span> s == rev;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(d) | Space: O(d). This problem demonstrates function composition — break it into two clean sub-problems: compute digit sum, then check palindrome.</p></div>
+    </div>
+
+    <div class="sec" data-m="p51">
+      <h2 class="sh"><span class="pnum med">P51</span> Characters Vector to String <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Given a <code>vector&lt;char&gt;</code> like <code>['h','e','l','l','o']</code>, build the string <code>"hello"</code>.</p>
+      </div>
+      <div class="cb"><pre><code>string charsToString(vector&lt;<span class="kw">char</span>&gt;&amp; chars){
+    <span class="kw">return</span> string(chars.begin(), chars.end());
+}
+<span class="cm">// Equivalently: string(chars.data(), chars.size())</span>
+<span class="cm">// Or: for(char c:chars) s+=c;</span></code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(n). The range constructor <code>string(begin, end)</code> works for any iterator pair over <code>char</code> — cleaner than a manual loop.</p></div>
+    </div>
+
+    <div class="sec" data-m="p52">
+      <h2 class="sh"><span class="pnum med">P52</span> Merge Two Strings Alternately <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Interleave two strings character by character. Append the remaining part of the longer string at the end. <code>"abc"</code> + <code>"xy"</code> → <code>"axbyc"</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">"abc" + "xy"</span>
+<pre>i=0,j=0: 'a','x'  →  "ax"
+i=1,j=1: 'b','y'  →  "axby"
+i=2:     'c' only →  "axbyc"
+Result: <span class="ok">"axbyc"</span></pre></div>
+      <div class="cb"><pre><code>string mergeAlternate(string a, string b){
+    string res;
+    <span class="kw">int</span> i=0, j=0;
+    <span class="kw">while</span>(i&lt;(<span class="kw">int</span>)a.size() || j&lt;(<span class="kw">int</span>)b.size()){
+        <span class="kw">if</span>(i &lt; (<span class="kw">int</span>)a.size()) res += a[i++];
+        <span class="kw">if</span>(j &lt; (<span class="kw">int</span>)b.size()) res += b[j++];
+    }
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n+m) | Space: O(n+m). The two <code>if</code> statements (not <code>if/else</code>) ensure both characters are appended in the same iteration when both strings still have characters.</p></div>
+    </div>
+
+    <div class="sec" data-m="p53">
+      <h2 class="sh"><span class="pnum med">P53</span> Longest Name from a List <span class="tag tg2">Beginner</span></h2>
+      <div class="prob">
+        <p>Given a list of names, find the longest one. On a tie in length, return the lexicographically smallest.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Custom Comparator Logic</span>
+        <p>Primary sort key: length (longer wins). Secondary key: lexicographic order (smaller wins on tie). Encode this in a lambda comparator for <code>max_element</code>.</p>
+      </div>
+      <div class="trace"><span class="t-label">["Alice", "Bob", "Charlie", "Dave", "Eve"]</span>
+<pre>Lengths: 5, 3, 7, 4, 3
+Max length = 7 → "Charlie"
+No tie → <span class="ok">Answer: "Charlie"</span></pre></div>
+      <div class="cb"><pre><code><span class="kw">int</span> n; cin&gt;&gt;n;
+vector&lt;string&gt; names(n);
+<span class="kw">for</span>(<span class="kw">auto</span>&amp; s : names) cin&gt;&gt;s;
+
+<span class="kw">auto</span> best = max_element(names.begin(), names.end(),
+    [](<span class="kw">const</span> string&amp; a, <span class="kw">const</span> string&amp; b){
+        <span class="kw">if</span>(a.size() != b.size()) <span class="kw">return</span> a.size() &lt; b.size();
+        <span class="kw">return</span> a &gt; b;   <span class="cm">// lex smaller wins tie, so b "beats" a when a > b</span>
+    });
+cout &lt;&lt; *best &lt;&lt; <span class="st">"\n"</span>;</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n) | Space: O(1). <code>max_element</code>'s comparator means "is a less than b?" — so returning <code>a &gt; b</code> on a tie means the lexicographically smaller string is "greater" and wins.</p></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CH6 ═══════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Pattern Printing — <em>Systematic Visual Logic</em></div>
+  </div>
+  <div class="ch-body">
+
+    <!-- UNIVERSAL METHOD -->
+    <div class="sec" data-m="method">
+      <h2 class="sh">The Universal Pattern Method <span class="tag tg">Must Read First</span></h2>
+      <div class="def-box">
+        <span class="lbl">3 Questions — Answer These, Two Loops Write Themselves</span>
+        <p>For each row i (1 to n), ask:<br>
+        <strong>1. How many leading spaces?</strong><br>
+        <strong>2. How many characters to print?</strong><br>
+        <strong>3. What is each character — star, row number, column number, a formula?</strong><br><br>
+        Once you answer these three questions on paper, the nested for loops follow directly. Never start coding a pattern without this analysis.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="p54">
+      <h2 class="sh"><span class="pnum easy">P54</span> Right Triangle &amp; Inverted Triangle <span class="tag tg2">Beginner</span></h2>
+      <div class="prob"><p>Print a right-angled triangle of stars growing from 1 to n rows, then the inverted version shrinking from n to 1.</p></div>
+      <div class="gv"><span class="dv-label">Right Triangle (n=4) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; Inverted Triangle (n=4)</span>
+<pre>*               |  * * * *
+* *             |  * * *
+* * *           |  * *
+* * * *         |  *
+
+Row i: 0 spaces, i stars  |  Row i: 0 spaces, (n−i+1) stars</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Right Triangle</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; <span class="st">"* "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// Inverted Triangle</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=n; i&gt;=1; i--){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; <span class="st">"* "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). The outer loop controls rows; the inner loop controls columns. Inversion is just reversing the outer loop direction — the inner loop formula stays the same.</p></div>
+    </div>
+
+    <div class="sec" data-m="p55">
+      <h2 class="sh"><span class="pnum easy">P55</span> Pyramid &amp; Diamond <span class="tag tc">Intermediate Pattern</span></h2>
+      <div class="prob"><p>Print a centered pyramid, then a full diamond (pyramid + inverted pyramid joined at the widest row).</p></div>
+      <div class="gv"><span class="dv-label">Pyramid (n=4)</span>
+<pre>   *           Row i: (n−i) spaces,  (2i−1) stars
+  ***
+ *****
+*******</pre></div>
+      <div class="gv"><span class="dv-label">Diamond (n=4) — pyramid rows 1..n then n-1..1</span>
+<pre>   *
+  ***
+ *****
+*******
+ *****
+  ***
+   *</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Pyramid</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> s=1; s&lt;=n-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// Diamond = Pyramid top + Pyramid bottom</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){                     <span class="cm">// top half</span>
+    <span class="kw">for</span>(<span class="kw">int</span> s=1; s&lt;=n-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+<span class="kw">for</span>(<span class="kw">int</span> i=n-1; i&gt;=1; i--){                  <span class="cm">// bottom half</span>
+    <span class="kw">for</span>(<span class="kw">int</span> s=1; s&lt;=n-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). Spaces = n−i, stars = 2i−1. Memorise this pair — it's the foundation of every centered pattern. The diamond is just two pyramids sharing no common row.</p></div>
+    </div>
+
+    <div class="sec" data-m="p56">
+      <h2 class="sh"><span class="pnum easy">P56</span> Half Diamond <span class="tag tc">Pattern</span></h2>
+      <div class="prob"><p>Print a half diamond — a right triangle growing from 1 to n rows, then shrinking back from n−1 to 1.</p></div>
+      <div class="gv"><span class="dv-label">Half Diamond (n=4)</span>
+<pre>*
+* *
+* * *
+* * * *
+* * *
+* *
+*</pre></div>
+      <div class="cb"><pre><code><span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){                  <span class="cm">// grow</span>
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; <span class="st">"* "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+<span class="kw">for</span>(<span class="kw">int</span> i=n-1; i&gt;=1; i--){              <span class="cm">// shrink</span>
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; <span class="st">"* "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). The total rows printed is 2n−1. The bottom half starts at i=n−1 (not n) to avoid printing the widest row twice.</p></div>
+    </div>
+
+    <div class="sec" data-m="p57">
+      <h2 class="sh"><span class="pnum easy">P57</span> Floyd's Triangle <span class="tag tg2">Beginner</span></h2>
+      <div class="prob"><p>Print Floyd's triangle: a right-angled triangle where cells are filled with consecutive integers starting from 1. Row i has i numbers.</p></div>
+      <div class="gv"><span class="dv-label">Floyd's Triangle (n=4)</span>
+<pre>1
+2  3
+4  5  6
+7  8  9  10</pre></div>
+      <div class="cb"><pre><code><span class="kw">int</span> num=1;
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; num++ &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). The running counter <code>num</code> is independent of the loop variables — it just increments every time an inner-loop cell is printed.</p></div>
+    </div>
+
+    <div class="sec" data-m="p58">
+      <h2 class="sh"><span class="pnum easy">P58</span> Number Patterns — Two Variations <span class="tag tc">Number Patterns</span></h2>
+      <div class="prob"><p>Pattern 1: each row i prints numbers 1 to i. Pattern 2: each row i prints numbers i to n (descending width).</p></div>
+      <div class="gv"><span class="dv-label">Pattern 1 (n=4) &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; Pattern 2 (n=4)</span>
+<pre>1              |  1 2 3 4
+1 2            |  1 2 3
+1 2 3          |  1 2
+1 2 3 4        |  1
+
+Row i: j from 1..i  |  Row i: j from 1..(n−i+1)</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Pattern 1: 1..i per row</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=i; j++) cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// Pattern 2: 1..(n-i+1) per row (inverted width, content starts at 1)</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=n-i+1; j++) cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). Keep track of two things separately: <em>how many</em> numbers per row (loop bound) and <em>what value</em> to print (j, or a formula). Conflating them is the most common pattern bug.</p></div>
+    </div>
+
+    <div class="sec" data-m="p59">
+      <h2 class="sh"><span class="pnum easy">P59</span> Alphabet Triangle &amp; Vowel Pyramid <span class="tag tc">Letter Patterns</span></h2>
+      <div class="prob"><p>Print a letter triangle (A, AB, ABC…) and a vowel pyramid (A, AE, AEI…) centered.</p></div>
+      <div class="gv"><span class="dv-label">Letter Triangle (n=4) &nbsp;&nbsp; | &nbsp;&nbsp; Vowel Pyramid (n=5, only 5 vowels)</span>
+<pre>A               |      A
+A B             |     A E
+A B C           |    A E I
+A B C D         |   A E I O
+                |  A E I O U</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Letter Triangle: row i prints first i letters</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;i; j++) cout &lt;&lt; (<span class="kw">char</span>)('A'+j) &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// Vowel Pyramid</span>
+string vowels = <span class="st">"AEIOU"</span>;
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=5; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> s=0; s&lt;5-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;i; j++) cout &lt;&lt; vowels[j] &lt;&lt; <span class="st">" "</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). Character arithmetic: <code>'A' + j</code> gives the j-th uppercase letter. Index into a vowel string for non-sequential characters like AEIOU.</p></div>
+    </div>
+
+    <div class="sec" data-m="p60">
+      <h2 class="sh"><span class="pnum hard">P60</span> Hollow Square &amp; Hollow Rectangle <span class="tag tp">Advanced Pattern</span></h2>
+      <div class="prob"><p>Print a hollow square of size n — stars on the border, spaces inside. Then a hollow rectangle of r rows and c columns.</p></div>
+      <div class="gv"><span class="dv-label">Hollow Square (n=5)</span>
+<pre>* * * * *
+*       *
+*       *
+*       *
+* * * * *
+
+Print * only if: first row, last row, first col, or last col</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Hollow Square</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=n; j++){
+        <span class="kw">if</span>(i==1 || i==n || j==1 || j==n)
+            cout &lt;&lt; <span class="st">"* "</span>;
+        <span class="kw">else</span>
+            cout &lt;&lt; <span class="st">"  "</span>;
+    }
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// Hollow Rectangle (r rows, c cols)</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=r; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=c; j++){
+        <span class="kw">if</span>(i==1 || i==r || j==1 || j==c)
+            cout &lt;&lt; <span class="st">"* "</span>;
+        <span class="kw">else</span>
+            cout &lt;&lt; <span class="st">"  "</span>;
+    }
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). The condition <code>i==1 || i==n || j==1 || j==n</code> is the canonical "border check". This same logic generalises to hollow triangles, hollow diamonds — always think: "when am I on the border?"</p></div>
+    </div>
+
+    <div class="sec" data-m="p61">
+      <h2 class="sh"><span class="pnum hard">P61</span> Sandglass &amp; X Pattern <span class="tag tp">Advanced Pattern</span></h2>
+      <div class="prob"><p>Print a sandglass (inverted pyramid joined to an upright pyramid at the tip). Also print an X pattern where stars appear only on the two diagonals.</p></div>
+      <div class="gv"><span class="dv-label">Sandglass (n=4) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; X Pattern (n=5)</span>
+<pre>* * * * * * *    |  *       *
+  * * * * *      |    *   *
+    * * *        |      *
+      *          |    *   *
+    * * *        |  *       *
+  * * * * *
+* * * * * * *
+
+Sandglass row i (top half): (n−i) spaces, (2i−1) stars  [i: n→1]
+Bottom half mirrors, starting at 2           [i: 2→n]
+X: print * if j==i  OR  j==n−i+1</pre></div>
+      <div class="cb"><pre><code><span class="cm">// Sandglass</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=n; i&gt;=1; i--){              <span class="cm">// top half (shrinking)</span>
+    <span class="kw">for</span>(<span class="kw">int</span> s=0; s&lt;n-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+<span class="kw">for</span>(<span class="kw">int</span> i=2; i&lt;=n; i++){              <span class="cm">// bottom half (growing, skip tip row)</span>
+    <span class="kw">for</span>(<span class="kw">int</span> s=0; s&lt;n-i; s++) cout &lt;&lt; <span class="st">" "</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}
+
+<span class="cm">// X Pattern (print * on either diagonal)</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++){
+    <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=n; j++){
+        <span class="kw">if</span>(j==i || j==n-i+1) cout &lt;&lt; <span class="st">"* "</span>;
+        <span class="kw">else</span>                  cout &lt;&lt; <span class="st">"  "</span>;
+    }
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Insight &amp; Complexity</span><p>Time: O(n²) | Space: O(1). X pattern tip: for an odd n, when <code>i==n/2+1</code> both conditions <code>j==i</code> and <code>j==n−i+1</code> are true simultaneously — that's the center cross point. It prints one star correctly.</p></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Edition · Part 2 of 4 · Ch 4–6 · P29–P61</div>
+</div>
+
+<script>
+document.querySelectorAll('.cb').forEach(cb => {
+  let btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  cb.insertBefore(btn, cb.firstChild);
+  btn.addEventListener('click', () => {
+    let code = cb.querySelector('code');
+    let text = code ? code.innerText : cb.innerText.replace('Copy','').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+});
+</script>
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-ps-02';
+  var FILE_DISP = '09 · Problem Solving Pt.2';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

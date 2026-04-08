@@ -57,6 +57,27 @@
       ]
     },
     {
+      "id": "programming",
+      "name": "Programming in C",
+      "slug": "programming",
+      "category": "GATE",
+      "icon": "code",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "prog-ch-01",
+          "subject_id": "programming",
+          "slug": "c-programming",
+          "title": "C Programming Complete",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "c-programming.html",
+          "has_questions": true,
+          "question_subject_tag": "programming"
+        }
+      ]
+    },
+    {
       "id": "dsa",
       "name": "Data Structures & Algorithms",
       "slug": "dsa",
@@ -376,12 +397,156 @@
       "is_published": true,
       "chapters": [
         {
-          "id": "cpp-ch-01",
-          "slug": "c-programming",
-          "title": "C Programming Complete",
+          "id": "cpp-track-1-01",
+          "slug": "cpp-01-foundations",
+          "title": "Track 1: Foundations",
           "order_index": 1,
           "has_notes": true,
-          "notes_file": "c-programming.html",
+          "notes_file": "cpp-01-foundations.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-1-02",
+          "slug": "cpp-02-oop",
+          "title": "Track 1: OOP Mastery",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "cpp-02-oop.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-1-03",
+          "slug": "cpp-03-advanced",
+          "title": "Track 1: Advanced C++",
+          "order_index": 3,
+          "has_notes": true,
+          "notes_file": "cpp-03-advanced.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-1-04",
+          "slug": "cpp-04-mastery",
+          "title": "Track 1: Pure Mastery",
+          "order_index": 4,
+          "has_notes": true,
+          "notes_file": "cpp-04-mastery.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-2-05",
+          "slug": "cpp-05-dsa",
+          "title": "Track 2: DSA with C++",
+          "order_index": 5,
+          "has_notes": true,
+          "notes_file": "cpp-05-dsa.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-2-07",
+          "slug": "cpp-07-logic-builder",
+          "title": "Track 2: Logic Builder",
+          "order_index": 6,
+          "has_notes": true,
+          "notes_file": "cpp-07-logic-builder.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-3-06",
+          "slug": "cpp-06-blackbox-final",
+          "title": "Track 3: The Black Box",
+          "order_index": 7,
+          "has_notes": true,
+          "notes_file": "cpp-06-blackbox-final.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-3-08",
+          "slug": "cpp-master-part1",
+          "title": "Track 3: Problem Solving Pt.1",
+          "order_index": 8,
+          "has_notes": true,
+          "notes_file": "cpp-master-part1.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-3-09",
+          "slug": "cpp-master-part2",
+          "title": "Track 3: Problem Solving Pt.2",
+          "order_index": 9,
+          "has_notes": true,
+          "notes_file": "cpp-master-part2.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-3-10",
+          "slug": "cpp-master-part3",
+          "title": "Track 3: Problem Solving Pt.3",
+          "order_index": 10,
+          "has_notes": true,
+          "notes_file": "cpp-master-part3.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-3-11",
+          "slug": "cpp-master-part4",
+          "title": "Track 3: Problem Solving Pt.4",
+          "order_index": 11,
+          "has_notes": true,
+          "notes_file": "cpp-master-part4.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p1",
+          "slug": "interview-part1",
+          "title": "Track 4: Interview Pt.1",
+          "order_index": 12,
+          "has_notes": true,
+          "notes_file": "interview-part1.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p2",
+          "slug": "interview-part2",
+          "title": "Track 4: Interview Pt.2",
+          "order_index": 13,
+          "has_notes": true,
+          "notes_file": "interview-part2.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p3",
+          "slug": "interview-part3",
+          "title": "Track 4: Interview Pt.3",
+          "order_index": 14,
+          "has_notes": true,
+          "notes_file": "interview-part3.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p4",
+          "slug": "interview-part4",
+          "title": "Track 4: Interview Pt.4",
+          "order_index": 15,
+          "has_notes": true,
+          "notes_file": "interview-part4.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p5",
+          "slug": "interview-part5",
+          "title": "Track 4: Interview Pt.5",
+          "order_index": 16,
+          "has_notes": true,
+          "notes_file": "interview-part5.html",
+          "has_questions": false
+        },
+        {
+          "id": "cpp-track-4-p6",
+          "slug": "interview-part6",
+          "title": "Track 4: Interview Pt.6",
+          "order_index": 17,
+          "has_notes": true,
+          "notes_file": "interview-part6.html",
           "has_questions": false
         }
       ]
