@@ -37,10 +37,7 @@ export default function Signup() {
 
     try {
       await syncAuth({
-        firebase_uid: firebaseUser.uid,
-        email: firebaseUser.email || '',
-        name: name || firebaseUser.displayName || '',
-        picture: firebaseUser.photoURL || undefined,
+        id_token: token,
       });
     } catch {
       // sync might fail — continue

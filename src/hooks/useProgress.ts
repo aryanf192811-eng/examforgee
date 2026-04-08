@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { getProgress } from '../lib/api';
-import type { UserStats } from '../types';
+import type { ProfileResponse } from '../types';
 
 /**
  * Hook for fetching user progress/stats.
  * All stat fields are null-coalesced in the consuming components.
  */
 export function useProgress() {
-  const [stats, setStats] = useState<UserStats | null>(null);
+  const [stats, setStats] = useState<ProfileResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

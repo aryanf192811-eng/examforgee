@@ -33,8 +33,8 @@ export default function Leaderboard() {
     if (tab === 'weekly') {
       return safeNum(b.weekly_points) - safeNum(a.weekly_points);
     }
-    const aScore = safeNum(a.total_points ?? a.total_score);
-    const bScore = safeNum(b.total_points ?? b.total_score);
+    const aScore = safeNum(a.total_points);
+    const bScore = safeNum(b.total_points);
     return bScore - aScore;
   });
 
@@ -89,7 +89,7 @@ export default function Leaderboard() {
               const rank = safeNum(entry.rank, i + 1);
               const score = tab === 'weekly'
                 ? safeNum(entry.weekly_points)
-                : safeNum(entry.total_points ?? entry.total_score);
+                : safeNum(entry.total_points);
               const isCurrentUser = entry.user_id === user?.id;
               const name = entry.name || 'Student';
 
