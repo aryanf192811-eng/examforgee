@@ -36,7 +36,7 @@ export default function Profile() {
 
   const userName = user.name || 'Student';
   const userBio = user.bio || 'No bio yet';
-  const totalScore = safeNum((user as any).total_score || user.total_points);
+  const totalScore = safeNum(user.total_points);
   const streakDays = safeNum(user.current_streak);
 
   async function handleSave() {

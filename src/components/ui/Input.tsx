@@ -1,8 +1,8 @@
-import { type InputHTMLAttributes, type ReactNode, forwardRef } from 'react';
-import { motion } from 'framer-motion';
+import { type ReactNode, forwardRef } from 'react';
+import { type HTMLMotionProps, motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<HTMLMotionProps<'input'>, 'onAnimationStart' | 'onDrag' | 'onDragStart' | 'onDragEnd' | 'ref'> {
   label?: string;
   error?: string;
   icon?: string;
@@ -13,6 +13,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, icon, trailing, fullWidth = true, className, id, ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
+    const { onAnimationStart: _, onDrag: __, onDragStart: ___, onDragEnd: ____, ...inputProps } = props as any;
 
     return (
       <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full')}>
@@ -44,7 +45,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               error ? 'ring-2 ring-error/40' : '',
               className
             )}
-            {...props}
+            {...inputProps}
           />
           {trailing && (
             <div className="absolute right-3 flex items-center">
