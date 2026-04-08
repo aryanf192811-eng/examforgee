@@ -90,12 +90,12 @@ export default function Leaderboard() {
               const score = tab === 'weekly'
                 ? safeNum(entry.weekly_points)
                 : safeNum(entry.total_points);
-              const isCurrentUser = entry.user_id === user?.id;
+              const isCurrentUser = entry.uid === user?.uid;
               const name = entry.name || 'Student';
 
               return (
                 <motion.div
-                  key={entry.user_id}
+                  key={entry.uid}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.03, type: 'spring', stiffness: 300, damping: 24 }}
