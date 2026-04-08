@@ -145,7 +145,7 @@ export function startQuiz(
   subjectSlugs?: string,
   count: number = 20
 ): Promise<QuizSessionResponse> {
-  const params = new URLSearchParams({ mode, count: count.toString() });
+  const params = new URLSearchParams({ mode: mode.toLowerCase(), count: count.toString() });
   if (subjectSlugs) {
     params.append('subject_slugs', subjectSlugs);
   }
