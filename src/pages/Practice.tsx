@@ -3,16 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { AppShell } from '../components/layout/AppShell';
 import { Button } from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Skeleton';
-import { EmptyState } from '../components/ui/EmptyState';
 import { Badge } from '../components/ui/Badge';
 import { useToast } from '../hooks/useToast';
 import { useQuizStore } from '../lib/store/quizStore';
 import { getSubjects, startQuiz, submitQuiz, saveQuizState } from '../lib/api';
-import { cn, safeNum, formatPercent } from '../lib/utils';
+import { cn, formatPercent } from '../lib/utils';
 import { VirtualCalculator } from '../components/ui/VirtualCalculator';
-import type { SubjectResponse, QuizQuestion } from '../types';
+import type { SubjectResponse } from '../types';
 
-const modes = ['topic', 'mixed', 'mock', 'PYQ'];
+const modes = [
+  { id: 'topic', label: 'Topic Focus', icon: 'subject', desc: 'Deep dive into specific chapters' },
+  { id: 'mixed', label: 'Grand Mix', icon: 'shuffle', desc: 'Randomized across all subjects' },
+  { id: 'mock', label: 'Full Mock', icon: 'timer', desc: 'Full-length 3-hour GATE simulation' },
+  { id: 'PYQ', label: 'Previous Years', icon: 'history', desc: 'Official questions from past exams' }
+];
 
 export default function Practice() {
   const { addToast } = useToast();
@@ -21,7 +25,7 @@ export default function Practice() {
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
   const [selectedSubjectId, setSelectedSubjectId] = useState('');
   const [selectedMode, setSelectedMode] = useState('mixed');
-  const [questionCount, setQuestionCount] = useState(10);
+  const [questionCount, setQuestionCount] = useState(15);
   const [isStarting, setIsStarting] = useState(false);
   const [isCalcOpen, setIsCalcOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -55,7 +59,7 @@ export default function Practice() {
   useEffect(() => {
     if (!sessionId || isSubmitted || timeLeft === 0) return;
     if (timeLeft === null) {
-      setTimeLeft(questions.length * 180); // 3 mins per question avg for GATE
+      setTimeLeft(questions.length * 180); // 3 mins per question
     }
 
     const timer = setInterval(() => {
@@ -72,20 +76,18 @@ export default function Practice() {
     return `${h > 0 ? h + ':' : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  // Start quiz
   const handleStart = useCallback(async () => {
-    if (!selectedSubjectId) {
+    if (!selectedSubjectId && selectedMode !== 'mixed') {
       addToast('Please select a subject.', 'warning');
       return;
     }
     const subject = subjects.find(s => s.id === selectedSubjectId);
-    if (!subject) return;
 
     setIsStarting(true);
     try {
       const slugs = selectedMode === 'mixed' 
         ? subjects.map(s => s.slug).join(',') 
-        : subject.slug;
+        : (subject?.slug ?? '');
 
       const session = await startQuiz(selectedMode, slugs, questionCount);
       setSession(session.session_id);
@@ -97,7 +99,6 @@ export default function Practice() {
     }
   }, [subjects, selectedSubjectId, selectedMode, questionCount, addToast, setSession, setQuestions]);
 
-  // Submit quiz
   const handleSubmit = useCallback(async () => {
     if (!sessionId) return;
     try {
@@ -105,103 +106,139 @@ export default function Practice() {
       const result = await submitQuiz(sessionId);
       setSubmissionResult(result);
       setSubmitted(true);
-      addToast('Quiz submitted!', 'success');
+      addToast('Simulation submitted successfully!', 'success');
     } catch (err: unknown) {
-      addToast(err instanceof Error ? err.message : 'Failed to submit', 'error');
+      addToast(err instanceof Error ? err.message : 'Submission failed', 'error');
     }
   }, [sessionId, answers, flags, addToast, setSubmitted, setSubmissionResult]);
 
-  const currentQuestion = questions[currentIndex] ?? null;
+  const currentQuestion = useMemo(() => questions[currentIndex] ?? null, [questions, currentIndex]);
 
   // ── Setup View ──
   if (!sessionId || questions.length === 0) {
     return (
-      <AppShell title="Practice">
+      <AppShell title="Console Prep">
         {isLoadingSubjects ? (
-          <div className="space-y-4">
-            <Skeleton variant="card" />
-            <Skeleton variant="card" />
+          <div className="max-w-4xl mx-auto grid gap-6">
+            <Skeleton className="h-48 rounded-3xl" />
+            <Skeleton className="h-96 rounded-3xl" />
           </div>
         ) : (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-xl mx-auto space-y-8"
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-5xl mx-auto space-y-10 py-8"
           >
-            <div className="text-center">
-              <h2 className="font-display text-headline-lg text-on-surface mb-2">Practice Console</h2>
-              <p className="text-body-md text-on-surface-variant">Configure your GATE-style examination environment</p>
+            <div className="flex flex-col items-center text-center space-y-3">
+               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined text-display-md text-primary">terminal</span>
+               </div>
+               <h2 className="text-display-sm font-display font-bold tracking-tight bg-gradient-to-br from-on-surface to-on-surface-variant bg-clip-text text-transparent">
+                  Engineering Practice Console
+               </h2>
+               <p className="text-body-lg text-on-surface-variant max-w-lg">
+                  Professional GATE-standard examination simulator. Select your domain and proceed to the console.
+               </p>
             </div>
 
-            <div className="grid gap-6">
-              <div className="p-6 rounded-3xl bg-surface-container border border-outline-variant space-y-6">
-                 {/* Subject */}
-                 <div>
-                    <label className="text-label-lg text-on-surface-variant block mb-3">Target Subject</label>
-                    <div className="flex flex-wrap gap-2">
-                      <button
-                        onClick={() => setSelectedMode('mixed')}
-                        className={cn(
-                          'px-4 py-2 rounded-xl text-label-lg transition-all border-2',
-                          selectedMode === 'mixed' ? 'bg-primary-container border-primary text-on-primary-container font-bold' : 'bg-surface border-transparent text-on-surface-variant hover:bg-surface-container-high'
-                        )}
-                      >
-                        Mixed Subjects
-                      </button>
-                      {subjects.map((s) => (
-                        <button
-                          key={s.id}
-                          onClick={() => { setSelectedSubjectId(s.id); setSelectedMode('topic'); }}
-                          className={cn(
-                            'px-4 py-2 rounded-xl text-label-lg transition-all border-2',
-                            selectedSubjectId === s.id && selectedMode !== 'mixed'
-                              ? 'bg-secondary-container border-secondary text-on-secondary-container font-bold'
-                              : 'bg-surface border-transparent text-on-surface-variant hover:bg-surface-container-high'
-                          )}
-                        >
-                          {s.name}
-                        </button>
-                      ))}
-                    </div>
-                 </div>
-
-                 {/* Mode */}
-                 <div>
-                    <label className="text-label-lg text-on-surface-variant block mb-3">Simulation Mode</label>
-                    <div className="grid grid-cols-2 gap-2">
-                       {modes.map(m => (
+            <div className="grid lg:grid-cols-12 gap-8">
+              {/* Left Side: Modes */}
+              <div className="lg:col-span-7 space-y-8">
+                 <section className="space-y-4">
+                    <h3 className="text-title-medium font-bold px-1 uppercase tracking-widest text-primary/70">1. Select Mode</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                       {modes.map((m) => (
                          <button
-                           key={m}
-                           onClick={() => setSelectedMode(m)}
+                           key={m.id}
+                           onClick={() => setSelectedMode(m.id)}
                            className={cn(
-                             'p-3 rounded-xl text-label-md border-2 transition-all capitalize',
-                             selectedMode === m ? 'bg-tertiary-container border-tertiary text-on-tertiary-container font-bold' : 'bg-surface border-transparent text-on-surface-variant'
+                             "relative p-6 rounded-3xl border-2 text-left transition-all overflow-hidden group",
+                             selectedMode === m.id 
+                               ? "bg-primary-container border-primary shadow-xl shadow-primary/10" 
+                               : "bg-surface-container border-outline-variant hover:border-primary/50"
                            )}
                          >
-                           {m} Mode
+                           <span className={cn(
+                             "material-symbols-outlined mb-3 transition-colors",
+                             selectedMode === m.id ? "text-primary" : "text-on-surface-variant group-hover:text-primary"
+                           )}>
+                             {m.icon}
+                           </span>
+                           <h4 className="font-bold text-title-medium mb-1">{m.label}</h4>
+                           <p className="text-body-small text-on-surface-variant leading-snug">{m.desc}</p>
                          </button>
                        ))}
                     </div>
-                 </div>
+                 </section>
 
-                 {/* Count */}
-                 <div>
-                    <div className="flex justify-between mb-3">
-                      <label className="text-label-lg text-on-surface-variant">Question Count</label>
-                      <span className="text-label-lg font-bold text-primary">{questionCount}</span>
+                 <section className="space-y-4">
+                    <div className="flex justify-between items-center px-1">
+                       <h3 className="text-title-medium font-bold uppercase tracking-widest text-primary/70">2. Session Intensity</h3>
+                       <Badge variant="primary" size="lg">{questionCount} Questions</Badge>
                     </div>
-                    <input
-                      type="range" min={5} max={50} step={5}
-                      value={questionCount}
-                      onChange={(e) => setQuestionCount(Number(e.target.value))}
-                      className="w-full accent-primary"
-                    />
-                 </div>
+                    <div className="p-8 rounded-3xl bg-surface-container border border-outline-variant">
+                       <input
+                         type="range" min={5} max={65} step={5}
+                         value={questionCount}
+                         onChange={(e) => setQuestionCount(Number(e.target.value))}
+                         className="w-full h-2 bg-outline-variant rounded-full appearance-none cursor-pointer accent-primary"
+                       />
+                       <div className="flex justify-between mt-4 text-label-medium text-outline">
+                          <span>Sprint</span>
+                          <span>Marathon</span>
+                       </div>
+                    </div>
+                 </section>
               </div>
 
-              <Button size="lg" onClick={handleStart} loading={isStarting} icon="play_arrow">
-                Start Simulation
-              </Button>
+              {/* Right Side: Subjects */}
+              <div className="lg:col-span-5 flex flex-col gap-8">
+                 <section className="flex-1 space-y-4">
+                    <h3 className="text-title-medium font-bold px-1 uppercase tracking-widest text-primary/70">3. Target Domain</h3>
+                    <div className="p-4 rounded-3xl bg-surface-container border border-outline-variant max-h-[440px] overflow-y-auto custom-scrollbar">
+                       <div className="grid gap-2">
+                          <button
+                            onClick={() => setSelectedMode('mixed')}
+                            className={cn(
+                              "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all",
+                              selectedMode === 'mixed' ? "bg-secondary-container border-secondary shadow-lg shadow-secondary/5" : "bg-surface border-transparent hover:bg-surface-container-high"
+                            )}
+                          >
+                             <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center text-secondary">
+                                <span className="material-symbols-outlined">auto_awesome</span>
+                             </div>
+                             <span className="font-bold">Mixed GATE Subjects</span>
+                          </button>
+                          {subjects.map((s) => (
+                            <button
+                              key={s.id}
+                              onClick={() => { setSelectedSubjectId(s.id); setSelectedMode('topic'); }}
+                              className={cn(
+                                "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all",
+                                selectedSubjectId === s.id && selectedMode !== 'mixed' ? "bg-primary-container border-primary" : "bg-surface border-transparent hover:bg-surface-container-high"
+                              )}
+                            >
+                               <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary/10">
+                                  <span className="material-symbols-outlined">{s.icon || 'menu_book'}</span>
+                               </div>
+                               <span className="font-bold flex-1 text-left">{s.name}</span>
+                            </button>
+                          ))}
+                       </div>
+                    </div>
+                 </section>
+
+                 <Button 
+                   size="lg" 
+                   fullWidth 
+                   onClick={handleStart} 
+                   loading={isStarting} 
+                   icon="bolt"
+                   className="shadow-2xl shadow-primary/20 rounded-3xl py-8 text-headline-small"
+                 >
+                   Launch Console
+                 </Button>
+              </div>
             </div>
           </motion.div>
         )}
@@ -212,212 +249,289 @@ export default function Practice() {
   // ── Results View ──
   if (isSubmitted && submissionResult) {
     return (
-      <AppShell title="Results Overview">
-        <div className="max-w-4xl mx-auto space-y-8">
-           <div className="grid md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 p-8 rounded-3xl bg-surface-container flex flex-col items-center justify-center text-center">
-                 <Badge variant="success" size="lg" className="mb-4">Simulation Complete</Badge>
-                 <div className="text-display-lg font-display text-primary leading-none mb-2">
-                   {formatPercent(submissionResult.accuracy_pct)}
+      <AppShell title="Analysis Dashboard">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-5xl mx-auto space-y-12 py-6"
+        >
+           {/* Top Scorecard */}
+           <div className="relative p-12 rounded-[40px] bg-gradient-to-br from-primary to-primary-container overflow-hidden text-center text-white shadow-3xl shadow-primary/30">
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none" />
+              <div className="relative z-10 flex flex-col items-center space-y-4">
+                 <Badge className="bg-white/20 text-white border-white/30 backdrop-blur-md px-6 py-2 uppercase tracking-[0.2em] font-bold">Performance Summary</Badge>
+                 <h2 className="text-display-xl font-display font-bold leading-none tracking-tighter">
+                    {formatPercent(submissionResult.accuracy_pct)}
+                 </h2>
+                 <p className="text-headline-small opacity-80 font-light">Precision Index</p>
+                 <div className="flex gap-12 mt-8">
+                    <div>
+                       <p className="text-headline-small font-bold">{submissionResult.marks_obtained}</p>
+                       <p className="text-label-lg opacity-60">Score Acquired</p>
+                    </div>
+                    <div className="w-px h-12 bg-white/20" />
+                    <div>
+                       <p className="text-headline-small font-bold">{submissionResult.correct}/{submissionResult.total_questions}</p>
+                       <p className="text-label-lg opacity-60">Success Rate</p>
+                    </div>
                  </div>
-                 <p className="text-body-lg text-on-surface-variant">Overall Accuracy</p>
-              </div>
-              <div className="grid gap-4">
-                 {[
-                   { label: 'Marks', val: `${submissionResult.marks_obtained}/${submissionResult.total_marks}`, color: 'text-primary' },
-                   { label: 'Correct', val: submissionResult.correct, color: 'text-success' },
-                   { label: 'Incorrect', val: submissionResult.incorrect, color: 'text-error' },
-                   { label: 'Unanswered', val: submissionResult.unanswered, color: 'text-outline' },
-                 ].map(stat => (
-                   <div key={stat.label} className="p-4 rounded-2xl bg-surface-container border border-outline-variant">
-                      <p className="text-label-sm text-on-surface-variant mb-1">{stat.label}</p>
-                      <p className={cn("text-title-lg font-bold", stat.color)}>{stat.val}</p>
-                   </div>
-                 ))}
               </div>
            </div>
 
-           <div className="space-y-6">
-              <h3 className="font-display text-headline-sm px-2">Detailed Analysis</h3>
-              <div className="grid gap-4">
+           {/* Stats Grid */}
+           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { label: 'Marks Obtained', val: submissionResult.marks_obtained, suffix: ` / ${submissionResult.total_marks}`, icon: 'military_tech', color: 'text-primary' },
+                { label: 'Correct Hits', val: submissionResult.correct, suffix: ' Questions', icon: 'check_circle', color: 'text-success' },
+                { label: 'Incorrect Hits', val: submissionResult.incorrect, suffix: ' Questions', icon: 'cancel', color: 'text-error' },
+                { label: 'Time Consumed', val: '24m 12s', suffix: '', icon: 'schedule', color: 'text-secondary' },
+              ].map(stat => (
+                <div key={stat.label} className="p-6 rounded-3xl bg-surface-container border border-outline-variant hover:border-primary/30 transition-all group">
+                   <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-colors", stat.color, "bg-current/10")}>
+                      <span className="material-symbols-outlined">{stat.icon}</span>
+                   </div>
+                   <p className="text-label-lg text-on-surface-variant font-medium mb-1">{stat.label}</p>
+                   <p className="text-headline-small font-bold text-on-surface">
+                      {stat.val}<span className="text-body-medium text-outline font-normal">{stat.suffix}</span>
+                   </p>
+                </div>
+              ))}
+           </div>
+
+           {/* Breakdown */}
+           <div className="space-y-8">
+              <div className="flex items-center gap-4 px-2">
+                 <h3 className="text-headline-small font-display font-bold">Deep Logic Analysis</h3>
+                 <div className="h-px flex-1 bg-outline-variant/50" />
+              </div>
+              <div className="grid gap-6">
                 {submissionResult.question_results.map((res, i) => {
                   const q = questions.find(question => question.id === res.question_id);
                   if (!q) return null;
                   return (
-                    <div key={q.id} className="p-6 rounded-2xl bg-surface-container border border-outline-variant hover:border-outline transition-colors">
-                       <div className="flex items-center gap-3 mb-4">
+                    <motion.div 
+                      key={q.id} 
+                      whileHover={{ scale: 1.01 }}
+                      className="p-8 rounded-[32px] bg-surface-container border border-outline-variant relative overflow-hidden group shadow-sm hover:shadow-xl transition-all"
+                    >
+                       <div className={cn(
+                         "absolute left-0 top-0 w-2 h-full transition-colors",
+                         res.is_correct ? "bg-success" : "bg-error"
+                       )} />
+                       
+                       <div className="flex items-flex flex-wrap gap-4 mb-8">
                           <span className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-label-md",
-                            res.is_correct ? "bg-success/10 text-success" : "bg-error/10 text-error"
+                            "px-4 py-2 rounded-xl flex items-center justify-center font-bold text-label-lg shadow-sm border",
+                            res.is_correct ? "bg-success/10 border-success/20 text-success" : "bg-error/10 border-error/20 text-error"
                           )}>
-                            Q{i + 1}
+                            ITEM #{i + 1}
                           </span>
-                          <span className="text-body-sm text-on-surface-variant font-mono uppercase tracking-widest">{q.subject_slug}</span>
+                          <Badge variant="primary" className="font-mono text-[10px] uppercase tracking-widest">{q.subject_slug}</Badge>
                           <div className="flex-1" />
-                          <Badge variant={res.is_correct ? "success" : "error"}>
-                            {res.is_correct ? `+${res.marks_awarded}` : `-${res.marks_awarded || '0.33'}`}
-                          </Badge>
-                       </div>
-                       <p className="text-body-md text-on-surface mb-6">{q.question_text}</p>
-                       <div className="grid grid-cols-2 gap-4 mb-4">
-                          <div className="p-3 rounded-xl bg-surface-container-low border border-outline-variant">
-                             <p className="text-[10px] text-outline-variant font-bold uppercase mb-1">Your Choice</p>
-                             <p className="font-bold text-on-surface">{res.user_answer || 'NONE'}</p>
-                          </div>
-                          <div className="p-3 rounded-xl bg-primary/5 border border-primary/20">
-                             <p className="text-[10px] text-primary/50 font-bold uppercase mb-1">Correct Identity</p>
-                             <p className="font-bold text-primary">{res.correct_answer}</p>
+                          <div className={cn(
+                             "text-title-medium font-bold px-4 py-2 rounded-xl border border-outline-variant",
+                             res.is_correct ? "text-success" : "text-error"
+                          )}>
+                             {res.is_correct ? `+ ${res.marks_awarded}` : `- ${res.marks_awarded || '0.33'}`} MARK
                           </div>
                        </div>
-                       {res.explanation && (
-                         <div className="p-4 rounded-xl bg-surface-container-highest/50 text-body-sm text-on-surface-variant" dangerouslySetInnerHTML={{ __html: res.explanation }} />
-                       )}
-                    </div>
+
+                       <p className="text-headline-small text-on-surface leading-snug mb-8 font-light italic">
+                          "{q.question_text}"
+                       </p>
+
+                       <div className="grid md:grid-cols-2 gap-6 p-1 rounded-3xl bg-surface-container-low border border-outline-variant/30">
+                          <div className="p-6 rounded-2xl bg-surface-container flex flex-col gap-1 border border-outline-variant/20 shadow-inner">
+                             <p className="text-[10px] text-outline font-black uppercase tracking-widest">Your Candidate</p>
+                             <p className={cn("text-title-large font-bold", res.is_correct ? "text-success" : "text-error")}>
+                                {res.user_answer || 'VACANT'}
+                             </p>
+                          </div>
+                          <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col gap-1 shadow-inner">
+                             <p className="text-[10px] text-primary/50 font-black uppercase tracking-widest">Ground Truth</p>
+                             <p className="text-title-large font-bold text-primary">{res.correct_answer}</p>
+                          </div>
+                       </div>
+                    </motion.div>
                   );
                 })}
               </div>
            </div>
 
-           <Button size="lg" fullWidth onClick={reset} icon="replay">Return to Prep</Button>
-        </div>
+           <Button size="lg" fullWidth onClick={reset} icon="refresh" className="rounded-3xl py-10 text-headline-small shadow-xl shadow-primary/10">Return to Bridge</Button>
+        </motion.div>
       </AppShell>
     );
   }
 
-  // ── Console Simulation View ──
+  // ── Console View ──
   return (
-    <AppShell title="GATE Engineering Console" headerActions={
-      <div className="flex items-center gap-4">
-         <div className="hidden md:flex flex-col items-end">
-            <span className="text-label-sm text-outline font-bold uppercase tracking-wider">Time Remaining</span>
-            <span className={cn("font-mono text-title-lg font-bold", (timeLeft ?? 0) < 300 ? "text-error" : "text-primary")}>
+    <AppShell title="Live Assessment" headerActions={
+      <div className="flex items-center gap-6">
+         <div className="hidden md:flex flex-col items-end gap-0.5">
+            <span className="text-[10px] text-outline font-black uppercase tracking-[0.2em]">Session Timer</span>
+            <span className={cn(
+              "font-mono text-headline-small font-black tracking-tighter transition-colors tabular-nums", 
+              (timeLeft ?? 0) < 180 ? "text-error animate-pulse" : "text-primary"
+            )}>
                {formatTime(timeLeft ?? 0)}
             </span>
          </div>
+         <div className="h-10 w-px bg-outline-variant/50 hidden md:block" />
          <button 
            onClick={() => setIsCalcOpen(true)}
-           className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center hover:bg-surface-container-highest transition-colors cursor-pointer border border-outline-variant"
+           className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center hover:bg-primary hover:text-white transition-all cursor-pointer border border-outline-variant shadow-sm active:scale-95"
          >
-           <span className="material-symbols-outlined">calculate</span>
+           <span className="material-symbols-outlined text-display-xs">calculate</span>
          </button>
       </div>
     }>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 h-[calc(100vh-140px)]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 h-[calc(100vh-140px)]">
          {/* Main Question Area */}
-         <div className="overflow-y-auto space-y-6 pr-2 custom-scrollbar">
-            {currentQuestion ? (
-              <motion.div
-                key={currentQuestion.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="space-y-6"
-              >
-                 {/* Metadata */}
-                 <div className="flex items-center flex-wrap gap-2">
-                    <Badge variant="primary">{currentQuestion.type}</Badge>
-                    <Badge variant="secondary">{currentQuestion.marks} Marks</Badge>
-                    {currentQuestion.gate_year && <Badge variant="tertiary">GATE {currentQuestion.gate_year}</Badge>}
-                    <div className="flex-1" />
-                    <button 
-                      onClick={() => toggleFlag(currentQuestion.id)}
-                      className={cn(
-                        "flex items-center gap-2 px-3 py-1.5 rounded-lg text-label-md font-bold transition-all border",
-                        flags.includes(currentQuestion.id) 
-                          ? "bg-warning/10 border-warning text-warning" 
-                          : "bg-surface border-outline-variant text-on-surface-variant hover:border-outline"
+         <div className="overflow-y-auto space-y-8 pr-4 custom-scrollbar-premium">
+            <AnimatePresence mode="wait">
+              {currentQuestion ? (
+                <motion.div
+                  key={currentQuestion.id}
+                  initial={{ opacity: 0, scale: 0.98, x: -10 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  exit={{ opacity: 0, scale: 0.98, x: 10 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  className="space-y-10"
+                >
+                   {/* Context Bar */}
+                   <div className="flex items-center gap-3">
+                      <div className="px-4 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 flex items-center gap-3">
+                        <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                        <span className="text-label-lg font-black uppercase tracking-widest">{currentQuestion.type}</span>
+                      </div>
+                      <Badge variant="primary" className="px-4 py-2 text-label-lg whitespace-nowrap">{currentQuestion.marks} Marks</Badge>
+                      {currentQuestion.gate_year && (
+                        <Badge variant="tertiary" className="px-4 py-2 text-label-lg">Official GATE {currentQuestion.gate_year}</Badge>
                       )}
-                    >
-                      <span className="material-symbols-outlined text-[18px]">
-                        {flags.includes(currentQuestion.id) ? 'bookmark_added' : 'bookmark'}
-                      </span>
-                      {flags.includes(currentQuestion.id) ? 'Marked' : 'Mark for Review'}
-                    </button>
-                 </div>
+                      
+                      <div className="flex-1" />
+                      
+                      <button 
+                        onClick={() => toggleFlag(currentQuestion.id)}
+                        className={cn(
+                          "flex items-center gap-3 px-5 py-2.5 rounded-xl text-label-lg font-black transition-all border-2",
+                          flags.includes(currentQuestion.id) 
+                            ? "bg-warning/10 border-warning text-warning shadow-lg shadow-warning/5" 
+                            : "bg-surface border-outline-variant text-outline hover:border-primary/50"
+                        )}
+                      >
+                        <span className="material-symbols-outlined text-[20px]">
+                          {flags.includes(currentQuestion.id) ? 'bookmark_added' : 'bookmark'}
+                        </span>
+                        {flags.includes(currentQuestion.id) ? 'FLAGGED' : 'MARK REVIEW'}
+                      </button>
+                   </div>
 
-                 {/* Question Content */}
-                 <div className="p-8 rounded-3xl bg-surface-container border border-outline-variant">
-                    <p className="text-body-lg text-on-surface leading-relaxed whitespace-pre-wrap">
-                      {currentQuestion.question_text}
-                    </p>
-                 </div>
+                   {/* Statement */}
+                   <div className="p-12 rounded-[48px] bg-surface-container border border-outline-variant relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-8 opacity-5">
+                         <span className="material-symbols-outlined text-[120px]">help</span>
+                      </div>
+                      <div className="relative z-10">
+                         <h3 className="text-label-sm text-outline font-black uppercase tracking-[0.3em] mb-6">Inquiry Statement</h3>
+                         <p className="text-headline-small text-on-surface leading-[1.6] font-display">
+                           {currentQuestion.question_text}
+                         </p>
+                      </div>
+                   </div>
 
-                 {/* Inputs */}
-                 <div className="space-y-4">
-                    {currentQuestion.type === 'MCQ' && (
-                        <div className="grid gap-3">
-                            {[
-                                { key: 'A', text: currentQuestion.option_a },
-                                { key: 'B', text: currentQuestion.option_b },
-                                { key: 'C', text: currentQuestion.option_c },
-                                { key: 'D', text: currentQuestion.option_d },
-                            ].filter(o => o.text).map((opt) => {
-                                const isSelected = answers[currentQuestion.id] === opt.key;
-                                return (
-                                    <button
-                                        key={opt.key}
-                                        onClick={() => recordAnswer(currentQuestion.id, opt.key)}
-                                        className={cn(
-                                            "w-full flex items-center gap-4 p-5 rounded-2xl border-2 transition-all group cursor-pointer",
-                                            isSelected 
-                                              ? "bg-primary-container border-primary text-on-primary-container shadow-sm" 
-                                              : "bg-surface-container border-transparent hover:bg-surface-container-high"
-                                        )}
-                                    >
-                                        <span className={cn(
-                                            "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-label-lg transition-all",
-                                            isSelected ? "bg-primary text-on-primary" : "bg-surface-container-highest text-on-surface-variant group-hover:bg-outline-variant"
-                                        )}>
-                                            {opt.key}
-                                        </span>
-                                        <span className="text-title-small flex-1 text-left">{opt.text}</span>
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    )}
+                   {/* Options Area */}
+                   <div className="space-y-10 pb-12">
+                      {currentQuestion.type === 'MCQ' && (
+                          <div className="grid gap-4">
+                              {[
+                                  { key: 'A', text: currentQuestion.option_a },
+                                  { key: 'B', text: currentQuestion.option_b },
+                                  { key: 'C', text: currentQuestion.option_c },
+                                  { key: 'D', text: currentQuestion.option_d },
+                              ].filter(o => o.text).map((opt) => {
+                                  const isSelected = answers[currentQuestion.id] === opt.key;
+                                  return (
+                                      <button
+                                          key={opt.key}
+                                          onClick={() => recordAnswer(currentQuestion.id, opt.key)}
+                                          className={cn(
+                                              "w-full flex items-center gap-6 p-6 rounded-[32px] border-2 transition-all group overflow-hidden relative shadow-sm",
+                                              isSelected 
+                                                ? "bg-primary text-white border-primary shadow-2xl shadow-primary/20" 
+                                                : "bg-surface-container border-transparent hover:bg-primary/5 hover:border-primary/30"
+                                          )}
+                                      >
+                                          <div className={cn(
+                                              "w-14 h-14 rounded-2xl flex items-center justify-center font-black text-headline-small transition-all",
+                                              isSelected ? "bg-white text-primary" : "bg-outline-variant/30 text-on-surface-variant group-hover:bg-primary/20 group-hover:text-primary"
+                                          )}>
+                                              {opt.key}
+                                          </div>
+                                          <span className="text-title-large flex-1 text-left font-medium">{opt.text}</span>
+                                          {isSelected && (
+                                            <motion.span 
+                                              initial={{ scale: 0 }} animate={{ scale: 1 }}
+                                              className="material-symbols-outlined text-white"
+                                            >
+                                              check_circle
+                                            </motion.span>
+                                          )}
+                                      </button>
+                                  );
+                              })}
+                          </div>
+                      )}
 
-                    {currentQuestion.type === 'NAT' && (
-                        <div className="p-6 rounded-3xl bg-surface-container border-2 border-primary/20">
-                            <label className="text-label-md text-primary font-bold uppercase mb-2 block">Numerical Response</label>
-                            <input
-                                type="number"
-                                step="any"
-                                value={String(answers[currentQuestion.id] ?? '')}
-                                placeholder="Enter calculated value..."
-                                onChange={(e) => recordAnswer(currentQuestion.id, e.target.value)}
-                                className="w-full bg-transparent text-headline-sm font-mono text-on-surface outline-none"
-                                autoFocus
-                            />
-                        </div>
-                    )}
-                 </div>
+                      {currentQuestion.type === 'NAT' && (
+                          <div className="p-10 rounded-[48px] bg-primary/5 border-2 border-primary/20 flex flex-col items-center">
+                             <span className="text-label-lg text-primary font-black uppercase tracking-[0.2em] mb-6">Decimal Value Result</span>
+                             <div className="relative group">
+                                <input
+                                    type="number"
+                                    step="any"
+                                    value={String(answers[currentQuestion.id] ?? '')}
+                                    placeholder="0.00"
+                                    onChange={(e) => recordAnswer(currentQuestion.id, e.target.value)}
+                                    className="bg-transparent text-display-sm font-mono text-on-surface text-center outline-none w-64 border-b-4 border-primary/50 focus:border-primary transition-all pb-2"
+                                    autoFocus
+                                />
+                             </div>
+                             <p className="mt-6 text-body-medium text-outline">Precise calculation required for full attribution.</p>
+                          </div>
+                      )}
+                   </div>
 
-                 {/* Interaction Bar */}
-                 <div className="flex items-center justify-between border-t border-outline-variant pt-6">
-                    <Button variant="ghost" onClick={prevQuestion} disabled={currentIndex === 0} icon="chevron_left">Previous</Button>
-                    <div className="flex items-center gap-2">
-                       <Button variant="secondary" onClick={() => recordAnswer(currentQuestion.id, null)} icon="backspace">Clear Answer</Button>
-                       {currentIndex === questions.length - 1 ? (
-                         <Button onClick={handleSubmit} icon="done_all" variant="primary">Submit Console</Button>
-                       ) : (
-                         <Button onClick={nextQuestion} iconRight="chevron_right">Save & Next</Button>
-                       )}
-                    </div>
-                 </div>
-              </motion.div>
-            ) : (
-              <Skeleton variant="card" />
-            )}
+                   {/* Navigation Footer */}
+                   <div className="flex items-center justify-between border-t-2 border-outline-variant/50 pt-10 px-4 mt-8">
+                      <Button variant="ghost" size="lg" onClick={prevQuestion} disabled={currentIndex === 0} icon="arrow_back">Previous</Button>
+                      <div className="flex items-center gap-4">
+                         <Button variant="secondary" size="lg" onClick={() => recordAnswer(currentQuestion.id, null)} icon="delete_sweep">Purge</Button>
+                         {currentIndex === questions.length - 1 ? (
+                           <Button onClick={handleSubmit} size="lg" icon="verified" className="px-12 rounded-2xl shadow-2xl shadow-primary/30">Submit Final</Button>
+                         ) : (
+                           <Button onClick={nextQuestion} size="lg" iconRight="arrow_forward" className="px-10 rounded-2xl shadow-xl shadow-primary/10">Save & Next</Button>
+                         )}
+                      </div>
+                   </div>
+                </motion.div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full opacity-50">
+                    <Skeleton className="w-full h-96 rounded-[48px]" />
+                </div>
+              )}
+            </AnimatePresence>
          </div>
 
-         {/* Palette Palette */}
-         <div className="hidden lg:flex flex-col h-full bg-surface-container p-6 rounded-3xl border border-outline-variant overflow-hidden">
-            <h4 className="text-label-lg font-bold text-on-surface mb-6 uppercase tracking-widest flex items-center gap-2">
-               <span className="material-symbols-outlined text-[20px]">apps</span>
-               Question Palette
-            </h4>
+         {/* Question Palette (Premium Right Sidebar) */}
+         <div className="hidden lg:flex flex-col bg-surface-container p-8 rounded-[48px] border border-outline-variant overflow-hidden shadow-2xl shadow-on-surface/5">
+            <header className="mb-10 flex flex-col gap-2">
+               <h4 className="text-label-lg font-black text-on-surface-variant uppercase tracking-[0.3em]">Map Strategy</h4>
+               <p className="text-body-small text-outline leading-tight">Fast navigation through your examination session.</p>
+            </header>
             
-            <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-5 gap-3 h-0 content-start">
+            <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar-premium grid grid-cols-4 gap-4 h-0 content-start py-2">
                {questions.map((q, i) => {
                   const isCurrent = currentIndex === i;
                   const isAnswered = answers[q.id] != null && answers[q.id] !== '';
@@ -428,30 +542,31 @@ export default function Practice() {
                       key={q.id}
                       onClick={() => goToQuestion(i)}
                       className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-label-md transition-all border-2",
-                        isCurrent ? "border-primary scale-110 shadow-lg" : "border-transparent",
+                        "w-full aspect-square rounded-2xl flex items-center justify-center font-black text-title-medium transition-all relative border-2",
+                        isCurrent ? "border-primary scale-110 shadow-xl shadow-primary/20 z-10" : "border-transparent",
                         isFlagged ? "bg-warning text-on-warning" : 
-                        isAnswered ? "bg-success text-on-success" : 
-                        "bg-surface-container-highest text-on-surface-variant hover:bg-outline-variant"
+                        isAnswered ? "bg-primary text-white" : 
+                        "bg-surface-container-highest text-outline hover:text-primary hover:bg-primary/10"
                       )}
                     >
                       {i + 1}
+                      {isFlagged && <div className="absolute -top-1 -right-1 w-3 h-3 bg-white rounded-full border-2 border-warning" />}
                     </button>
                   );
                })}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-outline-variant space-y-3">
-               <div className="flex items-center gap-3 text-label-sm text-on-surface-variant">
-                  <span className="w-3 h-3 rounded-full bg-success" /> Answered
+            <footer className="mt-10 pt-8 border-t border-outline-variant/50 space-y-4">
+               <div className="flex items-center gap-4 text-label-medium font-bold text-on-surface-variant">
+                  <span className="w-4 h-4 rounded-md bg-primary" /> Verified Answer
                </div>
-               <div className="flex items-center gap-3 text-label-sm text-on-surface-variant">
-                  <span className="w-3 h-3 rounded-full bg-warning" /> Marked for Review
+               <div className="flex items-center gap-4 text-label-medium font-bold text-on-surface-variant">
+                  <span className="w-4 h-4 rounded-md bg-warning" /> Flagged Review
                </div>
-               <div className="flex items-center gap-3 text-label-sm text-on-surface-variant">
-                  <span className="w-3 h-3 rounded-full bg-surface-container-highest" /> Not Visited
+               <div className="flex items-center gap-4 text-label-medium font-bold text-on-surface-variant">
+                  <span className="w-4 h-4 rounded-md bg-surface-container-highest" /> Not Visited
                </div>
-            </div>
+            </footer>
          </div>
       </div>
 
