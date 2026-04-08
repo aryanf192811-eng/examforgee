@@ -1,0 +1,381 @@
+@import "tailwindcss";
+
+/* ── Tailwind v4: Class-based dark mode ── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ══════════════════════════════════════════════════════════════
+   THEME TOKENS — Font Families (Tailwind v4 @theme directive)
+   ══════════════════════════════════════════════════════════════ */
+@theme {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-headline: "Newsreader", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-paper: "Lora", Georgia, serif;
+  --font-mono: "Fira Code", monospace;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THEME TOKENS — Typography Scale
+   ══════════════════════════════════════════════════════════════ */
+@theme {
+  --text-display-lg: 3.5rem;
+  --text-display-lg--line-height: 1.1;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  --text-display-md: 2.75rem;
+  --text-display-md--line-height: 1.15;
+  --text-display-md--letter-spacing: -0.015em;
+  --text-display-md--font-weight: 600;
+
+  --text-headline-lg: 2rem;
+  --text-headline-lg--line-height: 1.2;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 1.25;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-sm: 1.25rem;
+  --text-headline-sm--line-height: 1.3;
+  --text-headline-sm--font-weight: 600;
+
+  --text-title-lg: 1.125rem;
+  --text-title-lg--line-height: 1.4;
+  --text-title-lg--font-weight: 600;
+
+  --text-title-md: 1rem;
+  --text-title-md--line-height: 1.5;
+  --text-title-md--font-weight: 600;
+
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.6;
+
+  --text-body-md: 0.875rem;
+  --text-body-md--line-height: 1.5;
+
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.4;
+
+  --text-label-lg: 0.875rem;
+  --text-label-lg--line-height: 1.25;
+  --text-label-lg--font-weight: 500;
+  --text-label-lg--letter-spacing: 0.006em;
+
+  --text-label-md: 0.75rem;
+  --text-label-md--line-height: 1.25;
+  --text-label-md--font-weight: 500;
+  --text-label-md--letter-spacing: 0.031em;
+
+  --text-label-sm: 0.6875rem;
+  --text-label-sm--line-height: 1.25;
+  --text-label-sm--font-weight: 500;
+  --text-label-sm--letter-spacing: 0.031em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   THEME TOKENS — Colors (reference CSS variables for dynamic theming)
+   ══════════════════════════════════════════════════════════════ */
+@theme inline {
+  /* Surfaces */
+  --color-surface-dim: var(--color-surface-dim);
+  --color-surface: var(--color-surface);
+  --color-surface-bright: var(--color-surface-bright);
+  --color-surface-container-lowest: var(--color-surface-container-lowest);
+  --color-surface-container-low: var(--color-surface-container-low);
+  --color-surface-container: var(--color-surface-container);
+  --color-surface-container-high: var(--color-surface-container-high);
+  --color-surface-container-highest: var(--color-surface-container-highest);
+  --color-surface-variant: var(--color-surface-variant);
+  --color-background: var(--color-background);
+
+  /* Primary */
+  --color-primary: var(--color-primary);
+  --color-primary-dim: var(--color-primary-dim);
+  --color-primary-fixed: var(--color-primary-fixed);
+  --color-primary-fixed-dim: var(--color-primary-fixed-dim);
+  --color-primary-container: var(--color-primary-container);
+  --color-on-primary: var(--color-on-primary);
+  --color-on-primary-container: var(--color-on-primary-container);
+  --color-inverse-primary: var(--color-inverse-primary);
+
+  /* Secondary */
+  --color-secondary: var(--color-secondary);
+  --color-secondary-dim: var(--color-secondary-dim);
+  --color-secondary-fixed: var(--color-secondary-fixed);
+  --color-secondary-fixed-dim: var(--color-secondary-fixed-dim);
+  --color-secondary-container: var(--color-secondary-container);
+  --color-on-secondary: var(--color-on-secondary);
+  --color-on-secondary-container: var(--color-on-secondary-container);
+
+  /* Tertiary */
+  --color-tertiary: var(--color-tertiary);
+  --color-tertiary-dim: var(--color-tertiary-dim);
+  --color-tertiary-fixed: var(--color-tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--color-tertiary-fixed-dim);
+  --color-tertiary-container: var(--color-tertiary-container);
+  --color-on-tertiary: var(--color-on-tertiary);
+
+  /* Text / On-Surface */
+  --color-on-background: var(--color-on-background);
+  --color-on-surface: var(--color-on-surface);
+  --color-on-surface-variant: var(--color-on-surface-variant);
+  --color-inverse-surface: var(--color-inverse-surface);
+  --color-inverse-on-surface: var(--color-inverse-on-surface);
+
+  /* Borders / Outlines */
+  --color-outline: var(--color-outline);
+  --color-outline-variant: var(--color-outline-variant);
+  --color-surface-tint: var(--color-surface-tint);
+
+  /* Error */
+  --color-error: var(--color-error);
+  --color-error-dim: var(--color-error-dim);
+  --color-error-container: var(--color-error-container);
+  --color-on-error: var(--color-on-error);
+  --color-on-error-container: var(--color-on-error-container);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LIGHT THEME (Sakura Pastel) — :root default
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  --color-surface-dim:               #f8f9ff;
+  --color-surface:                   #fdf8ff;
+  --color-surface-bright:            #ffffff;
+  --color-surface-container-lowest:  #ffffff;
+  --color-surface-container-low:     #f1f3f9;
+  --color-surface-container:         #f1f0f4;
+  --color-surface-container-high:    #e8e8ec;
+  --color-surface-container-highest: #e2e2e6;
+  --color-surface-variant:           #e0e2ec;
+  --color-background:                #fdf8ff;
+  --color-primary:                   #6834eb;
+  --color-primary-dim:               #7e51ff;
+  --color-primary-fixed:             #a98fff;
+  --color-primary-fixed-dim:         #9c7eff;
+  --color-primary-container:         #b6a0ff;
+  --color-on-primary:                #ffffff;
+  --color-on-primary-container:      #ffffff;
+  --color-inverse-primary:           #b6a0ff;
+  --color-secondary:                 #006879;
+  --color-secondary-dim:             #40d2ee;
+  --color-secondary-fixed:           #5be2ff;
+  --color-secondary-fixed-dim:       #45d4f1;
+  --color-secondary-container:       #ebfaff;
+  --color-on-secondary:              #ffffff;
+  --color-on-secondary-container:    #001f26;
+  --color-tertiary:                  #9c4060;
+  --color-tertiary-dim:              #e85e88;
+  --color-tertiary-fixed:            #ffb2c8;
+  --color-tertiary-fixed-dim:        #ff87aa;
+  --color-tertiary-container:        #ffd9e4;
+  --color-on-tertiary:               #ffffff;
+  --color-on-background:             #1a1b23;
+  --color-on-surface:                #1a1b23;
+  --color-on-surface-variant:        #44475a;
+  --color-inverse-surface:           #2f3044;
+  --color-inverse-on-surface:        #f1f0f7;
+  --color-outline:                   #75778a;
+  --color-outline-variant:           #c5c6d8;
+  --color-surface-tint:              #6834eb;
+  --color-error:                     #ba1a1a;
+  --color-error-dim:                 #de3730;
+  --color-error-container:           #ffdad6;
+  --color-on-error:                  #ffffff;
+  --color-on-error-container:        #410002;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DARK THEME (Tokyo Night) — html.dark override
+   ══════════════════════════════════════════════════════════════ */
+html.dark {
+  --color-surface-dim:               #10141a;
+  --color-surface:                   #13171e;
+  --color-surface-bright:            #1e2330;
+  --color-surface-container-lowest:  #0b0e14;
+  --color-surface-container-low:     #191d28;
+  --color-surface-container:         #1e2330;
+  --color-surface-container-high:    #252a38;
+  --color-surface-container-highest: #2d3245;
+  --color-surface-variant:           #3a3f56;
+  --color-background:                #10141a;
+  --color-primary:                   #d0c1ff;
+  --color-primary-dim:               #b9a8f5;
+  --color-primary-fixed:             #6834eb;
+  --color-primary-fixed-dim:         #5a28d4;
+  --color-primary-container:         #4a1db8;
+  --color-on-primary:                #1a0d40;
+  --color-on-primary-container:      #e8e0ff;
+  --color-inverse-primary:           #6834eb;
+  --color-secondary:                 #5be2ff;
+  --color-secondary-dim:             #45d4f1;
+  --color-secondary-fixed:           #006879;
+  --color-secondary-fixed-dim:       #004f5d;
+  --color-secondary-container:       #003642;
+  --color-on-secondary:              #001f26;
+  --color-on-secondary-container:    #b8eaf6;
+  --color-tertiary:                  #ff87aa;
+  --color-tertiary-dim:              #f06890;
+  --color-tertiary-fixed:            #9c4060;
+  --color-tertiary-fixed-dim:        #7a2f4a;
+  --color-tertiary-container:        #5c1f35;
+  --color-on-tertiary:               #2d0014;
+  --color-on-background:             #e4e1f0;
+  --color-on-surface:                #e4e1f0;
+  --color-on-surface-variant:        #a8abbe;
+  --color-inverse-surface:           #e4e1f0;
+  --color-inverse-on-surface:        #2f3044;
+  --color-outline:                   #6b6d82;
+  --color-outline-variant:           #3a3f56;
+  --color-surface-tint:              #d0c1ff;
+  --color-error:                     #ffb4ab;
+  --color-error-dim:                 #ff897d;
+  --color-error-container:           #7f1d1d;
+  --color-on-error:                  #690005;
+  --color-on-error-container:        #ffdad6;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CUSTOM CSS CLASSES — Academic Atelier Design System
+   ══════════════════════════════════════════════════════════════ */
+
+/* Material Symbols rendering — REQUIRED */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Glassmorphism — navbar, overlays, floating cards */
+.glass {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+:root .glass {
+  background: rgba(253, 248, 255, 0.7);
+}
+html.dark .glass {
+  background: rgba(19, 23, 30, 0.7);
+}
+
+/* Glass panel — sidebar, modals */
+.glass-panel {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+:root .glass-panel {
+  background: rgba(241, 240, 244, 0.7);
+}
+html.dark .glass-panel {
+  background: rgba(30, 35, 48, 0.7);
+}
+
+/* Primary CTA gradient — linear-gradient(135deg, primary, primary-container) */
+.gradient-cta {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-container));
+}
+
+/* Ambient glow for primary CTAs */
+.glow-primary {
+  box-shadow: 0 0 40px rgba(104, 52, 235, 0.15);
+}
+html.dark .glow-primary {
+  box-shadow: 0 0 40px rgba(208, 193, 255, 0.12);
+}
+
+/* Progress quill gradient */
+.progress-quill {
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+/* Paper content — SACRED, NEVER CHANGES WITH THEME */
+.paper-content {
+  background: #faf7f2 !important;
+  color: #1a1a1a !important;
+  font-family: 'Lora', Georgia, serif !important;
+}
+
+/* Paper grain texture — subtle background noise */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-container) 25%,
+    var(--color-surface-container-high) 50%,
+    var(--color-surface-container) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+}
+
+/* Spring easing utility */
+.spring-transition {
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-outline-variant);
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-surface-variant);
+  border-radius: 10px;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary-container);
+}
+
+/* Ghost border — outline-variant at 10% opacity only */
+.ghost-border {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-outline-variant) 10%, transparent);
+}
+
+/* Base body styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+}
+
+/* Staggered entry utility (used with Framer Motion in components) */
+.stagger-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}

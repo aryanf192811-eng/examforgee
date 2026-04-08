@@ -1,0 +1,19 @@
+﻿
+> examforge-v2@0.0.0 build
+> tsc -b && vite build
+
+src/components/ui/Input.tsx(33,12): error TS2322: Type '{ accept?: string | undefined; alt?: string | undefined; autoComplete?: HTMLInputAutoCompleteAttribute | undefined; capture?: boolean | "user" | "environment" | undefined; ... 304 more ...; className: string; }' is not assignable to type 'Omit<HTMLMotionProps<"input">, "ref">'.
+  Types of property 'onAnimationStart' are incompatible.
+    Type 'AnimationEventHandler<HTMLInputElement> | undefined' is not assignable to type '((definition: AnimationDefinition) => void) | undefined'.
+      Type 'AnimationEventHandler<HTMLInputElement>' is not assignable to type '(definition: AnimationDefinition) => void'.
+        Types of parameters 'event' and 'definition' are incompatible.
+          Type 'AnimationDefinition' is not assignable to type 'AnimationEvent<HTMLInputElement>'.
+            Type 'string' is not assignable to type 'AnimationEvent<HTMLInputElement>'.
+src/hooks/useProgress.ts(3,15): error TS2305: Module '"../types"' has no exported member 'UserStats'.
+src/pages/Leaderboard.tsx(36,48): error TS2339: Property 'total_score' does not exist on type 'LeaderboardEntry'.
+src/pages/Leaderboard.tsx(37,48): error TS2339: Property 'total_score' does not exist on type 'LeaderboardEntry'.
+src/pages/Leaderboard.tsx(92,55): error TS2339: Property 'total_score' does not exist on type 'LeaderboardEntry'.
+src/pages/Profile.tsx(39,35): error TS2339: Property 'total_score' does not exist on type 'ProfileResponse'.
+src/pages/Profile.tsx(40,35): error TS2339: Property 'streak_days' does not exist on type 'ProfileResponse'.
+src/pages/Profile.tsx(47,9): error TS2353: Object literal may only specify known properties, and 'bio' does not exist in type 'ProfileUpdateRequest'.
+src/pages/Signup.tsx(40,9): error TS2353: Object literal may only specify known properties, and 'firebase_uid' does not exist in type 'AuthSyncPayload'.
