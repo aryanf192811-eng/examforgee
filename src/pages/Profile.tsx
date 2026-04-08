@@ -49,7 +49,7 @@ export function Profile() {
              <div className="flex flex-col">
                 <span className="text-xs text-on-surface-variant uppercase tracking-widest font-bold">Total Points</span>
                 <span className="text-2xl font-display font-bold text-primary">
-                  {((profile?.total_points ?? 0) / 1000).toFixed(1)}k
+                  {((profile?.total_points ?? (profile as any)?.total_score ?? 0) / 1000).toFixed(1)}k
                 </span>
              </div>
              <div className="w-px h-10 bg-outline-variant/20 hidden md:block"></div>

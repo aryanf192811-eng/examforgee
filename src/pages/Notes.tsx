@@ -149,28 +149,21 @@ export function Notes() {
           <style>
             :root {
               color-scheme: light dark;
-              --on-surface: #1d1b1e;
-              --on-surface-variant: #49454f;
               --primary: #6750a4;
             }
             body {
               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
               line-height: 1.8;
-              color: var(--on-surface);
+              color: inherit;
               margin: 0;
               padding: 0;
               font-size: 1.1rem;
-              overflow: hidden;
+              overflow: hidden; /* Prevent double scrollbars */
             }
-            h1, h2, h3 { color: var(--primary); margin-top: 2rem; }
-            ul, ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
-            li { margin-bottom: 0.5rem; }
-            img { max-width: 100%; height: auto; border-radius: 12px; margin: 1.5rem 0; }
+            img { max-width: 100%; height: auto; border-radius: 12px; }
             table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
             th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-            th { background-color: #f8f9fa; }
-            blockquote { border-left: 4px solid var(--primary); padding-left: 1rem; font-style: italic; color: var(--on-surface-variant); }
-            code { background: #f1f1f1; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+            code { background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px; font-family: monospace; }
           </style>
           <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
           <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -192,8 +185,10 @@ export function Notes() {
             window.addEventListener("load", renderMath);
           </script>
         </head>
-        <body>
-          ${noteHtml}
+        <body style="background: transparent;">
+          <div id="content-wrapper">
+            ${noteHtml}
+          </div>
         </body>
       </html>
     `;
@@ -367,8 +362,8 @@ export function Notes() {
                     height: iframeHeight,
                     width: '100%',
                     border: 'none',
-                    overflow: 'hidden'
                   }}
+                  scrolling="no"
                   sandbox="allow-same-origin allow-scripts"
                   title="Note Content"
                   onLoad={updateIframeHeight}
