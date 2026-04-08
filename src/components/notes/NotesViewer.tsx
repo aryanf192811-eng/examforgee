@@ -1,34 +1,31 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { getNoteUrl } from '../../lib/api';
 import { Skeleton } from '../ui/Skeleton';
+import { getChapterMetadata } from '../../lib/manifest';
 
 interface NotesViewerProps {
-  chapterId: string;
+  subjectSlug: string;
+  chapterSlug: string;
   chapterTitle: string;
   subjectName: string;
 }
 
 /**
- * NotesViewer — implements Section ❺ iframe protocol EXACTLY.
- *
- * 1. Fetch signed URL from backend (NOT stored in Zustand)
- * 2. Fetch raw HTML string from CDN
- * 3. Inject postMessage height script if not present
+ * NotesViewer — Hybrid Static Content Architecture (v3)
+ * 
+ * 1. Fetch metadata from manifest (same-origin cache)
+ * 2. Fetch HTML file directly from /content/notes/
+ * 3. Inject height script (iframe protocol)
  * 4. Create blob URL → set on iframe.src
- * 5. iframe fires postMessage → setIframeHeight
- * 6. On unmount: URL.revokeObjectURL(blobUrl)
  */
-export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewerProps) {
+export function NotesViewer({ subjectSlug, chapterSlug, chapterTitle, subjectName }: NotesViewerProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  // All state is LOCAL — never in Zustand
-  const [htmlContent, setHtmlContent] = useState<string | null>(null);
   const [iframeHeight, setIframeHeight] = useState(600);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
-  // ── Step 4: postMessage height listener ──
+  // postMessage height listener
   useEffect(() => {
     const handler = (e: MessageEvent) => {
       if (e.data?.type === 'ef-notes-height') {
@@ -39,7 +36,6 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
     return () => window.removeEventListener('message', handler);
   }, []);
 
-  // ── Steps 1-3: Fetch & inject ──
   const loadNotes = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -51,23 +47,23 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
     }
 
     try {
-      console.log(`[NotesViewer] Attempting to load notes for chapter: ${chapterId}`);
+      console.log(`[NotesViewer] Loading: ${subjectSlug}/${chapterSlug}`);
       
-      // Step 1: Fetch signed URL from backend
-      const { signed_url } = await getNoteUrl(chapterId);
-      if (!signed_url) throw new Error('No signed URL returned from server');
+      // Step 1: Get metadata for the file path
+      const metadata = await getChapterMetadata(subjectSlug, chapterSlug);
+      if (!metadata || !metadata.notes_file) {
+        throw new Error('This chapter does not have static notes content yet.');
+      }
 
-      // Step 2: Fetch raw HTML from CDN
-      console.log(`[NotesViewer] Fetching content from CDN...`);
-      const response = await fetch(signed_url);
+      // Step 2: Fetch raw HTML from local public directory
+      const contentUrl = `/content/notes/${metadata.notes_file}`;
+      console.log(`[NotesViewer] Fetching from: ${contentUrl}`);
+      
+      const response = await fetch(contentUrl);
       if (!response.ok) {
-        throw new Error(`CDN Error: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to load note file: ${response.status} ${response.statusText}`);
       }
       const rawHtml = await response.text();
-
-      if (!rawHtml || rawHtml.length < 10) {
-        throw new Error('Received empty or malformed HTML from CDN');
-      }
 
       // Step 3: Inject postMessage height script if not present
       let html = rawHtml;
@@ -75,16 +71,10 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
         const heightScript = `
 <script>
   window.addEventListener('load', function() {
-    window.parent.postMessage(
-      { type: 'ef-notes-height', height: document.body.scrollHeight },
-      '*'
-    );
+    window.parent.postMessage({ type: 'ef-notes-height', height: document.body.scrollHeight }, '*');
   });
   var ro = new ResizeObserver(function() {
-    window.parent.postMessage(
-      { type: 'ef-notes-height', height: document.body.scrollHeight },
-      '*'
-    );
+    window.parent.postMessage({ type: 'ef-notes-height', height: document.body.scrollHeight }, '*');
   });
   ro.observe(document.body);
 </script>`;
@@ -95,9 +85,7 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
         }
       }
 
-      setHtmlContent(html);
-
-      // Step 5: Create blob URL
+      // Step 4: Create blob URL
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       setBlobUrl(url);
@@ -105,20 +93,20 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
       if (iframeRef.current) {
         iframeRef.current.src = url;
       }
-      console.log(`[NotesViewer] Successfully loaded notes for ${chapterId}`);
-    } catch (err: unknown) {
-      console.error(`[NotesViewer] Error loading notes:`, err);
-      setError(err instanceof Error ? err.message : 'Failed to load notes');
+      console.log(`[NotesViewer] Successfully loaded ${metadata.notes_file}`);
+    } catch (err: any) {
+      console.error(`[NotesViewer] Error:`, err);
+      setError(err.message || 'Failed to load notes');
     } finally {
       setIsLoading(false);
     }
-  }, [chapterId]);
+  }, [subjectSlug, chapterSlug]);
 
   useEffect(() => {
     loadNotes();
   }, [loadNotes]);
 
-  // ── Cleanup: revoke blob URL on unmount ──
+  // Cleanup
   useEffect(() => {
     return () => {
       if (blobUrl) {
@@ -143,7 +131,7 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
           error_outline
         </span>
         <h3 className="font-headline text-headline-sm text-on-surface mb-2">
-          Failed to load notes
+          Content not available
         </h3>
         <p className="text-body-md text-on-surface-variant mb-4">{error}</p>
         <button
@@ -159,7 +147,6 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
 
   return (
     <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 120px)' }}>
-      {/* Header */}
       <div className="px-4 py-3 flex items-center gap-3">
         <div className="flex-1 min-w-0">
           <h2 className="font-headline text-title-lg text-on-surface truncate">
@@ -169,7 +156,6 @@ export function NotesViewer({ chapterId, chapterTitle, subjectName }: NotesViewe
         </div>
       </div>
 
-      {/* Iframe — NO scrollbar, parent scrolls */}
       <iframe
         ref={iframeRef}
         title={`Notes: ${chapterTitle}`}

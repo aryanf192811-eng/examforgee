@@ -55,6 +55,13 @@ export interface AuthSyncPayload {
   id_token: string;
 }
 
+export interface UserStats {
+  total_points: number;
+  current_streak: number;
+  accuracy_rate: number;
+  rank?: number;
+}
+
 // ── Subjects & Chapters ──────────────────────────────────────────────
 
 export interface SubjectResponse {
@@ -76,14 +83,13 @@ export interface SubjectListResponse {
 
 export interface ChapterResponse {
   id: string;
-  subject_id: string;
   slug: string;
   title: string;
   order_index: number;
-  is_published: boolean;
   has_notes: boolean;
   user_status: 'not_started' | 'in_progress' | 'done';
   time_spent_s: number;
+  notes_url?: string;
 }
 
 export interface ChapterListResponse {
@@ -92,12 +98,6 @@ export interface ChapterListResponse {
 }
 
 // ── Notes ────────────────────────────────────────────────────────────
-
-export interface NoteUrlResponse {
-  signed_url: string;
-  chapter_id: string;
-  cached: boolean;
-}
 
 export interface NoteProgressRequest {
   chapter_id: string;
@@ -114,18 +114,18 @@ export interface QuizOption {
 
 export interface QuizQuestion {
   id: string;
-  stem: string;
-  type: string | 'MCQ' | 'MSQ' | 'NAT';
-  marks: number;
-  options: QuizOption[];
-  subject: string;
-  chapter?: string;
-  category?: string;
+  question_text: string;
+  subject_slug: string;
+  chapter_slug: string;
   difficulty: string;
+  marks: number;
   is_pyq: boolean;
   gate_year?: number;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
   explanation?: string;
-  image_url?: string;
 }
 
 export interface QuizSessionResponse {

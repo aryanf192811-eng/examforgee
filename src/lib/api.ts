@@ -5,7 +5,6 @@ import type {
   SubjectListResponse,
   ChapterResponse,
   ChapterListResponse,
-  NoteUrlResponse,
   NoteProgressRequest,
   QuizSessionResponse,
   QuizSubmitRequest,
@@ -124,18 +123,14 @@ export async function getSubjects(): Promise<SubjectResponse[]> {
 // ── Chapters ──
 
 /** List chapters for a subject, returns unwrapped array */
-export async function getChapters(subjectId: string): Promise<ChapterResponse[]> {
-  const res = await request<ChapterListResponse>('GET', `/api/chapters/${subjectId}`);
+export async function getChapters(subjectSlug: string): Promise<ChapterResponse[]> {
+  const res = await request<ChapterListResponse>('GET', `/api/chapters/${subjectSlug}`);
   return res.chapters;
 }
 
 // ── Notes ──
 
-/** Get signed URL for note content */
-export function getNoteUrl(chapterId: string): Promise<NoteUrlResponse> {
-  // Backend uses ?chapter_id= based on notes.py audit
-  return request<NoteUrlResponse>('GET', `/api/notes/url?chapter_id=${chapterId}`);
-}
+// getNoteUrl is deprecated. Use getManifest() and direct static fetching.
 
 /** Update reading progress */
 export function updateNoteProgress(payload: NoteProgressRequest): Promise<{ ok: boolean }> {
@@ -147,12 +142,12 @@ export function updateNoteProgress(payload: NoteProgressRequest): Promise<{ ok: 
 /** Start a new quiz session (fetches questions) */
 export function startQuiz(
   mode: string = 'custom',
-  subjectIds?: string,
+  subjectSlugs?: string,
   count: number = 20
 ): Promise<QuizSessionResponse> {
   let path = `/api/quiz/questions?mode=${mode}&count=${count}`;
-  if (subjectIds) {
-    path += `&subject_ids=${subjectIds}`;
+  if (subjectSlugs) {
+    path += `&subject_slugs=${subjectSlugs}`;
   }
   return request<QuizSessionResponse>('GET', path);
 }

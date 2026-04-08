@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Aptitude — Verbal & Reasoning Master Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:880px;margin:0 auto;}
+
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:580px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tq{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+h4.sssh{font-family:var(--body);font-size:14px;font-weight:600;color:var(--green);margin:16px 0 6px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.purp-box{background:#f8f0ff;border-left:4px solid var(--purple);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.purp-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:4px;display:block;}
+.purp-box p{font-size:16px;color:var(--purple);margin:0;line-height:1.78;}
+.trick{background:#fffbea;border:2px solid #d4a800;border-radius:4px;padding:14px 18px;margin:14px 0;position:relative;}
+.trick::before{content:'⚡ Trick';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#a07800;position:absolute;top:-9px;left:14px;background:#fffbea;padding:0 6px;}
+.trick p{font-family:var(--prose);font-size:16.5px;color:var(--ink);margin:0 0 6px;line-height:1.82;}
+.trick p:last-child{margin:0;}
+.trick strong{color:#7a5800;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;} .c-p{color:var(--purple);font-weight:600;}
+
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+.visual{margin:20px 0;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.visual-lbl{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+.visual{overflow:hidden;border-radius:4px;}.visual svg{max-width:100%;height:auto;display:block;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+
+.trap-row{display:grid;grid-template-columns:auto 1fr 1fr;gap:0;border:1.5px solid #b0a080;border-radius:4px;overflow:hidden;margin:10px 0;}
+.trap-num{background:var(--ink);color:var(--paper);font-family:var(--hand);font-size:14px;padding:12px 14px;display:flex;align-items:center;justify-content:center;min-width:44px;}
+.trap-wrong{background:#fff1f1;padding:10px 14px;border-right:1px dashed #c0a880;}
+.trap-right{background:#f0fff4;padding:10px 14px;}
+.trap-wrong p,.trap-right p{font-family:var(--prose);font-size:15px;margin:0;line-height:1.7;}
+.trap-wrong p{color:var(--red);} .trap-right p{color:var(--green);}
+.trap-lbl{font-family:var(--hand);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+
+.fallacy-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:14px 16px;margin:8px 0;}
+.fallacy-name{font-family:var(--body);font-size:14px;font-weight:700;color:var(--purple);margin-bottom:4px;}
+.fallacy-def{font-family:var(--prose);font-size:15px;color:var(--ink2);line-height:1.7;margin-bottom:4px;}
+.fallacy-ex{font-family:var(--hand);font-size:11px;color:var(--ink3);font-style:italic;}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+
+/* Formula cards */
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0;}
+.fcard{background:var(--paper);border:2px solid var(--ink);border-radius:4px;padding:15px 17px;box-shadow:3px 4px 0 #9a8a6e;}
+.fcard-title{font-family:var(--hand);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--ink);}
+.fcard ul{list-style:none;margin:0;padding:0;}
+.fcard ul li{font-family:'Courier New',monospace;font-size:12.5px;color:var(--ink2);padding:3px 0;border-bottom:1px dashed #d0c0a0;line-height:1.55;}
+.fcard ul li:last-child{border-bottom:none;}
+
+/* How-to-use banner */
+.how-box{background:#f0f4ff;border:1.5px solid #1a4a8c;border-radius:4px;padding:14px 22px;margin-bottom:28px;display:flex;gap:16px;align-items:flex-start;}
+.how-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.how-box p{font-family:var(--prose);font-size:15.5px;color:var(--ink2);margin:0;line-height:1.82;}
+.how-box strong{color:var(--blue);}
+
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}.trap-row{grid-template-columns:auto 1fr;}.trap-right{grid-column:2;border-top:1px dashed #c0a880;}.fcards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-tag">GATE CSE + Placements</span>
+  <div class="cover-inner">
+    <div class="cover-subject">General Aptitude · Verbal &amp; Reasoning Master Reference</div>
+    <h1>The Complete Verbal Bible<br>for <em>GATE &amp; Placements</em></h1>
+    <p class="cover-desc">
+      Grammar rules and exceptions. Reading Comprehension with a question-type strategy grid. Critical reasoning — premises, assumptions, fallacies. Coding-decoding from first principles. Direction sense with coordinate tracking. Blood relations via family trees. Syllogisms and Venn. Statement-conclusion and cause-effect. Vocabulary analogies. A 20-trap watchlist. Everything needed for GATE, placements, and technical interviews.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch J · English Grammar</span>
+      <span class="chip">Ch K · Vocabulary &amp; Word Power</span>
+      <span class="chip">Ch L · Reading Comprehension</span>
+      <span class="chip">Ch M · Critical Reasoning</span>
+      <span class="chip">Ch N · Coding-Decoding</span>
+      <span class="chip">Ch O · Direction Sense</span>
+      <span class="chip">Ch P · Blood Relations</span>
+      <span class="chip">Ch Q · Syllogisms &amp; Venn</span>
+      <span class="chip">Ch R · Statement-Conclusion</span>
+      <span class="chip">Ch S · Verbal Trap Sheet</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#chJ"><span class="tn">J</span>English Grammar — Complete</a>
+    <a href="#chK"><span class="tn">K</span>Vocabulary &amp; Word Power</a>
+    <a href="#chL"><span class="tn">L</span>Reading Comprehension</a>
+    <a href="#chM"><span class="tn">M</span>Critical Reasoning &amp; Arguments</a>
+    <a href="#chN"><span class="tn">N</span>Coding-Decoding</a>
+    <a href="#chO"><span class="tn">O</span>Direction Sense &amp; Distance</a>
+    <a href="#chP"><span class="tn">P</span>Blood Relations</a>
+    <a href="#chQ"><span class="tn">Q</span>Syllogisms &amp; Venn Reasoning</a>
+    <a href="#chR"><span class="tn">R</span>Statement-Conclusion &amp; Cause-Effect</a>
+    <a href="#chS"><span class="tn">S</span>Verbal Trap Sheet — 20 Tested</a>
+  </div>
+</div>
+
+<!-- How to use -->
+<div class="how-box">
+  <div class="how-icon">📖</div>
+  <p><strong>How to use this document:</strong> Read each chapter once for coverage, then return to the <em>Tricks</em>, Formula Cards (Ch S.1), and the 20-item Trap Sheet (Ch S.2) before every mock. For grammar, mentally run every rule on the example sentence. For reasoning chapters, always draw — Venn, tree, or coordinate grid. Never try to solve syllogisms or blood relations in your head.</p>
+</div>
+
+<!-- ═══ CH J — GRAMMAR ═══ -->
+<div class="chapter" id="chJ">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter J</div>
+    <div class="ch-title">English Grammar — <em>The Complete Tested Set</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="S-V agree">
+      <h2 class="sh">J.1 &nbsp; Subject-Verb Agreement — All Cases <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule</th><th>Correct</th><th>Wrong</th></tr></thead>
+          <tbody>
+            <tr><td>Intervening phrase doesn't change subject</td><td class="good">The list of errors <strong>is</strong> long.</td><td class="bad">The list of errors <em>are</em> long.</td></tr>
+            <tr><td>Either/Neither + singular → singular</td><td class="good">Neither student <strong>has</strong> submitted.</td><td class="bad">Neither student <em>have</em> submitted.</td></tr>
+            <tr><td>Compound with "and" → plural</td><td class="good">Speed and accuracy <strong>are</strong> key.</td><td class="bad">Speed and accuracy <em>is</em> key.</td></tr>
+            <tr><td>"Each", "Every", "Everyone" → singular</td><td class="good">Each program <strong>runs</strong> correctly.</td><td class="bad">Each program <em>run</em> correctly.</td></tr>
+            <tr><td>Collective noun as single unit → singular</td><td class="good">The committee <strong>has</strong> decided.</td><td class="bad">The committee <em>have</em> decided.</td></tr>
+            <tr><td>"There is/are" — subject follows verb</td><td class="good">There <strong>are</strong> three errors.</td><td class="bad">There <em>is</em> three errors.</td></tr>
+            <tr><td>"A number of" → plural; "The number of" → singular</td><td class="good">A number of errors <strong>were</strong> found.</td><td class="bad">A number of errors <em>was</em> found.</td></tr>
+            <tr><td>Or/Nor — verb agrees with nearest subject</td><td class="good">Neither the manager nor the staff <strong>were</strong> told.</td><td class="bad">…<em>was</em> told.</td></tr>
+            <tr><td>Amounts as single unit → singular</td><td class="good">Three years <strong>is</strong> a long time.</td><td class="bad">Three years <em>are</em> a long time.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Tense Framework</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Tense</th><th>Form</th><th>Signal Words</th></tr></thead>
+          <tbody>
+            <tr><td>Simple Past</td><td>V₂ / verb+ed</td><td>yesterday, last year, ago, in 2020</td></tr>
+            <tr><td>Present Perfect</td><td>has/have + V₃</td><td>just, already, yet, since, ever, never</td></tr>
+            <tr><td>Past Perfect</td><td>had + V₃</td><td>by the time, before (earlier of two past events)</td></tr>
+            <tr><td>Future Perfect</td><td>will have + V₃</td><td>by then, by tomorrow, by the time X happens</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>Past Perfect — The "earlier of two past events" rule:</strong> "By the time I <em>arrived</em> [Simple Past], he <em>had already left</em> [Past Perfect]." Two past events in one sentence: the earlier one uses had+V₃. Ask: which happened first? That one needs Past Perfect.</p>
+      </div>
+
+      <h3 class="ssh">Conditionals — Four Types</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Situation</th><th>Structure</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>0 — Universal</strong></td><td>Scientific / always-true fact</td><td>If + present, present</td><td>If you heat ice, it melts.</td></tr>
+            <tr><td><strong>1 — Real/Possible</strong></td><td>Likely future event</td><td>If + present, will + base</td><td>If it rains, I will stay home.</td></tr>
+            <tr><td><strong>2 — Unreal Present</strong></td><td>Hypothetical / unlikely now</td><td>If + past, would + base</td><td>If I had money, I would buy it.</td></tr>
+            <tr><td><strong>3 — Unreal Past</strong></td><td>Impossible — past event didn't happen</td><td>If + past perfect, would have + V₃</td><td>If I had studied, I would have passed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">⚠ Type 2 Subjunctive Trap</span>
+        <p>Type 2 conditional uses <strong>"were"</strong> for ALL subjects (subjunctive mood): "If I <strong>were</strong> you…" — not "was". "If she <strong>were</strong> taller…" — not "was". The subjunctive "were" signals the condition is hypothetical. GATE sentence correction tests this frequently.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="errors">
+      <h2 class="sh">J.2 &nbsp; Sentence Error Types — GATE Pattern <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Error Type</th><th>Faulty Sentence</th><th>Corrected</th></tr></thead>
+          <tbody>
+            <tr><td>Dangling modifier</td><td class="bad">Walking to the lab, the server crashed.</td><td class="good">Walking to the lab, I noticed the server had crashed.</td></tr>
+            <tr><td>Misplaced modifier</td><td class="bad">She almost drove 400 km. (implies she didn't drive)</td><td class="good">She drove almost 400 km. (position changes meaning)</td></tr>
+            <tr><td>Faulty parallelism</td><td class="bad">He likes coding, to debug, and eat.</td><td class="good">He likes coding, debugging, and eating.</td></tr>
+            <tr><td>Redundancy</td><td class="bad">free gift / advance planning / past history</td><td class="good">gift / planning / history (modifier already in meaning)</td></tr>
+            <tr><td>Double comparative</td><td class="bad">more faster / most quickest</td><td class="good">faster / quickest</td></tr>
+            <tr><td>That vs which</td><td class="bad">The file which I deleted was critical.</td><td class="good">The file that I deleted… (restrictive → that; non-restrictive + comma → which)</td></tr>
+            <tr><td>Who vs whom</td><td class="bad">Who did you send it to?</td><td class="good">Whom did you send it to? (object → whom)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>Who vs Whom — the he/him substitution test:</strong> Replace with "he" or "him". If "he" sounds right → use <strong>who</strong>. If "him" sounds right → use <strong>whom</strong>.<br>
+        "Who/Whom did you call?" → "You called him." → <strong>Whom</strong> ✓<br>
+        "Who/Whom called?" → "He called." → <strong>Who</strong> ✓</p>
+        <p><strong>Fewer vs Less:</strong> Fewer = countable nouns (fewer students, fewer bugs, fewer lines). Less = uncountable nouns (less time, less water, less information). "Less errors" is wrong in formal writing — "fewer errors". GATE tests this consistently.</p>
+      </div>
+
+      <h3 class="ssh">Prepositions — High-Frequency Pairs</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Pair</th><th>Rule</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>in / on / at (time)</td><td>in = periods (months, years, seasons). on = specific days. at = clock times.</td><td>in July, on Monday, at 3 pm</td></tr>
+            <tr><td>in / at / on (place)</td><td>in = enclosed/city/country. at = specific point. on = surface.</td><td>in India, at the station, on the table</td></tr>
+            <tr><td>between / among</td><td>between = two (or distinct items). among = three or more as group.</td><td>between A and B; among the students</td></tr>
+            <tr><td>beside / besides</td><td>beside = next to. besides = in addition to.</td><td>sit beside me; besides math, she codes</td></tr>
+            <tr><td>since / for</td><td>since = specific point in time. for = duration of time.</td><td>since 2020; for three years</td></tr>
+            <tr><td>despite / although</td><td>despite/in spite of + noun/gerund. although + full clause.</td><td>Despite the rain / Although it rained</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Articles — Complete Rule Set</h3>
+      <div class="def-box">
+        <span class="lbl">a / an / the — When to Use What</span>
+        <p><strong>a/an (indefinite):</strong> "an" before VOWEL SOUNDS, not vowel letters. "an MBA" (/em/), "a university" (/juː/), "an hour" (/aʊər/), "a one-time offer" (/wʌn/).<br>
+        <strong>the (definite):</strong> Use when: (1) mentioned before, (2) unique in context, (3) superlatives, (4) specific geographic features (the Ganges, the Himalayas, the USA).<br>
+        <strong>No article:</strong> languages (Hindi), sports (cricket), subjects (mathematics), abstract nouns generally (Love is powerful. Time is money.).</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH K — VOCABULARY ═══ -->
+<div class="chapter" id="chK">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter K</div>
+    <div class="ch-title">Vocabulary &amp; <em>Word Power</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="confusables">
+      <h2 class="sh">K.1 &nbsp; Confusable Pairs <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Word</th><th>Meaning</th><th>Confusable</th><th>Partner Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Eminent</strong></td><td>Famous, respected</td><td>Imminent</td><td>About to happen very soon</td></tr>
+            <tr><td><strong>Elicit</strong></td><td>Draw out (a response)</td><td>Illicit</td><td>Illegal, forbidden</td></tr>
+            <tr><td><strong>Discrete</strong></td><td>Separate, distinct</td><td>Discreet</td><td>Careful, tactful, not drawing attention</td></tr>
+            <tr><td><strong>Infer</strong></td><td>Conclude from evidence (listener/reader)</td><td>Imply</td><td>Hint without stating (speaker/writer)</td></tr>
+            <tr><td><strong>Explicit</strong></td><td>Directly and clearly stated</td><td>Implicit</td><td>Implied, understood but not stated</td></tr>
+            <tr><td><strong>Comprise</strong></td><td>Consist of (whole comprises parts)</td><td>Compose</td><td>Make up (parts compose the whole)</td></tr>
+            <tr><td><strong>Credulous</strong></td><td>Too willing to believe; gullible</td><td>Credible</td><td>Believable, worthy of trust</td></tr>
+            <tr><td><strong>Affect (v)</strong></td><td>To have an influence on</td><td>Effect (n)</td><td>The result or outcome</td></tr>
+            <tr><td><strong>Principle</strong></td><td>A rule, belief, or fundamental truth</td><td>Principal</td><td>Main / head of school / loan amount</td></tr>
+            <tr><td><strong>Ambiguous</strong></td><td>Open to more than one interpretation</td><td>Ambivalent</td><td>Having conflicting/mixed feelings</td></tr>
+            <tr><td><strong>Tenuous</strong></td><td>Weak, insubstantial, thin</td><td>Tenacious</td><td>Persistent, not giving up easily</td></tr>
+            <tr><td><strong>Prescribe</strong></td><td>Recommend or order (medicine, rules)</td><td>Proscribe</td><td>Prohibit, officially ban</td></tr>
+            <tr><td><strong>Flouting</strong></td><td>Openly disregarding a rule</td><td>Flaunting</td><td>Showing off, displaying proudly</td></tr>
+            <tr><td><strong>Appraise</strong></td><td>Assess the value or quality of</td><td>Apprise</td><td>Inform or notify someone</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>"Comprise" — the most tested usage error:</strong> The WHOLE comprises the PARTS. "India comprises 28 states" ✓. "28 states comprise India" ✗. Never say "comprised of" — "is composed of" is the correct passive form.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="roots">
+      <h2 class="sh">K.2 &nbsp; Latin/Greek Roots &amp; Analogies <span class="tag tc">Core</span></h2>
+
+      <div class="cg" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+        <div class="cg-card">
+          <div class="ct">bene- / mal-</div>
+          <p><strong>bene-</strong> (good): benefit, benevolent, benign, benefactor<br><strong>mal-</strong> (bad): malicious, malfunction, malice, malevolent</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">chron- / port-</div>
+          <p><strong>chron-</strong> (time): chronic, synchronise, anachronism, chronicle<br><strong>port-</strong> (carry): portable, import, export, transport, deport</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">scrib/script- / greg-</div>
+          <p><strong>scrib-</strong> (write): describe, prescribe, manuscript, transcript<br><strong>greg-</strong> (group): gregarious, congregate, segregate, egregious</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">aud- / vid/vis-</div>
+          <p><strong>aud-</strong> (hear): auditory, audience, audible, auditorium<br><strong>vid/vis-</strong> (see): visible, vision, visual, evident, supervise</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">-logy / -onym</div>
+          <p><strong>-logy</strong> (study of): biology, psychology, ecology, etymology<br><strong>-onym</strong> (name/word): synonym, antonym, pseudonym, acronym</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Other Key Roots</div>
+          <p><strong>mis-</strong> (wrong): mistake, misnomer<br><strong>trans-</strong> (across): transfer, translate<br><strong>inter-</strong> (between): interact, interpose<br><strong>circum-</strong> (around): circumvent</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Analogy Relationship Types — Master List</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Relationship</th><th>Example Pair</th><th>Verbal Frame</th></tr></thead>
+          <tbody>
+            <tr><td>Part : Whole</td><td>Chapter : Book :: Byte : File</td><td>"A is a part of B"</td></tr>
+            <tr><td>Tool : Function / User</td><td>Scalpel : Surgeon :: Compiler : Programmer</td><td>"A is a tool used by B"</td></tr>
+            <tr><td>Cause : Effect</td><td>Virus : Disease :: Bug : Error</td><td>"A causes B"</td></tr>
+            <tr><td>Antonymy</td><td>Encrypt : Decrypt :: Compress : Decompress</td><td>"A is the opposite of B"</td></tr>
+            <tr><td>Degree / Intensity</td><td>Warm : Hot :: Cool : Freezing</td><td>"A is a milder form of B"</td></tr>
+            <tr><td>Action : Product</td><td>Compile : Binary :: Bake : Bread</td><td>"A produces B"</td></tr>
+            <tr><td>Category Membership</td><td>Python : Language :: Heap : Data Structure</td><td>"A is a type of B"</td></tr>
+            <tr><td>Instrument : Measurement</td><td>Speedometer : Speed :: Thermometer : Temperature</td><td>"A measures B"</td></tr>
+            <tr><td>Worker : Workplace</td><td>Judge : Courtroom :: Programmer : IDE</td><td>"A works in B"</td></tr>
+            <tr><td>Symbol : Concept</td><td>Crown : Royalty :: Key : Access</td><td>"A symbolises B"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>Always verbalize the A:B relationship before looking at answer options.</strong> Turn it into one precise sentence: "A is a tool used to achieve B". Apply that exact sentence to C:?. The most common wrong answer is a pair in the same domain as A:B but with a different relationship type — verbalization exposes this instantly.</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH L — READING COMPREHENSION ═══ -->
+<div class="chapter" id="chL">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter L</div>
+    <div class="ch-title">Reading Comprehension — <em>Strategy &amp; Question-Type Grid</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="RC system">
+      <h2 class="sh">L.1 &nbsp; The Complete RC System <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="purp-box">
+        <span class="lbl">4-Step RC Protocol</span>
+        <p><strong>Step 1 (30 sec):</strong> Scan all questions FIRST. Know what you're hunting for — main idea? inference? tone? specific fact?<br>
+        <strong>Step 2:</strong> Read passage actively. Mentally tag each paragraph's function: "This defines X / This challenges Y / This gives evidence for Z".<br>
+        <strong>Step 3:</strong> For each question, return to the exact passage location. Ground every answer in specific text.<br>
+        <strong>Step 4:</strong> Eliminate: (a) extreme language ("always", "never", "only"), (b) true-but-not-in-passage, (c) direct contradictions of the passage.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Question Type</th><th>What It Asks</th><th>How to Answer</th><th>Main Trap</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Main Idea / Theme</strong></td><td>What is the passage primarily about?</td><td>Find the idea supported by EVERY paragraph, not just one section</td><td>A specific detail that appears prominently but doesn't represent the whole</td></tr>
+            <tr><td><strong>Specific Fact</strong></td><td>What does the passage explicitly state?</td><td>Locate and verify from the passage. Answer must be directly stated.</td><td>A logical inference that follows from the fact but isn't the fact itself</td></tr>
+            <tr><td><strong>Inference</strong></td><td>What must follow logically?</td><td>Not explicitly stated but required by the passage. One step of logic from what IS stated.</td><td>Using general knowledge not grounded in the passage</td></tr>
+            <tr><td><strong>Author Tone/Attitude</strong></td><td>What is the author's stance toward X?</td><td>Identify loaded words: "unfortunately", "remarkably", "puzzlingly" → these signal stance</td><td>Your own opinion, or what you'd expect the tone to be</td></tr>
+            <tr><td><strong>Vocabulary in Context</strong></td><td>What does word X mean in paragraph N?</td><td>Read the full sentence. Substitute each option back — which preserves the meaning?</td><td>The most common everyday meaning of the word (context often overrides it)</td></tr>
+            <tr><td><strong>Title / Best Heading</strong></td><td>Which heading covers the whole passage?</td><td>Same test as main idea — must cover all paragraphs, not just one</td><td>A specific detail elevated to a title; or too-broad generalisation</td></tr>
+            <tr><td><strong>Strengthen / Weaken</strong></td><td>Which statement supports / undermines the argument?</td><td>Identify the author's core claim. Find the option that most directly attacks or supports it.</td><td>Options that affect a peripheral point, not the central claim</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">⚠ The #1 RC Trap — "True but Not in Passage"</span>
+        <p>The option states something factually correct about the topic area — but it's drawn from general knowledge, not this passage. Rule: every answer must be traceable to specific text in the passage. The moment you think "this is generally true", you've found the trap.</p>
+      </div>
+
+      <div class="trick">
+        <p><strong>Eliminate absolute language first:</strong> Options with "always", "never", "all", "none", "completely", "exclusively", "only" are almost always wrong. Authors hedge: "tends to", "in many cases", "often suggests". Unless the passage itself uses identical absolute language, eliminate these in your first pass. This typically eliminates 1–2 options immediately.</p>
+        <p><strong>Inference ≠ Fact ≠ Assumption:</strong> Specific-fact answer = directly stated. Inference = one logical step beyond what's stated. Assumption = fills a gap the passage takes for granted. GATE uses all three in the same RC set. Ask: "Is this stated word-for-word? (Fact) → Is this required by what's stated? (Inference) → Does this fill a gap? (Assumption)".</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH M — CRITICAL REASONING ═══ -->
+<div class="chapter" id="chM">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter M</div>
+    <div class="ch-title">Critical Reasoning &amp; <em>Arguments</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="argument">
+      <h2 class="sh">M.1 &nbsp; Argument Anatomy &amp; Question Types <span class="tag tg">GATE Tested</span></h2>
+
+      <!-- SVG: Argument structure diagram -->
+      <div class="visual">
+        <div class="visual-lbl">Anatomy of an Argument</div>
+        <svg width="100%" height="118" viewBox="0 0 620 118" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="620" height="118" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Premises box -->
+          <rect x="20" y="18" width="150" height="60" rx="4" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="95" y="42" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#1a4a8c" font-weight="bold">PREMISES</text>
+          <text x="95" y="57" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">Evidence / Facts</text>
+          <text x="95" y="71" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">given in argument</text>
+          <!-- Arrow 1 -->
+          <path d="M170 48 L220 48" stroke="#b0a088" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <polygon points="218,44 228,48 218,52" fill="#b0a088"/>
+          <!-- Assumption box -->
+          <rect x="228" y="18" width="162" height="60" rx="4" fill="#f8f0ff" stroke="#5a1a8a" stroke-width="1.5"/>
+          <text x="309" y="42" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#5a1a8a" font-weight="bold">ASSUMPTION</text>
+          <text x="309" y="57" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">Unstated bridge</text>
+          <text x="309" y="71" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">(hidden gap!)</text>
+          <!-- Arrow 2 -->
+          <path d="M390 48 L440 48" stroke="#b0a088" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <polygon points="438,44 448,48 438,52" fill="#b0a088"/>
+          <!-- Conclusion box -->
+          <rect x="448" y="18" width="152" height="60" rx="4" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.5"/>
+          <text x="524" y="42" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#1a6b40" font-weight="bold">CONCLUSION</text>
+          <text x="524" y="57" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">The claim being</text>
+          <text x="524" y="71" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#3a2e22">made by the author</text>
+          <!-- Signal words - two shorter lines -->
+          <text x="310" y="96" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Conclusion signals: "therefore", "hence", "so", "thus", "consequently"</text>
+          <text x="310" y="111" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Premise signals: "because", "since", "given that", "as", "for"</text>
+        </svg>
+      </div>
+
+      <div class="eg">
+        <p><strong>Working Example — all question types in one argument:</strong></p>
+        <div class="cb">Premise:   "All engineers who practise problems daily improve."
+Conclusion: "Aryan will improve."
+Assumption: Aryan is an engineer who practises problems daily. [UNSTATED — the gap]
+
+Strengthen: "Aryan solves 5 problems every single day." [makes assumption explicit and stronger]
+Weaken:     "Aryan only practises on weekends, not daily." [attacks the assumption]
+Inference:  "Engineers who practise daily do improve." [restated from premise — directly follows]</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Question Type</th><th>What to Do</th><th>Definitive Test</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Find the Assumption</strong></td><td>Identify the unstated bridge between premises and conclusion</td><td><mark>Negation test:</mark> negate each option — if the conclusion collapses, that's the assumption</td></tr>
+            <tr><td><strong>Strengthen</strong></td><td>Add a fact that makes the conclusion more likely to be true</td><td>Must support the premise→conclusion link, not just be related to the topic</td></tr>
+            <tr><td><strong>Weaken</strong></td><td>Add a fact that makes the conclusion less likely to be true</td><td>Must attack the core claim, not a peripheral detail</td></tr>
+            <tr><td><strong>Inference</strong></td><td>What must be true if the premises are true?</td><td>The conclusion follows necessarily — not just probably or reasonably</td></tr>
+            <tr><td><strong>Identify Conclusion</strong></td><td>Find what the author is actually claiming</td><td>Look for "therefore", "hence", "so", "thus", "consequently" — they flag conclusions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>Negation test for assumptions:</strong> Negate your candidate. "Aryan practises daily" → negated: "Aryan does NOT practise daily." Does the conclusion ("Aryan will improve") still hold? No — the entire argument falls apart. Confirmed assumption. If the conclusion still holds after negation → that option is NOT the assumption.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="fallacies">
+      <h2 class="sh">M.2 &nbsp; Logical Fallacies — Complete GATE/Placement List <span class="tag tp">Interview Level</span></h2>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Ad Hominem</div>
+        <div class="fallacy-def">Attack the person making the argument, not the argument itself.</div>
+        <div class="fallacy-ex">Example: "His design is flawed — he barely passed his degree." (Attacking the person, not the design.)</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Straw Man</div>
+        <div class="fallacy-def">Misrepresent the opponent's position, then attack the misrepresented version.</div>
+        <div class="fallacy-ex">Example: "He wants fewer tests — so he doesn't care about software quality at all." (Exaggerated misrepresentation.)</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">False Dichotomy</div>
+        <div class="fallacy-def">Present only two options when more actually exist.</div>
+        <div class="fallacy-ex">Example: "Either we migrate to cloud or we go bankrupt." (Other options clearly exist.)</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Post Hoc (Post hoc ergo propter hoc)</div>
+        <div class="fallacy-def">A preceded B, therefore A caused B. Confuses temporal sequence with causation.</div>
+        <div class="fallacy-ex">Example: "Bugs increased after the new hire joined — he must be causing them." (Correlation ≠ Causation.)</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Circular Reasoning</div>
+        <div class="fallacy-def">The conclusion is used as a premise — the argument goes around in a circle.</div>
+        <div class="fallacy-ex">Example: "This code is correct because it has no bugs. It has no bugs because it is correct."</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Hasty Generalisation</div>
+        <div class="fallacy-def">Broad conclusion drawn from too few or non-representative examples.</div>
+        <div class="fallacy-ex">Example: "Two toppers used Vim — therefore all serious coders should use Vim."</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Appeal to Authority</div>
+        <div class="fallacy-def">Claim is true merely because an expert said so, without independent evidence.</div>
+        <div class="fallacy-ex">Example: "This architecture is optimal — the CTO said so." (No supporting reasoning given.)</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Slippery Slope</div>
+        <div class="fallacy-def">Assume one event inevitably leads to extreme consequences without justification.</div>
+        <div class="fallacy-ex">Example: "If we allow one exception, the entire codebase will become unmaintainable."</div>
+      </div>
+
+      <div class="fallacy-card">
+        <div class="fallacy-name">Bandwagon</div>
+        <div class="fallacy-def">Something is right because everyone does it.</div>
+        <div class="fallacy-ex">Example: "Every company is switching to microservices, so we should too." (Popularity ≠ correctness.)</div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH N — CODING-DECODING ═══ -->
+<div class="chapter" id="chN">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter N</div>
+    <div class="ch-title">Coding-Decoding — <em>All Pattern Types</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="coding">
+      <h2 class="sh">N.1 &nbsp; Letter Position Chart &amp; All Coding Systems <span class="tag tg">GATE + Placements</span></h2>
+
+      <!-- SVG: A=1 to Z=26 reference chart -->
+      <div class="visual">
+        <div class="visual-lbl">Alphabet Position Reference — A=1 through Z=26</div>
+        <svg width="100%" height="120" viewBox="0 0 640 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="120" rx="5" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <g font-family="Lora,serif" font-size="13">
+            <!-- Row 1: A-M (purple = forward positions) -->
+            <text x="32" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">A</text><text x="32" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">1</text>
+            <text x="80" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">B</text><text x="80" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">2</text>
+            <text x="128" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">C</text><text x="128" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">3</text>
+            <text x="176" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">D</text><text x="176" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">4</text>
+            <text x="224" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">E</text><text x="224" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">5</text>
+            <text x="272" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">F</text><text x="272" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">6</text>
+            <text x="320" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">G</text><text x="320" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">7</text>
+            <text x="368" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">H</text><text x="368" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">8</text>
+            <text x="416" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">I</text><text x="416" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">9</text>
+            <text x="464" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">J</text><text x="464" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">10</text>
+            <text x="512" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">K</text><text x="512" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">11</text>
+            <text x="560" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">L</text><text x="560" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">12</text>
+            <text x="608" y="26" text-anchor="middle" fill="#5a1a8a" font-weight="bold">M</text><text x="608" y="40" text-anchor="middle" fill="#6b5a47" font-size="11">13</text>
+            <!-- Row 2: Z-N (blue = mirror positions) -->
+            <text x="32" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">Z</text><text x="32" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">26</text>
+            <text x="80" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">Y</text><text x="80" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">25</text>
+            <text x="128" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">X</text><text x="128" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">24</text>
+            <text x="176" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">W</text><text x="176" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">23</text>
+            <text x="224" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">V</text><text x="224" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">22</text>
+            <text x="272" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">U</text><text x="272" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">21</text>
+            <text x="320" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">T</text><text x="320" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">20</text>
+            <text x="368" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">S</text><text x="368" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">19</text>
+            <text x="416" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">R</text><text x="416" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">18</text>
+            <text x="464" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">Q</text><text x="464" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">17</text>
+            <text x="512" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">P</text><text x="512" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">16</text>
+            <text x="560" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">O</text><text x="560" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">15</text>
+            <text x="608" y="68" text-anchor="middle" fill="#1a4a8c" font-weight="bold">N</text><text x="608" y="82" text-anchor="middle" fill="#6b5a47" font-size="11">14</text>
+          </g>
+          <!-- Dividing line between rows -->
+          <line x1="16" y1="47" x2="624" y2="47" stroke="#c0a880" stroke-width="1" stroke-dasharray="3,6"/>
+          <text x="320" y="101" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Mirror rule: position p → 27−p (A↔Z, B↔Y, C↔X, M↔N)</text>
+          <text x="320" y="114" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Wrap-around: Z+1=A (mod 26). Purple=forward · Blue=mirror row</text>
+        </svg>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Coding Type</th><th>Pattern</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Fixed shift</td><td>Every letter shifted by k positions. Wraps: Z+1=A.</td><td>CAT + 3 → FDW (C→F, A→D, T→W)</td></tr>
+            <tr><td>Mirror / reverse alphabet</td><td>Position p → 27−p. A↔Z, B↔Y, C↔X…</td><td>CAT → XZG (C=3→X=24, A→Z, T=20→G=7)</td></tr>
+            <tr><td>Word reversal then shift</td><td>Reverse the word, then apply a shift</td><td>CAT → TAC, then +1 → UBD</td></tr>
+            <tr><td>Position-number coding</td><td>Each letter replaced by its alphabet position number</td><td>CAT → 3-1-20</td></tr>
+            <tr><td>Alternate letter coding</td><td>Every other letter of the word is taken</td><td>COMPUTER → CMUE (1st,3rd,5th,7th letters)</td></tr>
+            <tr><td>Number pattern coding</td><td>Input numbers follow a hidden mathematical rule</td><td>4→12, 5→20, 6→30 → rule: n×(n−1). 7→42.</td></tr>
+            <tr><td>Mixed shift (odd/even positions)</td><td>Different shifts for odd vs even position letters</td><td>Odd positions +2, even positions −1</td></tr>
+            <tr><td>Symbol substitution table</td><td>A lookup table is given; just map each character</td><td>Read the table — no pattern to decode</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Universal 4-Step Approach to Any Coding Question</span>
+        <p><strong>Step 1:</strong> Find the transformation between the original word and code — not just what each letter becomes, but the rule.<br>
+        <strong>Step 2:</strong> Verify the rule holds for at least 2–3 letters before committing.<br>
+        <strong>Step 3:</strong> Apply the identical transformation to the target word.<br>
+        <strong>Step 4:</strong> Check your answer against the given example.<br><br>
+        <strong>When shift isn't constant — check in order:</strong> (1) Fixed shift → (2) Mirror (27−p) → (3) Word reversed, then shifted → (4) Positions shifted differently → (5) Pattern in position index itself.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>If GATE = 7-1-20-5, what is CODE?</strong></p>
+        <div class="cb">G=7, A=1, T=20, E=5 → Each letter is replaced by its alphabet position.
+C=3, O=15, D=4, E=5
+CODE = 3-15-4-5</div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH O — DIRECTION SENSE ═══ -->
+<div class="chapter" id="chO">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter O</div>
+    <div class="ch-title">Direction Sense &amp; <em>Distance Problems</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="directions">
+      <h2 class="sh">O.1 &nbsp; Coordinate Tracking Method <span class="tag tg">GATE + Placements</span></h2>
+
+      <!-- SVG: Compass with coordinate system -->
+      <div class="visual">
+        <div class="visual-lbl">Compass System &amp; Turn Rules</div>
+        <svg width="100%" height="200" viewBox="0 0 620 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="620" height="200" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Compass rose -->
+          <circle cx="96" cy="100" r="72" fill="#f3ede3" stroke="#1c1510" stroke-width="2"/>
+          <circle cx="96" cy="100" r="5" fill="#1c1510"/>
+          <!-- N -->
+          <path d="M96 100 L96 36" stroke="#1a4a8c" stroke-width="2.5" stroke-linecap="round"/>
+          <polygon points="92,42 96,28 100,42" fill="#1a4a8c"/>
+          <text x="96" y="22" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="13" fill="#1a4a8c" font-weight="bold">N (+y)</text>
+          <!-- S -->
+          <path d="M96 100 L96 162" stroke="#b83030" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="92,158 96,172 100,158" fill="#b83030"/>
+          <text x="96" y="186" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="12" fill="#b83030">S (−y)</text>
+          <!-- E -->
+          <path d="M96 100 L162 100" stroke="#1a6b40" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="156,96 170,100 156,104" fill="#1a6b40"/>
+          <text x="178" y="104" font-family="Architects Daughter,cursive" font-size="12" fill="#1a6b40">E (+x)</text>
+          <!-- W -->
+          <path d="M96 100 L30 100" stroke="#b85a10" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="36,96 22,100 36,104" fill="#b85a10"/>
+          <text x="8" y="104" font-family="Architects Daughter,cursive" font-size="12" fill="#b85a10">W (−x)</text>
+          <!-- Intercardinal labels -->
+          <text x="152" y="52" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">NE</text>
+          <text x="30" y="52" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">NW</text>
+          <text x="152" y="155" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">SE</text>
+          <text x="30" y="155" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">SW</text>
+          <!-- Turn rules panel -->
+          <text x="210" y="22" font-family="Architects Daughter,cursive" font-size="12" fill="#1c1510" font-weight="bold">Turn Rules — Right = clockwise 90°</text>
+          <line x1="210" y1="30" x2="608" y2="30" stroke="#c0a880" stroke-width="1"/>
+          <text x="210" y="50" font-family="Lora,serif" font-size="12" fill="#3a2e22">N + Right → East     |   N + Left → West</text>
+          <text x="210" y="70" font-family="Lora,serif" font-size="12" fill="#3a2e22">E + Right → South   |   E + Left → North</text>
+          <text x="210" y="90" font-family="Lora,serif" font-size="12" fill="#3a2e22">S + Right → West    |   S + Left → East</text>
+          <text x="210" y="110" font-family="Lora,serif" font-size="12" fill="#3a2e22">W + Right → North  |   W + Left → South</text>
+          <line x1="210" y1="122" x2="608" y2="122" stroke="#c0a880" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="210" y="142" font-family="Architects Daughter,cursive" font-size="11" fill="#5a1a8a" font-weight="bold">Coordinate Method:</text>
+          <text x="210" y="160" font-family="Lora,serif" font-size="11.5" fill="#3a2e22">East=+x  West=−x  North=+y  South=−y</text>
+          <text x="210" y="178" font-family="Lora,serif" font-size="11.5" fill="#3a2e22">Displacement = √(x² + y²)</text>
+          <text x="210" y="194" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Morning shadow → West · Evening shadow → East</text>
+        </svg>
+      </div>
+
+      <div class="eg">
+        <p><strong>A man faces North. He walks 6 km North, turns right and walks 4 km, then turns right and walks 6 km. How far and in what direction from his starting point?</strong></p>
+        <div class="cb">Start at (0,0), facing North.
+Walk 6 km North  → (0, 6)
+Turn right (→ face East). Walk 4 km East → (4, 6)
+Turn right (→ face South). Walk 6 km South → (4, 0)
+
+Net x = 4 (East), Net y = 0
+Displacement = √(4² + 0²) = 4 km
+Direction = Due East ← stays at y=0, positive x
+
+Answer: 4 km East of starting point.</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Shadow Direction Rules</span>
+        <p>The sun is always the reference, never the person's facing direction.<br>
+        <strong>Morning:</strong> sun rises in East → shadows fall West (away from sun).<br>
+        <strong>Evening:</strong> sun sets in West → shadows fall East.<br>
+        <strong>Noon (India):</strong> sun roughly overhead/slightly South → shortest shadows, falling slightly North.</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH P — BLOOD RELATIONS ═══ -->
+<div class="chapter" id="chP">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter P</div>
+    <div class="ch-title">Blood Relations — <em>Family Tree Method</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="family">
+      <h2 class="sh">P.1 &nbsp; Tree Notation &amp; All Relation Types <span class="tag tg">GATE + Placements</span></h2>
+
+      <div class="warn-box">
+        <span class="lbl">The Only Method That Works — Always Draw a Tree</span>
+        <p>Never solve blood relation problems in your head. Draw a family tree for every problem, even simple ones. The cognitive load of tracking 3+ relationships mentally almost always leads to errors.</p>
+      </div>
+
+      <!-- SVG: Family tree notation -->
+      <div class="visual">
+        <div class="visual-lbl">Standard Two-Generation Family Tree with Notation</div>
+        <svg width="100%" height="175" viewBox="0 0 620 175" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="620" height="175" rx="5" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Generation 1: Grandparents -->
+          <rect x="50" y="16" width="70" height="28" rx="4" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="85" y="34" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#1a4a8c">□ Grandpa</text>
+          <line x1="120" y1="30" x2="156" y2="30" stroke="#1c1510" stroke-width="1.5"/>
+          <rect x="156" y="16" width="70" height="28" rx="4" fill="#fff0f8" stroke="#b83030" stroke-width="1.5"/>
+          <text x="191" y="34" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#b83030">○ Grandma</text>
+          <!-- Generation 2 drop lines -->
+          <line x1="138" y1="44" x2="138" y2="64" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="88" y1="64" x2="330" y2="64" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="88" y1="64" x2="88" y2="84" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="330" y1="64" x2="330" y2="84" stroke="#1c1510" stroke-width="1.5"/>
+          <!-- Father + Mother -->
+          <rect x="52" y="84" width="56" height="28" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="80" y="102" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#1a4a8c">□ Father</text>
+          <line x1="108" y1="98" x2="136" y2="98" stroke="#1c1510" stroke-width="1.5"/>
+          <rect x="136" y="84" width="56" height="28" rx="3" fill="#fff0f8" stroke="#b83030" stroke-width="1.5"/>
+          <text x="164" y="102" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#b83030">○ Mother</text>
+          <!-- Aunt/Uncle -->
+          <rect x="292" y="84" width="52" height="28" rx="3" fill="#fff0f8" stroke="#b83030" stroke-width="1.5"/>
+          <text x="318" y="102" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#b83030">○ Aunt</text>
+          <line x1="344" y1="98" x2="368" y2="98" stroke="#1c1510" stroke-width="1.5"/>
+          <rect x="368" y="84" width="54" height="28" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="395" y="102" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="#1a4a8c">□ Uncle</text>
+          <!-- Generation 3 -->
+          <line x1="152" y1="112" x2="152" y2="132" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="80" y1="132" x2="216" y2="132" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="80" y1="132" x2="80" y2="144" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="152" y1="132" x2="152" y2="144" stroke="#1c1510" stroke-width="1.5"/>
+          <line x1="216" y1="132" x2="216" y2="144" stroke="#1c1510" stroke-width="1.5"/>
+          <text x="80" y="158" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#5a1a8a">□/○ Sibling</text>
+          <text x="154" y="158" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#5a1a8a">★ You</text>
+          <text x="218" y="158" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#5a1a8a">□/○ Sibling</text>
+          <!-- Cousin -->
+          <line x1="338" y1="112" x2="338" y2="144" stroke="#1c1510" stroke-width="1.5"/>
+          <text x="338" y="158" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#5a1a8a">□/○ Cousin</text>
+          <!-- Legend panel -->
+          <rect x="460" y="12" width="148" height="100" rx="4" fill="#fffbea" stroke="#d4a800" stroke-width="1"/>
+          <text x="534" y="28" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#1c1510" font-weight="bold">Notation</text>
+          <text x="472" y="46" font-family="Lora,serif" font-size="11" fill="#3a2e22">□ = Male</text>
+          <text x="472" y="62" font-family="Lora,serif" font-size="11" fill="#3a2e22">○ = Female</text>
+          <text x="472" y="78" font-family="Lora,serif" font-size="11" fill="#3a2e22">── = Married</text>
+          <text x="472" y="94" font-family="Lora,serif" font-size="11" fill="#3a2e22">│ = Child of</text>
+          <text x="472" y="110" font-family="Lora,serif" font-size="11" fill="#3a2e22">★ = You (self)</text>
+          <!-- Gen labels -->
+          <text x="14" y="33" font-family="Architects Daughter,cursive" font-size="9" fill="#6b5a47" writing-mode="horizontal-tb">Gen 1</text>
+          <text x="14" y="100" font-family="Architects Daughter,cursive" font-size="9" fill="#6b5a47">Gen 2</text>
+          <text x="14" y="155" font-family="Architects Daughter,cursive" font-size="9" fill="#6b5a47">Gen 3</text>
+        </svg>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statement Given</th><th>Decoded Relationship</th></tr></thead>
+          <tbody>
+            <tr><td>A is the mother of B</td><td>A is female. A is B's parent. Draw A above B with vertical line.</td></tr>
+            <tr><td>A is the son of the only daughter of B</td><td>B's only daughter = A's mother. B is A's maternal grandfather.</td></tr>
+            <tr><td>A is the mother's brother of B</td><td>A is male. A's sister = B's mother. A is B's maternal uncle.</td></tr>
+            <tr><td>A's father's only son</td><td>If father has only one son, that son IS A. "A's father's only son = A himself." Self-reference!</td></tr>
+            <tr><td>A is the wife of B's brother</td><td>B's brother (say C) married A. A is B's sister-in-law.</td></tr>
+            <tr><td>A is the son of B's father's brother</td><td>B's father's brother = B's paternal uncle. A = uncle's son = B's first cousin.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">⚠ Gender Traps</span>
+        <p><strong>Mark gender ONLY when explicitly stated.</strong> Many GATE questions leave the subject's gender ambiguous ("A is B's sibling") and rely on you assuming. If gender is unknown, the answer may be "brother or sister" — watch for this option.<br><br>
+        <strong>"Only son" / "only daughter" are self-reference traps.</strong> "A's father's only son" = A himself. "A's mother's only daughter" = A herself (if female). Identify these immediately — they collapse the chain.</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH Q — SYLLOGISMS ═══ -->
+<div class="chapter" id="chQ">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter Q</div>
+    <div class="ch-title">Syllogisms &amp; <em>Venn Reasoning</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="syllogisms">
+      <h2 class="sh">Q.1 &nbsp; Valid Patterns, Invalid Patterns &amp; Venn Method <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="warn-box">
+        <span class="lbl">The Cardinal Rule</span>
+        <p>A conclusion is valid <strong>ONLY IF</strong> it holds in every possible valid Venn diagram that satisfies the premises. If you can draw even <em>one</em> valid diagram where the conclusion fails → the conclusion DOES NOT FOLLOW. Draw the minimum-overlap diagram to test whether "Some" conclusions can fail.</p>
+      </div>
+
+      <!-- SVG: Venn diagram showing All A→B configurations -->
+      <div class="visual">
+        <div class="visual-lbl">"All A are B" — Two Valid Configurations, Both Must Satisfy the Conclusion</div>
+        <svg width="100%" height="160" viewBox="0 0 560 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="560" height="160" rx="5" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Config 1: A ⊂ B -->
+          <text x="140" y="18" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#6b5a47">Config 1: A ⊂ B</text>
+          <ellipse cx="140" cy="75" rx="80" ry="46" fill="none" stroke="#1a4a8c" stroke-width="2"/>
+          <text x="200" y="55" font-family="Architects Daughter,cursive" font-size="13" fill="#1a4a8c" font-weight="bold">B</text>
+          <ellipse cx="128" cy="75" rx="44" ry="28" fill="rgba(90,26,138,0.12)" stroke="#5a1a8a" stroke-width="1.5"/>
+          <text x="124" y="79" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="13" fill="#5a1a8a" font-weight="bold">A</text>
+          <!-- Config 2: A = B -->
+          <text x="410" y="18" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#6b5a47">Config 2: A = B</text>
+          <ellipse cx="410" cy="75" rx="70" ry="44" fill="rgba(26,74,140,0.08)" stroke="#1a4a8c" stroke-width="2"/>
+          <ellipse cx="410" cy="75" rx="70" ry="44" fill="none" stroke="#5a1a8a" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="388" y="72" font-family="Architects Daughter,cursive" font-size="12" fill="#1a4a8c">A = B</text>
+          <!-- Divider -->
+          <line x1="280" y1="28" x2="280" y2="122" stroke="#c0a880" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- Conclusion test - properly spaced lines -->
+          <text x="280" y="134" text-anchor="middle" font-family="Lora,serif" font-size="12" fill="#1a6b40" font-weight="bold">"Some B are A" ✓ — holds in BOTH configs → valid conclusion</text>
+          <text x="280" y="152" text-anchor="middle" font-family="Lora,serif" font-size="12" fill="#b83030" font-weight="bold">"All B are A" ✗ — fails in Config 1 → INVALID conclusion</text>
+        </svg>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Given Premises</th><th>Valid Conclusions</th><th>Invalid — Never Conclude</th></tr></thead>
+          <tbody>
+            <tr><td>All A are B</td><td class="good">Some B are A ✓ &nbsp; Some A are B ✓</td><td class="bad">All B are A ✗ &nbsp; No A is B ✗</td></tr>
+            <tr><td>No A is B</td><td class="good">No B is A ✓ &nbsp; Some A are not B ✓ &nbsp; Some B are not A ✓</td><td class="bad">Some A are B ✗</td></tr>
+            <tr><td>Some A are B</td><td class="good">Some B are A ✓</td><td class="bad">All A are B ✗ &nbsp; No A is B ✗</td></tr>
+            <tr><td>All A→B + All B→C</td><td class="good">All A are C ✓ &nbsp; Some C are A ✓</td><td class="bad">All C are A ✗</td></tr>
+            <tr><td>All A→B + No B is C</td><td class="good">No A is C ✓ &nbsp; Some C are not A ✓</td><td class="bad">Some A are C ✗</td></tr>
+            <tr><td>Some A→B + All B→C</td><td class="good">Some A are C ✓ &nbsp; Some C are A ✓</td><td class="bad">All A are C ✗</td></tr>
+            <tr><td>Some A→B + Some B→C</td><td class="bad" colspan="2">No definitive conclusion about A and C. ANY claim about A and C is ✗</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">⚠ The Most Tested Invalid Conclusion</span>
+        <p>"Some A + Some B → nothing about A and C" — Draw it: A partially overlaps B, C partially overlaps B, but A and C may have zero intersection (their parts of B may be completely different subsets). "Some dogs are black, some black things are cars → some dogs are cars" is obviously wrong. Same logic applies everywhere.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Possibility vs Definite — Key Distinction</span>
+        <p><strong>Possible:</strong> True in at least one valid Venn diagram. <strong>Definite:</strong> True in ALL valid diagrams. "Some B are A" is a <em>definite</em> conclusion from "All A are B". "All B are A" is a <em>possible</em> (but not definite) conclusion — it's valid in Config 2 but not Config 1. GATE often asks "which conclusion is a possibility?" vs "which definitely follows?"</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH R — STATEMENT-CONCLUSION ═══ -->
+<div class="chapter" id="chR">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter R</div>
+    <div class="ch-title">Statement-Conclusion &amp; <em>Cause-Effect</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="statements">
+      <h2 class="sh">R.1 &nbsp; Statement-Conclusion Reasoning <span class="tag tg">GATE + Placements</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">The Core Test</span>
+        <p>A conclusion follows from a statement if it is a <strong>direct, necessary logical consequence</strong> — not an assumption, not general knowledge, and not an extreme extrapolation. Ask: "If the statement is true, must this conclusion be true, <em>without adding any new information</em>?"</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statement</th><th>Conclusion A</th><th>Conclusion B</th><th>Verdict</th></tr></thead>
+          <tbody>
+            <tr><td>Students who revised regularly scored above 80%.</td><td class="bad">All high scorers revised regularly. ✗</td><td class="good">Regular revision improves scores for most students. ✓</td><td>B follows. A reverses the relationship — not stated or required.</td></tr>
+            <tr><td>Company X increased R&amp;D budget by 40%.</td><td class="bad">Company X will launch new products. ✗</td><td class="good">Company X has invested more in research than before. ✓</td><td>B follows (directly stated). A requires an assumption (R&amp;D → new products — not guaranteed).</td></tr>
+            <tr><td>Literacy rate rose from 60% to 75% in a decade.</td><td class="bad">Primary school enrollment increased. ✗</td><td class="good">The state made educational progress. ✓</td><td>B follows. A requires a specific causal mechanism not stated in the data.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>The "zero additional premise" test:</strong> A conclusion must not require any additional premise. If you find yourself thinking "this follows because [something extra]", that "something extra" is an assumption — and the conclusion does not follow on its own. Valid conclusions require zero extra information beyond what the statement provides.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cause-effect">
+      <h2 class="sh">R.2 &nbsp; Cause and Effect — Four Patterns <span class="tag tp">Interview Level</span></h2>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Pattern 1: A → B (Direct)</div>
+          <p>A directly causes B. Heavy rainfall → flooding. The mechanism is direct and plausible. A precedes B in time.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Pattern 2: Common Cause</div>
+          <p>C → A and C → B. Both A and B happen because of a third factor. A and B are correlated but not causal of each other.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Pattern 3: Reversed</div>
+          <p>B → A (reverse of what appears obvious). Low humidity → static electricity. The "cause" may not be the more prominent event.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Pattern 4: Coincidence</div>
+          <p>A and B happened around the same time but are completely independent. Market rose and a celebrity married — no mechanism connects them.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">3-Part Test for Genuine Causation</span>
+        <p>(1) Does A precede B <em>in time</em>?<br>
+        (2) Is there a <em>plausible, known mechanism</em> connecting A to B?<br>
+        (3) Have obvious <em>confounding factors</em> been ruled out?<br>
+        All three must be satisfied before claiming A causes B. GATE cause-effect questions almost always hinge on one of these three conditions being missing.</p>
+      </div>
+
+      <h3 class="ssh">Statement-Assumption — Negation Method</h3>
+      <div class="def-box">
+        <span class="lbl">Assumption Rules</span>
+        <p>An assumption is <strong>unstated, taken for granted, and necessary</strong> for the statement or action to be rational.<br>
+        <strong>Negation test:</strong> Negate the candidate. If the statement/action becomes pointless or self-contradictory → confirmed assumption. If the statement still makes sense after negation → it is not a necessary assumption.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Statement: "Advertise your product on social media to increase sales."</strong></p>
+        <div class="cb">Assumption A: Social media advertising reaches potential buyers.
+  Negate → "Social media does NOT reach potential buyers."
+  If true, the advice makes no sense. ✓ IS an assumption.
+
+Assumption B: The product is not yet popular.
+  Negate → "The product is already popular."
+  The advice (advertise more) still makes sense. ✗ NOT an assumption.</div>
+      </div>
+    </div>
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<div class="chapter" id="chS">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter S</div>
+    <div class="ch-title">Verbal Master Reference — <em>Everything in One Place</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="formula-cards">
+      <h2 class="sh">S.1 &nbsp; Formula Cards — Verbal &amp; Reasoning <span class="tag tp">Mastery</span></h2>
+      <p>Cover each card and recite from memory. These are the patterns most frequently tested under time pressure.</p>
+
+      <div class="fcards">
+        <div class="fcard">
+          <div class="fcard-title">Grammar Essentials</div>
+          <ul>
+            <li>"a number of" → plural verb</li>
+            <li>"the number of" → singular verb</li>
+            <li>Type 2 conditional: "If I were…" (not was)</li>
+            <li>Fewer = countable; Less = uncountable</li>
+            <li>Who = subject; Whom = object (him-test)</li>
+            <li>That = restrictive clause (no comma)</li>
+            <li>Which = non-restrictive clause (needs comma)</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Tense &amp; Conditionals</div>
+          <ul>
+            <li>Past Perfect = earlier of two past events</li>
+            <li>Type 0: If + present, present (always true)</li>
+            <li>Type 1: If + present, will + base (likely)</li>
+            <li>Type 2: If + past, would + base (hypothetical)</li>
+            <li>Type 3: If + past perfect, would have + V₃</li>
+            <li>"an" before vowel SOUND, not letter</li>
+            <li>No article: languages, sports, abstract nouns</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Argument Analysis</div>
+          <ul>
+            <li>Negate assumption → conclusion collapses ✓</li>
+            <li>Strengthen: supports the P→C link</li>
+            <li>Weaken: attacks the P→C link</li>
+            <li>Inference = must follow; not just "probably"</li>
+            <li>Post Hoc: A before B ≠ A caused B</li>
+            <li>Straw Man: misrepresent, then attack</li>
+            <li>Ad Hominem: attack person, not argument</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Syllogism Patterns</div>
+          <ul>
+            <li>All A→B + All B→C = All A→C ✓</li>
+            <li>All A→B + No B is C = No A is C ✓</li>
+            <li>Some A→B + All B→C = Some A are C ✓</li>
+            <li>Some A→B + Some B→C = Nothing follows ✗</li>
+            <li>"All A→B" does NOT mean "All B→A"</li>
+            <li>Definite = holds in ALL diagrams</li>
+            <li>Possible = holds in AT LEAST ONE diagram</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Coding &amp; Direction</div>
+          <ul>
+            <li>A=1, B=2 … Z=26</li>
+            <li>Mirror position: p → 27−p (A↔Z, B↔Y…)</li>
+            <li>Verify coding rule on 2–3 letters before applying</li>
+            <li>Direction: East=+x, West=−x, N=+y, S=−y</li>
+            <li>Displacement = √(x² + y²)</li>
+            <li>Right turn = clockwise; Left = anticlockwise</li>
+            <li>Morning shadow falls West; Evening → East</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">RC &amp; Blood Relations</div>
+          <ul>
+            <li>Scan all questions BEFORE reading passage</li>
+            <li>Absolute words ("always", "never") → likely wrong</li>
+            <li>"True but not in passage" = classic distractor</li>
+            <li>Inference = one logical step beyond what's stated</li>
+            <li>Mark gender ONLY when explicitly stated</li>
+            <li>"A's father's only son" = A himself (self-ref!)</li>
+            <li>Always draw a family tree — never solve in head</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="trap-sheet">
+      <h2 class="sh">S.2 &nbsp; The Verbal Trap List — 20 Most Tested <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="trap-row">
+        <div class="trap-num">1</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>"an" goes before any word starting with a vowel letter (a, e, i, o, u).</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>"an" goes before vowel SOUNDS. "an hour" (/aʊ/), "a university" (/juː/), "an MBA" (/em/).</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">2</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>"Fewer" and "Less" are interchangeable in formal writing.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Fewer = Countable (fewer errors). Less = Uncountable (less time). "Less errors" is always wrong.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">3</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Subject-Verb: "The list of errors are long."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>The subject is "list" (singular). Correct: "The list of errors <strong>is</strong> long." Intervening phrases don't change number.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">4</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Hypothetical: "If I was you, I would take the job."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Type 2 conditionals strictly require the subjunctive "were" for all subjects. "If I <strong>were</strong> you..."</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">5</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Analogy: Choosing a pair from the same domain as the question but different relationship.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Relationship type matters more than domain. Always verbalize the frame (e.g., "A is a part of B").</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">6</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>RC: Options containing absolute language like "always," "never," or "only."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Authors usually hedge. Absolute options are almost always wrong unless explicitly stated in the text.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">7</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>RC: "True-but-not-in-passage" answers.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Answers must be traceable to the text. General knowledge that happens to be true is a classic distractor.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">8</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Inference is the same as a specific fact stated in the passage.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>A fact is stated word-for-word. An inference is one logical step BEYOND what is stated.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">9</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Usage: "28 states comprise India."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>The whole comprises the parts. "India comprises 28 states." Never say "comprised of."</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">10</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Syllogism: "Some A are B + Some B are C" → "Some A are C."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>INVALID. The "some" overlaps in group B may not touch each other at all. Draw minimum overlap.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">11</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Logic: "All A are B" → "All B are A."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>INVALID. Reversing the direction of a universal affirmative is a common fallacy. Only "Some B are A" follows.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">12</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Assumptions: "If A is true, then B is true" means A is the assumption.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>An assumption is an UNSTATED bridge. If it's explicitly mentioned in the premises, it's a fact, not an assumption.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">13</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Causation: Event A happened before Event B, so A must have caused B.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Post Hoc Fallacy. Temporal sequence is necessary but not sufficient for causation. Look for a mechanism.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">14</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Coding: Assuming a fixed shift without checking the 2nd and 3rd letters.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Many codes use increasing shifts (+1, +2, +3) or mirror positions (27-p). Always verify the pattern.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">15</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Directions: Right turn always means moving East.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Turns are relative to current facing. Face South → turn right → move West. Use coordinates (+x/-x).</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">16</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Blood Relations: Assuming gender based on a name (e.g., "Kiran").</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Mark gender ONLY when explicitly stated by "son," "daughter," "wife," or "he/she."</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">17</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Blood Relations: "A's father's only son" means a third person.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Self-reference trap. If A is male, A's father's only son IS A himself.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">18</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Statement-Conclusion: Adding common sense or external logic to the statement.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>Conclusions must be 100% derived from the given statement with zero outside premises.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">19</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Venn: "No A is B" and "No B is C" → "No A is C."</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>INVALID. A and C can overlap entirely and still not touch B.</p></div>
+      </div>
+
+      <div class="trap-row">
+        <div class="trap-num">20</div>
+        <div class="trap-wrong"><div class="trap-lbl">Wrong</div><p>Argument: A "Possible Conclusion" must follow definitely.</p></div>
+        <div class="trap-right"><div class="trap-lbl">Correct</div><p>"Possible" means it is true in at least ONE diagram. "Definite" means it is true in ALL diagrams. Check the question wording!</p></div>
+      </div>
+
+    </div>
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">
+  General Aptitude · Verbal Master Reference · GATE CSE + Placements · ExamForge Pro
+</div>
+
+</div>
+</body>
+</html>

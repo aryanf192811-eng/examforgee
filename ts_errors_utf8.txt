@@ -1,0 +1,1 @@
+src/components/ui/Input.tsx(5,10): error TS1484: 'HTMLMotionProps' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.

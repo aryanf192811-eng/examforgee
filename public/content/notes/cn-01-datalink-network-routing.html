@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Networks — Data Link, Network Layer & Routing · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Computer Networks</div>
+    <h1>Data Link, Network<br><em>&amp; Routing</em></h1>
+    <p class="cover-desc">
+      The OSI and TCP/IP models, framing and error detection, MAC protocols and Ethernet, IP addressing with subnetting, CIDR, ARP, ICMP, routing algorithms (RIP, OSPF, BGP), and NAT — every formula derived, every GATE trace worked.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Network Models &amp; Physical Layer</span>
+      <span class="chip">Ch 2 · Data Link Layer — Framing &amp; Error Control</span>
+      <span class="chip">Ch 3 · MAC Protocols &amp; Ethernet</span>
+      <span class="chip">Ch 4 · IP Addressing &amp; Subnetting</span>
+      <span class="chip">Ch 5 · ARP, ICMP &amp; IPv6</span>
+      <span class="chip">Ch 6 · Routing Algorithms</span>
+      <span class="chip">Ch 7 · CIDR, NAT &amp; Forwarding</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Network Models &amp; Physical Layer</a>
+    <a href="#ch2"><span class="tn">02</span>Data Link — Framing &amp; Error Control</a>
+    <a href="#ch3"><span class="tn">03</span>MAC Protocols &amp; Ethernet</a>
+    <a href="#ch4"><span class="tn">04</span>IP Addressing &amp; Subnetting</a>
+    <a href="#ch5"><span class="tn">05</span>ARP, ICMP &amp; IPv6</a>
+    <a href="#ch6"><span class="tn">06</span>Routing Algorithms</a>
+    <a href="#ch7"><span class="tn">07</span>CIDR, NAT &amp; Forwarding</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Complete Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — NETWORK MODELS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Network Models <em>&amp; Physical Layer</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="osi-model">
+      <h2 class="sh">1.1 &nbsp; OSI vs TCP/IP Model <span class="tag tc">Core</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>OSI Layer</th><th>Name</th><th>TCP/IP Layer</th><th>Key Protocols</th><th>PDU Name</th></tr></thead>
+          <tbody>
+            <tr><td>7</td><td>Application</td><td rowspan="3">Application</td><td>HTTP, FTP, SMTP, DNS, DHCP, Telnet, SSH</td><td>Message/Data</td></tr>
+            <tr><td>6</td><td>Presentation</td><td>SSL/TLS, MIME, encryption</td><td>Data</td></tr>
+            <tr><td>5</td><td>Session</td><td>NetBIOS, RPC, sockets</td><td>Data</td></tr>
+            <tr><td>4</td><td>Transport</td><td>Transport</td><td>TCP, UDP</td><td>Segment (TCP) / Datagram (UDP)</td></tr>
+            <tr><td>3</td><td>Network</td><td>Internet</td><td>IP, ICMP, ARP, OSPF, RIP, BGP</td><td>Packet / Datagram</td></tr>
+            <tr><td>2</td><td>Data Link</td><td>Network Access</td><td>Ethernet, Wi-Fi (802.11), PPP, HDLC</td><td>Frame</td></tr>
+            <tr><td>1</td><td>Physical</td><td>Network Access</td><td>Cables, hubs, repeaters, bits</td><td>Bits</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">ARP Lives at Layer 3, Not Layer 2</span>
+        <p>Despite working with MAC addresses (Layer 2 concept), ARP is a Layer 3 protocol — it maps Layer 3 IP addresses to Layer 2 MAC addresses. It sits between the Network and Data Link layers. GATE tests this directly. Similarly, ICMP is Layer 3 (encapsulated in IP packets), not Layer 4.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="physical-layer">
+      <h2 class="sh">1.2 &nbsp; Physical Layer — Bandwidth, Latency &amp; Transmission <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Key Physical Layer Formulas</span>
+        <p>
+          <strong>Transmission time (Tₜ):</strong> Time to push all bits of a frame onto the wire. Tₜ = L / B where L = frame size (bits), B = bandwidth (bps).<br>
+          <strong>Propagation delay (Tₚ):</strong> Time for one bit to travel from sender to receiver. Tₚ = d / v where d = distance, v = propagation speed (~2×10⁸ m/s in copper, 3×10⁸ in fibre).<br>
+          <strong>End-to-end delay:</strong> Tₜ + Tₚ (for a single link, no queuing).<br>
+          <strong>Bandwidth-Delay Product:</strong> B × Tₚ = number of bits that "fill" the pipe.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Packet of 1000 bytes sent over a 1 Mbps link, distance 1000 km, propagation speed 2×10⁸ m/s.</strong></p>
+        <div class="cb">Tₜ = (1000 × 8 bits) / (1 × 10⁶ bps) = 8000 / 10⁶ = 8 ms
+Tₚ = 1000 × 10³ m / (2 × 10⁸ m/s) = 10⁶ / 2×10⁸ = 5 ms
+Total delay = 8 + 5 = 13 ms
+
+Bandwidth-Delay Product = 1×10⁶ × 5×10⁻³ = 5000 bits = 625 bytes
+(5000 bits are "in flight" in the pipe when sender has just finished sending)</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Nyquist &amp; Shannon Capacity</span>
+        <p>
+          <strong>Nyquist (noiseless channel):</strong> Max data rate = 2 × B × log₂(M) bps, where B = bandwidth (Hz), M = signal levels.<br>
+          <strong>Shannon (noisy channel):</strong> Channel capacity C = B × log₂(1 + S/N) bps, where S/N is signal-to-noise ratio (linear, not dB).
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — DATA LINK ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Data Link Layer — <em>Framing, Error Control &amp; Sliding Window</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="error-detection">
+      <h2 class="sh">2.1 &nbsp; Error Detection &amp; Correction <span class="tag tg">GATE Critical</span></h2>
+
+      <h3 class="ssh">Parity Bits</h3>
+      <p>
+        <strong>Even parity:</strong> Add a bit so total 1s in the codeword (data + parity bit) is even.<br>
+        <strong>Odd parity:</strong> Add a bit so total 1s is odd.<br>
+        Detects all odd-number-of-bit errors. Cannot detect even-number errors (2-bit errors cancel out). Cannot correct errors — only detect.
+      </p>
+
+      <h3 class="ssh">Cyclic Redundancy Check (CRC)</h3>
+      <div class="def-box">
+        <span class="lbl">CRC Algorithm</span>
+        <p>
+          <strong>Sender:</strong> Append (n−1) zeros to message M (where n = degree of generator polynomial G). Divide M×xⁿ⁻¹ by G using binary long division (XOR). The remainder R is the CRC. Send M followed by R.<br>
+          <strong>Receiver:</strong> Divide received frame by G. If remainder = 0 → no error detected. If remainder ≠ 0 → error.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Message M = 1011, Generator G = 1011 (degree 3). Find CRC.</strong></p>
+        <div class="cb">Append 3 zeros: M×x³ = 1011 000
+
+Divide 1011000 by 1011 using XOR:
+  1011000
+  1011         (XOR at position 0)
+  ─────────
+   000 000
+   (nothing to XOR, shift)
+   0001000    (bring down bits)
+
+Wait — let me redo properly:
+  1011|000
+  1011        → XOR: 0000, bring down 0 → 0000
+  shift right, get 00000
+  00000
+  ...
+  Result: 1011 000 ÷ 1011 = quotient 1000, remainder 000
+
+Actually: 1011 × 1000 = 1011000. 1011000 XOR 1011000 = 000. Remainder = 000.
+Transmitted frame: 1011 000.
+
+If generator doesn't divide evenly, remainder is the CRC appended to message.
+For M=110011, G=11001 (degree 4): Append 4 zeros → 1100110000
+  1100110000 ÷ 11001:
+  11001
+  ─────────
+  00001 10000
+       11001
+  ─────────
+       01001 (remainder)
+CRC = 1001, Transmitted = 110011 1001</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Method</th><th>Detection Capability</th><th>Correction?</th><th>Overhead</th></tr></thead>
+          <tbody>
+            <tr><td>Single parity bit</td><td>Odd number of errors</td><td class="bad">No</td><td>1 bit per codeword</td></tr>
+            <tr><td>2D parity (row+col)</td><td>Any single error (position identified)</td><td class="good">Single bit</td><td>Row+col parity bits</td></tr>
+            <tr><td>CRC-8/16/32</td><td>All burst errors ≤ degree</td><td class="bad">No (detect only)</td><td>8/16/32 bits</td></tr>
+            <tr><td>Hamming Code</td><td>All single errors, detects double</td><td class="good">Single bit</td><td>log₂(n) extra bits</td></tr>
+            <tr><td>Checksum</td><td>Most errors (not all)</td><td class="bad">No</td><td>16 or 32 bits (IP/TCP)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Hamming Code</h3>
+      <div class="def-box">
+        <span class="lbl">Hamming Code — Minimum Redundant Bits</span>
+        <p>For m data bits, need r redundant (parity) bits such that: 2ʳ ≥ m + r + 1.<br>
+        Example: m=4 → 2ʳ ≥ 4+r+1 → r=3 (2³=8 ≥ 8 ✓). Total codeword length = m+r = 7 bits.<br>
+        Parity bits occupy positions 1, 2, 4, 8, ... (powers of 2). Each covers specific data bit positions.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sliding-window">
+      <h2 class="sh">2.2 &nbsp; Sliding Window Protocols — Stop-and-Wait, Go-Back-N, SR <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Stop-and-Wait (SAW)</span>
+        <p>Send one frame. Wait for ACK. Send next only after ACK received. Simplest but extremely inefficient when Tₚ >> Tₜ.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Efficiency of Stop-and-Wait</span>
+        <p>η (eta) = Tₜ / (Tₜ + 2Tₚ) = 1 / (1 + 2a) where <strong>a = Tₚ / Tₜ</strong>.<br>
+        If ACK transmission time and processing time are negligible.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Link: 1 Mbps, frame = 1000 bytes, Tₚ = 20ms. Efficiency of Stop-and-Wait?</strong></p>
+        <div class="cb">Tₜ = (1000 × 8) / 10⁶ = 8 ms
+a = Tₚ / Tₜ = 20 / 8 = 2.5
+η = 1 / (1 + 2×2.5) = 1/6 ≈ 16.7%
+
+Only 16.7% of link capacity is used — the rest is wasted waiting for ACKs.</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Sliding Window — General Efficiency</span>
+        <p>With window size W (sender can have W unacknowledged frames in flight):<br>
+        If W ≥ 1 + 2a: η = 1 (full utilization — window large enough to fill pipe)<br>
+        If W &lt; 1 + 2a: η = W / (1 + 2a)</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Window Size</th><th>Sequence bits n</th><th>On error: retransmit</th><th>Buffer at receiver</th></tr></thead>
+          <tbody>
+            <tr><td>Stop-and-Wait</td><td>1</td><td>1 bit (0 and 1)</td><td>1 frame</td><td>1 frame</td></tr>
+            <tr><td>Go-Back-N (GBN)</td><td>2ⁿ − 1</td><td>n bits</td><td>N frames (all from error)</td><td>1 frame (discards out-of-order)</td></tr>
+            <tr><td>Selective Repeat (SR)</td><td>2ⁿ⁻¹</td><td>n bits</td><td>1 frame (only erred)</td><td>2ⁿ⁻¹ frames (buffers OOO)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Window Size Limits — Why They Are Different</span>
+        <p>
+          <strong>Go-Back-N:</strong> Max window = 2ⁿ − 1. If window = 2ⁿ, sender and receiver cannot distinguish between a new window and a retransmitted old one after the sequence numbers wrap around.<br>
+          <strong>Selective Repeat:</strong> Max window = 2ⁿ⁻¹ (half the sequence space). SR needs a stricter limit because the receiver buffers out-of-order frames. If sender window + receiver window > 2ⁿ, there would be an overlap in sequence numbers causing old and new frames to be confused.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Go-Back-N with 3-bit sequence numbers. n=3, so max window = 2³−1 = 7. Efficiency with 20ms Tₚ, 1ms Tₜ?</strong></p>
+        <div class="cb">a = 20 / 1 = 20
+1 + 2a = 41
+Window W = 7 < 41
+
+η = W / (1 + 2a) = 7 / 41 ≈ 17.1%
+
+For full utilization (η=1): need W ≥ 41. With 3-bit seq numbers, max W=7 — insufficient.
+Need n bits such that 2ⁿ−1 ≥ 41 → 2ⁿ ≥ 42 → n ≥ 6 bits.</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — MAC PROTOCOLS ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">MAC Protocols <em>&amp; Ethernet</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="mac-protocols">
+      <h2 class="sh">3.1 &nbsp; Multiple Access Protocols <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">TDMA / FDMA / CDMA</div>
+          <p>Channel partitioning. Time/Frequency/Code division. Efficient at high load, wasteful at low load (reserved slots go unused).</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">ALOHA</div>
+          <p>Random access. Pure ALOHA: transmit anytime. Slotted ALOHA: transmit at slot boundaries only. No coordination. Simple but collision-prone.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">CSMA/CD</div>
+          <p>Carrier Sense Multiple Access with Collision Detection. Listen before transmit. Detect collision during transmission. Used in Ethernet (wired).</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">CSMA/CA</div>
+          <p>Collision Avoidance (not detection). Used in Wi-Fi (802.11). Avoids collision by waiting random backoff before transmitting.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">ALOHA Throughput</span>
+        <p>
+          <strong>Pure ALOHA:</strong> Maximum throughput = 1/(2e) ≈ 18.4% at load G = 0.5.<br>
+          <strong>Slotted ALOHA:</strong> Maximum throughput = 1/e ≈ 36.8% at load G = 1.<br>
+          Slotted ALOHA doubles efficiency by synchronizing transmissions to slot boundaries — collisions are complete (not partial).
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="csma-cd">
+      <h2 class="sh">3.2 &nbsp; CSMA/CD &amp; Ethernet — Minimum Frame Size <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">CSMA/CD — Collision Detection Requirement</span>
+        <p>A sender must be transmitting when a collision signal arrives — otherwise it has already stopped and won't know a collision occurred. This means the transmission time must be at least twice the propagation delay:<br>
+        <strong>Tₜ ≥ 2 × Tₚ</strong><br>
+        <strong>Minimum frame size = 2 × Tₚ × B</strong> (where B = bandwidth in bps)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Ethernet: 10 Mbps, max segment length 2500m, propagation speed 2×10⁸ m/s. Minimum frame size?</strong></p>
+        <div class="cb">Tₚ = 2500 / (2×10⁸) = 12.5 μs
+2 × Tₚ = 25 μs   (round-trip time)
+Min frame size = 25×10⁻⁶ × 10×10⁶ = 250 bits = 31.25 bytes
+
+Ethernet standard rounds up to 64 bytes (512 bits) minimum frame size.
+The extra overhead (up to 64 bytes − header size) is padding.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Ethernet Frame Format</span>
+        <p>Ethernet frame: Preamble(7B) + SFD(1B) + Dest MAC(6B) + Src MAC(6B) + Type/Length(2B) + Data(46-1500B) + FCS(4B). Minimum data payload = 46 bytes (so total frame ≥ 64 bytes). Maximum data payload = 1500 bytes (the MTU). GATE tests: "What is the minimum/maximum Ethernet frame size?" Min=64B, Max=1518B (64+1500−46 = 1518 including FCS but excluding preamble/SFD).</p>
+      </div>
+
+      <h3 class="ssh">Ethernet vs Wi-Fi (802.11)</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Ethernet (802.3)</th><th>Wi-Fi (802.11)</th></tr></thead>
+          <tbody>
+            <tr><td>MAC Protocol</td><td>CSMA/CD</td><td>CSMA/CA</td></tr>
+            <tr><td>Collision detection</td><td class="good">Yes (wired)</td><td class="bad">No (wireless can't hear own collision)</td></tr>
+            <tr><td>Acknowledgments</td><td class="bad">No (CD handles it)</td><td class="good">Yes (every frame ACKed)</td></tr>
+            <tr><td>Hidden terminal problem</td><td class="good">No</td><td class="bad">Yes (RTS/CTS helps)</td></tr>
+            <tr><td>Medium</td><td>Wired (copper/fibre)</td><td>Wireless (radio)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="devices">
+      <h2 class="sh">3.3 &nbsp; Network Devices — Layer-by-Layer <span class="tag tg">GATE Tested</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Device</th><th>OSI Layer</th><th>Operates on</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>Repeater / Hub</td><td>Layer 1</td><td>Bits</td><td>Amplify/regenerate signal. Hub broadcasts to all ports. No intelligence.</td></tr>
+            <tr><td>Bridge / Switch</td><td>Layer 2</td><td>MAC frames</td><td>Forward frames based on MAC address table. Separates collision domains. Switch = multi-port bridge.</td></tr>
+            <tr><td>Router</td><td>Layer 3</td><td>IP packets</td><td>Forward packets based on IP address and routing table. Separates broadcast domains.</td></tr>
+            <tr><td>Gateway</td><td>Layer 4-7</td><td>All layers</td><td>Protocol translation between different network architectures.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Switch vs Hub vs Router — The Key Distinctions</span>
+        <p>Hub: one collision domain, one broadcast domain. Switch: each port = separate collision domain, one broadcast domain. Router: each interface = separate collision domain AND separate broadcast domain. GATE frequently tests: "How many collision/broadcast domains in this network topology?"</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — IP ADDRESSING ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">IP Addressing <em>&amp; Subnetting</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ip-classes">
+      <h2 class="sh">4.1 &nbsp; IPv4 Addressing — Classes &amp; Structure <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Class</th><th>First Bits</th><th>Range (first octet)</th><th>Network bits</th><th>Host bits</th><th>Addresses per network</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong></td><td>0</td><td>1 – 126</td><td>8</td><td>24</td><td>2²⁴ − 2 = 16,777,214</td><td>Large ISPs/orgs</td></tr>
+            <tr><td><strong>B</strong></td><td>10</td><td>128 – 191</td><td>16</td><td>16</td><td>2¹⁶ − 2 = 65,534</td><td>Medium orgs</td></tr>
+            <tr><td><strong>C</strong></td><td>110</td><td>192 – 223</td><td>24</td><td>8</td><td>2⁸ − 2 = 254</td><td>Small orgs</td></tr>
+            <tr><td><strong>D</strong></td><td>1110</td><td>224 – 239</td><td>—</td><td>—</td><td>—</td><td>Multicast</td></tr>
+            <tr><td><strong>E</strong></td><td>1111</td><td>240 – 255</td><td>—</td><td>—</td><td>—</td><td>Reserved/experimental</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Special IP Addresses</span>
+        <p>
+          127.0.0.0/8 — Loopback (localhost). 127.0.0.1 most commonly used.<br>
+          0.0.0.0 — Default route / "this host".<br>
+          255.255.255.255 — Limited broadcast (all hosts on local network).<br>
+          x.x.x.255 — Directed broadcast for subnet x.x.x.0/24.<br>
+          Private ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="subnetting">
+      <h2 class="sh">4.2 &nbsp; Subnetting — VLSM &amp; Complete Calculation <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Subnet Mask and CIDR Notation</span>
+        <p>A subnet mask identifies which bits of an IP address are the network part. Written as: 255.255.255.0 (dotted decimal) or /24 (CIDR — count of 1-bits in mask).<br>
+        Network address = IP AND mask. Broadcast = network OR (NOT mask). Usable hosts = 2ʰ − 2 where h = host bits.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>IP: 192.168.10.130/26. Find: network address, broadcast, host range, number of hosts.</strong></p>
+        <div class="cb">Mask /26 = 255.255.255.192 = 11111111.11111111.11111111.11000000
+
+IP:     192.168.10.130 = 11000000.10101000.00001010.10000010
+Mask:                    11111111.11111111.11111111.11000000
+
+Network = IP AND Mask:   11000000.10101000.00001010.10000000 = 192.168.10.128
+NOT Mask:                00000000.00000000.00000000.00111111
+Broadcast = Net OR !Mask: 11000000.10101000.00001010.10111111 = 192.168.10.191
+
+Host range: 192.168.10.129 to 192.168.10.190
+Usable hosts: 2⁶ − 2 = 62 hosts
+(6 host bits since /26 = 32−26 = 6 host bits)</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Subnet 192.168.1.0/24 into subnets of at least 50 hosts each. How many subnets? What is the subnet mask?</strong></p>
+        <div class="cb">Need ≥ 50 hosts per subnet → 2ʰ − 2 ≥ 50 → 2ʰ ≥ 52 → h ≥ 6
+Use h = 6 host bits → 2⁶ − 2 = 62 hosts per subnet ✓
+
+Subnet bits = 8 − 6 = 2 → number of subnets = 2² = 4
+New mask: /24 + 2 = /26 = 255.255.255.192
+
+Subnets:
+192.168.1.0/26   hosts .1–.62   broadcast .63
+192.168.1.64/26  hosts .65–.126  broadcast .127
+192.168.1.128/26 hosts .129–.190 broadcast .191
+192.168.1.192/26 hosts .193–.254 broadcast .255</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Subnetting Quick Method</span>
+        <p>Block size = 2ʰ (where h = host bits). Subnets start at multiples of block size within the last octet (for /24 → /32 subnets). For /26: block size = 64. Subnets at 0, 64, 128, 192. Network address = start of block. Broadcast = next block start − 1. First host = network + 1. Last host = broadcast − 1.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — ARP, ICMP, IPv6 ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">ARP, ICMP <em>&amp; IPv6</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="arp">
+      <h2 class="sh">5.1 &nbsp; ARP — Address Resolution Protocol <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">ARP Operation</span>
+        <p>ARP maps an IP address to a MAC address on the local network. When host A wants to send to IP address X: (1) Check ARP cache — if found, use the MAC. (2) If not found, broadcast ARP request: "Who has IP X? Tell A." (3) Host with IP X responds: "I have IP X. My MAC is YY:YY:YY:YY:YY:YY." (4) A caches the mapping and sends the frame.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Message</th><th>Source</th><th>Destination</th><th>Type</th></tr></thead>
+          <tbody>
+            <tr><td>ARP Request</td><td>Requester's MAC</td><td>FF:FF:FF:FF:FF:FF (broadcast)</td><td>Broadcast to all</td></tr>
+            <tr><td>ARP Reply</td><td>Target's MAC</td><td>Requester's MAC (unicast)</td><td>Unicast back to requester</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">ARP is LAN-local — Routers Terminate ARP</span>
+        <p>ARP only works within a single LAN segment (broadcast domain). Routers do not forward ARP broadcasts. When sending to a remote host (different subnet), the sender ARPs for the router's MAC address (default gateway), not the destination host's MAC. The packet's IP destination is the remote host, but the frame's MAC destination is the router.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="icmp">
+      <h2 class="sh">5.2 &nbsp; ICMP &amp; IPv6 Highlights <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">ICMP — Internet Control Message Protocol</span>
+        <p>ICMP is used by routers and hosts to report network errors and send control messages. Encapsulated in IP packets. Key messages: <strong>Echo Request/Reply</strong> (ping), <strong>Destination Unreachable</strong> (no route, port closed, fragmentation needed), <strong>Time Exceeded</strong> (TTL=0, used by traceroute), <strong>Redirect</strong> (better route available).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">TTL — Time To Live</span>
+        <p>Each IP packet has a TTL field (initially set by sender, typically 64 or 128). Every router that forwards the packet decrements TTL by 1. If TTL reaches 0, the router discards the packet and sends an ICMP Time Exceeded message back to the source. Prevents packets from looping forever.</p>
+      </div>
+
+      <h3 class="ssh">IPv6 Key Differences from IPv4</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>IPv4</th><th>IPv6</th></tr></thead>
+          <tbody>
+            <tr><td>Address length</td><td>32 bits (4 bytes)</td><td>128 bits (16 bytes)</td></tr>
+            <tr><td>Address space</td><td>~4.3 billion</td><td>~3.4 × 10³⁸</td></tr>
+            <tr><td>Header length</td><td>Variable (20-60 bytes)</td><td>Fixed 40 bytes</td></tr>
+            <tr><td>Fragmentation</td><td>Routers can fragment</td><td>Source only (not routers)</td></tr>
+            <tr><td>Checksum in header</td><td class="good">Yes</td><td class="bad">No (removed for speed)</td></tr>
+            <tr><td>ARP equivalent</td><td>ARP (broadcast)</td><td>NDP/Neighbor Discovery (multicast)</td></tr>
+            <tr><td>DHCP equivalent</td><td>DHCP</td><td>DHCPv6 or SLAAC</td></tr>
+            <tr><td>Notation</td><td>Dotted decimal (192.168.1.1)</td><td>Colon-hex (2001:0db8::1)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — ROUTING ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Routing Algorithms — <em>RIP, OSPF &amp; BGP</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="routing-classes">
+      <h2 class="sh">6.1 &nbsp; Distance Vector vs Link State <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Distance Vector (DV)</div>
+          <p>Each router knows distances to all destinations and the next hop. Shares routing table with neighbours. Simple. Slow convergence. Count-to-infinity problem. Example: RIP.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Link State (LS)</div>
+          <p>Each router floods the entire network with its link-state advertisements (LSAs). Every router builds a complete topology map and runs Dijkstra's algorithm locally. Fast convergence. No count-to-infinity. Higher bandwidth/memory cost. Example: OSPF.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Distance Vector (RIP)</th><th>Link State (OSPF)</th></tr></thead>
+          <tbody>
+            <tr><td>Algorithm</td><td>Bellman-Ford (distributed)</td><td>Dijkstra (centralized at each node)</td></tr>
+            <tr><td>Info shared</td><td>Routing table with neighbours only</td><td>Link-state advertisements flooded to all</td></tr>
+            <tr><td>Convergence speed</td><td class="bad">Slow (count-to-infinity)</td><td class="good">Fast</td></tr>
+            <tr><td>Count-to-infinity</td><td class="bad">Yes — major problem</td><td class="good">No</td></tr>
+            <tr><td>Bandwidth usage</td><td class="good">Low (only share with neighbours)</td><td class="ok">Higher (flood entire network)</td></tr>
+            <tr><td>Scale</td><td class="bad">Small networks (RIP max 15 hops)</td><td class="good">Large networks (used in internet backbone)</td></tr>
+            <tr><td>Metric</td><td>Hop count (RIP)</td><td>Cost (bandwidth-based)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dv-algorithm">
+      <h2 class="sh">6.2 &nbsp; Distance Vector — Bellman-Ford &amp; Count-to-Infinity <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Bellman-Ford Equation (Distributed)</span>
+        <p>Dₓ(y) = min over all neighbours v of {c(x,v) + Dᵥ(y)}<br>
+        Router x computes its best distance to destination y as the minimum over all neighbour v of (cost to reach v + v's best distance to y).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Count-to-Infinity Problem:</strong></p>
+        <div class="cb">Topology: A ─1─ B ─1─ C
+
+Initial state: A→B=1, A→C=2 (via B), B→A=1, B→C=1, C→A=2, C→B=1
+
+Link B-C fails. C can no longer reach A.
+C's table: C→A = ∞, C→B = ∞
+
+But: B still has old entry C→A = 2 from before failure.
+Incorrect exchange:
+  B asks C: "What's your distance to A?" C says "3" (using B→A = 2 + 1 = 3)
+  B now thinks: C→A = 3, so B→A = 3 + 1 = 4
+  C now thinks: B→A = 4, so C→A = 4 + 1 = 5
+  B now thinks: B→A = 5 + 1 = 6 ...
+
+This continues until distances count up to infinity (16 in RIP = "infinity")
+Solution: Split horizon (don't advertise a route back to the neighbour you learned it from)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="routing-protocols">
+      <h2 class="sh">6.3 &nbsp; RIP, OSPF &amp; BGP <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Type</th><th>Metric</th><th>Max hops</th><th>Update method</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><strong>RIP v1/v2</strong></td><td>DV, IGP</td><td>Hop count</td><td class="bad">15</td><td>Periodic (30s)</td><td>Small networks</td></tr>
+            <tr><td><strong>OSPF</strong></td><td>LS, IGP</td><td>Cost (BW-based)</td><td class="good">None</td><td>Triggered (on change)</td><td>Large enterprise/ISP</td></tr>
+            <tr><td><strong>BGP</strong></td><td>Path Vector, EGP</td><td>AS path + policies</td><td class="good">None</td><td>Incremental updates</td><td>Internet (between ISPs)</td></tr>
+            <tr><td><strong>EIGRP</strong></td><td>Hybrid DV, IGP</td><td>Composite (BW+delay)</td><td class="ok">100/255</td><td>Triggered</td><td>Cisco networks</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">IGP vs EGP</span>
+        <p><strong>IGP (Interior Gateway Protocol):</strong> Routing within an Autonomous System (AS) — a network under single administrative control. Examples: RIP, OSPF, EIGRP.<br>
+        <strong>EGP (Exterior Gateway Protocol):</strong> Routing between different Autonomous Systems. The internet backbone. Example: BGP (Border Gateway Protocol) — the protocol that holds the internet together.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">BGP — Path Vector Protocol</span>
+        <p>BGP advertises the full AS path to reach a destination, not just hop count or link cost. This prevents routing loops (an AS won't route through itself) and allows policy-based routing (e.g., "don't route through AS X for political or commercial reasons"). BGP is what allows each ISP to control how their traffic flows through the internet.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — CIDR, NAT, FORWARDING ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">CIDR, NAT <em>&amp; Longest Prefix Matching</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="cidr">
+      <h2 class="sh">7.1 &nbsp; CIDR — Classless Inter-Domain Routing <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">CIDR</span>
+        <p>CIDR eliminates the fixed class boundaries of classful addressing. Any prefix length is valid (e.g., /13, /19, /27). Allows <strong>route aggregation (supernetting)</strong> — multiple contiguous networks can be summarised as one route, reducing routing table size. Notation: a.b.c.d/n where n = prefix length.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Route aggregation: 200.23.16.0/24, 200.23.17.0/24, 200.23.18.0/24, 200.23.19.0/24 — aggregate?</strong></p>
+        <div class="cb">200.23.16.0: 11001000.00010111.0001 0000.00000000
+200.23.17.0: 11001000.00010111.0001 0001.00000000
+200.23.18.0: 11001000.00010111.0001 0010.00000000
+200.23.19.0: 11001000.00010111.0001 0011.00000000
+
+Common prefix: 11001000.00010111.0001 00xx.xxxxxxxx = 22 bits
+Aggregate: 200.23.16.0/22
+
+This single /22 route represents all four /24 networks.
+Sending ISP advertises one route instead of four → reduces routing table entries.</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="longest-prefix">
+      <h2 class="sh">7.2 &nbsp; Longest Prefix Matching — Routing Table Lookup <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Longest Prefix Match</span>
+        <p>When a router receives a packet, it looks up the destination IP in the routing table. Multiple entries may match. The router uses the entry with the <strong>longest matching prefix</strong> (most specific route). This is the fundamental forwarding rule for IP routing.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Routing table: 192.168.1.0/24 → A, 192.168.0.0/16 → B, 0.0.0.0/0 → C (default route).</strong></p>
+        <div class="cb">Packet dest: 192.168.1.53
+Matches: 192.168.1.0/24 (24-bit match), 192.168.0.0/16 (16-bit match), 0.0.0.0/0 (0-bit match)
+Longest prefix: /24 → forward to A
+
+Packet dest: 192.168.20.1
+Matches: 192.168.0.0/16 (16-bit), 0.0.0.0/0 (0-bit)
+Longest prefix: /16 → forward to B
+
+Packet dest: 10.0.0.1
+Matches: 0.0.0.0/0 only
+Longest prefix: /0 → forward to C (default gateway)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="nat">
+      <h2 class="sh">7.3 &nbsp; NAT — Network Address Translation <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">NAT</span>
+        <p>NAT translates private IP addresses (10.x, 172.16.x, 192.168.x) to a public IP address (and back) at the network boundary router. Allows multiple devices to share one public IP. The NAT router maintains a <strong>NAT translation table</strong> mapping (private IP, private port) ↔ (public IP, public port).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>NAT in action:</strong></p>
+        <div class="cb">Internal host: 192.168.1.5:3456 sends packet to 8.8.8.8:80
+NAT router (public IP: 203.0.113.1):
+  Translates: 192.168.1.5:3456 → 203.0.113.1:5001
+  Records in table: (192.168.1.5, 3456) ↔ (203.0.113.1, 5001)
+  Forwards packet with src=203.0.113.1:5001
+
+Reply from 8.8.8.8:80 to 203.0.113.1:5001:
+  NAT looks up table: 5001 → (192.168.1.5, 3456)
+  Translates dst back: 203.0.113.1:5001 → 192.168.1.5:3456
+  Delivers to internal host</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">NAT Breaks End-to-End Connectivity</span>
+        <p>NAT violates the end-to-end principle of the internet. External hosts cannot initiate connections to NAT-internal hosts (no inbound entry in the translation table). Solutions: port forwarding (static NAT entry), STUN/TURN (for P2P apps like WebRTC), IPv6 (eliminates NAT need). GATE tests: "What problem does NAT introduce?" → breaks end-to-end connectivity, external cannot reach internal.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complete Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>ARP is Layer 2</td><td>ARP is Layer 3 — it provides a service to Layer 3 (IP) by resolving Layer 2 addresses. It sits between L2 and L3. ICMP is also Layer 3 (encapsulated in IP). Neither is Layer 4.</td></tr>
+            <tr><td>2</td><td>Efficiency = Tₜ / (Tₜ + Tₚ)</td><td>Stop-and-Wait efficiency = Tₜ / (Tₜ + 2Tₚ) — factor of 2 because you wait for the ACK to travel back. The full round-trip includes both directions.</td></tr>
+            <tr><td>3</td><td>GBN and SR have the same window size limit</td><td>GBN max window = 2ⁿ−1. SR max window = 2ⁿ⁻¹ (half). SR needs a stricter limit because it buffers out-of-order frames, creating a potential for confusion between old and new windows.</td></tr>
+            <tr><td>4</td><td>Router forwards broadcast packets</td><td>Routers do NOT forward broadcast packets — they terminate broadcast domains. ARP broadcasts, DHCP discover, and limited broadcasts (255.255.255.255) are all stopped at the router. Only switches flood broadcasts within a LAN.</td></tr>
+            <tr><td>5</td><td>Switch = hub with intelligence</td><td>Switch creates separate collision domains per port. Hub has ONE collision domain for all ports. Switch has ONE broadcast domain (all ports). Router separates both collision AND broadcast domains.</td></tr>
+            <tr><td>6</td><td>Minimum Ethernet frame is 46 bytes</td><td>Minimum Ethernet frame is 64 bytes TOTAL (header + data + FCS). Minimum DATA payload is 46 bytes (to ensure total reaches 64 bytes). This is the CSMA/CD requirement: transmission must last at least 2×Tₚ.</td></tr>
+            <tr><td>7</td><td>Class C network has 256 addresses</td><td>Class C (/24) has 2⁸ = 256 IP addresses total. But only 254 are usable for hosts — subtract network address (all host bits 0) and broadcast address (all host bits 1). Always subtract 2 for usable host count.</td></tr>
+            <tr><td>8</td><td>OSPF uses Bellman-Ford</td><td>OSPF is a Link State protocol — it uses Dijkstra's algorithm. Each router runs Dijkstra locally on its complete topology map. RIP (Distance Vector) uses a distributed form of Bellman-Ford.</td></tr>
+            <tr><td>9</td><td>BGP is a link-state protocol</td><td>BGP is a path-vector protocol — a hybrid of distance vector and link state. It advertises the complete AS path to a destination, not just a metric. This enables loop prevention and policy routing between autonomous systems.</td></tr>
+            <tr><td>10</td><td>Longest prefix match = largest IP</td><td>Longest prefix match means the prefix with the most bits matching — the most specific route. /28 is more specific than /16, regardless of IP value. Default route /0 is matched last (least specific, always matches).</td></tr>
+            <tr><td>11</td><td>IPv6 removes fragmentation entirely</td><td>IPv6 removes router-based fragmentation. Routers drop oversized IPv6 packets and send ICMPv6 "Packet Too Big" back. The source can then fragment. So fragmentation still exists at the source — it's just not done mid-network by routers.</td></tr>
+            <tr><td>12</td><td>Pure ALOHA is more efficient than Slotted ALOHA</td><td>Slotted ALOHA (max 36.8% = 1/e) is exactly twice as efficient as Pure ALOHA (max 18.4% = 1/2e). Synchronization eliminates partial collisions, doubling throughput.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Complete Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Tₜ = L / B</td><td>Transmission time: frame size ÷ bandwidth</td></tr>
+            <tr><td>Tₚ = d / v</td><td>Propagation delay: distance ÷ propagation speed</td></tr>
+            <tr><td>a = Tₚ / Tₜ</td><td>Ratio parameter used in efficiency formulas</td></tr>
+            <tr><td>η_SAW = 1 / (1 + 2a)</td><td>Stop-and-Wait efficiency</td></tr>
+            <tr><td>η_SW = W / (1 + 2a) if W &lt; 1+2a, else 1</td><td>Sliding window efficiency</td></tr>
+            <tr><td>GBN window max = 2ⁿ − 1</td><td>n = sequence number bits</td></tr>
+            <tr><td>SR window max = 2ⁿ⁻¹</td><td>n = sequence number bits</td></tr>
+            <tr><td>Hamming: 2ʳ ≥ m + r + 1</td><td>Redundant bits needed for m data bits</td></tr>
+            <tr><td>Usable hosts = 2ʰ − 2</td><td>h = host bits in subnet</td></tr>
+            <tr><td>Min Ethernet frame = 2×Tₚ×B bits</td><td>CSMA/CD requirement</td></tr>
+            <tr><td>Pure ALOHA throughput = G·e^(−2G), max at G=0.5 → 1/2e ≈ 18.4%</td><td>Throughput vs offered load</td></tr>
+            <tr><td>Slotted ALOHA throughput = G·e^(−G), max at G=1 → 1/e ≈ 36.8%</td><td>Throughput vs offered load</td></tr>
+            <tr><td>Shannon C = B·log₂(1 + S/N)</td><td>Maximum channel capacity</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Efficiency NAT:</strong> "Frame=1KB, link=1Mbps, Tₚ=20ms, window=7, Go-Back-N. What is efficiency?" Compute Tₜ, a, check W vs 1+2a, apply formula. Very common 2-mark question.</li>
+        <li><strong>Minimum frame size:</strong> "A network has bandwidth 10Mbps and round-trip propagation delay 50μs. What is the minimum frame size?" = 50×10⁻⁶ × 10×10⁶ = 500 bits = 62.5 bytes → round up to 64 bytes.</li>
+        <li><strong>Subnetting NAT:</strong> "Host 172.16.45.67/20. What is the network address?" Mask /20 = 255.255.240.0. 45 in binary: 00101101. Upper 4 bits of third octet: 0010 = 32. Network = 172.16.32.0. 2 marks.</li>
+        <li><strong>Routing protocol MCQ:</strong> "Which protocol uses Dijkstra's algorithm?" OSPF. "Which suffers from count-to-infinity?" RIP. 1-mark direct.</li>
+        <li><strong>Longest prefix MCQ:</strong> Given routing table, which entry is used to forward packet to X? Find all matching entries, pick longest prefix. 1-2 marks.</li>
+        <li><strong>CRC calculation:</strong> "Message = 1010011, Generator = 1011. What is the transmitted frame?" Append 3 zeros (degree-3 generator), perform XOR division, append remainder to original message. 2 marks.</li>
+        <li><strong>ARP sequence:</strong> "Host A sends packet to host B (different subnet). What MAC address does A put in the frame?" Default gateway's MAC (not B's MAC). 1-mark concept question.</li>
+        <li><strong>OSI layer MCQ:</strong> "At which layer does IP fragmentation occur?" Layer 3 (Network). "At which layer do switches operate?" Layer 2. Classic 1-mark questions.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Computer Networks · Data Link, Network Layer &amp; Routing · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

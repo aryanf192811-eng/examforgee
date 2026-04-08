@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compiler Design — Complete GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;} .cb .hi{background:var(--hl-y);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Compiler Design</div>
+    <h1>From Source Code<br><em>to Target Code</em></h1>
+    <p class="cover-desc">
+      Every phase of a compiler — lexical analysis, syntax analysis (LL and LR parsing), semantic analysis, intermediate code generation, and runtime environments — with complete derivations, parsing table constructions, and every GATE trap documented in one place.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Compiler Phases Overview</span>
+      <span class="chip">Ch 2 · Lexical Analysis</span>
+      <span class="chip">Ch 3 · Context-Free Grammars &amp; Parse Trees</span>
+      <span class="chip">Ch 4 · Top-Down Parsing — LL(1)</span>
+      <span class="chip">Ch 5 · Bottom-Up Parsing — LR</span>
+      <span class="chip">Ch 6 · Semantic Analysis &amp; SDT</span>
+      <span class="chip">Ch 7 · Intermediate Code &amp; Optimization</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Compiler Phases Overview</a>
+    <a href="#ch2"><span class="tn">02</span>Lexical Analysis</a>
+    <a href="#ch3"><span class="tn">03</span>CFGs, Derivations &amp; Ambiguity</a>
+    <a href="#ch4"><span class="tn">04</span>Top-Down Parsing — LL(1)</span></a>
+    <a href="#ch5"><span class="tn">05</span>Bottom-Up Parsing — SLR, CLR, LALR</a>
+    <a href="#ch6"><span class="tn">06</span>Semantic Analysis &amp; SDT</a>
+    <a href="#ch7"><span class="tn">07</span>Intermediate Code &amp; Optimization</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — PHASES OVERVIEW ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Compiler Phases — <em>The Complete Pipeline</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="phases">
+      <h2 class="sh">1.1 &nbsp; All Compiler Phases <span class="tag tc">Core</span></h2>
+
+      <div class="gv">
+        <span class="dv-label">Compiler Phase Pipeline</span>
+Source Program (character stream)
+        │
+        ▼
+┌─────────────────────┐
+│  Lexical Analyzer   │ → tokens + lexical errors
+│  (Scanner)          │   Uses: DFA / NFA from RE
+└─────────────────────┘
+        │ token stream
+        ▼
+┌─────────────────────┐
+│  Syntax Analyzer    │ → parse tree / AST + syntax errors
+│  (Parser)           │   Uses: CFG, LL(1)/LR parsers
+└─────────────────────┘
+        │ parse tree
+        ▼
+┌─────────────────────┐
+│  Semantic Analyzer  │ → annotated tree + semantic errors
+│                     │   Uses: attribute grammars, symbol table
+└─────────────────────┘
+        │ annotated AST
+        ▼
+┌─────────────────────┐
+│  Intermediate Code  │ → 3-address code / DAG / AST
+│  Generator          │
+└─────────────────────┘
+        │ IC
+        ▼
+┌─────────────────────┐
+│  Code Optimizer     │ → optimized IC (optional)
+│                     │   local / global / loop
+└─────────────────────┘
+        │ optimized IC
+        ▼
+┌─────────────────────┐
+│  Code Generator     │ → target machine code / assembly
+│                     │
+└─────────────────────┘
+        │
+        ▼
+Target Program
+
+Symbol Table: maintained throughout all phases
+Error Handler: reports/recovers from errors in each phase
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Phase</th><th>Input</th><th>Output</th><th>Theory used</th></tr></thead>
+          <tbody>
+            <tr><td>Lexical Analysis</td><td>Character stream</td><td>Token stream</td><td>Regular expressions, DFA</td></tr>
+            <tr><td>Syntax Analysis</td><td>Token stream</td><td>Parse tree / AST</td><td>CFG, LL/LR parsing</td></tr>
+            <tr><td>Semantic Analysis</td><td>Parse tree</td><td>Annotated tree</td><td>Attribute grammars, type systems</td></tr>
+            <tr><td>IC Generation</td><td>Annotated tree</td><td>Three-address code</td><td>Translation schemes</td></tr>
+            <tr><td>Optimization</td><td>IC</td><td>Optimized IC</td><td>Data-flow analysis</td></tr>
+            <tr><td>Code Generation</td><td>Optimized IC</td><td>Assembly / machine code</td><td>Register allocation, instruction selection</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Front End vs Back End</span>
+        <p><strong>Front end:</strong> Phases that are source-language dependent — lexical, syntax, semantic analysis, IC generation. Output is language-independent intermediate code.<br>
+        <strong>Back end:</strong> Phases that are target-machine dependent — optimization, code generation. Input is the intermediate code.<br>
+        This separation allows one front end + multiple back ends (compile same language for multiple architectures) or multiple front ends + one back end (compile different languages for same architecture).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — LEXICAL ANALYSIS ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Lexical Analysis — <em>Tokens, Patterns &amp; DFA</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tokens">
+      <h2 class="sh">2.1 &nbsp; Tokens, Patterns &amp; Lexemes <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Three Key Terms</span>
+        <p>
+          <strong>Token:</strong> A category of lexical units. Example: IDENTIFIER, NUMBER, PLUS, KEYWORD_IF.<br>
+          <strong>Lexeme:</strong> The actual string of characters that matches a token pattern. Example: "count", "3.14", "+", "if".<br>
+          <strong>Pattern:</strong> A rule (usually a regular expression) describing what strings are valid lexemes for a token. Example: pattern for IDENTIFIER = [a-zA-Z_][a-zA-Z0-9_]*
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Source: <code>count = count + 3.14;</code></strong></p>
+        <div class="cb">Tokens and their lexemes:
+  (IDENTIFIER, "count")
+  (ASSIGN, "=")
+  (IDENTIFIER, "count")
+  (PLUS, "+")
+  (FLOAT_LITERAL, "3.14")
+  (SEMICOLON, ";")</div>
+      </div>
+
+      <h3 class="ssh">Regular Expressions for Token Patterns</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Token</th><th>Regular Expression</th></tr></thead>
+          <tbody>
+            <tr><td>Integer literal</td><td>0 | [1-9][0-9]*</td></tr>
+            <tr><td>Identifier</td><td>[a-zA-Z_][a-zA-Z0-9_]*</td></tr>
+            <tr><td>Floating point</td><td>[0-9]+\.[0-9]+ (simplified)</td></tr>
+            <tr><td>Whitespace</td><td>[ \t\n]+ (to skip)</td></tr>
+            <tr><td>C comment</td><td>/\*([^*]|\*[^/])*\*/</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dfa-lexer">
+      <h2 class="sh">2.2 &nbsp; RE → NFA → DFA → Minimized DFA <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        A lexer (scanner) is built by converting token patterns (regular expressions) into a Deterministic Finite Automaton (DFA) using the standard pipeline: RE → NFA (Thompson's construction) → DFA (subset construction) → Minimal DFA (table filling). The resulting DFA is then used to scan the input character by character, grouping characters into tokens. This pipeline is covered in depth in the TOC File 1.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Longest Match Rule (Maximal Munch)</span>
+        <p>When multiple tokens could match at the current position, the lexer takes the longest match. Example: input "==" — don't tokenize as "=" then "="; tokenize as "==" (EQUALS_EQUALS). If a tie exists (two different tokens of equal length match), the token listed first in the specification wins (priority rule).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Lexer vs Parser Responsibility</span>
+        <p>The lexer handles regular language recognition (tokens) — things describable by regular expressions. It does NOT handle nested structures (parentheses, brackets) — those require a context-free grammar and a parser. "Is 'if' a keyword or an identifier?" is a lexer question. "Is this expression syntactically valid?" is a parser question.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — CFG & PARSE TREES ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">CFGs, Derivations <em>&amp; Ambiguity</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="cfg-compiler">
+      <h2 class="sh">3.1 &nbsp; CFG in Compiler Context — Eliminating Ambiguity <span class="tag tg">GATE Critical</span></h2>
+      <p>
+        Programming language syntax is specified using CFGs. Unlike theoretical automata where ambiguity is sometimes tolerable, compilers require <strong>unambiguous grammars</strong> — each valid program must have exactly one parse tree, ensuring one unambiguous interpretation.
+      </p>
+
+      <div class="eg">
+        <p><strong>Ambiguous grammar for arithmetic expressions:</strong></p>
+        <div class="cb">E → E + E | E * E | (E) | id
+
+The string "id + id * id" has two parse trees:
+  Tree 1: (id + id) * id  (wrong precedence)
+  Tree 2: id + (id * id)  (correct precedence)
+
+This grammar is ambiguous. Parsers cannot decide which tree to build.</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Unambiguous grammar encoding precedence and associativity:</strong></p>
+        <div class="cb">E  → E + T | T          (+ is left-associative, lowest precedence)
+T  → T * F | F          (* is left-associative, higher precedence)
+F  → (E) | id           (parentheses, base case)
+
+Now "id + id * id" has exactly one parse tree:
+  E → E + T → T + T → F + T → id + T → id + T*F → id + F*F → id + id*id
+  
+The tree forces * to bind tighter than + (precedence).
+Left-recursion (E→E+T) ensures left-associativity (a+b+c = (a+b)+c).</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Eliminating Left Recursion</span>
+        <p>LL parsers cannot handle left-recursive grammars (they loop forever). Left recursion A → Aα | β must be converted:<br>
+        A → βA'<br>
+        A' → αA' | ε<br>
+        For "E → E+T | T": E → TE', E' → +TE' | ε</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Left Factoring</span>
+        <p>When two productions for the same nonterminal start with the same terminal, LL parsers cannot choose between them. Factor out the common prefix:<br>
+        A → αβ | αγ becomes A → αA', A' → β | γ</p>
+      </div>
+
+      <h3 class="ssh">The Dangling Else Problem</h3>
+      <div class="eg">
+        <p><strong>Grammar: stmt → if expr then stmt | if expr then stmt else stmt | other</strong></p>
+        <div class="cb">Ambiguous: "if E1 then if E2 then S1 else S2" has two trees:
+  (a) if E1 then (if E2 then S1 else S2)  ← else belongs to inner if
+  (b) if E1 then (if E2 then S1) else S2  ← else belongs to outer if
+
+Most languages use rule (a) — "else matches closest if."
+This is the classic dangling-else ambiguity, resolved by convention in parsers.</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — LL(1) PARSING ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Top-Down Parsing — <em>LL(1) &amp; Predictive Parsing</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="first-follow">
+      <h2 class="sh">4.1 &nbsp; FIRST and FOLLOW Sets <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">FIRST(α)</span>
+        <p>The set of terminals that can begin strings derived from α.<br>
+        If α ⟹* ε (derives empty), then ε ∈ FIRST(α).<br>
+        <strong>Rules:</strong><br>
+        FIRST(a) = {a} for terminal a.<br>
+        FIRST(ε) = {ε}.<br>
+        FIRST(A) for nonterminal A: for each production A → X₁X₂...Xₙ, add FIRST(X₁)−{ε}. If ε ∈ FIRST(X₁), add FIRST(X₂)−{ε}, and so on. If ε ∈ FIRST(Xᵢ) for all i, add ε to FIRST(A).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">FOLLOW(A)</span>
+        <p>The set of terminals that can appear immediately after A in a sentential form. $ (end-of-input) is in FOLLOW(S) (start symbol).<br>
+        <strong>Rules:</strong><br>
+        If B → αAβ: add FIRST(β)−{ε} to FOLLOW(A).<br>
+        If B → αAβ and ε ∈ FIRST(β): add FOLLOW(B) to FOLLOW(A).<br>
+        If B → αA: add FOLLOW(B) to FOLLOW(A).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Compute FIRST and FOLLOW for the expression grammar:</strong></p>
+        <div class="cb">Grammar:
+E  → T E'
+E' → + T E' | ε
+T  → F T'
+T' → * F T' | ε
+F  → ( E ) | id
+
+FIRST:
+FIRST(E)  = FIRST(T)  = FIRST(F)  = { (, id }
+FIRST(E') = { +, ε }
+FIRST(T') = { *, ε }
+FIRST(F)  = { (, id }
+
+FOLLOW:
+FOLLOW(E)  = { $, ) }          (start symbol gets $; E appears before ) in F→(E))
+FOLLOW(E') = FOLLOW(E) = { $, ) }  (E' at end of E → T E')
+FOLLOW(T)  = FIRST(E')−{ε} ∪ FOLLOW(E') = { +, $, ) }
+FOLLOW(T') = FOLLOW(T) = { +, $, ) }
+FOLLOW(F)  = FIRST(T')−{ε} ∪ FOLLOW(T') = { *, +, $, ) }</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ll1-table">
+      <h2 class="sh">4.2 &nbsp; LL(1) Parsing Table Construction <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">LL(1) Parsing Table Construction Rule</span>
+        <p>For each production A → α:<br>
+        1. For each terminal a ∈ FIRST(α) − {ε}: add A → α to M[A, a].<br>
+        2. If ε ∈ FIRST(α): for each b ∈ FOLLOW(A): add A → α to M[A, b].<br>
+        If any cell gets more than one production → the grammar is NOT LL(1).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>LL(1) table for the expression grammar:</strong></p>
+        <div class="cb">      |  id  |  +  |  *  |  (  |  )  |  $  |
+──────┼──────┼─────┼─────┼─────┼─────┼─────┤
+  E   | E→TE'|     |     |E→TE'|     |     |
+  E'  |      |E'→+TE'|   |     |E'→ε |E'→ε |
+  T   | T→FT'|     |     |T→FT'|     |     |
+  T'  |      |T'→ε |T'→*FT'|   |T'→ε |T'→ε |
+  F   | F→id |     |     |F→(E)|     |     |
+
+All cells have at most one entry → grammar IS LL(1). ✓</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">LL(1) Parsing — Stack Algorithm</span>
+        <p>Initialize stack with [S, $] (top = S). Input pointer at first token.<br>
+        While stack not empty:<br>
+        &nbsp;&nbsp;If top = terminal a = current input: pop stack, advance input.<br>
+        &nbsp;&nbsp;If top = terminal a ≠ current input: ERROR.<br>
+        &nbsp;&nbsp;If top = nonterminal A: look up M[A, current_input] = A → α. Pop A, push α reversed (so leftmost symbol is on top).<br>
+        &nbsp;&nbsp;If M[A, current_input] = error: ERROR.<br>
+        Accept when stack = [$] and input = $.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Parse "id + id * id" using LL(1) table:</strong></p>
+        <div class="cb">Stack              Input           Action
+[E, $]             id+id*id$       M[E,id]=E→TE'. Push T,E'
+[T, E', $]         id+id*id$       M[T,id]=T→FT'. Push F,T'
+[F, T', E', $]     id+id*id$       M[F,id]=F→id. Push id
+[id, T', E', $]    id+id*id$       Match id. Pop, advance.
+[T', E', $]        +id*id$         M[T',+]=T'→ε. Pop T'.
+[E', $]            +id*id$         M[E',+]=E'→+TE'. Push +,T,E'
+[+, T, E', E', $]  +id*id$         Match +. Pop, advance.
+[T, E', E', $]     id*id$          M[T,id]=T→FT'. Push F,T'
+[F, T', E', E', $] id*id$          M[F,id]=F→id. Push id.
+[id,T',E',E',$]    id*id$          Match id. Pop, advance.
+[T', E', E', $]    *id$            M[T',*]=T'→*FT'. Push *,F,T'
+...
+[E', $]            $               M[E',$]=E'→ε. Pop.
+[$]                $               ACCEPT ✓</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">A Grammar is LL(1) iff No Table Cell Has Multiple Entries</span>
+        <p>A grammar is LL(1) if and only if no two productions of the same nonterminal have overlapping FIRST sets (or both derive ε). Left-recursive grammars are never LL(1). Ambiguous grammars are never LL(1). Every LL(1) grammar is unambiguous, but not every unambiguous grammar is LL(1).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — LR PARSING ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Bottom-Up Parsing — <em>SLR, CLR &amp; LALR</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="lr-concept">
+      <h2 class="sh">5.1 &nbsp; LR Parsing — Concept &amp; Handle Detection <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">LR Parsing Idea</span>
+        <p>LR (Left-to-right, Rightmost derivation) parsers build the parse tree from leaves to root. They maintain a <strong>stack</strong> of grammar symbols and states, and make two decisions at each step:<br>
+        <strong>Shift:</strong> Push the next input token onto the stack.<br>
+        <strong>Reduce:</strong> Replace the top of the stack (matching a production's RHS) with the LHS nonterminal.<br>
+        The parser reads tokens left-to-right and produces a rightmost derivation in reverse.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Handle</span>
+        <p>A <strong>handle</strong> is a substring of the stack that (a) matches the RHS of some production A → α and (b) reducing it is the correct next step in the rightmost derivation. The key challenge in bottom-up parsing is efficiently identifying the handle — the LR automaton does this using states.</p>
+      </div>
+
+      <h3 class="ssh">LR(0) Items</h3>
+      <div class="def-box">
+        <span class="lbl">LR(0) Item</span>
+        <p>An LR(0) item is a production with a dot (•) indicating how much has been seen. A → α•β means "we've seen α on the stack and expect to see β from the input."<br>
+        A → •αβ: haven't started yet.<br>
+        A → α•β: seen α, expect β.<br>
+        A → αβ•: seen the complete RHS — this is a <strong>complete item</strong> — potential reduce action.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>LR(0) items for production E → E + T:</strong></p>
+        <div class="cb">E → • E + T    (initial — expect to see E + T)
+E → E • + T   (have seen E, expect +, then T)
+E → E + • T   (have seen E+, expect T)
+E → E + T •   (complete — REDUCE using E → E+T)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="lr-parsers">
+      <h2 class="sh">5.2 &nbsp; SLR, CLR(1) and LALR(1) — The Family <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Parser</th><th>Items used</th><th>Lookahead for reduce</th><th>Power</th><th>Table size</th></tr></thead>
+          <tbody>
+            <tr><td><strong>LR(0)</strong></td><td>LR(0) items</td><td>None (reduce whenever complete)</td><td>Weakest — few real grammars</td><td>Smallest</td></tr>
+            <tr><td><strong>SLR(1)</strong></td><td>LR(0) items</td><td>FOLLOW(A) for A → α•</td><td>More languages than LR(0)</td><td>Same as LR(0)</td></tr>
+            <tr><td><strong>CLR(1) / LR(1)</strong></td><td>LR(1) items [A→α•β, a]</td><td>Exact lookahead set a</td><td>Most powerful</td><td>Largest (many states)</td></tr>
+            <tr><td><strong>LALR(1)</strong></td><td>LR(1) merged</td><td>Merged lookaheads</td><td>Same as CLR(1) for most grammars</td><td>Same as SLR</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Power Hierarchy</span>
+        <p>Every LL(1) grammar is also LR(1). Not every LR(1) grammar is LL(1). The hierarchy:<br>
+        LR(0) ⊂ SLR(1) ⊂ LALR(1) ⊂ LR(1) = CLR(1)<br>
+        All these are proper subsets of unambiguous CFLs.<br>
+        LALR(1) ≡ LR(1) for most practical programming languages. LALR(1) is what yacc/bison implement.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">SLR Conflicts — Shift-Reduce and Reduce-Reduce</span>
+        <p>
+          <strong>Shift-Reduce conflict:</strong> In a state, for some lookahead token a, both SHIFT a and REDUCE (A→α, a∈FOLLOW(A)) are valid actions. Ambiguity in what to do.<br>
+          <strong>Reduce-Reduce conflict:</strong> In a state, two different complete items A→α• and B→β• both want to reduce on the same lookahead. Which reduction to take?<br>
+          If a grammar produces conflicts in SLR but not in LALR(1): the grammar is LALR(1) but not SLR(1). If LALR(1) also has conflicts: try CLR(1). If CLR(1) has conflicts: the grammar is ambiguous or not LR(1).
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>SLR parsing table construction steps:</strong></p>
+        <div class="cb">1. Augment grammar: add S' → S to make unique start.
+2. Compute LR(0) item sets (states) using CLOSURE and GOTO:
+   CLOSURE(I): If A→α•Bβ in I, add B→•γ for all B→γ.
+   GOTO(I, X): Items in I with • before X, advance •.
+3. Build ACTION table:
+   If A→α•aβ in state i (shift on a): ACTION[i,a] = SHIFT(GOTO(i,a))
+   If A→α• in state i (reduce): ACTION[i,b] = REDUCE(A→α) for all b∈FOLLOW(A)
+   If S'→S• in state i: ACTION[i,$] = ACCEPT
+4. Build GOTO table:
+   GOTO[i,A] = GOTO(state_i, A) for nonterminals A.
+5. Any undefined cells = ERROR.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">yacc/bison Conflict Resolution Defaults</span>
+        <p>yacc/bison use defaults to resolve conflicts: Shift-Reduce conflict → prefer SHIFT (this correctly handles the dangling else). Reduce-Reduce conflict → prefer the production listed first in the grammar. These defaults make yacc accept slightly more than pure LALR(1), but the extra programs may be unintended — always eliminate conflicts explicitly.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — SEMANTIC ANALYSIS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Semantic Analysis <em>&amp; Syntax-Directed Translation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="semantic-analysis">
+      <h2 class="sh">6.1 &nbsp; What Semantic Analysis Does <span class="tag tc">Core</span></h2>
+
+      <p>
+        Syntactically valid programs can still be semantically wrong. "int x = 'a' + true;" may be syntactically correct but semantically problematic in a strongly-typed language. Semantic analysis enforces language-specific rules that context-free grammars cannot express.
+      </p>
+
+      <ul class="pl arr">
+        <li><strong>Type checking:</strong> Operands have compatible types. Functions called with correct argument types. Return types match declarations.</li>
+        <li><strong>Scope resolution:</strong> Every identifier used is declared in the appropriate scope before use.</li>
+        <li><strong>Undeclared variable detection:</strong> Using a variable not in the current symbol table = error.</li>
+        <li><strong>Array bounds / index type:</strong> Array index must be an integer type.</li>
+        <li><strong>Function call matching:</strong> Correct number and types of arguments.</li>
+        <li><strong>Label existence:</strong> GOTO targets a label that exists.</li>
+      </ul>
+
+      <div class="def-box">
+        <span class="lbl">Symbol Table</span>
+        <p>A data structure mapping identifiers to their attributes (type, scope, size, address, number of parameters for functions). Built during semantic analysis. Implemented as a hash table with scope chaining — each scope has its own table linked to its enclosing scope. Lookup traverses from innermost to outermost scope.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sdt">
+      <h2 class="sh">6.2 &nbsp; Syntax-Directed Translation (SDT) <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Syntax-Directed Definition (SDD)</span>
+        <p>Each grammar production has associated <strong>semantic rules</strong> (attribute computations). Attributes are values associated with grammar symbols — each symbol at each node in the parse tree has values for its attributes.<br>
+        <strong>Synthesized attribute:</strong> Value computed from children's attributes (bottom-up). Computed on the way up the tree.<br>
+        <strong>Inherited attribute:</strong> Value passed from parent or siblings (top-down). Computed on the way down the tree.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>SDD for evaluating arithmetic expressions (synthesized attributes):</strong></p>
+        <div class="cb">Production          Semantic Rule
+E → E₁ + T       E.val = E₁.val + T.val
+E → T             E.val = T.val
+T → T₁ * F       T.val = T₁.val * F.val
+T → F             T.val = F.val
+F → ( E )         F.val = E.val
+F → digit         F.val = digit.lexval
+
+For "3 + 4 * 5":
+  F.val=3, T.val=3, F.val=4, F.val=5, T.val=20, E.val=23 ✓</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">S-attributed vs L-attributed SDDs</span>
+        <p>
+          <strong>S-attributed:</strong> Uses only synthesized attributes. Evaluation is bottom-up — can be integrated directly into LR parsers. Simplest case.<br>
+          <strong>L-attributed:</strong> Uses synthesized and inherited attributes, but inherited attributes of a symbol depend only on: (a) attributes of the parent, (b) attributes of left siblings. Can be evaluated in a left-to-right traversal of the parse tree. Compatible with LL parsers and top-down passes.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="type-checking">
+      <h2 class="sh">6.3 &nbsp; Type Systems &amp; Type Checking <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Definition</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Static typing</td><td>Types checked at compile time</td><td>C, Java, Haskell</td></tr>
+            <tr><td>Dynamic typing</td><td>Types checked at runtime</td><td>Python, JavaScript, Ruby</td></tr>
+            <tr><td>Strong typing</td><td>No implicit type coercions — type errors always caught</td><td>Python, Haskell</td></tr>
+            <tr><td>Weak typing</td><td>Implicit coercions allowed (some type errors hidden)</td><td>C, JavaScript</td></tr>
+            <tr><td>Type coercion (widening)</td><td>Implicit: int → float automatically</td><td>int + float → float</td></tr>
+            <tr><td>Type casting (narrowing)</td><td>Explicit: must be written by programmer</td><td>(int)3.14 = 3</td></tr>
+            <tr><td>Type equivalence (structural)</td><td>Two types equal if same structure</td><td>Most functional languages</td></tr>
+            <tr><td>Type equivalence (name)</td><td>Two types equal only if same name declaration</td><td>Pascal, Ada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — INTERMEDIATE CODE & OPTIMIZATION ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Intermediate Code <em>&amp; Optimization</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ic-gen">
+      <h2 class="sh">7.1 &nbsp; Three-Address Code &amp; DAG <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Three-Address Code (TAC)</span>
+        <p>The most common intermediate representation. Each instruction has at most one operator and at most three addresses (operands/result). General form: <strong>result = operand₁ op operand₂</strong>. Temporary variables (t₁, t₂, ...) hold intermediate results. Maps closely to machine instructions.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Generate TAC for: a = b * -c + b * -c</strong></p>
+        <div class="cb">Naïve TAC:
+  t1 = -c
+  t2 = b * t1
+  t3 = -c
+  t4 = b * t3
+  t5 = t2 + t4
+  a  = t5
+
+After CSE (Common Subexpression Elimination):
+  t1 = -c
+  t2 = b * t1
+  t3 = t2 + t2    ← reuse t2 instead of recomputing
+  a  = t3</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>TAC Instruction Type</th><th>Form</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Assignment (binary op)</td><td>x = y op z</td><td>t1 = a + b</td></tr>
+            <tr><td>Assignment (unary op)</td><td>x = op y</td><td>t1 = -a</td></tr>
+            <tr><td>Copy</td><td>x = y</td><td>a = t3</td></tr>
+            <tr><td>Unconditional jump</td><td>goto L</td><td>goto L5</td></tr>
+            <tr><td>Conditional jump</td><td>if x relop y goto L</td><td>if t1 > t2 goto L3</td></tr>
+            <tr><td>Function call</td><td>call p, n</td><td>call foo, 3</td></tr>
+            <tr><td>Parameter</td><td>param x</td><td>param a</td></tr>
+            <tr><td>Return</td><td>return x</td><td>return t4</td></tr>
+            <tr><td>Array access</td><td>x = y[i] or y[i] = x</td><td>t1 = a[i]</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">DAG (Directed Acyclic Graph)</h3>
+      <div class="def-box">
+        <span class="lbl">DAG for Expressions</span>
+        <p>A DAG compactly represents expressions by sharing nodes for common subexpressions. Each unique subexpression appears exactly once as a node. Leaves are identifiers/constants. Internal nodes are operators. If an expression is computed twice, both references point to the same node — this is automatic common subexpression elimination.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>DAG for a = b * -c + b * -c:</strong></p>
+        <div class="cb">         +
+        / \
+       /   \   ← same node used twice (CSE)
+      *     *  ← both * nodes are identical → merged into one
+     / \   / \
+    b  uminus  b  uminus   ← both uminus point to same c
+          |         |
+          c         c      ← shared leaf
+
+After merging shared nodes:
+       a
+       │
+       +
+      / \
+     /   \
+    *   (same)   ← single * node, used twice in +
+   / \
+  b  uminus
+       │
+       c</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="optimization">
+      <h2 class="sh">7.2 &nbsp; Code Optimization Techniques <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Optimization</th><th>Description</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Constant Folding</strong></td><td>Evaluate constant expressions at compile time</td><td>x = 3 * 4 → x = 12</td></tr>
+            <tr><td><strong>Constant Propagation</strong></td><td>Replace variables with their constant values</td><td>x=5; y=x+3 → y=8</td></tr>
+            <tr><td><strong>Dead Code Elimination</strong></td><td>Remove code whose results are never used</td><td>x=5; (x never used) → remove</td></tr>
+            <tr><td><strong>Common Subexp. Elimination (CSE)</strong></td><td>Compute repeated expression once, reuse</td><td>a*b + a*b → t=a*b; t+t</td></tr>
+            <tr><td><strong>Copy Propagation</strong></td><td>Replace a copy variable with the original</td><td>x=y; z=x+1 → z=y+1</td></tr>
+            <tr><td><strong>Strength Reduction</strong></td><td>Replace expensive op with cheaper equivalent</td><td>x*2 → x+x or x&lt;&lt;1; x*4 → x&lt;&lt;2</td></tr>
+            <tr><td><strong>Loop Invariant Code Motion</strong></td><td>Move loop-invariant computations outside the loop</td><td>while(x) {y=a*b;...} → y=a*b; while(x){...}</td></tr>
+            <tr><td><strong>Induction Variable Elimination</strong></td><td>Simplify loop index variables in array addresses</td><td>Replace multiply-add address with incremental add</td></tr>
+            <tr><td><strong>Function Inlining</strong></td><td>Replace function call with function body</td><td>Eliminates call overhead for small functions</td></tr>
+            <tr><td><strong>Tail Call Optimization</strong></td><td>Convert tail-recursive calls to iteration</td><td>Prevents stack overflow in recursive programs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Basic Block &amp; Control Flow Graph (CFG)</span>
+        <p>A <strong>basic block</strong> is a maximal sequence of statements with: one entry point (first statement, or target of a jump) and one exit point (last statement, or jump/return). No branches in the middle. Optimizations within a basic block are <strong>local optimizations</strong>. Optimizations across multiple basic blocks are <strong>global optimizations</strong>. The <strong>Control Flow Graph (CFG)</strong> has basic blocks as nodes and edges for possible control flow between them.</p>
+      </div>
+
+      <h3 class="ssh">Data Flow Analysis</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Analysis</th><th>Question answered</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>Reaching Definitions</td><td>Which definitions of variable x can reach this point?</td><td>Constant propagation, copy propagation</td></tr>
+            <tr><td>Live Variable Analysis</td><td>Is variable x used after this point (is it "live")?</td><td>Dead code elimination, register allocation</td></tr>
+            <tr><td>Available Expressions</td><td>Has expression e been computed and not invalidated?</td><td>Global CSE</td></tr>
+            <tr><td>Very Busy Expressions</td><td>Will expression e definitely be computed before any variable in it is modified?</td><td>Code hoisting</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Register Allocation — Graph Coloring</span>
+        <p>Variables that are live simultaneously cannot share a register. Build an <strong>interference graph</strong>: nodes = variables, edges between variables that are simultaneously live. Register allocation = graph coloring with k colors (k = number of registers). If k-coloring is impossible: spill some variables to memory. NP-complete in general, but linear-time heuristics work well in practice.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="runtime">
+      <h2 class="sh">7.3 &nbsp; Runtime Environments &amp; Storage Organization <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Activation Record (Stack Frame)</span>
+        <p>Every function call creates an <strong>activation record</strong> (frame) on the runtime stack. A typical frame contains:<br>
+        Return address (where to return after function ends)<br>
+        Saved registers (caller-saved or callee-saved)<br>
+        Local variables<br>
+        Parameters (passed by value/reference)<br>
+        Temporaries<br>
+        Dynamic link (pointer to caller's frame)<br>
+        Static link (pointer to enclosing scope's frame — for nested functions)</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Storage Class</th><th>Lifetime</th><th>Location</th><th>Examples</th></tr></thead>
+          <tbody>
+            <tr><td>Static (global)</td><td>Entire program execution</td><td>Static data segment</td><td>Global variables, static local variables</td></tr>
+            <tr><td>Stack (automatic)</td><td>During function call</td><td>Runtime stack</td><td>Local variables, parameters</td></tr>
+            <tr><td>Heap (dynamic)</td><td>Programmer-controlled</td><td>Heap</td><td>malloc/new allocations</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Parameter Passing</span>
+        <p><strong>Call by value:</strong> Copy of actual parameter passed. Callee cannot modify caller's variable. C default.<br>
+        <strong>Call by reference:</strong> Address of actual parameter passed. Callee can modify caller's variable. C++ references, C with pointers.<br>
+        <strong>Call by value-result:</strong> Copy in, compute, copy result back. Ada.<br>
+        <strong>Call by name:</strong> Actual expression evaluated each time parameter is used (lazy). ALGOL. Can change behaviour based on side effects.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>LL(1) implies LR(1)</td><td>Every LL(1) grammar IS also LR(1) (and LALR(1)). LR parsers are strictly more powerful. An LR(1) grammar may NOT be LL(1) (e.g., left-recursive grammars are LR(1) but NOT LL(1)). LL(1) ⊂ LALR(1) ⊂ LR(1).</td></tr>
+            <tr><td>2</td><td>Left-recursive grammars cannot be parsed</td><td>Left-recursive grammars CANNOT be parsed by LL parsers (infinite loop). But they CAN be parsed by LR parsers — LR handles left recursion naturally. LR is more powerful than LL precisely because of this.</td></tr>
+            <tr><td>3</td><td>FIRST and FOLLOW are computed the same way</td><td>FIRST(α) = terminals that can BEGIN strings derived from α. FOLLOW(A) = terminals that can FOLLOW A in any sentential form. FIRST is defined for strings of symbols. FOLLOW is defined only for nonterminals. Never mix them up in LL(1) table construction.</td></tr>
+            <tr><td>4</td><td>ε should be in FOLLOW sets</td><td>ε is NEVER in a FOLLOW set. FOLLOW contains only terminals (including $). ε belongs in FIRST sets (when a symbol can derive the empty string). This distinction is critical for LL(1) table construction — ε in FIRST triggers FOLLOW-based table entries.</td></tr>
+            <tr><td>5</td><td>Shift-Reduce conflict always means grammar is ambiguous</td><td>A grammar causing SR conflict in SLR does NOT necessarily mean the grammar is ambiguous. The grammar might be LALR(1) or LR(1) — SLR just uses coarser lookaheads (FOLLOW sets) which cause false conflicts. Ambiguity causes conflicts in ALL LR parsers including LR(1).</td></tr>
+            <tr><td>6</td><td>Synthesized attributes flow top-down</td><td>Synthesized attributes flow BOTTOM-UP (computed from children). Inherited attributes flow TOP-DOWN (passed from parent). S-attributed SDDs use only synthesized — computed during LR reduction (bottom-up parse). L-attributed SDDs may use inherited — evaluated left-to-right in the tree.</td></tr>
+            <tr><td>7</td><td>Semantic analysis handles type checking and scoping — these are syntactic</td><td>Type errors and scope errors are SEMANTIC, not syntactic. CFGs cannot express "variable must be declared before use" or "operand types must match" — these require semantic analysis using the symbol table. If GATE asks "which phase catches type errors?" → semantic analysis.</td></tr>
+            <tr><td>8</td><td>Dead code elimination removes unreachable code</td><td>Dead code elimination removes code whose RESULTS are never used (variables computed but never read). Unreachable code elimination (code after return, else branches never taken) is a separate optimization. GATE distinguishes these: "variable x is assigned but never read" → dead code. "Code after return statement" → unreachable code.</td></tr>
+            <tr><td>9</td><td>LALR(1) and CLR(1) have different parsing power</td><td>LALR(1) and CLR(1)/LR(1) recognize the same class of languages — they differ in whether LALR(1) can be built without reduce-reduce conflicts. If LALR(1) produces a reduce-reduce conflict, the grammar is still LR(1) and CLR(1) can handle it without conflicts. They differ in table size, not expressive power in theory.</td></tr>
+            <tr><td>10</td><td>Three-address code uses three addresses always</td><td>Three-address code uses AT MOST three addresses. Unary operations (t1 = -a) use two. Copy instructions (a = b) use two. Jump instructions (goto L) use one. The "three" is a maximum, not a requirement for every instruction.</td></tr>
+            <tr><td>11</td><td>Compiler back end is language-dependent</td><td>The compiler BACK END (optimization, code generation) is machine/target-dependent, NOT source language-dependent. The front end is language-dependent. Intermediate code provides the clean separation — same IR can be processed by different back ends for different target machines.</td></tr>
+            <tr><td>12</td><td>Loop-invariant code motion is always safe</td><td>Moving loop-invariant code out of a loop is safe only if the code ALWAYS executes in the loop (it's in the loop body, not inside a conditional that might not execute). If the invariant code is inside an if-statement in the loop, moving it out changes semantics (it might now execute even when it shouldn't).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="parsing-hierarchy">
+      <h2 class="sh">8.2 &nbsp; Parser Hierarchy &amp; Quick Reference</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>LL(1)</th><th>SLR(1)</th><th>LALR(1)</th><th>CLR(1)/LR(1)</th></tr></thead>
+          <tbody>
+            <tr><td>Left recursion</td><td class="bad">Cannot handle</td><td class="good">Handles</td><td class="good">Handles</td><td class="good">Handles</td></tr>
+            <tr><td>Left factoring needed</td><td class="bad">Yes</td><td class="good">No</td><td class="good">No</td><td class="good">No</td></tr>
+            <tr><td>Reduce lookahead</td><td>FIRST/FOLLOW</td><td>FOLLOW(A)</td><td>Merged LR(1) lookaheads</td><td>Exact LR(1) lookaheads</td></tr>
+            <tr><td>Table states</td><td>Fewer</td><td>Same as LALR</td><td>Same as SLR</td><td>Most (can be huge)</td></tr>
+            <tr><td>Implemented by</td><td>Recursive descent</td><td>Simple tables</td><td>yacc, bison</td><td>GLR parsers</td></tr>
+            <tr><td>Languages</td><td>Subset</td><td>More than LL(1)</td><td>Most PL grammars</td><td>All deterministic CFLs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Key formula / rule</th></tr></thead>
+          <tbody>
+            <tr><td>FIRST(terminal a)</td><td>{a}</td></tr>
+            <tr><td>FIRST(ε)</td><td>{ε}</td></tr>
+            <tr><td>FIRST(A) where A→α₁|α₂|...</td><td>Union of FIRST(αᵢ), propagate ε</td></tr>
+            <tr><td>FOLLOW(S) (start symbol)</td><td>Always contains $</td></tr>
+            <tr><td>ε in FOLLOW</td><td>Never — FOLLOW contains only terminals and $</td></tr>
+            <tr><td>LL(1) table cell M[A,a]</td><td>A→α if a∈FIRST(α); A→α if ε∈FIRST(α) and a∈FOLLOW(A)</td></tr>
+            <tr><td>Grammar is LL(1)</td><td>No cell has more than one production</td></tr>
+            <tr><td>SLR reduce action</td><td>For A→α• in state i: REDUCE for all a∈FOLLOW(A)</td></tr>
+            <tr><td>LR(1) item</td><td>[A→α•β, a] — production + dot + lookahead terminal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>FIRST/FOLLOW computation NAT:</strong> "Compute FOLLOW(A) for grammar G." Trace all occurrences of A in productions, apply rules systematically. Very common 2-mark question.</li>
+        <li><strong>LL(1) table cell MCQ:</strong> "Which production goes in M[E', +]?" Find production E'→+TE'. + ∈ FIRST(+TE')={+}. So M[E',+] = E'→+TE'. 1 mark.</li>
+        <li><strong>Grammar classification MCQ:</strong> "Is this grammar LL(1)? SLR(1)? LALR(1)?" Check for conflicts. Left-recursive → not LL(1). Build SLR table → check for conflicts. Most common 2-mark classification question.</li>
+        <li><strong>Parser power MCQ:</strong> "Which is more powerful: LL(1) or LALR(1)?" LALR(1). "Which handles left recursion?" LR parsers (SLR/LALR/CLR). 1 mark.</li>
+        <li><strong>SDT evaluation:</strong> "Given grammar with semantic rules, what is the synthesized attribute value at the root for input X?" Trace the parse, evaluate attributes bottom-up. 2-mark computation.</li>
+        <li><strong>TAC generation:</strong> "Generate three-address code for expression E." Apply standard translation scheme — introduce temporaries, one operation per instruction. 2 marks.</li>
+        <li><strong>Optimization MCQ:</strong> "Which optimization replaces 2*x with x+x?" Strength reduction. "Which eliminates x=5 if x is never read?" Dead code elimination. 1-mark classification.</li>
+        <li><strong>Phase identification MCQ:</strong> "Which phase detects undefined variables?" Semantic analysis. "Which phase produces tokens?" Lexical analysis. "Which phase detects mismatched parentheses?" Syntax analysis. 1 mark each.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Compiler Design · From Source Code to Target Code · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

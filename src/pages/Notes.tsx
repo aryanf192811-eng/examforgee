@@ -50,7 +50,7 @@ export default function Notes() {
     async function load() {
       setIsLoadingChapters(true);
       try {
-        const data = await getChapters(selectedSubject!.id);
+        const data = await getChapters(selectedSubject!.slug);
         if (!cancelled) setChapters(data ?? []);
       } catch {
         // handled
@@ -227,7 +227,8 @@ export default function Notes() {
               {/* Notes content */}
               <div className="flex-1 overflow-hidden">
                 <NotesViewer
-                  chapterId={selectedChapter.id}
+                  subjectSlug={selectedSubject.slug}
+                  chapterSlug={selectedChapter.slug}
                   chapterTitle={selectedChapter.title}
                   subjectName={selectedSubject.name}
                 />

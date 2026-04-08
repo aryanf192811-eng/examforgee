@@ -5,6 +5,7 @@ import { OfflineBanner } from './components/global/OfflineBanner';
 import { CommandPalette } from './components/global/CommandPalette';
 import { ErrorBoundary } from './components/global/ErrorBoundary';
 import { usePlatformSecurity } from './hooks/usePlatformSecurity';
+import { useAuthInitializer } from './hooks/useAuthInitializer';
 import { AnimatedRoutes } from './components/routing/AnimatedRoutes';
 
 /**
@@ -14,6 +15,9 @@ import { AnimatedRoutes } from './components/routing/AnimatedRoutes';
 export default function App() {
   // Platform Security Hook — debugger trap triggered per rule #15
   usePlatformSecurity();
+  
+  // Auth Initializer — Syncs backend profile on page refresh
+  useAuthInitializer();
 
   return (
     <ErrorBoundary>

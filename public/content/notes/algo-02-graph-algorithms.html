@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithms — Graph Algorithms · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;
+}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+.cb .fn{color:var(--purple);} .cb .hi{background:var(--hl-y);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Algorithms</div>
+    <h1>Graph Algorithms —<br><em>Traversal to Shortest Paths</em></h1>
+    <p class="cover-desc">
+      BFS and DFS with full property analysis, topological sort, strongly connected components, Dijkstra, Bellman-Ford, Floyd-Warshall, and MST algorithms — every complexity proof, correctness argument, and GATE trap in one place.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · BFS — Breadth First Search</span>
+      <span class="chip">Ch 2 · DFS — Depth First Search</span>
+      <span class="chip">Ch 3 · Topological Sort</span>
+      <span class="chip">Ch 4 · Strongly Connected Components</span>
+      <span class="chip">Ch 5 · Single-Source Shortest Paths</span>
+      <span class="chip">Ch 6 · All-Pairs Shortest Paths</span>
+      <span class="chip">Ch 7 · Minimum Spanning Trees</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>BFS — Breadth First Search</a>
+    <a href="#ch2"><span class="tn">02</span>DFS — Depth First Search &amp; Edge Types</a>
+    <a href="#ch3"><span class="tn">03</span>Topological Sort</a>
+    <a href="#ch4"><span class="tn">04</span>Strongly Connected Components</a>
+    <a href="#ch5"><span class="tn">05</span>Single-Source Shortest Paths</a>
+    <a href="#ch6"><span class="tn">06</span>All-Pairs Shortest Paths</a>
+    <a href="#ch7"><span class="tn">07</span>Minimum Spanning Trees</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Complete Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — BFS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">BFS — <em>Breadth First Search</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bfs-algo">
+      <h2 class="sh">1.1 &nbsp; Algorithm &amp; Core Properties <span class="tag tc">Core</span></h2>
+      <p>
+        BFS explores a graph level by level — it visits all vertices at distance d from the source before visiting any vertex at distance d+1. It uses a <strong>queue</strong> (FIFO) to manage the frontier of vertices to explore.
+      </p>
+      <div class="cb"><span class="kw">BFS</span>(G, s):
+    for each vertex u ≠ s: color[u]=WHITE, d[u]=∞, π[u]=NIL
+    color[s]=GRAY, d[s]=0, π[s]=NIL
+    Q = empty queue
+    Enqueue(Q, s)
+    <span class="kw">while</span> Q not empty:
+        u = Dequeue(Q)
+        <span class="kw">for</span> each v in Adj[u]:
+            <span class="kw">if</span> color[v] == WHITE:
+                color[v]=GRAY, d[v]=d[u]+1, π[v]=u
+                Enqueue(Q, v)
+        color[u] = BLACK
+
+<span class="cm">// WHITE = undiscovered, GRAY = in queue, BLACK = fully processed</span>
+Time: O(V+E)  [adjacency list]  or  O(V²)  [adjacency matrix]</div>
+
+      <div class="def-box">
+        <span class="lbl">BFS Tree &amp; Shortest Path</span>
+        <p>BFS produces a <strong>BFS tree</strong> rooted at s. The path from s to any reachable vertex v in the BFS tree is a <strong>shortest path</strong> (fewest edges) in the unweighted graph. d[v] = shortest-path distance from s to v in terms of edge count.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>BFS on graph: s=1, Adj: 1→{2,3}, 2→{4,5}, 3→{5}, 4→{}, 5→{}</strong></p>
+        <div class="cb">Queue state (showing vertex dequeued and newly added):
+Start: Q=[1]
+Dequeue 1 → discover 2(d=1), 3(d=1) → Q=[2,3]
+Dequeue 2 → discover 4(d=2), 5(d=2) → Q=[3,4,5]
+Dequeue 3 → 5 already GRAY, skip → Q=[4,5]
+Dequeue 4 → no new neighbours → Q=[5]
+Dequeue 5 → no new neighbours → Q=[]
+
+BFS distances: d[1]=0, d[2]=1, d[3]=1, d[4]=2, d[5]=2</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>BFS</th></tr></thead>
+          <tbody>
+            <tr><td>Data structure used</td><td>Queue (FIFO)</td></tr>
+            <tr><td>Time complexity</td><td>O(V+E) with adjacency list</td></tr>
+            <tr><td>Space complexity</td><td>O(V) — queue holds at most one complete level</td></tr>
+            <tr><td>Shortest path?</td><td>Yes — shortest in edge count (unweighted graph)</td></tr>
+            <tr><td>Works on directed graphs?</td><td>Yes</td></tr>
+            <tr><td>Detects cycles?</td><td>Yes — if a non-tree edge to a GRAY/BLACK vertex is found</td></tr>
+            <tr><td>Finds connected components?</td><td>Yes — run BFS from each unvisited vertex</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bfs-apps">
+      <h2 class="sh">1.2 &nbsp; BFS Applications <span class="tag tg">GATE Tested</span></h2>
+      <ul class="pl arr">
+        <li><strong>Shortest path in unweighted graphs</strong> — by definition of BFS levels.</li>
+        <li><strong>Testing bipartiteness</strong> — 2-colour the graph during BFS. If any edge connects two vertices of the same colour → not bipartite. If BFS completes without conflict → bipartite.</li>
+        <li><strong>Connected components</strong> — run BFS from each unvisited vertex. Number of BFS initiations = number of components.</li>
+        <li><strong>Level-order traversal of trees</strong> — BFS on a tree = level-order traversal.</li>
+        <li><strong>Minimum number of steps</strong> — any problem reducible to finding shortest path in an implicit graph (word ladder, knight's tour, maze) → BFS.</li>
+      </ul>
+
+      <div class="tip-box">
+        <span class="lbl">BFS for Bipartiteness — The Connection</span>
+        <p>A graph is bipartite iff it has no odd cycles (from File 2 of DM). BFS detects this by attempting a 2-colouring: assign alternating colours at each level. If BFS finds an edge between two same-colour vertices (a cross edge at the same level or a back edge to the same level), an odd cycle exists → not bipartite. This runs in O(V+E).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — DFS ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">DFS — <em>Depth First Search &amp; Edge Classification</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dfs-algo">
+      <h2 class="sh">2.1 &nbsp; Algorithm, Timestamps &amp; Edge Types <span class="tag tg">GATE Critical</span></h2>
+      <p>
+        DFS explores as deep as possible before backtracking. It uses the <strong>call stack</strong> (recursion) or an explicit stack. DFS assigns timestamps to each vertex: <code>d[v]</code> (discovery time) and <code>f[v]</code> (finish time). These timestamps are the key to classifying edges and detecting properties.
+      </p>
+      <div class="cb"><span class="kw">DFS</span>(G):
+    for each u: color[u]=WHITE, π[u]=NIL
+    time = 0
+    for each u:
+        if color[u]==WHITE: DFS_Visit(G, u)
+
+<span class="kw">DFS_Visit</span>(G, u):
+    time++; d[u]=time; color[u]=GRAY
+    for each v in Adj[u]:
+        if color[v]==WHITE:
+            π[v]=u; DFS_Visit(G, v)
+    color[u]=BLACK; time++; f[u]=time
+
+Time: Θ(V+E)  [processes every vertex and edge exactly once]</div>
+
+      <h3 class="ssh">Edge Classification in DFS</h3>
+      <div class="def-box">
+        <span class="lbl">Four Edge Types (for directed graphs)</span>
+        <p>
+          <strong>Tree edge:</strong> edge (u,v) where v was WHITE when first discovered. Forms the DFS tree.<br>
+          <strong>Back edge:</strong> edge (u,v) where v is GRAY (ancestor of u in DFS tree). Creates a cycle.<br>
+          <strong>Forward edge:</strong> edge (u,v) where v is BLACK and d[u] &lt; d[v] (v is a descendant, already finished).<br>
+          <strong>Cross edge:</strong> edge (u,v) where v is BLACK and d[u] &gt; d[v] (v is in a different subtree or component).
+        </p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Edge Type</th><th>v's colour when edge (u,v) explored</th><th>Timestamp relation</th></tr></thead>
+          <tbody>
+            <tr><td>Tree edge</td><td>WHITE</td><td>d[u] &lt; d[v] &lt; f[v] &lt; f[u]</td></tr>
+            <tr><td>Back edge</td><td>GRAY</td><td>d[v] &lt; d[u] &lt; f[u] &lt; f[v]</td></tr>
+            <tr><td>Forward edge</td><td>BLACK</td><td>d[u] &lt; d[v] &lt; f[v] &lt; f[u]</td></tr>
+            <tr><td>Cross edge</td><td>BLACK</td><td>d[v] &lt; f[v] &lt; d[u] &lt; f[u]</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Undirected Graphs Have Only Tree and Back Edges</span>
+        <p>In an undirected graph, DFS produces only tree edges and back edges — no forward or cross edges. This is because every edge {u,v} is explored from both directions, and the second exploration always finds a non-WHITE vertex (either GRAY = back, but never forward or cross). GATE frequently tests: "In an undirected DFS, which edge types can occur?"</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Parenthesis Theorem</span>
+        <p>For any two vertices u and v in DFS, exactly one of these holds:<br>
+        (1) [d[u], f[u]] and [d[v], f[v]] are completely disjoint — u and v have no ancestor/descendant relationship.<br>
+        (2) [d[u], f[u]] is completely inside [d[v], f[v]] — u is a descendant of v.<br>
+        (3) [d[v], f[v]] is completely inside [d[u], f[u]] — v is a descendant of u.<br>
+        Intervals never partially overlap.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dfs-properties">
+      <h2 class="sh">2.2 &nbsp; DFS Properties &amp; Applications <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Cycle Detection</div>
+          <p>A directed graph has a cycle iff DFS finds a back edge. An undirected graph has a cycle iff DFS finds a back edge.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Topological Sort</div>
+          <p>If no back edges exist (DAG), output vertices in decreasing finish time order. Result is a topological ordering.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">SCC Detection</td>
+          <p>Kosaraju's algorithm uses two DFS passes (on G and Gᵀ) to find strongly connected components.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Articulation Points</div>
+          <p>Vertices whose removal disconnects the graph. Found using DFS with low-link values.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>BFS</th><th>DFS</th></tr></thead>
+          <tbody>
+            <tr><td>Data structure</td><td>Queue (FIFO)</td><td>Stack / Recursion (LIFO)</td></tr>
+            <tr><td>Time</td><td>O(V+E)</td><td>Θ(V+E)</td></tr>
+            <tr><td>Space</td><td>O(V)</td><td>O(V) recursion depth</td></tr>
+            <tr><td>Shortest path (unweighted)</td><td class="good">Yes ✓</td><td class="bad">No ✗</td></tr>
+            <tr><td>Cycle detection</td><td class="good">Yes (non-tree edge)</td><td class="good">Yes (back edge)</td></tr>
+            <tr><td>Topological sort</td><td class="bad">No (but Kahn's uses BFS-like)</td><td class="good">Yes (finish times)</td></tr>
+            <tr><td>SCC detection</td><td class="bad">Not directly</td><td class="good">Yes (Kosaraju's/Tarjan's)</td></tr>
+            <tr><td>Memory usage (tree-like graphs)</td><td class="bad">O(branching factor ^ depth)</td><td class="good">O(depth)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — TOPOLOGICAL SORT ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Topological Sort — <em>Ordering DAGs</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="topo-def">
+      <h2 class="sh">3.1 &nbsp; Definition &amp; Two Algorithms <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Topological Sort</span>
+        <p>A <strong>topological ordering</strong> of a directed acyclic graph (DAG) G=(V,E) is a linear ordering of all vertices such that if (u,v) ∈ E, then u appears before v. It represents a valid execution order for tasks with dependencies.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Topological Sort Requires a DAG</span>
+        <p>Topological sort is only defined for DAGs (directed acyclic graphs). If the graph has a cycle, no topological ordering exists — you can't linearize a cycle. Before running topological sort, either guarantee the graph is a DAG or check for cycles simultaneously. DFS-based topological sort detects cycles as back edges.</p>
+      </div>
+
+      <h3 class="ssh">Algorithm 1 — DFS-Based (Finish Times)</h3>
+      <p>Run DFS on the entire graph. After each vertex finishes (turns BLACK), prepend it to the output list. The resulting list is a topological ordering.</p>
+      <div class="cb"><span class="kw">TopologicalSort_DFS</span>(G):
+    Run DFS(G), computing finish times f[v]
+    As each vertex finishes, insert at FRONT of list L
+    Return L  <span class="cm">// sorted by decreasing finish time</span>
+
+Time: Θ(V+E)  (dominated by DFS)</div>
+
+      <h3 class="ssh">Algorithm 2 — Kahn's Algorithm (BFS-Based)</h3>
+      <p>Repeatedly remove vertices with in-degree 0. Each removed vertex has no remaining dependencies — it can come first. Update in-degrees of neighbours after removal.</p>
+      <div class="cb"><span class="kw">Kahn's Algorithm</span>(G):
+    Compute in-degree for all vertices
+    Q = queue of all vertices with in-degree 0
+    count = 0
+    <span class="kw">while</span> Q not empty:
+        u = Dequeue(Q)
+        output u; count++
+        for each v in Adj[u]:
+            in-degree[v]--
+            if in-degree[v] == 0: Enqueue(Q, v)
+    if count < V: <span class="cm">// CYCLE DETECTED</span>
+        report "Graph has a cycle, no topological ordering"
+
+Time: O(V+E)</div>
+
+      <div class="tip-box">
+        <span class="lbl">Kahn's Algorithm Detects Cycles</span>
+        <p>If after Kahn's algorithm completes, the count of processed vertices is less than |V|, there must be a cycle — some vertices remain with non-zero in-degree because they depend on each other circularly. This dual purpose (sort + cycle detection) makes Kahn's practically useful.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Topological sort of DAG: edges 5→0, 5→2, 4→0, 4→1, 2→3, 3→1</strong></p>
+        <div class="cb">In-degrees: 0→2, 1→2, 2→1, 3→1, 4→0, 5→0
+Q = [4, 5]
+
+Dequeue 4 → output 4, update: 0(1), 1(1) → Q=[5]
+Dequeue 5 → output 5, update: 0(0), 2(0) → Q=[0,2]
+Dequeue 0 → output 0, no neighbours → Q=[2]
+Dequeue 2 → output 2, update: 3(0) → Q=[3]
+Dequeue 3 → output 3, update: 1(0) → Q=[1]
+Dequeue 1 → output 1
+
+Result: 4, 5, 0, 2, 3, 1  ← one valid topological order
+(Multiple valid orderings may exist for the same DAG)</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — SCC ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Strongly Connected Components — <em>Kosaraju's Algorithm</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="scc-def">
+      <h2 class="sh">4.1 &nbsp; SCCs &amp; Kosaraju's Algorithm <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Strongly Connected Component (SCC)</span>
+        <p>A <strong>strongly connected component</strong> of a directed graph G is a maximal set of vertices C ⊆ V such that for every pair u, v ∈ C, there is a path from u to v AND a path from v to u. Every vertex is in exactly one SCC.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Kosaraju's Algorithm — Two-Pass DFS</span>
+        <p>
+          <strong>Pass 1:</strong> Run DFS on G. Push each vertex onto a stack in order of finish times (last finished = top of stack).<br>
+          <strong>Pass 2:</strong> Compute Gᵀ (transpose — reverse all edges). Run DFS on Gᵀ, processing vertices in stack order (highest finish time first). Each DFS tree in Pass 2 is one SCC.
+        </p>
+      </div>
+
+      <div class="cb"><span class="kw">Kosaraju</span>(G):
+    <span class="cm">// Pass 1: DFS on G, record finish order</span>
+    Run DFS on G; push vertices onto stack S as they finish
+
+    <span class="cm">// Pass 2: DFS on Gᵀ in reverse finish order</span>
+    Compute Gᵀ (reverse all edges)
+    while S not empty:
+        u = pop(S)
+        if u not visited: DFS_Visit(Gᵀ, u)
+        <span class="cm">// All vertices in this DFS tree = one SCC</span>
+
+Time: Θ(V+E)  (two DFS passes + transpose construction)
+Space: O(V+E)</div>
+
+      <h3 class="ssh">Why It Works — The Key Insight</h3>
+      <p>
+        In Pass 1, the vertex with the highest finish time is in an SCC with no incoming edges from other SCCs (a "source SCC" in the condensation graph). Starting DFS from this vertex in Gᵀ visits exactly the vertices in its SCC — because in Gᵀ, this was a sink SCC, so DFS can't escape to other SCCs.
+      </p>
+
+      <div class="tip-box">
+        <span class="lbl">Condensation Graph</span>
+        <p>After finding all SCCs, contract each SCC to a single node. The resulting graph (the condensation) is always a DAG. This is fundamental: any directed graph, when contracted to its SCCs, becomes acyclic. GATE tests: "How many SCCs does this graph have?" and "Draw the condensation graph."</p>
+      </div>
+
+      <div class="note-box">
+        <span class="lbl">Tarjan's Algorithm — One-Pass Alternative</span>
+        <p>Tarjan's SCC algorithm finds all SCCs in a single DFS pass using a stack and low-link values (similar to bridge-finding). Same time complexity Θ(V+E). GATE focuses on Kosaraju's (conceptually cleaner), but knowing Tarjan's exists shows depth.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — SINGLE-SOURCE SHORTEST PATHS ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Single-Source Shortest Paths — <em>Dijkstra &amp; Bellman-Ford</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sssp-setup">
+      <h2 class="sh">5.1 &nbsp; Setup — Relaxation &amp; Optimal Substructure <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Relaxation — The Core Operation</span>
+        <p>Every shortest-path algorithm uses relaxation. To <strong>relax edge (u,v)</strong> with weight w(u,v): if d[v] &gt; d[u] + w(u,v), then update d[v] = d[u] + w(u,v) and set π[v] = u.<br>
+        Initialize: d[s] = 0 for source, d[v] = ∞ for all others.</p>
+      </div>
+
+      <p>
+        <strong>Optimal substructure:</strong> Any subpath of a shortest path is itself a shortest path. This is what allows both Dijkstra and Bellman-Ford to work — they build shortest paths incrementally.
+      </p>
+
+      <div class="warn-box">
+        <span class="lbl">Negative Edge Weights — When Standard Algorithms Fail</span>
+        <p>Dijkstra's algorithm assumes all edge weights are non-negative. A single negative edge can invalidate Dijkstra's greedy choice — a "later" path through a negative edge might be shorter than the path Dijkstra chose first. Bellman-Ford handles negative weights but not negative cycles. Floyd-Warshall can detect negative cycles.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dijkstra">
+      <h2 class="sh">5.2 &nbsp; Dijkstra's Algorithm <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Dijkstra's Algorithm — Greedy Single-Source Shortest Paths</span>
+        <p>Maintains a set S of vertices whose shortest paths are finalized. Repeatedly extracts the vertex u with minimum d[u] from the min-priority queue Q (not yet in S), adds it to S, and relaxes all edges out of u. Works correctly for non-negative edge weights.</p>
+      </div>
+
+      <div class="cb"><span class="kw">Dijkstra</span>(G, w, s):
+    d[s]=0; d[v]=∞ for all v≠s; π[v]=NIL for all v
+    Q = min-priority queue with all vertices, keyed by d[]
+    S = {}
+    <span class="kw">while</span> Q not empty:
+        u = Extract-Min(Q)        <span class="cm">// O(log V)</span>
+        S = S ∪ {u}
+        <span class="kw">for</span> each v in Adj[u]:
+            <span class="kw">if</span> d[u] + w(u,v) < d[v]:
+                d[v] = d[u] + w(u,v)
+                π[v] = u
+                Decrease-Key(Q, v, d[v]) <span class="cm">// O(log V)</span></div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Implementation</th><th>Extract-Min</th><th>Decrease-Key</th><th>Total Time</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>Array (naïve)</td><td>O(V)</td><td>O(1)</td><td class="ok">O(V² + E) = O(V²)</td><td>Dense graphs (E ≈ V²)</td></tr>
+            <tr><td>Binary Heap</td><td>O(log V)</td><td>O(log V)</td><td class="good">O((V+E) log V)</td><td>Sparse graphs (E ≈ V)</td></tr>
+            <tr><td>Fibonacci Heap</td><td>O(log V)</td><td>O(1) amortized</td><td class="good">O(V log V + E)</td><td>Theoretically optimal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Trace Dijkstra on weighted graph (source = A):</strong></p>
+        <div class="cb">Graph: A→B(4), A→C(2), B→D(3), C→B(1), C→D(5)
+
+Initial: d[A]=0, d[B]=∞, d[C]=∞, d[D]=∞
+Q = {A(0), B(∞), C(∞), D(∞)}
+
+Extract A(0): relax B→min(∞,0+4)=4, C→min(∞,0+2)=2
+Q = {C(2), B(4), D(∞)}
+
+Extract C(2): relax B→min(4,2+1)=3, D→min(∞,2+5)=7
+Q = {B(3), D(7)}
+
+Extract B(3): relax D→min(7,3+3)=6
+Q = {D(6)}
+
+Extract D(6): no relaxation
+Final: d[A]=0, d[B]=3, d[C]=2, d[D]=6</div>
+        <p>Path to D: A→C→B→D (total weight 2+1+3=6). The direct path A→C→D costs 2+5=7 — longer. Dijkstra found the correct shortest path.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Dijkstra Fails on Negative Edges — The Classic Counterexample</span>
+        <p>Graph: A→B(2), A→C(4), B→C(−3). True shortest A→C = 2+(−3) = −1 (via B). Dijkstra extracts A first, relaxes B(2) and C(4). Extracts B(2), relaxes C to min(4,2−3)=−1 ✓ — this actually works in this case. But the key issue: Dijkstra may have already finalized C(4) before discovering B leads to a better path. With negative edges, once a vertex is extracted from Q, its distance is not guaranteed to be final.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bellman-ford">
+      <h2 class="sh">5.3 &nbsp; Bellman-Ford Algorithm <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Bellman-Ford — Handles Negative Weights</span>
+        <p>Relax ALL edges V−1 times. After k iterations, d[v] gives the shortest path distance using at most k edges. A shortest path with no cycles uses at most V−1 edges, so V−1 iterations suffice. A V-th iteration that still improves any distance indicates a negative cycle.</p>
+      </div>
+
+      <div class="cb"><span class="kw">Bellman-Ford</span>(G, w, s):
+    d[s]=0; d[v]=∞; π[v]=NIL for all v≠s
+    <span class="kw">for</span> i = 1 to V−1:
+        <span class="kw">for</span> each edge (u,v) ∈ E:
+            if d[u] + w(u,v) < d[v]:
+                d[v] = d[u] + w(u,v)
+                π[v] = u
+    <span class="kw">for</span> each edge (u,v) ∈ E:       <span class="cm">// Negative cycle check</span>
+        if d[u] + w(u,v) < d[v]:
+            return "NEGATIVE CYCLE DETECTED"
+    return d[]
+
+Time:  O(VE)
+Space: O(V)</div>
+
+      <div class="eg">
+        <p><strong>Why V−1 iterations?</strong> A shortest path can have at most V−1 edges (otherwise it repeats a vertex, forming a cycle). In iteration i, Bellman-Ford correctly computes shortest paths using at most i edges. After V−1 iterations, all paths with at most V−1 edges are finalized.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Dijkstra</th><th>Bellman-Ford</th></tr></thead>
+          <tbody>
+            <tr><td>Negative edge weights</td><td class="bad">Not supported</td><td class="good">Supported</td></tr>
+            <tr><td>Negative cycle detection</td><td class="bad">Cannot detect</td><td class="good">Detects and reports</td></tr>
+            <tr><td>Time complexity</td><td class="good">O((V+E) log V)</td><td class="ok">O(VE)</td></tr>
+            <tr><td>Correct for DAGs</td><td class="good">Yes (if non-negative)</td><td class="good">Yes (any weights)</td></tr>
+            <tr><td>Greedy or DP?</td><td>Greedy</td><td>Dynamic Programming</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Shortest Paths in DAGs — Topological Relaxation</h3>
+      <p>
+        For a DAG with any edge weights (even negative), we can find single-source shortest paths in <strong>O(V+E)</strong> — faster than both Dijkstra and Bellman-Ford:
+      </p>
+      <div class="cb"><span class="kw">DAG-Shortest-Paths</span>(G, w, s):
+    Topologically sort G
+    Initialize d[s]=0, d[v]=∞ for others
+    For each vertex u in topological order:
+        for each v in Adj[u]:
+            Relax(u, v, w)
+Time: O(V+E)  — optimal for DAGs</div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — ALL-PAIRS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">All-Pairs Shortest Paths — <em>Floyd-Warshall</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="floyd">
+      <h2 class="sh">6.1 &nbsp; Floyd-Warshall Algorithm <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Floyd-Warshall — All-Pairs DP</span>
+        <p>Computes shortest paths between ALL pairs of vertices using dynamic programming. Handles negative edge weights. Detects negative cycles (diagonal becomes negative). Time: Θ(V³). Space: O(V²).</p>
+      </div>
+
+      <p>
+        <strong>DP formulation:</strong> Let d^(k)[i][j] = shortest path from i to j using only vertices {1, 2, ..., k} as intermediate vertices.
+      </p>
+      <div class="cb">Recurrence:
+d^(0)[i][j] = w(i,j)  if edge exists, else ∞ (0 if i==j)
+d^(k)[i][j] = min( d^(k-1)[i][j],           <span class="cm">// don't use k</span>
+                    d^(k-1)[i][k] + d^(k-1)[k][j] )  <span class="cm">// use k as intermediate</span>
+
+<span class="kw">Floyd-Warshall</span>(W):  <span class="cm">// W is n×n weight matrix</span>
+    D = W  (copy, with D[i][i]=0)
+    <span class="kw">for</span> k = 1 to n:
+        <span class="kw">for</span> i = 1 to n:
+            <span class="kw">for</span> j = 1 to n:
+                D[i][j] = min(D[i][j], D[i][k] + D[k][j])
+    return D
+
+Time: Θ(n³)   Space: O(n²) — in-place update possible</div>
+
+      <div class="eg">
+        <p><strong>Trace Floyd-Warshall on:</strong></p>
+        <div class="cb">Graph (directed, 3 vertices):
+  1→2: 3,  1→3: 8,  2→3: 1,  3→1: 2,  2→1: -4
+
+Initial D⁽⁰⁾:
+     1     2     3
+1  [ 0     3     8  ]
+2  [-4     0     1  ]
+3  [ 2     ∞     0  ]
+
+k=1 (use vertex 1 as intermediate):
+D[2][3] = min(1, D[2][1]+D[1][3]) = min(1, -4+8) = 1  (no change)
+D[3][2] = min(∞, D[3][1]+D[1][2]) = min(∞, 2+3) = 5
+D⁽¹⁾: same except [3][2] = 5
+
+k=2 (use vertex 2):
+D[1][3] = min(8, D[1][2]+D[2][3]) = min(8, 3+1) = 4
+D[3][3] = min(0, D[3][2]+D[2][3]) = min(0, 5+1) = 0 (no change)
+D⁽²⁾: D[1][3] = 4
+
+k=3 (use vertex 3):
+D[1][2] = min(3, D[1][3]+D[3][2]) = min(3, 4+5) = 3 (no change)
+D[2][1] = min(-4, D[2][3]+D[3][1]) = min(-4, 1+2) = -4 (no change)
+
+Final: D[1][2]=3, D[1][3]=4, D[2][1]=-4, D[2][3]=1, D[3][1]=2, D[3][2]=5</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Detecting Negative Cycles in Floyd-Warshall</span>
+        <p>After Floyd-Warshall completes, check the diagonal: if D[i][i] &lt; 0 for any vertex i, then there is a negative-weight cycle through vertex i. A negative cycle means shortest paths are undefined (can keep going around the cycle to decrease path length indefinitely).</p>
+      </div>
+
+      <h3 class="ssh">Comparison — SSSP vs APSP Algorithms</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Problem</th><th>Time</th><th>Negative Weights?</th><th>Negative Cycle?</th></tr></thead>
+          <tbody>
+            <tr><td>BFS</td><td>SSSP (unweighted)</td><td class="good">O(V+E)</td><td class="bad">N/A (unweighted)</td><td class="bad">No</td></tr>
+            <tr><td>DAG relaxation</td><td>SSSP (DAG)</td><td class="good">O(V+E)</td><td class="good">Yes</td><td class="bad">N/A (acyclic)</td></tr>
+            <tr><td>Dijkstra (heap)</td><td>SSSP</td><td class="good">O((V+E) log V)</td><td class="bad">No</td><td class="bad">No</td></tr>
+            <tr><td>Bellman-Ford</td><td>SSSP</td><td class="ok">O(VE)</td><td class="good">Yes</td><td class="good">Detects</td></tr>
+            <tr><td>Floyd-Warshall</td><td>APSP</td><td class="ok">Θ(V³)</td><td class="good">Yes</td><td class="good">Detects (diagonal)</td></tr>
+            <tr><td>Johnson's</td><td>APSP (sparse)</td><td class="good">O(V² log V + VE)</td><td class="good">Yes (reweighting)</td><td class="good">Detects</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — MST ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Minimum Spanning Trees — <em>Kruskal's &amp; Prim's</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="mst-theory">
+      <h2 class="sh">7.1 &nbsp; MST — Theory &amp; Greedy Correctness <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Minimum Spanning Tree</span>
+        <p>A <strong>spanning tree</strong> of connected graph G is a subgraph that is a tree and includes all V vertices. Its weight = sum of edge weights. The <strong>MST</strong> is the spanning tree with minimum total weight. A graph may have multiple MSTs if edge weights are not distinct.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Cut Property — Why Greedy Works</span>
+        <p>For any <strong>cut</strong> (partition of V into two non-empty sets S and V−S), the minimum-weight edge crossing the cut is in EVERY MST of G (assuming unique weights). This guarantees both Kruskal's and Prim's greedy choices are always correct — at each step they add the cheapest edge that respects some cut.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="kruskal">
+      <h2 class="sh">7.2 &nbsp; Kruskal's Algorithm <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cb"><span class="kw">Kruskal</span>(G, w):
+    Sort edges by weight: e₁ ≤ e₂ ≤ ... ≤ eₘ
+    A = {}  (MST edge set)
+    for each vertex v: Make-Set(v)   <span class="cm">// Union-Find</span>
+    for each edge (u,v) in sorted order:
+        if Find(u) ≠ Find(v):        <span class="cm">// u,v in different components</span>
+            A = A ∪ {(u,v)}
+            Union(u, v)
+    return A
+
+Time: O(E log E) = O(E log V)  [sorting dominates]
+      O(E · α(V))              [union-find operations, α ≈ constant]
+      Total: O(E log V)</div>
+
+      <div class="tip-box">
+        <span class="lbl">Union-Find (Disjoint Set Union)</span>
+        <p>Union-Find supports two operations: Find(x) = find the set containing x (returns representative), Union(x,y) = merge the sets containing x and y. With union-by-rank and path compression, each operation runs in O(α(n)) amortized time where α is the inverse Ackermann function — effectively constant (α(n) ≤ 4 for all practical n). GATE sometimes asks about the data structure used in Kruskal's.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Kruskal's on edges sorted by weight:</strong></p>
+        <div class="cb">Edges sorted: (A,B,1), (B,C,2), (A,C,3), (B,D,4), (C,D,5)
+Vertices: A, B, C, D
+
+Add (A,B,1): A and B in different sets → add. A={A,B}, B={A,B}
+Add (B,C,2): B and C in different sets → add. {A,B,C}
+Add (A,C,3): A and C in SAME set → skip (would create cycle)
+Add (B,D,4): B and D in different sets → add. {A,B,C,D}
+
+MST edges: (A,B,1), (B,C,2), (B,D,4)  Total weight: 7
+All V−1=3 edges selected → done.</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="prim">
+      <h2 class="sh">7.3 &nbsp; Prim's Algorithm <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cb"><span class="kw">Prim</span>(G, w, r):  <span class="cm">// r = starting vertex</span>
+    key[v] = ∞ for all v; key[r] = 0; π[v] = NIL
+    Q = min-priority queue with all vertices keyed by key[]
+    <span class="kw">while</span> Q not empty:
+        u = Extract-Min(Q)
+        <span class="kw">for</span> each v in Adj[u]:
+            <span class="kw">if</span> v ∈ Q and w(u,v) < key[v]:
+                π[v] = u
+                key[v] = w(u,v)     <span class="cm">// Decrease-Key</span>
+    return {(π[v], v) | v ≠ r}
+
+Time: O((V+E) log V) with binary heap  [same as Dijkstra]
+      O(V² + E) with array-based priority queue
+      O(V log V + E) with Fibonacci heap</div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Kruskal's</th><th>Prim's</th></tr></thead>
+          <tbody>
+            <tr><td>Strategy</td><td>Global greedy — adds cheapest safe edge globally</td><td>Local greedy — grows a single tree from a root</td></tr>
+            <tr><td>Data structure</td><td>Union-Find + sorted edges</td><td>Min-priority queue</td></tr>
+            <tr><td>Time complexity</td><td>O(E log V)</td><td>O((V+E) log V)</td></tr>
+            <tr><td>Better for</td><td>Sparse graphs (small E)</td><td>Dense graphs (E ≈ V²)</td></tr>
+            <tr><td>Produces valid MST?</td><td>Always (Cut Property)</td><td>Always (Cut Property)</td></tr>
+            <tr><td>Works on disconnected?</td><td>Yes — produces MSF (forest)</td><td>No — produces spanning tree of one component</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">MST vs Shortest Path Tree — Different Problems</span>
+        <p>The MST minimizes total weight of the spanning tree. The shortest-path tree (from Dijkstra) minimizes distance from source to each vertex. These are different problems with different solutions. The MST is NOT a shortest-path tree in general, and the shortest-path tree is NOT an MST. GATE exploits this confusion.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complete Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>BFS finds shortest path always</td><td>BFS finds shortest path in EDGE COUNT (unweighted graphs). For weighted graphs, use Dijkstra. BFS on a weighted graph can give wrong shortest-weight paths.</td></tr>
+            <tr><td>2</td><td>DFS finds shortest path</td><td>DFS does NOT find shortest paths. It finds a path (not necessarily shortest). DFS explores deep, not level-by-level. Only BFS guarantees shortest path by edge count.</td></tr>
+            <tr><td>3</td><td>Undirected DFS has forward/cross edges</td><td>In undirected DFS, only tree edges and back edges exist. No forward or cross edges. Every edge is classified as tree edge (first visit) or back edge (already-seen ancestor).</td></tr>
+            <tr><td>4</td><td>Topological sort works on any directed graph</td><td>Topological sort requires a DAG. If the graph has a cycle, no topological ordering exists. Kahn's algorithm detects this: if processed_count &lt; V, a cycle exists.</td></tr>
+            <tr><td>5</td><td>Multiple topological orderings</td><td>A DAG can have multiple valid topological orderings. The topological sort is not unique unless the graph is a Hamiltonian path (total order). GATE may ask for the number of valid orderings.</td></tr>
+            <tr><td>6</td><td>Dijkstra works with negative edges</td><td>Dijkstra's greedy assumption breaks with negative edges — once a vertex is extracted as minimum, its distance is assumed final. A negative edge discovered later could provide a shorter path. Use Bellman-Ford for negative weights.</td></tr>
+            <tr><td>7</td><td>Bellman-Ford needs exactly V−1 iterations</td><td>Bellman-Ford needs AT MOST V−1 iterations. It can terminate early if no relaxation occurs in an iteration (converged). But in the worst case, it always needs V−1 full iterations.</td></tr>
+            <tr><td>8</td><td>Floyd-Warshall diagonal stays 0</td><td>Diagonal D[i][i] = 0 initially. If a negative cycle exists through vertex i, D[i][i] becomes negative after Floyd-Warshall. This is the negative cycle detection mechanism.</td></tr>
+            <tr><td>9</td><td>MST = shortest-path tree</td><td>These are completely different. MST minimizes total spanning tree weight. Dijkstra's shortest-path tree minimizes distance from source. They use different algorithms and solve different problems.</td></tr>
+            <tr><td>10</td><td>Kruskal's requires connected graph</td><td>Kruskal's works on disconnected graphs too — it produces a Minimum Spanning Forest (MSF). Prim's requires a connected graph to produce a spanning tree; on disconnected graphs it only spans one component.</td></tr>
+            <tr><td>11</td><td>Prim's and Dijkstra are the same algorithm</td><td>They look similar (both use a min-priority queue, extract-min, and relax neighbours) but differ in the key update: Dijkstra uses d[u]+w(u,v), Prim uses w(u,v) alone. Dijkstra minimizes path distance; Prim minimizes edge weight for the growing tree.</td></tr>
+            <tr><td>12</td><td>Unique MST</td><td>If all edge weights are distinct, the MST is unique. If some edges have equal weights, multiple MSTs may exist. The number of MSTs can be exponential. GATE sometimes asks: "Is the MST unique?" — check if all weights are distinct.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="master-ref">
+      <h2 class="sh">8.2 &nbsp; Complete Algorithm Reference Table</h2>
+
+      <div class="tbl">
+        <table>
+          <thead>
+            <tr><th>Algorithm</th><th>Problem</th><th>Time</th><th>Negative Weights</th><th>Key Data Structure</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>BFS</td><td>SSSP (unweighted), traversal</td><td class="good">O(V+E)</td><td>N/A</td><td>Queue</td></tr>
+            <tr><td>DFS</td><td>Cycle detection, topological sort, SCC</td><td class="good">Θ(V+E)</td><td>N/A</td><td>Stack/Recursion</td></tr>
+            <tr><td>Kahn's</td><td>Topological sort, cycle detection</td><td class="good">O(V+E)</td><td>N/A</td><td>Queue + in-degree array</td></tr>
+            <tr><td>Kosaraju's</td><td>Strongly Connected Components</td><td class="good">Θ(V+E)</td><td>N/A</td><td>Stack + two DFS</td></tr>
+            <tr><td>Dijkstra (heap)</td><td>SSSP (non-negative weights)</td><td class="good">O((V+E) log V)</td><td class="bad">No</td><td>Min-heap</td></tr>
+            <tr><td>Bellman-Ford</td><td>SSSP (any weights, cycle detection)</td><td class="ok">O(VE)</td><td class="good">Yes</td><td>Edge list, array</td></tr>
+            <tr><td>DAG Relaxation</td><td>SSSP on DAG</td><td class="good">O(V+E)</td><td class="good">Yes</td><td>Topological order</td></tr>
+            <tr><td>Floyd-Warshall</td><td>APSP (any weights, cycle detection)</td><td class="ok">Θ(V³)</td><td class="good">Yes</td><td>2D matrix</td></tr>
+            <tr><td>Kruskal's</td><td>Minimum Spanning Tree</td><td class="good">O(E log V)</td><td>N/A</td><td>Union-Find + sorted edges</td></tr>
+            <tr><td>Prim's (heap)</td><td>Minimum Spanning Tree</td><td class="good">O((V+E) log V)</td><td>N/A</td><td>Min-heap</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>BFS level order:</strong> "What is the BFS order starting from vertex s?" Draw the BFS tree level by level. When multiple vertices are at the same level, process them in adjacency list order. 1−2 marks.</li>
+        <li><strong>DFS edge classification:</strong> "In DFS on this directed graph, classify edge (u,v) as tree/back/forward/cross." Check colour of v when edge is traversed. 1−2 marks.</li>
+        <li><strong>Cycle detection:</strong> "Does this graph contain a cycle?" DFS − back edge exists? Or Kahn's − processed count &lt; V? Direct 1-mark MCQ.</li>
+        <li><strong>Topological ordering validity:</strong> "Which of the following is a valid topological ordering?" For each option, verify all edges go from earlier to later in the ordering. 1 mark.</li>
+        <li><strong>Dijkstra trace:</strong> "What is the shortest distance from s to t?" Trace Dijkstra step by step showing the priority queue state at each extraction. Most common 2-mark question in this chapter.</li>
+        <li><strong>Bellman-Ford negative cycle:</strong> "Does this graph have a negative cycle?" Run V iterations of Bellman-Ford — if V-th iteration still relaxes an edge, negative cycle exists. 2 marks.</li>
+        <li><strong>Floyd-Warshall matrix:</strong> "What is D[i][j] after Floyd-Warshall?" Trace the DP table update. Negative diagonal = negative cycle. 2-mark NAT.</li>
+        <li><strong>MST weight:</strong> "What is the weight of the MST of this graph?" Apply Kruskal's or Prim's — sort edges, add greedily avoiding cycles. Very common 1−2 mark question.</li>
+        <li><strong>Number of MSTs:</strong> "How many distinct MSTs does this graph have?" Count the ways to choose among equal-weight edges at critical steps. Harder 2-mark question.</li>
+        <li><strong>Algorithm applicability:</strong> "Which algorithm should be used to find shortest paths in a graph with negative edges but no negative cycles?" Bellman-Ford. "In an unweighted graph?" BFS. "In a DAG with negative weights?" DAG relaxation. 1-mark classification question.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Algorithms · Graph Algorithms · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

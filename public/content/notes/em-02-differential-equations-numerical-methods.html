@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Mathematics — Differential Equations, Numerical Methods & Logic · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Engineering Mathematics</div>
+    <h1>Differential Equations,<br><em>Numerical Methods &amp; Logic</em></h1>
+    <p class="cover-desc">
+      First and second-order ODEs with complete solution methods, numerical techniques (Bisection, Newton-Raphson, Euler, Runge-Kutta, Gaussian elimination, Trapezoidal rule), graph theory essentials, and mathematical logic — every formula proved, every iteration traced, every GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · First-Order ODEs</span>
+      <span class="chip">Ch 2 · Second-Order ODEs</span>
+      <span class="chip">Ch 3 · Root Finding Methods</span>
+      <span class="chip">Ch 4 · Numerical Integration</span>
+      <span class="chip">Ch 5 · Numerical Solution of ODEs</span>
+      <span class="chip">Ch 6 · Numerical Linear Algebra</span>
+      <span class="chip">Ch 7 · Graph Theory (Maths Perspective)</span>
+      <span class="chip">Ch 8 · Mathematical Logic</span>
+      <span class="chip">Ch 9 · GATE Traps &amp; Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>First-Order ODEs</a>
+    <a href="#ch2"><span class="tn">02</span>Second-Order ODEs</a>
+    <a href="#ch3"><span class="tn">03</span>Root Finding — Bisection &amp; Newton-Raphson</a>
+    <a href="#ch4"><span class="tn">04</span>Numerical Integration</a>
+    <a href="#ch5"><span class="tn">05</span>Numerical ODEs — Euler &amp; Runge-Kutta</a>
+    <a href="#ch6"><span class="tn">06</span>Numerical Linear Algebra</a>
+    <a href="#ch7"><span class="tn">07</span>Graph Theory — Mathematical Perspective</a>
+    <a href="#ch8"><span class="tn">08</span>Mathematical Logic &amp; Boolean Algebra</a>
+    <a href="#ch9"><span class="tn">09</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — FIRST-ORDER ODES ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">First-Order ODEs — <em>Separation, Linearity &amp; Exactness</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ode-basics">
+      <h2 class="sh">1.1 &nbsp; ODE Classification &amp; Order <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">ODE Classification</span>
+        <p>An ODE (Ordinary Differential Equation) involves a function of ONE variable and its derivatives.<br>
+        <strong>Order:</strong> Order of the highest derivative. y'' + 2y' + y = 0 is 2nd order.<br>
+        <strong>Degree:</strong> Power of the highest-order derivative (after clearing fractions/radicals). (y'')² + y' = x is 2nd order, degree 2.<br>
+        <strong>Linear:</strong> The dependent variable y and all its derivatives appear with exponent 1 only, with no products between them. y'' + xy' + y = sin x is linear. y·y' = x is nonlinear.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="first-order-methods">
+      <h2 class="sh">1.2 &nbsp; Methods for First-Order ODEs <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">1. Separable Equations</h3>
+      <div class="def-box">
+        <span class="lbl">Form and Method</span>
+        <p>dy/dx = f(x)·g(y). Separate variables: dy/g(y) = f(x)dx. Integrate both sides.<br>
+        Works when the RHS factors into a product of a function of x alone and a function of y alone.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Solve dy/dx = xy, y(0) = 2:</strong></p>
+        <div class="cb">Separate: dy/y = x dx
+Integrate: ln|y| = x²/2 + C₁
+Solve: y = Ae^(x²/2)  where A = e^C₁
+Apply IC: 2 = Ae⁰ = A → A = 2
+Solution: y = 2e^(x²/2)</div>
+      </div>
+
+      <h3 class="ssh">2. Linear First-Order ODE</h3>
+      <div class="def-box">
+        <span class="lbl">Form: dy/dx + P(x)y = Q(x)</span>
+        <p>Multiply both sides by the <strong>integrating factor</strong> μ(x) = e^(∫P(x)dx).<br>
+        The LHS becomes d/dx[μ(x)·y]. Integrate both sides:<br>
+        y = (1/μ(x)) ∫ μ(x)·Q(x)dx + C/μ(x)</p>
+      </div>
+      <div class="eg">
+        <p><strong>Solve dy/dx + 2y = 4x:</strong></p>
+        <div class="cb">P(x) = 2, Q(x) = 4x
+μ(x) = e^(∫2dx) = e^(2x)
+
+Multiply: e^(2x)(dy/dx + 2y) = 4x·e^(2x)
+LHS = d/dx[y·e^(2x)]
+Integrate: y·e^(2x) = ∫4x·e^(2x)dx
+
+∫4x·e^(2x)dx (by parts, u=4x, dv=e^(2x)dx):
+  = 4x·(e^(2x)/2) − ∫4·(e^(2x)/2)dx
+  = 2xe^(2x) − e^(2x) + C
+
+So: y·e^(2x) = 2xe^(2x) − e^(2x) + C
+    y = 2x − 1 + Ce^(−2x)</div>
+      </div>
+
+      <h3 class="ssh">3. Bernoulli Equation</h3>
+      <div class="def-box">
+        <span class="lbl">Form: dy/dx + P(x)y = Q(x)·yⁿ</span>
+        <p>Substitute v = y^(1−n). Then dv/dx = (1−n)y^(−n) dy/dx. The equation transforms to a linear ODE in v: dv/dx + (1−n)P(x)v = (1−n)Q(x).</p>
+      </div>
+
+      <h3 class="ssh">4. Exact Equations</h3>
+      <div class="def-box">
+        <span class="lbl">Form: M(x,y)dx + N(x,y)dy = 0</span>
+        <p>Exact iff ∂M/∂y = ∂N/∂x. If exact, there exists F(x,y) such that ∂F/∂x = M and ∂F/∂y = N. Solution: F(x,y) = C.<br>
+        Find F: integrate M w.r.t. x (treating y as constant), then use ∂F/∂y = N to find the y-dependent terms.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Check if (2xy+y²)dx + (x²+2xy)dy = 0 is exact and solve:</strong></p>
+        <div class="cb">M = 2xy+y², N = x²+2xy
+∂M/∂y = 2x + 2y,  ∂N/∂x = 2x + 2y  → EXACT ✓
+
+Find F: ∂F/∂x = M = 2xy+y²
+Integrate w.r.t. x: F = x²y + xy² + g(y)
+∂F/∂y = x² + 2xy + g'(y) = N = x² + 2xy
+→ g'(y) = 0 → g(y) = constant
+
+Solution: x²y + xy² = C</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Integrating Factor for Non-Exact Equations</span>
+        <p>If ∂M/∂y ≠ ∂N/∂x, multiply by an integrating factor μ to make it exact.<br>
+        If (∂M/∂y − ∂N/∂x)/N = f(x) depends only on x: μ = e^(∫f(x)dx).<br>
+        If (∂N/∂x − ∂M/∂y)/M = g(y) depends only on y: μ = e^(∫g(y)dy).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — SECOND-ORDER ODES ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Second-Order ODEs — <em>Homogeneous &amp; Non-Homogeneous</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="second-order">
+      <h2 class="sh">2.1 &nbsp; Linear Second-Order ODEs with Constant Coefficients <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Standard Form</span>
+        <p>ay'' + by' + cy = f(x)<br>
+        <strong>Homogeneous:</strong> f(x) = 0. General solution = complementary function yc.<br>
+        <strong>Non-homogeneous:</strong> f(x) ≠ 0. General solution y = yc + yp (complementary + particular).</p>
+      </div>
+
+      <h3 class="ssh">Step 1 — Complementary Function (Characteristic Equation)</h3>
+      <div class="def-box">
+        <span class="lbl">Characteristic Equation: aλ² + bλ + c = 0</span>
+        <p>
+          <strong>Case 1: Two distinct real roots λ₁ ≠ λ₂:</strong><br>
+          yc = C₁e^(λ₁x) + C₂e^(λ₂x)<br><br>
+          <strong>Case 2: Repeated real root λ₁ = λ₂ = λ:</strong><br>
+          yc = (C₁ + C₂x)e^(λx)<br><br>
+          <strong>Case 3: Complex roots λ = α ± βi:</strong><br>
+          yc = e^(αx)(C₁cos(βx) + C₂sin(βx))
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve y'' − 5y' + 6y = 0:</strong></p>
+        <div class="cb">Characteristic: λ² − 5λ + 6 = 0 → (λ−2)(λ−3) = 0
+Roots: λ₁=2, λ₂=3 (distinct real)
+yc = C₁e^(2x) + C₂e^(3x)</div>
+        <p><strong>Solve y'' + 4y' + 4y = 0:</strong></p>
+        <div class="cb">Characteristic: λ² + 4λ + 4 = 0 → (λ+2)² = 0
+Repeated root: λ = −2
+yc = (C₁ + C₂x)e^(−2x)</div>
+        <p><strong>Solve y'' + 2y' + 5y = 0:</strong></p>
+        <div class="cb">Characteristic: λ² + 2λ + 5 = 0
+λ = (−2 ± √(4−20))/2 = (−2 ± √(−16))/2 = −1 ± 2i
+Complex: α=−1, β=2
+yc = e^(−x)(C₁cos(2x) + C₂sin(2x))</div>
+      </div>
+
+      <h3 class="ssh">Step 2 — Particular Solution (Method of Undetermined Coefficients)</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>f(x) form</th><th>Trial particular solution yp</th><th>Exception</th></tr></thead>
+          <tbody>
+            <tr><td>Polynomial: aₙxⁿ+...+a₀</td><td>Aₙxⁿ+...+A₀ (same degree)</td><td>If 0 is a root of char eq: multiply by x</td></tr>
+            <tr><td>eᵃˣ</td><td>Aeᵃˣ</td><td>If a is a root: multiply by x (or x² if double root)</td></tr>
+            <tr><td>sin(bx) or cos(bx)</td><td>A sin(bx) + B cos(bx) (always both)</td><td>If ±bi is a root: multiply by x</td></tr>
+            <tr><td>eᵃˣ·sin(bx)</td><td>eᵃˣ(A sin(bx) + B cos(bx))</td><td>If a±bi is a root: multiply by x</td></tr>
+            <tr><td>xⁿ·eᵃˣ</td><td>(Aₙxⁿ+...+A₀)eᵃˣ</td><td>If a is root: multiply whole trial by x</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve y'' − 3y' + 2y = 4eˣ:</strong></p>
+        <div class="cb">Char eq: λ²−3λ+2=0 → (λ−1)(λ−2)=0 → λ=1,2
+yc = C₁eˣ + C₂e^(2x)
+
+f(x)=4eˣ: trial yp=Aeˣ, but 1 is a ROOT → exception!
+Modify: yp = Axeˣ
+
+yp' = Aeˣ + Axeˣ = A(1+x)eˣ
+yp'' = Aeˣ + A(1+x)eˣ = A(2+x)eˣ
+
+Substitute:
+A(2+x)eˣ − 3A(1+x)eˣ + 2Axeˣ = 4eˣ
+[A(2+x) − 3A(1+x) + 2Ax]eˣ = 4eˣ
+[2A + Ax − 3A − 3Ax + 2Ax]eˣ = 4eˣ
+[−A]eˣ = 4eˣ → A = −4
+
+yp = −4xeˣ
+General: y = C₁eˣ + C₂e^(2x) − 4xeˣ</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — ROOT FINDING ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Root Finding — <em>Bisection &amp; Newton-Raphson</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="root-finding">
+      <h2 class="sh">3.1 &nbsp; Bisection Method <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Bisection Method</span>
+        <p>Find a root of f(x) = 0 in [a,b] where f(a)·f(b) &lt; 0 (opposite signs guarantee a root by IVT).<br>
+        At each step: c = (a+b)/2.<br>
+        If f(c) = 0: c is the root.<br>
+        If f(a)·f(c) &lt; 0: root is in [a,c], set b=c.<br>
+        Else: root is in [c,b], set a=c.<br>
+        <strong>Error after n steps:</strong> |error| ≤ (b−a)/2ⁿ<br>
+        <strong>Steps for ε accuracy:</strong> n ≥ log₂((b−a)/ε)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find root of f(x) = x³ − x − 2 in [1,2] with 3 iterations:</strong></p>
+        <div class="cb">f(1) = 1−1−2 = −2 < 0
+f(2) = 8−2−2 = 4 > 0  → root in [1,2] ✓
+
+Iter 1: c = (1+2)/2 = 1.5. f(1.5) = 3.375−1.5−2 = −0.125 < 0
+  Root in [1.5, 2]
+
+Iter 2: c = (1.5+2)/2 = 1.75. f(1.75) = 5.359−1.75−2 = 1.609 > 0
+  Root in [1.5, 1.75]
+
+Iter 3: c = (1.5+1.75)/2 = 1.625. f(1.625) = 4.291−1.625−2 = 0.666 > 0
+  Root in [1.5, 1.625]
+
+After 3 iterations: root ≈ 1.5625 (midpoint).
+Error ≤ (2−1)/2³ = 0.125</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Bisection: Linear Convergence — 1 Bit Per Iteration</span>
+        <p>Bisection halves the interval each iteration — the number of correct binary digits increases by exactly 1 per iteration. This is called linear convergence. It is guaranteed to converge but slow. Newton-Raphson has quadratic convergence (roughly doubles the correct digits each iteration) but can diverge. Bisection is the safe fallback.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="newton-raphson">
+      <h2 class="sh">3.2 &nbsp; Newton-Raphson Method <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Newton-Raphson Formula</span>
+        <p>Given initial guess x₀, iterate:<br>
+        <strong>xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ)</strong><br>
+        Geometric interpretation: draw the tangent line at (xₙ, f(xₙ)), find where it crosses the x-axis — that's xₙ₊₁.<br>
+        Convergence: quadratic — errors roughly square each iteration. Fails if f'(xₙ) = 0 (horizontal tangent at iterate).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find √2 using Newton-Raphson with x₀ = 1:</strong></p>
+        <div class="cb">Find root of f(x) = x² − 2. f'(x) = 2x.
+Formula: xₙ₊₁ = xₙ − (xₙ² − 2)/(2xₙ) = (xₙ + 2/xₙ)/2
+
+x₀ = 1
+x₁ = (1 + 2/1)/2 = 1.5
+x₂ = (1.5 + 2/1.5)/2 = (1.5 + 1.333)/2 = 1.4167
+x₃ = (1.4167 + 2/1.4167)/2 = (1.4167 + 1.4118)/2 = 1.41421...
+
+Converges to √2 = 1.41421... in 3 steps from x₀=1. ✓
+(Compare: bisection on [1,2] needs 10+ iterations for same accuracy)</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Method</th><th>Formula</th><th>Convergence</th><th>Requirements</th><th>Guaranteed?</th></tr></thead>
+          <tbody>
+            <tr><td>Bisection</td><td>c = (a+b)/2</td><td class="ok">Linear (order 1)</td><td>f(a)·f(b)&lt;0, continuous f</td><td class="good">Yes</td></tr>
+            <tr><td>Newton-Raphson</td><td>x_{n+1} = xₙ − f(xₙ)/f'(xₙ)</td><td class="good">Quadratic (order 2)</td><td>Differentiable f, good x₀</td><td class="bad">No (can diverge)</td></tr>
+            <tr><td>Secant</td><td>x_{n+1} = xₙ − f(xₙ)(xₙ−x_{n-1})/(f(xₙ)−f(x_{n-1}))</td><td class="good">Superlinear (order 1.618)</td><td>Two initial points, no f'</td><td class="bad">No</td></tr>
+            <tr><td>Regula Falsi</td><td>False position — hybrid of bisection and secant</td><td class="ok">Linear</td><td>f(a)·f(b)&lt;0</td><td class="good">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — NUMERICAL INTEGRATION ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Numerical Integration — <em>Trapezoidal &amp; Simpson's Rules</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="numerical-integration">
+      <h2 class="sh">4.1 &nbsp; Trapezoidal &amp; Simpson's Rules <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Approximate ∫_a^b f(x)dx when f has no closed-form antiderivative. Divide [a,b] into n equal subintervals of width h = (b−a)/n.</p>
+
+      <div class="def-box">
+        <span class="lbl">Trapezoidal Rule</span>
+        <p>Approximate f(x) by piecewise linear functions (trapezoids):<br>
+        ∫_a^b f(x)dx ≈ (h/2)[f(x₀) + 2f(x₁) + 2f(x₂) + ... + 2f(xₙ₋₁) + f(xₙ)]<br>
+        <strong>Error:</strong> O(h²) — error proportional to h². Halving h reduces error by factor 4.<br>
+        <strong>Exact for:</strong> Linear functions (degree ≤ 1).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Simpson's 1/3 Rule (n must be even)</span>
+        <p>Approximate f(x) by piecewise quadratic functions (parabolas) over pairs of subintervals:<br>
+        ∫_a^b f(x)dx ≈ (h/3)[f(x₀) + 4f(x₁) + 2f(x₂) + 4f(x₃) + 2f(x₄) + ... + 4f(xₙ₋₁) + f(xₙ)]<br>
+        <strong>Pattern:</strong> 1, 4, 2, 4, 2, ..., 4, 1 (start/end are 1, alternating 4,2 in between)<br>
+        <strong>Error:</strong> O(h⁴) — much more accurate than trapezoidal.<br>
+        <strong>Exact for:</strong> Polynomials of degree ≤ 3 (cubic and below).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Estimate ∫_0^1 eˣ dx with n=4 using both rules:</strong></p>
+        <div class="cb">Exact value: [eˣ]_0^1 = e − 1 ≈ 1.71828
+
+h = (1−0)/4 = 0.25
+x₀=0,  x₁=0.25, x₂=0.5,  x₃=0.75, x₄=1
+
+f(x) = eˣ:
+f(x₀)=1.0000, f(x₁)=1.2840, f(x₂)=1.6487, f(x₃)=2.1170, f(x₄)=2.7183
+
+Trapezoidal:
+(0.25/2)[1.0000 + 2(1.2840+1.6487+2.1170) + 2.7183]
+= 0.125[1.0000 + 2(5.0497) + 2.7183]
+= 0.125[1.0000 + 10.0994 + 2.7183]
+= 0.125 × 13.8177 = 1.7272
+
+Error = |1.7272 − 1.7183| = 0.0089
+
+Simpson's 1/3:
+(0.25/3)[1.0000 + 4(1.2840) + 2(1.6487) + 4(2.1170) + 2.7183]
+= (0.0833)[1.0000 + 5.1360 + 3.2974 + 8.4680 + 2.7183]
+= 0.0833 × 20.6197 = 1.7183
+
+Error ≈ 0 (Simpson's is essentially exact here!)</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Simpson's 3/8 Rule (n must be multiple of 3)</span>
+        <p>∫_a^b f(x)dx ≈ (3h/8)[f(x₀) + 3f(x₁) + 3f(x₂) + 2f(x₃) + 3f(x₄) + ... + f(xₙ)]<br>
+        Pattern: 1, 3, 3, 2, 3, 3, 2, ..., 3, 3, 1. Exact for polynomials ≤ degree 3.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — NUMERICAL ODES ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Numerical ODEs — <em>Euler &amp; Runge-Kutta</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="euler-rk">
+      <h2 class="sh">5.1 &nbsp; Euler's Method &amp; Runge-Kutta <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Solve dy/dx = f(x,y), y(x₀) = y₀ numerically. Use step size h.</p>
+
+      <div class="def-box">
+        <span class="lbl">Euler's Method (First-Order)</span>
+        <p>yₙ₊₁ = yₙ + h·f(xₙ, yₙ)<br>
+        Use the slope at the current point to step forward. Simple but low accuracy.<br>
+        <strong>Error per step:</strong> O(h²). <strong>Global error:</strong> O(h) — first-order method.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve dy/dx = x + y, y(0)=1, step h=0.1, find y(0.2):</strong></p>
+        <div class="cb">f(x,y) = x + y
+
+Step 1: x₀=0, y₀=1
+  y₁ = y₀ + h·f(x₀,y₀) = 1 + 0.1·(0+1) = 1 + 0.1 = 1.1
+
+Step 2: x₁=0.1, y₁=1.1
+  y₂ = y₁ + h·f(x₁,y₁) = 1.1 + 0.1·(0.1+1.1) = 1.1 + 0.12 = 1.22
+
+y(0.2) ≈ 1.22
+
+Exact: y = 2eˣ − x − 1. y(0.2) = 2e^0.2 − 0.2 − 1 = 2(1.2214)−1.2 = 1.2428
+Error = |1.2428 − 1.22| = 0.0228  (significant error for h=0.1)</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Runge-Kutta Method (RK4 — Fourth Order)</span>
+        <p>The most widely used numerical ODE method. Uses four slope estimates (k₁,k₂,k₃,k₄) to compute a weighted average slope:<br>
+        k₁ = h·f(xₙ, yₙ)<br>
+        k₂ = h·f(xₙ + h/2, yₙ + k₁/2)<br>
+        k₃ = h·f(xₙ + h/2, yₙ + k₂/2)<br>
+        k₄ = h·f(xₙ + h, yₙ + k₃)<br>
+        <strong>yₙ₊₁ = yₙ + (k₁ + 2k₂ + 2k₃ + k₄)/6</strong><br>
+        Global error: O(h⁴) — far superior to Euler's O(h).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>One step of RK4: dy/dx = x+y, y(0)=1, h=0.2, find y(0.2):</strong></p>
+        <div class="cb">f(x,y) = x+y, x₀=0, y₀=1, h=0.2
+
+k₁ = h·f(0, 1) = 0.2·(0+1) = 0.2
+k₂ = h·f(0.1, 1+0.1) = 0.2·(0.1+1.1) = 0.2·1.2 = 0.24
+k₃ = h·f(0.1, 1+0.12) = 0.2·(0.1+1.12) = 0.2·1.22 = 0.244
+k₄ = h·f(0.2, 1+0.244) = 0.2·(0.2+1.244) = 0.2·1.444 = 0.2888
+
+y₁ = 1 + (0.2 + 2(0.24) + 2(0.244) + 0.2888)/6
+   = 1 + (0.2 + 0.48 + 0.488 + 0.2888)/6
+   = 1 + 1.4568/6
+   = 1 + 0.2428 = 1.2428
+
+Exact: y(0.2) = 1.2428 ✓  (RK4 matches to 4 decimal places in ONE step)</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Method</th><th>Formula</th><th>Global Error</th><th>f evaluations/step</th></tr></thead>
+          <tbody>
+            <tr><td>Euler</td><td>y_{n+1} = yₙ + hf(xₙ,yₙ)</td><td class="bad">O(h)</td><td>1</td></tr>
+            <tr><td>Modified Euler (Heun's)</td><td>Predictor-corrector, average of two slopes</td><td class="ok">O(h²)</td><td>2</td></tr>
+            <tr><td>RK2 (Midpoint method)</td><td>Uses midpoint slope estimate</td><td class="ok">O(h²)</td><td>2</td></tr>
+            <tr><td>RK4 (Classical)</td><td>Weighted average of 4 slopes</td><td class="good">O(h⁴)</td><td>4</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — NUMERICAL LINEAR ALGEBRA ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Numerical Linear Algebra — <em>Gaussian Elimination &amp; Iterative Methods</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="gaussian">
+      <h2 class="sh">6.1 &nbsp; Gaussian Elimination &amp; LU Decomposition <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Gaussian Elimination</span>
+        <p>Transform the augmented matrix [A|b] to row-echelon form using elementary row operations, then back-substitute to find the solution. Three elementary row operations: (1) Swap two rows. (2) Multiply a row by a nonzero scalar. (3) Add a multiple of one row to another.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve: 2x+y−z=8, −3x−y+2z=−11, −2x+y+2z=−3:</strong></p>
+        <div class="cb">Augmented matrix:
+[ 2   1  −1 |  8]
+[−3  −1   2 |−11]
+[−2   1   2 | −3]
+
+R2 ← R2 + (3/2)R1:
+[ 2   1  −1 |  8]
+[ 0  1/2  1/2| 1]
+[−2   1   2 | −3]
+
+R3 ← R3 + R1:
+[ 2   1  −1 |  8]
+[ 0  1/2  1/2| 1]
+[ 0   2   1 |  5]
+
+R3 ← R3 − 4·R2:
+[ 2   1  −1 |  8]
+[ 0  1/2  1/2| 1]
+[ 0   0  −1 |  1]
+
+Back-substitute: z=−1, y/2+z/2=1→y=3, 2x+3+1=8→x=2
+Solution: x=2, y=3, z=−1 ✓</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">LU Decomposition</span>
+        <p>Factor A = LU where L is lower triangular (1s on diagonal) and U is upper triangular. Useful when solving Ax=b for multiple right-hand sides b — compute LU once, then solve Ly=b (forward substitution) and Ux=y (back substitution) for each b. Time: O(n³) for factorization, O(n²) per solve.</p>
+      </div>
+
+      <h3 class="ssh">Iterative Methods — Gauss-Jacobi &amp; Gauss-Seidel</h3>
+      <div class="def-box">
+        <span class="lbl">Gauss-Jacobi Method</span>
+        <p>For Ax=b with A diagonally dominant: update ALL variables using values from the PREVIOUS iteration simultaneously.<br>
+        xᵢ^(k+1) = (1/aᵢᵢ) · [bᵢ − Σⱼ≠ᵢ aᵢⱼ·xⱼ^(k)]</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Gauss-Seidel Method</span>
+        <p>Same as Jacobi but use the MOST RECENTLY COMPUTED values immediately (within the same iteration). Faster convergence than Jacobi (roughly 2× fewer iterations). Convergence guaranteed if A is strictly diagonally dominant.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Diagonal Dominance — Convergence Condition</span>
+        <p>A matrix A is <strong>strictly diagonally dominant</strong> if |aᵢᵢ| > Σⱼ≠ᵢ |aᵢⱼ| for every row i. Both Jacobi and Gauss-Seidel are guaranteed to converge for strictly diagonally dominant matrices. Gauss-Seidel typically converges faster and is preferred. If the matrix is not diagonally dominant, reorder the equations to make it so if possible.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — GRAPH THEORY ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Graph Theory — <em>Mathematical Perspective</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="graph-math">
+      <h2 class="sh">7.1 &nbsp; Key Results for GATE EM <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        Graph theory appears in both the Engineering Mathematics and Discrete Mathematics sections of GATE. The full treatment (bipartite characterization, planarity, Euler/Hamiltonian, coloring, spanning trees, Cayley's formula) is covered in the Discrete Mathematics File 2. Here we cover the EM-specific perspective: counting and algebraic properties used in mathematical contexts.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Result</th><th>Formula</th></tr></thead>
+          <tbody>
+            <tr><td>Handshaking Lemma</td><td>Σ deg(v) = 2|E|. Sum of degrees = twice the number of edges.</td></tr>
+            <tr><td>Complete graph Kₙ</td><td>|E| = n(n−1)/2. Each vertex has degree n−1.</td></tr>
+            <tr><td>Tree with n vertices</td><td>Exactly n−1 edges. Connected and acyclic.</td></tr>
+            <tr><td>Cayley's formula</td><td>nⁿ⁻² labeled spanning trees of Kₙ.</td></tr>
+            <tr><td>Euler's formula (planar)</td><td>V − E + F = 2 for connected planar graph.</td></tr>
+            <tr><td>Planar graph edge bound</td><td>E ≤ 3V − 6 (general); E ≤ 2V − 4 (no triangles).</td></tr>
+            <tr><td>Chromatic polynomial</td><td>P(G, k) = number of proper k-colorings of G.</td></tr>
+            <tr><td>Matrix-Tree Theorem</td><td>Number of spanning trees = any cofactor of Laplacian L = D − A.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Adjacency Matrix Properties</span>
+        <p>For graph G with adjacency matrix A:<br>
+        (Aᵏ)ᵢⱼ = number of walks of length k from vertex i to vertex j.<br>
+        trace(A) = 0 for simple graphs (no self-loops).<br>
+        trace(A²) = 2|E| (each edge counted twice as walks of length 2).<br>
+        trace(A³)/6 = number of triangles in G.<br>
+        Eigenvalues of A are real (A is symmetric for undirected graphs).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — MATHEMATICAL LOGIC ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Mathematical Logic — <em>Propositional &amp; Predicate</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="logic-review">
+      <h2 class="sh">8.1 &nbsp; Logic Quick Reference for EM <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        The full treatment of propositional logic, predicate logic, quantifiers, normal forms, functionally complete sets, and proof techniques is in Discrete Mathematics File 1. This section provides the EM-specific focus: formal systems, completeness, soundness, and decidability as they appear in Engineering Mathematics context.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Soundness and Completeness</span>
+        <p>A proof system is <strong>sound</strong> if every provable statement is true (no false theorems). A proof system is <strong>complete</strong> if every true statement is provable (Gödel completeness for first-order logic — if a formula is true in all models, it is provable).<br>
+        <strong>Gödel's Incompleteness Theorem (1931):</strong> Any consistent formal system strong enough to express arithmetic contains true statements that cannot be proved within the system. Completeness and consistency cannot both hold simultaneously for sufficiently expressive systems.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td>Tautology</td><td>True for ALL truth value assignments</td></tr>
+            <tr><td>Contradiction / Unsatisfiable</td><td>False for ALL truth value assignments</td></tr>
+            <tr><td>Satisfiable</td><td>True for at LEAST ONE assignment</td></tr>
+            <tr><td>Valid argument</td><td>If premises are true, conclusion MUST be true</td></tr>
+            <tr><td>Logical consequence</td><td>φ ⊨ ψ: every model of φ is also a model of ψ</td></tr>
+            <tr><td>Logical equivalence</td><td>φ ≡ ψ: same truth value in every interpretation</td></tr>
+            <tr><td>Modus Ponens</td><td>p, p→q ⊢ q (valid inference rule)</td></tr>
+            <tr><td>Modus Tollens</td><td>¬q, p→q ⊢ ¬p (valid)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Key Normal Forms</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Form</th><th>Structure</th><th>How to get there</th></tr></thead>
+          <tbody>
+            <tr><td>CNF (Conjunctive Normal Form)</td><td>AND of clauses, each clause = OR of literals</td><td>Eliminate →, push ¬ inward (De Morgan), distribute ∨ over ∧</td></tr>
+            <tr><td>DNF (Disjunctive Normal Form)</td><td>OR of clauses, each clause = AND of literals</td><td>Eliminate →, push ¬ inward, distribute ∧ over ∨</td></tr>
+            <tr><td>PNF (Prenex Normal Form)</td><td>All quantifiers at the front, followed by quantifier-free formula</td><td>Move quantifiers outward using equivalences</td></tr>
+            <tr><td>Skolem Normal Form</td><td>Universal quantifiers only, existential eliminated by Skolem functions</td><td>Convert to PNF, then replace existential variables with Skolem functions</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Resolution — Automated Theorem Proving</span>
+        <p>Resolution is a complete inference method for propositional and first-order logic. From clauses (A ∨ B) and (¬A ∨ C), resolve to get (B ∨ C). To prove φ: negate φ, add it to the clause set, and apply resolution. If you derive the empty clause (contradiction), φ is proved. Resolution is the basis of logic programming (Prolog) and SAT solvers.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 9 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">9.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Order of ODE = highest power of derivative</td><td>Order = highest ORDER (which derivative) present. Degree = power of that highest derivative (after clearing radicals). y'' + (y')³ = 0 is ORDER 2, DEGREE 1. (y'')² + y' = 0 is ORDER 2, DEGREE 2.</td></tr>
+            <tr><td>2</td><td>If char polynomial root matches f(x), use the same trial solution</td><td>If f(x) = Aeᵃˣ and a is a root of the characteristic equation (multiplicity m), the trial particular solution must be xᵐ·Aeᵃˣ — multiply by xᵐ to avoid collision with the complementary function. Forgetting this gives yp=0 after substitution.</td></tr>
+            <tr><td>3</td><td>Bisection needs only f(a)·f(b) < 0</td><td>Bisection also needs f to be CONTINUOUS on [a,b]. Without continuity, sign change doesn't guarantee a root (e.g., f(x)=1/x on [−1,1] has a sign change but no root — it has a discontinuity).</td></tr>
+            <tr><td>4</td><td>Newton-Raphson always converges</td><td>Newton-Raphson can DIVERGE if: initial guess is far from root, f'(xₙ)≈0 (nearly horizontal tangent), the function has inflection points near the root, or the root is a repeated root (convergence slows to linear). Always verify convergence conditions.</td></tr>
+            <tr><td>5</td><td>Simpson's rule works for any n</td><td>Simpson's 1/3 rule requires n to be EVEN. Simpson's 3/8 rule requires n to be a multiple of 3. If n doesn't satisfy the requirement, you cannot directly apply that rule (use Trapezoidal or a different composite formula).</td></tr>
+            <tr><td>6</td><td>Trapezoidal rule is more accurate than Simpson's</td><td>Simpson's 1/3 rule is MORE accurate: error O(h⁴) vs Trapezoidal's O(h²). Halving h reduces Trapezoidal error by 4× but Simpson's error by 16×. Simpson's is exact for cubics (degree ≤ 3); Trapezoidal is only exact for linears (degree ≤ 1).</td></tr>
+            <tr><td>7</td><td>Euler's method error is O(h)</td><td>Euler's LOCAL (per-step) truncation error is O(h²). The GLOBAL error (accumulated over all steps to reach a fixed point) is O(h) — one order lower due to accumulation. When comparing methods, use global error order. RK4 has local error O(h⁵) and global error O(h⁴).</td></tr>
+            <tr><td>8</td><td>Gauss-Seidel and Jacobi converge under the same conditions</td><td>Both converge for strictly diagonally dominant matrices. However, Gauss-Seidel converges roughly TWICE as fast as Jacobi (fewer iterations for same accuracy). For some matrices, one may converge while the other diverges — they are not equivalent. Gauss-Seidel is preferred in practice.</td></tr>
+            <tr><td>9</td><td>Exact equations have ∂M/∂x = ∂N/∂y</td><td>The exactness condition is ∂M/∂y = ∂N/∂x (both with respect to the OTHER variable). M is the coefficient of dx, N is the coefficient of dy. ∂M/∂y = ∂N/∂x, NOT ∂M/∂x = ∂N/∂y. Mixing up which to differentiate with respect to is the most common exact equation error.</td></tr>
+            <tr><td>10</td><td>Separable means RHS = f(x)/g(y)</td><td>Separable means dy/dx = f(x)·g(y) — a PRODUCT (not quotient) of a function of x alone and a function of y alone. dy/dx = (x+y) is NOT separable (can't factor into f(x)·g(y)). dy/dx = x·y IS separable.</td></tr>
+            <tr><td>11</td><td>Simpson's coefficient pattern: 1,2,4,2,4,...,1</td><td>Simpson's 1/3 coefficient pattern is 1,4,2,4,2,...,4,1 (alternating 4 and 2 between endpoints). Many students write it as 1,2,4,2,4,...,1 (wrong order). Remember: endpoints are 1, then ALWAYS start with 4, alternate 2,4,2,4 until the last which is also 4, then endpoint 1.</td></tr>
+            <tr><td>12</td><td>Gödel's Completeness ≡ Incompleteness theorem</td><td>Gödel proved TWO different theorems. COMPLETENESS (1929): First-order logic is semantically complete — every valid formula is provable. INCOMPLETENESS (1931): Sufficiently powerful consistent formal systems contain true but unprovable statements. These address different systems and different questions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">9.2 &nbsp; Complete Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula / Fact</th><th>Topic</th></tr></thead>
+          <tbody>
+            <tr><td>Separable ODE: dy/g(y) = f(x)dx → integrate both sides</td><td>ODEs</td></tr>
+            <tr><td>Linear ODE: μ = e^(∫P dx), y = (1/μ)∫μQ dx + C/μ</td><td>ODEs</td></tr>
+            <tr><td>Exact ODE: exact iff ∂M/∂y = ∂N/∂x</td><td>ODEs</td></tr>
+            <tr><td>Char eq: aλ²+bλ+c=0 → two real, repeated, or complex roots</td><td>2nd order ODEs</td></tr>
+            <tr><td>Bisection steps: n ≥ log₂((b−a)/ε)</td><td>Root finding</td></tr>
+            <tr><td>Newton-Raphson: x_{n+1} = xₙ − f(xₙ)/f'(xₙ)</td><td>Root finding</td></tr>
+            <tr><td>Trapezoidal: (h/2)[f₀ + 2f₁ + ... + 2f_{n-1} + fₙ]</td><td>Numerical integration</td></tr>
+            <tr><td>Simpson's 1/3: (h/3)[f₀ + 4f₁ + 2f₂ + 4f₃ + ... + fₙ], n even</td><td>Numerical integration</td></tr>
+            <tr><td>Euler: y_{n+1} = yₙ + h·f(xₙ,yₙ), global error O(h)</td><td>Numerical ODEs</td></tr>
+            <tr><td>RK4: yₙ₊₁ = yₙ+(k₁+2k₂+2k₃+k₄)/6, global error O(h⁴)</td><td>Numerical ODEs</td></tr>
+            <tr><td>Trapezoidal error: O(h²); Simpson's error: O(h⁴)</td><td>Numerical integration</td></tr>
+            <tr><td>Diagonal dominance: |aᵢᵢ| > Σⱼ≠ᵢ|aᵢⱼ| ∀i → iterative methods converge</td><td>Numerical linear algebra</td></tr>
+            <tr><td>(Aᵏ)ᵢⱼ = walks of length k from i to j</td><td>Graph theory</td></tr>
+            <tr><td>trace(A³)/6 = number of triangles in G</td><td>Graph theory</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">9.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>ODE classification MCQ:</strong> "What is the order and degree of (y'')² + 3y' = x?" Order=2, Degree=2. "Is dy/dx = x²+y² linear?" No (y² makes it nonlinear). 1-mark each.</li>
+        <li><strong>Separable ODE NAT:</strong> "Solve dy/dx = x/y, y(0)=2. Find y(1)." Separate: y dy = x dx → y²/2 = x²/2 + C → y² = x²+C. IC: 4=0+C → C=4. y(1) = √5. 2 marks.</li>
+        <li><strong>Char equation MCQ:</strong> "General solution of y''−4y=0?" Char: λ²−4=0 → λ=±2. y = C₁e^(2x)+C₂e^(−2x). 1 mark.</li>
+        <li><strong>Bisection iterations NAT:</strong> "How many bisection iterations to achieve accuracy 10⁻³ on [0,2]?" n ≥ log₂(2/0.001) = log₂(2000) ≈ 10.97 → n=11. 2 marks.</li>
+        <li><strong>Newton-Raphson iteration NAT:</strong> "f(x)=x²−3. x₀=2. Find x₁." x₁ = 2 − (4−3)/4 = 2−0.25 = 1.75. 1 mark.</li>
+        <li><strong>Trapezoidal NAT:</strong> "Estimate ∫_0^2 x² dx using Trapezoidal with n=4." h=0.5, x: 0,0.5,1,1.5,2. f: 0,0.25,1,2.25,4. T=(0.5/2)[0+2(0.25+1+2.25)+4]=0.25[0+7+4]=2.75. Exact=8/3≈2.667. 2 marks.</li>
+        <li><strong>Simpson's NAT:</strong> Same integral, Simpson's: (0.5/3)[0+4(0.25)+2(1)+4(2.25)+4]=0.1667[0+1+2+9+4]=2.667. Exact! 2 marks.</li>
+        <li><strong>Euler's method NAT:</strong> "dy/dx=y, y(0)=1, h=0.1. Find y(0.3) using Euler." y₁=1+0.1(1)=1.1, y₂=1.1+0.1(1.1)=1.21, y₃=1.21+0.1(1.21)=1.331. 2 marks.</li>
+        <li><strong>Logic MCQ:</strong> "Which of these is a tautology?" p∨¬p (always true). "Which is a contradiction?" p∧¬p (always false). 1 mark each.</li>
+        <li><strong>Walks in graph NAT:</strong> "How many walks of length 2 from vertex 1 to vertex 3 in this graph?" Compute (A²)₁₃. 2 marks.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Engineering Mathematics · Differential Equations, Numerical Methods &amp; Mathematical Logic · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

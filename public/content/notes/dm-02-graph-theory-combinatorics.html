@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discrete Mathematics — Graph Theory & Combinatorics · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8; --paper4:#e4ddd0;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;
+}
+.book{max-width:840px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+/* HEADINGS */
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ta{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+
+/* BODY */
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* BOXES */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+
+/* EXAMPLE */
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+
+/* CODE */
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+
+/* HIGHLIGHTS */
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.hi-o{background:var(--hl-o);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.c-p{color:var(--purple);font-weight:600;}
+
+/* LISTS */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+
+/* TABLE */
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}
+.ok{color:var(--orange);font-weight:600;}
+.bad{color:var(--red);font-weight:600;}
+
+/* CALLOUT GRID */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+/* GRAPH VISUAL */
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+/* STEPS */
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+
+/* FORMULA BOX */
+.formula-box{background:var(--paper3);border:2px solid var(--ink);border-radius:4px;padding:14px 20px;margin:14px 0;font-family:'Courier New',monospace;font-size:14px;line-height:1.9;color:var(--ink);}
+.formula-box .fl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;display:block;}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Discrete Mathematics</div>
+    <h1>Graph Theory<br><em>&amp; Combinatorics</em></h1>
+    <p class="cover-desc">
+      Graph terminology, special graphs, trees, spanning trees, planarity, graph coloring, Euler and Hamiltonian paths — then counting principles, permutations, combinations, pigeonhole, and recurrence relations with full GATE-level depth.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Graph Fundamentals</span>
+      <span class="chip">Ch 2 · Special Graphs &amp; Properties</span>
+      <span class="chip">Ch 3 · Trees &amp; Spanning Trees</span>
+      <span class="chip">Ch 4 · Planarity &amp; Graph Coloring</span>
+      <span class="chip">Ch 5 · Euler &amp; Hamiltonian Paths</span>
+      <span class="chip">Ch 6 · Counting Principles</span>
+      <span class="chip">Ch 7 · Permutations &amp; Combinations</span>
+      <span class="chip">Ch 8 · Pigeonhole &amp; Recurrences</span>
+      <span class="chip">Ch 9 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Graph Fundamentals &amp; Terminology</a>
+    <a href="#ch2"><span class="tn">02</span>Special Graphs &amp; Properties</a>
+    <a href="#ch3"><span class="tn">03</span>Trees &amp; Spanning Trees</a>
+    <a href="#ch4"><span class="tn">04</span>Planarity &amp; Graph Coloring</a>
+    <a href="#ch5"><span class="tn">05</span>Euler &amp; Hamiltonian Paths</a>
+    <a href="#ch6"><span class="tn">06</span>Counting Principles</a>
+    <a href="#ch7"><span class="tn">07</span>Permutations &amp; Combinations</a>
+    <a href="#ch8"><span class="tn">08</span>Pigeonhole &amp; Recurrence Relations</a>
+    <a href="#ch9"><span class="tn">09</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — GRAPH FUNDAMENTALS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Graph Fundamentals <em>&amp; Terminology</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="graph-def">
+      <h2 class="sh">1.1 &nbsp; Graph — Formal Definition <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Graph</span>
+        <p>A <strong>graph</strong> G = (V, E) consists of a finite non-empty set V of <strong>vertices</strong> (nodes) and a set E of <strong>edges</strong> — pairs of vertices. In an <em>undirected graph</em>, edges are unordered pairs {u,v}. In a <em>directed graph (digraph)</em>, edges are ordered pairs (u,v) with a direction from u to v.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">Graph vocabulary on a concrete example</span>
+Undirected Graph G:          Directed Graph D:
+V = {A, B, C, D}            V = {1, 2, 3}
+E = {{A,B},{B,C},{C,D},{A,D}} E = {(1,2),(2,3),(3,1)}
+
+   A ─── B                     1 ──→ 2
+   │     │                     ↑      │
+   D ─── C                     └──── 3 ←┘
+
+Adjacent: A and B (connected by an edge)
+Incident: edge {A,B} is incident to vertices A and B
+Loop: edge from a vertex to itself: {A,A}
+Multi-edge: two or more edges between the same pair
+Simple graph: no loops, no multi-edges
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Degree of vertex v</strong></td><td>deg(v) = number of edges incident to v. Loops count twice.</td></tr>
+            <tr><td><strong>In-degree (digraph)</strong></td><td>deg⁻(v) = number of edges pointing INTO v</td></tr>
+            <tr><td><strong>Out-degree (digraph)</strong></td><td>deg⁺(v) = number of edges pointing OUT of v</td></tr>
+            <tr><td><strong>Isolated vertex</strong></td><td>deg(v) = 0 — no edges incident</td></tr>
+            <tr><td><strong>Pendant vertex</strong></td><td>deg(v) = 1 — exactly one edge (leaf)</td></tr>
+            <tr><td><strong>Neighbourhood N(v)</strong></td><td>Set of all vertices adjacent to v</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="handshaking">
+      <h2 class="sh">1.2 &nbsp; Handshaking Lemma &amp; Degree Sequence <span class="tag tg">GATE Staple</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Handshaking Lemma</span>
+        <p>In any undirected graph G = (V,E): <strong>Σ deg(v) = 2|E|</strong><br>
+        The sum of all vertex degrees equals twice the number of edges. Every edge contributes exactly 2 to the total degree sum — one for each endpoint.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Handshaking Lemma for Digraphs</span>
+        <p>Σ deg⁺(v) = Σ deg⁻(v) = |E|<br>
+        Sum of all out-degrees = sum of all in-degrees = number of edges.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>NAT pattern:</strong> A graph has 6 vertices, each with degree 4. How many edges does it have?</p>
+        <p>Σ deg = 6 × 4 = 24 = 2|E| → |E| = <strong>12</strong>.</p>
+        <p><strong>Can a graph have exactly 5 vertices each with odd degree?</strong></p>
+        <p>Σ deg = 5 odd numbers. Sum of 5 odd numbers is odd. But Σ deg = 2|E| is always even. Contradiction — impossible. An even number of vertices must have odd degree.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Corollary — Number of Odd-Degree Vertices is Always Even</span>
+        <p>Since Σ deg = 2|E| is even, and even + even = even, the sum of odd-degree vertices' contributions must be even — which means there must be an even number of odd-degree vertices. Zero, two, four, six — never an odd count. GATE tests this as a direct True/False question.</p>
+      </div>
+
+      <h3 class="ssh">Degree Sequence</h3>
+      <p>
+        The <strong>degree sequence</strong> of a graph is the list of vertex degrees arranged in non-decreasing (or non-increasing) order. A sequence of non-negative integers is graphical (can be the degree sequence of a simple graph) if and only if its sum is even and the <strong>Erdős–Gallai theorem</strong> conditions hold.
+      </p>
+
+      <div class="eg">
+        <p><strong>Is (3, 3, 2, 2, 2) a valid degree sequence?</strong></p>
+        <p>Sum = 3+3+2+2+2 = 12, which is even. ✓ (Necessary condition satisfied.)</p>
+        <p>The complete graph K₄ has degree sequence (3,3,3,3). Adding an isolated vertex gives (3,3,3,3,0). This is not (3,3,2,2,2). Let's try to construct it: 5 vertices, two of degree 3, three of degree 2. This is the cycle C₅ with no extra edges — wait, C₅ has all degrees 2. A valid graph exists: take C₅ and add one chord. Actually the Petersen-style construction works — this sequence IS graphical.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="graph-types">
+      <h2 class="sh">1.3 &nbsp; Graph Representations <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Representation</th><th>Space</th><th>Check edge (u,v)?</th><th>List neighbours of v?</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Adjacency Matrix</strong></td><td>O(V²)</td><td class="good">O(1)</td><td class="bad">O(V)</td><td>Dense graphs, quick edge lookup</td></tr>
+            <tr><td><strong>Adjacency List</strong></td><td>O(V+E)</td><td class="ok">O(degree)</td><td class="good">O(degree)</td><td>Sparse graphs, traversal</td></tr>
+            <tr><td><strong>Incidence Matrix</strong></td><td>O(V×E)</td><td class="bad">O(E)</td><td class="bad">O(E)</td><td>Theoretical analysis, rarely used</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        The adjacency matrix of an undirected graph is always <strong>symmetric</strong>. For a directed graph, M[i][j] = 1 means edge from i to j but M[j][i] may be 0. The trace (diagonal sum) counts self-loops — zero for simple graphs.
+      </p>
+
+      <div class="tip-box">
+        <span class="lbl">Matrix Powers and Path Counting</span>
+        <p>The (i,j) entry of A^k (the k-th power of the adjacency matrix) gives the number of walks of length exactly k from vertex i to vertex j. This is a direct GATE question: "How many walks of length 2 exist from vertex 1 to vertex 3?" Compute A² and read entry [1][3].</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — SPECIAL GRAPHS & CONNECTIVITY
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Special Graphs <em>&amp; Connectivity</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="special-graphs">
+      <h2 class="sh">2.1 &nbsp; Special Graph Families <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Graph</th><th>Notation</th><th>Vertices</th><th>Edges</th><th>Every vertex degree</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Complete graph</strong></td><td>Kₙ</td><td>n</td><td>n(n−1)/2</td><td>n−1</td></tr>
+            <tr><td><strong>Cycle</strong></td><td>Cₙ (n≥3)</td><td>n</td><td>n</td><td>2</td></tr>
+            <tr><td><strong>Path</strong></td><td>Pₙ</td><td>n</td><td>n−1</td><td>1 (endpoints), 2 (internal)</td></tr>
+            <tr><td><strong>Wheel</strong></td><td>Wₙ</td><td>n+1</td><td>2n</td><td>Hub: n; Rim: 3</td></tr>
+            <tr><td><strong>Complete bipartite</strong></td><td>Kₘ,ₙ</td><td>m+n</td><td>m·n</td><td>n (in m-set), m (in n-set)</td></tr>
+            <tr><td><strong>Hypercube</strong></td><td>Qₙ</td><td>2ⁿ</td><td>n·2ⁿ⁻¹</td><td>n (n-regular)</td></tr>
+            <tr><td><strong>Null/Empty graph</strong></td><td>N̄ₙ</td><td>n</td><td>0</td><td>0 (all isolated)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>K₅ properties:</strong> 5 vertices, 5×4/2 = 10 edges, every vertex has degree 4. It is 4-regular, simple, and complete. It also plays a starring role in planarity theory (Kuratowski's theorem).</p>
+        <p><strong>K₃,₃ properties:</strong> 6 vertices (3+3), 3×3 = 9 edges, all vertices degree 3. It is 3-regular and bipartite. Also central to planarity — K₅ and K₃,₃ are the two forbidden subgraphs for planar graphs.</p>
+      </div>
+
+      <h3 class="ssh">Bipartite Graphs</h3>
+      <div class="def-box">
+        <span class="lbl">Bipartite Graph</span>
+        <p>A graph G = (V,E) is <strong>bipartite</strong> if V can be partitioned into two disjoint sets V₁ and V₂ such that every edge connects a vertex in V₁ to a vertex in V₂. No edge exists within V₁ or within V₂.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Bipartite Characterization Theorem</span>
+        <p>A graph is bipartite if and only if it contains <strong>no odd-length cycles</strong>. This is a direct GATE theorem — tested as "which of these is bipartite?" Check for odd cycles.</p>
+      </div>
+
+      <div class="eg">
+        <p>C₄ (4-cycle) is bipartite: {1,3} and {2,4} form the bipartition. C₃ (triangle) is NOT bipartite — it is an odd cycle of length 3.</p>
+        <p>Trees are always bipartite — they have no cycles at all (and hence no odd cycles).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="connectivity">
+      <h2 class="sh">2.2 &nbsp; Connectivity — Paths, Walks &amp; Components <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Term</th><th>Definition</th><th>Allows repeated vertices?</th><th>Allows repeated edges?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Walk</strong></td><td>Sequence of vertices where consecutive vertices are adjacent</td><td class="bad">Yes</td><td class="bad">Yes</td></tr>
+            <tr><td><strong>Trail</strong></td><td>Walk with no repeated edges</td><td class="bad">Yes</td><td class="good">No</td></tr>
+            <tr><td><strong>Path</strong></td><td>Walk with no repeated vertices (implies no repeated edges)</td><td class="good">No</td><td class="good">No</td></tr>
+            <tr><td><strong>Closed walk</strong></td><td>Walk that starts and ends at the same vertex</td><td class="bad">Yes</td><td class="bad">Yes</td></tr>
+            <tr><td><strong>Circuit</strong></td><td>Closed trail (no repeated edges)</td><td class="bad">Yes</td><td class="good">No</td></tr>
+            <tr><td><strong>Cycle</strong></td><td>Closed path (no repeated vertices except start=end)</td><td class="good">No (except endpoints)</td><td class="good">No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Walk vs Trail vs Path — Hierarchy</span>
+        <p>Every path is a trail. Every trail is a walk. The converses don't hold. When GATE says "shortest path" it means shortest walk with no repeated vertices (since repetitions only increase length). When asked about Euler circuits, the relevant structure is a circuit (closed trail — no repeated edges).</p>
+      </div>
+
+      <h3 class="ssh">Connected Components</h3>
+      <div class="def-box">
+        <span class="lbl">Connectivity</span>
+        <p>An undirected graph is <strong>connected</strong> if there is a path between every pair of vertices. A <strong>connected component</strong> is a maximal connected subgraph. A directed graph is <strong>strongly connected</strong> if there is a directed path from u to v AND from v to u for every pair u,v.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Cut Vertex and Bridge</span>
+        <p>A <strong>cut vertex</strong> (articulation point) is a vertex whose removal increases the number of connected components. A <strong>bridge</strong> is an edge whose removal increases the number of connected components.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — TREES & SPANNING TREES
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Trees <em>&amp; Spanning Trees</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tree-def">
+      <h2 class="sh">3.1 &nbsp; Trees — Equivalent Definitions <span class="tag tg">GATE Critical</span></h2>
+
+      <p>A <strong>tree</strong> is one of the most important structures in discrete mathematics. These five statements are all equivalent — any one can serve as the definition, and the others follow as theorems:</p>
+
+      <div class="def-box">
+        <span class="lbl">Five Equivalent Definitions of a Tree</span>
+        <p>
+          A graph T with n vertices is a tree if and only if any ONE of the following holds:<br>
+          1. T is <strong>connected and has no cycles</strong> (acyclic connected graph).<br>
+          2. T is <strong>connected and has exactly n−1 edges</strong>.<br>
+          3. T has <strong>no cycles and has exactly n−1 edges</strong>.<br>
+          4. T is <strong>connected and every edge is a bridge</strong>.<br>
+          5. There is <strong>exactly one path</strong> between every pair of vertices.
+        </p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Two Properties Determine a Tree</span>
+        <p>Connected + acyclic = tree. Connected + n−1 edges = tree. Acyclic + n−1 edges = tree. But connected alone, or acyclic alone, or n−1 edges alone is NOT enough to guarantee a tree. GATE presents graphs and asks "is this a tree?" — always verify two properties.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Tree (n vertices)</th></tr></thead>
+          <tbody>
+            <tr><td>Number of edges</td><td>Exactly n−1</td></tr>
+            <tr><td>Number of leaves (minimum)</td><td>At least 2 (for n≥2)</td></tr>
+            <tr><td>Bipartite?</td><td>Always (no odd cycles — no cycles at all)</td></tr>
+            <tr><td>Chromatic number</td><td>2 (if n≥2), 1 (if n=1, single vertex)</td></tr>
+            <tr><td>Adding one edge</td><td>Creates exactly one cycle</td></tr>
+            <tr><td>Removing one edge</td><td>Disconnects into exactly 2 components</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="spanning-trees">
+      <h2 class="sh">3.2 &nbsp; Spanning Trees &amp; Counting <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Spanning Tree</span>
+        <p>A <strong>spanning tree</strong> of a connected graph G is a subgraph that is a tree and includes all vertices of G. It has exactly |V|−1 edges selected from E such that all vertices remain connected.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Kirchhoff's Matrix Tree Theorem</span>
+        <p>The number of distinct spanning trees of G equals any cofactor of the <strong>Laplacian matrix</strong> L = D − A, where D is the degree matrix (diagonal) and A is the adjacency matrix.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Number of spanning trees of Kₙ (complete graph on n vertices):</strong></p>
+        <p>By <strong>Cayley's formula</strong>: the number of labeled spanning trees of Kₙ is <strong>nⁿ⁻²</strong>.</p>
+        <div class="cb">K₁: 1¹⁻² = 1⁻¹ = 1  (just the single vertex)
+K₂: 2²⁻² = 2⁰ = 1  (single edge is the only spanning tree)
+K₃: 3³⁻² = 3¹ = 3  (three spanning trees of K₃)
+K₄: 4⁴⁻² = 4² = 16 (sixteen spanning trees of K₄)
+Kₙ: nⁿ⁻² spanning trees</div>
+      </div>
+
+      <h3 class="ssh">Minimum Spanning Trees (MST)</h3>
+      <p>For a weighted graph, the <strong>MST</strong> is the spanning tree with minimum total edge weight. Two classic algorithms:</p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Kruskal's Algorithm</div>
+          <p>Sort all edges by weight. Add edges greedily — add if it doesn't create a cycle. Use Union-Find to detect cycles. Time: O(E log E).</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Prim's Algorithm</div>
+          <p>Start from any vertex. Greedily add the minimum weight edge connecting the current tree to a new vertex. Time: O(E log V) with priority queue.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Cut Property — Why Greedy Works for MST</span>
+        <p>For any cut (partition of vertices into two sets S and V−S), the minimum weight edge crossing the cut belongs to every MST. This is the mathematical guarantee behind both Prim's and Kruskal's algorithms — the greedy choice at each step is provably optimal.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — PLANARITY & COLORING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Planarity <em>&amp; Graph Coloring</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="planarity">
+      <h2 class="sh">4.1 &nbsp; Planar Graphs &amp; Euler's Formula <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Planar Graph</span>
+        <p>A graph is <strong>planar</strong> if it can be drawn in the plane such that no two edges cross (except at shared vertices). The drawing is called a <em>planar embedding</em>. Planarity is a property of the graph, not a specific drawing.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Euler's Formula for Planar Graphs</span>
+        <p>For any connected planar graph: <strong>V − E + F = 2</strong><br>
+        where V = vertices, E = edges, F = faces (regions, including the unbounded outer face).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Verify Euler's formula on K₄:</strong></p>
+        <p>K₄: V=4, E=6. Draw it as a triangle with a central vertex. F = 4 (3 inner triangular faces + 1 outer face). V−E+F = 4−6+4 = <strong>2 ✓</strong></p>
+      </div>
+
+      <h3 class="ssh">Necessary Conditions for Planarity</h3>
+      <div class="def-box">
+        <span class="lbl">Edge Bound for Planar Graphs</span>
+        <p>For a simple connected planar graph with V≥3 vertices:<br>
+        <strong>E ≤ 3V − 6</strong> (general)<br>
+        <strong>E ≤ 2V − 4</strong> (if the graph has no triangles — no cycles of length 3)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Prove K₅ is non-planar using the edge bound:</strong></p>
+        <p>K₅ has V=5, E=10. Check: 3V−6 = 3(5)−6 = 9. But E=10 > 9. Violates the bound. Therefore K₅ is non-planar. ✓</p>
+        <p><strong>Prove K₃,₃ is non-planar:</strong></p>
+        <p>K₃,₃ has V=6, E=9. K₃,₃ is bipartite so has no triangles (odd cycles). Use: E ≤ 2V−4 = 8. But E=9 > 8. Non-planar. ✓</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Kuratowski's Theorem</span>
+        <p>A graph is planar if and only if it contains no subgraph that is a subdivision of K₅ or K₃,₃. A <em>subdivision</em> replaces edges with paths (adds intermediate vertices). This is both necessary and sufficient — the complete characterization.</p>
+      </div>
+
+      <div class="note-box">
+        <span class="lbl">E ≤ 3V−6 is Necessary, Not Sufficient</span>
+        <p>A graph satisfying E ≤ 3V−6 is not necessarily planar — it just hasn't been ruled out by this condition. To prove planarity, you must exhibit a planar drawing. To prove non-planarity, use edge bounds (sufficient for ruling out), Kuratowski's theorem, or direct argument.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="coloring">
+      <h2 class="sh">4.2 &nbsp; Graph Coloring <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Proper Coloring &amp; Chromatic Number</span>
+        <p>A <strong>proper k-coloring</strong> assigns one of k colors to each vertex such that no two adjacent vertices have the same color. The <strong>chromatic number χ(G)</strong> is the minimum k for which G has a proper coloring.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Graph</th><th>χ(G)</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Empty graph N̄ₙ (no edges)</td><td>1</td><td>No adjacencies — one color suffices</td></tr>
+            <tr><td>Bipartite graph (non-empty)</td><td>2</td><td>Two-color the bipartition</td></tr>
+            <tr><td>Odd cycle C₂ₖ₊₁</td><td>3</td><td>Can't 2-color — odd cycle forces 3rd color</td></tr>
+            <tr><td>Even cycle C₂ₖ</td><td>2</td><td>Bipartite — 2 colors suffice</td></tr>
+            <tr><td>Complete graph Kₙ</td><td>n</td><td>All vertices adjacent — each needs its own color</td></tr>
+            <tr><td>Tree (n≥2)</td><td>2</td><td>Trees are bipartite</td></tr>
+            <tr><td>Planar graph</td><td>≤4</td><td>Four Color Theorem (1976)</td></tr>
+            <tr><td>Wheel Wₙ (n odd rim)</td><td>3</td><td>Rim is bipartite (even cycle), hub needs its own</td></tr>
+            <tr><td>Wheel Wₙ (n even rim)</td><td>4</td><td>Rim is odd cycle (needs 3), hub adds 1 more</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Four Color Theorem</span>
+        <p>Every planar graph can be properly colored with at most 4 colors. Equivalently, every map can be colored with 4 colors such that no two adjacent regions share a color. Proved by Appel and Haken in 1976 using computer assistance — the first major theorem proved this way.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Chromatic Number Bounds</span>
+        <p><strong>Lower bound:</strong> χ(G) ≥ ω(G) where ω(G) is the clique number (size of the largest complete subgraph). Every Kₖ subgraph needs k colors. <br>
+        <strong>Upper bound:</strong> χ(G) ≤ Δ(G) + 1 where Δ(G) is the maximum degree (greedy coloring). Brooks' theorem tightens this: χ(G) ≤ Δ(G) unless G is a complete graph or odd cycle.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — EULER & HAMILTONIAN
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Euler <em>&amp; Hamiltonian Paths</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="euler">
+      <h2 class="sh">5.1 &nbsp; Euler Paths &amp; Circuits <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Euler Path &amp; Euler Circuit</span>
+        <p>An <strong>Euler path</strong> is a trail (no repeated edges) that visits every edge of the graph exactly once. An <strong>Euler circuit</strong> is an Euler path that starts and ends at the same vertex.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Euler's Theorems — Exact Conditions</span>
+        <p>
+          <strong>Euler Circuit exists</strong> ↔ Graph is connected AND every vertex has <em>even degree</em>.<br>
+          <strong>Euler Path exists (non-circuit)</strong> ↔ Graph is connected AND exactly <em>two vertices</em> have odd degree (path starts at one, ends at the other).<br>
+          If more than 2 vertices have odd degree → no Euler path at all.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>The Seven Bridges of Königsberg:</strong> The city had 4 landmasses and 7 bridges. Does an Euler circuit exist?</p>
+        <p>Model as a graph: 4 vertices (landmasses), 7 edges (bridges). Degrees: 3, 3, 3, 5 — ALL odd. More than 2 odd-degree vertices → no Euler path exists. Euler proved this in 1736, founding graph theory.</p>
+        <p><strong>NAT pattern:</strong> In a graph where exactly 2 vertices have odd degree, how many Euler paths exist? At least 1 (start at one odd-degree vertex, end at the other). The exact count requires the BEST algorithm.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Euler Circuit vs Hamiltonian Circuit — Easily Confused</span>
+        <p>Euler circuit visits every <strong>EDGE</strong> exactly once. Hamiltonian circuit visits every <strong>VERTEX</strong> exactly once. The conditions for Euler circuits are clean and checkable in polynomial time. Determining whether a Hamiltonian circuit exists is NP-complete — no efficient algorithm is known.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="hamiltonian">
+      <h2 class="sh">5.2 &nbsp; Hamiltonian Paths &amp; Circuits <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Hamiltonian Path &amp; Circuit</span>
+        <p>A <strong>Hamiltonian path</strong> visits every vertex exactly once. A <strong>Hamiltonian circuit</strong> is a Hamiltonian path that returns to the starting vertex. Unlike Euler, there is no simple necessary and sufficient condition.</p>
+      </div>
+
+      <h3 class="ssh">Sufficient Conditions (not necessary)</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Theorem</th><th>Condition</th><th>Guarantees</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Dirac's Theorem</strong></td><td>G has n≥3 vertices; every vertex has degree ≥ n/2</td><td>Hamiltonian circuit exists</td></tr>
+            <tr><td><strong>Ore's Theorem</strong></td><td>For every non-adjacent pair u,v: deg(u)+deg(v) ≥ n</td><td>Hamiltonian circuit exists</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>These are sufficient but not necessary — a graph can have a Hamiltonian circuit even if the conditions don't hold. And a graph can fail both conditions without having one.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Kₙ has Hamiltonian circuits; Kₘ,ₙ has one iff m=n</span>
+        <p>The complete graph Kₙ has (n−1)!/2 distinct Hamiltonian circuits (fix one vertex, permute the rest, divide by 2 for direction). The complete bipartite graph Kₘ,ₙ has a Hamiltonian circuit if and only if m = n ≥ 2 — you must alternate between the two sets, so equal sizes are required.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — COUNTING PRINCIPLES
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Counting Principles — <em>Sum, Product, Inclusion-Exclusion</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="basic-counting">
+      <h2 class="sh">6.1 &nbsp; The Fundamental Counting Rules <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Sum Rule (Rule of Addition)</span>
+        <p>If task A can be done in m ways and task B can be done in n ways, and the tasks are <em>mutually exclusive</em> (doing one rules out the other), then either A or B can be done in <strong>m + n ways</strong>.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Product Rule (Rule of Multiplication)</span>
+        <p>If task A can be done in m ways and, <em>independently</em>, task B can be done in n ways, then both A and B can be done (in sequence) in <strong>m × n ways</strong>.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Sum rule:</strong> A student can choose a programming language from {C, C++, Java} (3 options) or a scripting language from {Python, Ruby} (2 options). Total choices = 3 + 2 = 5.</p>
+        <p><strong>Product rule:</strong> A password consists of 3 letters followed by 2 digits. Each letter: 26 choices. Each digit: 10 choices. Total passwords = 26 × 26 × 26 × 10 × 10 = 26³ × 10² = 1,757,600.</p>
+      </div>
+
+      <h3 class="ssh">Inclusion-Exclusion Principle — Generalized</h3>
+      <div class="def-box">
+        <span class="lbl">Inclusion-Exclusion for 3 Sets</span>
+        <p>|A ∪ B ∪ C| = |A| + |B| + |C| − |A∩B| − |A∩C| − |B∩C| + |A∩B∩C|</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>How many integers from 1 to 100 are divisible by 2, 3, or 5?</strong></p>
+        <div class="cb">|A| = ⌊100/2⌋ = 50  (div by 2)
+|B| = ⌊100/3⌋ = 33  (div by 3)
+|C| = ⌊100/5⌋ = 20  (div by 5)
+|A∩B| = ⌊100/6⌋ = 16   (div by 6)
+|A∩C| = ⌊100/10⌋ = 10  (div by 10)
+|B∩C| = ⌊100/15⌋ = 6   (div by 15)
+|A∩B∩C| = ⌊100/30⌋ = 3 (div by 30)
+
+|A∪B∪C| = 50+33+20 − 16−10−6 + 3 = 74</div>
+      </div>
+
+      <h3 class="ssh">Division Rule</h3>
+      <div class="def-box">
+        <span class="lbl">Division Rule</span>
+        <p>If n objects are partitioned into groups of k identical objects each, the number of distinct groups = n/k. Used when counting overcounts by a factor of k. Example: counting unordered pairs from n elements = n(n−1)/2 because each pair is counted twice in n(n−1) ordered pairs.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — PERMUTATIONS & COMBINATIONS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Permutations <em>&amp; Combinations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="permcomb">
+      <h2 class="sh">7.1 &nbsp; Permutations — Ordered Arrangements <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Permutation P(n,r)</span>
+        <p>The number of ways to arrange r objects chosen from n distinct objects where <strong>order matters</strong>: P(n,r) = n!/(n−r)! = n(n−1)(n−2)...(n−r+1)</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scenario</th><th>Formula</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>All n objects in a row</td><td>n!</td><td>5 books on a shelf: 5! = 120</td></tr>
+            <tr><td>r objects from n (ordered)</td><td>P(n,r) = n!/(n−r)!</td><td>Top 3 from 10 runners: 10×9×8 = 720</td></tr>
+            <tr><td>n objects with repetition allowed</td><td>nʳ</td><td>4-digit PIN from 0-9: 10⁴ = 10000</td></tr>
+            <tr><td>n objects, with nᵢ identical of type i</td><td>n! / (n₁!·n₂!·...·nₖ!)</td><td>Arrange "MISSISSIPPI": 11!/(1!4!4!2!)</td></tr>
+            <tr><td>n objects in a circle</td><td>(n−1)!</td><td>5 people around a table: 4! = 24</td></tr>
+            <tr><td>n objects in a circle (with necklaces — flip symmetry)</td><td>(n−1)!/2</td><td>5 beads on necklace: 4!/2 = 12</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Circular Permutations — Fix One Element</span>
+        <p>In circular permutations, rotations of the same arrangement are considered identical. Fix one person/object in place, arrange the remaining n−1 in (n−1)! ways. For necklaces (or cases where flipping is also identical), divide by 2: (n−1)!/2.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="combinations">
+      <h2 class="sh">7.2 &nbsp; Combinations — Unordered Selections <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Combination C(n,r)</span>
+        <p>The number of ways to choose r objects from n distinct objects where <strong>order does NOT matter</strong>: C(n,r) = n! / (r!(n−r)!) = P(n,r) / r!</p>
+      </div>
+
+      <h3 class="ssh">Key Identities</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Identity</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>C(n,r) = C(n, n−r)</td><td>Choosing r to include = choosing n−r to exclude</td></tr>
+            <tr><td>C(n,0) = C(n,n) = 1</td><td>Only one way to choose none or all</td></tr>
+            <tr><td>C(n,1) = n</td><td>n ways to choose one element</td></tr>
+            <tr><td>C(n,r) = C(n−1,r−1) + C(n−1,r)</td><td>Pascal's identity — basis of Pascal's triangle</td></tr>
+            <tr><td>Σᵣ C(n,r) = 2ⁿ</td><td>Total subsets of n-element set</td></tr>
+            <tr><td>Σᵣ (−1)ʳ C(n,r) = 0 (n≥1)</td><td>Alternating sum of binomial coefficients</td></tr>
+            <tr><td>C(n,r) = C(n,r−1) × (n−r+1)/r</td><td>Recursive computation without factorials</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Binomial Theorem</h3>
+      <div class="def-box">
+        <span class="lbl">Binomial Theorem</span>
+        <p>(x + y)ⁿ = Σₖ₌₀ⁿ C(n,k) xᵏ yⁿ⁻ᵏ<br>
+        The coefficient of xᵏyⁿ⁻ᵏ in the expansion of (x+y)ⁿ is C(n,k).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Coefficient of x³y⁵ in (x+y)⁸:</strong> C(8,3) = 56. (k=3, n=8)</p>
+        <p><strong>Sum of all coefficients in (x+y)⁸:</strong> Set x=y=1: (1+1)⁸ = 2⁸ = 256 = Σ C(8,k).</p>
+        <p><strong>Sum of coefficients of even powers in (x+y)ⁿ:</strong> Set x=1,y=−1 and x=1,y=1, average: 2ⁿ⁻¹.</p>
+      </div>
+
+      <h3 class="ssh">Stars and Bars — Combinations with Repetition</h3>
+      <div class="def-box">
+        <span class="lbl">Combinations with Repetition</span>
+        <p>The number of ways to choose r items from n types <strong>with repetition allowed</strong> (order doesn't matter) is C(n+r−1, r). Also counts non-negative integer solutions to x₁+x₂+...+xₙ=r.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Distribute 10 identical candies among 4 children (each can get 0 or more):</strong></p>
+        <p>C(4+10−1, 10) = C(13,10) = C(13,3) = 286.</p>
+        <p><strong>Number of non-negative integer solutions to x₁+x₂+x₃ = 7:</strong></p>
+        <p>C(3+7−1, 7) = C(9,7) = C(9,2) = 36.</p>
+        <p><strong>If each xᵢ ≥ 1 (positive solutions):</strong> Substitute yᵢ = xᵢ−1 ≥ 0. Then y₁+y₂+y₃ = 7−3 = 4. C(3+4−1,4) = C(6,4) = 15.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — PIGEONHOLE & RECURRENCES
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Pigeonhole Principle <em>&amp; Recurrence Relations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pigeonhole">
+      <h2 class="sh">8.1 &nbsp; Pigeonhole Principle <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Pigeonhole Principle</span>
+        <p>If n+1 or more objects are distributed into n boxes, then at least one box contains at least 2 objects.<br>
+        <strong>Generalized:</strong> If N objects are distributed into k boxes, then at least one box contains at least ⌈N/k⌉ objects.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Among 13 people, at least 2 share the same birth month.</strong> (13 people, 12 months — 13 > 12.)</p>
+        <p><strong>Among n+1 integers from {1,...,2n}, at least two are consecutive (differ by 1).</strong><br>
+        Pair them: {1,2}, {3,4}, ..., {2n−1,2n} — n pairs. With n+1 integers chosen from n pairs, at least one pair is fully represented → two consecutive integers.</p>
+        <p><strong>In a graph with n≥2 vertices, at least two vertices have the same degree.</strong><br>
+        Possible degrees: 0,1,2,...,n−1 — seems like n choices for n vertices. But degree 0 (isolated vertex) and degree n−1 (connected to all) cannot both exist simultaneously. So only n−1 distinct degrees are possible for n vertices → at least two vertices have the same degree.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Applying Pigeonhole — The Template</span>
+        <p>Step 1: Identify the "pigeons" (objects). Step 2: Identify the "holes" (categories). Step 3: Show pigeons > holes, conclude some hole has ≥2 pigeons. The art is in choosing the right categorization — GATE sometimes requires a non-obvious partition.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="recurrences">
+      <h2 class="sh">8.2 &nbsp; Recurrence Relations <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Recurrence Relation</span>
+        <p>An equation that defines each term of a sequence in terms of previous terms. A <strong>closed-form solution</strong> (or explicit formula) expresses the n-th term directly without reference to previous terms.</p>
+      </div>
+
+      <h3 class="ssh">Linear Homogeneous Recurrences with Constant Coefficients</h3>
+      <p>Form: aₙ = c₁aₙ₋₁ + c₂aₙ₋₂ + ... + cₖaₙ₋ₖ (no non-recurrence terms on the right side)</p>
+
+      <div class="def-box">
+        <span class="lbl">Characteristic Equation Method</span>
+        <p>
+          <strong>Step 1:</strong> Write the characteristic equation by substituting aₙ = rⁿ: rⁿ = c₁rⁿ⁻¹ + c₂rⁿ⁻² + ... + cₖrⁿ⁻ᵏ → rᵏ = c₁rᵏ⁻¹ + ... + cₖ.<br>
+          <strong>Step 2:</strong> Find the roots r₁, r₂, ..., rₖ of the characteristic polynomial.<br>
+          <strong>Step 3:</strong> If all roots distinct: general solution = α₁r₁ⁿ + α₂r₂ⁿ + ... + αₖrₖⁿ.<br>
+          If root r has multiplicity m: contributes (α₁ + α₂n + ... + αₘnᵐ⁻¹)rⁿ.<br>
+          <strong>Step 4:</strong> Use initial conditions to solve for α₁, α₂, ..., αₖ.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve: aₙ = 5aₙ₋₁ − 6aₙ₋₂, with a₀=1, a₁=4</strong></p>
+        <div class="cb">Characteristic equation: r² = 5r − 6 → r² − 5r + 6 = 0
+Roots: (r−2)(r−3) = 0 → r₁=2, r₂=3  (distinct roots)
+
+General solution: aₙ = α₁·2ⁿ + α₂·3ⁿ
+
+Apply initial conditions:
+  a₀ = α₁ + α₂ = 1
+  a₁ = 2α₁ + 3α₂ = 4
+
+From first: α₁ = 1 − α₂
+Substituting: 2(1−α₂) + 3α₂ = 4 → 2 + α₂ = 4 → α₂ = 2, α₁ = −1
+
+Solution: aₙ = −1·2ⁿ + 2·3ⁿ = 2·3ⁿ − 2ⁿ</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Fibonacci: Fₙ = Fₙ₋₁ + Fₙ₋₂, F₀=0, F₁=1</strong></p>
+        <div class="cb">Characteristic equation: r² − r − 1 = 0
+Roots: r = (1 ± √5)/2
+  φ = (1+√5)/2 ≈ 1.618 (golden ratio)
+  ψ = (1−√5)/2 ≈ −0.618
+
+General solution: Fₙ = α₁φⁿ + α₂ψⁿ
+
+Applying F₀=0, F₁=1:
+  Fₙ = (φⁿ − ψⁿ)/√5   ← Binet's formula
+
+For large n: Fₙ ≈ φⁿ/√5 (since |ψ|<1, ψⁿ→0)</div>
+      </div>
+
+      <h3 class="ssh">Non-Homogeneous Recurrences</h3>
+      <div class="def-box">
+        <span class="lbl">Non-Homogeneous Form</span>
+        <p>aₙ = c₁aₙ₋₁ + ... + cₖaₙ₋ₖ + f(n) where f(n) ≠ 0.<br>
+        Solution = homogeneous solution + particular solution.<br>
+        Find the particular solution by guessing its form based on f(n):<br>
+        f(n) = dⁿ → try pₙ = Adⁿ (or Anⁱdⁿ if d is a root of multiplicity i).<br>
+        f(n) = polynomial of degree k → try polynomial of degree k.</p>
+      </div>
+
+      <h3 class="ssh">Master Theorem (for divide-and-conquer recurrences)</h3>
+      <div class="def-box">
+        <span class="lbl">Master Theorem</span>
+        <p>T(n) = aT(n/b) + f(n) where a≥1, b>1:<br>
+        Let c = log_b(a).<br>
+        Case 1: f(n) = O(nᶜ⁻ᵉ) for some ε>0 → T(n) = Θ(nᶜ)<br>
+        Case 2: f(n) = Θ(nᶜ logᵏn) → T(n) = Θ(nᶜ logᵏ⁺¹n)<br>
+        Case 3: f(n) = Ω(nᶜ⁺ᵉ) and af(n/b) ≤ cf(n) → T(n) = Θ(f(n))</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Merge Sort:</strong> T(n) = 2T(n/2) + O(n). a=2, b=2, c=log₂2=1. f(n)=O(n)=O(n¹)=Θ(n¹log⁰n). Case 2 with k=0: T(n)=Θ(n log n). ✓</p>
+        <p><strong>Binary Search:</strong> T(n) = T(n/2) + O(1). a=1, b=2, c=log₂1=0. f(n)=O(1)=Θ(n⁰log⁰n). Case 2 with k=0: T(n)=Θ(log n). ✓</p>
+        <p><strong>Naive Matrix Multiply:</strong> T(n)=8T(n/2)+O(n²). a=8,b=2,c=log₂8=3. f(n)=O(n²)=O(n³⁻¹). Case 1: T(n)=Θ(n³). ✓</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 9 — GATE TRAPS & REFERENCE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">9.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Odd-degree vertex count</td><td>The number of vertices with odd degree is always even (Handshaking Lemma). If a question gives a degree sequence with an odd number of odd-degree vertices, no such graph exists.</td></tr>
+            <tr><td>2</td><td>Tree: connected alone ≠ tree</td><td>A tree requires BOTH connectivity AND acyclicity (equivalently, connected + exactly n−1 edges). Check two conditions.</td></tr>
+            <tr><td>3</td><td>Spanning tree count for Kₙ</td><td>Cayley's formula: nⁿ⁻² spanning trees. K₃ has 3¹=3. K₄ has 4²=16. Very frequently tested as direct NAT.</td></tr>
+            <tr><td>4</td><td>Euler's formula faces</td><td>F includes the outer (unbounded) face. For a planar graph embedded in a plane, always count the infinite outer region as one face. V−E+F=2 always holds for connected planar graphs.</td></tr>
+            <tr><td>5</td><td>K₅ and K₃,₃ non-planarity</td><td>K₅: E=10 > 3(5)−6=9. K₃,₃: E=9 > 2(6)−4=8 (no triangles bound). Memorize both proofs — they appear directly in GATE.</td></tr>
+            <tr><td>6</td><td>Euler circuit requires ALL even degrees</td><td>An Euler circuit exists iff connected + every vertex has even degree. Even ONE odd-degree vertex means no Euler circuit (only Euler path if exactly two odd-degree vertices, starting and ending at them).</td></tr>
+            <tr><td>7</td><td>Hamiltonian vs Euler</td><td>Euler = every EDGE exactly once (polynomial-time checkable). Hamiltonian = every VERTEX exactly once (NP-complete to check). Easy to confuse — the problems are very different in complexity.</td></tr>
+            <tr><td>8</td><td>Chromatic number of bipartite</td><td>Any non-empty bipartite graph has χ=2. Trees are bipartite → χ=2. Odd cycles have χ=3. Even cycles have χ=2.</td></tr>
+            <tr><td>9</td><td>Circular permutations</td><td>(n−1)! not n!. Fix one element's position (rotations are identical), arrange remaining n−1 elements. For necklaces: additionally divide by 2 for reflections.</td></tr>
+            <tr><td>10</td><td>Stars and bars formula</td><td>Distributing r identical items into n distinct boxes (0 allowed) = C(n+r−1, r). For positive integer solutions (each ≥1): substitute yᵢ=xᵢ−1 first, reducing r by n.</td></tr>
+            <tr><td>11</td><td>C(n,r) vs P(n,r)</td><td>P(n,r) = n!/(n−r)! for ordered. C(n,r) = P(n,r)/r! for unordered. "How many ways to select" → C. "How many ways to arrange" → P. The word "arrange" or "order" is the signal.</td></tr>
+            <tr><td>12</td><td>Master theorem Case 2</td><td>Case 2 applies when f(n) = Θ(nᶜ logᵏn). Result: Θ(nᶜ logᵏ⁺¹n). Most missed: the exponent of log increases by 1, not stays the same. T(n)=2T(n/2)+n gives Θ(n log n), not Θ(n).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formulas">
+      <h2 class="sh">9.2 &nbsp; Master Formula Reference</h2>
+
+      <div class="formula-box">
+        <span class="fl">Graph Theory</span>
+Σ deg(v) = 2|E|                          (Handshaking Lemma)
+|V| − |E| + |F| = 2                      (Euler's formula for planar graphs)
+E ≤ 3V − 6  (simple planar, V≥3)         (Planarity bound — triangles allowed)
+E ≤ 2V − 4  (simple planar, no triangles)(Planarity bound — bipartite)
+|E| = n(n−1)/2  for Kₙ                  (Complete graph edges)
+|E| = mn        for Kₘ,ₙ                (Complete bipartite edges)
+Spanning trees of Kₙ = nⁿ⁻²             (Cayley's formula)
+Tree: |E| = |V| − 1                      (Tree edge count)
+      </div>
+
+      <div class="formula-box">
+        <span class="fl">Combinatorics</span>
+P(n,r) = n!/(n−r)!                        (Ordered selection)
+C(n,r) = n!/(r!(n−r)!)                    (Unordered selection)
+C(n,r) = C(n−1,r−1) + C(n−1,r)           (Pascal's identity)
+(x+y)ⁿ = Σ C(n,k) xᵏyⁿ⁻ᵏ               (Binomial theorem)
+Σₖ C(n,k) = 2ⁿ                           (Sum of binomial coefficients)
+Repetition combinations: C(n+r−1, r)      (Stars and bars)
+Circular permutations: (n−1)!             (Without reflection)
+Necklace permutations: (n−1)!/2           (With reflection symmetry)
+Multinomial: n!/(n₁!n₂!...nₖ!)           (Arrange with identical elements)
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">9.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Handshaking NAT:</strong> "A graph has 7 vertices each of degree 3 — how many edges?" Σdeg=21 is odd — impossible. No such graph exists. 1 mark.</li>
+        <li><strong>Spanning tree count:</strong> "How many spanning trees does K₅ have?" Cayley: 5³ = 125. Direct 1-mark NAT.</li>
+        <li><strong>Planarity check:</strong> "Is K₃,₄ planar?" E=12, V=7. 3V−6=15. E≤15 ✓. But K₃,₄ has no triangles: 2V−4=10. E=12>10. Not planar. 2-mark reasoning.</li>
+        <li><strong>Chromatic number:</strong> "What is χ(C₇)?" Odd cycle → 3. "What is χ(K₄)?" Complete → 4. 1-mark MCQ.</li>
+        <li><strong>Euler circuit existence:</strong> "Does graph G have an Euler circuit?" Count odd-degree vertices. If zero → yes. If any → no. 1 mark.</li>
+        <li><strong>Bipartite check:</strong> "Is the graph with this adjacency matrix bipartite?" Check for odd cycles by BFS 2-coloring. 1-2 marks.</li>
+        <li><strong>Combination counting NAT:</strong> "Number of ways to distribute 8 identical balls into 3 distinct boxes with each box ≥2." Stars and bars after substitution: C(5+3−1,5)=C(7,5)=21. 2 marks.</li>
+        <li><strong>Recurrence solving:</strong> "Solve T(n)=3T(n/3)+n." a=3,b=3,c=1,f(n)=n=Θ(n¹). Case 2: T(n)=Θ(n log n). 1-2 marks.</li>
+        <li><strong>Pigeonhole application:</strong> "What is the minimum number of students needed to guarantee 3 with the same birth month?" ⌈N/12⌉=3 → N=25. 1 mark.</li>
+        <li><strong>Binomial coefficient:</strong> "Coefficient of x⁴ in (1+x)¹⁰?" C(10,4)=210. 1 mark.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Discrete Mathematics · Graph Theory &amp; Combinatorics · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

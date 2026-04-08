@@ -1,0 +1,390 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-08",
+  "subjects": [
+    {
+      "id": "dbms",
+      "name": "Database Management Systems",
+      "slug": "dbms",
+      "category": "GATE",
+      "icon": "database",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "dbms-ch-01",
+          "subject_id": "dbms",
+          "slug": "dbms-gate-notes-v2-1",
+          "title": "Relational Model, FDs & Normal Forms",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "dbms-gate-notes-v2-1.html",
+          "has_questions": true,
+          "question_subject_tag": "dbms"
+        },
+        {
+          "id": "dbms-ch-02",
+          "subject_id": "dbms",
+          "slug": "dbms-02-sql-relational-algebra-3",
+          "title": "Relational Algebra & SQL",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "dbms-02-sql-relational-algebra-3.html",
+          "has_questions": true,
+          "question_subject_tag": "dbms"
+        },
+        {
+          "id": "dbms-ch-03",
+          "subject_id": "dbms",
+          "slug": "dbms-03-transactions-concurrency-1",
+          "title": "Transactions & Concurrency",
+          "order_index": 3,
+          "has_notes": true,
+          "notes_file": "dbms-03-transactions-concurrency-1.html",
+          "has_questions": true,
+          "question_subject_tag": "dbms"
+        },
+        {
+          "id": "dbms-ch-04",
+          "subject_id": "dbms",
+          "slug": "dbms-04-er-indexing-relational-calculus",
+          "title": "ER Model, Indexing & Calculus",
+          "order_index": 4,
+          "has_notes": true,
+          "notes_file": "dbms-04-er-indexing-relational-calculus.html",
+          "has_questions": true,
+          "question_subject_tag": "dbms"
+        }
+      ]
+    },
+    {
+      "id": "dsa",
+      "name": "Data Structures & Algorithms",
+      "slug": "dsa",
+      "category": "GATE",
+      "icon": "account_tree",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "dsa-ch-01",
+          "subject_id": "dsa",
+          "slug": "ds-01-linear-data-structures-2",
+          "title": "Arrays, Linked Lists, Stack, Queue, Hash",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "ds-01-linear-data-structures-2.html",
+          "has_questions": true,
+          "question_subject_tag": "dsa"
+        },
+        {
+          "id": "dsa-ch-02",
+          "subject_id": "dsa",
+          "slug": "ds-02-trees-heaps",
+          "title": "Trees, BST, AVL, Heap",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "ds-02-trees-heaps.html",
+          "has_questions": true,
+          "question_subject_tag": "dsa"
+        },
+        {
+          "id": "algo-ch-01",
+          "subject_id": "dsa",
+          "slug": "algo-01-complexity-sorting-searching",
+          "title": "Complexity, Sorting & Searching",
+          "order_index": 3,
+          "has_notes": true,
+          "notes_file": "algo-01-complexity-sorting-searching.html",
+          "has_questions": true,
+          "question_subject_tag": "algo"
+        },
+        {
+          "id": "algo-ch-02",
+          "subject_id": "dsa",
+          "slug": "algo-02-graph-algorithms",
+          "title": "Graph Algorithms",
+          "order_index": 4,
+          "has_notes": true,
+          "notes_file": "algo-02-graph-algorithms.html",
+          "has_questions": true,
+          "question_subject_tag": "algo"
+        },
+        {
+          "id": "algo-ch-03",
+          "subject_id": "dsa",
+          "slug": "algo-03-dp-greedy-divide-conquer",
+          "title": "DP, Greedy, Divide & Conquer",
+          "order_index": 5,
+          "has_notes": true,
+          "notes_file": "algo-03-dp-greedy-divide-conquer.html",
+          "has_questions": true,
+          "question_subject_tag": "algo"
+        }
+      ]
+    },
+    {
+      "id": "os",
+      "name": "Operating Systems",
+      "slug": "os",
+      "category": "GATE",
+      "icon": "memory",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "os-ch-01",
+          "subject_id": "os",
+          "slug": "os-01-processes-scheduling-synchronization",
+          "title": "Processes, Scheduling & Sync",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "os-01-processes-scheduling-synchronization.html",
+          "has_questions": true,
+          "question_subject_tag": "os"
+        },
+        {
+          "id": "os-ch-02",
+          "subject_id": "os",
+          "slug": "os-02-memory-filesystems-io",
+          "title": "Memory, Filesystems & I/O",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "os-02-memory-filesystems-io.html",
+          "has_questions": true,
+          "question_subject_tag": "os"
+        }
+      ]
+    },
+    {
+      "id": "cn",
+      "name": "Computer Networks",
+      "slug": "cn",
+      "category": "GATE",
+      "icon": "lan",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "cn-ch-01",
+          "subject_id": "cn",
+          "slug": "cn-01-datalink-network-routing",
+          "title": "Data Link & Network Layer",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "cn-01-datalink-network-routing.html",
+          "has_questions": true,
+          "question_subject_tag": "cn"
+        },
+        {
+          "id": "cn-ch-02",
+          "subject_id": "cn",
+          "slug": "cn-02-transport-application-1",
+          "title": "Transport & Application Layer",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "cn-02-transport-application-1.html",
+          "has_questions": true,
+          "question_subject_tag": "cn"
+        }
+      ]
+    },
+    {
+      "id": "coa",
+      "name": "Computer Organization & Architecture",
+      "slug": "coa",
+      "category": "GATE",
+      "icon": "settings_input_component",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "coa-ch-01",
+          "subject_id": "coa",
+          "slug": "coa-01-number-systems-boolean-circuits",
+          "title": "Numbers & Boolean Circuits",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "coa-01-number-systems-boolean-circuits.html",
+          "has_questions": true,
+          "question_subject_tag": "coa"
+        },
+        {
+          "id": "coa-ch-02",
+          "subject_id": "coa",
+          "slug": "coa-02-cpu-isa-pipeline-memory",
+          "title": "CPU, ISA, Pipeline & Memory",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "coa-02-cpu-isa-pipeline-memory.html",
+          "has_questions": true,
+          "question_subject_tag": "coa"
+        }
+      ]
+    },
+    {
+      "id": "toc",
+      "name": "Theory of Computation",
+      "slug": "toc",
+      "category": "GATE",
+      "icon": "auto_awesome",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "toc-ch-01",
+          "subject_id": "toc",
+          "slug": "toc-01-automata-grammars",
+          "title": "Automata & Grammars",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "toc-01-automata-grammars.html",
+          "has_questions": true,
+          "question_subject_tag": "toc"
+        },
+        {
+          "id": "toc-ch-02",
+          "subject_id": "toc",
+          "slug": "toc-02-turing-decidability",
+          "title": "Turing Machines & Decidability",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "toc-02-turing-decidability.html",
+          "has_questions": true,
+          "question_subject_tag": "toc"
+        }
+      ]
+    },
+    {
+      "id": "cd",
+      "name": "Compiler Design",
+      "slug": "compiler-design",
+      "category": "GATE",
+      "icon": "Terminal",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "cd-ch-01",
+          "subject_id": "cd",
+          "slug": "compiler-design-complete",
+          "title": "Compiler Design Foundations",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "compiler-design-complete.html",
+          "has_questions": true,
+          "question_subject_tag": "cd"
+        }
+      ]
+    },
+    {
+      "id": "dm",
+      "name": "Discrete Mathematics",
+      "slug": "discrete-math",
+      "category": "GATE",
+      "icon": "functions",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "dm-ch-01",
+          "subject_id": "dm",
+          "slug": "dm-01-logic-sets-relations-functions-2",
+          "title": "Logic, Sets & Functions",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "dm-01-logic-sets-relations-functions-2.html",
+          "has_questions": true,
+          "question_subject_tag": "dm"
+        },
+        {
+          "id": "dm-ch-02",
+          "subject_id": "dm",
+          "slug": "dm-02-graph-theory-combinatorics",
+          "title": "Graph Theory & Combinatorics",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "dm-02-graph-theory-combinatorics.html",
+          "has_questions": true,
+          "question_subject_tag": "dm"
+        }
+      ]
+    },
+    {
+      "id": "em",
+      "name": "Engineering Mathematics",
+      "slug": "eng-math",
+      "category": "GATE",
+      "icon": "calculate",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "em-ch-01",
+          "subject_id": "em",
+          "slug": "em-01-calculus-linear-algebra-probability-2",
+          "title": "Calculus, Linear Algebra & Prob",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "em-01-calculus-linear-algebra-probability-2.html",
+          "has_questions": true,
+          "question_subject_tag": "em"
+        },
+        {
+          "id": "em-ch-02",
+          "subject_id": "em",
+          "slug": "em-02-differential-equations-numerical-methods",
+          "title": "Diff Equations & Numerical Methods",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "em-02-differential-equations-numerical-methods.html",
+          "has_questions": true,
+          "question_subject_tag": "em"
+        }
+      ]
+    },
+    {
+      "id": "aptitude",
+      "name": "General Aptitude",
+      "slug": "aptitude",
+      "category": "GATE",
+      "icon": "psychology",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "apt-ch-01",
+          "subject_id": "aptitude",
+          "slug": "aptitude-quantitative-master",
+          "title": "Quantitative Aptitude",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "aptitude-quantitative-master.html",
+          "has_questions": true,
+          "question_subject_tag": "ga"
+        },
+        {
+          "id": "apt-ch-02",
+          "subject_id": "aptitude",
+          "slug": "aptitude-verbal-master",
+          "title": "Verbal Aptitude",
+          "order_index": 2,
+          "has_notes": true,
+          "notes_file": "aptitude-verbal-master.html",
+          "has_questions": true,
+          "question_subject_tag": "ga"
+        }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "id": "cpp",
+      "name": "C++ Mastery",
+      "slug": "cpp-mastery",
+      "icon": "code",
+      "is_published": true,
+      "chapters": [
+        {
+          "id": "cpp-ch-01",
+          "slug": "c-programming-complete-1",
+          "title": "C++ Foundations & Patterns",
+          "order_index": 1,
+          "has_notes": true,
+          "notes_file": "c-programming-complete-1.html",
+          "has_questions": false
+        }
+      ]
+    }
+  ]
+}

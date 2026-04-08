@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theory of Computation — Turing Machines & Decidability · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8; --paper4:#e4ddd0;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;
+}
+.book{max-width:840px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+/* HEADINGS */
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ta{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+
+/* BODY */
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* BOXES */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+
+/* EXAMPLE */
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+
+/* CODE */
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .ac{color:var(--green);font-weight:bold;}
+.cb .rj{color:var(--red);font-weight:bold;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+
+/* HIGHLIGHTS */
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.hi-o{background:var(--hl-o);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.c-p{color:var(--purple);font-weight:600;}
+
+/* LISTS */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+
+/* TABLE */
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}
+.ok{color:var(--orange);font-weight:600;}
+.bad{color:var(--red);font-weight:600;}
+
+/* CALLOUT GRID */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+/* TM VISUAL */
+.tm-visual{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.tm-visual .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+/* HIERARCHY — decidability levels */
+.dec-hierarchy{margin:20px 0;display:flex;flex-direction:column;align-items:center;}
+.dec-box{border:2px solid var(--ink);border-radius:4px;padding:12px 28px;text-align:center;position:relative;min-width:320px;margin:2px 0;}
+.dec-box .db-type{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;display:block;}
+.dec-box .db-name{font-family:var(--body);font-size:16px;font-weight:700;color:var(--ink);}
+.dec-box .db-desc{font-family:var(--prose);font-size:13px;color:var(--ink3);font-style:italic;margin-top:2px;}
+.db-dec{background:#f0fff4;border-color:var(--green);}
+.db-re{background:#fdf8ee;border-color:var(--orange);}
+.db-co{background:#eef3ff;border-color:var(--blue);}
+.db-none{background:#fff1f1;border-color:var(--red);}
+.dec-arrow{font-size:18px;color:var(--ink3);padding:1px 0;}
+
+/* STEPS */
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+
+/* REDUCTION DIAGRAM */
+.reduction{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:16px 20px;margin:16px 0;font-family:'Courier New',monospace;font-size:13.5px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.reduction .rl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Theory of Computation</div>
+    <h1>Turing Machines<br><em>&amp; Decidability</em></h1>
+    <p class="cover-desc">
+      Turing machines, the Church-Turing thesis, decidable and undecidable languages, reductions, Rice's theorem, and the precise boundary between what is computable and what is not.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Turing Machine Model</span>
+      <span class="chip">Ch 2 · TM Variants &amp; Church-Turing Thesis</span>
+      <span class="chip">Ch 3 · Decidable Languages</span>
+      <span class="chip">Ch 4 · Undecidability — Diagonalization</span>
+      <span class="chip">Ch 5 · Halting Problem</span>
+      <span class="chip">Ch 6 · Reductions</span>
+      <span class="chip">Ch 7 · Rice's Theorem</span>
+      <span class="chip">Ch 8 · RE and co-RE Languages</span>
+      <span class="chip">Ch 9 · GATE Traps &amp; Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Turing Machine — Model &amp; Definition</a>
+    <a href="#ch2"><span class="tn">02</span>TM Variants &amp; Church-Turing Thesis</a>
+    <a href="#ch3"><span class="tn">03</span>Decidable Languages</a>
+    <a href="#ch4"><span class="tn">04</span>Undecidability — Diagonalization</a>
+    <a href="#ch5"><span class="tn">05</span>The Halting Problem</a>
+    <a href="#ch6"><span class="tn">06</span>Reductions &amp; Undecidable Problems</a>
+    <a href="#ch7"><span class="tn">07</span>Rice's Theorem</a>
+    <a href="#ch8"><span class="tn">08</span>RE, co-RE &amp; The Decidability Hierarchy</a>
+    <a href="#ch9"><span class="tn">09</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — TURING MACHINE MODEL
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Turing Machine — <em>Model &amp; Formal Definition</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tm-def">
+      <h2 class="sh">1.1 &nbsp; What Is a Turing Machine? <span class="tag tc">Core</span></h2>
+      <p>
+        A <strong>Turing Machine (TM)</strong> is the most powerful model of computation known. It was conceived by Alan Turing in 1936 as an abstract model of a human computer performing mechanical calculation. Every algorithm that can be computed by any digital computer can also be computed by a Turing machine — and vice versa. This is not just a claim; it is the Church-Turing thesis, the foundational assertion of theoretical computer science.
+      </p>
+      <p>
+        The key difference from a finite automaton: a TM has an <strong>infinite tape</strong> as its memory. It can read from and write to the tape, and move the read/write head in either direction. This gives it unbounded memory — unlike FAs (no memory beyond states) and PDAs (stack memory, but restricted access).
+      </p>
+
+      <div class="tm-visual">
+        <span class="dv-label">Turing Machine Architecture</span>
+                    ┌─────────────────────────────────────────┐
+Infinite Tape:      │ B │ a │ a │ b │ b │ B │ B │ B │ B │ ...│
+                    └─────────────────────────────────────────┘
+                               ↑
+                         Read/Write Head (moves Left or Right)
+                               │
+                    ┌──────────┴────────────┐
+                    │   Finite Control      │
+                    │   (current state,     │
+                    │    transition fn δ)   │
+                    └───────────────────────┘
+
+B = blank symbol (fills all unwritten tape cells)
+Head starts at leftmost symbol of input.
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">TM — 7-Tuple Definition</span>
+        <p>A TM is M = (Q, Σ, Γ, δ, q₀, q_accept, q_reject) where:<br>
+        <strong>Q</strong> — finite set of states<br>
+        <strong>Σ</strong> — input alphabet (does not contain blank B)<br>
+        <strong>Γ</strong> — tape alphabet (Σ ⊆ Γ, B ∈ Γ)<br>
+        <strong>δ: Q × Γ → Q × Γ × {L, R}</strong> — transition function<br>
+        &nbsp;&nbsp;&nbsp;(current state, tape symbol) → (new state, write symbol, direction)<br>
+        <strong>q₀ ∈ Q</strong> — start state<br>
+        <strong>q_accept ∈ Q</strong> — accept state (halts and accepts)<br>
+        <strong>q_reject ∈ Q</strong> — reject state (halts and rejects), q_accept ≠ q_reject</p>
+      </div>
+
+      <div class="note-box">
+        <span class="lbl">Three Outcomes for a TM on Input w</span>
+        <p><strong>Accept:</strong> TM halts in q_accept. String w is in L(M).<br>
+        <strong>Reject:</strong> TM halts in q_reject. String w is NOT in L(M).<br>
+        <strong>Loop (diverge):</strong> TM runs forever without halting. This is the fundamental problem — we cannot always detect looping from outside.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="tm-computation">
+      <h2 class="sh">1.2 &nbsp; TM Computation — Configuration &amp; Moves <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Configuration</span>
+        <p>A <strong>configuration</strong> of a TM captures its complete state at an instant: (current state, tape contents, head position). Written as: uqv where q is current state, u is tape content left of head, v is tape content from head position rightward (v's first symbol is what head is reading).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>TM for L = {w#w | w ∈ {0,1}*} — zigzag matching:</strong></p>
+        <div class="cb">Strategy: Cross off matching symbols on both sides of # using marks.
+1. Read leftmost unmarked symbol from left side (say '0'), mark it (write 'x').
+2. Scan right across left side and # to find first unmarked symbol on right side.
+3. If it matches, mark it. If not, reject.
+4. Return to leftmost unmarked symbol on left side.
+5. Repeat until all symbols matched. Accept if # separates two identical halves.
+
+This requires O(n²) steps for length-n strings.
+A TM can do this; a PDA cannot (PDAs can't compare both halves arbitrarily).</div>
+      </div>
+
+      <p>
+        The <strong>language accepted</strong> by M is L(M) = {w | M accepts w}. The collection of languages recognized by TMs is exactly the class of <strong>Recursively Enumerable (RE) languages</strong>.
+      </p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — TM VARIANTS & CHURCH-TURING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">TM Variants <em>&amp; The Church-Turing Thesis</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tm-variants">
+      <h2 class="sh">2.1 &nbsp; TM Variants — All Equivalent in Power <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        Many extensions of the basic TM model have been proposed. Every one of them turns out to be equivalent in computational power to the standard single-tape TM. This robustness is part of what makes the Church-Turing thesis so compelling.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>TM Variant</th><th>Description</th><th>Equivalent to Standard TM?</th><th>Speed Difference</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Multitape TM</strong></td><td>k tapes, k heads operating independently</td><td class="good">Yes</td><td>t(n) → O(t(n)²) slowdown</td></tr>
+            <tr><td><strong>Nondeterministic TM (NTM)</strong></td><td>δ: Q×Γ → 2^(Q×Γ×{L,R}), multiple choices</td><td class="good">Yes</td><td>Exponential slowdown possible</td></tr>
+            <tr><td><strong>Two-stack PDA</strong></td><td>PDA with two stacks</td><td class="good">Yes</td><td>Simulates TM tape exactly</td></tr>
+            <tr><td><strong>Semi-infinite Tape TM</strong></td><td>Tape extends right only, not left</td><td class="good">Yes</td><td>Constant factor</td></tr>
+            <tr><td><strong>Read-only TM</strong></td><td>Cannot write to tape (= FA)</td><td class="bad">No — only recognizes Regular</td><td>Strictly weaker</td></tr>
+            <tr><td><strong>Enumerator</strong></td><td>Generates (prints) all strings in a language</td><td class="good">Yes (same RE class)</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Nondeterministic TM ≠ More Powerful</span>
+        <p>Unlike PDAs where NPDA &gt; DPDA, a nondeterministic TM (NTM) recognizes exactly the same class of languages as a deterministic TM. An NTM accepting a string has at least one computation branch that accepts — a deterministic TM can simulate this by doing a BFS over all branches. The simulation is exponentially slower, but terminates. This is the P vs NP question in disguise at the level of decidability.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="church-turing">
+      <h2 class="sh">2.2 &nbsp; The Church-Turing Thesis <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Church-Turing Thesis</span>
+        <p>Every effectively computable function (every function that can be computed by any algorithm, by any physical machine, by any reasonable computational model) can be computed by a Turing machine.</p>
+      </div>
+
+      <p>
+        This is a <strong>thesis</strong>, not a theorem — it cannot be formally proven because "effectively computable" is an informal notion. However, it is universally accepted because:
+      </p>
+      <ul class="pl arr">
+        <li>Every known model of computation (λ-calculus, recursive functions, RAM machines, modern computers) has been proven equivalent to TMs.</li>
+        <li>No one has ever found a physically realizable computation that a TM cannot perform.</li>
+        <li>The robustness of TMs to extensions (multitape, nondeterminism, etc.) is strong evidence of their universality.</li>
+      </ul>
+
+      <div class="tip-box">
+        <span class="lbl">Practical Implication</span>
+        <p>When we say a problem is "computable," we mean a TM can solve it. When we say it is "uncomputable," we mean no TM can solve it — which also means no real computer can solve it (for all inputs). The TM is the mathematical proxy for all computers.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="universal-tm">
+      <h2 class="sh">2.3 &nbsp; The Universal Turing Machine (UTM) <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Universal TM</span>
+        <p>A <strong>Universal TM (UTM)</strong> U is a single TM that can simulate any other TM M on any input w. U takes as input the <em>encoding</em> of M (written ⟨M⟩) and the input w, and simulates M's computation on w: U accepts iff M accepts w, U rejects iff M rejects w, U loops iff M loops.</p>
+      </div>
+
+      <p>
+        The UTM is the theoretical foundation of the <strong>stored-program computer</strong>. A modern CPU is essentially a UTM — it takes a program (encoding of M) and data (w) and executes it. The concept of software running on hardware comes directly from Turing's 1936 paper.
+      </p>
+
+      <div class="def-box" style="background:#f0fff4;border-color:var(--green)">
+        <span class="lbl" style="color:var(--green)">Encoding a TM — ⟨M⟩</span>
+        <p>Any TM M can be encoded as a binary string ⟨M⟩. The encoding captures Q, Σ, Γ, δ, q₀, q_accept, q_reject in a systematic format. This encoding is crucial — it allows TMs to take other TMs as input, enabling the diagonal argument and undecidability proofs.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — DECIDABLE LANGUAGES
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Decidable <em>Languages</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="decidable-def">
+      <h2 class="sh">3.1 &nbsp; Decidability — Precise Definitions <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Recognizable (Recursively Enumerable)</span>
+        <p>A language L is <strong>Turing-recognizable</strong> (or recursively enumerable, RE) if there exists a TM M such that M accepts every string in L, and M either rejects or loops on every string not in L.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Decidable (Recursive)</span>
+        <p>A language L is <strong>decidable</strong> (or recursive) if there exists a TM M — called a <em>decider</em> — that always halts (never loops) AND accepts every string in L and rejects every string not in L.</p>
+      </div>
+
+      <p>
+        The difference is critical: a recognizer may loop forever on strings not in L. A decider always answers yes or no in finite time. <mark>Every decidable language is recognizable, but not every recognizable language is decidable.</mark>
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Decider</div>
+          <p>Always halts. On L: accept. On L̄: reject. No looping on any input. The "nice" case — like a function that always returns a value.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">Recognizer</div>
+          <p>On L: always accepts (and halts). On L̄: rejects OR loops forever. We can't always distinguish "will reject eventually" from "looping forever."</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Not Recognizable</div>
+          <p>No TM exists that accepts all strings in L. Some strings in L will be missed — either rejected or looped on. Language is "beyond" TM reach.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="decidable-examples">
+      <h2 class="sh">3.2 &nbsp; Decidable Problems — Key Examples <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem</th><th>Formal Description</th><th>Decidable?</th><th>Algorithm Idea</th></tr></thead>
+          <tbody>
+            <tr><td>DFA Acceptance</td><td>A_DFA = {⟨M,w⟩ | M is DFA, M accepts w}</td><td class="good">Yes</td><td>Simulate DFA on w — always halts in |w| steps</td></tr>
+            <tr><td>NFA Acceptance</td><td>A_NFA = {⟨M,w⟩ | M is NFA, M accepts w}</td><td class="good">Yes</td><td>Convert NFA→DFA, then simulate</td></tr>
+            <tr><td>DFA Emptiness</td><td>E_DFA = {⟨M⟩ | L(M) = ∅}</td><td class="good">Yes</td><td>BFS/DFS from start — any accept state reachable?</td></tr>
+            <tr><td>DFA Equivalence</td><td>EQ_DFA = {⟨M₁,M₂⟩ | L(M₁)=L(M₂)}</td><td class="good">Yes</td><td>Construct M for symmetric difference, test if empty</td></tr>
+            <tr><td>CFG Acceptance</td><td>A_CFG = {⟨G,w⟩ | G is CFG, G generates w}</td><td class="good">Yes</td><td>Convert to CNF, run CYK algorithm O(n³)</td></tr>
+            <tr><td>CFG Emptiness</td><td>E_CFG = {⟨G⟩ | L(G) = ∅}</td><td class="good">Yes</td><td>Mark generating variables, check if S is marked</td></tr>
+            <tr><td>CFG Equivalence</td><td>EQ_CFG = {⟨G₁,G₂⟩ | L(G₁)=L(G₂)}</td><td class="bad">No — Undecidable</td><td>No algorithm exists</td></tr>
+            <tr><td>TM Acceptance</td><td>A_TM = {⟨M,w⟩ | M accepts w}</td><td class="bad">No — Undecidable</td><td>The fundamental undecidable problem</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">The Pattern — Simpler Models Are Decidable, TMs Are Not</span>
+        <p>Every acceptance/emptiness/equivalence problem for DFAs and NFAs is decidable — these models always halt, so simulation always terminates. CFG acceptance and emptiness are decidable, but CFG equivalence is not. TM acceptance is undecidable — the model is powerful enough to loop, and we cannot detect that looping in general. This layered pattern is testable: the more powerful the model, the fewer decision problems are solvable.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — UNDECIDABILITY & DIAGONALIZATION
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Undecidability — <em>The Diagonalization Argument</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="counting-argument">
+      <h2 class="sh">4.1 &nbsp; Why Undecidable Problems Must Exist <span class="tag tc">Core</span></h2>
+
+      <p>
+        Before proving any specific language undecidable, we can show that <em>most</em> languages must be undecidable using a simple counting argument.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">The Counting Argument</span>
+        <p>
+          The set of all TMs is <strong>countably infinite</strong> — each TM can be encoded as a binary string, and the set of all binary strings is countable (can be listed: ε, 0, 1, 00, 01, 10, 11, ...).<br><br>
+          The set of all languages over Σ = {0,1} is <strong>uncountably infinite</strong> — by Cantor's diagonal argument, the power set of a countably infinite set (Σ*) is uncountable.<br><br>
+          Therefore: there are uncountably many languages but only countably many TMs. Most languages have no TM. Most languages are not even recognizable.
+        </p>
+      </div>
+
+      <p>
+        This argument doesn't tell us which specific languages are undecidable — just that they must exist in overwhelming quantity. The diagonalization argument constructs a specific undecidable language.
+      </p>
+    </div>
+
+    <div class="sec" data-m="diagonalization">
+      <h2 class="sh">4.2 &nbsp; Diagonalization — The Diagonal Language L_d <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        Cantor's diagonalization constructs something that differs from every item on a supposedly complete list. Turing applied this to TMs to construct a language no TM can decide.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">The Diagonal Language</span>
+        <p>List all TMs M₁, M₂, M₃, ... and all binary strings w₁, w₂, w₃, ... Form an infinite matrix where entry (i,j) = 1 if Mᵢ accepts wⱼ, else 0.<br><br>
+        Define L_d = {wᵢ | Mᵢ does NOT accept wᵢ} — the set of strings whose TM "rejects itself."<br><br>
+        L_d cannot be recognized by any TM. Proof: suppose Mₖ recognizes L_d. Ask: does Mₖ accept wₖ?<br>
+        If Mₖ accepts wₖ: then wₖ ∉ L_d (definition). But L_d = L(Mₖ) means wₖ ∈ L_d. Contradiction.<br>
+        If Mₖ does not accept wₖ: then wₖ ∈ L_d. But L_d = L(Mₖ) means Mₖ should accept wₖ. Contradiction.<br>
+        Either way: contradiction. L_d is not recognizable by any TM.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">L_d vs A_TM</span>
+        <p>L_d (the diagonal language) is NOT recognizable at all — no TM even partially recognizes it. A_TM (the halting/acceptance problem) IS recognizable (a UTM recognizes it) but not decidable. These are different levels of undecidability. GATE tests whether you can distinguish "not recognizable" from "recognizable but not decidable."</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — THE HALTING PROBLEM
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">The Halting Problem — <em>A_TM is Undecidable</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="atm">
+      <h2 class="sh">5.1 &nbsp; A_TM — The Acceptance Problem <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">A_TM — The Acceptance Problem</span>
+        <p>A_TM = {⟨M, w⟩ | M is a TM and M accepts input w}</p>
+      </div>
+
+      <p>
+        A_TM is <strong>recognizable</strong> (a UTM U can simulate M on w — if M accepts, U accepts) but <strong>NOT decidable</strong>. No TM can always correctly answer "does M accept w?" in finite time.
+      </p>
+
+      <h3 class="ssh">Proof that A_TM is Undecidable — By Contradiction</h3>
+
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>Assume for contradiction that A_TM is decidable. Then there exists a TM H (a decider) such that: H accepts ⟨M,w⟩ if M accepts w, and H rejects ⟨M,w⟩ if M does not accept w. H always halts.</div></li>
+        <li><div class="pl-num">2</div><div>Construct a new TM D using H: D takes input ⟨M⟩ (encoding of a TM M). D runs H on ⟨M, ⟨M⟩⟩ (asks: does M accept its own encoding?). D accepts if H rejects, and D rejects if H accepts. D is a "self-referential inverter."</div></li>
+        <li><div class="pl-num">3</div><div>Ask: what does D do on input ⟨D⟩ (D applied to its own encoding)?
+          <div class="cb">If D accepts ⟨D⟩:
+  → H rejects ⟨D,⟨D⟩⟩ (by D's construction)
+  → M=D does NOT accept ⟨D⟩ (by H's correctness)
+  → D does NOT accept ⟨D⟩. CONTRADICTION.
+
+If D rejects ⟨D⟩:
+  → H accepts ⟨D,⟨D⟩⟩
+  → M=D DOES accept ⟨D⟩
+  → D accepts ⟨D⟩. CONTRADICTION.</div></div></li>
+        <li><div class="pl-num">4</div><div>Both cases lead to contradiction. Our assumption (H exists) is false. A_TM is undecidable. ∎</div></li>
+      </ol>
+
+      <div class="warn-box">
+        <span class="lbl">The Structure of This Proof — Internalize It</span>
+        <p>This proof appears in many forms in GATE. The key structure is always: (1) Assume a decider H for the problem exists. (2) Construct a self-referential machine D using H. (3) Ask what D does on ⟨D⟩. (4) Derive a contradiction. The specific problem changes, but the template remains identical. Every undecidability proof via direct diagonalization follows this blueprint.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="halt-tm">
+      <h2 class="sh">5.2 &nbsp; HALT_TM — The Halting Problem <span class="tag tg">GATE Classic</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">HALT_TM</span>
+        <p>HALT_TM = {⟨M, w⟩ | M is a TM and M halts on input w} (either accepts or rejects — just doesn't loop)</p>
+      </div>
+
+      <p>
+        HALT_TM is undecidable. Proof is by reduction from A_TM: if we could decide HALT_TM, we could decide A_TM (which is impossible). The reduction:
+      </p>
+
+      <div class="reduction">
+        <span class="rl">Reduction: A_TM ≤_m HALT_TM</span>
+Given ⟨M, w⟩ (instance of A_TM), construct ⟨M', w⟩ where:
+  M' simulates M on w.
+  If M accepts w → M' accepts (halts).
+  If M rejects w → M' accepts (halts). ← convert reject to accept
+  If M loops     → M' loops.
+
+Now: HALT_TM decider on ⟨M', w⟩ tells us if M' halts on w.
+M' halts on w iff M halts on w (loop case preserved).
+If M halts → run M on w and see if it accepts → decides A_TM.
+But A_TM is undecidable → HALT_TM must be undecidable too. ∎
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">HALT_TM is Recognizable</span>
+        <p>HALT_TM is RE (recognizable): simulate M on w using a UTM. If M halts (accept or reject), accept ⟨M,w⟩. If M loops, the UTM loops too. The recognizer accepts all strings in HALT_TM — it just may not halt on strings not in HALT_TM. HALT_TM is recognizable but NOT decidable.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — REDUCTIONS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Reductions <em>&amp; Undecidable Problems</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="reductions-def">
+      <h2 class="sh">6.1 &nbsp; Many-One Reductions <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Many-One Reduction (Mapping Reduction)</span>
+        <p>A is <strong>many-one reducible to B</strong> (written A ≤_m B) if there exists a computable function f such that for every string w: w ∈ A ↔ f(w) ∈ B. The function f "translates" instances of A into instances of B.</p>
+      </div>
+
+      <p>
+        Reductions are the workhorse of undecidability proofs. The key inference rules:
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Upward Transfer (Decidability)</div>
+          <p>If A ≤_m B and B is decidable, then A is decidable.<br><em>A is "no harder than" B.</em></p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Downward Transfer (Undecidability)</div>
+          <p>If A ≤_m B and A is undecidable, then B is undecidable.<br><em>B is "at least as hard as" A.</em></p>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Direction of Inference — The Most Common Mistake</span>
+        <p>
+          If A ≤_m B: A reduces TO B. We can solve A using B.<br>
+          To prove B undecidable: show A ≤_m B where A is already known undecidable (e.g., A_TM).<br>
+          To prove B decidable: show B ≤_m A where A is already known decidable.<br>
+          <strong>Never</strong> conclude "B is undecidable because B ≤_m A_TM" — this is backwards. The reduction must go FROM the undecidable problem TO B.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="undecidable-problems">
+      <h2 class="sh">6.2 &nbsp; Key Undecidable Problems &amp; Their Reductions <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem</th><th>Definition</th><th>Status</th><th>Proved By</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A_TM</strong></td><td>{⟨M,w⟩ | M accepts w}</td><td class="bad">Undecidable, RE</td><td>Direct diagonalization</td></tr>
+            <tr><td><strong>HALT_TM</strong></td><td>{⟨M,w⟩ | M halts on w}</td><td class="bad">Undecidable, RE</td><td>A_TM ≤_m HALT_TM</td></tr>
+            <tr><td><strong>E_TM</strong></td><td>{⟨M⟩ | L(M) = ∅}</td><td class="bad">Undecidable, co-RE</td><td>A_TM ≤_m Ē_TM</td></tr>
+            <tr><td><strong>EQ_TM</strong></td><td>{⟨M₁,M₂⟩ | L(M₁)=L(M₂)}</td><td class="bad">Undecidable, not RE, not co-RE</td><td>E_TM ≤_m EQ_TM</td></tr>
+            <tr><td><strong>REGULAR_TM</strong></td><td>{⟨M⟩ | L(M) is regular}</td><td class="bad">Undecidable</td><td>Rice's Theorem</td></tr>
+            <tr><td><strong>PCP</strong></td><td>Post Correspondence Problem</td><td class="bad">Undecidable, RE</td><td>Reduction from A_TM</td></tr>
+            <tr><td><strong>CFG Ambiguity</strong></td><td>{⟨G⟩ | G is ambiguous}</td><td class="bad">Undecidable, RE</td><td>Reduction from PCP</td></tr>
+            <tr><td><strong>CFG Equivalence</strong></td><td>{⟨G₁,G₂⟩ | L(G₁)=L(G₂)}</td><td class="bad">Undecidable</td><td>Reduction</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Proving E_TM Undecidable — A Full Reduction</h3>
+      <p>E_TM = {⟨M⟩ | L(M) = ∅} is undecidable. Proof by reduction from A_TM:</p>
+
+      <div class="reduction">
+        <span class="rl">Reduction: A_TM ≤_m E_TM (via complement)</span>
+Given ⟨M, w⟩ (instance of A_TM), construct TM M_w:
+  M_w on input x:
+    Ignore x. Simulate M on w.
+    If M accepts w → M_w accepts x.
+    If M rejects w → M_w rejects x.
+
+Key property:
+  If M accepts w: M_w accepts ALL inputs → L(M_w) = Σ* ≠ ∅
+  If M does not accept w: M_w accepts NO inputs → L(M_w) = ∅
+
+So: M accepts w ↔ L(M_w) ≠ ∅ ↔ ⟨M_w⟩ ∉ E_TM
+
+This means: A_TM ≤_m Ē_TM (complement of E_TM).
+Since A_TM is undecidable, Ē_TM is undecidable.
+Since Ē_TM is undecidable and decidability is closed under complement,
+E_TM is also undecidable. ∎
+      </div>
+
+      <div class="eg">
+        <p><strong>Post Correspondence Problem (PCP):</strong></p>
+        <p>Given a finite list of domino pairs {[t₁/b₁], [t₂/b₂], ..., [tₖ/bₖ]}, does there exist a sequence of indices i₁, i₂, ..., iₙ (repetition allowed) such that t_{i₁}t_{i₂}...t_{iₙ} = b_{i₁}b_{i₂}...b_{iₙ}?</p>
+        <div class="cb">Example: dominos [a/ab], [b/a], [ab/b]
+Try i=1,2,1,3:
+  Top: a + b + a + ab = abab
+  Bot: ab + a + ab + b = ababab  → Not equal
+
+Try i=1,1,3:
+  Top: a + a + ab = aaab
+  Bot: ab + ab + b = ababb → Not equal
+
+PCP asks: does ANY sequence work? This is undecidable in general.</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — RICE'S THEOREM
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Rice's Theorem — <em>The Universal Undecidability Result</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="rice-statement">
+      <h2 class="sh">7.1 &nbsp; Rice's Theorem — Statement &amp; Proof <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Rice's Theorem</span>
+        <p>Every <strong>non-trivial property of the language</strong> of a Turing machine is undecidable.<br><br>
+        A property P of TM languages is:<br>
+        <strong>Trivial</strong> if P holds for ALL TMs, or P holds for NO TMs (vacuously true/false).<br>
+        <strong>Non-trivial</strong> if P holds for some TMs but not others.<br><br>
+        Rice's Theorem: if P is non-trivial, then {⟨M⟩ | L(M) satisfies P} is undecidable.</p>
+      </div>
+
+      <p>
+        Rice's theorem is a <strong>meta-theorem</strong> — it subsumes infinitely many individual undecidability results. Instead of proving each language property undecidable separately, Rice's theorem lets you invoke it directly.
+      </p>
+
+      <h3 class="ssh">Applying Rice's Theorem — 3-Step Check</h3>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div><strong>Is it a property of the language L(M)?</strong> The property must depend only on what language M recognizes, not on how M is structured (number of states, tape symbols, etc.).</div></li>
+        <li><div class="pl-num">2</div><div><strong>Is it non-trivial?</strong> Find one TM where the property holds, and one where it doesn't.</div></li>
+        <li><div class="pl-num">3</div><div>If both conditions hold: invoke Rice's Theorem → the problem is undecidable. Done.</div></li>
+      </ol>
+
+      <div class="eg">
+        <p><strong>Apply Rice's Theorem to these problems:</strong></p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Problem</th><th>Property of L(M)?</th><th>Non-trivial?</th><th>Verdict</th></tr></thead>
+            <tbody>
+              <tr><td>{⟨M⟩ | L(M) contains "01"}</td><td class="good">Yes</td><td class="good">Yes (some do, some don't)</td><td class="bad">Undecidable ✓</td></tr>
+              <tr><td>{⟨M⟩ | L(M) = Σ*}</td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">Undecidable ✓</td></tr>
+              <tr><td>{⟨M⟩ | L(M) is regular}</td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">Undecidable ✓</td></tr>
+              <tr><td>{⟨M⟩ | L(M) is a CFL}</td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">Undecidable ✓</td></tr>
+              <tr><td>{⟨M⟩ | L(M) is infinite}</td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">Undecidable ✓</td></tr>
+              <tr><td>{⟨M⟩ | M has 5 states}</td><td class="bad">No — property of M, not L(M)</td><td>—</td><td class="ok">Rice's doesn't apply — may be decidable</td></tr>
+              <tr><td>{⟨M⟩ | M halts on ε}</td><td class="bad">No — depends on M's behavior, not just L(M)</td><td>—</td><td class="ok">Rice's doesn't apply — but still undecidable (directly)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Rice's Theorem Scope — Language Properties Only</span>
+        <p>Rice's theorem applies ONLY to properties of the <em>language</em> L(M), not properties of the TM M itself. "M has fewer than 10 states" is a property of the machine — Rice's theorem doesn't apply (and this IS decidable). "L(M) is finite" is a property of the language — Rice's theorem applies (undecidable). The distinction is subtle but critical for GATE.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="rice-proof-sketch">
+      <h2 class="sh">7.2 &nbsp; Why Rice's Theorem is True — Proof Sketch <span class="tag tp">Advanced</span></h2>
+
+      <p>
+        The proof reduces A_TM to any non-trivial language property problem. Let P be a non-trivial property. Since P is non-trivial, there exist TMs M_yes (L(M_yes) satisfies P) and M_no (L(M_no) does not satisfy P).
+      </p>
+
+      <div class="reduction">
+        <span class="rl">Proof sketch (assume ∅ does not satisfy P — the other case is symmetric)</span>
+Since P is non-trivial and ∅ doesn't satisfy P:
+  ∃ M_yes such that L(M_yes) satisfies P.
+
+Given ⟨M, w⟩ (instance of A_TM), construct TM M':
+  M' on input x:
+    1. Simulate M on w.
+    2. If M accepts w: simulate M_yes on x, accept if M_yes accepts.
+    3. If M never finishes step 1: M' never reaches step 2.
+
+Key:
+  If M accepts w: L(M') = L(M_yes) → satisfies P → ⟨M'⟩ ∈ {⟨T⟩ | L(T) satisfies P}
+  If M rejects/loops w: L(M') = ∅ → doesn't satisfy P → ⟨M'⟩ ∉ {⟨T⟩ | L(T) satisfies P}
+
+So: M accepts w ↔ ⟨M'⟩ ∈ L_P
+This is a reduction A_TM ≤_m L_P.
+Since A_TM is undecidable → L_P is undecidable. ∎
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — RE, co-RE & HIERARCHY
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">RE, co-RE <em>&amp; The Decidability Hierarchy</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="re-core">
+      <h2 class="sh">8.1 &nbsp; RE, co-RE, and Their Relationship <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Recursively Enumerable (RE)</span>
+        <p>L is RE if there exists a TM that accepts every string in L (and either rejects or loops on strings not in L). Equivalently, a TM can <em>enumerate</em> all strings in L (print them out one by one).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">co-RE</span>
+        <p>L is co-RE if its complement L̄ is RE. That is, L is co-RE if there exists a TM that accepts every string NOT in L.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Decidable (Recursive)</span>
+        <p>L is decidable if and only if L is BOTH RE and co-RE. Equivalently, both L and L̄ are RE.</p>
+      </div>
+
+      <div class="dec-hierarchy">
+        <div class="dec-box db-none">
+          <span class="db-type">Outermost — all languages</span>
+          <div class="db-name">Not RE, Not co-RE</div>
+          <div class="db-desc">No TM recognizes L or L̄ — examples: L_d (diagonal language), EQ_TM</div>
+        </div>
+        <div class="dec-arrow">⊃</div>
+        <div class="dec-box db-co">
+          <span class="db-type">co-RE only (not RE)</span>
+          <div class="db-name">co-RE \ RE</div>
+          <div class="db-desc">L̄ is RE but L is not — example: Ē_TM = {⟨M⟩ | L(M) ≠ ∅}</div>
+        </div>
+        <div class="dec-arrow">⊃</div>
+        <div class="dec-box db-re">
+          <span class="db-type">RE only (not co-RE)</span>
+          <div class="db-name">RE \ co-RE</div>
+          <div class="db-desc">L is RE but L̄ is not — examples: A_TM, HALT_TM, E_TM</div>
+        </div>
+        <div class="dec-arrow">⊃</div>
+        <div class="dec-box db-dec">
+          <span class="db-type">Innermost — RE ∩ co-RE</span>
+          <div class="db-name">Decidable (Recursive)</div>
+          <div class="db-desc">Both L and L̄ are RE — examples: all regular languages, CFLs, A_DFA, E_DFA</div>
+        </div>
+      </div>
+
+      <div class="tbl" style="margin-top:20px;">
+        <table>
+          <thead><tr><th>Language</th><th>RE?</th><th>co-RE?</th><th>Decidable?</th></tr></thead>
+          <tbody>
+            <tr><td>Any regular language</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td></tr>
+            <tr><td>Any CFL</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td></tr>
+            <tr><td>A_TM</td><td class="good">Yes (UTM)</td><td class="bad">No</td><td class="bad">No</td></tr>
+            <tr><td>HALT_TM</td><td class="good">Yes</td><td class="bad">No</td><td class="bad">No</td></tr>
+            <tr><td>E_TM = {⟨M⟩ | L(M)=∅}</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td></tr>
+            <tr><td>Ā_TM (complement of A_TM)</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td></tr>
+            <tr><td>EQ_TM</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td></tr>
+            <tr><td>L_d (diagonal)</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Deciding with Two Recognizers</span>
+        <p>If L is RE and co-RE, you can decide L by running two TMs in parallel: one that recognizes L, one that recognizes L̄. One of them must eventually accept — and when it does, you know the answer. This is why RE ∩ co-RE = Decidable: you don't need a single decider, you just need both sides to be recognizable.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="enumerability">
+      <h2 class="sh">8.2 &nbsp; Enumeration &amp; RE Languages <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Enumerator Theorem</span>
+        <p>A language L is RE if and only if there exists a TM (enumerator) that prints (enumerates) all strings in L one by one — possibly with repetitions — and eventually prints every string in L.</p>
+      </div>
+
+      <p>
+        This gives the alternative name "recursively enumerable" — L can be listed by a TM. If L is finite, the enumerator eventually stops. If L is infinite, the enumerator runs forever but prints every string eventually.
+      </p>
+
+      <div class="note-box">
+        <span class="lbl">Why RE Languages Are Called "Recognizable"</span>
+        <p>A TM recognizes L means: it says "yes" for every string in L. It might say "no" or might loop forever for strings not in L. An enumerator for L essentially runs all computations in parallel and announces results — this is the same as recognizing. The two definitions are provably equivalent.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 9 — GATE TRAPS & REFERENCE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">9.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>NTM = DTM in power</td><td>Unlike PDAs, nondeterministic TMs and deterministic TMs recognize exactly the same languages (RE). An NTM can be simulated by a DTM — exponentially slower but equivalent in what it can compute.</td></tr>
+            <tr><td>2</td><td>A_TM is recognizable</td><td>A_TM is NOT decidable, but it IS recognizable — a UTM recognizes it. "Undecidable" does NOT mean "unrecognizable." These are different levels. Always specify which level.</td></tr>
+            <tr><td>3</td><td>Rice's theorem scope</td><td>Rice's applies ONLY to properties of L(M) — what language the TM recognizes. Properties of the TM itself (number of states, transitions) are NOT covered. "M has 5 states" is a machine property — decidable. "L(M) is finite" is a language property — undecidable by Rice's.</td></tr>
+            <tr><td>4</td><td>Reduction direction</td><td>To prove B undecidable: show A ≤_m B where A is known undecidable. You reduce FROM the hard problem TO B. "A reduces to B" means: if B were decidable, then A would be decidable. Since A isn't, B isn't.</td></tr>
+            <tr><td>5</td><td>E_TM vs A_TM — which is RE, which is co-RE</td><td>A_TM is RE (not co-RE). E_TM is co-RE (not RE). Their complements swap: Ā_TM is co-RE, Ē_TM is RE. EQ_TM is neither RE nor co-RE.</td></tr>
+            <tr><td>6</td><td>Decidable = RE ∩ co-RE</td><td>A language is decidable if AND ONLY IF it is both RE and co-RE. To show undecidability, show either L is not RE or L is not co-RE (or that one of its completions falls into the wrong class).</td></tr>
+            <tr><td>7</td><td>Halting problem is not "halt on empty input"</td><td>HALT_TM = {⟨M,w⟩ | M halts on w} — it asks about any w. HALT_ε = {⟨M⟩ | M halts on ε} is a different (also undecidable) problem. Both are undecidable but they are distinct languages.</td></tr>
+            <tr><td>8</td><td>Finite language ⊄ decidable implies regular</td><td>Every finite language IS regular (can be expressed as a finite union of strings). Every regular language is decidable. But not every decidable language is regular — decidable languages are a much broader class including many non-regular, non-CFL languages.</td></tr>
+            <tr><td>9</td><td>CFG equivalence vs CFL equivalence</td><td>"Is L(G₁) = L(G₂)?" for CFGs is undecidable. "Are these two DFAs equivalent?" is decidable. The decidability of equivalence depends critically on the model — CFG and above: undecidable. DFA/NFA: decidable.</td></tr>
+            <tr><td>10</td><td>Rice's theorem covers ALL non-trivial properties</td><td>There is no clever algorithm for any non-trivial language property of TMs. People often think "but this particular property seems simple" — it doesn't matter. If it's non-trivial and about L(M), Rice's theorem says it's undecidable, period.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="master-reference">
+      <h2 class="sh">9.2 &nbsp; Complete Decidability Reference Table</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem</th><th>Decidable?</th><th>RE?</th><th>co-RE?</th><th>How to Prove</th></tr></thead>
+          <tbody>
+            <tr><td>A_DFA</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td><td>Simulate DFA</td></tr>
+            <tr><td>E_DFA</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td><td>Graph reachability</td></tr>
+            <tr><td>EQ_DFA</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td><td>Symmetric difference empty?</td></tr>
+            <tr><td>A_CFG</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td><td>CNF + CYK algorithm</td></tr>
+            <tr><td>E_CFG</td><td class="good">Yes</td><td class="good">Yes</td><td class="good">Yes</td><td>Mark generating variables</td></tr>
+            <tr><td>EQ_CFG</td><td class="bad">No</td><td>Unknown</td><td>Unknown</td><td>Reduction from PCP</td></tr>
+            <tr><td>CFG Ambiguity</td><td class="bad">No</td><td class="good">RE</td><td class="bad">No</td><td>Reduction from PCP</td></tr>
+            <tr><td>A_TM</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td><td>Diagonalization</td></tr>
+            <tr><td>HALT_TM</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td><td>A_TM ≤_m HALT_TM</td></tr>
+            <tr><td>E_TM</td><td class="bad">No</td><td class="bad">No</td><td class="good">Yes</td><td>A_TM ≤_m Ē_TM</td></tr>
+            <tr><td>REGULAR_TM</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td><td>Rice's theorem</td></tr>
+            <tr><td>EQ_TM</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td><td>E_TM ≤_m EQ_TM</td></tr>
+            <tr><td>PCP</td><td class="bad">No</td><td class="good">Yes</td><td class="bad">No</td><td>A_TM ≤_m PCP</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">9.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Classify a language:</strong> Given a language description, identify RE/co-RE/decidable/none. The hierarchy diagram is your guide. 1–2 mark MCQ.</li>
+        <li><strong>Apply Rice's theorem:</strong> "Is the following problem decidable? {⟨M⟩ | L(M) contains at least 5 strings}." Check: language property? Non-trivial? → Undecidable by Rice's. 1-mark direct application.</li>
+        <li><strong>Reduction validity:</strong> "Which reduction proves HALT_TM is undecidable?" — A_TM ≤_m HALT_TM. Direction must be correct. 1-mark trap.</li>
+        <li><strong>TM vs NTM power:</strong> "An NTM recognizes more languages than a DTM — True or False?" False. They recognize the same class. 1-mark.</li>
+        <li><strong>Recognizable but not decidable:</strong> "Give an example of a language that is RE but not decidable." A_TM, HALT_TM. Know at least 3 examples cold.</li>
+        <li><strong>Two-recognizer decidability:</strong> "If both L and L̄ are recognizable, what can you conclude?" L is decidable. This is the RE ∩ co-RE = Decidable theorem applied directly.</li>
+        <li><strong>Reduction construction:</strong> Given a new problem, construct a reduction from A_TM to prove it undecidable. This is a 2-mark question requiring the full reduction argument.</li>
+        <li><strong>Properties of TM (not Rice's):</strong> "Is it decidable whether a TM has an even number of states?" Yes — count the states in the encoding. Not a language property, so Rice's doesn't apply.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Theory of Computation · Turing Machines &amp; Decidability · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>
