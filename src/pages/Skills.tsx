@@ -5,7 +5,8 @@ import { AppShell } from '../components/layout/AppShell';
 import { Skeleton } from '../components/ui/Skeleton';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { Badge } from '../components/ui/Badge';
-import { getSubjects, getChapters } from '../lib/api';
+import { getChapters } from '../lib/api';
+import { getManifest } from '../lib/manifest';
 import { cn, safeNum } from '../lib/utils';
 import type { SubjectResponse, ChapterResponse } from '../types';
 
@@ -22,8 +23,13 @@ export default function Skills() {
     async function load() {
       setIsLoading(true);
       try {
-        const data = await getSubjects();
-        if (!cancelled) setSubjects(data ?? []);
+        const manifest = await getManifest();
+        if (!cancelled) {
+          // Combined subjects and skills
+          const skills = manifest.skills.map(s => ({ ...s, category: 'skill' }));
+          const combined = [...manifest.subjects, ...skills];
+          setSubjects(combined as any);
+        }
       } catch { /* handled */ }
       finally { if (!cancelled) setIsLoading(false); }
     }

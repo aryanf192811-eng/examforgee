@@ -158,12 +158,20 @@ export function NotesViewer({ subjectSlug, chapterSlug, chapterTitle, subjectNam
 
       <iframe
         ref={iframeRef}
+        src={blobUrl || 'about:blank'}
         title={`Notes: ${chapterTitle}`}
         sandbox="allow-scripts allow-same-origin"
+        onLoad={() => {
+          // Manual trigger for height bridge
+          if (iframeRef.current?.contentWindow) {
+            iframeRef.current.contentWindow.postMessage({ type: 'ef-notes-ping' }, '*');
+          }
+        }}
         style={{
           height: iframeHeight,
           border: 'none',
           width: '100%',
+          display: blobUrl ? 'block' : 'none',
         }}
       />
     </div>
