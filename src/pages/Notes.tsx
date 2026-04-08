@@ -31,12 +31,9 @@ export default function Notes() {
       try {
         const manifest = await getManifest();
         if (!cancelled) {
-          // Combined subjects and skills (Subjects first)
-          const combined = [
-            ...manifest.subjects,
-            ...manifest.skills
-          ];
-          setSubjects(combined as any);
+          // Only show GATE subjects in the Notes sidebar
+          const gateSubjects = manifest.subjects.filter(s => s.category !== 'skill');
+          setSubjects(gateSubjects as any);
         }
       } catch (error) {
         console.error('Failed to load manifest in Notes.tsx:', error);

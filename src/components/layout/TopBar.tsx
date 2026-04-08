@@ -3,11 +3,14 @@ import { useAuthStore } from '../../lib/store/authStore';
 import { useTheme } from '../../hooks/useTheme';
 import { getInitials, hashColor } from '../../lib/utils';
 
+import type { ReactNode } from 'react';
+
 interface TopBarProps {
   title?: string;
+  headerActions?: ReactNode;
 }
 
-export function TopBar({ title }: TopBarProps) {
+export function TopBar({ title, headerActions }: TopBarProps) {
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const { isDark, toggleTheme } = useTheme();
@@ -35,6 +38,8 @@ export function TopBar({ title }: TopBarProps) {
 
       {/* Right actions */}
       <div className="flex items-center gap-2">
+        {headerActions}
+        
         {/* Theme toggle (mobile) */}
         <button
           onClick={toggleTheme}

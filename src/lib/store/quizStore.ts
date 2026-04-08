@@ -5,6 +5,7 @@ interface QuizState {
   sessionId: string | null;
   questions: QuizQuestion[];
   answers: Record<string, unknown>;
+  flags: string[]; // List of question IDs marked for review
   currentIndex: number;
   timePerQuestion: Record<string, number>;
   isSubmitted: boolean;
@@ -13,6 +14,7 @@ interface QuizState {
   setSession: (sessionId: string) => void;
   setQuestions: (questions: QuizQuestion[]) => void;
   recordAnswer: (questionId: string, answer: unknown) => void;
+  toggleFlag: (questionId: string) => void;
   recordTime: (questionId: string, seconds: number) => void;
   nextQuestion: () => void;
   prevQuestion: () => void;
@@ -26,6 +28,7 @@ export const useQuizStore = create<QuizState>((set) => ({
   sessionId: null,
   questions: [],
   answers: {},
+  flags: [],
   currentIndex: 0,
   timePerQuestion: {},
   isSubmitted: false,
@@ -37,6 +40,7 @@ export const useQuizStore = create<QuizState>((set) => ({
     questions,
     currentIndex: 0,
     answers: {},
+    flags: [],
     isSubmitted: false,
     submissionResult: null,
   }),
@@ -44,6 +48,13 @@ export const useQuizStore = create<QuizState>((set) => ({
   recordAnswer: (questionId, answer) =>
     set((state) => ({
       answers: { ...state.answers, [questionId]: answer },
+    })),
+
+  toggleFlag: (questionId) =>
+    set((state) => ({
+      flags: state.flags.includes(questionId)
+        ? state.flags.filter((id) => id !== questionId)
+        : [...state.flags, questionId],
     })),
 
   recordTime: (questionId, seconds) =>

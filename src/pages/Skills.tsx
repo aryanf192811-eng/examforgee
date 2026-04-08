@@ -81,9 +81,10 @@ export default function Skills() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {subjects.filter(s => s.category === 'skill').map((s, i) => {
-              const chapCount = safeNum(s.chapter_count);
+              const chaptersList = (s as any).chapters || [];
+              const chapCount = chaptersList.length || safeNum(s.chapter_count);
               const isExpanded = expandedTrack === s.id;
-              const isComingSoon = chapCount === 0;
+              const isComingSoon = (s as any).status === 'soon' || chapCount === 0;
               
               // Visual rotation for variety
               const colors = ['primary', 'secondary', 'tertiary'];
@@ -97,26 +98,31 @@ export default function Skills() {
                   transition={{ delay: i * 0.06, type: 'spring', stiffness: 300, damping: 24 }}
                   className={cn(
                     "rounded-2xl bg-surface-container overflow-hidden border-2 border-transparent transition-all",
-                    isComingSoon && "opacity-80 scale-[0.98]"
+                    isComingSoon && "opacity-80 grayscale-[0.5]"
                   )}
                 >
                   <button
                     onClick={() => !isComingSoon && handleExpand(s.id)}
                     disabled={isComingSoon}
                     className={cn(
-                      "w-full text-left p-5 transition-colors spring-transition",
+                      "w-full text-left p-5 transition-colors spring-transition relative overflow-hidden",
                       !isComingSoon ? "cursor-pointer hover:bg-surface-container-high" : "cursor-not-allowed"
                     )}
                   >
+                    {isComingSoon && (
+                      <div className="absolute top-2 right-2">
+                        <Badge variant="secondary" size="sm">Coming Soon</Badge>
+                      </div>
+                    )}
                     <div className="flex items-center gap-3 mb-3">
                       <div className={cn(
-                        'w-10 h-10 rounded-xl flex items-center justify-center',
+                        'w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm',
                         color === 'primary' && 'bg-primary-container',
                         color === 'secondary' && 'bg-secondary-container',
                         color === 'tertiary' && 'bg-tertiary-container',
                       )}>
                         <span className={cn(
-                          'material-symbols-outlined text-[20px]',
+                          'material-symbols-outlined text-[24px]',
                           color === 'primary' && 'text-on-primary-container',
                           color === 'secondary' && 'text-on-secondary-container',
                           color === 'tertiary' && 'text-on-tertiary',
@@ -126,15 +132,12 @@ export default function Skills() {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <h3 className="font-headline text-title-md text-on-surface">
+                          <h3 className="font-headline text-title-lg text-on-surface">
                             {s.name}
                           </h3>
-                          {isComingSoon && (
-                            <Badge variant="secondary" size="sm">Soon</Badge>
-                          )}
                         </div>
-                        <span className="text-label-sm text-on-surface-variant">
-                          {chapCount} chapters
+                        <span className="text-body-sm text-on-surface-variant font-medium">
+                          {isComingSoon ? 'Curriculum Inbound' : `${chapCount} Engineering Modules`}
                         </span>
                       </div>
                       {!isComingSoon && (
