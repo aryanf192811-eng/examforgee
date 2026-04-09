@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery Series — Reading Sequence Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,12.5px);
+  --fs-base:clamp(14px,3.2vw,16.5px);--fs-md:clamp(13.5px,3.2vw,15.5px);
+  --fs-lg:clamp(15px,3.6vw,19px);--fs-xl:clamp(22px,5.5vw,38px);
+  --fs-ch:clamp(15px,4vw,20px);--fs-code:clamp(11px,2.5vw,13px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;
+  padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);
+}
+.book{max-width:900px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(24px,5vw,48px) clamp(16px,5vw,52px) clamp(20px,4vw,40px);margin-bottom:clamp(16px,3vw,32px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.12;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.82;max-width:540px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;}
+
+/* LEGEND */
+.legend{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;}
+.legend-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;}
+.legend-row{display:flex;flex-wrap:wrap;gap:10px 24px;}
+.leg-item{display:flex;align-items:center;gap:8px;font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);}
+.leg-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.ld-start{background:var(--green);}
+.ld-lang{background:var(--blue);}
+.ld-logic{background:var(--orange);}
+.ld-dsa{background:var(--purple);}
+.ld-cp{background:var(--red);}
+.ld-prac{background:var(--teal);}
+
+/* TRACK CONTAINER */
+.track-wrap{margin-bottom:clamp(14px,3vw,28px);}
+.track-label{font-family:var(--hand);font-size:clamp(10px,2.2vw,12px);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.track-label::after{content:'';flex:1;height:1px;background:rgba(0,0,0,0.12);}
+
+/* FILE CARDS — the main UI element */
+.file-card{
+  background:var(--paper);border:1.5px solid #b0a088;border-radius:4px;
+  margin-bottom:clamp(10px,2vw,18px);
+  box-shadow:3px 4px 0 #9a8a6e,5px 6px 0 #7a6a50;
+  overflow:hidden;position:relative;
+}
+.file-head{
+  display:flex;align-items:stretch;
+  border-bottom:1px dashed #c8b898;
+}
+.file-num{
+  background:var(--ink);
+  min-width:clamp(52px,10vw,72px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(12px,2vw,16px) clamp(8px,2vw,14px);
+  flex-shrink:0;
+}
+.fn-step{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.4);margin-bottom:3px;}
+.fn-num{font-family:var(--body);font-size:clamp(22px,5vw,36px);font-weight:700;color:var(--paper);line-height:1;}
+.fn-total{font-family:var(--hand);font-size:var(--fs-xs);color:rgba(245,240,230,0.3);margin-top:2px;}
+
+.file-title-area{
+  padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,22px);
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+}
+.file-name{
+  font-family:var(--body);font-size:clamp(14px,3.5vw,18px);font-weight:700;
+  color:var(--ink);line-height:1.2;margin-bottom:4px;
+}
+.file-name em{font-style:italic;color:var(--blue);}
+.file-subtitle{
+  font-family:var(--prose);font-size:var(--fs-md);
+  color:var(--ink3);line-height:1.6;
+}
+.file-badge-area{
+  padding:clamp(8px,2vw,14px) clamp(10px,2vw,18px);
+  display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+  gap:6px;flex-shrink:0;
+}
+.fbadge{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;
+  text-transform:uppercase;padding:3px 10px;border-radius:2px;
+  border:1.5px solid currentColor;white-space:nowrap;
+}
+.fb-start{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.fb-lang{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.fb-logic{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.fb-dsa{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.fb-cp{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.fb-prac{color:var(--teal);border-color:var(--teal);}
+
+/* FILE BODY */
+.file-body{
+  background-image:repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size:100% 32px;background-position:0 0;
+  padding:clamp(14px,2.5vw,20px) clamp(14px,3vw,24px) clamp(12px,2.5vw,18px) clamp(14px,3vw,24px);
+}
+
+/* CHAPTER LIST */
+.ch-list{list-style:none;margin:0;padding:0;columns:2;column-gap:24px;}
+.ch-list li{
+  font-family:var(--prose);font-size:clamp(13px,2.7vw,15px);
+  color:var(--ink2);padding:4px 0 4px 20px;
+  position:relative;break-inside:avoid;
+  border-bottom:1px dashed rgba(0,0,0,0.07);
+  line-height:1.55;
+}
+.ch-list li::before{
+  content:attr(data-n);
+  position:absolute;left:0;
+  font-family:var(--hand);font-size:var(--fs-xs);
+  color:var(--ink3);top:5px;
+}
+.ch-list li strong{color:var(--ink);}
+
+/* WHEN + WHAT META ROW */
+.meta-row{
+  display:flex;flex-wrap:wrap;gap:8px 20px;
+  padding:clamp(10px,2vw,14px) clamp(14px,3vw,24px);
+  background:var(--paper2);border-top:1px dashed #c8b898;
+}
+.meta-item{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);display:flex;align-items:flex-start;gap:7px;}
+.meta-icon{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;color:var(--ink3);white-space:nowrap;padding-top:2px;min-width:52px;}
+.meta-item strong{color:var(--ink);}
+
+/* CONNECTOR ARROWS between files */
+.connector{
+  display:flex;align-items:center;justify-content:center;
+  height:clamp(24px,4vw,36px);margin:0 auto;
+  gap:8px;color:var(--ink3);
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;
+  text-transform:uppercase;
+}
+.connector::before,.connector::after{content:'';flex:1;max-width:80px;height:1px;background:rgba(0,0,0,0.15);}
+.connector span{color:var(--orange);}
+
+/* TRACK DIVIDERS */
+.track-divider{
+  background:var(--paper2);border:1.5px solid #b0a080;border-radius:3px;
+  padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,24px);
+  margin-bottom:clamp(10px,2vw,18px);
+  box-shadow:2px 3px 0 #9a8a6e;
+  position:relative;overflow:hidden;
+}
+.track-divider::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.1) 31px,rgba(100,130,180,0.1) 32px);background-size:100% 32px;pointer-events:none;}
+.td-inner{position:relative;}
+.td-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;}
+.td-title{font-family:var(--body);font-size:clamp(14px,3.5vw,17px);font-weight:700;color:var(--ink);}
+.td-desc{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink3);margin-top:4px;line-height:1.7;}
+.td-files{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;color:var(--ink3);margin-top:8px;}
+
+/* READING PATH VISUAL */
+.path-card{
+  background:var(--paper);border:1.5px solid #b0a088;border-radius:4px;
+  padding:clamp(14px,3vw,22px) clamp(14px,3vw,24px);
+  margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:3px 4px 0 #9a8a6e;
+}
+.path-card .pc-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;padding-bottom:8px;border-bottom:1px dashed #c8b898;}
+.path-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;}
+.path-row:last-child{margin-bottom:0;}
+.path-arrow{font-family:var(--hand);font-size:clamp(11px,2.5vw,14px);color:var(--orange);flex-shrink:0;margin-top:2px;min-width:20px;}
+.path-content{flex:1;font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);line-height:1.75;}
+.path-content strong{color:var(--ink);}
+.path-content .tag{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1.5px solid currentColor;display:inline;margin-left:6px;}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tg2{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+
+/* PROFICIENCY TIMELINE */
+.timeline{
+  background:var(--paper);border:1.5px solid #b0a088;border-radius:4px;
+  padding:clamp(14px,3vw,22px) clamp(14px,3vw,28px);
+  margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:3px 4px 0 #9a8a6e;
+}
+.tl-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;}
+.tl-row{display:flex;align-items:flex-start;gap:0;margin-bottom:0;position:relative;}
+.tl-row::before{content:'';position:absolute;left:clamp(20px,4vw,28px);top:36px;bottom:-4px;width:2px;background:rgba(0,0,0,0.1);}
+.tl-row:last-child::before{display:none;}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:clamp(44px,8vw,60px);}
+.tl-dot{width:clamp(28px,5vw,36px);height:clamp(28px,5vw,36px);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--body);font-weight:700;font-size:clamp(11px,2.5vw,14px);color:var(--paper);flex-shrink:0;margin-top:4px;}
+.tl-content{flex:1;padding:clamp(4px,1vw,8px) 0 clamp(20px,3vw,30px) clamp(10px,2vw,16px);}
+.tl-level{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.tl-heading{font-family:var(--body);font-size:clamp(13.5px,3.2vw,16px);font-weight:700;color:var(--ink);margin-bottom:4px;}
+.tl-files{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin-bottom:4px;line-height:1.65;}
+.tl-files strong{color:var(--blue);}
+.tl-desc{font-family:var(--prose);font-size:clamp(12.5px,2.7vw,14.5px);color:var(--ink3);line-height:1.72;}
+
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.9;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,14px) clamp(12px,3vw,20px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:5px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,14px) clamp(12px,3vw,20px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(14px,3vw,24px) 0;}
+
+@media(max-width:640px){
+  .ch-list{columns:1;}
+  .file-badge-area{display:none;}
+  .file-head{flex-wrap:wrap;}
+  .meta-row{flex-direction:column;gap:6px;}
+  .legend-row{flex-direction:column;gap:8px;}
+  .path-row{flex-direction:column;gap:4px;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}
+  .cover{padding:18px 14px 16px;}
+  .cover::after{display:none;}
+  .cover-inner{padding-left:0;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;}
+  .file-num{min-width:44px;padding:10px 8px;}
+  .fn-num{font-size:22px;}
+}
+@media print{
+  body{background:white;padding:0;}
+  .file-card,.timeline,.path-card{box-shadow:none;break-inside:avoid;}
+  .connector{page-break-inside:avoid;}
+}
+
+/* ── COPY BUTTON ── */
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: var(--blue);
+  color: var(--paper);
+  border: none;
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-family: var(--hand, 'Architects Daughter', cursive);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  z-index: 10;
+  user-select: none;
+  letter-spacing: 0.5px;
+}
+.copy-btn:hover { background: var(--ink); transform: translateY(-1px); }
+.copy-btn.copied { background: var(--green, #1a6b40); }
+
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover">
+  <span class="cover-gate-tag">The Reading Sequence Map</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery Series — All 8 Files</div>
+    <h1>Your Complete<br><em>Learning Path</em></h1>
+    <p class="cover-desc">Eight files. One clear path. This map tells you which file to open first, which to skip if you already know something, and exactly where each file fits in your journey from writing your first <code>cout</code> to submitting at ICPC. There is a correct order. This is it.</p>
+  </div>
+</div>
+
+<!-- LEGEND -->
+<div class="legend">
+  <div class="legend-lbl">File Types in This Series</div>
+  <div class="legend-row">
+    <div class="leg-item"><div class="leg-dot ld-start"></div> Absolute Start Point</div>
+    <div class="leg-item"><div class="leg-dot ld-lang"></div> C++ Language Deep Dive</div>
+    <div class="leg-item"><div class="leg-dot ld-logic"></div> Logic &amp; Thinking Training</div>
+    <div class="leg-item"><div class="leg-dot ld-dsa"></div> Data Structures &amp; Algorithms</div>
+    <div class="leg-item"><div class="leg-dot ld-cp"></div> Competitive Programming</div>
+    <div class="leg-item"><div class="leg-dot ld-prac"></div> Practice Problems</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE PROFICIENCY TIMELINE
+════════════════════════════════════════════ -->
+<div class="timeline">
+  <div class="tl-lbl">Where You Are → Where Each File Takes You</div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--teal);">★</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--teal);">Stage 0 — You start here</div>
+      <div class="tl-heading">Complete Beginner — Never written C++ before</div>
+      <div class="tl-files">Open <strong>File 08</strong> first, then <strong>File 01</strong></div>
+      <div class="tl-desc">You need two things simultaneously: a feel for what problems look like, and the C++ syntax to write solutions. File 08 gives you ~80 beginner problems with step-by-step thinking. File 01 gives you the language. Run them in parallel.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--green);">1</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--green);">Stage 1 — Foundation</div>
+      <div class="tl-heading">Know syntax, solving simple problems</div>
+      <div class="tl-files">Active files: <strong>File 01</strong> (language) + <strong>File 08</strong> (practice)</div>
+      <div class="tl-desc">Variables, loops, functions, arrays, pointers. You can write programs but often don't know where to start on a new problem. Complete File 01 fully. Finish File 08's first 6 chapters. Understand every line you write.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--orange);">2</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--orange);">Stage 2 — Logic Builder</div>
+      <div class="tl-heading">Syntax is comfortable, logic is the bottleneck</div>
+      <div class="tl-files">Active files: <strong>File 07</strong> (logic thinking) + <strong>File 08</strong> Ch7–8 (harder problems)</div>
+      <div class="tl-desc">This is where most people are stuck longest. You know the language but stare at blank screens. File 07 fixes this — it teaches you HOW to think about any problem before touching the keyboard. The 5-step framework, constraint reading, and pattern recognition are the most valuable 50 pages in this series for someone at this stage.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--blue);">3</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--blue);">Stage 3 — OOP &amp; Modern C++</div>
+      <div class="tl-heading">Procedural programmer becoming a C++ programmer</div>
+      <div class="tl-files">Active files: <strong>File 02</strong> (OOP) → <strong>File 03</strong> (Advanced C++)</div>
+      <div class="tl-desc">Classes, inheritance, polymorphism, templates, STL, smart pointers, lambdas, modern C++11–20 features. Read File 02 completely before File 03. These two files make you write production-quality C++ instead of C with classes.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--purple);">4</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--purple);">Stage 4 — DSA</div>
+      <div class="tl-heading">Comfortable with C++, learning algorithms</div>
+      <div class="tl-files">Active file: <strong>File 05</strong> (DSA with C++)</div>
+      <div class="tl-desc">This is where competitive programming starts. Linked lists, stacks, queues, trees, graphs, sorting, binary search, dynamic programming. Every algorithm is implemented from scratch in C++. Do not skip to this stage — you need Files 01–03 first or the code won't make sense.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:var(--red);">5</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:var(--red);">Stage 5 — Expert C++</div>
+      <div class="tl-heading">Solving DSA problems, want deeper C++ mastery</div>
+      <div class="tl-files">Active file: <strong>File 04</strong> (Pure Mastery)</div>
+      <div class="tl-desc">Undefined behavior, memory model, template metaprogramming, CRTP, performance engineering, ABI, design patterns. This is what separates good engineers from great ones. Read this file after File 03, not before. It builds on everything.</div>
+    </div>
+  </div>
+
+  <div class="tl-row">
+    <div class="tl-dot-wrap">
+      <div class="tl-dot" style="background:#8a1a1a;">6</div>
+    </div>
+    <div class="tl-content">
+      <div class="tl-level" style="color:#8a1a1a;">Stage 6 — Competitive Programming</div>
+      <div class="tl-heading">ICPC / Codeforces level</div>
+      <div class="tl-files">Active file: <strong>File 06</strong> (The Black Box)</div>
+      <div class="tl-desc">Copy-paste contest templates. Binary lifting, centroid decomp, Dinic's max flow, Manacher, suffix arrays, NTT, convex hull trick, digit DP, game theory, ICPC strategy. This file assumes you've solved 300+ problems. It's a weapon, not a tutorial.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FILE-BY-FILE SEQUENCE
+════════════════════════════════════════════ -->
+
+<!-- TRACK 1 — Start here -->
+<div class="track-wrap">
+  <div class="track-label" style="color:var(--teal);">
+    <div class="leg-dot ld-prac" style="flex-shrink:0;width:10px;height:10px;border-radius:50%;"></div>
+    Track A — Begin Here (Parallel Start)
+  </div>
+
+  <div class="track-divider">
+    <div class="td-inner">
+      <div class="td-label" style="color:var(--teal);">Weeks 1–4 · Read Both Simultaneously</div>
+      <div class="td-title">Start with File 08 for problems + File 01 for language</div>
+      <div class="td-desc">You need problems to practice on AND syntax to write them. Open both. Read one chapter of File 01. Then solve the corresponding problems in File 08. Alternate until done.</div>
+      <div class="td-files">Files 08 + 01 · ~200 pages total · 4–6 weeks at 1–2 hrs/day</div>
+    </div>
+  </div>
+
+  <!-- FILE 08 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">08</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">Problem Solving — <em>Beginner to Intermediate</em></div>
+        <div class="file-subtitle">80+ problems · Basic math to intermediate algorithms · Every problem has approach + dry run + code</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-prac">Practice</span>
+        <span class="fbadge fb-start">Start Here</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Basic Math &amp; Numbers</strong> — Odd/even, GCD, primes, digits, swaps, leap year</li>
+        <li data-n="Ch2"><strong>Decision Making</strong> — Greatest of three, vowels, case conversion, dice problem</li>
+        <li data-n="Ch3"><strong>Loops &amp; Series</strong> — Factorial, AP/GP, triangular numbers, mean, median</li>
+        <li data-n="Ch4"><strong>Array Problems</strong> — Second/third largest, palindrome array, intersection, union</li>
+        <li data-n="Ch5"><strong>String Problems</strong> — Remove vowels, anagram, frequency, camelCase, merge strings</li>
+        <li data-n="Ch6"><strong>Pattern Printing</strong> — Triangle, pyramid, diamond, Floyd's, number patterns</li>
+        <li data-n="Ch7"><strong>Matrix Problems</strong> — Diagonal sum, Toeplitz, identical matrices, rotation</li>
+        <li data-n="Ch8"><strong>Intermediate</strong> — Armstrong, Boyer-Moore voting, longest subarray, square root</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> You are an absolute beginner</div>
+      <div class="meta-item"><span class="meta-icon">Skip if</span> You've already solved 50+ beginner problems</div>
+      <div class="meta-item"><span class="meta-icon">Prereq</span> None — this is genuinely file #1 to open</div>
+    </div>
+  </div>
+
+  <div class="connector"><span>simultaneously with ↕</span></div>
+
+  <!-- FILE 01 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">01</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">Foundations — <em>The Language of C++</em></div>
+        <div class="file-subtitle">Variables, operators, control flow, functions, arrays, pointers, memory — everything the language itself gives you</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-lang">Language</span>
+        <span class="fbadge fb-start">Start Here</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Setup &amp; First Program</strong> — Compile, run, hello world, structure</li>
+        <li data-n="Ch2"><strong>Variables &amp; Data Types</strong> — int, long long, char, bool, float, overflow</li>
+        <li data-n="Ch3"><strong>Operators &amp; Expressions</strong> — Arithmetic, logical, bitwise, precedence</li>
+        <li data-n="Ch4"><strong>Control Flow</strong> — if/else, switch, for, while, do-while, break/continue</li>
+        <li data-n="Ch5"><strong>Functions</strong> — Parameters, return, scope, recursion, inline</li>
+        <li data-n="Ch6"><strong>Arrays &amp; Strings</strong> — 1D/2D arrays, C-strings, std::string operations</li>
+        <li data-n="Ch7"><strong>Pointers</strong> — Addresses, dereferencing, pointer arithmetic, nullptr</li>
+        <li data-n="Ch8"><strong>References &amp; Memory</strong> — Stack vs heap, new/delete, RAII introduction</li>
+        <li data-n="Ch9"><strong>Traps &amp; Reference</strong> — Common mistakes, cheatsheet, fast I/O</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> Learning C++ syntax for the first time</div>
+      <div class="meta-item"><span class="meta-icon">Skip if</span> You know C++ syntax fluently</div>
+      <div class="meta-item"><span class="meta-icon">Prereq</span> File 08 open simultaneously is ideal</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACK 2 — Logic -->
+<div class="track-wrap">
+  <div class="track-label" style="color:var(--orange);">
+    <div class="leg-dot ld-logic" style="flex-shrink:0;width:10px;height:10px;border-radius:50%;"></div>
+    Track B — The Thinking Layer (Most Underrated Step)
+  </div>
+
+  <div class="track-divider">
+    <div class="td-inner">
+      <div class="td-label" style="color:var(--orange);">Weeks 5–8 · After File 01 is complete</div>
+      <div class="td-title">File 07 — teach your brain how to see problems</div>
+      <div class="td-desc">Most people skip this step and wonder why they're still stuck after learning syntax. File 07 is the bridge. It teaches the mental framework for problem analysis that every experienced programmer uses but rarely explains out loud.</div>
+      <div class="td-files">File 07 · 12 chapters · Read actively — do examples by hand as you go</div>
+    </div>
+  </div>
+
+  <!-- FILE 07 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">07</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">The Logic Builder — <em>How to Think Before You Code</em></div>
+        <div class="file-subtitle">Problem frameworks, pattern recognition, constraint analysis, recursion mental model — the thinking layer</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-logic">Logic</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>How to Think About Any Problem</strong> — 5-step framework, constraints, patterns</li>
+        <li data-n="Ch2"><strong>Number Logic</strong> — Primes, Armstrong, Strong, Perfect — with traces</li>
+        <li data-n="Ch3"><strong>Pattern Printing</strong> — The 3-question method for any shape</li>
+        <li data-n="Ch4"><strong>Array Logic</strong> — Kadane's, rotation, matrix thinking</li>
+        <li data-n="Ch5"><strong>String Logic</strong> — Frequency maps, palindrome approaches compared</li>
+        <li data-n="Ch6"><strong>Recursion Thinking</strong> — The one thought that unlocks all recursion</li>
+        <li data-n="Ch7"><strong>Searching &amp; Sorting</strong> — Binary search on answer, custom sorts</li>
+        <li data-n="Ch8"><strong>Mathematical Logic</strong> — GCD, series formulas, next permutation</li>
+        <li data-n="Ch9"><strong>Two Pointer &amp; Sliding Window</strong> — When and why each pointer moves</li>
+        <li data-n="Ch10"><strong>Bit Manipulation Logic</strong> — See numbers as binary, the XOR tricks</li>
+        <li data-n="Ch11"><strong>Advanced Logic</strong> — Greedy thinking, DP intuition, graph-in-disguise</li>
+        <li data-n="Ch12"><strong>Logic Master Reference</strong> — The 20 rules + signal→algorithm map</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> After File 01; syntax is comfortable but logic is the bottleneck</div>
+      <div class="meta-item"><span class="meta-icon">Skip if</span> You can already solve Codeforces 1200–1400 rated problems</div>
+      <div class="meta-item"><span class="meta-icon">Key habit</span> Solve every example by hand on paper before looking at the code</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACK 3 — Language Mastery -->
+<div class="track-wrap">
+  <div class="track-label" style="color:var(--blue);">
+    <div class="leg-dot ld-lang" style="flex-shrink:0;width:10px;height:10px;border-radius:50%;"></div>
+    Track C — C++ Language Mastery (Files 02 → 03 → 04)
+  </div>
+
+  <div class="track-divider">
+    <div class="td-inner">
+      <div class="td-label" style="color:var(--blue);">Weeks 6–16 · Parallel with or after File 07</div>
+      <div class="td-title">Three files that make you a real C++ programmer</div>
+      <div class="td-desc">These must be read in order: 02 → 03 → 04. Each builds on the previous. File 02 is OOP fundamentals. File 03 is the modern C++ toolkit. File 04 is senior-engineer knowledge. Don't rush to 04 — it only makes sense after 02 and 03.</div>
+      <div class="td-files">Files 02 + 03 + 04 · The longest track · 6–10 weeks total depending on depth</div>
+    </div>
+  </div>
+
+  <!-- FILE 02 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">02</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">OOP Mastery — <em>Classes, Inheritance &amp; Polymorphism</em></div>
+        <div class="file-subtitle">Everything about object-oriented design in C++ — from your first class to SOLID principles</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-lang">Language</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Classes &amp; Objects</strong> — Blueprint, instance, member functions, this pointer</li>
+        <li data-n="Ch2"><strong>Constructors &amp; Destructors</strong> — Default, param, copy, move, RAII</li>
+        <li data-n="Ch3"><strong>Encapsulation</strong> — Access control, getters/setters, friend</li>
+        <li data-n="Ch4"><strong>Inheritance</strong> — Single, multi-level, multiple, virtual base</li>
+        <li data-n="Ch5"><strong>Polymorphism &amp; Virtual</strong> — vtable, virtual dispatch, override, final</li>
+        <li data-n="Ch6"><strong>Operator Overloading</strong> — +, <<, ==, [], (), conversion</li>
+        <li data-n="Ch7"><strong>Abstract Classes</strong> — Pure virtual, interfaces, abstract design</li>
+        <li data-n="Ch8"><strong>Rule of Five</strong> — Copy ctor, copy assign, move ctor, move assign, destructor</li>
+        <li data-n="Ch9"><strong>OOP Design Principles</strong> — SOLID, composition vs inheritance</li>
+        <li data-n="Ch10"><strong>OOP Cheatsheet</strong> — All patterns and traps in one reference</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> After File 01 is complete</div>
+      <div class="meta-item"><span class="meta-icon">Read before</span> File 03 (uses OOP everywhere)</div>
+      <div class="meta-item"><span class="meta-icon">Prereq</span> File 01 — must know pointers, functions, references</div>
+    </div>
+  </div>
+
+  <div class="connector"><span>then immediately</span></div>
+
+  <!-- FILE 03 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">03</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">Advanced C++ — <em>Templates, STL &amp; Modern C++</em></div>
+        <div class="file-subtitle">The toolkit that makes C++ genuinely powerful — STL, smart pointers, lambdas, concurrency, C++11–20</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-lang">Language</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Templates</strong> — Function, class, variadic, specialization, SFINAE intro</li>
+        <li data-n="Ch2"><strong>STL Containers</strong> — vector, map, set, unordered_map, deque, when to use each</li>
+        <li data-n="Ch3"><strong>STL Algorithms</strong> — sort, find, transform, accumulate, iterators</li>
+        <li data-n="Ch4"><strong>Smart Pointers</strong> — unique_ptr, shared_ptr, weak_ptr, make_shared</li>
+        <li data-n="Ch5"><strong>Lambdas &amp; Functional</strong> — Captures, std::function, higher-order patterns</li>
+        <li data-n="Ch6"><strong>Exception Handling</strong> — try/catch/throw, noexcept, exception hierarchy</li>
+        <li data-n="Ch7"><strong>File I/O &amp; Streams</strong> — fstream, stringstream, formatting</li>
+        <li data-n="Ch8"><strong>Modern C++11–20</strong> — auto, range-for, structured bindings, concepts, modules</li>
+        <li data-n="Ch9"><strong>Concurrency</strong> — std::thread, mutex, async, atomic basics</li>
+        <li data-n="Ch10"><strong>Advanced Cheatsheet</strong> — Complete modern C++ reference</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> After File 02; OOP is comfortable</div>
+      <div class="meta-item"><span class="meta-icon">Read before</span> File 04 and File 05 (both use STL heavily)</div>
+      <div class="meta-item"><span class="meta-icon">Prereq</span> Files 01 + 02 complete</div>
+    </div>
+  </div>
+
+  <div class="connector"><span>then when ready for senior-level</span></div>
+
+  <!-- FILE 04 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">04</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">Pure Mastery — <em>What Senior Engineers Know</em></div>
+        <div class="file-subtitle">Undefined behavior, memory model, TMP, CRTP, performance, ABI, custom allocators — the deep end</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-lang">Language</span>
+        <span class="fbadge" style="color:var(--red);border-color:var(--red);background:var(--hl-r);">Senior</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Undefined Behavior</strong> — What UB means, 7 types, sanitizers (ASan/UBSan/TSan)</li>
+        <li data-n="Ch2"><strong>Memory Model &amp; Alignment</strong> — Padding, cache architecture, SoA vs AoS, false sharing</li>
+        <li data-n="Ch3"><strong>Template Metaprogramming</strong> — Type traits, SFINAE, enable_if, if constexpr</li>
+        <li data-n="Ch4"><strong>CRTP &amp; Policy Classes</strong> — Static polymorphism, zero-overhead abstractions</li>
+        <li data-n="Ch5"><strong>Performance Engineering</strong> — Profile first, move semantics, branchless, LTO/PGO</li>
+        <li data-n="Ch6"><strong>Design Patterns</strong> — Builder, Decorator, Command, Strategy in modern C++</li>
+        <li data-n="Ch7"><strong>Custom Allocators</strong> — Placement new, arena allocators, pool allocators</li>
+        <li data-n="Ch8"><strong>ABI &amp; Compilation</strong> — Name mangling, ODR, linkage, extern "C"</li>
+        <li data-n="Ch9"><strong>Real-World Architecture</strong> — CMake, project layout, senior checklist, debugging</li>
+        <li data-n="Ch10"><strong>Expert Reference</strong> — Complete cheatsheet + reading list</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> Files 02 + 03 are complete; you're writing real C++ projects</div>
+      <div class="meta-item"><span class="meta-icon">Skip if</span> You're primarily focused on competitive programming (do File 05 instead)</div>
+      <div class="meta-item"><span class="meta-icon">Best for</span> Software engineering interviews, production code, systems programming</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACK 4 — DSA -->
+<div class="track-wrap">
+  <div class="track-label" style="color:var(--purple);">
+    <div class="leg-dot ld-dsa" style="flex-shrink:0;width:10px;height:10px;border-radius:50%;"></div>
+    Track D — Data Structures &amp; Algorithms
+  </div>
+
+  <div class="track-divider">
+    <div class="td-inner">
+      <div class="td-label" style="color:var(--purple);">Weeks 10–20 · After Files 01 + 02 + 03</div>
+      <div class="td-title">File 05 — the algorithmic foundation for everything competitive</div>
+      <div class="td-desc">This is the largest file in the series and the most important one for interviews and competitive programming. Every data structure built from scratch. Every classic algorithm traced and explained. Do not rush this — spend real time on DP and graphs especially.</div>
+      <div class="td-files">File 05 · 15 chapters · This is a 6–8 week commitment if done properly</div>
+    </div>
+  </div>
+
+  <!-- FILE 05 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">05</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">DSA with C++ — <em>Every Structure, Every Algorithm</em></div>
+        <div class="file-subtitle">From O(n) complexity to segment trees — 15 chapters of complete implementations, traces and patterns</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-dsa">DSA</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch1"><strong>Complexity Analysis</strong> — Big-O, the 10⁸ rule, DS complexity cheatsheet</li>
+        <li data-n="Ch2"><strong>Arrays &amp; Strings</strong> — Two-pointer, sliding window, prefix sum, KMP</li>
+        <li data-n="Ch3"><strong>Linked Lists</strong> — Reverse, Floyd's cycle, merge sorted, LRU Cache</li>
+        <li data-n="Ch4"><strong>Stacks &amp; Queues</strong> — Monotonic stack, next greater element, histogram</li>
+        <li data-n="Ch5"><strong>Recursion &amp; Backtracking</strong> — Template, subsets, permutations, N-Queens</li>
+        <li data-n="Ch6"><strong>Sorting</strong> — Merge sort, quicksort 3-way, counting sort, radix sort</li>
+        <li data-n="Ch7"><strong>Binary Search</strong> — 3 templates, search on answer, rotated array</li>
+        <li data-n="Ch8"><strong>Hashing</strong> — From scratch, anagrams, subarray sum, consecutive</li>
+        <li data-n="Ch9"><strong>Trees &amp; BST</strong> — Traversals, LCA, diameter, serialize, full BST impl</li>
+        <li data-n="Ch10"><strong>Heaps</strong> — Max-heap from scratch, top-K, median stream, merge K</li>
+        <li data-n="Ch11"><strong>Graphs</strong> — BFS/DFS, topo sort, Dijkstra, Bellman-Ford, Kruskal + DSU</li>
+        <li data-n="Ch12"><strong>Dynamic Programming</strong> — Knapsack, LCS, LIS, edit distance, bitmask DP</li>
+        <li data-n="Ch13"><strong>Greedy</strong> — Activity selection, jump game, fractional knapsack</li>
+        <li data-n="Ch14"><strong>Advanced Structures</strong> — Segment tree, lazy prop, Fenwick BIT, Trie, XOR Trie</li>
+        <li data-n="Ch15"><strong>Bit Manipulation</strong> — All tricks, single number, subsets, problem→algorithm map</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> C++ syntax is solid (Files 01–03 done or equivalent experience)</div>
+      <div class="meta-item"><span class="meta-icon">Skip if</span> You've already completed a full DSA course with implementations</div>
+      <div class="meta-item"><span class="meta-icon">Key habit</span> Implement every structure by hand first. Only then look at the solution.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRACK 5 — CP -->
+<div class="track-wrap">
+  <div class="track-label" style="color:var(--red);">
+    <div class="leg-dot ld-cp" style="flex-shrink:0;width:10px;height:10px;border-radius:50%;"></div>
+    Track E — Competitive Programming (The Final Weapon)
+  </div>
+
+  <div class="track-divider">
+    <div class="td-inner">
+      <div class="td-label" style="color:var(--red);">Weeks 20+ · After File 05; 300+ problems solved</div>
+      <div class="td-title">File 06 — The Black Box — ICPC &amp; Codeforces level</div>
+      <div class="td-desc">This is not a learning file. This is a reference file. Open it during practice when you need a template. Copy the boilerplate at every contest. Use the pattern map when stuck. Read it after solving problems, not before. Every algorithm here assumes you already understand the concept — it just gives you the contest-ready implementation.</div>
+      <div class="td-files">File 06 · 12 chapters · Reference document, not linear reading</div>
+    </div>
+  </div>
+
+  <!-- FILE 06 -->
+  <div class="file-card">
+    <div class="file-head">
+      <div class="file-num">
+        <div class="fn-step">Read</div>
+        <div class="fn-num">06</div>
+        <div class="fn-total">of 08</div>
+      </div>
+      <div class="file-title-area">
+        <div class="file-name">The Black Box — <em>ICPC &amp; Codeforces Templates</em></div>
+        <div class="file-subtitle">Copy-paste contest weapons: boilerplate, number theory, heavy trees, flows, geometry, advanced DP, game theory</div>
+      </div>
+      <div class="file-badge-area">
+        <span class="fbadge fb-cp">Contest</span>
+        <span class="fbadge" style="color:var(--red);border-color:var(--red);background:var(--hl-r);">ICPC Level</span>
+      </div>
+    </div>
+    <div class="file-body">
+      <ul class="ch-list">
+        <li data-n="Ch16"><strong>Silver Bullet Boilerplate</strong> — The ultimate contest template + debug macros</li>
+        <li data-n="Ch17"><strong>Number Theory</strong> — Binary expo, modular inverse, nCr, linear sieve, Miller-Rabin</li>
+        <li data-n="Ch18"><strong>Heavy Trees</strong> — Binary lifting LCA, Euler tour, HLD, centroid decomposition</li>
+        <li data-n="Ch19"><strong>Advanced Range Queries</strong> — Sparse Table O(1) RMQ, lazy SegTree, 2D BIT</li>
+        <li data-n="Ch20"><strong>String Mastery</strong> — Z-algorithm, Manacher, double hashing, suffix arrays</li>
+        <li data-n="Ch21"><strong>Coordinate Compression + Mo's</strong> — Shrink 10⁹ to 10⁵, offline range queries</li>
+        <li data-n="Ch22"><strong>Network Flow</strong> — Dinic's max-flow, Hopcroft-Karp matching, min-cost flow</li>
+        <li data-n="Ch23"><strong>Geometry</strong> — Point struct, convex hull, polygon area, rotating calipers</li>
+        <li data-n="Ch24"><strong>Advanced Graphs</strong> — Tarjan SCC, bridges, articulation points, Li Chao tree</li>
+        <li data-n="Ch25"><strong>Digit DP + Advanced DP</strong> — Digit DP template, SOS DP, D&amp;C opt, Knuth's</li>
+        <li data-n="Ch26"><strong>Game Theory &amp; Math</strong> — Sprague-Grundy, Nim, matrix expo, NTT/FFT</li>
+        <li data-n="Ch27"><strong>ICPC Strategy</strong> — 3-hour playbook, pattern map, rating roadmap, problem list</li>
+      </ul>
+    </div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-icon">Read when</span> File 05 complete + 300+ problems solved on Codeforces/CSES</div>
+      <div class="meta-item"><span class="meta-icon">How to use</span> Not linear — use as reference during contests and practice sessions</div>
+      <div class="meta-item"><span class="meta-icon">Must do first</span> Ch16 boilerplate — copy this into every new contest file from day one</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     THE THREE READING PATHS
+════════════════════════════════════════════ -->
+<div class="path-card">
+  <div class="pc-lbl">Three Paths — Choose the One That Fits You</div>
+
+  <div class="path-row">
+    <div class="path-arrow">→</div>
+    <div class="path-content">
+      <strong>Path 1 — "I want to get a software engineering job"</strong><span class="tag tc">Industry</span><br>
+      <span style="font-size:clamp(12.5px,2.7vw,14.5px);color:var(--ink3);">File 08 → File 01 → File 02 → File 03 → File 04 → File 05 → File 07<br>
+      Focus: C++ language mastery + DSA for interviews. File 04 (UB, ABI, performance) is critical for this path. File 06 is optional but nice to have. Estimated time: 6–9 months serious study.</span>
+    </div>
+  </div>
+
+  <div class="path-row">
+    <div class="path-arrow">→</div>
+    <div class="path-content">
+      <strong>Path 2 — "I want to get good at competitive programming"</strong><span class="tag tp">Competitive</span><br>
+      <span style="font-size:clamp(12.5px,2.7vw,14.5px);color:var(--ink3);">File 08 → File 01 → File 07 → File 05 → File 06 → (File 02+03 as needed)<br>
+      Focus: problem-solving speed + DSA templates. Skip File 04 initially — it's less relevant for CP. File 06 Ch16 boilerplate from day one. Estimated time: 4–6 months to Codeforces Expert rating.</span>
+    </div>
+  </div>
+
+  <div class="path-row">
+    <div class="path-arrow">→</div>
+    <div class="path-content">
+      <strong>Path 3 — "I know some C++, I want to fill the gaps"</strong><span class="tag tt">Gap Fill</span><br>
+      <span style="font-size:clamp(12.5px,2.7vw,14.5px);color:var(--ink3);">Use the file descriptions above to identify your level. Open the corresponding file. Read the chapters you haven't mastered. Use each file's final "Master Reference" chapter as a self-assessment — if you know everything in it, skip to the next file.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     QUICK REFERENCE TABLE
+════════════════════════════════════════════ -->
+<div class="legend" style="margin-bottom:clamp(14px,3vw,28px);">
+  <div class="legend-lbl">Quick Reference — All 8 Files at a Glance</div>
+  <div style="overflow-x:auto;margin-top:4px;">
+  <table style="width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12px,2.7vw,14.5px);">
+    <thead>
+      <tr style="background:var(--ink);">
+        <th style="padding:8px 12px;text-align:left;color:var(--paper);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;white-space:nowrap;">File</th>
+        <th style="padding:8px 12px;text-align:left;color:var(--paper);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;">Title</th>
+        <th style="padding:8px 12px;text-align:left;color:var(--paper);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;white-space:nowrap;">Read Sequence</th>
+        <th style="padding:8px 12px;text-align:left;color:var(--paper);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;white-space:nowrap;">Type</th>
+        <th style="padding:8px 12px;text-align:left;color:var(--paper);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;white-space:nowrap;">Prereq</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 08</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">Problem Solving — Beginner to Intermediate</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-g);color:var(--green);padding:2px 7px;border-radius:2px;border:1px solid var(--green);">1st</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">Practice + Logic</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">None</td>
+      </tr>
+      <tr style="background:rgba(0,0,0,0.02);">
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 01</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">Foundations — C++ Language</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-g);color:var(--green);padding:2px 7px;border-radius:2px;border:1px solid var(--green);">1st (parallel with 08)</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">C++ Language</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">None</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 07</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">The Logic Builder — How to Think</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-o);color:var(--orange);padding:2px 7px;border-radius:2px;border:1px solid var(--orange);">2nd</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">Logic Training</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">File 01</td>
+      </tr>
+      <tr style="background:rgba(0,0,0,0.02);">
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 02</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">OOP Mastery — Classes &amp; Inheritance</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-b);color:var(--blue);padding:2px 7px;border-radius:2px;border:1px solid var(--blue);">3rd</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">C++ Language</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">File 01</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 03</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">Advanced C++ — STL, Templates, Modern C++</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-b);color:var(--blue);padding:2px 7px;border-radius:2px;border:1px solid var(--blue);">4th</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">C++ Language</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">Files 01 + 02</td>
+      </tr>
+      <tr style="background:rgba(0,0,0,0.02);">
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 05</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">DSA with C++ — Every Structure &amp; Algorithm</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-p);color:var(--purple);padding:2px 7px;border-radius:2px;border:1px solid var(--purple);">5th</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">DSA</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">Files 01 + 02 + 03</td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-weight:700;color:var(--blue);">File 04</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink);">Pure Mastery — Senior Engineering</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-p);color:var(--purple);padding:2px 7px;border-radius:2px;border:1px solid var(--purple);">5th (industry path)</span></td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;">C++ Language</td>
+        <td style="padding:8px 12px;border-bottom:1px dashed #c0a880;color:var(--ink3);">Files 01 + 02 + 03</td>
+      </tr>
+      <tr style="background:rgba(0,0,0,0.02);">
+        <td style="padding:8px 12px;font-weight:700;color:var(--blue);">File 06</td>
+        <td style="padding:8px 12px;color:var(--ink);">The Black Box — ICPC &amp; Codeforces</td>
+        <td style="padding:8px 12px;font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;"><span style="background:var(--hl-r);color:var(--red);padding:2px 7px;border-radius:2px;border:1px solid var(--red);">Last — reference only</span></td>
+        <td style="padding:8px 12px;">Competitive CP</td>
+        <td style="padding:8px 12px;color:var(--ink3);">File 05 + 300 problems</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="note-box">
+  <span class="lbl">The one rule that matters most</span>
+  <p><strong>Never move to the next file until you can explain every concept in the current one out loud — without looking at notes.</strong> Rushing to File 06 without File 05 mastery is the single most common mistake. The files are sequenced to build on each other. The sequence is the curriculum.</p>
+</div>
+
+<div class="tip-box">
+  <span class="lbl">How to use Files 07 and 08 throughout your journey</span>
+  <p>Files 07 and 08 are not one-time reads — they are <strong>permanent references</strong>. File 07's signal→algorithm table and 20 rules should be open every time you sit down to practice. File 08's intermediate chapter should be revisited every few weeks as you get stronger — problems that seemed hard will feel obvious, which tells you exactly how much you've grown.</p>
+</div>
+
+<div class="footer">C++ Mastery Series · Reading Sequence Map · 8 Files · One Complete Path from Zero to ICPC</div>
+
+</div>
+
+<!-- ══ COPY BUTTON ENGINE ══ -->
+<script>
+(function() {
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return; // skip if already has one
+      // ensure positioning works
+      var cs = window.getComputedStyle(block).position;
+      if (cs === 'static') block.style.position = 'relative';
+      // add padding for button
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) {
+        block.style.paddingTop = '36px';
+      }
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        // get text, exclude the button text itself
+        var text = block.innerText || block.textContent;
+        // strip "Copy" or "Copied" artifact from start
+        text = text.replace(/^(Copy|Copied)
+?/,'').trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function() {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(function() {
+              btn.textContent = 'Copy';
+              btn.classList.remove('copied');
+            }, 1800);
+          }).catch(function() { fallbackCopy(text, btn); });
+        } else { fallbackCopy(text, btn); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+
+  function fallbackCopy(text, btn) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand('copy');
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function() {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1800);
+    } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCopyBtns);
+  } else {
+    initCopyBtns();
+  }
+})();
+</script>
+</body>
+</html>

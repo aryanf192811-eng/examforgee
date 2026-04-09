@@ -1,0 +1,2926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — Part 4 · Ch 10–12 · Complex Patterns, Contest Math &amp; Advanced Arrays</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New','Menlo',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,13px);
+  --fs-base:clamp(14px,3.2vw,17px);--fs-md:clamp(14px,3.4vw,16.5px);
+  --fs-lg:clamp(16px,3.8vw,19px);--fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(16px,4.2vw,21px);--fs-code:clamp(11px,2.6vw,13.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:860px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:530px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tg2{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.prob{background:var(--paper2);border:1.5px solid var(--ink);border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,20px);margin:14px 0;position:relative;}
+.prob::before{content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;border:1px solid var(--ink);border-radius:2px;}
+.prob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0 0 4px;line-height:1.82;}
+.prob p:last-child{margin:0;}
+.prob strong{color:var(--blue);}
+.io-row{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;}
+.io-box{flex:1;min-width:120px;background:var(--paper3);border:1px dashed #a09070;border-radius:3px;padding:8px 12px;}
+.io-box .io-lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;display:block;}
+.io-box code{font-family:var(--mono);font-size:var(--fs-code);color:var(--ink);background:none;border:none;padding:0;}
+.approach{background:#f0f4ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,20px);margin:14px 0;}
+.approach .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block;}
+.approach p{font-size:var(--fs-md);line-height:1.85;margin:0 0 6px;color:var(--ink2);}
+.approach p:last-child{margin:0;}
+.approach strong{color:var(--blue);}
+.trace{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,12.5px);line-height:2;color:var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.trace::-webkit-scrollbar{height:4px;}.trace::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.trace .t-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:block;}
+.trace .hi{background:var(--hl-y);border-radius:2px;padding:0 2px;}
+.trace .ok{color:var(--green);font-weight:700;}
+.trace .no{color:var(--red);font-weight:700;}
+.trace .cur{color:var(--blue);font-weight:700;}
+.trace .dim{color:var(--ink3);}
+.cb{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;color:var(--ink);line-height:1.85;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;position:relative;padding-top:36px !important;}
+.cb::-webkit-scrollbar{height:4px;}.cb::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .st{color:var(--green);}
+.cb .num{color:var(--orange);}
+.cb .fn{color:var(--teal);}
+.cb .pp{color:var(--red);}
+code{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+.copy-btn{position:absolute;top:6px;right:8px;background:var(--blue);color:var(--paper);border:none;border-radius:3px;padding:4px 8px;font-family:var(--hand);font-size:11px;cursor:pointer;transition:0.2s;z-index:10;}
+.copy-btn:hover{background:var(--ink);}.copy-btn.copied{background:var(--green);}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:14px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,13px);line-height:1.9;color:var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.gv .dv-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pnum{display:inline-flex;align-items:center;justify-content:center;font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);border-radius:3px;padding:2px 8px;margin-right:8px;letter-spacing:1px;}
+.pnum.easy{background:var(--green);}.pnum.med{background:var(--orange);}.pnum.hard{background:var(--red);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+/* Roadmap cards */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin:20px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(14px,2.5vw,20px);box-shadow:3px 3px 0 #9a8a6e;}
+.ct{font-family:var(--body);font-size:var(--fs-md);font-weight:700;color:var(--ink);margin-bottom:8px;padding-bottom:6px;border-bottom:1.5px solid #c8b898;}
+.cg-card p{font-size:var(--fs-md);margin:0;color:var(--ink2);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .sec{padding-left:clamp(28px,6vw,44px);}
+  h2.sh{font-size:clamp(15px,3.8vw,18px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10.5px,2.4vw,12.5px);padding:10px 12px;}
+  .trace{font-size:clamp(9.5px,2.1vw,11.5px);}
+  .io-row{flex-direction:column;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{box-shadow:3px 4px 0 #8a7a60;padding:18px 14px 16px;}
+  .cover::after{display:none;}.cover-inner{padding-left:0;}
+  .sec{padding-left:18px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(14px,4vw,17px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .cb{font-size:10.5px;padding:9px 10px;}.trace{font-size:9.5px;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;break-inside:avoid;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cb,.trace,.gv{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">11 · Problem Solving Pt.4</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Part 4 of 4 · Ch 10–12 · P93–P132</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery · Complete Edition</div>
+    <h1>Complex Patterns · Contest Math<br><em>Advanced Arrays &amp; Final Strategies</em></h1>
+    <p class="cover-desc">Chapters 10 through 12. Spatial logic pushed to its limits: spiral matrices, fractals, and geometric shapes. The mathematical toolkit for competitive programming: SPF sieve, binary exponentiation, matrix expo, Euler's totient, and combinatorics. Advanced array strategies: 2D prefix sums, difference arrays, bitmask generation, sweep lines, and cycle-based sorting.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 10 · Complex Pattern Printing · P93–P107</span>
+      <span class="chip">Ch 11 · Contest Math &amp; Number Theory · P108–P120</span>
+      <span class="chip">Ch 12 · Advanced Arrays &amp; Two-Pointer · P122–P132</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CH10 ═══════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">Complex &amp; Unique Pattern Printing — <em>Spatial Logic Mastery</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="p93">
+      <h2 class="sh"><span class="pnum hard">P93</span> Pascal's Triangle (Space Optimized) <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Generate the first <code>N</code> rows of Pascal's triangle. Do <strong>not</strong> use an O(N²) 2D array. Optimize space to O(N) by storing only the previous row to compute the next.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach</span>
+        <p>Every element in Pascal's Triangle is the sum of the two elements directly above it. Since row <code>K</code> only depends on row <code>K-1</code>, we don't need rows 0 to K-2 in memory. Maintain a single 1D array of size <code>N</code> and <strong>update it from right to left</strong> to avoid overwriting values we still need for the current iteration.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Pascal's Triangle (N = 5)</span>
+<pre>    1
+   1 1
+  1 2 1
+ 1 3 3 1
+1 4 6 4 1</pre></div>
+      <div class="trace"><span class="t-label">Dry Run (Right-to-Left Update)</span>
+<pre>Row 1: [1]
+Row 2: [1, 0] → j=1: arr[1]+=arr[0] → [1, 1]
+Row 3: [1, 1, 0] → j=2: arr[2]+=arr[1] → [1, 1, 1]
+               → j=1: arr[1]+=arr[0] → [1, 2, 1] <span class="ok">Correct!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printPascal(<span class="kw">int</span> n) {
+    vector&lt;<span class="kw">int</span>&gt; row(n, 0);
+    row[0] = 1;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="cm">// Print leading spaces for alignment</span>
+        <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt; n - i - 1; s++) cout &lt;&lt; <span class="st">" "</span>;
+
+        <span class="cm">// Update array right-to-left to prevent overwrite</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = i; j &gt; 0; j--)
+            row[j] = row[j] + row[j - 1];
+
+        <span class="cm">// Print current row</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt;= i; j++) cout &lt;&lt; row[j] &lt;&lt; <span class="st">" "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(N). By collapsing the 2D matrix to a single 1D vector updated backwards, memory is drastically cut with zero correctness cost.</p></div>
+    </div>
+
+    <div class="sec" data-m="p94">
+      <h2 class="sh"><span class="pnum hard">P94</span> Spiral Number Matrix <span class="tag tc">Matrix</span></h2>
+      <div class="prob">
+        <p>Given an integer <code>N</code>, print an <code>N×N</code> matrix filled with numbers from 1 to N² spiraling inward from the top-left corner.</p>
+        <div class="io-row">
+          <div class="io-box"><span class="io-lbl">Input</span><code>N = 4</code></div>
+          <div class="io-box"><span class="io-lbl">Output</span><code>Spiral matrix (see visual)</code></div>
+        </div>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Four Boundary Variables</span>
+        <p>Use four boundaries: <code>top</code>, <code>bottom</code>, <code>left</code>, <code>right</code>. A <code>while</code> loop contains four <code>for</code> loops representing the four traversal directions: Left→Right, Top→Bottom, Right→Left, Bottom→Top. After each directional pass, shrink the respective boundary inward.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Spiral Matrix (N = 4)</span>
+<pre>  1   2   3   4
+ 12  13  14   5
+ 11  16  15   6
+ 10   9   8   7</pre></div>
+      <div class="trace"><span class="t-label">Dry Run Boundaries</span>
+<pre>Start: T=0, B=3, L=0, R=3
+1. L→R: Fill 1,2,3,4.   T++ (T=1)
+2. T→B: Fill 5,6,7.     R-- (R=2)
+3. R→L: Fill 8,9,10.    B-- (B=2)
+4. B→T: Fill 11,12.     L++ (L=1)
+Repeat for inner ring...</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> generateSpiral(<span class="kw">int</span> n) {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; matrix(n, vector&lt;<span class="kw">int</span>&gt;(n));
+    <span class="kw">int</span> top = 0, bottom = n - 1, left = 0, right = n - 1;
+    <span class="kw">int</span> val = 1;
+
+    <span class="kw">while</span> (left &lt;= right &amp;&amp; top &lt;= bottom) {
+        <span class="kw">for</span> (<span class="kw">int</span> i = left;  i &lt;= right;  i++) matrix[top][i]    = val++;
+        top++;
+        <span class="kw">for</span> (<span class="kw">int</span> i = top;   i &lt;= bottom; i++) matrix[i][right]   = val++;
+        right--;
+        <span class="kw">if</span> (top &lt;= bottom) {
+            <span class="kw">for</span> (<span class="kw">int</span> i = right; i &gt;= left;   i--) matrix[bottom][i] = val++;
+            bottom--;
+        }
+        <span class="kw">if</span> (left &lt;= right) {
+            <span class="kw">for</span> (<span class="kw">int</span> i = bottom; i &gt;= top;  i--) matrix[i][left]   = val++;
+            left++;
+        }
+    }
+
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; row : matrix) {
+        <span class="kw">for</span> (<span class="kw">int</span> x : row) cout &lt;&lt; setw(3) &lt;&lt; x;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N²) | Space: O(N²). You MUST guard <code>if(top &lt;= bottom)</code> and <code>if(left &lt;= right)</code> before the reverse traversals (steps 3 and 4) to prevent double-filling on odd-sized matrices.</p></div>
+    </div>
+
+    <div class="sec" data-m="p95">
+      <h2 class="sh"><span class="pnum hard">P95</span> Zig-Zag Diagonal Matrix <span class="tag tc">Matrix</span></h2>
+      <div class="prob">
+        <p>Given an <code>N×N</code> matrix, print its elements in a zig-zag diagonal order — the same traversal pattern used in JPEG compression quantization.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Diagonal Sum Grouping</span>
+        <p>Group elements by their diagonal sum: <code>row + col == k</code>. The sum <code>k</code> ranges from 0 to <code>2*(N-1)</code>. If <code>k</code> is even, traverse the diagonal upward (decrease row, increase col). If <code>k</code> is odd, traverse downward. Clamp starting indices to remain within bounds.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Zig-Zag Diagonal Print (N = 3)</span>
+<pre>[ 1  2  3 ]
+[ 4  5  6 ]
+[ 7  8  9 ]
+Output: 1, 2, 4, 7, 5, 3, 6, 8, 9</pre></div>
+      <div class="trace"><span class="t-label">Dry Run by Diagonal Sum (k)</span>
+<pre>k=0 (Even, Up):   (0,0)→1
+k=1 (Odd, Down):  (0,1)→2, (1,0)→4
+k=2 (Even, Up):   (2,0)→7, (1,1)→5, (0,2)→3
+k=3 (Odd, Down):  (1,2)→6, (2,1)→8
+k=4 (Even, Up):   (2,2)→9  <span class="ok">Complete!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printZigZag(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; mat) {
+    <span class="kw">int</span> n = mat.size();
+    <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt;= 2 * (n - 1); s++) {
+        <span class="kw">if</span> (s % 2 == 0) {
+            <span class="cm">// Traverse upward</span>
+            <span class="kw">int</span> r = min(s, n - 1);
+            <span class="kw">int</span> c = s - r;
+            <span class="kw">while</span> (r &gt;= 0 &amp;&amp; c &lt; n) { cout &lt;&lt; mat[r][c] &lt;&lt; <span class="st">" "</span>; r--; c++; }
+        } <span class="kw">else</span> {
+            <span class="cm">// Traverse downward</span>
+            <span class="kw">int</span> c = min(s, n - 1);
+            <span class="kw">int</span> r = s - c;
+            <span class="kw">while</span> (c &gt;= 0 &amp;&amp; r &lt; n) { cout &lt;&lt; mat[r][c] &lt;&lt; <span class="st">" "</span>; r++; c--; }
+        }
+    }
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). Visits each cell exactly once. The diagonal sum trick is reusable for any anti-diagonal traversal problem.</p></div>
+    </div>
+
+    <div class="sec" data-m="p96">
+      <h2 class="sh"><span class="pnum hard">P96</span> Concentric Rectangles Number Pattern <span class="tag tc">Math Pattern</span></h2>
+      <div class="prob">
+        <p>For a given <code>N</code>, print a concentric square where the outermost ring is <code>N</code>, the next ring is <code>N-1</code>, dropping until the center is <code>1</code>. Grid size is always <code>(2N-1) × (2N-1)</code>.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Coordinate Distance</span>
+        <p>Instead of drawing rings sequentially, inspect every single cell <code>(i, j)</code>. The value at any cell equals <code>N − minDistance</code>, where <code>minDistance</code> is its closest distance to any of the 4 borders. This collapses the entire problem into a single O(1) formula per cell.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Concentric Squares (N = 4)</span>
+<pre>4 4 4 4 4 4 4
+4 3 3 3 3 3 4
+4 3 2 2 2 3 4
+4 3 2 1 2 3 4
+4 3 2 2 2 3 4
+4 3 3 3 3 3 4
+4 4 4 4 4 4 4</pre></div>
+      <div class="trace"><span class="t-label">Dry Run Math at Cell (2, 3) for N=4</span>
+<pre>Grid size = 2(4)-1 = 7.  Top=0, Bottom=6.
+Distance from top    = i        = 2
+Distance from bottom = 6-i      = 4
+Distance from left   = j        = 3
+Distance from right  = 6-j      = 3
+Min distance = 2.
+Value = N - minDist = 4 - 2 = <span class="ok">2</span>  (matches the grid above)</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> concentricRectangles(<span class="kw">int</span> n) {
+    <span class="kw">int</span> size = 2 * n - 1;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; size; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; size; j++) {
+            <span class="kw">int</span> top    = i;
+            <span class="kw">int</span> bottom = size - 1 - i;
+            <span class="kw">int</span> left   = j;
+            <span class="kw">int</span> right  = size - 1 - j;
+            <span class="kw">int</span> distance = min({top, bottom, left, right});
+            cout &lt;&lt; n - distance &lt;&lt; <span class="st">" "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). The topological distance formula eliminates any need to build the array in memory — the value is computed on the fly per cell.</p></div>
+    </div>
+
+    <div class="sec" data-m="p97">
+      <h2 class="sh"><span class="pnum hard">P97</span> The Swastika / Hindu Cross <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Print the Swastika (Hindu cross) pattern using stars for a given odd dimension <code>N</code>. The pattern is built from four quadrant rules intersecting at the center axes.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Quadrant Rules</span>
+        <p>The grid is divided into 4 quadrants by the center row and column (<code>i == n/2</code> or <code>j == n/2</code>). For each of the four quadrants, a single additional edge line is drawn. Chain these checks in a single <code>if</code> condition.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Swastika (N = 7)</span>
+<pre>*     * * *
+*     *
+*     *
+* * * * * * *
+      *     *
+      *     *
+* * * *     *</pre></div>
+      <div class="trace"><span class="t-label">Dry Run Math Rules</span>
+<pre>Center Cross:      print if (i == n/2) OR (j == n/2)
+Q1 (Top Left):     print if (j == 0   AND i &lt; n/2)
+Q2 (Top Right):    print if (i == 0   AND j &gt; n/2)
+Q3 (Bottom Left):  print if (i == n-1 AND j &lt; n/2)
+Q4 (Bottom Right): print if (j == n-1 AND i &gt; n/2)</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> swastika(<span class="kw">int</span> n) {
+    <span class="kw">int</span> mid = n / 2;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n; j++) {
+            <span class="kw">if</span> (i == mid || j == mid    ||
+                (j == 0     &amp;&amp; i &lt; mid) ||   <span class="cm">// Top-left vertical</span>
+                (i == 0     &amp;&amp; j &gt; mid) ||   <span class="cm">// Top-right horizontal</span>
+                (i == n - 1 &amp;&amp; j &lt; mid) ||   <span class="cm">// Bottom-left horizontal</span>
+                (j == n - 1 &amp;&amp; i &gt; mid))     <span class="cm">// Bottom-right vertical</span>
+                cout &lt;&lt; <span class="st">"* "</span>;
+            <span class="kw">else</span>
+                cout &lt;&lt; <span class="st">"  "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N²) | Space: O(1). <code>N</code> must be odd. An even value destroys the center-line symmetry and produces a malformed output.</p></div>
+    </div>
+
+    <div class="sec" data-m="p98">
+      <h2 class="sh"><span class="pnum hard">P98</span> Arrow Pattern (Right Symmetry) <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Construct a right-facing Arrow of stars that peaks at width <code>N</code> then contracts, using a single loop from <code>1</code> to <code>2N-1</code>.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — 2N-1 Symmetric Loop</span>
+        <p>Run a single loop from <code>i = 1</code> to <code>2N-1</code>. If <code>i &lt;= N</code>, stars on that row = <code>i</code>. Otherwise, stars = <code>2N - i</code>. This mirror formula completely avoids writing two separate expansion/contraction loops.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Right Arrow (N = 4)</span>
+<pre>*
+**
+***
+****
+***
+**
+*</pre></div>
+      <div class="trace"><span class="t-label">Dry Run (N = 4, loop i from 1 to 7)</span>
+<pre>i=1: i≤4 → 1 star
+i=4: i≤4 → 4 stars (peak)
+i=5: i>4  → 2(4)-5 = 3 stars  <span class="ok">Symmetric deflation begins</span>
+i=7: i>4  → 2(4)-7 = 1 star</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> rightArrow(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; 2 * n; i++) {
+        <span class="kw">int</span> stars = (i &lt;= n) ? i : (2 * n - i);
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; stars; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). The <code>2N-1</code> iteration loop replaces two redundant halves with a single mirrored formula.</p></div>
+    </div>
+
+    <div class="sec" data-m="p99">
+      <h2 class="sh"><span class="pnum hard">P99</span> Combinatorial Pascal's Triangle <span class="tag tc">Math</span></h2>
+      <div class="prob">
+        <p>Print Pascal's Triangle for <code>N</code> rows, calculating each element via the combination formula C(i, j) — no array caching at all.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — nCr Inline Optimization</span>
+        <p>The element at row <code>i</code>, column <code>j</code> is literally <strong>C(i, j)</strong>. Compute C(n, r) in O(r) by multiplying and dividing incrementally: <code>res = res * (n-i) / (i+1)</code>. This avoids factorial overflow and never stores the triangle in memory.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Pascal Elements</span>
+<pre>Row 3 → C(3,0), C(3,1), C(3,2), C(3,3)
+         1,      3,      3,      1</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> nCr(<span class="kw">int</span> n, <span class="kw">int</span> r) {
+    <span class="kw">long long</span> res = 1;
+    <span class="kw">if</span> (r &gt; n - r) r = n - r;       <span class="cm">// C(n,r) == C(n,n-r) optimization</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; r; i++) {
+        res *= (n - i);
+        res /= (i + 1);
+    }
+    <span class="kw">return</span> (<span class="kw">int</span>)res;
+}
+
+<span class="kw">void</span> printPascalMath(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt; n - i - 1; s++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt;= i; j++) cout &lt;&lt; nCr(i, j) &lt;&lt; <span class="st">" "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N³) overall | Space: O(1). Calling nCr — which is O(r) — nested inside O(N²) rows makes the overall complexity cubic. Zero-memory but slower than the P93 caching approach. Choose based on whether memory or speed is the bottleneck.</p></div>
+    </div>
+
+    <div class="sec" data-m="p100">
+      <h2 class="sh"><span class="pnum hard">P100</span> Butterfly Pattern <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Print a symmetrical butterfly. Wings expand from 1 to N stars, merge at row N, then identically mirror back to 1.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Three Zones Per Row</span>
+        <p>Every row has three zones: Left wing (<code>i</code> stars), Middle body (<code>2*(N-i)</code> spaces), Right wing (<code>i</code> stars). Phase 1 runs from <code>1 to N</code>. Phase 2 iterates <code>N-1 down to 1</code> using the exact same logic — no separate formula needed.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Butterfly (N = 4)</span>
+<pre>*      *
+**    **
+***  ***
+********
+********
+***  ***
+**    **
+*      *</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printButterfly(<span class="kw">int</span> n) {
+    <span class="cm">// Upper half</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)          cout &lt;&lt; <span class="st">"*"</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> s = 1; s &lt;= 2 * (n - i); s++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)          cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+    <span class="cm">// Lower half (same logic, reverse order)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = n; i &gt;= 1; i--) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)          cout &lt;&lt; <span class="st">"*"</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> s = 1; s &lt;= 2 * (n - i); s++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)          cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1).</p></div>
+    </div>
+
+    <div class="sec" data-m="p101">
+      <h2 class="sh"><span class="pnum hard">P101</span> Hollow Space Diamond inside Rectangle <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>The inverse of a butterfly. Form a solid rectangle, but carve out an empty diamond-shaped void inside it.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Inverted Butterfly Logic</span>
+        <p>Top half: Left stars shrink from <code>N</code> down to <code>1</code>. Inner spaces expand from <code>0</code> up. By inverting the butterfly's expansion logic — stars shrink while spaces grow — the inner void becomes a perfect hollow diamond.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Inscribed Diamond Space (N = 4)</span>
+<pre>********
+***  ***
+**    **
+*      *
+*      *
+**    **
+***  ***
+********</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> hollowDiamond(<span class="kw">int</span> n) {
+    <span class="cm">// Upper cavity</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n - i; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; 2 * i; j++)  cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n - i; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+    <span class="cm">// Lower cavity (mirror)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = n - 1; i &gt;= 0; i--) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n - i; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; 2 * i; j++)  cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n - i; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). Inversion requires zero changes to asymptotic complexity.</p></div>
+    </div>
+
+    <div class="sec" data-m="p102">
+      <h2 class="sh"><span class="pnum hard">P102</span> The "Z" Alphabet Pattern <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Draw the capital letter "Z" on an <code>N×N</code> grid using stars — two horizontal borders and a diagonal slash.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach</span>
+        <p>Print a star at <code>(i, j)</code> if it is on the top row (<code>i == 0</code>), the bottom row (<code>i == n-1</code>), or on the anti-diagonal (<code>i + j == n - 1</code>). Three conditions. One pass.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Z Pattern (N = 5)</span>
+<pre>*****
+   *
+  *
+ *
+*****</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printZ(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n; j++) {
+            <span class="kw">if</span> (i == 0 || i == n - 1 || i + j == n - 1)
+                cout &lt;&lt; <span class="st">"*"</span>;
+            <span class="kw">else</span>
+                cout &lt;&lt; <span class="st">" "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). The anti-diagonal condition <code>i + j == n - 1</code> is the key formula — it is the complement of the main diagonal condition <code>i == j</code>.</p></div>
+    </div>
+
+    <div class="sec" data-m="p103">
+      <h2 class="sh"><span class="pnum hard">P103</span> Code The Heart Element <span class="tag tc">Math / Logic</span></h2>
+      <div class="prob">
+        <p>Print a symmetrical heart shape of size <code>N</code>. The shape features two upper semi-circles over a downward-pointing inverted triangle.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Two Phases</span>
+        <p>Phase 1: Loop from <code>N/2 to N</code> step 2, printing two humps with a gap in the center. Phase 2: Print an inverted pyramid from width <code>2N-1</code> down to <code>1</code>, indented from the left edge.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Heart (N = 6)</span>
+<pre>  ***   ***
+ ***** *****
+*************
+ ***********
+  *********
+   *******
+    *****
+     ***
+      *</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printHeart(<span class="kw">int</span> n) {
+    <span class="cm">// Top dual-curves (loop i from n/2 to n, step 2)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = n / 2; i &lt;= n; i += 2) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = 1; s &lt; n - i; s += 2) cout &lt;&lt; <span class="st">" "</span>;  <span class="cm">// Left indent</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)        cout &lt;&lt; <span class="st">"*"</span>;  <span class="cm">// Left hump</span>
+        <span class="kw">for</span> (<span class="kw">int</span> s = 1; s &lt;= n - i; s++)    cout &lt;&lt; <span class="st">" "</span>;  <span class="cm">// Center cleft</span>
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)        cout &lt;&lt; <span class="st">"*"</span>;  <span class="cm">// Right hump</span>
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+    <span class="cm">// Bottom inverted pyramid</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = n; i &gt;= 1; i--) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = i; s &lt; n; s++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= (i * 2) - 1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N²) | Space: O(1). The upper loop uses <code>i += 2</code>. For small N (&lt; 4), the rendering deforms. Ensure N ≥ 4 for a recognizable heart.</p></div>
+    </div>
+
+    <div class="sec" data-m="p104">
+      <h2 class="sh"><span class="pnum hard">P104</span> Sine Wave Output <span class="tag tc">Pattern Math</span></h2>
+      <div class="prob">
+        <p>Draw a continuous oscillating sine-like wave across the screen for <code>N</code> peaks using only integer arithmetic — no <code>sin()</code> calls.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — The Wave Equation</span>
+        <p>The wave fits in a fixed 3-row height. Use a modulo check: print a star at <code>(i, j)</code> if <code>((i + j) % 4 == 0)</code> or <code>(i == 2 &amp;&amp; j % 4 == 0)</code>. This formula maps discrete amplitude points onto the grid mathematically, replacing float trigonometry entirely.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Sine Wave (integer approximation)</span>
+<pre>  *       *       *
+ * *     * *     * *
+*   *   *   *   *   *</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> printWave(<span class="kw">int</span> length) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= 3; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= length; j++) {
+            <span class="kw">if</span> (((i + j) % 4 == 0) || (i == 2 &amp;&amp; j % 4 == 0))
+                cout &lt;&lt; <span class="st">"*"</span>;
+            <span class="kw">else</span>
+                cout &lt;&lt; <span class="st">" "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(length) | Space: O(1). Pure cycle-modulo math replaces <code>float sin(x)</code> completely — no precision issues, no math.h dependency.</p></div>
+    </div>
+
+    <div class="sec" data-m="p105">
+      <h2 class="sh"><span class="pnum hard">P105</span> Hourglass Pattern <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Print a number-based hourglass: numbers descend inward from the top, cross at zero, then expand back out symmetrically below.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Downward + Upward Pyramid Pair</span>
+        <p>Combine a downward contracting pyramid with an upward expanding one. Each row prints: leading spaces, numbers decreasing from <code>i</code> to 0, then numbers increasing from 1 to <code>i</code>. The first loop runs <code>i</code> from N down to 0; the second runs <code>i</code> from 1 up to N.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Hourglass (N = 3)</span>
+<pre>3 2 1 0 1 2 3
+  2 1 0 1 2
+    1 0 1
+      0
+    1 0 1
+  2 1 0 1 2
+3 2 1 0 1 2 3</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> hourGlass(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = n; i &gt;= 0; i--) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt; n - i; s++) cout &lt;&lt; <span class="st">"  "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i; j &gt;= 0; j--)   cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)   cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt; n - i; s++) cout &lt;&lt; <span class="st">"  "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = i; j &gt;= 0; j--)   cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++)   cout &lt;&lt; j &lt;&lt; <span class="st">" "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1).</p></div>
+    </div>
+
+    <div class="sec" data-m="p106">
+      <h2 class="sh"><span class="pnum hard">P106</span> Basic Rhombus Shift <span class="tag tc">Pattern</span></h2>
+      <div class="prob">
+        <p>Draw a solid parallelogram (rhombus) of width N, and a hollow variant using the same loop by adding a boundary condition.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach</span>
+        <p>A rhombus is a square where each successive row is offset by one additional leading space. The hollow variant simply checks boundary edges: print a star only if <code>i == 0</code>, <code>i == N-1</code>, <code>j == 0</code>, or <code>j == N-1</code>.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Rhombus vs Hollow Rhombus (N = 4)</span>
+<pre>Solid:        Hollow:
+    ****          ****
+   ****          *  *
+  ****          *  *
+ ****          ****</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> rhombusHollowSolid(<span class="kw">int</span> n, <span class="kw">bool</span> hollow) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> s = 0; s &lt; n - i; s++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n; j++) {
+            <span class="kw">if</span> (!hollow || i == 0 || i == n - 1 || j == 0 || j == n - 1)
+                cout &lt;&lt; <span class="st">"*"</span>;
+            <span class="kw">else</span>
+                cout &lt;&lt; <span class="st">" "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N²) | Space: O(1). Parameterizing <code>hollow</code> keeps both variants in one function without code duplication.</p></div>
+    </div>
+
+    <div class="sec" data-m="p107">
+      <h2 class="sh"><span class="pnum hard">P107</span> Sierpinski Triangle (Fractal Bitwise Logic) <span class="tag tc">Mind Bender</span></h2>
+      <div class="prob">
+        <p>Draw the Sierpinski fractal triangle using pure bitwise logic — no recursion, no matrices, no combinatorics.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">The Bitwise Miracle</span>
+        <p>A remarkable property of binary arithmetic: if <code>(row &amp; col) == col</code>, the cell is part of the fractal. Equivalently, <code>(row &amp; col) == 0</code> for the standard left-aligned form. The Bitwise AND operation between a row index and column index directly maps the self-similar triangular structure with zero mathematical overhead.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Sierpinski Fractal Map (n = 8)</span>
+<pre>*
+**
+* *
+****
+*   *
+**  **
+* * * *
+********</pre></div>
+      <div class="trace"><span class="t-label">Dry Run Math</span>
+<pre>row = 2 (binary: 0010):
+j=0 (0000): 2 &amp; 0 = 0  → <span class="ok">*</span>  (star)
+j=1 (0001): 2 &amp; 1 = 0  → <span class="ok">*</span>  (star)
+j=2 (0010): 2 &amp; 2 = 2  → <span class="no"> </span>  (empty)
+Output: * *   ← matches the fractal!</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> sierpinskiBitwise(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt;= i; j++) {
+            <span class="cm">// The legendary fractal check: AND of row and col == 0</span>
+            <span class="kw">if</span> ((i &amp; j) == 0 || (i &amp; ~j) == i)
+                cout &lt;&lt; <span class="st">"* "</span>;
+            <span class="kw">else</span>
+                cout &lt;&lt; <span class="st">"  "</span>;
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N²) | Space: O(1). To see the true fractal geometry, N must be a power of 2 (8, 16, 32, 64). Other values produce visually chopped outputs that truncate mid-fractal.</p></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<!-- ═══════════════════════ CH11 ═══════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11</div>
+    <div class="ch-title">Contest Math &amp; Number Theory — <em>The Mathematical Edge</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="p108">
+      <h2 class="sh"><span class="pnum hard">P108</span> Smallest Prime Factor (SPF) <span class="tag tc">Number Theory</span></h2>
+      <div class="prob">
+        <p>Given multiple queries for the prime factorization of a number N ≤ 10⁶, precompute an SPF array so each query runs in O(log N) instead of O(√N).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Sieve Modification</span>
+        <p>Modify the Sieve of Eratosthenes. Instead of storing <code>isPrime[]</code>, store <code>spf[]</code> — the <strong>Smallest Prime Factor</strong> of every number. Initialize <code>spf[i] = i</code>. When you find a prime <code>p</code>, iterate through its multiples and if their SPF is still themselves, update it to <code>p</code>. To factorize <code>X</code>, repeatedly divide by <code>spf[X]</code> until <code>X == 1</code>.</p>
+      </div>
+      <div class="gv"><span class="dv-label">SPF Array State (i = 1 to 10)</span>
+<pre>i:   1  2  3  4  5  6  7  8  9  10
+spf: 1  2  3  2  5  2  7  2  3   2</pre></div>
+      <div class="trace"><span class="t-label">Dry Run: Query N = 12</span>
+<pre>X=12. spf[12]=2. Factor: 2.  X = 12/2 = 6.
+X= 6. spf[ 6]=2. Factor: 2.  X =  6/2 = 3.
+X= 3. spf[ 3]=3. Factor: 3.  X =  3/3 = 1.
+Factors: [2, 2, 3]  <span class="ok">Terminates instantly!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">const int</span> MAXN = 1000000;
+<span class="kw">int</span> spf[MAXN + 1];
+
+<span class="kw">void</span> sieveSPF() {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= MAXN; i++) spf[i] = i;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = 2; i * i &lt;= MAXN; i++) {
+        <span class="kw">if</span> (spf[i] == i) {                       <span class="cm">// i is prime</span>
+            <span class="kw">for</span> (<span class="kw">int</span> j = i * i; j &lt;= MAXN; j += i) {
+                <span class="kw">if</span> (spf[j] == j) spf[j] = i;   <span class="cm">// Assign smallest prime</span>
+            }
+        }
+    }
+}
+
+<span class="kw">void</span> getFactorization(<span class="kw">int</span> x) {
+    cout &lt;&lt; <span class="st">"Factors of "</span> &lt;&lt; x &lt;&lt; <span class="st">": "</span>;
+    <span class="kw">while</span> (x != 1) {
+        cout &lt;&lt; spf[x] &lt;&lt; <span class="st">" "</span>;
+        x = x / spf[x];
+    }
+    cout &lt;&lt; <span class="st">"\n"</span>;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: Precomputation O(N log log N), each query O(log N) | Space: O(N). Essential when answering 10⁵ factorization queries on large inputs cleanly.</p></div>
+    </div>
+
+    <div class="sec" data-m="p109">
+      <h2 class="sh"><span class="pnum hard">P109</span> Modular Multiplicative Inverse <span class="tag tc">Modular Math</span></h2>
+      <div class="prob">
+        <p>Find (A⁻¹) mod M. Division under modulo is illegal — compute (A × B⁻¹) mod M instead using Fermat's Little Theorem.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Fermat's Little Theorem</span>
+        <p>If M is prime, Fermat's Little Theorem states A^(M-1) ≡ 1 (mod M). Multiplying both sides by A⁻¹ gives <strong>A^(M-2) ≡ A⁻¹ (mod M)</strong>. So to find the inverse of A, compute A^(M-2) mod M using binary exponentiation.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: Inverse of 3 mod 7</span>
+<pre>Theorem: 3^(7-2) % 7  →  3^5 % 7
+3^5 = 243.  243 % 7 = 5.
+Check: (3 × 5) % 7 = 15 % 7 = 1.  <span class="ok">Correct! inv(3) under mod 7 is 5.</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> power(<span class="kw">long long</span> base, <span class="kw">long long</span> exp, <span class="kw">long long</span> mod) {
+    <span class="kw">long long</span> res = 1;
+    base %= mod;
+    <span class="kw">while</span> (exp &gt; 0) {
+        <span class="kw">if</span> (exp % 2 == 1) res = (res * base) % mod;
+        base = (base * base) % mod;
+        exp /= 2;
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="kw">long long</span> modInverse(<span class="kw">long long</span> n, <span class="kw">long long</span> m) {
+    <span class="cm">// Only valid when m is prime (Fermat's Little Theorem)</span>
+    <span class="kw">return</span> power(n, m - 2, m);
+}
+
+<span class="kw">long long</span> modDivide(<span class="kw">long long</span> a, <span class="kw">long long</span> b, <span class="kw">long long</span> m) {
+    a = a % m;
+    <span class="kw">return</span> (a * modInverse(b, m)) % m;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(log M) | Space: O(1). Fermat's theorem strictly requires M to be prime (like 10⁹+7). If M is composite, use the Extended Euclidean Algorithm (P112) instead.</p></div>
+    </div>
+
+    <div class="sec" data-m="p110">
+      <h2 class="sh"><span class="pnum hard">P110</span> Binary Exponentiation <span class="tag tc">Algorithm</span></h2>
+      <div class="prob">
+        <p>Calculate X^N mod M in O(log N) instead of O(N) — essential when N ≤ 10¹⁸ and iterative multiplication is infeasible.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Divide and Conquer</span>
+        <p>Instead of multiplying X sequentially N times, use the binary representation of N. If N is even: X^N = (X^(N/2))². If N is odd: X^N = X × (X^(N/2))². Repeatedly square the base and halve the exponent — the number of multiplications collapses from N to log₂(N).</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: 3^13 % 100</span>
+<pre>N=13 (Odd).  Ans = 1×3 = 3.    Base = 3×3 = 9.     N = 6.
+N= 6 (Even). Ans = 3.           Base = 9×9 = 81.    N = 3.
+N= 3 (Odd).  Ans = 3×81 = 43.  Base = 81×81 = 61.  N = 1.
+N= 1 (Odd).  Ans = 43×61 = 23. Base = ...           N = 0.
+Final Ans = 23.  <span class="ok">3^13 computed in 4 multiplications, not 13!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> binpow(<span class="kw">long long</span> a, <span class="kw">long long</span> b, <span class="kw">long long</span> m) {
+    a %= m;
+    <span class="kw">long long</span> res = 1;
+    <span class="kw">while</span> (b &gt; 0) {
+        <span class="kw">if</span> (b &amp; 1)            <span class="cm">// If b is odd</span>
+            res = (res * a) % m;
+        a = (a * a) % m;      <span class="cm">// Square the base</span>
+        b &gt;&gt;= 1;              <span class="cm">// Halve the exponent</span>
+    }
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(log N) | Space: O(1). The bitwise shift <code>b &gt;&gt;= 1</code> and check <code>b &amp; 1</code> operate at CPU register level — this is as fast as software exponentiation gets.</p></div>
+    </div>
+
+    <div class="sec" data-m="p111">
+      <h2 class="sh"><span class="pnum hard">P111</span> Matrix Exponentiation (O(log N) Fibonacci) <span class="tag tc">Advanced Strategy</span></h2>
+      <div class="prob">
+        <p>Find the 1,000,000th Fibonacci number mod 10⁹+7. Standard DP iterates 10⁶ times. Use matrix exponentiation to reach it in O(log N).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Recurrence Matrix Transition</span>
+        <p>The Fibonacci recurrence F(n) = F(n-1) + F(n-2) can be represented as matrix multiplication. The transformation matrix <code>[[1,1],[1,0]]</code> raised to the power <code>N-1</code> using binary exponentiation on matrices gives F(N) at the top-left cell. The identity matrix acts as "1" for matrix multiplication.</p>
+      </div>
+      <div class="gv"><span class="dv-label">The Magic Transformation Matrix</span>
+<pre>[ F(N)   ]   =   [ 1  1 ] ^ (N-1)   ×   [ F(1) ]
+[ F(N-1) ]       [ 1  0 ]               [ F(0) ]</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">const int</span> MOD = 1e9 + 7;
+<span class="kw">typedef</span> vector&lt;vector&lt;<span class="kw">long long</span>&gt;&gt; Matrix;
+
+Matrix multiply(Matrix A, Matrix B) {
+    Matrix C(2, vector&lt;<span class="kw">long long</span>&gt;(2, 0));
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 2; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; 2; j++)
+            <span class="kw">for</span> (<span class="kw">int</span> k = 0; k &lt; 2; k++)
+                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % MOD;
+    <span class="kw">return</span> C;
+}
+
+Matrix matpow(Matrix A, <span class="kw">long long</span> p) {
+    Matrix res = {{1, 0}, {0, 1}};  <span class="cm">// Identity matrix</span>
+    <span class="kw">while</span> (p &gt; 0) {
+        <span class="kw">if</span> (p &amp; 1) res = multiply(res, A);
+        A = multiply(A, A);
+        p &gt;&gt;= 1;
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="kw">long long</span> fibFast(<span class="kw">long long</span> n) {
+    <span class="kw">if</span> (n == 0) <span class="kw">return</span> 0;
+    Matrix T = {{1, 1}, {1, 0}};
+    T = matpow(T, n - 1);
+    <span class="kw">return</span> T[0][0];  <span class="cm">// Top-left cell holds F(N)</span>
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(M³ log N), Space: O(M²) where M=2 here. Apply the modulo strictly inside the multiply loop's addition — not outside — to prevent 64-bit overflow on intermediate products.</p></div>
+    </div>
+
+    <div class="sec" data-m="p112">
+      <h2 class="sh"><span class="pnum hard">P112</span> Extended Euclidean Algorithm <span class="tag tc">Number Theory</span></h2>
+      <div class="prob">
+        <p>Given integers A and B, find coefficients x and y such that Ax + By = GCD(A, B). This is Bézout's identity.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Back-Substitution Recursion</span>
+        <p>Run the standard Euclidean algorithm recursively. On the way back up, derive the Bézout coefficients: the new x is the previous y1, and the new y is <code>x1 - floor(A/B) * y1</code>. The base case when B == 0 returns x=1, y=0.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: A=30, B=20 → GCD=10</span>
+<pre>gcd(30,20) → gcd(20,10) → gcd(10,0).
+Base: x1=1, y1=0
+Return 1: x = 0,  y = 1 - (20/10)*0 = 1
+Return 2: x = 1,  y = 0 - (30/20)*1 = -1
+Check: 30(1) + 20(-1) = 10.  <span class="ok">Correct! (x=1, y=-1)</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="cm">// Returns GCD and sets x, y such that a*x + b*y = gcd(a,b)</span>
+<span class="kw">int</span> extGCD(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span>&amp; x, <span class="kw">int</span>&amp; y) {
+    <span class="kw">if</span> (b == 0) { x = 1; y = 0; <span class="kw">return</span> a; }
+
+    <span class="kw">int</span> x1, y1;
+    <span class="kw">int</span> gcd = extGCD(b, a % b, x1, y1);
+
+    <span class="cm">// Back-substitution</span>
+    x = y1;
+    y = x1 - (a / b) * y1;
+    <span class="kw">return</span> gcd;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(log min(A,B)) | Space: O(log min(A,B)) stack frames. Use this instead of Fermat's Little Theorem when the modulus is NOT prime (P109 cannot handle that case).</p></div>
+    </div>
+
+    <div class="sec" data-m="p113">
+      <h2 class="sh"><span class="pnum hard">P113</span> Euler's Totient Function φ(N) <span class="tag tc">Number Theory</span></h2>
+      <div class="prob">
+        <p>Find the count of positive integers up to N that are coprime to N — i.e., GCD(k, N) = 1.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Euler's Product Formula</span>
+        <p>Loop through all prime factors of N up to √N. For each prime factor <code>p</code> found, multiply result by <code>(1 - 1/p)</code>, which in integer code is <code>res -= res / p</code>. Then fully divide <code>p</code> out of <code>N</code>. If N > 1 after the loop, N itself is a prime factor.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: N = 12</span>
+<pre>Prime factors of 12 = {2, 3}.  Start res = 12.
+Factor 2: res -= res/2 → res = 6.  N /= 2 until odd → N = 3.
+Factor 3: res -= res/3 → res = 4.  N /= 3 → N = 1.
+Coprime values ≤12: {1,5,7,11}.  Count = 4.  <span class="ok">Matches formula!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> phi(<span class="kw">int</span> n) {
+    <span class="kw">int</span> result = n;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 2; i * i &lt;= n; i++) {
+        <span class="kw">if</span> (n % i == 0) {
+            <span class="kw">while</span> (n % i == 0) n /= i;  <span class="cm">// Remove factor completely</span>
+            result -= result / i;          <span class="cm">// Apply Euler product term</span>
+        }
+    }
+    <span class="kw">if</span> (n &gt; 1) result -= result / n;   <span class="cm">// n is itself prime</span>
+    <span class="kw">return</span> result;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(√N) | Space: O(1). Core primitive in RSA cryptography and modular arithmetic theory.</p></div>
+    </div>
+
+    <div class="sec" data-m="p114">
+      <h2 class="sh"><span class="pnum hard">P114</span> Inclusion-Exclusion Principle <span class="tag tc">Combinatorics</span></h2>
+      <div class="prob">
+        <p>Count how many numbers between 1 and N are divisible by A, B, or C.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Venn Set Theory</span>
+        <p>Adding N/A + N/B + N/C double-counts numbers divisible by both A and B. Subtract the pairwise intersections using LCM. But now the triple intersection is under-counted — add N/LCM(A,B,C) back. This is the inclusion-exclusion formula for three sets.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Inclusion-Exclusion Formula</span>
+<pre>|A ∪ B ∪ C| = |A| + |B| + |C|
+             - |A∩B| - |B∩C| - |A∩C|
+             + |A∩B∩C|</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> gcd(<span class="kw">long long</span> a, <span class="kw">long long</span> b) { <span class="kw">return</span> b == 0 ? a : gcd(b, a % b); }
+<span class="kw">long long</span> lcm(<span class="kw">long long</span> a, <span class="kw">long long</span> b) { <span class="kw">return</span> (a / gcd(a, b)) * b; }
+
+<span class="kw">long long</span> countDivisible(<span class="kw">long long</span> n, <span class="kw">long long</span> a, <span class="kw">long long</span> b, <span class="kw">long long</span> c) {
+    <span class="kw">long long</span> count = 0;
+    count += (n/a) + (n/b) + (n/c);               <span class="cm">// Primary sets</span>
+    count -= (n/lcm(a,b)) + (n/lcm(b,c)) + (n/lcm(a,c));  <span class="cm">// Pairwise intersections</span>
+    count += (n / lcm(a, lcm(b, c)));             <span class="cm">// Triple intersection</span>
+    <span class="kw">return</span> count;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(log min(A,B)) | Space: O(1). Always compute LCM as <code>(a / gcd(a,b)) * b</code> — not <code>a * b / gcd</code> — to avoid overflow before the division happens.</p></div>
+    </div>
+
+    <div class="sec" data-m="p115">
+      <h2 class="sh"><span class="pnum hard">P115</span> Count Trailing Zeros in N! <span class="tag tc">Math</span></h2>
+      <div class="prob">
+        <p>Find exactly how many trailing zeros N! has — without computing the factorial itself.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Count Factor 5 Pairs</span>
+        <p>A trailing zero is produced by a factor of 10 = 2 × 5. In any factorial, factors of 2 always outnumber factors of 5. So the trailing zero count equals the total number of times 5 divides into N!. Count contributions from 5, 25, 125, 625, … by summing ⌊N/5^k⌋ until the term reaches zero.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: 100!</span>
+<pre>100 / 5   = 20
+100 / 25  =  4
+100 / 125 =  0
+Total trailing zeros = 20 + 4 = <span class="ok">24</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> trailingZeroes(<span class="kw">int</span> n) {
+    <span class="kw">int</span> count = 0;
+    <span class="kw">for</span> (<span class="kw">long long</span> i = 5; n / i &gt;= 1; i *= 5)
+        count += n / i;
+    <span class="kw">return</span> count;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(log₅ N) | Space: O(1). Stepping through powers of 5 is dramatically faster than iterating through the factorial.</p></div>
+    </div>
+
+    <div class="sec" data-m="p116">
+      <h2 class="sh"><span class="pnum hard">P116</span> N-th Catalan Number <span class="tag tc">Combinatorics</span></h2>
+      <div class="prob">
+        <p>Find the N-th Catalan number. Direct application: how many valid groupings of N pairs of parentheses exist?</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Direct Formula</span>
+        <p>The formula is Cₙ = C(2n, n) / (n+1). Compute C(2n, n) using the incremental nCr function from P99 to avoid factorial overflow. Divide by (n+1) at the end.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> nCr(<span class="kw">int</span> n, <span class="kw">int</span> r) {
+    <span class="kw">long long</span> res = 1;
+    <span class="kw">if</span> (r &gt; n - r) r = n - r;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; r; i++) { res *= (n - i); res /= (i + 1); }
+    <span class="kw">return</span> res;
+}
+
+<span class="kw">long long</span> catalan(<span class="kw">int</span> n) {
+    <span class="kw">return</span> nCr(2 * n, n) / (n + 1);
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N) | Space: O(1). Catalan numbers grow rapidly — they exceed 64-bit signed integers around N=33. Cap input testing there to prevent overflow.</p></div>
+    </div>
+
+    <div class="sec" data-m="p117">
+      <h2 class="sh"><span class="pnum hard">P117</span> Stars and Bars Combinatorics <span class="tag tc">Formula</span></h2>
+      <div class="prob">
+        <p>In how many distinct ways can N identical items be distributed into K distinct bins, with empty bins allowed?</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">The Stars and Bars Theorem</span>
+        <p>Picture N items as stars (*) and K-1 dividers as bars (|). Distributing 5 items into 3 bins is identical to arranging 5 stars and 2 bars. Total slots = N + K - 1. We choose K-1 of them for the bars. Answer = C(N + K - 1, K - 1).</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: 5 apples, 3 students</span>
+<pre>N = 5, K = 3.
+C(5 + 3 - 1, 3 - 1) → C(7, 2) = (7 × 6) / (2 × 1) = <span class="ok">21 ways</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> starsAndBars(<span class="kw">int</span> items_n, <span class="kw">int</span> bins_k) {
+    <span class="kw">if</span> (items_n == 0 || bins_k == 0) <span class="kw">return</span> 1;
+    <span class="kw">return</span> nCr(items_n + bins_k - 1, bins_k - 1);
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(K) | Space: O(1). Reduces a combinatorial allocation problem to a single nCr call.</p></div>
+    </div>
+
+    <div class="sec" data-m="p118">
+      <h2 class="sh"><span class="pnum hard">P118</span> Ray Casting — Point in Polygon <span class="tag tc">Geometry Logic</span></h2>
+      <div class="prob">
+        <p>Determine whether a point (Px, Py) lies inside or outside an arbitrary N-sided polygon.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Ray Casting</span>
+        <p>Cast an imaginary horizontal ray to the right from the test point. Count how many times it crosses a polygon edge. If the crossing count is <strong>odd</strong>, the point is inside. If <strong>even</strong>, it is outside. For each edge, check if the test point's Y falls between the edge vertices' Y values, then compute the X intersection of the ray with that edge.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Ray Intersection Map</span>
+<pre>      /  \
+     |  X | ——→ 1 crossing (Odd)  = Inside!
+      \__/
+ X ————————→ 2 crossings (Even) = Outside!</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">struct</span> Point { <span class="kw">double</span> x, y; };
+
+<span class="kw">bool</span> isInsidePolygon(vector&lt;Point&gt;&amp; poly, Point test) {
+    <span class="kw">int</span> n = poly.size();
+    <span class="kw">bool</span> inside = <span class="kw">false</span>;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0, j = n - 1; i &lt; n; j = i++) {
+        <span class="cm">// Does test.y fall strictly between poly[i].y and poly[j].y?</span>
+        <span class="kw">if</span> ((poly[i].y &gt; test.y) != (poly[j].y &gt; test.y)) {
+            <span class="kw">double</span> intersectX =
+                (poly[j].x - poly[i].x) * (test.y - poly[i].y) /
+                (poly[j].y - poly[i].y) + poly[i].x;
+            <span class="kw">if</span> (test.x &lt; intersectX)
+                inside = !inside;  <span class="cm">// Toggle on each crossing</span>
+        }
+    }
+    <span class="kw">return</span> inside;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N) | Space: O(1). Floating-point precision issues can cause anomalies when the test point lies exactly on a vertex or edge. Add an epsilon guard for production code.</p></div>
+    </div>
+
+    <div class="sec" data-m="p119">
+      <h2 class="sh"><span class="pnum hard">P119</span> Fast Multiplication Over Large Modulo <span class="tag tc">Algorithm</span></h2>
+      <div class="prob">
+        <p>Compute (A × B) mod M safely when both A, B ≈ 10¹⁸ — where standard 64-bit multiplication overflows before the modulo is applied.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Binary Multiplication via Addition</span>
+        <p>Identical in structure to binary exponentiation but using addition instead of multiplication. Decompose B in binary: if the current bit of B is set, add A to the result. Then double A (shift left). This decomposes a single multiplication into O(log B) safe additions that never overflow.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: 5 × 13 % 10</span>
+<pre>A=5, B=13 (binary: 1101).
+B odd → res = (0+5)%10 = 5.   A = (5+5)%10 = 0.  B = 6.
+B even →                       A = (0+0)%10 = 0.  B = 3.
+B odd → res = (5+0)%10 = 5.   A = (0+0)%10 = 0.  B = 1.
+B odd → res = (5+0)%10 = 5.   Done.  <span class="ok">5×13 % 10 = 5</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">long long</span> multiplyFast(<span class="kw">long long</span> a, <span class="kw">long long</span> b, <span class="kw">long long</span> m) {
+    <span class="kw">long long</span> res = 0;
+    a %= m;
+    <span class="kw">while</span> (b &gt; 0) {
+        <span class="kw">if</span> (b &amp; 1) res = (res + a) % m;
+        a = (a * 2) % m;   <span class="cm">// Double A under modulo</span>
+        b &gt;&gt;= 1;
+    }
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(log B) | Space: O(1). Prevents 10³⁶ intermediate overflow when multiplying two 10¹⁸ values. Use this whenever both operands are close to LLONG_MAX.</p></div>
+    </div>
+
+    <div class="sec" data-m="p120">
+      <h2 class="sh"><span class="pnum hard">P120</span> Linear Diophantine Validation <span class="tag tc">Formula Check</span></h2>
+      <div class="prob">
+        <p>Given integers A, B, C, determine whether integer solutions (x, y) exist for the equation Ax + By = C.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Bézout's Identity</span>
+        <p>By Bézout's identity, the equation Ax + By = C has integer solutions if and only if <strong>C is divisible by GCD(A, B)</strong>. If C % GCD(A, B) ≠ 0, no integer solution exists — regardless of how you choose x and y.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: 3x + 6y = 8</span>
+<pre>GCD(3, 6) = 3.
+Does 3 divide 8? 8 % 3 = 2 ≠ 0.
+<span class="no">No integer solution exists.</span>
+
+Example with solution: 3x + 6y = 9.
+9 % 3 = 0. <span class="ok">Solution exists</span> (e.g., x=3, y=0).</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> getGCD(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> b == 0 ? a : getGCD(b, a % b);
+}
+
+<span class="kw">bool</span> hasIntegerSolution(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c) {
+    <span class="kw">if</span> (a == 0 &amp;&amp; b == 0) <span class="kw">return</span> c == 0;
+    <span class="kw">return</span> c % getGCD(abs(a), abs(b)) == 0;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(log min(A,B)) | Space: O(1). Use <code>abs()</code> on both inputs — negative values crash standard GCD implementations that expect non-negative inputs.</p></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<!-- ═══════════════════════ CH12 ═══════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 12</div>
+    <div class="ch-title">Advanced Arrays &amp; Two-Pointer Strategies — <em>Linear Optimizations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="p122">
+      <h2 class="sh"><span class="pnum hard">P122</span> 2D Prefix Sum Array <span class="tag tc">Range Queries</span></h2>
+      <div class="prob">
+        <p>Given a 2D matrix, answer queries for the sum of any rectangular sub-matrix in O(1) per query after O(R×C) preprocessing.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Inclusion-Exclusion on 2D</span>
+        <p>Build a prefix matrix where <code>prefix[i][j]</code> = sum of all elements in the sub-grid from (0,0) to (i-1, j-1). For a query rectangle (r1,c1) to (r2,c2): take the large rectangle ending at (r2+1, c2+1), subtract the top and left overlaps, then re-add the top-left corner that was subtracted twice.</p>
+      </div>
+      <div class="gv"><span class="dv-label">Area Extraction Formula</span>
+<pre>Sum(r1..r2, c1..c2) =
+  prefix[r2+1][c2+1]
+- prefix[r1]  [c2+1]    (remove top strip)
+- prefix[r2+1][c1]      (remove left strip)
++ prefix[r1]  [c1]      (restore doubly-removed corner)</pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">class</span> NumMatrix {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; prefix;
+<span class="kw">public</span>:
+    NumMatrix(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; matrix) {
+        <span class="kw">int</span> R = matrix.size(), C = matrix[0].size();
+        <span class="cm">// 1-based indexing to avoid boundary checks</span>
+        prefix.assign(R + 1, vector&lt;<span class="kw">int</span>&gt;(C + 1, 0));
+
+        <span class="kw">for</span> (<span class="kw">int</span> r = 0; r &lt; R; r++)
+            <span class="kw">for</span> (<span class="kw">int</span> c = 0; c &lt; C; c++)
+                prefix[r+1][c+1] = matrix[r][c]
+                                 + prefix[r][c+1]
+                                 + prefix[r+1][c]
+                                 - prefix[r][c];
+    }
+
+    <span class="kw">int</span> sumRegion(<span class="kw">int</span> r1, <span class="kw">int</span> c1, <span class="kw">int</span> r2, <span class="kw">int</span> c2) {
+        <span class="kw">return</span> prefix[r2+1][c2+1]
+             - prefix[r1]  [c2+1]
+             - prefix[r2+1][c1]
+             + prefix[r1]  [c1];
+    }
+};</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(R×C) precompute, O(1) per query | Space: O(R×C). The optimal architecture for heavily-queried static grids.</p></div>
+    </div>
+
+    <div class="sec" data-m="p123">
+      <h2 class="sh"><span class="pnum hard">P123</span> 1D Difference Array <span class="tag tc">Delta Updates</span></h2>
+      <div class="prob">
+        <p>Process Q range-update queries on an array where each query adds V to every element in [L, R]. Finalize the array in O(N), not O(Q×N).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Additive Delta Shifting</span>
+        <p>Build a <code>diff</code> array. For each query "+V on [L, R]": write <code>diff[L] += V</code> and <code>diff[R+1] -= V</code>. After all queries, run a prefix sum over <code>diff</code> — the running total at each index exactly accumulates all overlapping updates.</p>
+      </div>
+      <div class="trace"><span class="t-label">Dry Run: Add 3 to [1, 3]</span>
+<pre>Initial diff: [0, 0, 0, 0, 0]
+diff[1] += 3, diff[4] -= 3 → [0, 3, 0, 0, -3]
+
+Prefix sum reconstruction:
+idx 0: 0
+idx 1: 0+3 = 3
+idx 2: 3+0 = 3
+idx 3: 3+0 = 3
+idx 4: 3+(-3) = 0  <span class="ok">Bounds accurately respected!</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code>vector&lt;<span class="kw">int</span>&gt; processUpdates(<span class="kw">int</span> n, vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; updates) {
+    vector&lt;<span class="kw">int</span>&gt; diff(n + 1, 0);  <span class="cm">// +1 to handle R+1 without overflow</span>
+
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; u : updates) {
+        <span class="kw">int</span> L = u[0], R = u[1], val = u[2];
+        diff[L]     += val;
+        diff[R + 1] -= val;
+    }
+
+    vector&lt;<span class="kw">int</span>&gt; arr(n);
+    arr[0] = diff[0];
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; n; i++)
+        arr[i] = arr[i-1] + diff[i];
+
+    <span class="kw">return</span> arr;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(1) per update, O(N) reconstruction | Space: O(N). Completely decouples update frequency from array size — Q updates cost the same as 1 update.</p></div>
+    </div>
+
+    <div class="sec" data-m="p124">
+      <h2 class="sh"><span class="pnum hard">P124</span> 2D Difference Array <span class="tag tc">Spatial Deltas</span></h2>
+      <div class="prob">
+        <p>Apply additive offset K across a 2D sub-grid from (r1,c1) to (r2,c2) in O(1) per update. Reconstruct the final matrix in O(R×C).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Four-Corner Algebraic Update</span>
+        <p>2D analogue of the 1D difference array. Mark four corners: <code>+K</code> at (r1,c1), <code>-K</code> at (r2+1,c1) and (r1,c2+1), and <code>+K</code> again at (r2+1,c2+1) to neutralize the double-subtraction. Reconstruct with a 2D prefix sweep.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">class</span> GridUpdate {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; diff;
+    <span class="kw">int</span> R, C;
+<span class="kw">public</span>:
+    GridUpdate(<span class="kw">int</span> rows, <span class="kw">int</span> cols) : R(rows), C(cols) {
+        diff.assign(R + 2, vector&lt;<span class="kw">int</span>&gt;(C + 2, 0));  <span class="cm">// +2 padding for corner safety</span>
+    }
+
+    <span class="kw">void</span> addRegion(<span class="kw">int</span> r1, <span class="kw">int</span> c1, <span class="kw">int</span> r2, <span class="kw">int</span> c2, <span class="kw">int</span> val) {
+        diff[r1]    [c1]     += val;
+        diff[r2+1]  [c1]     -= val;
+        diff[r1]    [c2+1]   -= val;
+        diff[r2+1]  [c2+1]   += val;
+    }
+
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; build() {
+        vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; g(R, vector&lt;<span class="kw">int</span>&gt;(C, 0));
+        <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; R; i++)
+            <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; C; j++)
+                g[i][j] = diff[i][j]
+                        + (i &gt; 0 ? g[i-1][j] : 0)
+                        + (j &gt; 0 ? g[i][j-1] : 0)
+                        - (i &gt; 0 &amp;&amp; j &gt; 0 ? g[i-1][j-1] : 0);
+        <span class="kw">return</span> g;
+    }
+};</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(1) update, O(R×C) build | Space: O(R×C). Allocate <code>diff</code> with +2 padding (not +1) — the corner at (r2+1, c2+1) requires both dimensions to have room.</p></div>
+    </div>
+
+    <div class="sec" data-m="p125">
+      <h2 class="sh"><span class="pnum hard">P125</span> Bitmask Subsets <span class="tag tp">Bitwise Generation</span></h2>
+      <div class="prob">
+        <p>Generate the complete power set (all 2^N subsets) of an array of N unique integers using bit manipulation — no recursion.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Binary State Counter</span>
+        <p>An array of size N has exactly 2^N subsets. Iterate a counter <code>i</code> from 0 to 2^N - 1. For each <code>i</code>, the j-th bit being set <code>(i &amp; (1 &lt;&lt; j)) != 0</code> means <code>arr[j]</code> is included in this subset. Each integer from 0 to 2^N-1 uniquely encodes one subset.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code>vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; generateSubsets(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> n = nums.size();
+    <span class="kw">int</span> limit = 1 &lt;&lt; n;         <span class="cm">// 2^n subsets</span>
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; result;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; limit; i++) {
+        vector&lt;<span class="kw">int</span>&gt; subset;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n; j++)
+            <span class="kw">if</span> (i &amp; (1 &lt;&lt; j))      <span class="cm">// j-th bit is set in i</span>
+                subset.push_back(nums[j]);
+        result.push_back(subset);
+    }
+    <span class="kw">return</span> result;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N × 2^N) | Space: O(1) auxiliary. Highly optimal for N ≤ 20. Above that, 2^N subsets becomes infeasible to store regardless of method.</p></div>
+    </div>
+
+    <div class="sec" data-m="p126">
+      <h2 class="sh"><span class="pnum hard">P126</span> Brian Kernighan's Algorithm <span class="tag tp">Bit Manipulation</span></h2>
+      <div class="prob">
+        <p>Count the number of set bits (1s) in a 32-bit integer, running only as many iterations as there are set bits — not 32.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — The N &amp; (N-1) Trick</span>
+        <p>The expression <code>N &amp; (N-1)</code> clears exactly the lowest-order set bit of N. Repeating this until N reaches zero counts the set bits, and loops only K times where K is the popcount — not 32. This is strictly more efficient than shifting through all 32 bits.</p>
+      </div>
+      <div class="trace"><span class="t-label">Trace on N = 12 (binary: 1100)</span>
+<pre>Pass 1: N = 12 & 11  (1100 & 1011) = 1000 (8). Count = 1.
+Pass 2: N =  8 &  7  (1000 & 0111) = 0000 (0). Count = 2.
+Terminates after exactly 2 iterations (2 set bits). <span class="ok">Done.</span></pre></div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> countSetBits(<span class="kw">int</span> n) {
+    <span class="kw">int</span> count = 0;
+    <span class="kw">while</span> (n &gt; 0) {
+        n &amp;= (n - 1);   <span class="cm">// Clear the lowest set bit</span>
+        count++;
+    }
+    <span class="kw">return</span> count;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(K) where K = number of set bits | Space: O(1). Compare with <code>__builtin_popcount(n)</code> which maps to a single CPU instruction on modern hardware — use that in contest code.</p></div>
+    </div>
+
+    <div class="sec" data-m="p127">
+      <h2 class="sh"><span class="pnum hard">P127</span> XOR Partition — Two Non-Repeating Elements <span class="tag tp">Bitwise Sieve</span></h2>
+      <div class="prob">
+        <p>Find the two unique elements in an array where every other element appears exactly twice. No auxiliary map allowed — O(1) space only.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Rightmost Differential Split</span>
+        <p>XOR the entire array → result = A ^ B (paired duplicates cancel). Extract the rightmost differing bit: <code>diffBit = XOR &amp; -XOR</code>. Use this bit to partition the array into two buckets. A and B end up in different buckets. XOR-ing within each bucket cancels the pairs, leaving A and B isolated.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code>vector&lt;<span class="kw">int</span>&gt; singleNumbers(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> globalXor = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> num : nums) globalXor ^= num;
+
+    <span class="cm">// Rightmost bit where A and B differ (two's complement trick)</span>
+    <span class="kw">int</span> diffBit = globalXor &amp; -(unsigned <span class="kw">int</span>)globalXor;
+
+    vector&lt;<span class="kw">int</span>&gt; res = {0, 0};
+    <span class="kw">for</span> (<span class="kw">int</span> num : nums) {
+        <span class="kw">if</span> ((num &amp; diffBit) == 0) res[0] ^= num;  <span class="cm">// Bucket A</span>
+        <span class="kw">else</span>                        res[1] ^= num;  <span class="cm">// Bucket B</span>
+    }
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N) | Space: O(1). Cast to <code>unsigned int</code> before the unary negation to prevent undefined behavior on INT_MIN (signed overflow is UB in C++).</p></div>
+    </div>
+
+    <div class="sec" data-m="p128">
+      <h2 class="sh"><span class="pnum hard">P128</span> Coordinate Compression <span class="tag tp">Data Processing</span></h2>
+      <div class="prob">
+        <p>Compress a sparse coordinate array where values can reach 10⁹ into a compact index space of size N, preserving relative order.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Sort, Deduplicate, Rank</span>
+        <p>Copy the array, sort it, deduplicate with <code>std::unique</code>. For each original value, use <code>std::lower_bound</code> to find its rank in the sorted-unique array. This rank (0-indexed or 1-indexed) is its compressed coordinate.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">void</span> compressArray(vector&lt;<span class="kw">int</span>&gt;&amp; arr) {
+    vector&lt;<span class="kw">int</span>&gt; sorted = arr;
+    sort(sorted.begin(), sorted.end());
+    sorted.erase(unique(sorted.begin(), sorted.end()), sorted.end());
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; (<span class="kw">int</span>)arr.size(); i++) {
+        <span class="cm">// lower_bound gives iterator; subtract begin() for 0-based index; +1 for 1-based</span>
+        arr[i] = lower_bound(sorted.begin(), sorted.end(), arr[i])
+                 - sorted.begin() + 1;
+    }
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N log N) for sort + N × O(log N) for lower_bound = O(N log N) total | Space: O(N). Prerequisite for segment trees and Fenwick trees on large coordinate spaces.</p></div>
+    </div>
+
+    <div class="sec" data-m="p129">
+      <h2 class="sh"><span class="pnum hard">P129</span> Sweep Line Algorithm <span class="tag tc">Intervals</span></h2>
+      <div class="prob">
+        <p>Given N overlapping intervals, find the maximum number of intervals active simultaneously at any point in time.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Event-Based Sorting</span>
+        <p>Shatter each interval into two events: start (+1) and end (-1). Sort all events by time. Sweep through, maintaining a running count. The maximum running count is the answer. Sorting end events before start events at the same timestamp handles open/closed interval semantics.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> maxOverlaps(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; intervals) {
+    vector&lt;pair&lt;<span class="kw">int</span>, <span class="kw">int</span>&gt;&gt; events;
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; inv : intervals) {
+        events.push_back({inv[0],  1});  <span class="cm">// Interval starts</span>
+        events.push_back({inv[1], -1});  <span class="cm">// Interval ends</span>
+    }
+    sort(events.begin(), events.end());  <span class="cm">// Sort by time; ends before starts at ties</span>
+
+    <span class="kw">int</span> active = 0, maxOverlap = 0;
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; e : events) {
+        active += e.second;
+        maxOverlap = max(maxOverlap, active);
+    }
+    <span class="kw">return</span> maxOverlap;
+}</code></pre></div>
+      <div class="warn-box"><span class="lbl">Gotcha / Edge Case</span><p>Time: O(N log N) | Space: O(N). When a start and end share the same timestamp, the pair sort puts -1 before +1 (since -1 &lt; +1), meaning the ending interval exits before the new one is counted. Adjust if your problem uses closed intervals.</p></div>
+    </div>
+
+    <div class="sec" data-m="p130">
+      <h2 class="sh"><span class="pnum hard">P130</span> Maximum Sum Circular Subarray <span class="tag tc">Kadane Variant</span></h2>
+      <div class="prob">
+        <p>Find the maximum subarray sum in a circular array — the subarray can wrap around from the end back to the beginning.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Global Sum Minus Minimum Subarray</span>
+        <p>A circular subarray either does NOT wrap (standard Kadane gives the answer) or it DOES wrap (which means the "excluded" middle segment is the minimum subarray). So: <code>answer = max(maxLinear, totalSum - minLinear)</code>. Run both max-Kadane and min-Kadane in a single pass.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> maxSubarraySumCircular(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> totalSum = 0;
+    <span class="kw">int</span> currMax = 0, maxSum = INT_MIN;
+    <span class="kw">int</span> currMin = 0, minSum = INT_MAX;
+
+    <span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+        currMax = max(currMax + x, x);
+        maxSum  = max(maxSum, currMax);
+
+        currMin = min(currMin + x, x);
+        minSum  = min(minSum, currMin);
+
+        totalSum += x;
+    }
+
+    <span class="cm">// If all elements are negative, circular wrap gives empty array → discard</span>
+    <span class="kw">if</span> (maxSum &lt; 0) <span class="kw">return</span> maxSum;
+
+    <span class="kw">return</span> max(maxSum, totalSum - minSum);
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N) | Space: O(1). The "total minus minimum" inversion is the key insight — it converts the wrap-around problem into a standard linear one.</p></div>
+    </div>
+
+    <div class="sec" data-m="p131">
+      <h2 class="sh"><span class="pnum hard">P131</span> Minimum Swaps to Sort Array <span class="tag tc">Graph Cycles</span></h2>
+      <div class="prob">
+        <p>Find the minimum number of swaps needed to sort an array. Answer in O(N log N).</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Cycle Detection in Permutation Graph</span>
+        <p>Compare each element's current position with its target position in the sorted array. Elements that need to swap form directed cycles in a permutation graph. For any cycle of size K, exactly K-1 swaps are needed. Sum (cycle_size - 1) over all cycles.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code><span class="kw">int</span> minSwaps(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> n = nums.size();
+    vector&lt;pair&lt;<span class="kw">int</span>, <span class="kw">int</span>&gt;&gt; arrPos(n);
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) arrPos[i] = {nums[i], i};
+
+    sort(arrPos.begin(), arrPos.end());  <span class="cm">// Sort to find target positions</span>
+    vector&lt;<span class="kw">bool</span>&gt; visited(n, <span class="kw">false</span>);
+    <span class="kw">int</span> swaps = 0;
+
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">if</span> (visited[i] || arrPos[i].second == i) <span class="kw">continue</span>;
+
+        <span class="kw">int</span> cycle_size = 0, j = i;
+        <span class="kw">while</span> (!visited[j]) {
+            visited[j] = <span class="kw">true</span>;
+            j = arrPos[j].second;
+            cycle_size++;
+        }
+        <span class="kw">if</span> (cycle_size &gt; 0) swaps += (cycle_size - 1);
+    }
+    <span class="kw">return</span> swaps;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N log N) for sort + O(N) for cycle traversal | Space: O(N). The cycle-counting insight is reusable for any "minimum operations to reach target permutation" problem.</p></div>
+    </div>
+
+    <div class="sec" data-m="p132">
+      <h2 class="sh"><span class="pnum hard">P132</span> Majority Element II <span class="tag tc">Voting Mechanics</span></h2>
+      <div class="prob">
+        <p>Find all elements appearing more than ⌊N/3⌋ times in O(N) time and O(1) space.</p>
+      </div>
+      <div class="approach">
+        <span class="lbl">Approach — Modified Boyer-Moore (Two Candidates)</span>
+        <p>At most 2 elements can exceed ⌊N/3⌋ threshold. Maintain two candidate variables with counters. On each element: if it matches a candidate, increment its count. If a counter is zero, adopt this element as a new candidate. Otherwise, decrement both counters (cancellation). A second pass verifies the final candidates.</p>
+      </div>
+      <div class="cb"><button class="copy-btn" onclick="copyCode(this)">Copy</button><pre><code>vector&lt;<span class="kw">int</span>&gt; majorityElementII(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> c1 = 0, c2 = 0, num1 = -1, num2 = -1;
+
+    <span class="cm">// Phase 1: Find candidate pair via extended voting</span>
+    <span class="kw">for</span> (<span class="kw">int</span> el : nums) {
+        <span class="kw">if</span>      (el == num1) c1++;
+        <span class="kw">else if</span> (el == num2) c2++;
+        <span class="kw">else if</span> (c1 == 0)  { num1 = el; c1 = 1; }
+        <span class="kw">else if</span> (c2 == 0)  { num2 = el; c2 = 1; }
+        <span class="kw">else</span>               { c1--; c2--; }
+    }
+
+    <span class="cm">// Phase 2: Verify candidates against the N/3 threshold</span>
+    c1 = c2 = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> el : nums) {
+        <span class="kw">if</span>      (el == num1) c1++;
+        <span class="kw">else if</span> (el == num2) c2++;
+    }
+
+    vector&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">if</span> (c1 &gt; (<span class="kw">int</span>)nums.size() / 3) res.push_back(num1);
+    <span class="kw">if</span> (c2 &gt; (<span class="kw">int</span>)nums.size() / 3) res.push_back(num2);
+    <span class="kw">return</span> res;
+}</code></pre></div>
+      <div class="tip-box"><span class="lbl">Complexity</span><p>Time: O(N) | Space: O(1). Generalizes directly: for threshold N/K, maintain K-1 candidates. P77 was the N/2 case with 1 candidate — this is the N/3 case with 2.</p></div>
+    </div>
+
+    <!-- ─── Practice Roadmap ─── -->
+    <div class="sec" data-m="roadmap">
+      <h2 class="sh">Practice Roadmap — Your Path Forward <span class="tag tg2">Series Complete</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Patterns (Ch 10)</div>
+          <p>Every pattern in this chapter has a one-line mathematical rule. If you can't state it in English before writing code, you don't understand it yet. Go back, derive the rule, then code.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Number Theory (Ch 11)</div>
+          <p>Drill SPF, binary expo, Fermat's inverse, and Euler's totient until they are automatic. These appear verbatim in competitive programming and GATE CSE Algorithms questions.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Advanced Arrays (Ch 12)</div>
+          <p>Prefix sums and difference arrays are the most underrated DSA techniques. Master 1D first, then 2D. Sweep line and coordinate compression unlock segment tree problems.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">After This Series</div>
+          <p>Move to Codeforces Div3 contests (first 3 problems). Then tackle CSES Problem Set sections: Sorting &amp; Searching, Dynamic Programming, and Graph Algorithms in that order.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">The Bit Manipulation Block</div>
+          <p>P125–P127 are the foundation for an entire category. Add: count bits in a range, single number III variations, and XOR-basis problems to solidify this layer completely.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">The Rule</div>
+          <p><strong>Never copy code you don't understand.</strong> Every line you write should have a reason you can state out loud. Reproduce each problem from memory 24 hours after reading it.</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">The single most important habit</span>
+        <p><strong>Always write the test case first.</strong> Before coding, write 2–3 examples by hand including edge cases (n=0, n=1, all-negative, all-same, sorted/reverse-sorted). Trace your logic on those examples. Code follows naturally. Debugging becomes rare.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Edition · Part 4 of 4 · Ch 10–12 · P93–P132</div>
+</div>
+
+<script>
+function copyCode(btn){
+  const pre = btn.nextElementSibling;
+  const text = pre.innerText || pre.textContent;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); }, 1800);
+  }).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent='Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent='Copy'; btn.classList.remove('copied'); }, 1800);
+  });
+}
+</script>
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-ps-04';
+  var FILE_DISP = '11 · Problem Solving Pt.4';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

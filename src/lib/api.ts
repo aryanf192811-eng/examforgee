@@ -1,173 +1,222 @@
 import { getIdToken } from "./firebase";
 import { sanitizeNoteHtml } from "./dompurify-config";
+import { useAuthStore } from './store/authStore';
 import type {
-  Subject,
-  Chapter,
-  Question,
-  QuizSession,
-  Flashcard,
-  FlashcardReview,
-  UserProgress,
-  Bookmark,
-  DoubtHistory,
-  UserProfile,
+  ProfileResponse,
+  SubjectResponse,
+  SubjectListResponse,
+  ChapterResponse,
+  ChapterListResponse,
+  NoteProgressRequest,
+  QuizSessionResponse,
+  QuizSubmitRequest,
+  QuizSubmitResponse,
+  ActiveSessionResponse,
+  LeaderboardResponse,
+  LeaderboardEntry,
+  FlashcardResponse,
+  FlashcardDueResponse,
+  FlashcardReviewRequest,
+  FlashcardReviewResponse,
+  DoubtRequest,
+  DoubtResponse,
+  BookmarkResponse,
+  BookmarkListResponse,
+  BookmarkCreateRequest,
+  AuthSyncPayload,
   SessionResponse,
-  ToastType
-} from "../types";
+  ApiErrorBody,
+  ProfileUpdateRequest,
+} from '../types';
 
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-class ApiError extends Error {
+// ── Custom API Error ──
+export class ApiError extends Error {
   status: number;
-  data: any;
-  constructor(status: number, data: any) {
-    let message = `API Error ${status}`;
-    if (status === 422 && data?.detail) {
-      const details = Array.isArray(data.detail)
-        ? data.detail.map((d: any) => `${d.loc.join(" -> ")}: ${d.msg}`).join("; ")
-        : JSON.stringify(data.detail);
-      message = `Validation Error (422): ${details}`;
-    } else if (data?.detail) {
-      message = data.detail;
-    } else if (data?.message) {
-      message = data.message;
-    }
-    super(message);
-    this.name = "ApiError";
+  title: string;
+  detail: string;
+
+  constructor(status: number, title: string, detail: string) {
+    super(`${status}: ${title} — ${detail}`);
+    this.name = 'ApiError';
     this.status = status;
-    this.data = data;
+    this.title = title;
+    this.detail = detail;
   }
 }
 
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const token = await getIdToken();
+// ── Core request function ──
+async function request<T>(
+  method: string,
+  path: string,
+  body?: unknown
+): Promise<T> {
+  const token = useAuthStore.getState().idToken || await getIdToken();
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${BASE}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-      ...init?.headers,
-    },
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined,
   });
+
+  if (res.status === 401) {
+    await useAuthStore.getState().signOut();
+    window.location.href = '/login';
+    throw new ApiError(401, 'Unauthorized', 'Session expired. Please log in again.');
+  }
+
   if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, data);
+    let errorBody: ApiErrorBody = {};
+    try {
+      errorBody = (await res.json()) as ApiErrorBody;
+    } catch {
+      // Response body is not JSON
+    }
+    throw new ApiError(
+      errorBody.status ?? res.status,
+      errorBody.title ?? 'Error',
+      errorBody.detail ?? res.statusText
+    );
   }
-  return res.json();
-}
 
-async function publicFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${path}`, {
-    ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers,
-    },
-  });
-  if (!res.ok)
-    throw new ApiError(res.status, await res.json().catch(() => ({})));
-  return res.json();
+  if (res.status === 204) {
+    return undefined as T;
+  }
+
+  return (await res.json()) as T;
 }
 
 // ── Auth ──
+export async function syncAuth(payload: AuthSyncPayload): Promise<SessionResponse> {
+  return request<SessionResponse>('POST', '/api/auth/session', payload);
+}
 
-export const createSession = (idToken: string) =>
-  publicFetch<SessionResponse>("/api/auth/session", {
-    method: "POST",
-    body: JSON.stringify({ id_token: idToken }),
-  });
+export async function getMe(): Promise<ProfileResponse> {
+  return request<ProfileResponse>('GET', '/api/profile/me');
+}
 
-// ── Content (SQLite) ──
+// ── Subjects ──
+export async function getSubjects(): Promise<SubjectResponse[]> {
+  const res = await request<SubjectListResponse>('GET', '/api/subjects');
+  return res.subjects;
+}
 
-export const fetchSubjects = () =>
-  apiFetch<Subject[]>("/api/content/subjects");
+// ── Chapters ──
+export async function getChapters(subjectSlug: string): Promise<ChapterResponse[]> {
+  const res = await request<ChapterListResponse>('GET', `/api/chapters/${subjectSlug}`);
+  return res.chapters;
+}
 
-export const fetchChapters = (subjectSlug: string) =>
-  apiFetch<Chapter[]>(`/api/content/subjects/${subjectSlug}/chapters`);
-
-export const fetchChapterDetail = (chapterSlug: string) =>
-  apiFetch<Chapter>(`/api/content/chapters/${chapterSlug}`);
-
-// ── Notes (Static HTML) ──
-
+// ── Notes & HTML Sanitization ──
 export async function loadNoteHtml(notesFile: string): Promise<string> {
-  // Static notes are served from /notes/ inside the public folder
   const res = await fetch(`/notes/${notesFile}`);
   if (!res.ok) throw new Error("Failed to load notes");
   const html = await res.text();
   return sanitizeNoteHtml(html);
 }
 
-// ── Quiz (Hybrid) ──
+export function updateNoteProgress(payload: NoteProgressRequest): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>('POST', '/api/notes/progress', payload);
+}
 
-export const fetchQuestions = (subjectId: string, chapterId?: string, mode = "practice", limit = 10) =>
-  apiFetch<Question[]>(`/api/quiz/questions?subject_id=${subjectId}&chapter_id=${chapterId || ""}&mode=${mode}&limit=${limit}`);
+// ── Practice / Quiz ──
+export function startQuiz(
+  mode: string = 'custom',
+  subjectSlugs?: string,
+  count: number = 20
+): Promise<QuizSessionResponse> {
+  const params = new URLSearchParams({ mode: mode.toLowerCase(), count: count.toString() });
+  if (subjectSlugs) {
+    params.append('subject_slugs', subjectSlugs);
+  }
+  return request<QuizSessionResponse>('GET', `/api/quiz/questions?${params.toString()}`);
+}
 
-export const startQuizSession = (payload: { subject_id: string, chapter_id?: string, mode?: string, total_questions?: number }) =>
-  apiFetch<QuizSession>("/api/quiz/sessions", {
-    method: "POST",
-    body: JSON.stringify(payload)
+export function submitQuiz(sessionId: string): Promise<QuizSubmitResponse> {
+  return request<QuizSubmitResponse>('POST', '/api/quiz/submit', { session_id: sessionId });
+}
+
+export function getActiveSession(): Promise<ActiveSessionResponse> {
+  return request<ActiveSessionResponse>('GET', '/api/quiz/active');
+}
+
+export function saveQuizState(sessionId: string, answers: Record<string, string>, flags: string[]): Promise<{ ok: boolean }> {
+  return request<{ ok: boolean }>('POST', '/api/quiz/save', {
+    session_id: sessionId,
+    answers,
+    flags
   });
-
-export const submitQuizSession = (sessionId: string, payload: { score: number, correct_count: number, time_taken_s: number, answers: any[] }) =>
-  apiFetch<{ status: string }>(`/api/quiz/sessions/${sessionId}/submit`, {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-
-// ── User Progress (Supabase) ──
-
-export const fetchUserProgress = (subjectId?: string) =>
-  apiFetch<UserProgress[]>(`/api/progress/` + (subjectId ? `?subject_id=${subjectId}` : ""));
-
-export const updateUserProgress = (payload: { chapter_slug: string, subject_id: string, progress_pct: number, time_spent_s: number, completed: boolean }) =>
-  apiFetch<UserProgress>("/api/progress/update", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-
-// ── Bookmarks ──
-
-export const fetchBookmarks = () =>
-  apiFetch<Bookmark[]>("/api/bookmarks/");
-
-export const toggleBookmark = (payload: { chapter_slug: string, subject_id: string }) =>
-  apiFetch<{ bookmarked: boolean }>("/api/bookmarks/toggle", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-
-// ── Doubts (AI) ──
-
-export const askDoubt = (payload: { chapter_slug: string, subject_id: string, question: string, selected_text?: string }) =>
-  apiFetch<{ answer: string, history_item: DoubtHistory }>("/api/doubts/ask", {
-    method: "POST",
-    body: JSON.stringify(payload)
-  });
-
-export const fetchDoubtHistory = () =>
-  apiFetch<DoubtHistory[]>("/api/doubts/");
+}
 
 // ── Flashcards ──
+export async function getFlashcards(subjectId?: string): Promise<FlashcardResponse[]> {
+  let path = '/api/flashcards/due';
+  if (subjectId) {
+    path += `?subject_id=${subjectId}`;
+  }
+  const res = await request<FlashcardDueResponse>('GET', path);
+  return res.flashcards;
+}
 
-export const fetchFlashcardsByChapter = (chapterSlug: string) =>
-  apiFetch<Flashcard[]>(`/api/flashcards/chapter/${chapterSlug}`);
-
-export const fetchDueFlashcards = () =>
-  apiFetch<FlashcardReview[]>("/api/flashcards/due");
-
-export const reviewFlashcard = (flashcardId: string, rating: number) =>
-  apiFetch<FlashcardReview>("/api/flashcards/review", {
-    method: "POST",
-    body: JSON.stringify({ flashcard_id: flashcardId, rating })
+export function reviewFlashcard(flashcardId: string, quality: number): Promise<FlashcardReviewResponse> {
+  return request<FlashcardReviewResponse>('POST', '/api/flashcards/review', {
+    flashcard_id: flashcardId,
+    quality
   });
+}
 
 // ── Leaderboard ──
+export async function getLeaderboard(scope: string = 'weekly', page: number = 1): Promise<LeaderboardEntry[]> {
+  const res = await request<LeaderboardResponse>('GET', `/api/leaderboard?scope=${scope}&page=${page}`);
+  return res.entries;
+}
 
-export const fetchLeaderboard = (limit = 50) =>
-  apiFetch<LeaderboardEntry[]>(`/api/leaderboard/?limit=${limit}`);
+// ── Bookmarks ────────────────────────────────────────────────────────
+export async function getBookmarks(): Promise<BookmarkResponse[]> {
+  const res = await request<BookmarkListResponse>('GET', '/api/bookmarks');
+  return res.bookmarks;
+}
 
-export const fetchMyRank = () =>
-  apiFetch<{ rank: number }>("/api/leaderboard/me");
+export function createBookmark(payload: BookmarkCreateRequest): Promise<{ id: string }> {
+  return request<{ id: string }>('POST', '/api/bookmarks', payload);
+}
 
-export { ApiError };
+export function deleteBookmark(bookmarkId: string): Promise<{ deleted: boolean }> {
+  return request<{ deleted: boolean }>('DELETE', `/api/bookmarks/${bookmarkId}`);
+}
+
+// ── Doubts ───────────────────────────────────────────────────────────
+export function askDoubt(payload: DoubtRequest): Promise<DoubtResponse> {
+  return request<DoubtResponse>('POST', '/api/doubts/ask', payload);
+}
+
+// ── Profile Management ──
+export function updateProfile(payload: ProfileUpdateRequest): Promise<ProfileResponse> {
+  return request<ProfileResponse>('PATCH', '/api/profile/me', payload);
+}
+
+// ── Compatibility Aliases ──
+export const fetchProfile = getMe;
+export const getProfile = getMe;
+export const getProgress = getMe;
+export const fetchSubjects = getSubjects;
+export const fetchChapters = getChapters;
+export const markChapterProgress = (chapterSlug: string, subjectSlug: string, completed: boolean) => {
+  return updateNoteProgress({
+    chapter_slug: chapterSlug,
+    subject_slug: subjectSlug,
+    status: completed ? 'done' : 'in_progress',
+    time_spent_s: 0
+  });
+};
+export const fetchLeaderboard = getLeaderboard;
+export const fetchBookmarks = getBookmarks;

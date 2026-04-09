@@ -1,146 +1,151 @@
-import { useState, useEffect } from "react";
-import { fetchLeaderboard, fetchMyRank } from "../lib/api";
-import type { LeaderboardEntry } from "../types";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { AppShell } from '../components/layout/AppShell';
+import { Skeleton } from '../components/ui/Skeleton';
+import { useAuthStore } from '../lib/store/authStore';
+import { getLeaderboard } from '../lib/api';
+import { cn, formatNumber, getInitials, hashColor, safeNum } from '../lib/utils';
+import type { LeaderboardEntry } from '../types';
 
-export function Leaderboard() {
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [myRank, setMyRank] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+type Tab = 'weekly' | 'all-time';
+
+export default function Leaderboard() {
+  const user = useAuthStore((s) => s.user);
+  const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [tab, setTab] = useState<Tab>('weekly');
 
   useEffect(() => {
+    let cancelled = false;
     async function load() {
+      setIsLoading(true);
       try {
-        setLoading(true);
-        const [data, rankData] = await Promise.all([
-          fetchLeaderboard(50),
-          fetchMyRank()
-        ]);
-        setLeaderboard(data);
-        setMyRank(rankData.rank);
-      } catch (err) {
-        console.error("Failed to load leaderboard:", err);
-      } finally {
-        setLoading(false);
-      }
+        const data = await getLeaderboard();
+        if (!cancelled) setEntries(data ?? []);
+      } catch { /* handled */ }
+      finally { if (!cancelled) setIsLoading(false); }
     }
     load();
+    return () => { cancelled = true; };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
-  const topThree = leaderboard.slice(0, 3);
-  const restEntries = leaderboard.slice(3);
+  const sorted = [...entries].sort((a, b) => {
+    if (tab === 'weekly') {
+      return safeNum(b.weekly_points) - safeNum(a.weekly_points);
+    }
+    const aScore = safeNum(a.total_points);
+    const bScore = safeNum(b.total_points);
+    return bScore - aScore;
+  });
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-12 animate-fade-in relative min-h-[80vh]">
-      <header className="space-y-4 text-center mt-12">
-        <h1 className="font-display text-4xl lg:text-6xl font-bold tracking-tight text-on-surface text-transparent bg-clip-text academic-gradient">
-          The Academic Roster
-        </h1>
-        <p className="text-on-surface-variant text-lg font-notes italic mx-auto max-w-xl">
-          A healthy scholarly rivalry among the nation's premier analytical minds.
-        </p>
-      </header>
-
-      {/* Podium Visualization */}
-      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 items-end px-4">
-        {/* Rank 2 */}
-        {topThree[1] && (
-          <div className="order-2 md:order-1 flex flex-col items-center group">
-            <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-full bg-surface-container-high border-4 border-outline-variant/20 shadow-xl overflow-hidden flex items-center justify-center text-3xl text-on-surface-variant font-bold">
-                 {topThree[1].name.charAt(0)}
-              </div>
-              <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center font-bold border-2 border-surface">2</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-lg text-on-surface">{topThree[1].name}</div>
-              <div className="text-primary font-mono font-bold">{topThree[1].score.toLocaleString()} pts</div>
-            </div>
-            <div className="w-full h-32 bg-surface-container/50 rounded-t-3xl mt-6 border-t border-x border-outline-variant/10"></div>
-          </div>
-        )}
-
-        {/* Rank 1 */}
-        {topThree[0] && (
-          <div className="order-1 md:order-2 flex flex-col items-center group">
-             <div className="material-symbols-outlined text-5xl text-warning mb-4 animate-bounce">workspace_premium</div>
-            <div className="relative mb-6">
-              <div className="w-28 h-28 rounded-full bg-primary-container border-4 border-primary/30 shadow-2xl overflow-hidden flex items-center justify-center text-5xl text-primary font-bold">
-                 {topThree[0].name.charAt(0)}
-              </div>
-              <div className="absolute -bottom-2 -right-2 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold border-4 border-surface shadow-lg">1</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-2xl text-on-surface">{topThree[0].name}</div>
-              <div className="text-primary font-mono font-bold text-xl">{topThree[0].score.toLocaleString()} pts</div>
-            </div>
-            <div className="w-full h-44 bg-primary/5 rounded-t-3xl mt-6 border-t border-x border-primary/20"></div>
-          </div>
-        )}
-
-        {/* Rank 3 */}
-        {topThree[2] && (
-          <div className="order-3 flex flex-col items-center group">
-            <div className="relative mb-6">
-              <div className="w-20 h-20 rounded-full bg-surface-container-high border-4 border-outline-variant/20 shadow-xl overflow-hidden flex items-center justify-center text-3xl text-on-surface-variant font-bold">
-                 {topThree[2].name.charAt(0)}
-              </div>
-              <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-surface-variant text-on-surface flex items-center justify-center font-bold border-2 border-surface">3</div>
-            </div>
-            <div className="text-center">
-              <div className="font-bold text-lg text-on-surface">{topThree[2].name}</div>
-              <div className="text-primary font-mono font-bold">{topThree[2].score.toLocaleString()} pts</div>
-            </div>
-            <div className="w-full h-24 bg-surface-container/30 rounded-t-3xl mt-6 border-t border-x border-outline-variant/10"></div>
-          </div>
-        )}
-      </div>
-
-      <div className="max-w-3xl mx-auto space-y-4">
-        {/* My Rank Placeholder */}
-        {myRank && myRank > 50 && (
-          <div className="bg-primary/5 p-6 rounded-3xl border border-primary/20 flex items-center justify-between shadow-lg shadow-primary/5 mb-8">
-            <div className="flex items-center gap-6">
-               <div className="w-10 text-center font-mono font-bold text-primary text-xl">#{myRank}</div>
-               <div className="font-bold text-on-surface">Your Current Standing</div>
-            </div>
-            <div className="text-on-surface-variant italic text-sm">Keep synthesizing to climb higher.</div>
-          </div>
-        )}
-
-        {/* Regular List */}
-        <div className="bg-surface-container-low rounded-[2.5rem] p-4 border border-outline-variant/10 overflow-hidden shadow-sm">
-          {restEntries.map((entry, idx) => (
-            <div key={entry.user_id} className="flex items-center justify-between p-5 rounded-2xl hover:bg-surface-container transition-all group">
-              <div className="flex items-center gap-6 flex-1">
-                <div className="w-10 text-center font-mono text-on-surface-variant font-bold text-lg group-hover:text-primary transition-colors">
-                  {idx + 4}
-                </div>
-                <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-on-surface-variant border border-outline-variant/10">
-                  {entry.name.charAt(0)}
-                </div>
-                <div className="font-bold text-lg text-on-surface">{entry.name}</div>
-              </div>
-              <div className="font-mono text-primary font-bold">
-                {entry.score.toLocaleString()} <span className="text-[10px] uppercase opacity-50 ml-1">pts</span>
-              </div>
-            </div>
+    <AppShell title="Leaderboard">
+      <div className="max-w-2xl mx-auto">
+        {/* Tabs */}
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-surface-container mb-6 w-fit mx-auto">
+          {(['weekly', 'all-time'] as Tab[]).map((t) => (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={cn(
+                'px-5 py-2 rounded-lg text-label-lg transition-colors spring-transition capitalize cursor-pointer',
+                tab === t
+                  ? 'bg-primary-container text-on-primary-container font-semibold'
+                  : 'text-on-surface-variant hover:bg-surface-container-high'
+              )}
+            >
+              {t === 'all-time' ? 'All Time' : 'Weekly'}
+            </button>
           ))}
-          {leaderboard.length === 0 && (
-            <div className="p-20 text-center">
-               <span className="material-symbols-outlined text-6xl text-on-surface-variant/20 mb-4">analytics</span>
-               <p className="text-on-surface-variant italic">The roster is being regenerated...</p>
-            </div>
-          )}
         </div>
+
+        {/* Table */}
+        {isLoading ? (
+          <Skeleton variant="table-row" count={10} />
+        ) : entries.length === 0 ? (
+          <div className="text-center py-16">
+            <span className="material-symbols-outlined text-[40px] text-on-surface-variant mb-4 block">
+              leaderboard
+            </span>
+            <p className="text-body-md text-on-surface-variant">
+              No leaderboard data yet. Start practicing to see rankings!
+            </p>
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-1.5"
+          >
+            {/* Header */}
+            <div className="flex items-center gap-4 px-4 py-2 text-label-md text-on-surface-variant">
+              <span className="w-8 text-center">#</span>
+              <span className="w-8" />
+              <span className="flex-1">Name</span>
+              <span className="w-20 text-right">Score</span>
+            </div>
+
+            {sorted.map((entry, i) => {
+              const rank = safeNum(entry.rank, i + 1);
+              const score = tab === 'weekly'
+                ? safeNum(entry.weekly_points)
+                : safeNum(entry.total_points);
+              const isCurrentUser = entry.uid === user?.uid;
+              const name = entry.name || 'Student';
+
+              return (
+                <motion.div
+                  key={entry.uid}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.03, type: 'spring', stiffness: 300, damping: 24 }}
+                  className={cn(
+                    'flex items-center gap-4 px-4 py-3 rounded-xl transition-colors',
+                    isCurrentUser
+                      ? 'bg-primary-container'
+                      : 'bg-surface-container hover:bg-surface-container-high'
+                  )}
+                >
+                  {/* Rank */}
+                  <span className={cn(
+                    'w-8 text-center font-display text-title-md',
+                    rank <= 3 ? 'text-primary' : 'text-on-surface-variant'
+                  )}>
+                    {rank <= 3 ? ['🥇', '🥈', '🥉'][rank - 1] : rank}
+                  </span>
+
+                  {/* Avatar */}
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-label-md font-bold text-white shrink-0"
+                    style={{ backgroundColor: hashColor(name) }}
+                  >
+                    {getInitials(name)}
+                  </div>
+
+                  {/* Name */}
+                  <span className={cn(
+                    'flex-1 text-body-md truncate',
+                    isCurrentUser ? 'text-on-primary-container font-semibold' : 'text-on-surface'
+                  )}>
+                    {name}
+                    {isCurrentUser && (
+                      <span className="text-label-sm ml-2 opacity-70">(You)</span>
+                    )}
+                  </span>
+
+                  {/* Score */}
+                  <span className={cn(
+                    'w-20 text-right font-mono text-label-lg',
+                    isCurrentUser ? 'text-on-primary-container' : 'text-on-surface'
+                  )}>
+                    {formatNumber(score)}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        )}
       </div>
-    </div>
+    </AppShell>
   );
 }

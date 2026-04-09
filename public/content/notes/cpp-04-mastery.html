@@ -1,0 +1,3011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — File 04: Pure Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;--hand:'Architects Daughter',cursive;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,13px);
+  --fs-base:clamp(14px,3.2vw,17px);--fs-md:clamp(14px,3.4vw,16.5px);
+  --fs-lg:clamp(16px,3.8vw,19px);--fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(16px,4.2vw,21px);--fs-code:clamp(11px,2.6vw,13.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+.toc-grid a{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:clamp(13.5px,3.2vw,15.5px);font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:clamp(14px,3vw,18px) clamp(12px,3vw,20px);margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:var(--fs-code);background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;color:var(--ink);line-height:1.85;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.cb::-webkit-scrollbar{height:4px;}.cb::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.cb .kw{color:var(--blue);font-weight:bold;}.cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}.pl.chk li::before{content:'✓';color:var(--green);}.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:3px;}
+.tbl::-webkit-scrollbar{height:4px;}.tbl::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12.5px,2.8vw,15.5px);}
+thead tr{background:var(--ink);}
+th{padding:clamp(7px,2vw,9px) clamp(8px,2.5vw,14px);text-align:left;color:var(--paper);font-weight:400;font-size:clamp(10px,2.2vw,13px);font-family:var(--hand);letter-spacing:0.5px;white-space:nowrap;}
+td{padding:clamp(6px,1.8vw,8px) clamp(8px,2.5vw,14px);border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}.ok{color:var(--orange);font-weight:600;}.bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,15px);}
+.cg-card .ct{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:clamp(13px,2.8vw,15px);line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,16px) clamp(10px,3vw,18px);margin:14px 0;font-family:'Courier New',monospace;font-size:clamp(10px,2.2vw,13px);line-height:1.9;color:var(--ink);white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.gv::-webkit-scrollbar{height:4px;}.gv::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.gv .dv-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:var(--fs-md);line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;min-width:24px;display:flex;align-items:center;justify-content:center;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .toc-grid{grid-template-columns:1fr;}
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .cover-gate-tag{font-size:8px;letter-spacing:1px;}
+  .sec{padding-left:clamp(28px,6vw,44px);}.sec::before{font-size:8px;}
+  h2.sh{font-size:clamp(15px,3.8vw,18px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10.5px,2.4vw,12.5px);padding:10px 12px;tab-size:2;}
+  .gv{font-size:clamp(9.5px,2.1vw,11.5px);}
+  .tbl{border-left:3px solid var(--blue);}
+  .cg{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);padding:18px 14px 16px;}
+  .cover::after{display:none;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;letter-spacing:1px;}
+  .cover-inner{padding-left:0;}.chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:20px;padding-right:12px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(14px,4vw,17px);}
+  h2.sh{font-size:clamp(14px,4vw,16px);flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .toc-grid a{font-size:14px;}
+  .def-box,.warn-box,.tip-box,.note-box{padding:10px 12px;}
+  .cb{font-size:10.5px;padding:9px 10px;letter-spacing:-0.1px;}.gv{font-size:9.5px;padding:10px;}
+  table{font-size:12px;}th{font-size:9.5px;padding:6px 8px;}td{padding:5px 8px;}
+  .cg-card p{font-size:13px;}.bt{padding:8px 12px 0;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;break-inside:avoid;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cb,.gv{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">04 · Pure Mastery</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Complete Reference · File 04 of 05</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Programming</div>
+    <h1>Pure Mastery<br><em>What Senior Engineers Know</em></h1>
+    <p class="cover-desc">The final frontier. Template metaprogramming, undefined behavior, the memory model, ABI, performance engineering, design patterns in real C++, compiler internals, type traits, CRTP, policy classes, custom allocators, and the unwritten rules that separate good engineers from great ones. Read this file twice.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Undefined Behavior</span>
+      <span class="chip">Ch 2 · Memory Model &amp; Alignment</span>
+      <span class="chip">Ch 3 · Template Metaprogramming</span>
+      <span class="chip">Ch 4 · Advanced OOP Patterns</span>
+      <span class="chip">Ch 5 · Performance Engineering</span>
+      <span class="chip">Ch 6 · Design Patterns in C++</span>
+      <span class="chip">Ch 7 · Custom Allocators</span>
+      <span class="chip">Ch 8 · ABI &amp; Compilation Model</span>
+      <span class="chip">Ch 9 · Real-World Architecture</span>
+      <span class="chip">Ch 10 · Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Undefined Behavior — The Dark Side</a>
+    <a href="#ch2"><span class="tn">02</span>Memory Model &amp; Alignment</a>
+    <a href="#ch3"><span class="tn">03</span>Template Metaprogramming</a>
+    <a href="#ch4"><span class="tn">04</span>Advanced OOP Patterns</a>
+    <a href="#ch5"><span class="tn">05</span>Performance Engineering</a>
+    <a href="#ch6"><span class="tn">06</span>Design Patterns in C++</a>
+    <a href="#ch7"><span class="tn">07</span>Custom Allocators &amp; Memory</a>
+    <a href="#ch8"><span class="tn">08</span>ABI, Linkage &amp; Compilation</a>
+    <a href="#ch9"><span class="tn">09</span>Real-World Architecture</a>
+    <a href="#ch10"><span class="tn">10</span>Master Reference</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — UNDEFINED BEHAVIOR
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Undefined Behavior — <em>The Dark Side of C++</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ub-intro">
+      <h2 class="sh">1.1 &nbsp; What Undefined Behavior Actually Means <span class="tag tg">Critical</span></h2>
+      <p><strong>Undefined behavior (UB)</strong> means the C++ standard makes <mark>no requirements whatsoever</mark> about what your program does. Not "it crashes." Not "it produces wrong output." Literally anything — the compiler is free to assume UB never happens, which means it can optimize away checks, reorder operations, delete branches, or generate code that formats your hard drive. This is not theoretical.</p>
+      
+      <div class="def-box">
+        <span class="lbl">Why compilers exploit UB for optimization</span>
+        <p>When a compiler sees code that would be UB if a certain condition held, it assumes that condition is <strong>false</strong> — because you promised (by writing valid C++) that UB never happens. It uses this as a free optimization license. Signed integer overflow? The compiler assumes it never happens, so it can eliminate the overflow check. Null pointer dereference? It assumes the pointer is never null, so it eliminates your null check. This is legal. This breaks production code quietly.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Example 1: Signed Integer Overflow Optimization</strong><br>
+        In C++, signed integer overflow is UB (unlike unsigned, which wraps). If you try to guard against overflow by checking if <code>x + 1 &gt; x</code>, the compiler will look at this and say: "If <code>x</code> was <code>INT_MAX</code>, <code>x + 1</code> would be UB. Since UB cannot happen, <code>x</code> can never be <code>INT_MAX</code>. Therefore, <code>x + 1</code> is ALWAYS greater than <code>x</code>." The optimizer then deletes your check entirely.</p>
+        <div class="cb"><span class="cm">// The compiler ASSUMES signed overflow never happens → eliminates the guard</span>
+<span class="kw">void</span> secure_check(<span class="kw">int</span> x) {
+    <span class="kw">if</span> (x + 1 &gt; x) {          <span class="cm">// O2 optimizer DELETES this 'if' — assumes it's always true!</span>
+        doSomething();         
+    }
+}
+<span class="cm">// Fix: use unsigned, or check before adding:</span>
+<span class="kw">if</span> (x &lt; INT_MAX) doSomething();</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Example 2: Null Pointer Dereference (Time-Travel Optimization)</strong><br>
+        If you dereference a pointer, the compiler assumes it cannot be null. If you check for null <em>after</em> the dereference, the compiler says: "We already dereferenced it securely on line 1, so it cannot possibly be null on line 2." It will delete the null check on line 2!</p>
+        <div class="cb"><span class="kw">void</span> process(<span class="kw">int</span>* p) {
+    <span class="kw">int</span> val = *p;             <span class="cm">// Dereference happens here (UB if null)</span>
+    <span class="kw">if</span> (p == <span class="kw">nullptr</span>) <span class="kw">return</span>; <span class="cm">// Optimizer DELETES this check because p was dereferenced!</span>
+    
+    <span class="cm">// If you pass nullptr: works in Debug (crashes at *p), but in Release</span>
+    <span class="cm">// it might read garbage, skip the return, and execute the rest of the function!</span>
+}</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Example 3: Out-of-Bounds Array Access</strong><br>
+        Reading slightly past an array often works in Debug mode because memory is zeroed or padded. In Release mode, it might read sensitive adjacent variables, or the compiler might vectorize the loop and crash unpredictably.</p>
+        <div class="cb"><span class="kw">int</span> arr[4] = {1, 2, 3, 4};
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt;= 4; ++i) {  <span class="cm">// BUG: loops 5 times (i=4 is UB)</span>
+    cout &lt;&lt; arr[i] &lt;&lt; "\n";     <span class="cm">// Debug: prints 0. Release: prints garbage, or deletes loop.</span>
+}</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ub-detect">
+      <h2 class="sh">1.2 &nbsp; Detecting &amp; Sanitizing UB <span class="tag tg">Essential Tooling</span></h2>
+      <p>The compiler can find UB for you during development. These sanitizers add instrumentation to your binary — <mark>always run them during testing</mark>, never in production builds. They will crash your program at the exact line where UB occurs, printing a detailed stack trace.</p>
+      
+      <div class="cb"><span class="cm"># AddressSanitizer (ASan) — Finds: out-of-bounds, use-after-free, double-free, leaks</span>
+g++ -std=c++17 -g -fsanitize=address prog.cpp -o prog
+./prog
+
+<span class="cm"># UBSanitizer (UBSan) — Finds: signed overflow, null deref, misaligned access, bad cast</span>
+g++ -std=c++17 -g -fsanitize=undefined prog.cpp -o prog
+
+<span class="cm"># ThreadSanitizer (TSan) — Finds: data races across threads, lock-order violations</span>
+g++ -std=c++17 -g -fsanitize=thread prog.cpp -o prog
+
+<span class="cm"># MemorySanitizer (MSan, Clang only) — Finds: reads of uninitialized memory</span>
+clang++ -std=c++17 -g -fsanitize=memory prog.cpp -o prog</div>
+      
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Tool</th><th>What It Catches</th><th>Overhead</th><th>Compiler</th></tr></thead>
+          <tbody>
+            <tr><td>ASan</td><td>Heap/stack/global OOB, use-after-free, double-free, leaks</td><td class="ok">2–3×</td><td class="good">GCC/Clang</td></tr>
+            <tr><td>UBSan</td><td>Integer overflow, null deref, misalignment, bad casts/enums</td><td class="good">1.2×</td><td class="good">GCC/Clang</td></tr>
+            <tr><td>TSan</td><td>Data races (missing mutexes), deadlocks</td><td class="bad">5–15×</td><td class="good">GCC/Clang</td></tr>
+            <tr><td>MSan</td><td>Uninitialized reads (returning garbage variables)</td><td class="ok">3×</td><td class="ok">Clang only</td></tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="tip-box">
+        <span class="lbl">Run all sanitizers in CI</span>
+        <p>Set up a CI pipeline that builds with <code>-fsanitize=address,undefined</code> and runs all tests. This catches most UB before it ships. Use <code>-O1</code> with sanitizers — <code>-O0</code> misses some issues, and <code>-O2</code> may optimize away the UB before ASan can catch it.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">1.3 &nbsp; UB Traps Quick Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>UB Type</th><th>Trigger</th><th>Safe Alternative</th></tr></thead>
+          <tbody>
+            <tr><td>Signed overflow</td><td class="bad">INT_MAX + 1</td><td class="good">Use unsigned or __builtin_add_overflow()</td></tr>
+            <tr><td>Shift past width</td><td class="bad">1 &lt;&lt; 32 on 32-bit int</td><td class="good">Use 1ULL &lt;&lt; n; check n &lt; 64</td></tr>
+            <tr><td>Strict aliasing</td><td class="bad">Reading float* through int*</td><td class="good">memcpy or std::bit_cast (C++20)</td></tr>
+            <tr><td>VLA size ≤ 0</td><td class="bad">int arr[n] where n &lt;= 0</td><td class="good">Use vector or assert(n &gt; 0) first</td></tr>
+            <tr><td>Lifetime violation</td><td class="bad">Use after scope exits or delete</td><td class="good">unique_ptr, or extend lifetime explicitly</td></tr>
+            <tr><td>Divide by zero</td><td class="bad">x / 0 (integer)</td><td class="good">Guard: if (divisor != 0)</td></tr>
+            <tr><td>Invalid downcast</td><td class="bad">static_cast&lt;Derived*&gt;(base) when wrong type</td><td class="good">dynamic_cast + nullptr check</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — MEMORY MODEL & ALIGNMENT
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Memory Model &amp; Alignment — <em>How Data Really Lives in Memory</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="object-layout">
+      <h2 class="sh">2.1 &nbsp; Object Layout, Padding &amp; sizeof <span class="tag tg">Critical</span></h2>
+      <p>The compiler inserts <strong>padding bytes</strong> between struct members to satisfy alignment requirements. Every type has a natural alignment — <code>int</code> must be at a 4-byte boundary, <code>double</code> at 8 bytes. If you ignore this, you waste memory and kill cache performance.</p>
+      <div class="cb"><span class="cm">// BAD layout — wastes 7 bytes of padding</span>
+<span class="kw">struct</span> BadLayout {
+    <span class="kw">char</span>   a;      <span class="cm">// 1 byte  @ offset 0</span>
+                   <span class="cm">// 7 bytes padding (double needs 8-byte alignment)</span>
+    <span class="kw">double</span> b;      <span class="cm">// 8 bytes @ offset 8</span>
+    <span class="kw">char</span>   c;      <span class="cm">// 1 byte  @ offset 16</span>
+                   <span class="cm">// 7 bytes padding (struct total must align to largest member)</span>
+};
+<span class="cm">// sizeof(BadLayout) = 24!  (we stored 10 bytes of real data)</span>
+
+<span class="cm">// GOOD layout — sort largest to smallest</span>
+<span class="kw">struct</span> GoodLayout {
+    <span class="kw">double</span> b;      <span class="cm">// 8 bytes @ offset 0</span>
+    <span class="kw">char</span>   a;      <span class="cm">// 1 byte  @ offset 8</span>
+    <span class="kw">char</span>   c;      <span class="cm">// 1 byte  @ offset 9</span>
+                   <span class="cm">// 6 bytes padding</span>
+};
+<span class="cm">// sizeof(GoodLayout) = 16  (saved 8 bytes!)</span>
+
+<span class="cm">// Check alignment and size</span>
+cout &lt;&lt; <span class="kw">alignof</span>(<span class="kw">double</span>)      &lt;&lt; "\n";   <span class="cm">// 8</span>
+cout &lt;&lt; <span class="kw">alignof</span>(BadLayout)   &lt;&lt; "\n";   <span class="cm">// 8 (largest member)</span>
+cout &lt;&lt; <span class="kw">sizeof</span>(BadLayout)    &lt;&lt; "\n";   <span class="cm">// 24</span>
+cout &lt;&lt; <span class="kw">sizeof</span>(GoodLayout)   &lt;&lt; "\n";   <span class="cm">// 16</span>
+
+<span class="cm">// alignas — force specific alignment</span>
+<span class="kw">struct</span> alignas(64) CacheAligned {     <span class="cm">// Aligned to cache line (64 bytes)</span>
+    <span class="kw">int</span> data[16];
+};
+<span class="cm">// Essential for SIMD, lock-free data structures, false-sharing prevention</span>
+
+<span class="cm">// Packed struct — remove all padding (use with caution)</span>
+<span class="kw">#pragma pack</span>(push, 1)
+<span class="kw">struct</span> Packed {
+    <span class="kw">char</span>   a;
+    <span class="kw">double</span> b;
+    <span class="kw">char</span>   c;
+};
+<span class="kw">#pragma pack</span>(pop)
+<span class="cm">// sizeof(Packed) = 10 — no padding! But misaligned reads may be SLOWER</span></div>
+      <div class="gv">
+        <span class="dv-label">Memory Layout — Visualizing the Padding</span>
+  // BadLayout: Size 24
+  | a (1) | pad (7) |               &lt;-- Char stored at offset 0. Needs 8-byte alignment for next double.
+  |      b (8)      |               &lt;-- Double perfectly aligned at offset 8.
+  | c (1) | pad (7) |               &lt;-- Char stored at offset 16. Total size must be multiple of 8!
+
+  // GoodLayout: Size 16 (Saving 33% Memory)
+  |      b (8)      |               &lt;-- Double aligned at offset 0.
+  | a (1) | c (1) |   pad (6)   |   &lt;-- Chars neatly packed together at tail, followed by final padding.
+
+  Rule: Sort members LARGEST to SMALLEST type size to minimize padding holes.
+      </div>
+    </div>
+
+    <div class="sec" data-m="cache">
+      <h2 class="sh">2.2 &nbsp; Cache Architecture &amp; Data-Oriented Design <span class="tag tp">Expert</span></h2>
+      <p>Modern CPUs are <strong>1000× faster than RAM</strong>. Everything hinges on the cache. Data that fits in cache runs at full speed; data that misses the cache stalls the CPU waiting for memory. This is the single biggest performance factor in C++ code.</p>
+      <div class="gv">
+        <span class="dv-label">CPU Memory Hierarchy — Latency</span>
+L1 Cache  (32 KB)   ~  4 cycles  ← Fastest — your hot data must live here
+L2 Cache  (256 KB)  ~ 12 cycles
+L3 Cache  (8+ MB)   ~ 40 cycles
+RAM                 ~200 cycles  ← 50× slower than L1
+SSD                 ~50,000 cycles
+HDD                 ~5,000,000 cycles
+
+Cache line = 64 bytes. CPU loads/evicts data in 64-byte chunks.
+If you touch arr[0], the CPU pulls arr[0] through arr[15] into the L1 cache simultaneously.
+Sequential loops trigger the Hardware Prefetcher — the CPU guesses you'll want the NEXT 64 bytes and loads it before you ask!
+      </div>
+      <div class="cb"><span class="cm">// CACHE-HOSTILE: Array of Structures (AoS) — bad for SIMD/vectorization</span>
+<span class="kw">struct</span> Entity {
+    <span class="kw">float</span> x, y, z;       <span class="cm">// position</span>
+    <span class="kw">float</span> vx, vy, vz;    <span class="cm">// velocity</span>
+    <span class="kw">float</span> health;
+    <span class="kw">int</span>   id;
+    <span class="kw">bool</span>  alive;
+};
+Entity entities[10000];
+
+<span class="cm">// Update positions: touches 12 floats per entity — wasteful,</span>
+<span class="cm">// health/id/alive load into cache but are never used this loop</span>
+<span class="kw">for</span> (<span class="kw">auto</span>&amp; e : entities) {
+    e.x += e.vx; e.y += e.vy; e.z += e.vz;
+}
+
+<span class="cm">// CACHE-FRIENDLY: Structure of Arrays (SoA) — ideal for hot loops</span>
+<span class="kw">struct</span> EntitySystem {
+    <span class="kw">float</span> x[10000], y[10000], z[10000];     <span class="cm">// All positions together</span>
+    <span class="kw">float</span> vx[10000], vy[10000], vz[10000];  <span class="cm">// All velocities together</span>
+    <span class="kw">float</span> health[10000];
+    <span class="kw">int</span>   id[10000];
+    <span class="kw">bool</span>  alive[10000];
+};
+EntitySystem es;
+
+<span class="cm">// Now the position update is SEQUENTIAL memory access — cache perfect</span>
+<span class="cm">// CPU can auto-vectorize with SIMD: processes 4-8 floats per instruction</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 10000; i++) {
+    es.x[i] += es.vx[i];
+    es.y[i] += es.vy[i];
+    es.z[i] += es.vz[i];
+}</div>
+      <div class="tip-box">
+        <span class="lbl">False Sharing — The Silent Perf Killer in Multi-threaded Code</span>
+        <p>When two threads write to different variables that happen to share the same 64-byte cache line, each write invalidates the other thread's cache entry — they "fight" over the cache line. This can make multi-threaded code <strong>slower than single-threaded</strong>. Fix: pad hot per-thread variables to cache-line size using <code>alignas(64)</code> or <code>std::hardware_destructive_interference_size</code> (C++17).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="atomics-mem">
+      <h2 class="sh">2.3 &nbsp; The C++ Memory Model &amp; Memory Orders <span class="tag tp">Expert</span></h2>
+      <p>Modern CPUs and compilers <strong>reorder operations</strong> for performance. The C++ memory model defines rules for what orderings are observable across threads. Getting this wrong causes data races even with atomics.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;atomic&gt;
+
+std::atomic&lt;<span class="kw">int</span>&gt; x{0}, y{0};
+
+<span class="cm">// memory_order_relaxed — no ordering guarantee, just atomicity</span>
+<span class="cm">// Use for: counters where you only care about the final value</span>
+x.store(1, std::memory_order_relaxed);
+<span class="kw">int</span> v = x.load(std::memory_order_relaxed);
+
+<span class="cm">// memory_order_release / memory_order_acquire — publish/subscribe pattern</span>
+<span class="cm">// Store with release: all writes before this are visible to anyone who acquires</span>
+<span class="cm">// Load with acquire: all reads after this see writes before the release</span>
+std::atomic&lt;<span class="kw">bool</span>&gt; ready{<span class="kw">false</span>};
+<span class="kw">int</span> data = 0;
+
+<span class="cm">// Thread 1 (producer)</span>
+data = 42;                                      <span class="cm">// Write data first</span>
+ready.store(<span class="kw">true</span>, std::memory_order_release);  <span class="cm">// Publish: "data is ready"</span>
+
+<span class="cm">// Thread 2 (consumer)</span>
+<span class="kw">while</span> (!ready.load(std::memory_order_acquire)); <span class="cm">// Wait for publication</span>
+cout &lt;&lt; data;  <span class="cm">// Guaranteed to see 42 — the acquire fence established happens-before</span>
+
+<span class="cm">// memory_order_seq_cst — sequential consistency (the default, safest, slowest)</span>
+<span class="cm">// All seq_cst operations appear in a single global order to all threads</span>
+x.store(1);    <span class="cm">// default: seq_cst</span>
+
+<span class="cm">// Compare-and-swap — the foundation of lock-free data structures</span>
+std::atomic&lt;<span class="kw">int</span>&gt; val{10};
+<span class="kw">int</span> expected = 10;
+<span class="kw">bool</span> swapped = val.compare_exchange_strong(
+    expected,   <span class="cm">// If val == expected...</span>
+    20          <span class="cm">// ...set val = 20 atomically</span>
+);
+<span class="cm">// If val was 10: swapped=true, val=20</span>
+<span class="cm">// If val was NOT 10: swapped=false, expected=current val, val unchanged</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — TEMPLATE METAPROGRAMMING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Template Metaprogramming — <em>Computation at Compile Time</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="type-traits">
+      <h2 class="sh">3.1 &nbsp; Type Traits — Introspecting Types at Compile Time <span class="tag tc">Core</span></h2>
+      <p>Type traits (from <code>&lt;type_traits&gt;</code>) let you query and transform types at compile time. They are the building blocks of all generic programming, concept constraints, and SFINAE.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;type_traits&gt;
+
+<span class="cm">// Query properties — all return bool (as ::value or _v suffix)</span>
+std::is_integral&lt;<span class="kw">int</span>&gt;::value          <span class="cm">// true</span>
+std::is_integral_v&lt;<span class="kw">float</span>&gt;              <span class="cm">// false  (_v = C++17 variable template shortcut)</span>
+std::is_pointer_v&lt;<span class="kw">int</span>*&gt;                <span class="cm">// true</span>
+std::is_reference_v&lt;<span class="kw">int</span>&amp;&gt;              <span class="cm">// true</span>
+std::is_const_v&lt;<span class="kw">const int</span>&gt;             <span class="cm">// true</span>
+std::is_class_v&lt;std::string&gt;            <span class="cm">// true</span>
+std::is_abstract_v&lt;IShape&gt;             <span class="cm">// true (has pure virtual)</span>
+std::is_trivially_copyable_v&lt;MyStruct&gt; <span class="cm">// true if memcpy-safe</span>
+std::is_same_v&lt;<span class="kw">int</span>, <span class="kw">int</span>&gt;               <span class="cm">// true</span>
+std::is_base_of_v&lt;Base, Derived&gt;        <span class="cm">// true if Derived inherits Base</span>
+std::is_convertible_v&lt;<span class="kw">int</span>, <span class="kw">double</span>&gt;     <span class="cm">// true</span>
+
+<span class="cm">// Transform types — returns a new type (::type or _t suffix)</span>
+std::remove_const&lt;<span class="kw">const int</span>&gt;::type     <span class="cm">// int</span>
+std::remove_reference_t&lt;<span class="kw">int</span>&amp;&gt;          <span class="cm">// int  (_t = C++14 alias template)</span>
+std::remove_pointer_t&lt;<span class="kw">int</span>*&gt;            <span class="cm">// int</span>
+std::add_const_t&lt;<span class="kw">int</span>&gt;                  <span class="cm">// const int</span>
+std::add_lvalue_reference_t&lt;<span class="kw">int</span>&gt;       <span class="cm">// int&amp;</span>
+std::decay_t&lt;<span class="kw">int</span>[5]&gt;                   <span class="cm">// int* (array decay, const/ref stripped)</span>
+std::underlying_type_t&lt;MyEnum&gt;          <span class="cm">// int (underlying type of enum)</span>
+std::common_type_t&lt;<span class="kw">int</span>, <span class="kw">double</span>&gt;        <span class="cm">// double (common type for arithmetic)</span>
+
+<span class="cm">// Use in templates to conditionally enable code</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+T absolute(T val) {
+    <span class="kw">if constexpr</span> (std::is_signed_v&lt;T&gt;) {
+        <span class="kw">return</span> val &lt; 0 ? -val : val;
+    } <span class="kw">else</span> {
+        <span class="kw">return</span> val;  <span class="cm">// unsigned — already non-negative</span>
+    }
+}</div>
+    </div>
+
+    <div class="sec" data-m="sfinae">
+      <h2 class="sh">3.2 &nbsp; SFINAE &amp; enable_if — Selective Template Enabling <span class="tag tp">Expert</span></h2>
+      <p><strong>SFINAE</strong> (Substitution Failure Is Not An Error) is the rule that if substituting template arguments causes a compile error in an <em>immediate context</em>, the compiler silently skips that overload rather than reporting an error. This enables <mark>compile-time overload selection based on type properties</mark>.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;type_traits&gt;
+
+<span class="cm">// enable_if — include this overload ONLY for integral types</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T,
+         <span class="kw">typename</span> = std::enable_if_t&lt;std::is_integral_v&lt;T&gt;&gt;&gt;
+<span class="kw">void</span> process(T val) {
+    cout &lt;&lt; "Integer: " &lt;&lt; val &lt;&lt; "\n";
+}
+
+<span class="cm">// This overload only activates for floating-point types</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T,
+         <span class="kw">typename</span> = std::enable_if_t&lt;std::is_floating_point_v&lt;T&gt;&gt;&gt;
+<span class="kw">void</span> process(T val) {
+    cout &lt;&lt; fixed &lt;&lt; setprecision(4) &lt;&lt; "Float: " &lt;&lt; val &lt;&lt; "\n";
+}
+
+process(42);      <span class="cm">// Integer: 42</span>
+process(3.14);    <span class="cm">// Float: 3.1400</span>
+<span class="cm">// process("hi"); // Compile error: no matching overload — good!</span>
+
+<span class="cm">// C++17 cleaner: if constexpr (preferred over SFINAE in most cases)</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">void</span> process2(T val) {
+    <span class="kw">if constexpr</span> (std::is_integral_v&lt;T&gt;)
+        cout &lt;&lt; "Integer: " &lt;&lt; val &lt;&lt; "\n";
+    <span class="kw">else if constexpr</span> (std::is_floating_point_v&lt;T&gt;)
+        cout &lt;&lt; "Float: " &lt;&lt; val &lt;&lt; "\n";
+    <span class="kw">else</span>
+        cout &lt;&lt; "Other: " &lt;&lt; val &lt;&lt; "\n";
+}
+
+<span class="cm">// declval — create a value of type T without constructing it</span>
+<span class="cm">// Used in unevaluated contexts (sizeof, decltype, noexcept)</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">using</span> HasBegin = decltype(std::declval&lt;T&gt;().begin()); <span class="cm">// Does T have .begin()?</span>
+
+<span class="cm">// void_t — detect if an expression is well-formed (C++17)</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T, <span class="kw">typename</span> = void&gt;
+<span class="kw">struct</span> HasSize : std::false_type {};
+
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">struct</span> HasSize&lt;T, std::void_t&lt;decltype(std::declval&lt;T&gt;().size())&gt;&gt;
+    : std::true_type {};   <span class="cm">// Only matches if T has .size()</span>
+
+static_assert(HasSize&lt;std::vector&lt;<span class="kw">int</span>&gt;&gt;::value);   <span class="cm">// true</span>
+static_assert(!HasSize&lt;<span class="kw">int</span>&gt;::value);               <span class="cm">// false</span></div>
+    </div>
+
+    <div class="sec" data-m="crtp">
+      <h2 class="sh">3.3 &nbsp; CRTP — Curiously Recurring Template Pattern <span class="tag tp">Expert</span></h2>
+      <p>CRTP is a pattern where a class inherits from a template instantiation of itself. It achieves <mark>static polymorphism</mark> — the performance of non-virtual dispatch with the interface of inheritance. Used in STL (<code>std::enable_shared_from_this</code>), Boost, and game engines everywhere.</p>
+      
+      <div class="note-box">
+        <span class="lbl">The Cost of Virtual Functions vs. CRTP</span>
+        <p>A standard <code>virtual</code> function call has two hidden costs: 1) <strong>vtable indirection</strong> (dereferencing a hidden pointer to find the function table) and 2) <strong>branch predictor misses</strong> (the CPU cannot aggressively inline the function because the destination isn't known until runtime). If you call a virtual function in a tight loop millions of times, this overhead becomes massive. CRTP dodges both: because the Base template is instantiated with the Derived type, it knows the exact derived class at compile time. It acts like inheritance but evaluates statically like a regular flat function call.</p>
+      </div>
+
+      <div class="cb"><span class="cm">// CRTP Base — knows the derived type at compile time</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> Derived&gt;
+<span class="kw">class</span> Shape {
+<span class="kw">public</span>:
+    <span class="cm">// Call derived's implementation — ZERO virtual overhead!</span>
+    <span class="kw">double</span> area()      <span class="kw">const</span> { <span class="kw">return</span> derived().areaImpl(); }
+    <span class="kw">double</span> perimeter() <span class="kw">const</span> { <span class="kw">return</span> derived().perimeterImpl(); }
+
+    <span class="kw">void</span> printInfo() <span class="kw">const</span> {
+        cout &lt;&lt; "Area: " &lt;&lt; area() &lt;&lt; " Perimeter: " &lt;&lt; perimeter() &lt;&lt; "\n";
+    }
+
+<span class="kw">private</span>:
+    <span class="kw">const</span> Derived&amp; derived() <span class="kw">const</span> {
+        <span class="kw">return</span> *<span class="kw">static_cast</span>&lt;<span class="kw">const</span> Derived*&gt;(<span class="kw">this</span>); <span class="cm">// Safe: we KNOW derived type</span>
+    }
+};
+
+<span class="cm">// Derived — passes itself as template parameter</span>
+<span class="kw">class</span> Circle : <span class="kw">public</span> Shape&lt;Circle&gt; {
+    <span class="kw">double</span> r_;
+<span class="kw">public</span>:
+    Circle(<span class="kw">double</span> r) : r_(r) {}
+    <span class="kw">double</span> areaImpl()      <span class="kw">const</span> { <span class="kw">return</span> M_PI * r_ * r_; }
+    <span class="kw">double</span> perimeterImpl() <span class="kw">const</span> { <span class="kw">return</span> 2 * M_PI * r_; }
+};
+
+<span class="kw">class</span> Square : <span class="kw">public</span> Shape&lt;Square&gt; {
+    <span class="kw">double</span> s_;
+<span class="kw">public</span>:
+    Square(<span class="kw">double</span> s) : s_(s) {}
+    <span class="kw">double</span> areaImpl()      <span class="kw">const</span> { <span class="kw">return</span> s_ * s_; }
+    <span class="kw">double</span> perimeterImpl() <span class="kw">const</span> { <span class="kw">return</span> 4 * s_; }
+};
+
+Circle c(5.0);
+c.printInfo();   <span class="cm">// Area: 78.54 Perimeter: 31.42 — ZERO virtual call overhead</span>
+Square s(4.0);
+s.printInfo();   <span class="cm">// Area: 16.00 Perimeter: 16.00</span>
+
+<span class="cm">// CRTP Mixin — add functionality non-intrusively</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> Derived&gt;
+<span class="kw">class</span> Comparable {
+<span class="kw">public</span>:
+    <span class="cm">// Define !=, >, >=, <= in terms of == and < (which Derived must provide)</span>
+    <span class="kw">bool</span> operator!=(<span class="kw">const</span> Derived&amp; o) <span class="kw">const</span> { <span class="kw">return</span> !(derived() == o); }
+    <span class="kw">bool</span> operator&gt; (<span class="kw">const</span> Derived&amp; o) <span class="kw">const</span> { <span class="kw">return</span>  o.derived() &lt; derived(); }
+    <span class="kw">bool</span> operator&lt;=(<span class="kw">const</span> Derived&amp; o) <span class="kw">const</span> { <span class="kw">return</span> !(derived() &gt; o); }
+    <span class="kw">bool</span> operator&gt;=(<span class="kw">const</span> Derived&amp; o) <span class="kw">const</span> { <span class="kw">return</span> !(derived() &lt; o); }
+<span class="kw">private</span>:
+    <span class="kw">const</span> Derived&amp; derived() <span class="kw">const</span> { <span class="kw">return</span> *<span class="kw">static_cast</span>&lt;<span class="kw">const</span> Derived*&gt;(<span class="kw">this</span>); }
+};
+
+<span class="cm">// Client only defines == and < — gets all 6 operators for free</span>
+<span class="kw">class</span> Temperature : <span class="kw">public</span> Comparable&lt;Temperature&gt; {
+    <span class="kw">double</span> val_;
+<span class="kw">public</span>:
+    Temperature(<span class="kw">double</span> v) : val_(v) {}
+    <span class="kw">bool</span> operator==(<span class="kw">const</span> Temperature&amp; o) <span class="kw">const</span> { <span class="kw">return</span> val_ == o.val_; }
+    <span class="kw">bool</span> operator&lt; (<span class="kw">const</span> Temperature&amp; o) <span class="kw">const</span> { <span class="kw">return</span> val_ &lt;  o.val_; }
+};</div>
+    </div>
+
+    <div class="sec" data-m="policy">
+      <h2 class="sh">3.4 &nbsp; Policy-Based Design — Composable Behavior <span class="tag tp">Expert</span></h2>
+      <p>Policy classes let you inject behavior into a class template at compile time. Instead of virtual functions (runtime), you pick implementations at the template instantiation site (compile time). Zero overhead, maximum flexibility.</p>
+      <div class="cb"><span class="cm">// Policies: separate concerns into independent classes</span>
+<span class="kw">struct</span> NullLogger {
+    <span class="kw">void</span> log(<span class="kw">const</span> std::string&amp;) {}  <span class="cm">// Does nothing — compiles away completely</span>
+};
+
+<span class="kw">struct</span> ConsoleLogger {
+    <span class="kw">void</span> log(<span class="kw">const</span> std::string&amp; msg) { cout &lt;&lt; "[LOG] " &lt;&lt; msg &lt;&lt; "\n"; }
+};
+
+<span class="kw">struct</span> SingleThreaded {
+    <span class="kw">struct</span> Lock { Lock(...){} };    <span class="cm">// No-op lock — compiles to nothing</span>
+    <span class="kw">using</span> Mutex = <span class="kw">struct</span>{};
+};
+
+<span class="kw">struct</span> MultiThreaded {
+    <span class="kw">using</span> Mutex = std::mutex;
+    <span class="kw">using</span> Lock  = std::lock_guard&lt;std::mutex&gt;;
+};
+
+<span class="cm">// Policy-based Cache: pick logger and threading model at compile time</span>
+<span class="kw">template</span>&lt;
+    <span class="kw">typename</span> LoggerPolicy    = NullLogger,
+    <span class="kw">typename</span> ThreadingPolicy = SingleThreaded
+&gt;
+<span class="kw">class</span> Cache : <span class="kw">private</span> LoggerPolicy {      <span class="cm">// Inherit policy (EBO: empty base optimization)</span>
+    std::map&lt;std::string, std::string&gt; store_;
+    <span class="kw">typename</span> ThreadingPolicy::Mutex mtx_;
+
+<span class="kw">public</span>:
+    <span class="kw">void</span> set(<span class="kw">const</span> std::string&amp; k, <span class="kw">const</span> std::string&amp; v) {
+        <span class="kw">typename</span> ThreadingPolicy::Lock lock(mtx_);
+        store_[k] = v;
+        LoggerPolicy::log("SET " + k);
+    }
+    std::string get(<span class="kw">const</span> std::string&amp; k) {
+        <span class="kw">typename</span> ThreadingPolicy::Lock lock(mtx_);
+        LoggerPolicy::log("GET " + k);
+        <span class="kw">auto</span> it = store_.find(k);
+        <span class="kw">return</span> it != store_.end() ? it-&gt;second : "";
+    }
+};
+
+<span class="cm">// Zero-overhead for production (no logging, no mutex)</span>
+Cache&lt;&gt; fastCache;
+
+<span class="cm">// Debug build: console logging, single-threaded</span>
+Cache&lt;ConsoleLogger&gt; debugCache;
+
+<span class="cm">// Production multi-threaded with logging</span>
+Cache&lt;ConsoleLogger, MultiThreaded&gt; serverCache;</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — ADVANCED OOP PATTERNS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Advanced OOP Patterns — <em>NVI, Pimpl, Mixins &amp; More</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="nvi">
+      <h2 class="sh">4.1 &nbsp; NVI — Non-Virtual Interface Pattern <span class="tag tc">Important</span></h2>
+      <p>The <strong>NVI idiom</strong>: make public interface functions <em>non-virtual</em>, and override behavior through <em>private virtual</em> functions. The public function does pre/post-processing; derived classes customize the virtual hook. This lets you enforce invariants that subclasses cannot bypass.</p>
+      <div class="cb"><span class="kw">class</span> DataProcessor {
+<span class="kw">public</span>:
+    <span class="cm">// Non-virtual public interface — handles logging, validation, timing</span>
+    <span class="kw">void</span> process(<span class="kw">const</span> std::string&amp; data) {
+        <span class="kw">if</span> (data.empty()) <span class="kw">throw</span> std::invalid_argument("Empty data");
+        <span class="kw">auto</span> start = std::chrono::high_resolution_clock::now();
+        doProcess(data);           <span class="cm">// Call the private virtual hook</span>
+        <span class="kw">auto</span> end = std::chrono::high_resolution_clock::now();
+        cout &lt;&lt; "Took " &lt;&lt; std::chrono::duration_cast&lt;std::chrono::microseconds&gt;
+                              (end-start).count() &lt;&lt; "us\n";
+    }
+
+    <span class="kw">virtual</span> ~DataProcessor() {}
+
+<span class="kw">private</span>:
+    <span class="cm">// Virtual hook — derived classes override THIS, not process()</span>
+    <span class="kw">virtual void</span> doProcess(<span class="kw">const</span> std::string&amp; data) = 0;
+};
+
+<span class="kw">class</span> CSVProcessor : <span class="kw">public</span> DataProcessor {
+<span class="kw">private</span>:
+    <span class="kw">void</span> doProcess(<span class="kw">const</span> std::string&amp; data) <span class="kw">override</span> {
+        cout &lt;&lt; "Parsing CSV: " &lt;&lt; data &lt;&lt; "\n";
+    }
+};
+<span class="cm">// CSVProcessor can NEVER skip validation or timing — enforced by NVI</span></div>
+    </div>
+
+    <div class="sec" data-m="pimpl">
+      <h2 class="sh">4.2 &nbsp; Pimpl — Pointer to Implementation <span class="tag tc">Important</span></h2>
+      <p>The <strong>Pimpl idiom</strong> hides all private implementation details behind a forward-declared pointer. Benefits: faster compilation (including the header doesn't drag in implementation headers), true binary encapsulation (private details are invisible to users), and ABI stability.</p>
+      <div class="cb"><span class="cm">// NetworkClient.h — the PUBLIC header (lean, users include this)</span>
+<span class="kw">#pragma once</span>
+<span class="kw">#include</span> &lt;string&gt;
+<span class="kw">#include</span> &lt;memory&gt;
+
+<span class="kw">class</span> NetworkClient {
+<span class="kw">public</span>:
+    NetworkClient(<span class="kw">const</span> std::string&amp; host, <span class="kw">int</span> port);
+    ~NetworkClient();                          <span class="cm">// Must be in .cpp (complete Impl type needed)</span>
+    NetworkClient(NetworkClient&amp;&amp;) noexcept;   <span class="cm">// Must be in .cpp</span>
+    NetworkClient&amp; operator=(NetworkClient&amp;&amp;) noexcept;
+
+    <span class="kw">void</span> connect();
+    <span class="kw">void</span> disconnect();
+    <span class="kw">bool</span> send(<span class="kw">const</span> std::string&amp; data);
+    std::string receive();
+
+<span class="kw">private</span>:
+    <span class="kw">struct</span> Impl;                               <span class="cm">// Forward declaration only</span>
+    std::unique_ptr&lt;Impl&gt; pImpl_;              <span class="cm">// Pointer to hidden implementation</span>
+};
+
+<span class="cm">// NetworkClient.cpp — users NEVER see this file</span>
+<span class="kw">#include</span> "NetworkClient.h"
+<span class="kw">#include</span> &lt;sys/socket.h&gt;   <span class="cm">// Heavy OS headers — hidden from users!</span>
+<span class="kw">#include</span> &lt;openssl/ssl.h&gt;   <span class="cm">// SSL — hidden from users!</span>
+
+<span class="kw">struct</span> NetworkClient::Impl {    <span class="cm">// Full definition here</span>
+    std::string host;
+    <span class="kw">int</span> port;
+    <span class="kw">int</span> socketFd = -1;
+    SSL* ssl = <span class="kw">nullptr</span>;
+    <span class="cm">// All private data lives here</span>
+};
+
+NetworkClient::NetworkClient(<span class="kw">const</span> std::string&amp; host, <span class="kw">int</span> port)
+    : pImpl_(std::make_unique&lt;Impl&gt;()) {
+    pImpl_-&gt;host = host;
+    pImpl_-&gt;port = port;
+}
+NetworkClient::~NetworkClient() = <span class="kw">default</span>;  <span class="cm">// Defined here — Impl is complete</span>
+<span class="kw">void</span> NetworkClient::connect() { <span class="cm">/* use pImpl_->socketFd etc */</span> }
+<span class="cm">// etc...</span></div>
+    </div>
+
+    <div class="sec" data-m="type-erasure">
+      <h2 class="sh">4.3 &nbsp; Type Erasure — std::any, std::function, and Custom <span class="tag tp">Expert</span></h2>
+      <p>Type erasure hides a concrete type behind a uniform interface without requiring inheritance. <code>std::function</code>, <code>std::any</code>, and <code>std::shared_ptr</code> all use type erasure internally.</p>
+      <div class="cb"><span class="cm">// Manual type erasure — the technique behind std::function</span>
+<span class="kw">class</span> AnyCallable {
+    <span class="kw">struct</span> Base {
+        <span class="kw">virtual void</span> call() = 0;
+        <span class="kw">virtual</span> ~Base() {}
+    };
+
+    <span class="kw">template</span>&lt;<span class="kw">typename</span> F&gt;
+    <span class="kw">struct</span> Concrete : Base {
+        F func;
+        Concrete(F f) : func(std::move(f)) {}
+        <span class="kw">void</span> call() <span class="kw">override</span> { func(); }
+    };
+
+    std::unique_ptr&lt;Base&gt; impl_;
+
+<span class="kw">public</span>:
+    <span class="kw">template</span>&lt;<span class="kw">typename</span> F&gt;
+    AnyCallable(F f) : impl_(std::make_unique&lt;Concrete&lt;F&gt;&gt;(std::move(f))) {}
+
+    <span class="kw">void</span> operator()() { impl_-&gt;call(); }
+};
+
+AnyCallable c1([]{ cout &lt;&lt; "Lambda\n"; });
+AnyCallable c2([]{ cout &lt;&lt; "Another\n"; });
+c1();  c2();   <span class="cm">// Polymorphic dispatch without inheritance on the user side!</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — PERFORMANCE ENGINEERING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Performance Engineering — <em>Measure, Understand, Optimize</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="measure">
+      <h2 class="sh">5.1 &nbsp; Measuring Performance — Profiling &amp; Benchmarking <span class="tag tg">Measure First</span></h2>
+      <div class="def-box">
+        <span class="lbl">The Golden Rule of Optimization</span>
+        <p><strong>Measure first. Always.</strong> Never optimize based on intuition. Profile first to find the actual bottleneck. 90% of runtime is typically in 10% of code. Optimizing the wrong 90% is wasted effort and adds complexity. Stop guessing, start profiling.</p>
+      </div>
+      
+      <div class="note-box">
+        <span class="lbl">Flame Graphs &amp; Hot Paths</span>
+        <p>When you run a profiler (like <code>perf</code> or <code>Instruments</code>), you look for the <strong>hot path</strong>: the stack of functions where the CPU spends the vast majority of its cycles. A <strong>Flame Graph</strong> visualizes this: the x-axis shows the % of execution time, and the y-axis shows the call stack. Wide blocks at the bottom indicate functions taking up tons of time. If a function isn't on the hot path, applying micro-optimizations (like branchless programming or bit-twiddling) is useless. Optimize algorithms first (O(N) vs O(N²)), memory access patterns second (cache misses), and instructions last.</p>
+      </div>
+
+      <div class="cb"><span class="cm">// Manual timing with chrono</span>
+<span class="kw">#include</span> &lt;chrono&gt;
+<span class="kw">using</span> Clock = std::chrono::high_resolution_clock;
+
+<span class="kw">auto</span> t0 = Clock::now();
+<span class="cm">// ... code to measure ...</span>
+<span class="kw">auto</span> t1 = Clock::now();
+<span class="kw">auto</span> us = std::chrono::duration_cast&lt;std::chrono::microseconds&gt;(t1-t0).count();
+cout &lt;&lt; "Time: " &lt;&lt; us &lt;&lt; " µs\n";
+
+<span class="cm">// RAII Timer — auto-reports on scope exit</span>
+<span class="kw">struct</span> Timer {
+    std::string name;
+    Clock::time_point start = Clock::now();
+    Timer(std::string n) : name(std::move(n)) {}
+    ~Timer() {
+        <span class="kw">auto</span> us = std::chrono::duration_cast&lt;std::chrono::microseconds&gt;
+                    (Clock::now() - start).count();
+        cout &lt;&lt; name &lt;&lt; ": " &lt;&lt; us &lt;&lt; " µs\n";
+    }
+};
+
+{
+    Timer t("sort 1M ints");
+    sort(bigVec.begin(), bigVec.end());
+}   <span class="cm">// Automatically prints timing</span>
+
+<span class="cm"># Compile with optimizations for realistic benchmarks</span>
+g++ -O2 -DNDEBUG -std=c++17 bench.cpp -o bench
+
+<span class="cm"># Linux perf — CPU-level profiling</span>
+perf record -g ./myapp          <span class="cm"># Run and collect stack traces periodically</span>
+perf report                     <span class="cm"># View textual hot paths</span>
+<span class="cm"># Export to flamegraph tool to see the visual blocks</span>
+
+<span class="cm"># Compiler output — see what the optimizer actually did</span>
+g++ -O2 -S -fverbose-asm prog.cpp -o prog.asm   <span class="cm"># Assembly output</span></div>
+    </div>
+
+    <div class="sec" data-m="opt-techniques">
+      <h2 class="sh">5.2 &nbsp; Optimization Techniques — The Toolkit <span class="tag tg">Senior Level</span></h2>
+      <div class="cb"><span class="cm">// ── 1. MOVE INSTEAD OF COPY ──────────────────────────────</span>
+vector&lt;string&gt; names;
+string s = "very long string content here";
+names.push_back(std::move(s));   <span class="cm">// Move: O(1). Copy: O(n)</span>
+
+<span class="cm">// ── 2. RESERVE BEFORE PUSH_BACK ──────────────────────────</span>
+vector&lt;<span class="kw">int</span>&gt; v;
+v.reserve(1000000);              <span class="cm">// One allocation. Without: ~20 reallocations.</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 1000000; i++) v.push_back(i);
+
+<span class="cm">// ── 3. EMPLACE vs INSERT ──────────────────────────────────</span>
+map&lt;<span class="kw">int</span>, MyObject&gt; m;
+m[1] = MyObject(args);           <span class="cm">// Constructs, then copies/moves into map</span>
+m.emplace(1, args);              <span class="cm">// Constructs DIRECTLY in place — faster</span>
+m.try_emplace(1, args);          <span class="cm">// C++17: only inserts if key absent — avoids overwrite</span>
+
+<span class="cm">// ── 4. STRING_VIEW FOR READS ─────────────────────────────</span>
+<span class="kw">void</span> slowLog(<span class="kw">const</span> std::string&amp; msg);   <span class="cm">// If caller passes literal: allocates!</span>
+<span class="kw">void</span> fastLog(std::string_view msg);      <span class="cm">// Zero allocation always</span>
+
+<span class="cm">// ── 5. BRANCHLESS PROGRAMMING ────────────────────────────</span>
+<span class="cm">// Branch misprediction: ~15 cycle penalty per miss</span>
+<span class="kw">int</span> abs_slow(<span class="kw">int</span> x) { <span class="kw">return</span> x &lt; 0 ? -x : x; }  <span class="cm">// Branch</span>
+<span class="kw">int</span> abs_fast(<span class="kw">int</span> x) {                              <span class="cm">// Branchless</span>
+    <span class="kw">int</span> mask = x &gt;&gt; 31;           <span class="cm">// All 1s if negative, all 0s if positive</span>
+    <span class="kw">return</span> (x + mask) ^ mask;
+}
+
+<span class="cm">// ── 6. LOOP TRANSFORMATIONS ──────────────────────────────</span>
+<span class="cm">// Loop unrolling hint</span>
+<span class="kw">#pragma GCC unroll 4</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) arr[i] *= 2;
+
+<span class="cm">// Prefer forward iteration (cache-friendly)</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++)    <span class="cm">// GOOD: sequential memory access</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = n-1; i &gt;= 0; i--) <span class="cm">// Less ideal: may fight prefetcher</span>
+
+<span class="cm">// ── 7. [[likely]] / [[unlikely]] HINTS (C++20) ───────────</span>
+<span class="kw">if</span> ([[likely]] x &gt; 0) {         <span class="cm">// Hint: this branch is usually taken</span>
+    fastPath();
+} <span class="kw">else</span> [[unlikely]] {
+    errorPath();
+}
+
+<span class="cm">// ── 8. AVOID VIRTUAL DISPATCH IN HOT LOOPS ───────────────</span>
+<span class="cm">// Each virtual call: ~5ns (pointer dereference + branch mispredict)</span>
+<span class="cm">// 1M virtual calls = 5ms overhead</span>
+<span class="cm">// Solution: templates (CRTP), devirtualization, or batch operations</span>
+
+<span class="cm">// ── 9. SMALL BUFFER OPTIMIZATION (SBO) ───────────────────</span>
+<span class="cm">// std::string stores up to 15 chars on the stack (most implementations)</span>
+<span class="cm">// Strings ≤ 15 chars: ZERO heap allocation</span>
+string s1 = "hello";         <span class="cm">// Stack — no heap alloc</span>
+string s2 = "this is definitely more than fifteen characters long";  <span class="cm">// Heap</span></div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Optimization</th><th>Typical Speedup</th><th>Effort</th></tr></thead>
+          <tbody>
+            <tr><td>Fix O(n²) → O(n log n) algorithm</td><td class="good">1000× on large input</td><td class="good">High value</td></tr>
+            <tr><td>cache-friendly data layout (SoA)</td><td class="good">2–10×</td><td class="ok">Medium</td></tr>
+            <tr><td>reserve() before push_back loop</td><td class="good">2–3×</td><td class="good">Trivial</td></tr>
+            <tr><td>Move semantics instead of copy</td><td class="good">2–100× (large objects)</td><td class="good">Easy</td></tr>
+            <tr><td>string_view instead of string ref</td><td class="ok">1.2–2× in hot paths</td><td class="good">Easy</td></tr>
+            <tr><td>unordered_map vs map</td><td class="ok">3–5× lookup</td><td class="good">Easy</td></tr>
+            <tr><td>Remove virtual dispatch (CRTP)</td><td class="ok">1.3–3× in tight loops</td><td class="ok">Medium</td></tr>
+            <tr><td>Compiler flags: -O2 vs -O0</td><td class="good">2–10×</td><td class="good">Trivial</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="compiler-flags">
+      <h2 class="sh">5.3 &nbsp; Compiler Flags &amp; Pragmas — Extracting Maximum Speed <span class="tag tc">Reference</span></h2>
+      <div class="cb"><span class="cm"># Debug build — no optimization, full symbols</span>
+g++ -std=c++17 -g -O0 -Wall -Wextra prog.cpp
+
+<span class="cm"># Release build — maximum optimization</span>
+g++ -std=c++17 -O2 -DNDEBUG prog.cpp
+
+<span class="cm"># Aggressive release — target current CPU (not portable!)</span>
+g++ -std=c++17 -O3 -march=native -DNDEBUG prog.cpp
+
+<span class="cm"># Link-time optimization — optimize across translation units</span>
+g++ -std=c++17 -O2 -flto prog.cpp
+
+<span class="cm"># Profile-guided optimization (PGO)</span>
+g++ -fprofile-generate prog.cpp -o prog_inst   <span class="cm"># Step 1: instrument</span>
+./prog_inst &lt; typical_input.txt                <span class="cm"># Step 2: gather profiles</span>
+g++ -fprofile-use prog.cpp -o prog_optimized   <span class="cm"># Step 3: optimize with data</span>
+
+<span class="cm">// Inline hints — tell compiler to always/never inline</span>
+__attribute__((always_inline)) <span class="kw">inline void</span> hotFunc();
+__attribute__((noinline)) <span class="kw">void</span> coldFunc();
+
+<span class="cm">// Branch prediction hints (pre-C++20)</span>
+<span class="kw">#define</span> LIKELY(x)   __builtin_expect(!!(x), 1)
+<span class="kw">#define</span> UNLIKELY(x) __builtin_expect(!!(x), 0)
+<span class="kw">if</span> (LIKELY(x &gt; 0)) { ... }
+
+<span class="cm">// Restrict — pointer alias hint (no two restrict pointers point to same memory)</span>
+<span class="kw">void</span> add(<span class="kw">float</span>* __restrict__ a, <span class="kw">const float</span>* __restrict__ b, <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) a[i] += b[i];  <span class="cm">// Compiler can vectorize safely</span>
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — DESIGN PATTERNS IN C++
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Design Patterns in C++ — <em>The Gang of Four, Modernized</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="creational">
+      <h2 class="sh">6.1 &nbsp; Creational Patterns <span class="tag tc">Core</span></h2>
+      <h3 class="ssh">Builder Pattern — Constructing Complex Objects Step by Step</h3>
+      <div class="cb"><span class="kw">class</span> HttpRequest {
+<span class="kw">public</span>:
+    std::string method, url, body;
+    std::map&lt;std::string, std::string&gt; headers;
+
+    <span class="kw">class</span> Builder {
+        HttpRequest req_;
+    <span class="kw">public</span>:
+        Builder&amp; method(std::string m)  { req_.method = std::move(m); <span class="kw">return</span> *<span class="kw">this</span>; }
+        Builder&amp; url(std::string u)     { req_.url = std::move(u);    <span class="kw">return</span> *<span class="kw">this</span>; }
+        Builder&amp; body(std::string b)    { req_.body = std::move(b);   <span class="kw">return</span> *<span class="kw">this</span>; }
+        Builder&amp; header(<span class="kw">const</span> std::string&amp; k, std::string v) {
+            req_.headers[k] = std::move(v); <span class="kw">return</span> *<span class="kw">this</span>;
+        }
+        HttpRequest build() { <span class="kw">return</span> std::move(req_); }  <span class="cm">// Validate then return</span>
+    };
+};
+
+<span class="kw">auto</span> req = HttpRequest::Builder{}
+    .method("POST")
+    .url("/api/users")
+    .header("Content-Type", "application/json")
+    .header("Authorization", "Bearer token123")
+    .body(R"({"name":"Alice","age":25})")
+    .build();</div>
+      <h3 class="ssh">Prototype — Clone Without Knowing the Concrete Type</h3>
+      <div class="cb"><span class="kw">class</span> Shape {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> std::unique_ptr&lt;Shape&gt; clone() <span class="kw">const</span> = 0;
+    <span class="kw">virtual void</span> draw() <span class="kw">const</span> = 0;
+    <span class="kw">virtual</span> ~Shape() {}
+};
+
+<span class="kw">class</span> Circle : <span class="kw">public</span> Shape {
+    <span class="kw">double</span> radius_;
+<span class="kw">public</span>:
+    Circle(<span class="kw">double</span> r) : radius_(r) {}
+    std::unique_ptr&lt;Shape&gt; clone() <span class="kw">const</span> <span class="kw">override</span> {
+        <span class="kw">return</span> std::make_unique&lt;Circle&gt;(*<span class="kw">this</span>);  <span class="cm">// Copy constructor</span>
+    }
+    <span class="kw">void</span> draw() <span class="kw">const</span> <span class="kw">override</span> { cout &lt;&lt; "Circle r=" &lt;&lt; radius_ &lt;&lt; "\n"; }
+};
+
+<span class="cm">// Clone without knowing the type:</span>
+std::unique_ptr&lt;Shape&gt; original = std::make_unique&lt;Circle&gt;(5.0);
+<span class="kw">auto</span> copy = original-&gt;clone();   <span class="cm">// Circle, even through Shape* interface</span></div>
+    </div>
+
+    <div class="sec" data-m="structural">
+      <h2 class="sh">6.2 &nbsp; Structural Patterns <span class="tag tc">Core</span></h2>
+      <h3 class="ssh">Decorator — Add Behavior Without Subclassing</h3>
+      <div class="cb"><span class="kw">class</span> IStream {
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> std::string read() = 0;
+    <span class="kw">virtual void</span> write(<span class="kw">const</span> std::string&amp;) = 0;
+    <span class="kw">virtual</span> ~IStream() {}
+};
+
+<span class="kw">class</span> FileStream : <span class="kw">public</span> IStream {
+<span class="kw">public</span>:
+    std::string read() <span class="kw">override</span> { <span class="kw">return</span> "raw data"; }
+    <span class="kw">void</span> write(<span class="kw">const</span> std::string&amp; d) <span class="kw">override</span> { cout &lt;&lt; "Write: " &lt;&lt; d &lt;&lt; "\n"; }
+};
+
+<span class="cm">// Decorator wraps another IStream and adds behavior</span>
+<span class="kw">class</span> CompressedStream : <span class="kw">public</span> IStream {
+    std::unique_ptr&lt;IStream&gt; wrapped_;
+<span class="kw">public</span>:
+    CompressedStream(std::unique_ptr&lt;IStream&gt; s) : wrapped_(std::move(s)) {}
+    std::string read() <span class="kw">override</span> { <span class="kw">return</span> decompress(wrapped_-&gt;read()); }
+    <span class="kw">void</span> write(<span class="kw">const</span> std::string&amp; d) <span class="kw">override</span> { wrapped_-&gt;write(compress(d)); }
+<span class="kw">private</span>:
+    std::string compress(<span class="kw">const</span> std::string&amp; s) { <span class="kw">return</span> "[compressed:" + s + "]"; }
+    std::string decompress(<span class="kw">const</span> std::string&amp; s) { <span class="kw">return</span> s; }
+};
+
+<span class="kw">class</span> EncryptedStream : <span class="kw">public</span> IStream {
+    std::unique_ptr&lt;IStream&gt; wrapped_;
+<span class="kw">public</span>:
+    EncryptedStream(std::unique_ptr&lt;IStream&gt; s) : wrapped_(std::move(s)) {}
+    std::string read() <span class="kw">override</span> { <span class="kw">return</span> decrypt(wrapped_-&gt;read()); }
+    <span class="kw">void</span> write(<span class="kw">const</span> std::string&amp; d) <span class="kw">override</span> { wrapped_-&gt;write(encrypt(d)); }
+<span class="kw">private</span>:
+    std::string encrypt(<span class="kw">const</span> std::string&amp; s) { <span class="kw">return</span> "[enc:" + s + "]"; }
+    std::string decrypt(<span class="kw">const</span> std::string&amp; s) { <span class="kw">return</span> s; }
+};
+
+<span class="cm">// Compose decorators freely at runtime</span>
+<span class="kw">auto</span> stream = std::make_unique&lt;EncryptedStream&gt;(
+    std::make_unique&lt;CompressedStream&gt;(
+        std::make_unique&lt;FileStream&gt;()
+    )
+);
+stream-&gt;write("hello");  <span class="cm">// Encrypts → compresses → writes to file</span></div>
+    </div>
+
+    <div class="sec" data-m="behavioral">
+      <h2 class="sh">6.3 &nbsp; Behavioral Patterns <span class="tag tc">Core</span></h2>
+      <h3 class="ssh">Command — Encapsulate Actions as Objects</h3>
+      <div class="cb"><span class="kw">class</span> ICommand {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> execute() = 0;
+    <span class="kw">virtual void</span> undo()    = 0;
+    <span class="kw">virtual</span> ~ICommand() {}
+};
+
+<span class="kw">class</span> TextEditor {
+    std::string text_;
+    std::stack&lt;std::unique_ptr&lt;ICommand&gt;&gt; history_;
+<span class="kw">public</span>:
+    <span class="kw">void</span> execute(std::unique_ptr&lt;ICommand&gt; cmd) {
+        cmd-&gt;execute();
+        history_.push(std::move(cmd));
+    }
+    <span class="kw">void</span> undo() {
+        <span class="kw">if</span> (!history_.empty()) {
+            history_.top()-&gt;undo();
+            history_.pop();
+        }
+    }
+    <span class="kw">void</span> appendText(std::string&amp; target, <span class="kw">const</span> std::string&amp; s) { target += s; }
+    <span class="kw">void</span> removeText(std::string&amp; target, <span class="kw">int</span> n) { target.resize(target.size() - n); }
+};</div>
+      <h3 class="ssh">Strategy — Swap Algorithms at Runtime</h3>
+      <div class="cb"><span class="kw">class</span> Sorter {
+    std::function&lt;<span class="kw">void</span>(vector&lt;<span class="kw">int</span>&gt;&amp;)&gt; strategy_;
+<span class="kw">public</span>:
+    <span class="kw">void</span> setStrategy(std::function&lt;<span class="kw">void</span>(vector&lt;<span class="kw">int</span>&gt;&amp;)&gt; s) { strategy_ = std::move(s); }
+    <span class="kw">void</span> sort(vector&lt;<span class="kw">int</span>&gt;&amp; data) {
+        <span class="kw">if</span> (strategy_) strategy_(data);
+    }
+};
+
+Sorter s;
+s.setStrategy([](<span class="kw">auto</span>&amp; v){ std::sort(v.begin(), v.end()); });          <span class="cm">// std::sort</span>
+s.setStrategy([](<span class="kw">auto</span>&amp; v){ std::sort(v.begin(), v.end(), greater&lt;<span class="kw">int</span>&gt;()); }); <span class="cm">// descending</span>
+<span class="cm">// Strategy can be changed at runtime!</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — CUSTOM ALLOCATORS & MEMORY
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Custom Allocators &amp; Memory — <em>Taking Full Control</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="placement-new">
+      <h2 class="sh">7.1 &nbsp; Placement new — Constructing at a Specific Address <span class="tag tp">Expert</span></h2>
+      <p>Placement new lets you construct an object at a pre-allocated memory address. It <strong>does not allocate memory</strong> — you provide the address. This is the foundation of object pools, arenas, and embedded systems programming.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;new&gt;
+
+<span class="cm">// Pre-allocate a buffer</span>
+alignas(MyObject) <span class="kw">char</span> buffer[<span class="kw">sizeof</span>(MyObject)];
+
+<span class="cm">// Construct an object in the buffer — no heap allocation!</span>
+MyObject* obj = <span class="kw">new</span>(buffer) MyObject(args...);    <span class="cm">// Placement new</span>
+
+obj-&gt;doStuff();
+
+<span class="cm">// MUST explicitly call destructor (no delete — no heap was allocated)</span>
+obj-&gt;~MyObject();
+<span class="cm">// buffer memory is on stack — freed automatically</span>
+
+<span class="cm">// Object Pool using placement new</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T, <span class="kw">size_t</span> N&gt;
+<span class="kw">class</span> ObjectPool {
+    alignas(T) <span class="kw">char</span> storage_[N * <span class="kw">sizeof</span>(T)];
+    std::bitset&lt;N&gt; used_;
+
+<span class="kw">public</span>:
+    <span class="kw">template</span>&lt;<span class="kw">typename</span>... Args&gt;
+    T* allocate(Args&amp;&amp;... args) {
+        <span class="kw">for</span> (<span class="kw">size_t</span> i = 0; i &lt; N; i++) {
+            <span class="kw">if</span> (!used_[i]) {
+                used_[i] = <span class="kw">true</span>;
+                T* ptr = <span class="kw">reinterpret_cast</span>&lt;T*&gt;(storage_ + i * <span class="kw">sizeof</span>(T));
+                <span class="kw">return</span> <span class="kw">new</span>(ptr) T(std::forward&lt;Args&gt;(args)...);
+            }
+        }
+        <span class="kw">throw</span> std::bad_alloc();
+    }
+
+    <span class="kw">void</span> deallocate(T* ptr) {
+        ptr-&gt;~T();                              <span class="cm">// Explicitly destroy</span>
+        <span class="kw">size_t</span> i = (<span class="kw">reinterpret_cast</span>&lt;<span class="kw">char</span>*&gt;(ptr) - storage_) / <span class="kw">sizeof</span>(T);
+        used_[i] = <span class="kw">false</span>;
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="allocator">
+      <h2 class="sh">7.2 &nbsp; Custom STL Allocator — Replace new/delete for Containers <span class="tag tp">Expert</span></h2>
+      <div class="cb"><span class="cm">// Minimal custom allocator — replaces malloc/free for a vector</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">struct</span> ArenaAllocator {
+    <span class="kw">using</span> value_type = T;
+
+    <span class="kw">char</span>*  arenaStart_;
+    <span class="kw">size_t</span> remaining_;
+
+    ArenaAllocator(<span class="kw">char</span>* start, <span class="kw">size_t</span> size)
+        : arenaStart_(start), remaining_(size) {}
+
+    <span class="kw">template</span>&lt;<span class="kw">typename</span> U&gt;
+    ArenaAllocator(<span class="kw">const</span> ArenaAllocator&lt;U&gt;&amp; o)
+        : arenaStart_(o.arenaStart_), remaining_(o.remaining_) {}
+
+    T* allocate(<span class="kw">size_t</span> n) {
+        <span class="kw">size_t</span> bytes = n * <span class="kw">sizeof</span>(T);
+        <span class="kw">if</span> (bytes &gt; remaining_) <span class="kw">throw</span> std::bad_alloc();
+        T* ptr = <span class="kw">reinterpret_cast</span>&lt;T*&gt;(arenaStart_);
+        arenaStart_ += bytes;
+        remaining_ -= bytes;
+        <span class="kw">return</span> ptr;
+    }
+
+    <span class="kw">void</span> deallocate(T*, <span class="kw">size_t</span>) {}  <span class="cm">// Arena: free all at once, not individually</span>
+};
+
+<span class="cm">// Use the custom allocator with vector</span>
+<span class="kw">char</span> arena[1024 * 1024];   <span class="cm">// 1MB stack arena — ZERO heap allocations!</span>
+ArenaAllocator&lt;<span class="kw">int</span>&gt; alloc(arena, <span class="kw">sizeof</span>(arena));
+std::vector&lt;<span class="kw">int</span>, ArenaAllocator&lt;<span class="kw">int</span>&gt;&gt; v(alloc);
+v.reserve(1000);
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 1000; i++) v.push_back(i);
+<span class="cm">// All allocations from arena — lightning fast, no fragmentation</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 8 — ABI, LINKAGE & COMPILATION
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">ABI, Linkage &amp; Compilation — <em>How C++ Becomes a Program</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="compilation">
+      <h2 class="sh">8.1 &nbsp; The Compilation Model — From Source to Binary <span class="tag tc">Core</span></h2>
+      <div class="gv">
+        <span class="dv-label">C++ Build Pipeline</span>
+  Source Files (.cpp)
+       │
+       ▼ Preprocessor (cpp)
+  Preprocessed (.ii)   ← #include expanded, macros replaced
+       │
+       ▼ Compiler (cc1plus)
+  Assembly (.s)        ← Optimized, type-checked, AST → IR → Assembly
+       │
+       ▼ Assembler (as)
+  Object Files (.o)    ← Machine code + symbol table + relocation entries
+       │
+       ▼ Linker (ld)
+  Executable / Library ← Symbols resolved, addresses patched
+      </div>
+      <div class="cb"><span class="cm">// Translation Unit (TU) — one .cpp file after preprocessing</span>
+<span class="cm">// Each TU compiled independently → .o file</span>
+<span class="cm">// Linker combines .o files into final binary</span>
+
+<span class="cm">// ── LINKAGE ─────────────────────────────────────────────</span>
+<span class="cm">// External linkage — visible across all TUs (default for non-static functions/globals)</span>
+<span class="kw">int</span> globalVar = 42;              <span class="cm">// External linkage — other .cpp files can see this</span>
+<span class="kw">void</span> publicFunc() {}             <span class="cm">// External linkage</span>
+
+<span class="cm">// Internal linkage — only visible in this TU</span>
+<span class="kw">static int</span> fileLocalVar = 10;    <span class="cm">// Internal linkage — hidden from other TUs</span>
+<span class="kw">static void</span> fileLocalFunc() {}   <span class="cm">// Internal linkage</span>
+
+<span class="cm">// Anonymous namespace — modern way to express internal linkage</span>
+<span class="kw">namespace</span> {
+    <span class="kw">int</span> anon = 5;               <span class="cm">// Unique to this TU — preferred over static</span>
+    <span class="kw">void</span> helper() {}
+}
+
+<span class="cm">// extern — declare (not define) a variable defined in another TU</span>
+<span class="kw">extern int</span> globalVar;           <span class="cm">// Declaration: "this exists somewhere"</span>
+<span class="kw">int</span> globalVar = 42;             <span class="cm">// Definition: "this is where it lives"</span>
+
+<span class="cm">// inline — multiple definitions allowed (all must be identical)</span>
+<span class="cm">// Functions defined in headers MUST be inline to avoid multiple definition errors</span>
+<span class="kw">inline int</span> headerFunc() { <span class="kw">return</span> 42; }  <span class="cm">// Safe in header — one per TU, merged by linker</span></div>
+    </div>
+
+    <div class="sec" data-m="abi">
+      <h2 class="sh">8.2 &nbsp; ABI — Application Binary Interface <span class="tag tp">Expert</span></h2>
+      <p>The ABI defines how binary code interoperates: calling conventions, name mangling, vtable layout, struct alignment. <strong>C++ ABI is not standardized</strong> — GCC and MSVC produce incompatible binaries. Breaking ABI requires recompiling all users of a library.</p>
+      <div class="cb"><span class="cm">// Name mangling — C++ encodes types in symbol names</span>
+<span class="cm">// void foo(int)    → _Z3fooi</span>
+<span class="cm">// void foo(double) → _Z3food</span>
+<span class="cm">// void foo(int, double) → _Z3fooid</span>
+
+<span class="cm">// Demangle: c++filt _Z3fooi → foo(int)</span>
+
+<span class="cm">// extern "C" — use C linkage (no mangling, compatible with C code)</span>
+<span class="kw">extern</span> "C" {
+    <span class="kw">void</span> c_compatible_func(<span class="kw">int</span> x);  <span class="cm">// Symbol: c_compatible_func (no mangling)</span>
+    <span class="kw">int</span>  c_add(<span class="kw">int</span> a, <span class="kw">int</span> b);
+}
+<span class="cm">// Use for: shared libraries (.so/.dll), Python extensions, JNI interfaces</span>
+
+<span class="cm">// ABI-stable techniques:</span>
+<span class="cm">// 1. Pimpl idiom — changes to private data don't break binary compatibility</span>
+<span class="cm">// 2. virtual dispatch — vtable layout is ABI (don't reorder virtuals!)</span>
+<span class="cm">// 3. C interface with opaque pointers — safest cross-compiler ABI</span>
+
+<span class="cm">// Check what symbols are in a binary:</span>
+<span class="cm">// nm -C mylib.so     — list symbols (demangled)</span>
+<span class="cm">// objdump -d mylib   — disassemble</span>
+<span class="cm">// ldd myapp          — list dynamic dependencies</span></div>
+      <div class="warn-box">
+        <span class="lbl">ABI Breaking Changes — Will Silently Corrupt Memory</span>
+        <p>Changing a class layout (adding/removing members, reordering virtuals) without recompiling all users causes crashes and memory corruption at runtime — no compile error. ABI-stable rules: never add/remove virtual functions from a base class in a shipped library, never add data members to ABI-exported classes, use Pimpl for stability.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="odr">
+      <h2 class="sh">8.3 &nbsp; ODR — One Definition Rule <span class="tag tg">Important</span></h2>
+      <div class="def-box">
+        <span class="lbl">One Definition Rule (ODR)</span>
+        <p>Every entity (function, class, variable) must be <strong>defined exactly once</strong> across all translation units. <strong>Declarations</strong> can appear many times (that's what headers are for). <strong>Definitions</strong> must appear exactly once. Violating ODR is <strong>undefined behavior</strong> — the linker may or may not catch it. If the linker silently picks the wrong copy, you get horrific runtime memory corruption.</p>
+      </div>
+      
+      <div class="eg">
+        <p><strong>Example: The Silent ODR Linker Bug</strong><br>
+        Imagine a header file contains a class with an inline member function. <code>fileA.cpp</code> includes it. Then, a coworker modifies the struct locally inside <code>fileB.cpp</code> and doesn't update the header, or two different headers define a <code>struct Config { int a; }</code> versus <code>struct Config { double a; }</code>. If both <code>fileA.cpp</code> and <code>fileB.cpp</code> are linked together, the linker sees two definitions of the same token. By the C++ standard, it assumes both are identical and silently discards one. If it discards the larger one, <code>fileB.cpp</code> now writes into memory that is too small, corrupting the heap or stack.</p>
+      </div>
+
+      <div class="cb"><span class="cm">// Header guards / #pragma once — prevent multiple inclusion within one TU</span>
+<span class="kw">#pragma once</span>                    <span class="cm">// Modern (de-facto standard, not official)</span>
+<span class="cm">// or:</span>
+<span class="kw">#ifndef</span> MY_HEADER_H
+<span class="kw">#define</span> MY_HEADER_H
+<span class="cm">// ... header content ...</span>
+<span class="kw">#endif</span>
+
+<span class="cm">// ODR violations to avoid:</span>
+<span class="cm">// 1. Defining non-inline function in header → multiple definition linker error</span>
+<span class="kw">void</span> badFunc() { }              <span class="cm">// In header → error if included in 2+ .cpp files</span>
+<span class="kw">inline void</span> okFunc() { }        <span class="cm">// inline → ODR-exempt, all defs must be identical!</span>
+
+<span class="cm">// 2. Global variable in header → each TU gets its own copy (silent ODR violation!)</span>
+<span class="kw">int</span> globalInHeader = 0;         <span class="cm">// BAD in header! Use extern declaration + one .cpp def</span>
+<span class="kw">inline int</span> globalInHeader = 0;  <span class="cm">// C++17: inline variable — ODR-safe in header</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 9 — REAL-WORLD ARCHITECTURE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Real-World Architecture — <em>Structuring Production C++ Code</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="project-structure">
+      <h2 class="sh">9.1 &nbsp; Project Structure — How to Layout a C++ Project <span class="tag tc">Practical</span></h2>
+      <div class="gv">
+        <span class="dv-label">Modern C++ Project Layout</span>
+myproject/
+├── CMakeLists.txt          ← Build system root
+├── README.md
+├── include/
+│   └── myproject/
+│       ├── core.hpp        ← Public API headers (installed with library)
+│       └── utils.hpp
+├── src/
+│   ├── core.cpp            ← Implementation files
+│   └── utils.cpp
+├── tests/
+│   ├── CMakeLists.txt
+│   ├── test_core.cpp       ← Unit tests (Google Test / Catch2)
+│   └── test_utils.cpp
+├── benchmarks/
+│   └── bench_core.cpp      ← Google Benchmark
+├── examples/
+│   └── demo.cpp
+└── third_party/            ← Dependencies (or use CMake FetchContent)
+    └── googletest/
+      </div>
+      <div class="cb"><span class="cm"># Minimal CMakeLists.txt</span>
+cmake_minimum_required(VERSION 3.20)
+project(MyProject VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+<span class="cm"># Library target</span>
+add_library(mylib
+    src/core.cpp
+    src/utils.cpp
+)
+target_include_directories(mylib
+    PUBLIC  include/          <span class="cm"># Consumers get include/ on their include path</span>
+    PRIVATE src/              <span class="cm"># Implementation-only headers</span>
+)
+target_compile_options(mylib PRIVATE -Wall -Wextra -Wpedantic)
+
+<span class="cm"># Executable target</span>
+add_executable(myapp src/main.cpp)
+target_link_libraries(myapp PRIVATE mylib)
+
+<span class="cm"># Tests</span>
+enable_testing()
+add_subdirectory(tests)
+
+<span class="cm"># Build types</span>
+<span class="cm"># cmake -B build -DCMAKE_BUILD_TYPE=Debug</span>
+<span class="cm"># cmake -B build -DCMAKE_BUILD_TYPE=Release</span>
+<span class="cm"># cmake --build build</span></div>
+    </div>
+
+    <div class="sec" data-m="best-practices">
+      <h2 class="sh">9.2 &nbsp; The Senior Engineer's Checklist <span class="tag tg">Must Follow</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Memory &amp; Ownership</div>
+          <p>Never raw <code>new/delete</code> in new code. Use <code>unique_ptr</code> by default. <code>shared_ptr</code> only when truly shared. Prefer value semantics and stack allocation. Use RAII everywhere.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Const Correctness</div>
+          <p>Mark every method that doesn't modify state as <code>const</code>. Pass large objects as <code>const&amp;</code>. Use <code>const</code> local variables wherever possible. <code>constexpr</code> for compile-time constants.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Error Handling Strategy</div>
+          <p>Use exceptions for exceptional conditions (IO failure, invalid state). Use <code>std::optional</code> for expected-absent values. Use <code>std::expected</code> (C++23) or error codes for recoverable errors in performance-critical code.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Interface Design</div>
+          <p>Make interfaces hard to use wrong. Use <code>explicit</code> on single-param constructors. Use strong types instead of primitive types for domain concepts. Keep base class interfaces minimal.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Testing Philosophy</div>
+          <p>Write unit tests (Google Test / Catch2). Test public interfaces, not internals. Test edge cases and error paths. Run sanitizers in CI. Use fuzzing for input-handling code.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Code Review Flags</div>
+          <p>Any raw pointer that's owned. Any <code>new</code> without matching <code>delete</code>. Any signed integer that could overflow. Any mutex locked without RAII. Any virtual base class without virtual destructor.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">The Unwritten Rules — What Nobody Tells You</h3>
+      <ul class="pl arr">
+        <li><strong>Readability beats cleverness.</strong> The next person to read your code is you in 6 months. Write for them.</li>
+        <li><strong>Don't optimize what you haven't measured.</strong> Profile first. The bottleneck is never where you think it is.</li>
+        <li><strong>Prefer the standard library.</strong> Your hand-rolled data structure has bugs. <code>std::vector</code> does not.</li>
+        <li><strong>Comments explain WHY, not WHAT.</strong> The code says what. Comments say why you made that choice.</li>
+        <li><strong>If it's hard to test, the design is wrong.</strong> Testability is a quality metric, not a luxury.</li>
+        <li><strong>Compiler warnings are bugs.</strong> Fix every warning. Zero-warning policy is non-negotiable.</li>
+        <li><strong>API is forever.</strong> Private code can change freely. Public API, especially library API, is extremely hard to change without breaking users.</li>
+        <li><strong>Use existing solutions.</strong> Before writing any non-trivial utility, check Boost, Abseil, or the standard library.</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="debugging">
+      <h2 class="sh">9.3 &nbsp; Debugging — The Senior's Toolkit <span class="tag tc">Practical</span></h2>
+      <div class="cb"><span class="cm"># GDB — the essential debugger</span>
+gdb ./myapp
+(gdb) run                      <span class="cm"># Run program</span>
+(gdb) break main               <span class="cm"># Breakpoint at main</span>
+(gdb) break file.cpp:42        <span class="cm"># Breakpoint at line</span>
+(gdb) next                     <span class="cm"># Step over</span>
+(gdb) step                     <span class="cm"># Step into</span>
+(gdb) print myVar              <span class="cm"># Print variable</span>
+(gdb) backtrace                <span class="cm"># Print call stack</span>
+(gdb) info locals              <span class="cm"># All local variables</span>
+(gdb) watch myVar              <span class="cm"># Break when myVar changes</span>
+
+<span class="cm"># Core dumps — post-mortem debugging</span>
+ulimit -c unlimited            <span class="cm"># Enable core dumps</span>
+./myapp                        <span class="cm"># Crashes → produces core file</span>
+gdb ./myapp core               <span class="cm"># Load core dump</span>
+
+<span class="cm">// Assertions — document and enforce invariants</span>
+<span class="kw">#include</span> &lt;cassert&gt;
+assert(ptr != <span class="kw">nullptr</span>);       <span class="cm">// Crashes with info if false (removed in NDEBUG builds)</span>
+assert(index &lt; size &amp;&amp; "Index out of bounds");  <span class="cm">// Custom message in assert</span>
+
+<span class="cm">// [[nodiscard]] — force callers to use return values</span>
+[[nodiscard]] <span class="kw">int</span> computeResult();
+<span class="cm">// computeResult();  ← WARNING: return value discarded</span>
+
+<span class="cm">// Structured debugging output</span>
+<span class="kw">#define</span> DEBUG_PRINT(x) std::cerr &lt;&lt; #x " = " &lt;&lt; (x) &lt;&lt; "\n"
+DEBUG_PRINT(myVector.size());  <span class="cm">// myVector.size() = 42</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 10 — MASTER REFERENCE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">Master Reference — <em>The Expert C++ Cheatsheet</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ub-ref">
+      <h2 class="sh">10.1 &nbsp; Complete UB Quick Reference <span class="tag tg">Critical</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Category</th><th>Examples</th><th>Detection</th></tr></thead>
+          <tbody>
+            <tr><td>Memory</td><td>OOB access, use-after-free, double-free, null deref</td><td class="good">ASan</td></tr>
+            <tr><td>Integer</td><td>Signed overflow, shift ≥ width, divide by zero</td><td class="good">UBSan</td></tr>
+            <tr><td>Type system</td><td>Strict aliasing, invalid downcast, bad bit manipulation</td><td class="good">UBSan</td></tr>
+            <tr><td>Initialization</td><td>Uninitialized read, lifetime violation, dangling reference</td><td class="good">MSan/UBSan</td></tr>
+            <tr><td>Concurrency</td><td>Data races, unsynchronized shared state</td><td class="good">TSan</td></tr>
+            <tr><td>ODR</td><td>Multiple definitions, inconsistent inline definitions</td><td class="ok">Linker (sometimes)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="patterns-ref">
+      <h2 class="sh">10.2 &nbsp; Design Patterns Quick Reference <span class="tag tc">Cheatsheet</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Pattern</th><th>Category</th><th>C++ Idiom</th><th>Use When</th></tr></thead>
+          <tbody>
+            <tr><td>Singleton</td><td>Creational</td><td>Static local + deleted copy</td><td>One global instance (config, registry)</td></tr>
+            <tr><td>Factory Method</td><td>Creational</td><td>Virtual/static function returning unique_ptr</td><td>Create without knowing concrete type</td></tr>
+            <tr><td>Builder</td><td>Creational</td><td>Fluent inner class, return *this</td><td>Complex object with many optional params</td></tr>
+            <tr><td>Prototype</td><td>Creational</td><td>Virtual clone() → unique_ptr</td><td>Copy through base pointer</td></tr>
+            <tr><td>Adapter</td><td>Structural</td><td>Wrapper class, composition</td><td>Incompatible interfaces</td></tr>
+            <tr><td>Decorator</td><td>Structural</td><td>Wrapper with same interface, unique_ptr member</td><td>Add behavior without subclassing</td></tr>
+            <tr><td>Proxy</td><td>Structural</td><td>Same interface, lazy init / access control</td><td>Lazy loading, logging, access</td></tr>
+            <tr><td>Observer</td><td>Behavioral</td><td>vector of callbacks / function&lt;&gt;</td><td>Event notification, decoupled signaling</td></tr>
+            <tr><td>Strategy</td><td>Behavioral</td><td>function&lt;&gt; member or policy template</td><td>Swappable algorithms</td></tr>
+            <tr><td>Command</td><td>Behavioral</td><td>Interface + undo stack of unique_ptrs</td><td>Undo/redo, transactional operations</td></tr>
+            <tr><td>Visitor</td><td>Behavioral</td><td>std::visit + variant, or virtual accept()</td><td>Operations on type hierarchies</td></tr>
+            <tr><td>CRTP</td><td>Structural TMP</td><td>Base&lt;Derived&gt; + static_cast in base</td><td>Static polymorphism, mixins</td></tr>
+            <tr><td>Pimpl</td><td>Structural</td><td>unique_ptr&lt;Impl&gt; member, Impl in .cpp</td><td>ABI stability, fast compilation</td></tr>
+            <tr><td>NVI</td><td>Behavioral OOP</td><td>Public non-virtual + private virtual</td><td>Enforce pre/post conditions</td></tr>
+            <tr><td>Policy</td><td>Structural TMP</td><td>Template parameters for behaviors</td><td>Compile-time behavior injection</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="final-cards">
+      <h2 class="sh">10.3 &nbsp; Expert Quick-Reference Cards <span class="tag tc">Reference</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Struct Layout Rule</div>
+          <p>Order members largest to smallest type size to minimize padding. Use <code>alignas(N)</code> for explicit alignment. Use <code>#pragma pack(1)</code> only when binary compatibility demands it (slower reads).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Cache Performance</div>
+          <p>Sequential access: fast (prefetcher). Random access: slow (cache miss). SoA &gt; AoS for vectorizable loops. Hot data together on same cache line. Cold data separate. Avoid false sharing (alignas(64)).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Linkage Rules</div>
+          <p>Functions/globals: external by default. <code>static</code> or anon namespace: internal. <code>inline</code>: multiple defs OK (must be identical). <code>extern "C"</code>: no name mangling. Templates: always in headers.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Type Deduction Rules</div>
+          <p><code>auto</code> strips refs &amp; const (like template). <code>auto&amp;</code> preserves (adds lvalue ref). <code>auto&amp;&amp;</code> perfect forwards. <code>decltype(x)</code> preserves exactly. <code>decltype(auto)</code> deduces like decltype.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Move Semantics Rules</div>
+          <p><code>std::move</code> = cast to rvalue (doesn't move). Moving = calling move ctor/assign. After move: valid but unspecified. noexcept on move = STL uses it. Return local by value (NRVO/move auto-applied).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">When to use which cast</div>
+          <p><code>static_cast</code>: compile-time, safe conversions.<br>
+          <code>dynamic_cast</code>: safe downcast, RTTI check.<br>
+          <code>const_cast</code>: add/remove const only.<br>
+          <code>reinterpret_cast</code>: raw bits, use sparingly.<br>
+          <span class="c-r">Never: C-style (T)x</span> — hides bugs.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="reading-list">
+      <h2 class="sh">10.4 &nbsp; The Expert's Reading List <span class="tag tp">Go Deeper</span></h2>
+      <ul class="pl arr">
+        <li><strong>Effective C++ / More Effective C++</strong> — Scott Meyers. The bible of C++ best practices. Read it twice.</li>
+        <li><strong>Effective Modern C++</strong> — Scott Meyers. C++11/14 deep dive. Essential for modern code.</li>
+        <li><strong>C++ Concurrency in Action</strong> — Anthony Williams. The definitive threading reference.</li>
+        <li><strong>The C++ Programming Language (4th Ed)</strong> — Bjarne Stroustrup. Written by the creator. Dense but authoritative.</li>
+        <li><strong>Modern C++ Design</strong> — Andrei Alexandrescu. Policy classes, type lists, compile-time techniques. Advanced.</li>
+        <li><strong>cppreference.com</strong> — The definitive online reference. Bookmark it.</li>
+        <li><strong>Compiler Explorer (godbolt.org)</strong> — See what your code compiles to. Use this daily.</li>
+        <li><strong>CppCon talks (YouTube)</strong> — Annual conference, world-class speakers. Watch: Back to Basics series first.</li>
+        <li><strong>isocpp.org/faq</strong> — Official C++ FAQ. Answers the questions you didn't know you had.</li>
+      </ul>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Reference · File 04 of 05 · Pure Mastery · Senior Engineering</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-04-mastery';
+  var FILE_DISP = '04 · Pure Mastery';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

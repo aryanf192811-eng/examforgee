@@ -1,0 +1,3554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — File 02: OOP Mastery</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────────── */
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;
+  --prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;
+  /* fluid type scale — clamp(min, preferred, max) */
+  --fs-xs:   clamp(9px,  1.8vw, 10px);
+  --fs-sm:   clamp(11px, 2.4vw, 13px);
+  --fs-base: clamp(14px, 3.2vw, 17px);
+  --fs-md:   clamp(14px, 3.4vw, 16.5px);
+  --fs-lg:   clamp(16px, 3.8vw, 19px);
+  --fs-xl:   clamp(22px, 5.5vw, 40px);
+  --fs-ch:   clamp(16px, 4.2vw, 21px);
+  --fs-code: clamp(11px, 2.6vw, 13.5px);
+}
+
+/* ── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+/* ── BODY & OUTER SHELL ─────────────────────────────────── */
+body {
+  background:#bfb49a;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);
+  color:var(--ink);
+  min-height:100vh;
+  padding: clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);
+}
+.book { max-width:840px; margin:0 auto; }
+
+/* ── COVER ──────────────────────────────────────────────── */
+.cover {
+  background:var(--paper2);
+  border:2px solid var(--ink);
+  border-radius:4px;
+  padding: clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);
+  margin-bottom:clamp(14px,3vw,28px);
+  position:relative;
+  overflow:hidden;
+  box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);
+}
+.cover::before {
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);
+  background-size:100% 32px;background-position:0 48px;pointer-events:none;
+}
+.cover::after {
+  content:'';position:absolute;top:0;bottom:0;left:52px;
+  width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;
+}
+.cover-inner { position:relative; padding-left: clamp(8px,2vw,20px); }
+.cover-subject {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.cover-subject::before {
+  content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;
+}
+.cover h1 {
+  font-family:var(--body);font-size:var(--fs-xl);font-weight:700;
+  line-height:1.15;color:var(--ink);
+}
+.cover h1 em { font-style:italic; color:var(--blue); }
+.cover-desc {
+  font-family:var(--prose);font-size:var(--fs-base);
+  color:var(--ink3);margin-top:14px;line-height:1.8;
+  max-width:520px;border-left:3px solid var(--orange);padding-left:14px;
+}
+.cover-chips { display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px); }
+.chip {
+  font-family:var(--hand);font-size:var(--fs-xs);
+  border:1.5px solid #b0a080;border-radius:2px;
+  padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);
+}
+.cover-gate-tag {
+  position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--paper);background:var(--ink);
+  padding:5px clamp(6px,2vw,12px);border-radius:2px;
+  max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ── TABLE OF CONTENTS ──────────────────────────────────── */
+.toc {
+  background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;
+  padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);
+  margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;
+}
+.toc-lbl {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:12px;
+}
+.toc-grid { display:grid;grid-template-columns:1fr 1fr;gap:3px 24px; }
+.toc-grid a {
+  font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);
+  text-decoration:none;display:flex;align-items:baseline;gap:7px;
+  padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;
+}
+.toc-grid a:hover { color:var(--blue);border-color:var(--ink3); }
+.tn { font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px; }
+
+/* ── CHAPTER ────────────────────────────────────────────── */
+.chapter {
+  background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;
+  margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;
+}
+.ch-head {
+  background:var(--ink);
+  padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);
+}
+.ch-ey {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;
+}
+.ch-title {
+  font-family:var(--body);font-size:var(--fs-ch);font-weight:600;
+  color:var(--paper);line-height:1.25;
+}
+.ch-title em { font-style:italic; color:#e8c870; }
+
+/* ── CHAPTER BODY — ruled notebook lines ─────────────────── */
+.ch-body {
+  background-image:
+    linear-gradient(var(--mline) 1px,transparent 1px),
+    repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size:54px 100%,100% 32px;
+  background-position:0 0,0 16px;
+}
+
+/* ── SECTION ────────────────────────────────────────────── */
+.sec {
+  padding: clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);
+  border-bottom:1px dashed #c8b898;position:relative;
+}
+.sec:last-child { border-bottom:none; }
+.sec::before {
+  content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;
+  font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);
+  writing-mode:vertical-lr;transform:rotate(180deg);
+  letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ── HEADINGS ───────────────────────────────────────────── */
+h2.sh {
+  font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);
+  margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);
+  display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;
+}
+.tag {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 7px;border-radius:2px;
+  border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;
+}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh {
+  font-family:var(--body);font-size:clamp(13.5px,3.2vw,15.5px);
+  font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;
+}
+
+/* ── BODY TEXT ──────────────────────────────────────────── */
+p {
+  font-family:var(--prose);font-size:var(--fs-base);
+  line-height:1.92;color:var(--ink2);margin-bottom:10px;
+}
+strong { color:var(--ink);font-weight:600; }
+
+/* ── CALLOUT BOXES ──────────────────────────────────────── */
+.def-box  { background:#eef3ff;border-left:4px solid var(--blue);  border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0; }
+.warn-box { background:#fff1f1;border-left:4px solid var(--red);   border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.tip-box  { background:#f0fff4;border-left:4px solid var(--green); border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.note-box { background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.def-box  .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);  margin-bottom:5px;display:block; }
+.warn-box .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);   margin-bottom:4px;display:block; }
+.tip-box  .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green); margin-bottom:4px;display:block; }
+.note-box .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block; }
+.def-box  p { font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink); }
+.warn-box p { font-size:var(--fs-md);color:var(--red);   margin:0;line-height:1.78; }
+.tip-box  p { font-size:var(--fs-md);color:var(--green); margin:0;line-height:1.78; }
+.note-box p { font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78; }
+
+/* ── EXAMPLE BOX ────────────────────────────────────────── */
+.eg {
+  background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;
+  padding:clamp(14px,3vw,18px) clamp(12px,3vw,20px);margin:16px 0;position:relative;
+}
+.eg::before {
+  content:'Example';font-family:var(--hand);font-size:var(--fs-xs);
+  letter-spacing:2px;text-transform:uppercase;color:var(--ink3);
+  position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;
+}
+.eg p { font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin:0 0 6px;line-height:1.82; }
+.eg p:last-child { margin:0; }
+
+/* ── CODE BLOCKS ────────────────────────────────────────── */
+.cb {
+  font-family:'Courier New',monospace;
+  font-size:var(--fs-code);
+  background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;
+  padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);
+  margin:12px 0;color:var(--ink);line-height:1.85;
+  white-space:pre;overflow-x:auto;
+  /* smooth scrollbar on mobile */
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:#b0a080 transparent;
+}
+.cb::-webkit-scrollbar { height:4px; }
+.cb::-webkit-scrollbar-track { background:transparent; }
+.cb::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+.cb .kw { color:var(--blue);font-weight:bold; }
+.cb .cm { color:var(--ink3);font-style:italic; }
+
+/* inline code */
+code {
+  font-family:'Courier New',monospace;font-size:var(--fs-code);
+  background:var(--paper3);border:1px solid #c0a880;border-radius:3px;
+  padding:1px 5px;color:var(--blue);word-break:break-word;
+}
+
+/* ── ASCII DIAGRAM BLOCK ────────────────────────────────── */
+.gv {
+  background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;
+  padding:clamp(10px,2.5vw,16px) clamp(10px,3vw,18px);margin:14px 0;
+  font-family:'Courier New',monospace;font-size:clamp(10px,2.2vw,13px);
+  line-height:1.9;color:var(--ink);
+  white-space:pre;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:#b0a080 transparent;
+}
+.gv::-webkit-scrollbar { height:4px; }
+.gv::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+.gv .dv-label {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;
+}
+
+/* ── HIGHLIGHTS & COLOR UTILS ───────────────────────────── */
+mark  { background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink); }
+.hi-b { background:var(--hl-b);padding:0 3px;border-radius:2px; }
+.hi-g { background:var(--hl-g);padding:0 3px;border-radius:2px; }
+.hi-r { background:var(--hl-r);padding:0 3px;border-radius:2px; }
+.c-r  { color:var(--red);font-weight:600; }
+.c-b  { color:var(--blue);font-weight:600; }
+.c-g  { color:var(--green);font-weight:600; }
+.c-o  { color:var(--orange);font-weight:600; }
+
+/* ── LISTS ──────────────────────────────────────────────── */
+.pl { list-style:none;margin:8px 0 12px;padding:0; }
+.pl li {
+  font-family:var(--prose);font-size:var(--fs-md);
+  line-height:1.88;color:var(--ink2);
+  padding:3px 0 3px 22px;position:relative;
+}
+.pl li::before  { content:'—';position:absolute;left:0;color:var(--orange);font-weight:600; }
+.pl.arr li::before { content:'→';color:var(--blue); }
+.pl.chk li::before { content:'✓';color:var(--green); }
+.pl.crs li::before { content:'✗';color:var(--red); }
+
+/* numbered steps */
+.pl-steps { list-style:none;margin:10px 0;padding:0; }
+.pl-steps li {
+  display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;
+  font-family:var(--prose);font-size:var(--fs-md);line-height:1.82;color:var(--ink2);
+}
+.pl-num {
+  font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);
+  border-radius:50%;width:24px;height:24px;min-width:24px;
+  display:flex;align-items:center;justify-content:center;margin-top:3px;
+}
+
+/* ── TABLES ─────────────────────────────────────────────── */
+.tbl { overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:3px; }
+.tbl::-webkit-scrollbar { height:4px; }
+.tbl::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+table { width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12.5px,2.8vw,15.5px); }
+thead tr { background:var(--ink); }
+th {
+  padding:clamp(7px,2vw,9px) clamp(8px,2.5vw,14px);
+  text-align:left;color:var(--paper);font-weight:400;
+  font-size:clamp(10px,2.2vw,13px);font-family:var(--hand);letter-spacing:0.5px;
+  white-space:nowrap;
+}
+td {
+  padding:clamp(6px,1.8vw,8px) clamp(8px,2.5vw,14px);
+  border-bottom:1px dashed #c0a880;line-height:1.65;
+  vertical-align:top;color:var(--ink2);
+}
+tr:nth-child(even) td { background:rgba(0,0,0,0.024); }
+tr:hover td { background:rgba(255,240,150,0.22); }
+.good { color:var(--green);font-weight:600; }
+.ok   { color:var(--orange);font-weight:600; }
+.bad  { color:var(--red);font-weight:600; }
+
+/* ── CARD GRID ──────────────────────────────────────────── */
+.cg { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:13px;margin:14px 0; }
+.cg-card { background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,15px); }
+.cg-card .ct {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:6px;
+  padding-bottom:4px;border-bottom:1px solid #c0a880;
+}
+.cg-card p { font-family:var(--prose);font-size:clamp(13px,2.8vw,15px);line-height:1.75;color:var(--ink2);margin:0; }
+
+/* ── MISC ───────────────────────────────────────────────── */
+hr.dv { border:none;border-top:1.5px dashed #c0a880;margin:22px 0; }
+.bt {
+  display:block;text-align:right;font-family:var(--hand);
+  font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;
+  padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;
+}
+.bt:hover { color:var(--blue); }
+.footer {
+  text-align:center;font-family:var(--hand);font-size:var(--fs-xs);
+  color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════════════════════════ */
+
+/* ── ≤ 640px : TABLET / LARGE PHONE ──────────────────────── */
+@media (max-width:640px) {
+  /* toc: single column */
+  .toc-grid { grid-template-columns:1fr; }
+
+  /* cover: hide the red margin line (left:52px) — too close to text */
+  .cover::after { left:36px; }
+  .cover-inner  { padding-left:12px; }
+
+  /* cover tag: shorten on small screens */
+  .cover-gate-tag { font-size:8px; letter-spacing:1px; }
+
+  /* section: reduce left padding — margin watermark still visible but tighter */
+  .sec { padding-left: clamp(28px,6vw,44px); }
+  .sec::before { font-size:8px; }
+
+  /* h2 tags: push to new line on small */
+  h2.sh { font-size:clamp(15px,3.8vw,18px); }
+  .tag  { margin-left:0; margin-top:4px; }
+
+  /* code blocks: tighter padding, smaller but readable font */
+  .cb { font-size:clamp(10.5px,2.4vw,12.5px); padding:10px 12px; tab-size:2; }
+  .gv { font-size:clamp(9.5px,2.1vw,11.5px); }
+
+  /* table: allow horizontal scroll with visual cue */
+  .tbl { border-left:3px solid var(--blue); }
+
+  /* card grid: force single column on narrow */
+  .cg { grid-template-columns:1fr; }
+}
+
+/* ── ≤ 420px : SMALL PHONE ────────────────────────────────── */
+@media (max-width:420px) {
+  body { padding:8px 6px 40px; }
+
+  /* book: let it breathe edge-to-edge */
+  .book { max-width:100%; }
+
+  /* cover: reduce shadow depth (shadows get clipped on tiny screens) */
+  .cover {
+    box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);
+    padding:18px 14px 16px;
+  }
+  .cover::after { display:none; } /* hide margin line — too tight */
+
+  /* gate tag: absolute → relative, put it inline below subject */
+  .cover-gate-tag {
+    position:static;display:inline-block;
+    margin-bottom:10px;font-size:8px;letter-spacing:1px;
+  }
+  .cover-inner { padding-left:0; }
+
+  /* tighten chips */
+  .chip { font-size:9px; padding:3px 8px; }
+
+  /* section: minimal left offset — watermark hidden (writing-mode text still renders) */
+  .sec { padding-left:20px; padding-right:12px; }
+  .sec::before { display:none; } /* watermark too cramped at this width */
+
+  /* chapter head */
+  .ch-head { padding:12px 14px; }
+  .ch-title { font-size:clamp(14px,4vw,17px); }
+
+  /* headings */
+  h2.sh { font-size:clamp(14px,4vw,16px); flex-direction:column; align-items:flex-start; gap:6px; }
+  .tag  { margin-left:0; }
+
+  /* TOC entries */
+  .toc-grid a { font-size:14px; }
+
+  /* callout boxes */
+  .def-box, .warn-box, .tip-box, .note-box { padding:10px 12px; }
+
+  /* code: smallest comfortable size */
+  .cb { font-size:10.5px; padding:9px 10px; letter-spacing:-0.1px; }
+  .gv { font-size:9.5px; padding:10px; }
+
+  /* table: even smaller font */
+  table { font-size:12px; }
+  th    { font-size:9.5px; padding:6px 8px; }
+  td    { padding:5px 8px; }
+
+  /* card grid */
+  .cg-card p { font-size:13px; }
+
+  /* back-to-top */
+  .bt { padding:8px 12px 0; }
+}
+
+/* ── PRINT ────────────────────────────────────────────────── */
+@media print {
+  body { background:white; padding:0; }
+  .book { max-width:100%; }
+  .cover { box-shadow:none;border:2px solid #333; }
+  .chapter { box-shadow:none;break-inside:avoid; }
+  .ch-head { -webkit-print-color-adjust:exact;print-color-adjust:exact; }
+  .cb,.gv  { white-space:pre-wrap;word-break:break-all; }
+  .bt      { display:none; }
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">02 · OOP Mastery</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Complete Reference · File 02 of 05</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Programming</div>
+    <h1>OOP Mastery<br><em>Classes, Inheritance &amp; Polymorphism</em></h1>
+    <p class="cover-desc">The complete object-oriented programming guide for C++. Every concept from class anatomy to virtual dispatch, from operator overloading to the Rule of Five — with full working code at every step. This is the file that separates programmers from software engineers.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Classes &amp; Objects</span>
+      <span class="chip">Ch 2 · Constructors &amp; Destructors</span>
+      <span class="chip">Ch 3 · Encapsulation</span>
+      <span class="chip">Ch 4 · Inheritance</span>
+      <span class="chip">Ch 5 · Polymorphism &amp; Virtual</span>
+      <span class="chip">Ch 6 · Operator Overloading</span>
+      <span class="chip">Ch 7 · Abstract Classes &amp; Interfaces</span>
+      <span class="chip">Ch 8 · Rule of Five</span>
+      <span class="chip">Ch 9 · OOP Design Principles</span>
+      <span class="chip">Ch 10 · Traps &amp; Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Classes &amp; Objects</a>
+    <a href="#ch2"><span class="tn">02</span>Constructors &amp; Destructors</a>
+    <a href="#ch3"><span class="tn">03</span>Encapsulation &amp; Access Control</a>
+    <a href="#ch4"><span class="tn">04</span>Inheritance</a>
+    <a href="#ch5"><span class="tn">05</span>Polymorphism &amp; Virtual Functions</a>
+    <a href="#ch6"><span class="tn">06</span>Operator Overloading</a>
+    <a href="#ch7"><span class="tn">07</span>Abstract Classes &amp; Interfaces</a>
+    <a href="#ch8"><span class="tn">08</span>Rule of Five &amp; Resource Management</a>
+    <a href="#ch9"><span class="tn">09</span>OOP Design Principles (SOLID)</a>
+    <a href="#ch10"><span class="tn">10</span>Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 1 — CLASSES & OBJECTS
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Classes &amp; Objects — <em>The Blueprint and the Instance</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="concept">
+      <h2 class="sh">1.1 &nbsp; What is OOP? The Core Idea <span class="tag tc">Foundation</span></h2>
+      <p>Object-Oriented Programming is a paradigm where you model your program as a collection of <strong>objects</strong> — entities that bundle <mark>data (attributes)</mark> and <mark>behaviour (methods)</mark> together. Instead of writing functions that operate on separate data, you define types that know how to manage themselves.</p>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">The 4 Pillars</div>
+          <p><strong>Encapsulation</strong> — hide internal state<br>
+          <strong>Abstraction</strong> — expose only what's needed<br>
+          <strong>Inheritance</strong> — reuse and extend types<br>
+          <strong>Polymorphism</strong> — one interface, many forms</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Class vs Object</div>
+          <p>A <strong>class</strong> is a blueprint — it defines what data and operations the type has. An <strong>object</strong> is an instance — actual memory allocated from that blueprint. One class → many objects.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Why OOP?</div>
+          <p>Models real-world entities naturally. Enables code reuse through inheritance. Reduces complexity by hiding implementation. Makes large codebases manageable through clear interfaces.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="anatomy">
+      <h2 class="sh">1.2 &nbsp; Anatomy of a Class <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: Life Without Classes</span>
+        <p>Before OOP, programs were written as loose variables passed into standalone functions. To model a bank account, you'd have <code>double balance1 = 1000; string owner1 = "Alice";</code> and pass them to <code>withdraw(balance1, 50.0);</code>. When you added a second account, you had to duplicate all variables. It quickly became unmanageable. Classes solve this by bundling the data (balance, owner) and the functions (withdraw) into a single, self-contained unit. You no longer pass loose data to functions; the object carries its own data and knows how to modify itself.</p>
+      </div>
+      <p>A class declaration has <strong>member variables</strong> (data) and <strong>member functions</strong> (methods). By default, class members are <strong>private</strong> — only accessible within the class itself.</p>
+      <div class="cb"><span class="kw">class</span> BankAccount {
+<span class="kw">private</span>:                          <span class="cm">// Hidden from outside — accessible only within class</span>
+    std::string owner;
+    <span class="kw">double</span> balance;
+    <span class="kw">int</span> accountNumber;
+
+<span class="kw">public</span>:                           <span class="cm">// Accessible from anywhere</span>
+    <span class="cm">// Constructor — initializes the object</span>
+    BankAccount(std::string name, <span class="kw">double</span> initialBalance) {
+        owner = name;
+        balance = initialBalance;
+        accountNumber = generateAccountNumber();
+    }
+
+    <span class="cm">// Member functions (methods)</span>
+    <span class="kw">void</span> deposit(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; 0) balance += amount;
+    }
+
+    <span class="kw">bool</span> withdraw(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; 0 &amp;&amp; balance &gt;= amount) {
+            balance -= amount;
+            <span class="kw">return true</span>;
+        }
+        <span class="kw">return false</span>;
+    }
+
+    <span class="cm">// Getter — read-only access to private data</span>
+    <span class="kw">double</span> getBalance() <span class="kw">const</span> { <span class="kw">return</span> balance; }
+    std::string getOwner() <span class="kw">const</span> { <span class="kw">return</span> owner; }
+
+    <span class="kw">void</span> printStatement() <span class="kw">const</span>;   <span class="cm">// Declaration only — defined outside class</span>
+
+<span class="kw">private</span>:
+    <span class="kw">int</span> generateAccountNumber() { <span class="kw">return</span> rand() % 900000 + 100000; }
+};
+
+<span class="cm">// Define member function outside class — use ClassName:: scope operator</span>
+<span class="kw">void</span> BankAccount::printStatement() <span class="kw">const</span> {
+    std::cout &lt;&lt; "Account: " &lt;&lt; accountNumber
+              &lt;&lt; " | Owner: " &lt;&lt; owner
+              &lt;&lt; " | Balance: $" &lt;&lt; balance &lt;&lt; "\n";
+}</div>
+      <div class="def-box">
+        <span class="lbl">The const after a member function</span>
+        <p>A <code>const</code> after the parameter list (e.g., <code>double getBalance() const</code>) means this function <strong>does not modify</strong> any member variables. It promises read-only access. Always mark getter/inspection methods as <code>const</code> — it allows them to be called on <code>const</code> objects and communicates intent clearly.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="objects">
+      <h2 class="sh">1.3 &nbsp; Creating and Using Objects <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="cm">// Stack allocation — object destroyed when it goes out of scope</span>
+BankAccount acc1("Alice", 1000.0);
+BankAccount acc2{"Bob", 500.0};     <span class="cm">// Brace initialization (preferred)</span>
+
+acc1.deposit(200.0);
+acc1.withdraw(50.0);
+acc1.printStatement();              <span class="cm">// Account: 123456 | Owner: Alice | Balance: $1150</span>
+
+<span class="cm">// Heap allocation — object lives until explicitly deleted</span>
+BankAccount* acc3 = <span class="kw">new</span> BankAccount("Carol", 2000.0);
+acc3-&gt;deposit(500.0);               <span class="cm">// Arrow operator for pointer to object</span>
+acc3-&gt;printStatement();
+<span class="kw">delete</span> acc3;                        <span class="cm">// MUST free heap objects manually</span>
+acc3 = <span class="kw">nullptr</span>;
+
+<span class="cm">// Modern C++ — use unique_ptr instead (no manual delete needed)</span>
+<span class="kw">auto</span> acc4 = std::make_unique&lt;BankAccount&gt;("Dave", 3000.0);
+acc4-&gt;deposit(100.0);
+<span class="cm">// acc4 is automatically deleted when it goes out of scope</span>
+
+<span class="cm">// Array of objects</span>
+BankAccount accounts[3] = {
+    {"Eve",   100.0},
+    {"Frank", 200.0},
+    {"Grace", 300.0}
+};
+<span class="kw">for</span> (<span class="kw">auto</span>&amp; a : accounts) a.printStatement();</div>
+      <h3 class="ssh">The this Pointer</h3>
+      <p>Inside every non-static member function, <code>this</code> is an implicit pointer to the current object. It's used to disambiguate member variables from parameters of the same name, and to enable method chaining.</p>
+      <div class="cb"><span class="kw">class</span> Builder {
+    <span class="kw">int</span> x, y;
+<span class="kw">public</span>:
+    Builder&amp; setX(<span class="kw">int</span> x) {
+        <span class="kw">this</span>-&gt;x = x;    <span class="cm">// this->x = member variable, x = parameter</span>
+        <span class="kw">return</span> *<span class="kw">this</span>;   <span class="cm">// Return reference to self for chaining</span>
+    }
+    Builder&amp; setY(<span class="kw">int</span> y) { <span class="kw">this</span>-&gt;y = y; <span class="kw">return</span> *<span class="kw">this</span>; }
+    <span class="kw">void</span> build() { std::cout &lt;&lt; x &lt;&lt; ", " &lt;&lt; y &lt;&lt; "\n"; }
+};
+
+<span class="cm">// Method chaining — each call returns *this</span>
+Builder b;
+b.setX(10).setY(20).build();   <span class="cm">// 10, 20</span></div>
+    </div>
+
+    <div class="sec" data-m="static">
+      <h2 class="sh">1.4 &nbsp; Static Members — Class-Level Data <span class="tag tc">Core</span></h2>
+      <p><strong>Static members</strong> belong to the <em>class itself</em>, not to any individual object. All instances share a single copy of a static member. Use them for class-wide counters, shared configuration, or factory functions.</p>
+      <div class="cb"><span class="kw">class</span> Counter {
+<span class="kw">private</span>:
+    <span class="kw">int</span> id;
+    <span class="kw">static int</span> count;              <span class="cm">// Declaration — one copy shared by ALL objects</span>
+
+<span class="kw">public</span>:
+    Counter() {
+        count++;
+        id = count;
+    }
+    ~Counter() { count--; }
+
+    <span class="kw">static int</span> getCount() {        <span class="cm">// Static method — no 'this' pointer</span>
+        <span class="kw">return</span> count;
+    }
+    <span class="kw">int</span> getId() <span class="kw">const</span> { <span class="kw">return</span> id; }
+};
+
+<span class="cm">// Definition of static member — must be OUTSIDE the class, in a .cpp file</span>
+<span class="kw">int</span> Counter::count = 0;
+
+<span class="kw">int</span> main() {
+    std::cout &lt;&lt; Counter::getCount() &lt;&lt; "\n";  <span class="cm">// 0</span>
+    Counter a, b, c;
+    std::cout &lt;&lt; Counter::getCount() &lt;&lt; "\n";  <span class="cm">// 3</span>
+    {
+        Counter d;
+        std::cout &lt;&lt; Counter::getCount() &lt;&lt; "\n";  <span class="cm">// 4</span>
+    }   <span class="cm">// d destroyed here, destructor called</span>
+    std::cout &lt;&lt; Counter::getCount() &lt;&lt; "\n";  <span class="cm">// 3</span>
+}</div>
+      <div class="warn-box">
+        <span class="lbl">Static Member Must Be Defined Outside the Class</span>
+        <p>Declaring <code>static int count;</code> inside the class is only a declaration. You must provide a definition in exactly one .cpp file: <code>int Counter::count = 0;</code>. Forgetting this gives a linker error: "undefined reference to Counter::count". In C++17, you can use <code>inline static int count = 0;</code> inside the class to avoid this.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">1.5 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Calling non-const method on const object</td><td class="bad">const BankAccount a; a.deposit(10); // error</td><td class="good">Mark read-only methods const; they work on const objects</td></tr>
+            <tr><td>Forgetting semicolon after class</td><td class="bad">class Foo { }  // missing ;</td><td class="good">class Foo { };  // class definition must end with ;</td></tr>
+            <tr><td>Static member definition</td><td class="bad">Static int declared but not defined outside class</td><td class="good">int MyClass::staticVar = 0; in .cpp (or inline static in C++17)</td></tr>
+            <tr><td>this in static method</td><td class="bad">Using this inside a static method</td><td class="good">Static methods have no this pointer — they don't belong to an instance</td></tr>
+            <tr><td>Returning this by value</td><td class="bad">Builder setX() { return *this; } (copies!)</td><td class="good">Builder& setX() { return *this; } (reference for chaining)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 2 — CONSTRUCTORS & DESTRUCTORS
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Constructors &amp; Destructors — <em>Birth, Life &amp; Death of Objects</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="constructor">
+      <h2 class="sh">2.1 &nbsp; Constructors — Initializing Objects <span class="tag tc">Core</span></h2>
+      <p>A <strong>constructor</strong> is a special member function called automatically when an object is created. It has <mark>the same name as the class</mark>, no return type (not even void), and is responsible for initializing the object to a valid state.</p>
+      <div class="cb"><span class="kw">class</span> Rectangle {
+<span class="kw">private</span>:
+    <span class="kw">double</span> width, height;
+
+<span class="kw">public</span>:
+    <span class="cm">// 1. Default constructor — no parameters</span>
+    Rectangle() {
+        width = 0.0;
+        height = 0.0;
+    }
+
+    <span class="cm">// 2. Parameterized constructor</span>
+    Rectangle(<span class="kw">double</span> w, <span class="kw">double</span> h) {
+        width = w;
+        height = h;
+    }
+
+    <span class="cm">// 3. PREFERRED: Member Initializer List — faster and required for const/refs</span>
+    Rectangle(<span class="kw">double</span> w, <span class="kw">double</span> h, <span class="kw">bool</span> validate)
+        : width(w &gt; 0 ? w : 0),    <span class="cm">// Initialize width before constructor body runs</span>
+          height(h &gt; 0 ? h : 0)   <span class="cm">// Comma-separated list after colon</span>
+    {
+        <span class="cm">// Constructor body — runs AFTER member initializer list</span>
+        <span class="kw">if</span> (validate &amp;&amp; (w &lt;= 0 || h &lt;= 0))
+            std::cout &lt;&lt; "Warning: invalid dimensions\n";
+    }
+
+    <span class="kw">double</span> area() <span class="kw">const</span> { <span class="kw">return</span> width * height; }
+};
+
+Rectangle r1;               <span class="cm">// Default: 0×0</span>
+Rectangle r2(5.0, 3.0);     <span class="cm">// Parameterized: 5×3</span>
+Rectangle r3{4.0, 6.0, <span class="kw">true</span>};  <span class="cm">// With validation</span></div>
+      <div class="def-box">
+        <span class="lbl">Member Initializer List — Why Prefer It</span>
+        <p>Without initializer list: members are <strong>default-initialized first</strong>, then assigned in the constructor body — two operations. With initializer list: members are <strong>initialized directly</strong> — one operation. For <code>const</code> members, reference members, and members with no default constructor, initializer list is the <strong>only option</strong>. Always prefer it.</p>
+      </div>
+      <h3 class="ssh">Delegating Constructors (C++11)</h3>
+      <div class="cb"><span class="kw">class</span> Point {
+    <span class="kw">double</span> x, y, z;
+<span class="kw">public</span>:
+    Point(<span class="kw">double</span> x, <span class="kw">double</span> y, <span class="kw">double</span> z) : x(x), y(y), z(z) {}
+
+    <span class="cm">// Delegating constructor — calls another constructor, reduces code duplication</span>
+    Point(<span class="kw">double</span> x, <span class="kw">double</span> y) : Point(x, y, 0.0) {}  <span class="cm">// Delegates to 3-arg version</span>
+    Point() : Point(0.0, 0.0, 0.0) {}                  <span class="cm">// Delegates to 3-arg version</span>
+};</div>
+      <h3 class="ssh">explicit Keyword — Preventing Implicit Conversions</h3>
+      <div class="cb"><span class="kw">class</span> Wrapper {
+<span class="kw">public</span>:
+    <span class="kw">explicit</span> Wrapper(<span class="kw">int</span> val) : value(val) {}  <span class="cm">// explicit prevents auto-conversion</span>
+<span class="kw">private</span>:
+    <span class="kw">int</span> value;
+};
+
+Wrapper w1(42);    <span class="cm">// OK: direct initialization</span>
+Wrapper w2 = 42;   <span class="cm">// ERROR if explicit! Prevents: "int can be used as Wrapper"</span>
+Wrapper w3{42};    <span class="cm">// OK: brace initialization always fine</span>
+
+<span class="cm">// Without explicit, this would silently convert:
+// void f(Wrapper w); f(42);  ← dangerous implicit conversion
+// With explicit, f(42) is a compile error. You must write f(Wrapper{42}).</span></div>
+    </div>
+
+    <div class="sec" data-m="destructor">
+      <h2 class="sh">2.2 &nbsp; Destructors — Cleaning Up <span class="tag tg">Critical</span></h2>
+      <p>A <strong>destructor</strong> is called automatically when an object is destroyed (goes out of scope, or <code>delete</code> is called on a heap object). It has the same name as the class prefixed with <code>~</code> and no parameters. Its job: <mark>release all resources acquired by the object</mark> — memory, file handles, network connections, locks.</p>
+      <div class="cb"><span class="kw">class</span> DynamicArray {
+<span class="kw">private</span>:
+    <span class="kw">int</span>* data;
+    <span class="kw">int</span> size;
+
+<span class="kw">public</span>:
+    <span class="cm">// Constructor: acquire resource (heap memory)</span>
+    DynamicArray(<span class="kw">int</span> n) : size(n) {
+        data = <span class="kw">new int</span>[n];          <span class="cm">// Allocate n ints on heap</span>
+        std::cout &lt;&lt; "Constructed, allocated " &lt;&lt; n &lt;&lt; " ints\n";
+    }
+
+    <span class="cm">// Destructor: release resource</span>
+    ~DynamicArray() {
+        <span class="kw">delete</span>[] data;               <span class="cm">// MUST free heap memory</span>
+        std::cout &lt;&lt; "Destructed, freed memory\n";
+    }
+
+    <span class="kw">int</span>&amp; operator[](<span class="kw">int</span> i) { <span class="kw">return</span> data[i]; }
+    <span class="kw">int</span> getSize() <span class="kw">const</span> { <span class="kw">return</span> size; }
+};
+
+<span class="kw">int</span> main() {
+    {
+        DynamicArray arr(10);         <span class="cm">// Constructor called</span>
+        arr[0] = 42;
+    }   <span class="cm">// Scope ends → destructor automatically called → memory freed</span>
+    <span class="cm">// No memory leak! Destructor handled it.</span>
+}</div>
+      <div class="def-box">
+        <span class="lbl">RAII — Resource Acquisition Is Initialization</span>
+        <p>This is the most important C++ idiom. Tie the lifetime of a resource to the lifetime of an object: acquire in the constructor, release in the destructor. When the object goes out of scope, the destructor runs — resource is always released. No manual cleanup. No leaks. This is how <code>std::vector</code>, <code>std::fstream</code>, <code>std::unique_ptr</code>, and mutexes all work.</p>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">Virtual Destructor Rule</span>
+        <p>If a class has virtual methods (is meant to be a base class), its destructor <strong>must be virtual</strong>. Without it, deleting a derived object through a base pointer only calls the base destructor — the derived destructor never runs — causing resource leaks. Rule: <strong>if a class has any virtual function, make the destructor virtual too</strong>.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="copy">
+      <h2 class="sh">2.3 &nbsp; Copy Constructor &amp; Copy Assignment <span class="tag tg">Critical</span></h2>
+      <p>When you copy an object, C++ calls either the <strong>copy constructor</strong> (when creating a new object) or <strong>copy assignment operator</strong> (when assigning to an existing object). By default, C++ generates these as <em>shallow copies</em> — copying each member value directly.</p>
+      <div class="cb"><span class="kw">class</span> MyString {
+<span class="kw">private</span>:
+    <span class="kw">char</span>* data;
+    <span class="kw">int</span> len;
+
+<span class="kw">public</span>:
+    <span class="cm">// Constructor</span>
+    MyString(<span class="kw">const char</span>* str) {
+        len = strlen(str);
+        data = <span class="kw">new char</span>[len + 1];
+        strcpy(data, str);
+    }
+
+    <span class="cm">// COPY CONSTRUCTOR — called when: MyString b(a);  or  MyString b = a;</span>
+    MyString(<span class="kw">const</span> MyString&amp; other) {
+        len = other.len;
+        data = <span class="kw">new char</span>[len + 1];     <span class="cm">// Deep copy: allocate NEW memory</span>
+        strcpy(data, other.data);       <span class="cm">// Copy the content, not just the pointer</span>
+        std::cout &lt;&lt; "Copy constructor called\n";
+    }
+
+    <span class="cm">// COPY ASSIGNMENT OPERATOR — called when: existing_obj = other_obj;</span>
+    MyString&amp; operator=(<span class="kw">const</span> MyString&amp; other) {
+        <span class="kw">if</span> (<span class="kw">this</span> == &amp;other) <span class="kw">return</span> *<span class="kw">this</span>;  <span class="cm">// Self-assignment guard — CRITICAL</span>
+        <span class="kw">delete</span>[] data;                   <span class="cm">// Free existing memory</span>
+        len = other.len;
+        data = <span class="kw">new char</span>[len + 1];
+        strcpy(data, other.data);
+        <span class="kw">return</span> *<span class="kw">this</span>;                    <span class="cm">// Return *this for chain assignment (a=b=c)</span>
+    }
+
+    ~MyString() { <span class="kw">delete</span>[] data; }
+    <span class="kw">void</span> print() <span class="kw">const</span> { std::cout &lt;&lt; data &lt;&lt; "\n"; }
+};</div>
+      <div class="warn-box">
+        <span class="lbl">Shallow Copy — The Pointer Sharing Disaster</span>
+        <p>If you manage heap memory and don't define a copy constructor, the compiler generates a <strong>shallow copy</strong> that copies the pointer value — both objects now point to the same heap memory. When either object is destroyed, it frees that memory. The other object now has a dangling pointer. When it's destroyed, it tries to free already-freed memory → <strong>double free → crash</strong>. Always define a deep copy when you own heap memory.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">2.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Initializer list order</td><td class="bad">Members initialized in list order, NOT declaration order</td><td class="good">Members ALWAYS initialized in declaration order. Keep list in same order.</td></tr>
+            <tr><td>Missing self-assignment check</td><td class="bad">op= without if(this==&amp;other) — deletes own data first</td><td class="good">Always check self-assignment before any delete in op=</td></tr>
+            <tr><td>Shallow copy with raw pointer</td><td class="bad">Default copy copies pointer address — shared ownership</td><td class="good">Define copy constructor + op= to deep copy heap data</td></tr>
+            <tr><td>Non-virtual destructor in base</td><td class="bad">Base* p = new Derived(); delete p; — derived destructor never called</td><td class="good">virtual ~Base() {} whenever the class is a base class</td></tr>
+            <tr><td>explicit constructor</td><td class="bad">Implicit conversion: void f(A); f(42); silently constructs A</td><td class="good">Mark single-param constructors explicit to prevent surprise conversions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 3 — ENCAPSULATION
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Encapsulation &amp; Access Control — <em>Hiding the Wires</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="access">
+      <h2 class="sh">3.1 &nbsp; Access Specifiers — public, private, protected <span class="tag tc">Core</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Specifier</th><th>Accessible From</th><th>Use When</th></tr></thead>
+          <tbody>
+            <tr><td><code>public</code></td><td class="good">Anywhere — outside the class, derived classes, everywhere</td><td>Interface: what the user of the class is meant to call</td></tr>
+            <tr><td><code>private</code></td><td class="bad">Only within this class (not even derived classes)</td><td>Implementation details: internal data and helper functions</td></tr>
+            <tr><td><code>protected</code></td><td class="ok">This class AND derived classes only</td><td>Data/methods that subclasses need but external code shouldn't touch</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cb"><span class="kw">class</span> Person {
+<span class="kw">private</span>:
+    std::string ssn;          <span class="cm">// Nobody outside gets this — not even subclasses</span>
+    <span class="kw">double</span> bankBalance;
+
+<span class="kw">protected</span>:
+    std::string name;         <span class="cm">// Subclasses (Employee, Student) can access this</span>
+    <span class="kw">int</span> age;
+
+<span class="kw">public</span>:
+    Person(std::string n, <span class="kw">int</span> a, std::string id, <span class="kw">double</span> bal)
+        : name(n), age(a), ssn(id), bankBalance(bal) {}
+
+    std::string getName() <span class="kw">const</span> { <span class="kw">return</span> name; }    <span class="cm">// Public getter</span>
+    <span class="kw">int</span> getAge() <span class="kw">const</span> { <span class="kw">return</span> age; }
+
+    <span class="cm">// No getter for ssn — that data should never leave the class</span>
+};
+
+<span class="kw">class</span> Employee : <span class="kw">public</span> Person {
+    std::string department;
+<span class="kw">public</span>:
+    <span class="kw">void</span> introduce() {
+        std::cout &lt;&lt; name &lt;&lt; ", age " &lt;&lt; age;  <span class="cm">// OK — protected access</span>
+        <span class="cm">// std::cout &lt;&lt; ssn;  ERROR — ssn is private in Person</span>
+    }
+};</div>
+      <div class="note-box">
+        <span class="lbl">struct vs class — One Difference</span>
+        <p>In C++, <code>struct</code> and <code>class</code> are nearly identical. The only difference: <code>struct</code> members are <strong>public by default</strong>, <code>class</code> members are <strong>private by default</strong>. Convention: use <code>struct</code> for simple data containers (POD types), use <code>class</code> for types with significant behavior and invariants to protect.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="getset">
+      <h2 class="sh">3.2 &nbsp; Getters, Setters &amp; Invariant Protection <span class="tag tc">Core</span></h2>
+      <p>The core payoff of encapsulation: by forcing access through methods, you can <strong>validate input</strong>, <strong>enforce invariants</strong>, and <strong>change the internal representation</strong> without breaking external code.</p>
+      <div class="cb"><span class="kw">class</span> Temperature {
+<span class="kw">private</span>:
+    <span class="kw">double</span> celsius;   <span class="cm">// Internal representation: always in Celsius</span>
+
+<span class="kw">public</span>:
+    Temperature(<span class="kw">double</span> c) {
+        setCelsius(c);    <span class="cm">// Reuse setter for validation even in constructor</span>
+    }
+
+    <span class="cm">// Getter</span>
+    <span class="kw">double</span> getCelsius() <span class="kw">const</span> { <span class="kw">return</span> celsius; }
+    <span class="kw">double</span> getFahrenheit() <span class="kw">const</span> { <span class="kw">return</span> celsius * 9.0/5.0 + 32; }
+    <span class="kw">double</span> getKelvin() <span class="kw">const</span> { <span class="kw">return</span> celsius + 273.15; }
+
+    <span class="cm">// Setter with invariant enforcement</span>
+    <span class="kw">void</span> setCelsius(<span class="kw">double</span> c) {
+        <span class="kw">if</span> (c &lt; -273.15) <span class="cm">// Absolute zero — physically impossible</span>
+            <span class="kw">throw</span> std::invalid_argument("Temperature below absolute zero");
+        celsius = c;
+    }
+
+    <span class="kw">void</span> setFahrenheit(<span class="kw">double</span> f) {
+        setCelsius((f - 32) * 5.0/9.0);   <span class="cm">// Convert and delegate</span>
+    }
+};
+
+<span class="cm">// Public interface hides internal representation completely:
+// We can change internal storage to Kelvin without changing the API!</span></div>
+      <div class="tip-box">
+        <span class="lbl">Don't Write Mindless Getters/Setters</span>
+        <p>A class with a private member <code>x</code> and public <code>getX()</code>/<code>setX()</code> is not encapsulated — it's just bureaucracy. Real encapsulation means the class <em>protects an invariant</em>. Before adding a setter, ask: what rules must hold? Enforce those in the setter. If there are no rules, consider if the member needs to be private at all.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="friend">
+      <h2 class="sh">3.3 &nbsp; friend — Controlled Encapsulation Bypass <span class="tag tt">Use Carefully</span></h2>
+      <p>A <code>friend</code> declaration grants a specific external function or class access to private/protected members. It's an intentional, controlled bypass of encapsulation — useful for operator overloading and tightly coupled classes.</p>
+      <div class="cb"><span class="kw">class</span> Vector2D {
+<span class="kw">private</span>:
+    <span class="kw">double</span> x, y;
+
+<span class="kw">public</span>:
+    Vector2D(<span class="kw">double</span> x, <span class="kw">double</span> y) : x(x), y(y) {}
+
+    <span class="cm">// Friend function — NOT a member, but can access private x, y</span>
+    <span class="kw">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="kw">const</span> Vector2D&amp; v);
+
+    <span class="cm">// Friend class — Matrix can access Vector2D's private members</span>
+    <span class="kw">friend class</span> Matrix;
+};
+
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="kw">const</span> Vector2D&amp; v) {
+    os &lt;&lt; "(" &lt;&lt; v.x &lt;&lt; ", " &lt;&lt; v.y &lt;&lt; ")";  <span class="cm">// Accesses private x, y</span>
+    <span class="kw">return</span> os;
+}
+
+Vector2D v(3.0, 4.0);
+std::cout &lt;&lt; v &lt;&lt; "\n";   <span class="cm">// (3, 4)</span></div>
+      <div class="warn-box">
+        <span class="lbl">Overusing friend Breaks Encapsulation</span>
+        <p>Friendship is not inherited and not transitive. But overusing it defeats the purpose of encapsulation. If you find yourself adding many friend declarations, it's a sign your design needs rethinking. Use friend primarily for operator overloading (especially <code>operator&lt;&lt;</code>) and for pairs of tightly coupled classes that form a single logical unit.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">3.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Returning private data by non-const reference</td><td class="bad">double& getBalance() — caller can modify private member!</td><td class="good">const double& getBalance() const — or return by value for small types</td></tr>
+            <tr><td>Protected data in large hierarchies</td><td class="bad">Protected data accessible to all subclasses — hard to reason about</td><td class="good">Prefer private data + protected getters/setters for controlled access</td></tr>
+            <tr><td>Mutable keyword abuse</td><td class="bad">mutable on data that changes logical state (breaks const correctness)</td><td class="good">mutable only for caching/lazy eval that doesn't affect observable state (e.g., cached hash)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 4 — INHERITANCE
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Inheritance — <em>Reuse, Extension &amp; Hierarchies</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="basics">
+      <h2 class="sh">4.1 &nbsp; Single Inheritance <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: Avoiding Redundancy</span>
+        <p>Imagine writing a game with a <code>Dog</code> and a <code>Cat</code>. Both need a name, an age, and an <code>eat()</code> method. Without inheritance, you would copy and paste those variables and methods into both classes. When you inevitably find a bug in <code>eat()</code>, you have to fix it in every single animal class. Inheritance allows you to write the shared logic exactly once in a Base class (<code>Animal</code>), and let the Derived classes only specify what makes them unique.</p>
+      </div>
+      <p>Inheritance lets a <strong>derived class</strong> (child) acquire the properties and methods of a <strong>base class</strong> (parent). The derived class <em>is a</em> base class — it can be used anywhere a base class is expected. This is the <mark>Liskov Substitution Principle</mark>.</p>
+      <div class="cb"><span class="kw">class</span> Animal {                          <span class="cm">// Base class</span>
+<span class="kw">protected</span>:
+    std::string name;
+    <span class="kw">int</span> age;
+
+<span class="kw">public</span>:
+    Animal(std::string n, <span class="kw">int</span> a) : name(n), age(a) {}
+
+    <span class="kw">virtual</span> ~Animal() {}               <span class="cm">// Virtual destructor — ALWAYS in base class</span>
+
+    <span class="kw">void</span> eat() <span class="kw">const</span> {
+        std::cout &lt;&lt; name &lt;&lt; " is eating\n";
+    }
+
+    <span class="kw">virtual void</span> speak() <span class="kw">const</span> {      <span class="cm">// virtual = can be overridden by derived class</span>
+        std::cout &lt;&lt; name &lt;&lt; " makes a sound\n";
+    }
+
+    std::string getName() <span class="kw">const</span> { <span class="kw">return</span> name; }
+};
+
+<span class="kw">class</span> Dog : <span class="kw">public</span> Animal {         <span class="cm">// Dog IS-A Animal (public inheritance)</span>
+<span class="kw">private</span>:
+    std::string breed;
+
+<span class="kw">public</span>:
+    Dog(std::string n, <span class="kw">int</span> a, std::string b)
+        : Animal(n, a),              <span class="cm">// Call base class constructor FIRST via init list</span>
+          breed(b) {}
+
+    <span class="kw">void</span> speak() <span class="kw">const</span> <span class="kw">override</span> {  <span class="cm">// override keyword (C++11) — compiler checks this</span>
+        std::cout &lt;&lt; name &lt;&lt; " says: Woof!\n";
+    }
+
+    <span class="kw">void</span> fetch() <span class="kw">const</span> {            <span class="cm">// New method, only in Dog</span>
+        std::cout &lt;&lt; name &lt;&lt; " fetches the ball!\n";
+    }
+
+    std::string getBreed() <span class="kw">const</span> { <span class="kw">return</span> breed; }
+};
+
+<span class="kw">class</span> Cat : <span class="kw">public</span> Animal {
+<span class="kw">public</span>:
+    Cat(std::string n, <span class="kw">int</span> a) : Animal(n, a) {}
+
+    <span class="kw">void</span> speak() <span class="kw">const</span> <span class="kw">override</span> {
+        std::cout &lt;&lt; name &lt;&lt; " says: Meow!\n";
+    }
+};
+
+<span class="kw">int</span> main() {
+    Dog d("Rex", 3, "Labrador");
+    d.eat();         <span class="cm">// Inherited from Animal: "Rex is eating"</span>
+    d.speak();       <span class="cm">// Overridden in Dog: "Rex says: Woof!"</span>
+    d.fetch();       <span class="cm">// Dog-only method</span>
+}</div>
+      <div class="def-box">
+        <span class="lbl">Inheritance Modes</span>
+        <p><code>class Dog : public Animal</code> — public members of Animal remain public in Dog. Most common; models "IS-A" relationship.<br>
+        <code>class Dog : protected Animal</code> — public/protected of Animal become protected in Dog.<br>
+        <code>class Dog : private Animal</code> — all Animal members become private in Dog; models "IMPLEMENTED-IN-TERMS-OF". Very rare.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="constructors">
+      <h2 class="sh">4.2 &nbsp; Constructor &amp; Destructor Order in Inheritance <span class="tag tg">Critical</span></h2>
+      <div class="cb"><span class="kw">class</span> Base {
+<span class="kw">public</span>:
+    Base()  { std::cout &lt;&lt; "Base constructor\n"; }
+    ~Base() { std::cout &lt;&lt; "Base destructor\n"; }
+};
+
+<span class="kw">class</span> Derived : <span class="kw">public</span> Base {
+<span class="kw">public</span>:
+    Derived()  { std::cout &lt;&lt; "Derived constructor\n"; }
+    ~Derived() { std::cout &lt;&lt; "Derived destructor\n"; }
+};
+
+<span class="kw">int</span> main() {
+    Derived d;
+    <span class="cm">// Output:</span>
+    <span class="cm">// Base constructor      ← base ALWAYS constructed first</span>
+    <span class="cm">// Derived constructor</span>
+    <span class="cm">// Derived destructor    ← derived ALWAYS destroyed first (reverse order)</span>
+    <span class="cm">// Base destructor</span>
+}</div>
+      <div class="def-box">
+        <span class="lbl">Construction and Destruction Order</span>
+        <p><strong>Construction</strong>: Base → Derived. The base must exist before the derived part is built on top of it.<br>
+        <strong>Destruction</strong>: Derived → Base. Reverse of construction. The derived part is torn down first, then the base part.<br>
+        This is symmetric and automatic. You can't change this order.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="multi">
+      <h2 class="sh">4.3 &nbsp; Multiple Inheritance &amp; Diamond Problem <span class="tag tp">Advanced</span></h2>
+      <p>C++ supports inheriting from <strong>multiple base classes</strong>. This is powerful but can cause the <mark>diamond problem</mark> when two bases share a common ancestor.</p>
+      <div class="cb"><span class="kw">class</span> Flyable {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> fly() { std::cout &lt;&lt; "Flying\n"; }
+    <span class="kw">virtual</span> ~Flyable() {}
+};
+
+<span class="kw">class</span> Swimmable {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> swim() { std::cout &lt;&lt; "Swimming\n"; }
+    <span class="kw">virtual</span> ~Swimmable() {}
+};
+
+<span class="cm">// Duck inherits from BOTH — perfectly valid</span>
+<span class="kw">class</span> Duck : <span class="kw">public</span> Animal, <span class="kw">public</span> Flyable, <span class="kw">public</span> Swimmable {
+<span class="kw">public</span>:
+    Duck(std::string n) : Animal(n, 1) {}
+    <span class="kw">void</span> speak() <span class="kw">const</span> <span class="kw">override</span> { std::cout &lt;&lt; name &lt;&lt; ": Quack!\n"; }
+};
+
+Duck d("Donald");
+d.eat();    <span class="cm">// From Animal</span>
+d.fly();    <span class="cm">// From Flyable</span>
+d.swim();   <span class="cm">// From Swimmable</span>
+d.speak();  <span class="cm">// Overridden in Duck</span></div>
+      <h3 class="ssh">The Diamond Problem &amp; Virtual Inheritance</h3>
+      <div class="gv">
+        <span class="dv-label">Diamond Inheritance Problem</span>
+         Person
+        /      \
+   Student   Worker
+        \      /
+         WorkStudy     ← Has TWO copies of Person without virtual inheritance!
+      </div>
+      <div class="cb"><span class="kw">class</span> Person { <span class="kw">public</span>: std::string name; };
+
+<span class="cm">// WITHOUT virtual: WorkStudy would have TWO copies of Person (ambiguous!)</span>
+<span class="kw">class</span> Student : <span class="kw">virtual public</span> Person { ... };   <span class="cm">// virtual inheritance</span>
+<span class="kw">class</span> Worker  : <span class="kw">virtual public</span> Person { ... };   <span class="cm">// virtual inheritance</span>
+
+<span class="kw">class</span> WorkStudy : <span class="kw">public</span> Student, <span class="kw">public</span> Worker {
+    <span class="cm">// Now only ONE copy of Person — shared between Student and Worker branches</span>
+};
+
+WorkStudy ws;
+ws.name = "Alice";  <span class="cm">// No ambiguity — only one Person::name</span></div>
+      <div class="tip-box">
+        <span class="lbl">Prefer Composition Over Multiple Inheritance</span>
+        <p>Multiple inheritance is complex and rarely necessary. Before reaching for it, ask: can I model this with composition (having a member of that type) or interfaces (pure abstract base classes)? Most real-world cases where you think you need multiple inheritance are better solved with composition + interfaces. Keep multiple inheritance for mixins and interface-only base classes.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">4.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Not calling base constructor</td><td class="bad">Derived() {} — base default-initialized (may crash)</td><td class="good">Derived() : Base(args) {} — explicitly chain base constructor</td></tr>
+            <tr><td>Slicing</td><td class="bad">Animal a = Dog("Rex",3,"Lab"); — Dog part is sliced off!</td><td class="good">Animal* a = new Dog(...); or Animal& a = dog; — use pointer/reference</td></tr>
+            <tr><td>override not used</td><td class="bad">void speak() const — typo in signature = new function, not override</td><td class="good">Always use override keyword — compiler catches signature mismatches</td></tr>
+            <tr><td>Calling virtual in constructor</td><td class="bad">Virtual calls in constructors go to BASE version (polymorphism inactive)</td><td class="good">Never rely on virtual dispatch in constructors/destructors</td></tr>
+            <tr><td>Diamond without virtual</td><td class="bad">Two copies of base class, ambiguous member access</td><td class="good">Use virtual inheritance when diamond structure is needed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 5 — POLYMORPHISM & VIRTUAL FUNCTIONS
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Polymorphism &amp; Virtual Functions — <em>One Interface, Many Forms</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="vtable">
+      <h2 class="sh">5.1 &nbsp; Virtual Functions &amp; the vtable <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: The Base Pointer Problem</span>
+        <p>Imagine you have an array of 50 different shapes, and you want to call <code>area()</code> on all of them. To put them in one array, they must all be stored as pointers to the base class: <code>Shape*</code>. But if <code>area()</code> is a normal function, calling <code>shapeArray[0]-&gt;area()</code> will ALWAYS execute the base <code>Shape</code> version of the function—even if the object is actually a <code>Circle</code>! The compiler only looks at the pointer type. <code>virtual</code> fixes this. It tells the compiler: "Wait until runtime, look at the ACTUAL object this pointer is aiming at, and call its specific version."</p>
+      </div>
+      <p><strong>Polymorphism</strong> means "many forms" — the same function call can execute different code depending on the actual runtime type of the object. C++ achieves this through <strong>virtual functions</strong> and the <mark>virtual dispatch mechanism (vtable)</mark>.</p>
+      <div class="cb"><span class="kw">class</span> Shape {
+<span class="kw">public</span>:
+    <span class="kw">virtual double</span> area() <span class="kw">const</span> = 0;        <span class="cm">// Pure virtual — must override</span>
+    <span class="kw">virtual double</span> perimeter() <span class="kw">const</span> = 0;
+    <span class="kw">virtual void</span> draw() <span class="kw">const</span> {               <span class="cm">// Virtual with default implementation</span>
+        std::cout &lt;&lt; "Drawing a shape\n";
+    }
+    <span class="kw">virtual</span> ~Shape() {}
+};
+
+<span class="kw">class</span> Circle : <span class="kw">public</span> Shape {
+    <span class="kw">double</span> radius;
+<span class="kw">public</span>:
+    Circle(<span class="kw">double</span> r) : radius(r) {}
+    <span class="kw">double</span> area() <span class="kw">const</span> <span class="kw">override</span> { <span class="kw">return</span> M_PI * radius * radius; }
+    <span class="kw">double</span> perimeter() <span class="kw">const</span> <span class="kw">override</span> { <span class="kw">return</span> 2 * M_PI * radius; }
+    <span class="kw">void</span> draw() <span class="kw">const</span> <span class="kw">override</span> {
+        std::cout &lt;&lt; "Drawing circle r=" &lt;&lt; radius &lt;&lt; "\n";
+    }
+};
+
+<span class="kw">class</span> Rectangle : <span class="kw">public</span> Shape {
+    <span class="kw">double</span> w, h;
+<span class="kw">public</span>:
+    Rectangle(<span class="kw">double</span> w, <span class="kw">double</span> h) : w(w), h(h) {}
+    <span class="kw">double</span> area() <span class="kw">const</span> <span class="kw">override</span> { <span class="kw">return</span> w * h; }
+    <span class="kw">double</span> perimeter() <span class="kw">const</span> <span class="kw">override</span> { <span class="kw">return</span> 2*(w+h); }
+};
+
+<span class="cm">// POLYMORPHISM IN ACTION</span>
+std::vector&lt;Shape*&gt; shapes;
+shapes.push_back(<span class="kw">new</span> Circle(5.0));
+shapes.push_back(<span class="kw">new</span> Rectangle(4.0, 6.0));
+shapes.push_back(<span class="kw">new</span> Circle(3.0));
+
+<span class="kw">for</span> (Shape* s : shapes) {
+    <span class="cm">// Correct function called at RUNTIME based on actual type</span>
+    std::cout &lt;&lt; "Area: " &lt;&lt; s-&gt;area() &lt;&lt; "\n";
+    s-&gt;draw();    <span class="cm">// Circle::draw or Rectangle's inherited draw</span>
+}
+<span class="cm">// Clean up</span>
+<span class="kw">for</span> (Shape* s : shapes) <span class="kw">delete</span> s;</div>
+      <div class="def-box">
+        <span class="lbl">How the vtable Works</span>
+        <p>When a class has virtual functions, the compiler creates a <strong>vtable</strong> (virtual function table) — an array of function pointers. Each object of that class gets a hidden <code>vptr</code> pointing to its class's vtable. When you call <code>s->area()</code> through a base pointer, C++ follows the vptr to find the right function. This is called <strong>dynamic dispatch</strong> and has a tiny overhead (~indirection through a pointer). The payoff: you write code against the base interface and it works correctly for all current and future derived types.</p>
+      </div>
+      <div class="gv">
+        <span class="dv-label">vtable layout</span>
+Circle object                 Circle vtable
+┌──────────────┐             ┌─────────────────────┐
+│ vptr ─────── │ ──────────► │ Circle::area()      │
+│ radius: 5.0  │             │ Circle::perimeter() │
+└──────────────┘             │ Circle::draw()      │
+                             └─────────────────────┘
+
+Rectangle object              Rectangle vtable
+┌──────────────┐             ┌──────────────────────────┐
+│ vptr ─────── │ ──────────► │ Rectangle::area()        │
+│ w: 4.0       │             │ Rectangle::perimeter()   │
+│ h: 6.0       │             │ Shape::draw() (inherited)│
+└──────────────┘             └──────────────────────────┘
+      </div>
+      <h3 class="ssh">The Virtual Destructor Rule <span class="tag tg">Critical Trap</span></h3>
+      <div class="warn-box">
+        <span class="lbl">Trap: Deleting via Base Pointer</span>
+        <p>If you delete a derived object through a pointer to its base class, and the base class has a <em>non-virtual</em> destructor, the result is <strong>undefined behavior</strong>. Usually, this means only the base class destructor runs, silently leaking the derived class's memory and resources.</p>
+      </div>
+      <div class="cb"><span class="kw">class</span> Base {
+<span class="kw">public</span>:
+    ~Base() { std::cout &lt;&lt; "Base destroyed\n"; } <span class="cm">// BUG: non-virtual!</span>
+};
+
+<span class="kw">class</span> Derived : <span class="kw">public</span> Base {
+    <span class="kw">int</span>* data;
+<span class="kw">public</span>:
+    Derived() { data = <span class="kw">new int</span>[100]; }
+    ~Derived() { <span class="kw">delete</span>[] data; std::cout &lt;&lt; "Derived destroyed\n"; }
+};
+
+Base* ptr = <span class="kw">new</span> Derived();
+<span class="kw">delete</span> ptr;
+<span class="cm">// Output: "Base destroyed" </span>
+<span class="cm">// The 100 ints in Derived are LEAKED because ~Derived() was never called!</span>
+<span class="cm">// FIX: add 'virtual' to ~Base() {}</span></div>
+    </div>
+
+    <div class="sec" data-m="override">
+      <h2 class="sh">5.2 &nbsp; override, final, and Hiding vs Overriding <span class="tag tg">Important</span></h2>
+      <div class="cb"><span class="cm">// override — compiler verifies this actually overrides a base virtual</span>
+<span class="kw">class</span> Derived : <span class="kw">public</span> Base {
+    <span class="kw">void</span> foo() <span class="kw">const</span> <span class="kw">override</span>;    <span class="cm">// ERROR if Base has no virtual foo() const</span>
+    <span class="kw">void</span> foo() <span class="kw">override</span>;          <span class="cm">// ERROR if only Base::foo() const exists (const mismatch)</span>
+};
+
+<span class="cm">// final — prevents further overriding or inheritance</span>
+<span class="kw">class</span> Sealed <span class="kw">final</span> : <span class="kw">public</span> Base { };  <span class="cm">// Nobody can inherit from Sealed</span>
+
+<span class="kw">class</span> Base2 {
+    <span class="kw">virtual void</span> foo() <span class="kw">final</span>;         <span class="cm">// foo() can no longer be overridden</span>
+};
+
+<span class="cm">// HIDING vs OVERRIDING — critical distinction</span>
+<span class="kw">class</span> B {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> f() { std::cout &lt;&lt; "B::f\n"; }
+    <span class="kw">void</span> g()          { std::cout &lt;&lt; "B::g\n"; }  <span class="cm">// NOT virtual</span>
+};
+
+<span class="kw">class</span> D : <span class="kw">public</span> B {
+<span class="kw">public</span>:
+    <span class="kw">void</span> f() <span class="kw">override</span> { std::cout &lt;&lt; "D::f\n"; }  <span class="cm">// OVERRIDES B::f (virtual)</span>
+    <span class="kw">void</span> g()           { std::cout &lt;&lt; "D::g\n"; }  <span class="cm">// HIDES B::g (not virtual)</span>
+};
+
+B* p = <span class="kw">new</span> D();
+p-&gt;f();    <span class="cm">// "D::f" — virtual dispatch → correct derived version</span>
+p-&gt;g();    <span class="cm">// "B::g" — NOT virtual → calls base version! (hiding, not overriding)</span></div>
+      <div class="warn-box">
+        <span class="lbl">Hiding is NOT Polymorphism</span>
+        <p>If a base function is not <code>virtual</code>, the derived class can define a function with the same name — but this <strong>hides</strong> the base function, not overrides it. Through a base pointer, the base function is always called, regardless of the actual object type. This is one of the most insidious bugs in C++ OOP. <strong>Always use <code>virtual</code> for functions meant to be overridden. Always use <code>override</code> in derived classes.</strong></p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="casting">
+      <h2 class="sh">5.3 &nbsp; Casting in Class Hierarchies <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="cm">// static_cast — compile-time cast, no runtime check</span>
+Derived* d = static_cast&lt;Derived*&gt;(basePtr);  <span class="cm">// You assert it IS a Derived</span>
+<span class="cm">// If it's NOT actually a Derived, UB! No runtime protection.</span>
+
+<span class="cm">// dynamic_cast — runtime type check (RTTI) — safest for polymorphic hierarchies</span>
+Shape* s = <span class="kw">new</span> Circle(5.0);
+Circle* c = dynamic_cast&lt;Circle*&gt;(s);
+<span class="kw">if</span> (c != <span class="kw">nullptr</span>) {
+    std::cout &lt;&lt; "It's a Circle!\n";
+} <span class="kw">else</span> {
+    std::cout &lt;&lt; "Not a Circle\n";
+}
+<span class="cm">// dynamic_cast returns nullptr for pointer casts if type doesn't match</span>
+<span class="cm">// dynamic_cast throws std::bad_cast for reference casts if type doesn't match</span>
+
+<span class="cm">// typeid — get runtime type information</span>
+<span class="kw">#include</span> &lt;typeinfo&gt;
+std::cout &lt;&lt; typeid(*s).name() &lt;&lt; "\n";   <span class="cm">// Implementation-defined name</span>
+<span class="kw">if</span> (typeid(*s) == typeid(Circle)) { ... }</div>
+      <div class="tip-box">
+        <span class="lbl">Avoid dynamic_cast in Hot Code Paths</span>
+        <p><code>dynamic_cast</code> requires RTTI and has runtime overhead. Frequent use often signals a design smell — you shouldn't need to know the concrete type at runtime if the virtual interface is designed well. For performance-critical code, use virtual dispatch instead. <code>dynamic_cast</code> is appropriate for introspection (e.g., debugging, serialization, visitor pattern).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">5.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>No virtual destructor</td><td class="bad">delete basePtr — derived destructor skipped, resource leak</td><td class="good">virtual ~Base() {} — always in polymorphic base classes</td></tr>
+            <tr><td>Hiding instead of overriding</td><td class="bad">Derived::g() without virtual in base — base called via pointer</td><td class="good">Mark base function virtual; mark derived override</td></tr>
+            <tr><td>Object slicing</td><td class="bad">Base b = derived; — polymorphism gone, derived data lost</td><td class="good">Always use pointer or reference for polymorphic behavior</td></tr>
+            <tr><td>Pure virtual class instantiation</td><td class="bad">Shape s; // error: Shape has pure virtual members</td><td class="good">Abstract classes cannot be instantiated; use pointers to derived</td></tr>
+            <tr><td>Virtual call in constructor</td><td class="bad">Virtual functions in constructor call base version (not derived)</td><td class="good">Polymorphism is only active AFTER the object is fully constructed</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 6 — OPERATOR OVERLOADING
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Operator Overloading — <em>Making Your Types Behave Naturally</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="basics">
+      <h2 class="sh">6.1 &nbsp; What is Operator Overloading? <span class="tag tc">Core</span></h2>
+      <p>C++ lets you define what operators like <code>+</code>, <code>-</code>, <code>==</code>, <code>&lt;&lt;</code> mean for your custom types. This enables your classes to feel as natural as built-in types — <code>v1 + v2</code> for vectors, <code>a == b</code> for objects, <code>cout &lt;&lt; obj</code> for printing.</p>
+      <div class="def-box">
+        <span class="lbl">Rules of Operator Overloading</span>
+        <p>1. You can only overload <strong>existing</strong> operators — you can't invent new ones.<br>
+        2. At least one operand must be a user-defined type — you can't change <code>int + int</code>.<br>
+        3. You cannot change arity (unary stays unary, binary stays binary).<br>
+        4. You cannot overload: <code>::</code> <code>.</code> <code>.*</code> <code>?:</code> <code>sizeof</code> <code>typeid</code>.<br>
+        5. Keep semantics intuitive — <code>+</code> should add, not subtract.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="examples">
+      <h2 class="sh">6.2 &nbsp; Complete Operator Overloading Examples <span class="tag tg">Heavy Reference</span></h2>
+      <div class="cb"><span class="kw">class</span> Complex {
+<span class="kw">public</span>:
+    <span class="kw">double</span> real, imag;
+    Complex(<span class="kw">double</span> r = 0, <span class="kw">double</span> i = 0) : real(r), imag(i) {}
+
+    <span class="cm">// ── ARITHMETIC OPERATORS ──────────────────────────────────────</span>
+    <span class="cm">// As member function: left operand = *this, right = param</span>
+    Complex operator+(<span class="kw">const</span> Complex&amp; rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> Complex(real + rhs.real, imag + rhs.imag);
+    }
+    Complex operator-(<span class="kw">const</span> Complex&amp; rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> Complex(real - rhs.real, imag - rhs.imag);
+    }
+    Complex operator*(<span class="kw">const</span> Complex&amp; rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> Complex(real*rhs.real - imag*rhs.imag,
+                       real*rhs.imag + imag*rhs.real);
+    }
+
+    <span class="cm">// Unary minus: -a</span>
+    Complex operator-() <span class="kw">const</span> { <span class="kw">return</span> Complex(-real, -imag); }
+
+    <span class="cm">// ── COMPOUND ASSIGNMENT ───────────────────────────────────────</span>
+    Complex&amp; operator+=(<span class="kw">const</span> Complex&amp; rhs) {
+        real += rhs.real; imag += rhs.imag;
+        <span class="kw">return</span> *<span class="kw">this</span>;    <span class="cm">// Return *this for chaining: a += b += c</span>
+    }
+
+    <span class="cm">// ── COMPARISON OPERATORS ─────────────────────────────────────</span>
+    <span class="kw">bool</span> operator==(<span class="kw">const</span> Complex&amp; rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> real == rhs.real &amp;&amp; imag == rhs.imag;
+    }
+    <span class="kw">bool</span> operator!=(<span class="kw">const</span> Complex&amp; rhs) <span class="kw">const</span> {
+        <span class="kw">return</span> !(*<span class="kw">this</span> == rhs);   <span class="cm">// Implement != in terms of ==</span>
+    }
+
+    <span class="cm">// ── SUBSCRIPT OPERATOR ───────────────────────────────────────</span>
+    <span class="kw">double</span>&amp; operator[](<span class="kw">int</span> idx) {
+        <span class="kw">if</span> (idx == 0) <span class="kw">return</span> real;
+        <span class="kw">if</span> (idx == 1) <span class="kw">return</span> imag;
+        <span class="kw">throw</span> std::out_of_range("Complex index out of range");
+    }
+    <span class="kw">const double</span>&amp; operator[](<span class="kw">int</span> idx) <span class="kw">const</span> {  <span class="cm">// const version</span>
+        <span class="kw">if</span> (idx == 0) <span class="kw">return</span> real;
+        <span class="kw">if</span> (idx == 1) <span class="kw">return</span> imag;
+        <span class="kw">throw</span> std::out_of_range("Complex index out of range");
+    }
+
+    <span class="cm">// ── PREFIX/POSTFIX INCREMENT ─────────────────────────────────</span>
+    Complex&amp; operator++() {              <span class="cm">// Prefix: ++c  (no param)</span>
+        real++; <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+    Complex operator++(<span class="kw">int</span>) {           <span class="cm">// Postfix: c++  (dummy int param)</span>
+        Complex old = *<span class="kw">this</span>;
+        ++(*<span class="kw">this</span>);
+        <span class="kw">return</span> old;                      <span class="cm">// Return old value (before increment)</span>
+    }
+
+    <span class="cm">// ── CONVERSION OPERATOR ──────────────────────────────────────</span>
+    <span class="kw">explicit</span> operator <span class="kw">double</span>() <span class="kw">const</span> {    <span class="cm">// Complex → double (magnitude)</span>
+        <span class="kw">return</span> std::sqrt(real*real + imag*imag);
+    }
+    <span class="kw">explicit</span> operator <span class="kw">bool</span>() <span class="kw">const</span> {      <span class="cm">// Used in: if(complex_val) ...</span>
+        <span class="kw">return</span> real != 0 || imag != 0;
+    }
+
+    <span class="cm">// ── STREAM OPERATORS (as friend, not member) ─────────────────</span>
+    <span class="kw">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="kw">const</span> Complex&amp; c);
+    <span class="kw">friend</span> std::istream&amp; operator&gt;&gt;(std::istream&amp; is, Complex&amp; c);
+};
+
+<span class="cm">// output operator: must be non-member (left operand is ostream, not Complex)</span>
+std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="kw">const</span> Complex&amp; c) {
+    os &lt;&lt; c.real;
+    <span class="kw">if</span> (c.imag &gt;= 0) os &lt;&lt; "+" &lt;&lt; c.imag &lt;&lt; "i";
+    <span class="kw">else</span>             os &lt;&lt; c.imag &lt;&lt; "i";
+    <span class="kw">return</span> os;   <span class="cm">// Always return os to allow chaining: cout &lt;&lt; a &lt;&lt; b</span>
+}
+
+std::istream&amp; operator&gt;&gt;(std::istream&amp; is, Complex&amp; c) {
+    is &gt;&gt; c.real &gt;&gt; c.imag;
+    <span class="kw">return</span> is;
+}
+
+<span class="cm">// Usage</span>
+Complex a(1, 2), b(3, -1);
+Complex c = a + b;          <span class="cm">// (4, 1)</span>
+std::cout &lt;&lt; c &lt;&lt; "\n";    <span class="cm">// 4+1i</span>
+c += a;                     <span class="cm">// compound assignment</span>
+<span class="kw">bool</span> eq = (a == b);         <span class="cm">// false</span>
+<span class="kw">double</span> mag = <span class="kw">static_cast</span>&lt;<span class="kw">double</span>&gt;(a);  <span class="cm">// explicit conversion to magnitude</span></div>
+    </div>
+
+    <div class="sec" data-m="spaceship">
+      <h2 class="sh">6.3 &nbsp; Spaceship Operator &lt;=&gt; (C++20) <span class="tag tp">Modern C++</span></h2>
+      <p>C++20 introduced the <strong>three-way comparison operator</strong> <code>&lt;=&gt;</code>, nicknamed the "spaceship operator". Define it once and the compiler auto-generates all six comparison operators (<code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code> <code>==</code> <code>!=</code>).</p>
+      <div class="cb"><span class="kw">#include</span> &lt;compare&gt;
+
+<span class="kw">class</span> Version {
+    <span class="kw">int</span> major, minor, patch;
+<span class="kw">public</span>:
+    Version(<span class="kw">int</span> ma, <span class="kw">int</span> mi, <span class="kw">int</span> p) : major(ma), minor(mi), patch(p) {}
+
+    <span class="cm">// Define spaceship — compiler generates all 6 comparison operators</span>
+    <span class="kw">auto</span> operator&lt;=&gt;(<span class="kw">const</span> Version&amp; o) <span class="kw">const</span> = default;
+    <span class="cm">// 'default' uses member-by-member lexicographic comparison</span>
+};
+
+Version v1(1, 2, 3), v2(1, 3, 0);
+v1 &lt; v2;    <span class="cm">// true  — auto-generated</span>
+v1 &gt;= v2;   <span class="cm">// false — auto-generated</span>
+v1 == v2;   <span class="cm">// false — auto-generated</span></div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">6.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Not returning *this from +=</td><td class="bad">void operator+=(…) — breaks a += b += c</td><td class="good">T& operator+=(…) { …; return *this; }</td></tr>
+            <tr><td>Postfix vs prefix return</td><td class="bad">Postfix returning reference *this (returns modified, not old)</td><td class="good">Postfix: save old, increment, return old value (by value)</td></tr>
+            <tr><td>operator== missing const</td><td class="bad">bool operator==(const T& o) — not const, can't call on const objects</td><td class="good">bool operator==(const T& o) const</td></tr>
+            <tr><td>Not returning ostream&amp; from &lt;&lt;</td><td class="bad">void operator&lt;&lt;(ostream, T) — breaks chaining</td><td class="good">ostream& operator&lt;&lt;(ostream& os, const T& t) { …; return os; }</td></tr>
+            <tr><td>Implicit conversion operator</td><td class="bad">operator int() — silently converts where not expected</td><td class="good">explicit operator int() — require static_cast</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 7 — ABSTRACT CLASSES & INTERFACES
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Abstract Classes &amp; Interfaces — <em>Contracts, not Implementations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pure">
+      <h2 class="sh">7.1 &nbsp; Pure Virtual Functions &amp; Abstract Classes <span class="tag tc">Core</span></h2>
+      <p>A <strong>pure virtual function</strong> is declared with <code>= 0</code>. It has no body in the base class — it's a contract saying "every derived class MUST provide this." A class with at least one pure virtual function is an <strong>abstract class</strong> — it <mark>cannot be instantiated directly</mark>.</p>
+      <div class="cb"><span class="kw">class</span> ISerializable {                      <span class="cm">// Pure interface — all pure virtual</span>
+<span class="kw">public</span>:
+    <span class="kw">virtual</span> std::string serialize() <span class="kw">const</span> = 0;
+    <span class="kw">virtual void</span> deserialize(<span class="kw">const</span> std::string&amp; data) = 0;
+    <span class="kw">virtual</span> ~ISerializable() {}              <span class="cm">// Virtual destructor even in interface</span>
+};
+
+<span class="kw">class</span> IDrawable {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> draw() <span class="kw">const</span> = 0;
+    <span class="kw">virtual void</span> resize(<span class="kw">double</span> factor) = 0;
+    <span class="kw">virtual</span> ~IDrawable() {}
+};
+
+<span class="cm">// Concrete class implementing multiple interfaces</span>
+<span class="kw">class</span> Sprite : <span class="kw">public</span> ISerializable, <span class="kw">public</span> IDrawable {
+    <span class="kw">double</span> x, y, scale;
+    std::string texture;
+
+<span class="kw">public</span>:
+    Sprite(<span class="kw">double</span> x, <span class="kw">double</span> y, std::string tex)
+        : x(x), y(y), scale(1.0), texture(tex) {}
+
+    std::string serialize() <span class="kw">const</span> <span class="kw">override</span> {
+        <span class="kw">return</span> texture + ":" + std::to_string(x) + "," + std::to_string(y);
+    }
+
+    <span class="kw">void</span> deserialize(<span class="kw">const</span> std::string&amp; data) <span class="kw">override</span> {
+        <span class="cm">// Parse data and set members...</span>
+    }
+
+    <span class="kw">void</span> draw() <span class="kw">const</span> <span class="kw">override</span> {
+        std::cout &lt;&lt; "Drawing " &lt;&lt; texture &lt;&lt; " at (" &lt;&lt; x &lt;&lt; "," &lt;&lt; y &lt;&lt; ")\n";
+    }
+
+    <span class="kw">void</span> resize(<span class="kw">double</span> factor) <span class="kw">override</span> { scale *= factor; }
+};
+
+<span class="cm">// ISerializable* s = new ISerializable();  ERROR — abstract class!</span>
+ISerializable* s = <span class="kw">new</span> Sprite(0, 0, "hero.png");  <span class="cm">// OK — pointer to interface</span>
+std::cout &lt;&lt; s-&gt;serialize() &lt;&lt; "\n";
+<span class="kw">delete</span> s;</div>
+      <div class="tip-box">
+        <span class="lbl">Pure Virtual with Default Implementation</span>
+        <p>A pure virtual function can still have a body — it's optional. Derived classes must still override it, but they can call the base implementation via <code>Base::func()</code>. This is useful when you want to provide a default behavior that subclasses can choose to reuse.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="design">
+      <h2 class="sh">7.2 &nbsp; Programming to Interfaces — The Power of Abstraction <span class="tag tg">Design Principle</span></h2>
+      <p>The principle: <mark>program to an interface, not an implementation</mark>. Write code against abstract base classes — then swap concrete implementations without changing calling code.</p>
+      <div class="eg">
+        <p><strong>Build a plugin system: swap logging implementations without changing the logger call sites.</strong></p>
+        <div class="cb"><span class="kw">class</span> ILogger {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> log(<span class="kw">const</span> std::string&amp; msg) = 0;
+    <span class="kw">virtual void</span> error(<span class="kw">const</span> std::string&amp; msg) = 0;
+    <span class="kw">virtual</span> ~ILogger() {}
+};
+
+<span class="kw">class</span> ConsoleLogger : <span class="kw">public</span> ILogger {
+<span class="kw">public</span>:
+    <span class="kw">void</span> log(<span class="kw">const</span> std::string&amp; msg) <span class="kw">override</span> {
+        std::cout &lt;&lt; "[LOG] " &lt;&lt; msg &lt;&lt; "\n";
+    }
+    <span class="kw">void</span> error(<span class="kw">const</span> std::string&amp; msg) <span class="kw">override</span> {
+        std::cerr &lt;&lt; "[ERROR] " &lt;&lt; msg &lt;&lt; "\n";
+    }
+};
+
+<span class="kw">class</span> FileLogger : <span class="kw">public</span> ILogger {
+    std::ofstream file;
+<span class="kw">public</span>:
+    FileLogger(<span class="kw">const</span> std::string&amp; path) : file(path, std::ios::app) {}
+    <span class="kw">void</span> log(<span class="kw">const</span> std::string&amp; msg) <span class="kw">override</span> {
+        file &lt;&lt; "[LOG] " &lt;&lt; msg &lt;&lt; "\n";
+    }
+    <span class="kw">void</span> error(<span class="kw">const</span> std::string&amp; msg) <span class="kw">override</span> {
+        file &lt;&lt; "[ERROR] " &lt;&lt; msg &lt;&lt; "\n";
+    }
+};
+
+<span class="cm">// Application class depends only on the INTERFACE — not any concrete logger</span>
+<span class="kw">class</span> Application {
+    ILogger* logger;         <span class="cm">// Pointer to interface — we don't know or care which impl</span>
+<span class="kw">public</span>:
+    Application(ILogger* l) : logger(l) {}
+
+    <span class="kw">void</span> run() {
+        logger-&gt;log("Application started");
+        <span class="cm">// ... business logic ...</span>
+        logger-&gt;log("Application done");
+    }
+};
+
+<span class="cm">// Switch logger with ZERO changes to Application code:</span>
+ConsoleLogger cl;
+Application app1(&amp;cl);
+app1.run();                       <span class="cm">// Logs to console</span>
+
+FileLogger fl("app.log");
+Application app2(&amp;fl);
+app2.run();                       <span class="cm">// Logs to file — same code!</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">7.3 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Instantiating abstract class</td><td class="bad">IShape s; // compile error</td><td class="good">IShape* s = new Circle(...); or use references</td></tr>
+            <tr><td>Forgetting to implement all pure virtuals</td><td class="bad">Derived class missing one pure virtual override — still abstract!</td><td class="good">All pure virtuals must be overridden for class to be concrete</td></tr>
+            <tr><td>No virtual destructor in interface</td><td class="bad">Deleting through interface pointer leaks derived resources</td><td class="good">Always: virtual ~Interface() {} even in pure abstract classes</td></tr>
+            <tr><td>Storing objects in interface containers</td><td class="bad">vector&lt;ILogger&gt; loggers — slicing!</td><td class="good">vector&lt;ILogger*&gt; or vector&lt;unique_ptr&lt;ILogger&gt;&gt;</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 8 — RULE OF FIVE
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Rule of Five &amp; Resource Management — <em>Owning Memory Correctly</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="rule-of-five">
+      <h2 class="sh">8.1 &nbsp; Rule of Zero, Three, and Five <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Rule of Zero</span>
+        <p>If your class doesn't directly manage any resources (no raw pointers to owned memory, no file handles, no locks), <strong>don't define any of the five special functions</strong>. Let the compiler generate them — they'll be correct. Use RAII wrappers (<code>std::vector</code>, <code>std::string</code>, <code>std::unique_ptr</code>) to manage resources.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Rule of Three (pre-C++11)</span>
+        <p>If you need to define any of: <strong>destructor</strong>, <strong>copy constructor</strong>, or <strong>copy assignment operator</strong> — you almost certainly need to define all three. They're all about resource management and they all need to be consistent.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Rule of Five (C++11+)</span>
+        <p>With move semantics, add two more: <strong>move constructor</strong> and <strong>move assignment operator</strong>. If you define any of the five, consider whether you need all five. Defining one suppresses compiler generation of others.</p>
+      </div>
+      <div class="note-box">
+        <span class="lbl">First Principles Walkthrough</span>
+        <p><strong>1. The Disaster (Shallow Copy):</strong> If your object has an <code>int* data_</code> pointing to heap memory, the compiler's default copy just copies the memory address. Now two objects point to the same memory. When they both get destroyed, they both try to <code>delete[] data_</code>. The second one crashes your program (Double Free).<br>
+        <strong>2. The Fix (Copy Constructor):</strong> To fix this, you write a Copy Constructor. Instead of copying the address, it asks the OS for <em>new memory</em>, then copies the actual numbers over (Deep Copy). Safe, but slow for huge data.<br>
+        <strong>3. The Optimization (Move Constructor):</strong> Suppose you create a temporary 10GB Buffer, pass it to a function, and immediately destroy the temporary. Creating a Deep Copy of 10GB is a massive waste of time because the original is about to be thrown away anyway! A Move Constructor fixes this by simply <em>stealing</em> the pointer from the temporary object and setting the temporary's pointer to null. It's an instant, safe transfer of ownership.</p>
+      </div>
+      <div class="cb"><span class="kw">class</span> Buffer {                          <span class="cm">// Owns heap memory — needs all five</span>
+<span class="kw">private</span>:
+    <span class="kw">size_t</span> size_;
+    <span class="kw">int</span>*   data_;
+
+<span class="kw">public</span>:
+    <span class="cm">// 1. Constructor</span>
+    Buffer(<span class="kw">size_t</span> n) : size_(n), data_(<span class="kw">new int</span>[n]()) {
+        std::cout &lt;&lt; "Construct " &lt;&lt; n &lt;&lt; "\n";
+    }
+
+    <span class="cm">// 2. Destructor</span>
+    ~Buffer() {
+        <span class="kw">delete</span>[] data_;
+        std::cout &lt;&lt; "Destruct\n";
+    }
+
+    <span class="cm">// 3. Copy Constructor — deep copy</span>
+    Buffer(<span class="kw">const</span> Buffer&amp; other)
+        : size_(other.size_), data_(<span class="kw">new int</span>[other.size_]) {
+        std::copy(other.data_, other.data_ + size_, data_);
+        std::cout &lt;&lt; "Copy construct\n";
+    }
+
+    <span class="cm">// 4. Copy Assignment — deep copy</span>
+    Buffer&amp; operator=(<span class="kw">const</span> Buffer&amp; other) {
+        <span class="kw">if</span> (<span class="kw">this</span> == &amp;other) <span class="kw">return</span> *<span class="kw">this</span>;   <span class="cm">// Self-assignment check</span>
+        <span class="kw">delete</span>[] data_;                    <span class="cm">// Free existing</span>
+        size_ = other.size_;
+        data_ = <span class="kw">new int</span>[size_];
+        std::copy(other.data_, other.data_ + size_, data_);
+        std::cout &lt;&lt; "Copy assign\n";
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+
+    <span class="cm">// 5. Move Constructor — steal the resource (no copy)</span>
+    Buffer(Buffer&amp;&amp; other) noexcept                <span class="cm">// noexcept: won't throw</span>
+        : size_(other.size_), data_(other.data_) {  <span class="cm">// Take other's pointer</span>
+        other.data_ = <span class="kw">nullptr</span>;                    <span class="cm">// Leave other in valid empty state</span>
+        other.size_ = 0;
+        std::cout &lt;&lt; "Move construct\n";
+    }
+
+    <span class="cm">// 6. Move Assignment — steal the resource</span>
+    Buffer&amp; operator=(Buffer&amp;&amp; other) <span class="kw">noexcept</span> {
+        <span class="kw">if</span> (<span class="kw">this</span> == &amp;other) <span class="kw">return</span> *<span class="kw">this</span>;
+        <span class="kw">delete</span>[] data_;              <span class="cm">// Free current resource</span>
+        data_ = other.data_;         <span class="cm">// Steal other's resource</span>
+        size_ = other.size_;
+        other.data_ = <span class="kw">nullptr</span>;      <span class="cm">// Leave other in valid state</span>
+        other.size_ = 0;
+        std::cout &lt;&lt; "Move assign\n";
+        <span class="kw">return</span> *<span class="kw">this</span>;
+    }
+
+    <span class="kw">int</span>&amp; operator[](<span class="kw">size_t</span> i) { <span class="kw">return</span> data_[i]; }
+    <span class="kw">size_t</span> size() <span class="kw">const</span> { <span class="kw">return</span> size_; }
+};
+
+<span class="kw">int</span> main() {
+    Buffer a(10);           <span class="cm">// Construct 10</span>
+    Buffer b = a;           <span class="cm">// Copy construct</span>
+    Buffer c(20);           <span class="cm">// Construct 20</span>
+    c = a;                  <span class="cm">// Copy assign</span>
+    Buffer d = std::move(a); <span class="cm">// Move construct — a is now empty (data_ = nullptr)</span>
+    c = std::move(b);       <span class="cm">// Move assign</span>
+}   <span class="cm">// All destructors called — no leaks</span></div>
+    </div>
+
+    <div class="sec" data-m="move">
+      <h2 class="sh">8.2 &nbsp; Move Semantics — std::move and Rvalue References <span class="tag tp">Modern C++</span></h2>
+      <p>Move semantics enable transferring ownership of a resource instead of copying it. This is critical for performance with large objects like vectors, strings, and buffers.</p>
+      <div class="cb"><span class="cm">// T&& — rvalue reference (binds to temporaries and std::move'd values)</span>
+<span class="kw">int</span>&amp;&amp; rref = 5;           <span class="cm">// Rvalue reference to literal (contrived example)</span>
+
+Buffer createBuffer() {
+    Buffer temp(1000);
+    <span class="kw">return</span> temp;          <span class="cm">// NRVO or move — no copy of 1000 ints!</span>
+}
+
+Buffer b1 = createBuffer();          <span class="cm">// Move constructor (from temporary return)</span>
+Buffer b2 = std::move(b1);           <span class="cm">// Explicit move — b1 is now in valid empty state</span>
+<span class="cm">// b1.data_ is nullptr now — don't use b1!</span>
+
+<span class="cm">// std::move doesn't "move" anything by itself</span>
+<span class="cm">// It's a CAST to rvalue reference — tells the compiler the object can be moved from</span>
+<span class="cm">// The actual move happens in the move constructor/operator if one exists</span>
+
+<span class="cm">// Perfect forwarding with std::forward (advanced — see File 03)</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+<span class="kw">void</span> wrapper(T&amp;&amp; arg) {
+    process(std::forward&lt;T&gt;(arg));  <span class="cm">// Forwards as lvalue or rvalue as appropriate</span>
+}</div>
+      <div class="tip-box">
+        <span class="lbl">noexcept on Move Operations</span>
+        <p>Always mark move constructor and move assignment <code>noexcept</code>. The STL (e.g., <code>std::vector::push_back</code>) will only use your move operations if they're <code>noexcept</code> — otherwise it falls back to copying for exception safety. A move that doesn't throw should always be declared <code>noexcept</code>.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.3 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Using moved-from object</td><td class="bad">Buffer b2 = move(b1); b1[0]; — b1.data_ is nullptr!</td><td class="good">After move, treat moved-from object as valid but unspecified state — don't use it</td></tr>
+            <tr><td>Missing noexcept on move</td><td class="bad">Buffer(Buffer&&) — vector resizes use copy, not move!</td><td class="good">Buffer(Buffer&&) noexcept — enables STL optimizations</td></tr>
+            <tr><td>Defining destructor suppresses move</td><td class="bad">Define ~Foo() {} → compiler suppresses move operations → copies!</td><td class="good">Explicitly = default move operations: Foo(Foo&&) noexcept = default;</td></tr>
+            <tr><td>std::move on return value</td><td class="bad">return std::move(local); — prevents NRVO (actually slower!)</td><td class="good">return local; — compiler applies NRVO or implicit move</td></tr>
+            <tr><td>Rule of Zero violation</td><td class="bad">Class has a raw pointer member, no copy/move defined → shallow copy bugs</td><td class="good">Wrap in unique_ptr and follow Rule of Zero, or implement all five</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 9 — OOP DESIGN PRINCIPLES (SOLID)
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">OOP Design Principles — <em>SOLID, Composition &amp; Patterns</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="solid">
+      <h2 class="sh">9.1 &nbsp; SOLID Principles <span class="tag tg">Essential for Interviews</span></h2>
+      <h3 class="ssh">S — Single Responsibility Principle</h3>
+      <p>A class should have exactly <strong>one reason to change</strong>. If a class handles business logic, database saving, and UI rendering, a change in the UI will force you to recompile and retest the database logic. By separating concerns, your code becomes modular, testable, and robust against cascading changes.</p>
+      <div class="cb"><span class="cm">// BAD: User class does everything</span>
+<span class="kw">class</span> User {
+    std::string name;
+<span class="kw">public</span>:
+    <span class="kw">void</span> updateName(std::string n) { name = n; }  <span class="cm">// Logic</span>
+    <span class="kw">void</span> saveToDB() { <span class="cm">/* SQL code... */</span> }         <span class="cm">// DB logic</span>
+};
+
+<span class="cm">// GOOD: Split responsibilities</span>
+<span class="kw">class</span> User {
+    std::string name;
+<span class="kw">public</span>:
+    <span class="kw">void</span> updateName(std::string n) { name = n; }
+};
+
+<span class="kw">class</span> UserRepository {
+<span class="kw">public</span>:
+    <span class="kw">void</span> save(<span class="kw">const</span> User&amp; u) { <span class="cm">/* SQL code... */</span> }
+};</div>
+
+      <h3 class="ssh">O — Open/Closed Principle</h3>
+      <p>Software entities should be <strong>open for extension, but closed for modification</strong>. When requirements change, you should be able to add new functionality by writing <em>new</em> code, not by modifying <em>existing</em>, already-tested code. Modifying existing code risks breaking things that already work.</p>
+      <div class="cb"><span class="cm">// BAD: Modifying existing logic for every new shape</span>
+<span class="kw">void</span> drawShape(int type) {
+    <span class="kw">if</span> (type == 1) drawCircle();
+    <span class="kw">else if</span> (type == 2) drawSquare();
+    <span class="cm">// Adding a Triangle means modifying this function!</span>
+}
+
+<span class="cm">// GOOD: Open for extension (new classes), closed for modification (no if-else)</span>
+<span class="kw">class</span> Shape { <span class="kw">public</span>: <span class="kw">virtual void</span> draw() = 0; };
+<span class="kw">class</span> Circle : <span class="kw">public</span> Shape { <span class="kw">public</span>: <span class="kw">void</span> draw() <span class="kw">override</span> { <span class="cm">/*...*/</span> } };
+<span class="kw">void</span> drawShape(Shape&amp; s) { s.draw(); } <span class="cm">// Never needs to change!</span></div>
+
+      <h3 class="ssh">L — Liskov Substitution Principle</h3>
+      <p>If a program works with objects of a base class, it should also work with objects of any derived class <strong>without altering the correctness of the program</strong>. If a subclass overrides a method to do something completely unexpected, or throws an exception where the base class wouldn't, it violates LSP and creates bugs for callers relying on the base interface.</p>
+      <div class="cb"><span class="cm">// BAD: Square breaks Rectangle's mathematical invariants</span>
+<span class="kw">class</span> Rectangle {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> setWidth(<span class="kw">int</span> w) { width = w; }
+    <span class="kw">virtual void</span> setHeight(<span class="kw">int</span> h) { height = h; }
+};
+<span class="kw">class</span> Square : <span class="kw">public</span> Rectangle {
+<span class="kw">public</span>:
+    <span class="cm">// Forces both to change, violating what a user of Rectangle expects!</span>
+    <span class="kw">void</span> setWidth(<span class="kw">int</span> w) <span class="kw">override</span> { width = w; height = w; }
+};
+<span class="cm">// A function expecting a Rectangle might change width and expect the</span>
+<span class="cm">// height to stay the same. Square breaks this assumption!</span>
+
+<span class="cm">// GOOD: Don't force an IS-A relationship if invariants conflict.</span>
+<span class="cm">// A Square is mathematically a Rectangle, but behaviorally it is NOT.</span>
+<span class="cm">// Keep them separate or make them immutable.</span></div>
+
+      <h3 class="ssh">I — Interface Segregation Principle</h3>
+      <p>A client should never be forced to depend on methods it doesn't use. Fat, monolithic interfaces force implementing classes to create dummy or empty methods, cluttering the code and coupling unrelated systems. Break interfaces down into small, highly cohesive roles.</p>
+      <div class="cb"><span class="cm">// BAD: A fat interface</span>
+<span class="kw">class</span> IMachine {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> print() = 0;
+    <span class="kw">virtual void</span> scan() = 0;
+    <span class="kw">virtual void</span> fax() = 0;
+};
+<span class="cm">// A BasicPrinter has to implement scan() and fax() just to throw errors!</span>
+
+<span class="cm">// GOOD: Segregated interfaces</span>
+<span class="kw">class</span> IPrinter { <span class="kw">public</span>: <span class="kw">virtual void</span> print() = 0; };
+<span class="kw">class</span> IScanner { <span class="kw">public</span>: <span class="kw">virtual void</span> scan() = 0; };
+
+<span class="kw">class</span> BasicPrinter : <span class="kw">public</span> IPrinter { <span class="cm">/* only implements print */</span> };
+<span class="kw">class</span> AdvancedCopier : <span class="kw">public</span> IPrinter, <span class="kw">public</span> IScanner { <span class="cm">/* both */</span> };</div>
+
+      <h3 class="ssh">D — Dependency Inversion Principle</h3>
+      <p>High-level modules should not depend on low-level modules; both should depend on <strong>abstractions</strong>. Abstractions should not depend on details; details should depend on abstractions. This means you should inject dependencies via interfaces (like a database connection), rather than hardcoding concrete classes inside your business logic.</p>
+      <div class="cb"><span class="cm">// BAD: Business logic is tightly coupled to a specific database tool</span>
+<span class="kw">class</span> MySQLDatabase { <span class="kw">public</span>: <span class="kw">void</span> insert() { } };
+<span class="kw">class</span> App {
+    MySQLDatabase db;  <span class="cm">// Hard dependency! Can't test independent of MySQL.</span>
+<span class="kw">public</span>:
+    <span class="kw">void</span> save() { db.insert(); }
+};
+
+<span class="cm">// GOOD: App depends on an abstraction.</span>
+<span class="kw">class</span> IDatabase { <span class="kw">public</span>: <span class="kw">virtual void</span> insert() = 0; };
+<span class="kw">class</span> App {
+    IDatabase* db;     <span class="cm">// Depends on abstraction. Can inject a MockDatabase!</span>
+<span class="kw">public</span>:
+    App(IDatabase* injected_db) : db(injected_db) {}
+    <span class="kw">void</span> save() { db-&gt;insert(); }
+};</div>
+    </div>
+
+    <div class="sec" data-m="composition">
+      <h2 class="sh">9.2 &nbsp; Composition over Inheritance <span class="tag tc">Design Rule</span></h2>
+      <p>Inheritance models <em>IS-A</em>. Composition models <em>HAS-A</em>. Prefer composition — it's more flexible, avoids tight coupling, and doesn't require deep inheritance hierarchies.</p>
+      <div class="cb"><span class="cm">// BAD: Inheritance when IS-A is questionable</span>
+<span class="kw">class</span> Engine { <span class="kw">public</span>: <span class="kw">void</span> start(); <span class="kw">void</span> stop(); };
+<span class="kw">class</span> Car : <span class="kw">public</span> Engine { ... };  <span class="cm">// Car IS-A Engine? Wrong! Car HAS-A Engine.</span>
+
+<span class="cm">// GOOD: Composition</span>
+<span class="kw">class</span> Engine {
+<span class="kw">public</span>:
+    <span class="kw">void</span> start() { std::cout &lt;&lt; "Engine started\n"; }
+    <span class="kw">void</span> stop()  { std::cout &lt;&lt; "Engine stopped\n"; }
+    <span class="kw">int</span>  getRPM() <span class="kw">const</span>;
+};
+
+<span class="kw">class</span> GPS {
+<span class="kw">public</span>:
+    std::pair&lt;<span class="kw">double</span>,<span class="kw">double</span>&gt; getLocation() <span class="kw">const</span>;
+    <span class="kw">void</span> navigate(std::string destination);
+};
+
+<span class="kw">class</span> Car {
+<span class="kw">private</span>:
+    Engine engine;   <span class="cm">// Composition: Car HAS-A Engine</span>
+    GPS gps;         <span class="cm">// Car HAS-A GPS</span>
+    std::string model;
+
+<span class="kw">public</span>:
+    <span class="kw">void</span> startCar() {
+        engine.start();         <span class="cm">// Delegate to Engine</span>
+        gps.navigate("Home");   <span class="cm">// Delegate to GPS</span>
+    }
+    <span class="kw">int</span> getEngineRPM() <span class="kw">const</span> { <span class="kw">return</span> engine.getRPM(); }
+};
+<span class="cm">// Can swap Engine implementation without touching Car!
+// Can have Car without GPS (optional member) easily.
+// Inheritance would have locked you in.</span></div>
+    </div>
+
+    <div class="sec" data-m="patterns">
+      <h2 class="sh">9.3 &nbsp; Essential Design Patterns in C++ <span class="tag tp">Senior Level</span></h2>
+      <h3 class="ssh">Singleton — One Instance</h3>
+      <div class="cb"><span class="kw">class</span> Config {
+<span class="kw">private</span>:
+    Config() {}                                    <span class="cm">// Private constructor</span>
+    Config(<span class="kw">const</span> Config&amp;) = <span class="kw">delete</span>;              <span class="cm">// No copy</span>
+    Config&amp; operator=(<span class="kw">const</span> Config&amp;) = <span class="kw">delete</span>;  <span class="cm">// No copy assign</span>
+
+<span class="kw">public</span>:
+    <span class="kw">static</span> Config&amp; getInstance() {
+        <span class="kw">static</span> Config instance;   <span class="cm">// Thread-safe in C++11 (magic static)</span>
+        <span class="kw">return</span> instance;
+    }
+    std::string get(<span class="kw">const</span> std::string&amp; key) { <span class="cm">/* ... */</span> }
+};
+
+Config&amp; cfg = Config::getInstance();
+<span class="cm">// Config cfg2 = Config::getInstance();  OK — it's a reference, not a copy</span></div>
+      <h3 class="ssh">Factory Method — Create Without Knowing the Concrete Type</h3>
+      <div class="cb"><span class="kw">class</span> Button {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> render() = 0;
+    <span class="kw">virtual</span> ~Button() {}
+
+    <span class="cm">// Factory method — returns the right Button for the platform</span>
+    <span class="kw">static</span> std::unique_ptr&lt;Button&gt; create(std::string platform);
+};
+
+<span class="kw">class</span> WindowsButton : <span class="kw">public</span> Button {
+<span class="kw">public</span>:
+    <span class="kw">void</span> render() <span class="kw">override</span> { std::cout &lt;&lt; "Windows button\n"; }
+};
+
+<span class="kw">class</span> MacButton : <span class="kw">public</span> Button {
+<span class="kw">public</span>:
+    <span class="kw">void</span> render() <span class="kw">override</span> { std::cout &lt;&lt; "Mac button\n"; }
+};
+
+std::unique_ptr&lt;Button&gt; Button::create(std::string platform) {
+    <span class="kw">if</span> (platform == "windows") <span class="kw">return</span> std::make_unique&lt;WindowsButton&gt;();
+    <span class="kw">if</span> (platform == "mac")     <span class="kw">return</span> std::make_unique&lt;MacButton&gt;();
+    <span class="kw">throw</span> std::invalid_argument("Unknown platform: " + platform);
+}
+
+<span class="kw">auto</span> btn = Button::create("windows");
+btn-&gt;render();   <span class="cm">// "Windows button" — caller doesn't know it's a WindowsButton</span></div>
+      <h3 class="ssh">Observer — Decouple Event Emitters from Listeners</h3>
+      <div class="cb"><span class="kw">class</span> IObserver {
+<span class="kw">public</span>:
+    <span class="kw">virtual void</span> update(<span class="kw">const</span> std::string&amp; event) = 0;
+    <span class="kw">virtual</span> ~IObserver() {}
+};
+
+<span class="kw">class</span> EventEmitter {
+    std::vector&lt;IObserver*&gt; observers;
+<span class="kw">public</span>:
+    <span class="kw">void</span> subscribe(IObserver* o) { observers.push_back(o); }
+    <span class="kw">void</span> unsubscribe(IObserver* o) {
+        observers.erase(std::remove(observers.begin(), observers.end(), o), observers.end());
+    }
+    <span class="kw">void</span> emit(<span class="kw">const</span> std::string&amp; event) {
+        <span class="kw">for</span> (<span class="kw">auto</span>* o : observers) o-&gt;update(event);
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">9.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Anti-Pattern</th><th>Problem</th><th>Solution</th></tr></thead>
+          <tbody>
+            <tr><td>God Class</td><td class="bad">One class does everything — 5000 lines</td><td class="good">Split into focused classes by responsibility (SRP)</td></tr>
+            <tr><td>Deep inheritance hierarchy</td><td class="bad">6+ levels deep — fragile, hard to understand</td><td class="good">Prefer composition; keep hierarchies max 2-3 levels</td></tr>
+            <tr><td>Shotgun surgery</td><td class="bad">One change requires editing 20 files</td><td class="good">Encapsulate change behind interfaces</td></tr>
+            <tr><td>Singleton overuse</td><td class="bad">Singletons everywhere = hidden global state, untestable</td><td class="good">Use dependency injection instead; singletons for truly global resources only</td></tr>
+            <tr><td>Concrete dependency</td><td class="bad">Class A holds a FileLogger — can't unit test without files</td><td class="good">Class A holds ILogger* — inject MockLogger in tests</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CHAPTER 10 — TRAPS & MASTER REFERENCE
+═════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">Traps &amp; Master Reference — <em>The Complete OOP Cheatsheet</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="special-functions">
+      <h2 class="sh">10.1 &nbsp; Compiler-Generated Special Functions Reference <span class="tag tc">Cheatsheet</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>You Define</th><th>Compiler Generates Default:</th><th>Compiler Suppresses:</th></tr></thead>
+          <tbody>
+            <tr><td>Nothing</td><td class="good">All 6 (default ctor, copy ctor, copy=, move ctor, move=, dtor)</td><td>—</td></tr>
+            <tr><td>Any constructor</td><td>—</td><td class="bad">Default constructor</td></tr>
+            <tr><td>Destructor</td><td>Copy ctor, copy=</td><td class="bad">Move ctor, move= (deprecated)</td></tr>
+            <tr><td>Copy constructor</td><td>Copy assignment</td><td class="bad">Move ctor, move=</td></tr>
+            <tr><td>Copy assignment</td><td>Copy constructor</td><td class="bad">Move ctor, move=</td></tr>
+            <tr><td>Move constructor</td><td>—</td><td class="bad">Copy ctor, copy= (deleted!)</td></tr>
+            <tr><td>Move assignment</td><td>—</td><td class="bad">Copy ctor, copy= (deleted!)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">Use = default and = delete Explicitly</span>
+        <p>Rather than relying on implicit generation rules (which are complex), be explicit: <code>Foo(const Foo&amp;) = default;</code> to explicitly request compiler generation, and <code>Foo(const Foo&amp;) = delete;</code> to explicitly prohibit copying. This is clearer and immune to the suppress rules above.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="oop-bugs">
+      <h2 class="sh">10.2 &nbsp; Top OOP Bugs Reference <span class="tag tg">Must Know</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Bug</th><th>Catch Phrase</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Object Slicing</td><td class="bad">Base b = derived; — derived data lost</td><td class="good">Always use Base* or Base& for polymorphism</td></tr>
+            <tr><td>2</td><td>Missing virtual destructor</td><td class="bad">delete base_ptr; → derived dtor never called</td><td class="good">virtual ~Base() {} in every polymorphic base</td></tr>
+            <tr><td>3</td><td>Shallow copy</td><td class="bad">Two objects share same pointer → double free</td><td class="good">Deep copy constructor, or use unique_ptr (Rule of Zero)</td></tr>
+            <tr><td>4</td><td>Self-assignment not handled</td><td class="bad">a = a; deletes data before copying from self</td><td class="good">if (this == &other) return *this; at top of op=</td></tr>
+            <tr><td>5</td><td>Virtual call in constructor</td><td class="bad">Dispatches to base, not derived (vtable not set up yet)</td><td class="good">Never rely on virtual dispatch in ctor/dtor</td></tr>
+            <tr><td>6</td><td>Hiding, not overriding</td><td class="bad">Non-virtual base function "overridden" — wrong version called</td><td class="good">virtual in base + override in derived</td></tr>
+            <tr><td>7</td><td>Not calling base constructor</td><td class="bad">Base member default-initialized or not initialized</td><td class="good">Derived() : Base(args) {} always chain explicitly</td></tr>
+            <tr><td>8</td><td>No self-assignment in move</td><td class="bad">move(a, a) — frees memory before stealing it</td><td class="good">if (this == &other) return *this; in move op= too</td></tr>
+            <tr><td>9</td><td>Using moved-from object</td><td class="bad">Dereferences nullptr after move</td><td class="good">Treat moved-from as unspecified; don't use it</td></tr>
+            <tr><td>10</td><td>Diamond ambiguity</td><td class="bad">Two copies of base class, ambiguous member access</td><td class="good">Virtual inheritance for shared base in diamond</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="summary-cards">
+      <h2 class="sh">10.3 &nbsp; OOP Quick-Reference Cards <span class="tag tc">Reference</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Virtual Keywords</div>
+          <p><code>virtual</code> — enables dynamic dispatch<br>
+          <code>virtual f() = 0</code> — pure virtual<br>
+          <code>override</code> — verify overrides virtual<br>
+          <code>final</code> — prevents further override/inherit<br>
+          <code>virtual ~Base()</code> — always in base</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Access Quick Ref</div>
+          <p><code>public</code> — anyone<br>
+          <code>protected</code> — class + subclasses<br>
+          <code>private</code> — class only<br>
+          <code>friend</code> — named class/function<br>
+          struct default: public<br>
+          class default: private</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Special Functions</div>
+          <p>Ctor, copy ctor, copy=<br>
+          move ctor, move=, dtor<br>
+          <code>= default</code> — request generation<br>
+          <code>= delete</code> — prohibit<br>
+          Prefer Rule of Zero</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Cast Operators</div>
+          <p><code>static_cast&lt;T&gt;(x)</code> — compile-time<br>
+          <code>dynamic_cast&lt;T*&gt;(p)</code> — RTTI, safe<br>
+          <code>const_cast&lt;T&gt;(x)</code> — add/remove const<br>
+          <code>reinterpret_cast&lt;T&gt;(x)</code> — raw bits<br>
+          Prefer static_cast; avoid C-cast (T)x</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Key Idioms</div>
+          <p>RAII — resource in ctor, free in dtor<br>
+          Pimpl — hide implementation in private impl<br>
+          CRTP — Curiously Recurring Template Pattern<br>
+          NVI — Non-Virtual Interface<br>
+          Dependency Injection — pass dependencies in</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">SOLID in One Line Each</div>
+          <p>S: One reason to change<br>
+          O: Extend without modifying<br>
+          L: Substitutable subtype<br>
+          I: Small focused interfaces<br>
+          D: Depend on abstractions</p>
+        </div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Reference · File 02 of 05 · OOP Mastery</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-02-oop';
+  var FILE_DISP = '02 · OOP Mastery';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

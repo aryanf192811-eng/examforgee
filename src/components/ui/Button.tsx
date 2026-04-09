@@ -1,60 +1,89 @@
-import { type ButtonHTMLAttributes } from 'react';
+import { type ReactNode, type ButtonHTMLAttributes } from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'tertiary';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
+  size?: ButtonSize;
   icon?: string;
   iconRight?: string;
-  isLoading?: boolean;
+  loading?: boolean;
+  isLoading?: boolean; // legacy alias
+  fullWidth?: boolean;
+  children?: ReactNode;
 }
 
-const variants: Record<ButtonVariant, string> = {
+const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'academic-gradient text-white sakura-glow hover:scale-[1.02] active:scale-[0.98] transition-transform',
+    'gradient-cta text-on-primary font-semibold glow-primary hover:opacity-90',
   secondary:
-    'bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors border border-outline-variant/10',
+    'bg-surface-container-high text-on-surface hover:bg-surface-container-highest border border-outline-variant/10',
   tertiary:
-    'bg-transparent text-primary hover:bg-primary/5 transition-colors',
-  destructive:
-    'bg-error/10 text-error hover:bg-error/20 transition-colors',
+    'bg-transparent text-primary hover:bg-primary/5',
   ghost:
-    'bg-transparent text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors',
+    'bg-transparent text-on-surface-variant hover:bg-surface-container',
+  destructive:
+    'bg-error-container text-on-error-container hover:opacity-90',
 };
 
+const sizeClasses: Record<ButtonSize, string> = {
+  sm: 'px-3 py-1.5 text-label-md rounded-lg gap-1.5',
+  md: 'px-5 py-2.5 text-label-lg rounded-xl gap-2',
+  lg: 'px-7 py-3.5 text-title-md rounded-2xl gap-2.5',
+};
+
+/**
+ * Button component — the primary action element of the Atelier design system.
+ * Supports spring-based motion feedback and multiple stylistic variants.
+ */
 export function Button({
   variant = 'primary',
+  size = 'md',
   icon,
   iconRight,
-  isLoading,
+  loading = false,
+  isLoading = false,
+  fullWidth = false,
   children,
   className,
   disabled,
   ...props
 }: ButtonProps) {
+  const isActuallyLoading = loading || isLoading;
+  
+  // Omit conflicting props from framer-motion to avoid runtime warnings
+  const { onAnimationStart, onDrag, onDragStart, onDragEnd, ...rest } = props as any;
+
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: disabled || isActuallyLoading ? 1 : 1.02 }}
+      whileTap={{ scale: disabled || isActuallyLoading ? 1 : 0.97 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 17 }}
       className={cn(
-        'rounded-full px-6 py-3 font-label font-semibold text-sm',
-        'flex items-center justify-center gap-2',
-        'disabled:opacity-50 disabled:cursor-not-allowed',
-        'transition-all duration-200',
-        variants[variant],
+        'inline-flex items-center justify-center spring-transition transition-all duration-200 cursor-pointer select-none',
+        variantClasses[variant] || variantClasses.primary,
+        sizeClasses[size],
+        fullWidth && 'w-full',
+        (disabled || isActuallyLoading) && 'opacity-50 cursor-not-allowed',
         className
       )}
-      disabled={disabled || isLoading}
-      {...props}
+      disabled={disabled || isActuallyLoading}
+      {...rest}
     >
-      {isLoading ? (
-        <span className="material-symbols-outlined animate-spin text-base">progress_activity</span>
+      {isActuallyLoading ? (
+        <span className="material-symbols-outlined animate-spin text-[18px]">
+          progress_activity
+        </span>
       ) : icon ? (
-        <span className="material-symbols-outlined text-base">{icon}</span>
+        <span className="material-symbols-outlined text-[18px]">{icon}</span>
       ) : null}
       {children}
-      {iconRight && !isLoading && (
-        <span className="material-symbols-outlined text-base">{iconRight}</span>
+      {iconRight && !isActuallyLoading && (
+        <span className="material-symbols-outlined text-[18px]">{iconRight}</span>
       )}
-    </button>
+    </motion.button>
   );
 }

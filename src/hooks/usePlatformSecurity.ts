@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 
-export function usePlatformSecurity() {
+/**
+ * Platform security hook — debugger trap pattern.
+ * Standard DevTools detection via debugger statement.
+ * 
+ * Call this ONCE in App.tsx.
+ */
+export function usePlatformSecurity(): void {
   useEffect(() => {
-    if (import.meta.env.DEV) return; // Skip in development
+    if (import.meta.env.DEV) return;
 
-    const trap = () => {
-      const start = performance.now();
+    const interval = setInterval(() => {
       // eslint-disable-next-line no-debugger
       debugger;
-      if (performance.now() - start > 100) {
-        document.body.innerHTML = '';
-        window.location.href = '/';
-      }
-    };
-    const interval = setInterval(trap, 1000);
+    }, 1000);
+
     return () => clearInterval(interval);
   }, []);
 }

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithms — DP, Greedy & Divide-Conquer · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;} .cb .fn{color:var(--purple);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.dp-table{overflow-x:auto;margin:14px 0;}
+.dp-table table{font-family:'Courier New',monospace;font-size:13.5px;}
+.dp-table th{font-family:var(--hand);font-size:11px;padding:7px 10px;text-align:center;}
+.dp-table td{padding:6px 10px;text-align:center;border:1px solid #d0c0a0;}
+.dp-table .hl{background:var(--hl-y);font-weight:bold;}
+.dp-table .trace{background:var(--hl-b);}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Algorithms</div>
+    <h1>DP, Greedy<br><em>&amp; Divide-Conquer</em></h1>
+    <p class="cover-desc">
+      Dynamic programming from first principles through LCS, LIS, 0/1 Knapsack, and Matrix Chain Multiplication — then greedy algorithms with proof of correctness — then Divide & Conquer with recurrence analysis. Every GATE pattern, every trap.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · DP — Foundations</span>
+      <span class="chip">Ch 2 · Classic DP Problems</span>
+      <span class="chip">Ch 3 · Advanced DP</span>
+      <span class="chip">Ch 4 · Greedy — Foundations &amp; Correctness</span>
+      <span class="chip">Ch 5 · Classic Greedy Problems</span>
+      <span class="chip">Ch 6 · Divide &amp; Conquer</span>
+      <span class="chip">Ch 7 · NP-Completeness</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Dynamic Programming — Foundations</a>
+    <a href="#ch2"><span class="tn">02</span>Classic DP Problems</a>
+    <a href="#ch3"><span class="tn">03</span>Advanced DP Problems</a>
+    <a href="#ch4"><span class="tn">04</span>Greedy — Foundations &amp; Proofs</a>
+    <a href="#ch5"><span class="tn">05</span>Classic Greedy Problems</a>
+    <a href="#ch6"><span class="tn">06</span>Divide &amp; Conquer</a>
+    <a href="#ch7"><span class="tn">07</span>NP-Completeness</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — DP FOUNDATIONS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Dynamic Programming — <em>Foundations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dp-idea">
+      <h2 class="sh">1.1 &nbsp; The Core Idea — When and Why DP Works <span class="tag tc">Core</span></h2>
+      <p>
+        Dynamic programming (DP) applies to optimization and counting problems that have two key properties. Without both, DP either doesn't apply or doesn't help.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Optimal Substructure</span>
+        <p>An optimal solution to the problem contains within it optimal solutions to subproblems. That is, you can build the global optimum by combining locally optimal subproblem solutions. This is what allows a DP recurrence to be correct.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Overlapping Subproblems</span>
+        <p>The recursive solution solves the same subproblems repeatedly. If subproblems were all distinct, simple divide-and-conquer would suffice. DP gains its power by storing and reusing subproblem solutions instead of recomputing them.</p>
+      </div>
+
+      <p>
+        The naive recursive Fibonacci — T(n) = T(n−1)+T(n−2)+O(1) — solves F(n−2) repeatedly across different branches of the recursion tree. The number of calls is exponential (Θ(φⁿ)). DP stores each F(k) once, reducing time to Θ(n). This is the canonical example of both properties.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Top-Down (Memoization)</div>
+          <p>Write the recursive solution. Cache results in a table. On each call, check the cache first — if found, return immediately. Natural to write, uses only the subproblems that are actually needed.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Bottom-Up (Tabulation)</div>
+          <p>Fill the DP table iteratively from smallest subproblems to largest. No recursion overhead. Better cache performance. Requires knowing the subproblem dependency order.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dp-steps">
+      <h2 class="sh">1.2 &nbsp; The Four-Step DP Design Process <span class="tag tg">GATE Framework</span></h2>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div><strong>Define the subproblem.</strong> What does dp[i] or dp[i][j] represent? Make it precise. "dp[i] = the length of the longest increasing subsequence ending at index i."</div></li>
+        <li><div class="pl-num">2</div><div><strong>Write the recurrence.</strong> How does dp[i] relate to smaller subproblems? Enumerate the choices at each step and express dp[i] in terms of previously computed values.</div></li>
+        <li><div class="pl-num">3</div><div><strong>Identify base cases.</strong> What are the smallest subproblems with known answers? These seed the table.</div></li>
+        <li><div class="pl-num">4</div><div><strong>Determine the fill order and extract the answer.</strong> Ensure when computing dp[i], all dp[j] it depends on are already computed. Identify which entry in the table is the final answer.</div></li>
+      </ol>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — CLASSIC DP ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Classic DP Problems — <em>LCS, LIS &amp; 0/1 Knapsack</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="lcs">
+      <h2 class="sh">2.1 &nbsp; Longest Common Subsequence (LCS) <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem Statement</span>
+        <p>Given two sequences X = x₁x₂...xₘ and Y = y₁y₂...yₙ, find the length of their longest common subsequence. A subsequence is obtained by deleting some (or zero) characters without changing order — it need not be contiguous.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Recurrence</span>
+        <p>Let dp[i][j] = length of LCS of X[1..i] and Y[1..j].<br>
+        Base: dp[0][j] = 0, dp[i][0] = 0 (empty prefix has LCS 0).<br>
+        If X[i] == Y[j]: dp[i][j] = dp[i−1][j−1] + 1<br>
+        Else: dp[i][j] = max(dp[i−1][j], dp[i][j−1])</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>LCS of X = "ABCBDAB" and Y = "BDCABA"</strong></p>
+        <div class="dp-table">
+          <table>
+            <thead><tr><th></th><th>∅</th><th>B</th><th>D</th><th>C</th><th>A</th><th>B</th><th>A</th></tr></thead>
+            <tbody>
+              <tr><td>∅</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>A</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="hl">1</td><td>1</td><td class="hl">1</td></tr>
+              <tr><td>B</td><td>0</td><td class="hl">1</td><td>1</td><td>1</td><td>1</td><td class="hl">2</td><td>2</td></tr>
+              <tr><td>C</td><td>0</td><td>1</td><td>1</td><td class="hl">2</td><td>2</td><td>2</td><td>2</td></tr>
+              <tr><td>B</td><td>0</td><td>1</td><td>1</td><td>2</td><td>2</td><td class="hl">3</td><td>3</td></tr>
+              <tr><td>D</td><td>0</td><td>1</td><td class="hl">2</td><td>2</td><td>2</td><td>3</td><td>3</td></tr>
+              <tr><td>A</td><td>0</td><td>1</td><td>2</td><td>2</td><td class="hl">3</td><td>3</td><td class="hl">4</td></tr>
+              <tr><td>B</td><td>0</td><td>1</td><td>2</td><td>2</td><td>3</td><td class="hl">4</td><td>4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>LCS length = 4. One LCS = "BCBA". Time: Θ(mn). Space: Θ(mn), reducible to Θ(n) by keeping only two rows.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">LCS → Edit Distance Connection</span>
+        <p>Edit distance (minimum insertions + deletions to convert X to Y) = (m − LCS) + (n − LCS) = m + n − 2·LCS. If substitutions are also allowed (cost 1), use a different DP. GATE sometimes asks for edit distance — reduce it to LCS.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="lis">
+      <h2 class="sh">2.2 &nbsp; Longest Increasing Subsequence (LIS) <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem &amp; Recurrence</span>
+        <p>Given sequence A[1..n], find the length of the longest strictly increasing subsequence.<br>
+        Let dp[i] = length of LIS ending at index i.<br>
+        dp[i] = 1 + max{dp[j] | j &lt; i and A[j] &lt; A[i]}, with dp[i]=1 if no such j exists.<br>
+        Answer = max(dp[1], dp[2], ..., dp[n]).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>A = [10, 9, 2, 5, 3, 7, 101, 18]</strong></p>
+        <div class="cb">dp[1]=1 (10)
+dp[2]=1 (9 — nothing before 9 is smaller)
+dp[3]=1 (2 — nothing before 2 is smaller)
+dp[4]=2 (5 — 2<5, dp[3]+1=2)
+dp[5]=2 (3 — 2<3, dp[3]+1=2)
+dp[6]=3 (7 — 2<3<7... best: dp[5]+1=3 or dp[4]+1=3)
+dp[7]=4 (101 — 2<5<7<101, dp[6]+1=4)
+dp[8]=4 (18 — 2<5<7<18, dp[6]+1=4)
+
+Answer = max(dp) = 4. LIS = [2, 3, 7, 18] or [2, 5, 7, 18]</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Approach</th><th>Time</th><th>Space</th></tr></thead>
+          <tbody>
+            <tr><td>DP (O(n²))</td><td class="ok">O(n²)</td><td class="good">O(n)</td></tr>
+            <tr><td>DP + Patience Sorting / Binary Search</td><td class="good">O(n log n)</td><td class="good">O(n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">LIS in O(n log n) — Patience Sorting Idea</span>
+        <p>Maintain an array <code>tails</code> where tails[k] = smallest tail element of all increasing subsequences of length k+1 found so far. For each new element, binary search in tails for the first element ≥ current, replace it (or extend). Length of tails at the end = LIS length. GATE rarely tests the O(n log n) implementation but does test the O(n log n) complexity claim.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="knapsack">
+      <h2 class="sh">2.3 &nbsp; 0/1 Knapsack Problem <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem Statement</span>
+        <p>Given n items, each with weight wᵢ and value vᵢ, and a knapsack of capacity W. Select a subset of items to maximize total value such that total weight ≤ W. Each item is taken at most once (0/1 — binary choice).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Recurrence</span>
+        <p>dp[i][w] = maximum value using first i items with weight capacity exactly w.<br>
+        Base: dp[0][w] = 0 (no items), dp[i][0] = 0 (zero capacity).<br>
+        If wᵢ &gt; w: dp[i][w] = dp[i−1][w] (can't include item i)<br>
+        Else: dp[i][w] = max(dp[i−1][w], dp[i−1][w−wᵢ] + vᵢ)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Items: (w=2,v=6), (w=2,v=10), (w=3,v=12). Capacity W=5.</strong></p>
+        <div class="dp-table">
+          <table>
+            <thead><tr><th>Item</th><th>w=0</th><th>w=1</th><th>w=2</th><th>w=3</th><th>w=4</th><th>w=5</th></tr></thead>
+            <tbody>
+              <tr><td>None</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+              <tr><td>Item 1 (2,6)</td><td>0</td><td>0</td><td>6</td><td>6</td><td>6</td><td>6</td></tr>
+              <tr><td>Item 2 (2,10)</td><td>0</td><td>0</td><td>10</td><td>10</td><td>16</td><td>16</td></tr>
+              <tr><td>Item 3 (3,12)</td><td>0</td><td>0</td><td>10</td><td>12</td><td>16</td><td class="hl">22</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Maximum value = 22 (take items 2 and 3: 10+12=22, weight 2+3=5 ≤ 5). Time: Θ(nW). Space: Θ(nW), reducible to Θ(W).</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">0/1 Knapsack is NP-Hard — But Pseudo-Polynomial</span>
+        <p>Θ(nW) looks polynomial but is actually <strong>pseudo-polynomial</strong> — it's polynomial in W (the numeric value) but exponential in the number of bits needed to represent W. If W = 2^n, the DP table has 2^n columns — exponential in input size. This is why 0/1 Knapsack is NP-hard despite having a DP solution. The Fractional Knapsack (greedy) is polynomial.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — ADVANCED DP ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Advanced DP — <em>MCM, Coin Change &amp; Edit Distance</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="mcm">
+      <h2 class="sh">3.1 &nbsp; Matrix Chain Multiplication (MCM) <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem Statement</span>
+        <p>Given n matrices A₁, A₂, ..., Aₙ with dimensions p₀×p₁, p₁×p₂, ..., pₙ₋₁×pₙ, find the optimal parenthesization to minimize the number of scalar multiplications.</p>
+      </div>
+
+      <p>
+        Multiplying a (p×q) matrix by a (q×r) matrix costs p·q·r scalar multiplications. The order of multiplication affects total cost drastically — associativity means we can choose any parenthesization.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Recurrence</span>
+        <p>m[i][j] = minimum cost to multiply matrices Aᵢ through Aⱼ.<br>
+        Base: m[i][i] = 0 (single matrix, no multiplication needed).<br>
+        m[i][j] = min over k from i to j−1 of: m[i][k] + m[k+1][j] + pᵢ₋₁ · pₖ · pⱼ<br>
+        (split at position k: multiply Aᵢ..Aₖ and Aₖ₊₁..Aⱼ then combine)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>A₁(10×30), A₂(30×5), A₃(5×60). Find optimal cost.</strong></p>
+        <div class="cb">Dimensions: p = [10, 30, 5, 60]
+
+m[1][2] = p₀·p₁·p₂ = 10·30·5 = 1500   (A₁ × A₂)
+m[2][3] = p₁·p₂·p₃ = 30·5·60 = 9000   (A₂ × A₃)
+
+m[1][3] = min of:
+  k=1: m[1][1] + m[2][3] + p₀·p₁·p₃ = 0 + 9000 + 10·30·60 = 9000 + 18000 = 27000
+  k=2: m[1][2] + m[3][3] + p₀·p₂·p₃ = 1500 + 0 + 10·5·60 = 1500 + 3000 = 4500
+
+Optimal: 4500 — parenthesize as (A₁A₂)A₃
+  Compute A₁A₂ first (cost 1500), then multiply result (10×5) by A₃ (cost 10·5·60=3000)</div>
+        <p>Time: O(n³). Space: O(n²). Fill the table diagonally — length-2 subproblems first, then length-3, etc.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">MCM Fill Order — Diagonal by Chain Length</span>
+        <p>The key to MCM bottom-up: fill m[i][j] for all chains of length l = j−i+1, starting from l=2. For l=2: fill m[1][2], m[2][3], ..., m[n−1][n]. For l=3: fill m[1][3], m[2][4], ..., m[n−2][n]. Continue until l=n. This ensures m[i][k] and m[k+1][j] are always computed before m[i][j].</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="coin-change">
+      <h2 class="sh">3.2 &nbsp; Coin Change Problems <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Minimum Coins (Unbounded)</h3>
+      <div class="def-box">
+        <span class="lbl">Problem &amp; Recurrence</span>
+        <p>Given coin denominations c₁,...,cₖ and target amount n. Find minimum coins to make n (each coin usable unlimited times).<br>
+        dp[i] = minimum coins to make amount i.<br>
+        dp[0] = 0. dp[i] = 1 + min{dp[i−cⱼ] | cⱼ ≤ i} for i ≥ 1.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Coins = {1,3,4}, target = 6:</strong></p>
+        <div class="cb">dp[0]=0
+dp[1]=1 (1)         dp[2]=2 (1+1)   dp[3]=1 (3)
+dp[4]=1 (4)         dp[5]=2 (4+1)   dp[6]=2 (3+3)  ← not 4+1+1=3</div>
+        <p>Greedy (largest first) would give: 4+1+1 = 3 coins. DP gives 3+3 = 2 coins. <strong>Greedy fails on this input</strong> — this is why Coin Change requires DP for general denominations.</p>
+      </div>
+
+      <h3 class="ssh">Number of Ways (Coin Change II)</h3>
+      <div class="def-box">
+        <span class="lbl">Counting Combinations</span>
+        <p>Count distinct ways to make amount n using coins (order doesn't matter).<br>
+        dp[i] = number of ways to make amount i.<br>
+        For each coin c: for i from c to n: dp[i] += dp[i−c]<br>
+        (iterate coins in outer loop to avoid counting permutations separately)</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="edit-distance">
+      <h2 class="sh">3.3 &nbsp; Edit Distance (Levenshtein Distance) <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem &amp; Recurrence</span>
+        <p>Minimum operations (insert, delete, substitute — each cost 1) to transform string X into Y.<br>
+        dp[i][j] = edit distance between X[1..i] and Y[1..j].<br>
+        Base: dp[0][j] = j (insert j characters), dp[i][0] = i (delete i characters).<br>
+        If X[i]==Y[j]: dp[i][j] = dp[i−1][j−1]<br>
+        Else: dp[i][j] = 1 + min(dp[i−1][j−1], dp[i−1][j], dp[i][j−1])<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(substitute,&nbsp;&nbsp;&nbsp;&nbsp;delete,&nbsp;&nbsp;&nbsp;insert)</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Edit distance between "kitten" and "sitting":</strong></p>
+        <div class="cb">kitten → sitten  (substitute k→s, cost 1)
+sitten → sittin  (substitute e→i, cost 1)
+sittin → sitting (insert g at end, cost 1)
+Total: 3 operations. dp[6][7] = 3.</div>
+        <p>Time: O(mn). Space: O(mn) reducible to O(min(m,n)).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — GREEDY FOUNDATIONS ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Greedy Algorithms — <em>Foundations &amp; Proof of Correctness</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="greedy-def">
+      <h2 class="sh">4.1 &nbsp; The Greedy Paradigm <span class="tag tc">Core</span></h2>
+      <p>
+        A greedy algorithm makes the locally optimal choice at each step, hoping the sequence of local optima leads to a global optimum. Unlike DP which considers all subproblem solutions, greedy commits to one choice and never reconsiders.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Greedy Choice Property</div>
+          <p>There always exists an optimal solution that includes the greedy choice. Making the greedy choice doesn't foreclose the path to an optimal solution.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Optimal Substructure</div>
+          <p>After making the greedy choice, the remaining subproblem's optimal solution combined with the greedy choice gives an optimal solution to the original.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Proving Greedy Correctness — Two Methods</span>
+        <p>
+          <strong>Greedy stays ahead:</strong> Show that after each step, the greedy solution is at least as good as any other solution at that point. By induction, it's optimal overall.<br><br>
+          <strong>Exchange argument:</strong> Take any optimal solution. Show that exchanging the first point of difference (where it disagrees with greedy) with the greedy choice gives an equally good or better solution. Hence greedy produces an optimal solution.
+        </p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Greedy ≠ Always Optimal — The Critical Distinction</span>
+        <p>Greedy works for Fractional Knapsack but NOT 0/1 Knapsack. Works for Activity Selection but NOT Weighted Job Scheduling. The difference: problems where greedy is optimal have the greedy choice property provably. For others, greedy gives suboptimal results. GATE frequently tests: "does greedy give the optimal solution for problem X?" — always verify with a proof or counterexample.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — CLASSIC GREEDY ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Classic Greedy Problems — <em>Activity Selection, Huffman &amp; Knapsack</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="activity-sel">
+      <h2 class="sh">5.1 &nbsp; Activity Selection Problem <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem</span>
+        <p>Given n activities, each with start time sᵢ and finish time fᵢ. Select the maximum number of non-overlapping activities. Activities i and j are compatible if their intervals don't overlap: fᵢ ≤ sⱼ or fⱼ ≤ sᵢ.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Greedy Algorithm</span>
+        <p>Sort activities by finish time. Always select the activity with the earliest finish time that is compatible with previously selected activities.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Activities: (1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16)</strong></p>
+        <div class="cb">Sort by finish time: (1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16)
+Select (1,4)  — first activity
+Skip  (3,5)  — 3 < 4, overlaps
+Skip  (0,6)  — 0 < 4, overlaps
+Select (5,7)  — 5 ≥ 4, compatible ✓
+Skip  (3,9)  — 3 < 7
+Skip  (5,9)  — 5 < 7
+Select (8,11) — 8 ≥ 7, compatible ✓
+Skip  (8,12) — 8 < 11
+Select (12,16)— 12 ≥ 11, compatible ✓
+
+Result: 4 activities selected. Optimal.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Why Earliest Finish Time is Optimal</span>
+        <p>Exchange argument: suppose an optimal solution selects activity A instead of B (the earliest-finish greedy choice) at some step. Since B finishes no later than A, replacing A with B in the optimal solution doesn't reduce the number of subsequent compatible activities. So the greedy choice gives at least as many activities as any optimal solution.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="huffman">
+      <h2 class="sh">5.2 &nbsp; Huffman Coding <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Problem</span>
+        <p>Given n characters with frequencies f₁, f₂, ..., fₙ. Assign binary codes to minimize the total encoding length (weighted path length from root to each character leaf in the code tree).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Huffman Algorithm</span>
+        <p>Build a min-heap of all character frequencies. Repeatedly extract the two minimum-frequency nodes, create a new internal node with frequency = sum of the two, reinsert. Repeat until one node remains (the root). Time: O(n log n).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Characters: a(5), b(9), c(12), d(13), e(16), f(45). Build Huffman tree.</strong></p>
+        <div class="cb">Initial heap: [5(a), 9(b), 12(c), 13(d), 16(e), 45(f)]
+
+Step 1: Extract 5,9 → new node 14. Heap: [12,13,14,16,45]
+Step 2: Extract 12,13 → new node 25. Heap: [14,16,25,45]
+Step 3: Extract 14,16 → new node 30. Heap: [25,30,45]
+Step 4: Extract 25,30 → new node 55. Heap: [45,55]
+Step 5: Extract 45,55 → root 100.
+
+Codes (left=0, right=1):
+  f:0 (1 bit) — most frequent, shortest code
+  c:100, d:101 (3 bits each)
+  a:1100, b:1101 (4 bits each)
+  e:111 (3 bits — assigned to e)
+
+Total bits: 45×1 + 16×3 + 12×3 + 13×3 + 5×4 + 9×4
+          = 45 + 48 + 36 + 39 + 20 + 36 = 224 bits</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Huffman Code Properties</span>
+        <p>Huffman codes are prefix-free (no code is a prefix of another — enables unambiguous decoding). Higher frequency → shorter code. Lower frequency → longer code. The Huffman tree is a full binary tree (every internal node has exactly 2 children). GATE often asks about the code length for a specific character, or the total encoding cost.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="frac-knapsack">
+      <h2 class="sh">5.3 &nbsp; Fractional Knapsack &amp; Job Scheduling <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Fractional Knapsack</h3>
+      <div class="def-box">
+        <span class="lbl">Algorithm</span>
+        <p>Items can be divided. Compute value-to-weight ratio vᵢ/wᵢ for each item. Sort by ratio (descending). Take items greedily from highest ratio to lowest, taking full items until capacity is exceeded, then take fraction of last item.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Items: (w=10,v=60), (w=20,v=100), (w=30,v=120). W=50.</strong></p>
+        <p>Ratios: 6, 5, 4. Sort: item1(6), item2(5), item3(4).</p>
+        <p>Take all of item1 (10kg, 60 value). Take all of item2 (20kg, 100 value). Remaining: 20kg. Take 20/30 of item3 (80 value). Total: 60+100+80 = <strong>240</strong>.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>0/1 Knapsack</th><th>Fractional Knapsack</th></tr></thead>
+          <tbody>
+            <tr><td>Items divisible?</td><td class="bad">No</td><td class="good">Yes</td></tr>
+            <tr><td>Algorithm</td><td>Dynamic Programming</td><td>Greedy (value/weight ratio)</td></tr>
+            <tr><td>Time complexity</td><td class="ok">Θ(nW) — pseudo-poly</td><td class="good">O(n log n) — sort + linear scan</td></tr>
+            <tr><td>Optimal value</td><td>≤ Fractional Knapsack</td><td>≥ 0/1 Knapsack (more flexible)</td></tr>
+            <tr><td>Complexity class</td><td class="bad">NP-Hard</td><td class="good">Polynomial</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Job Scheduling to Minimize Lateness</h3>
+      <p>Each job j has processing time tⱼ and deadline dⱼ. Schedule on one machine to minimize maximum lateness (Lmax = max of (completion time − deadline) over all jobs).</p>
+      <p><strong>Greedy:</strong> Sort by deadline (earliest deadline first — EDF). This is optimal. Proof: any adjacent pair where a later-deadline job precedes an earlier-deadline job can be swapped without increasing Lmax.</p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — DIVIDE & CONQUER ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Divide <em>&amp; Conquer</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dc-paradigm">
+      <h2 class="sh">6.1 &nbsp; The Paradigm &amp; Classic Algorithms <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Divide & Conquer Pattern</span>
+        <p><strong>Divide:</strong> Split the problem into subproblems of roughly equal size.<br>
+        <strong>Conquer:</strong> Solve each subproblem recursively (base case when small enough).<br>
+        <strong>Combine:</strong> Merge subproblem solutions into the overall solution.</p>
+      </div>
+
+      <p>The key analysis tool: write the recurrence T(n) = aT(n/b) + f(n) and apply the Master Theorem (covered in File 1).</p>
+
+      <h3 class="ssh">Merge Sort — O(n log n)</h3>
+      <p>Divide array in half, sort each half recursively, merge in O(n). T(n) = 2T(n/2)+O(n) → Θ(n log n). Covered in detail in File 1.</p>
+
+      <h3 class="ssh">Strassen's Matrix Multiplication — O(n^2.81)</h3>
+      <div class="def-box">
+        <span class="lbl">Strassen's Algorithm</span>
+        <p>Standard n×n matrix multiplication: 8 recursive multiplications of n/2×n/2 matrices + O(n²) additions → T(n)=8T(n/2)+O(n²) → O(n³).<br>
+        Strassen: 7 recursive multiplications using clever combinations → T(n)=7T(n/2)+O(n²) → <strong>O(n^log₂7) ≈ O(n^2.807)</strong>.</p>
+      </div>
+      <p>The constant-factor improvement in recursive calls (7 vs 8) propagates multiplicatively across all recursion levels, giving a genuinely faster asymptotic algorithm.</p>
+
+      <h3 class="ssh">Closest Pair of Points — O(n log n)</h3>
+      <div class="def-box">
+        <span class="lbl">Algorithm Sketch</span>
+        <p>Divide points by median x-coordinate into left (L) and right (R) halves. Find closest pair in each half recursively (distances δL and δR). Let δ = min(δL, δR). Check the strip of width 2δ around the dividing line — at most 8 points in any δ×2δ rectangle in the strip, so each point is compared to at most 7 others. Combine in O(n).</p>
+      </div>
+      <div class="cb">T(n) = 2T(n/2) + O(n)  →  Θ(n log n)  [dominated by sort + strip scan]
+
+Naïve: O(n²) (check all pairs). D&C gives Θ(n log n) — a genuine improvement.</div>
+
+      <h3 class="ssh">Integer Multiplication — Karatsuba O(n^1.585)</h3>
+      <p>
+        Multiplying two n-digit numbers naïvely: O(n²). Karatsuba's algorithm splits each number into two halves and performs 3 recursive multiplications instead of 4: T(n) = 3T(n/2)+O(n) → O(n^log₂3) ≈ O(n^1.585).
+      </p>
+    </div>
+
+    <div class="sec" data-m="dc-vs-dp">
+      <h2 class="sh">6.2 &nbsp; Divide &amp; Conquer vs Dynamic Programming <span class="tag tg">GATE Distinction</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Aspect</th><th>Divide &amp; Conquer</th><th>Dynamic Programming</th></tr></thead>
+          <tbody>
+            <tr><td>Subproblem overlap</td><td class="good">No (or minimal)</td><td class="bad">Yes (essential)</td></tr>
+            <tr><td>Memoization needed?</td><td class="good">No</td><td class="bad">Yes — key benefit</td></tr>
+            <tr><td>Top-down recursion</td><td class="good">Natural</td><td class="ok">Can be done (memoized)</td></tr>
+            <tr><td>Bottom-up iteration</td><td class="bad">Usually unnatural</td><td class="good">Natural (tabulation)</td></tr>
+            <tr><td>Example</td><td>Merge Sort, Binary Search, Strassen</td><td>LCS, Knapsack, Floyd-Warshall</td></tr>
+            <tr><td>When to use</td><td>Subproblems are independent</td><td>Subproblems overlap and share structure</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">The Simplest Test</span>
+        <p>Draw the recursion tree. If the same subproblem appears multiple times in the tree → overlapping subproblems → use DP. If every leaf in the recursion tree is a distinct subproblem → divide and conquer is fine, DP gives no benefit. Fibonacci: exponentially many repeated nodes → DP. Merge Sort: every subarray is unique → D&C.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — NP-COMPLETENESS ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">NP-Completeness — <em>P, NP &amp; Reductions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="np-def">
+      <h2 class="sh">7.1 &nbsp; P, NP, NP-Hard &amp; NP-Complete <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">P — Polynomial Time</span>
+        <p>The class of decision problems solvable by a deterministic algorithm in polynomial time O(nᵏ) for some constant k. Examples: sorting, searching, shortest paths, MST, bipartiteness testing.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">NP — Nondeterministic Polynomial Time</span>
+        <p>The class of decision problems where a "yes" answer can be <strong>verified</strong> in polynomial time given a certificate (witness). Equivalently, solvable by a nondeterministic polynomial-time algorithm. P ⊆ NP — every polynomial-time algorithm is also a polynomial-time verifier.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">NP-Hard</span>
+        <p>A problem H is NP-Hard if every problem in NP can be polynomial-time reduced to H. H is at least as hard as the hardest problem in NP. H need not be in NP itself (e.g., Halting problem is NP-Hard but not in NP).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">NP-Complete</span>
+        <p>A problem C is NP-Complete if (1) C ∈ NP (solutions are polynomial-time verifiable), AND (2) C is NP-Hard (every NP problem reduces to C). NP-Complete = NP ∩ NP-Hard. These are the "hardest" problems in NP.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem</th><th>Class</th><th>Best Known Algorithm</th></tr></thead>
+          <tbody>
+            <tr><td>Sorting, MST, Shortest Path, BFS/DFS</td><td class="good">P</td><td>Polynomial — O(n log n), O(V+E), etc.</td></tr>
+            <tr><td>Boolean Satisfiability (SAT)</td><td class="bad">NP-Complete</td><td>O(2ⁿ) worst case — DPLL, CDCL in practice</td></tr>
+            <tr><td>Travelling Salesman (decision)</td><td class="bad">NP-Complete</td><td>O(n² 2ⁿ) DP (Held-Karp)</td></tr>
+            <tr><td>3-Colorability</td><td class="bad">NP-Complete</td><td>No polynomial algorithm known</td></tr>
+            <tr><td>Hamiltonian Cycle</td><td class="bad">NP-Complete</td><td>Exponential</td></tr>
+            <tr><td>0/1 Knapsack (optimization)</td><td class="bad">NP-Hard</td><td>O(nW) pseudo-polynomial DP</td></tr>
+            <tr><td>Vertex Cover</td><td class="bad">NP-Complete</td><td>2-approximation in polynomial time</td></tr>
+            <tr><td>Clique</td><td class="bad">NP-Complete</td><td>No polynomial algorithm known</td></tr>
+            <tr><td>Independent Set</td><td class="bad">NP-Complete</td><td>No polynomial algorithm known</td></tr>
+            <tr><td>Subset Sum</td><td class="bad">NP-Complete</td><td>O(nW) pseudo-polynomial DP</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">P vs NP — The Million Dollar Question</span>
+        <p>It is unknown whether P = NP. If P = NP, then every problem whose solution can be quickly verified can also be quickly solved — cryptography, optimization, AI would all be revolutionized. The prevailing belief (but not proven) is P ≠ NP. GATE accepts "P ≠ NP is unproven" as the current state of knowledge.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="np-reductions">
+      <h2 class="sh">7.2 &nbsp; Proving NP-Completeness by Reduction <span class="tag tg">GATE Tested</span></h2>
+
+      <p>To prove problem B is NP-Complete:</p>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>Show B ∈ NP: given a solution, verify it in polynomial time.</div></li>
+        <li><div class="pl-num">2</div><div>Show B is NP-Hard: choose a known NP-Complete problem A. Show A ≤_p B — polynomial-time reduction from A to B.</div></li>
+      </ol>
+
+      <div class="eg">
+        <p><strong>Reduction chain GATE uses:</strong></p>
+        <div class="cb">SAT  →  3-SAT  →  Independent Set  →  Vertex Cover  →  Clique
+ ↓
+3-SAT  →  Hamiltonian Cycle  →  TSP
+ ↓
+3-SAT  →  Subset Sum  →  0/1 Knapsack
+
+SAT is the "first" NP-Complete problem (Cook-Levin theorem, 1971).
+All others proved NP-Complete by reduction FROM a known NP-Complete problem.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">NP-Complete Problems Have Polynomial Verifiers</span>
+        <p>For SAT: given an assignment of variables, evaluate the formula in polynomial time — easy. For Hamiltonian Cycle: given a cycle, check it visits every vertex once — polynomial. For 0/1 Knapsack: given a subset, sum weights and values — polynomial. The verification is always polynomial; it's the FINDING that's hard.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>DP = optimal always</td><td>DP solves problems with optimal substructure + overlapping subproblems optimally. If these properties don't hold, DP either doesn't apply or gives wrong results. Always verify both properties before applying DP.</td></tr>
+            <tr><td>2</td><td>Greedy solves Coin Change</td><td>Greedy (largest denomination first) works for standard currency (1,5,10,25 cents) but fails for arbitrary denominations. Coins={1,3,4}, target=6: greedy gives 4+1+1=3 coins, DP gives 3+3=2 coins. Always use DP for general coin change.</td></tr>
+            <tr><td>3</td><td>0/1 Knapsack is polynomial (O(nW))</td><td>O(nW) is pseudo-polynomial — polynomial in the numeric value W but exponential in the bit length of W. If W=2ⁿ, the algorithm is exponential. 0/1 Knapsack is NP-Hard; no polynomial-time algorithm exists (unless P=NP).</td></tr>
+            <tr><td>4</td><td>LCS length = LCS string length</td><td>LCS gives the length of the longest common subsequence. To reconstruct the actual subsequence, trace back through the dp table. Length is found in dp[m][n]; the string requires backtracking.</td></tr>
+            <tr><td>5</td><td>MCM fills row by row</td><td>MCM DP table must be filled diagonally (by increasing chain length), not row by row. m[i][j] depends on m[i][k] and m[k+1][j] for all k — these must be computed for all shorter chains first.</td></tr>
+            <tr><td>6</td><td>Greedy works for Weighted Job Scheduling</td><td>Weighted Job Scheduling (maximize total weight of non-overlapping intervals) requires DP — greedy doesn't give the optimal solution when jobs have different weights. Unweighted activity selection (maximize count) works with greedy.</td></tr>
+            <tr><td>7</td><td>NP-Complete = not solvable</td><td>NP-Complete means no known polynomial-time algorithm. These problems ARE solvable — with exponential time algorithms. NP-Hard problems may not even be in NP (may be harder than NP). "NP" does not mean "non-polynomial" — it means "nondeterministic polynomial verifiable."</td></tr>
+            <tr><td>8</td><td>P ⊆ NP means NP has no polynomial solution</td><td>P ⊆ NP means every P problem is also in NP (since you can verify a solution by just re-running the polynomial solver). It does NOT say NP has no polynomial solutions — that's the unsolved P vs NP question.</td></tr>
+            <tr><td>9</td><td>Huffman tree is always balanced</td><td>Huffman tree structure depends entirely on character frequencies — it is generally unbalanced. Characters with very high frequency get short codes (near the root); rare characters get long codes (deep in tree). Balance is irrelevant; optimality of encoding is what matters.</td></tr>
+            <tr><td>10</td><td>DP always needs O(n²) space for 2D problems</td><td>Many 2D DP tables can be space-optimized. LCS: only two rows needed → O(n) space. 0/1 Knapsack: one row iterated backwards → O(W) space. Recognize when the recurrence only depends on the "previous row."</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="master-ref">
+      <h2 class="sh">8.2 &nbsp; Complete DP &amp; Greedy Reference</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem</th><th>Approach</th><th>Time</th><th>Space</th><th>Key Recurrence</th></tr></thead>
+          <tbody>
+            <tr><td>Fibonacci</td><td>DP</td><td class="good">O(n)</td><td class="good">O(1)</td><td>F(n) = F(n−1)+F(n−2)</td></tr>
+            <tr><td>LCS</td><td>DP</td><td class="ok">O(mn)</td><td class="ok">O(mn) / O(n)</td><td>Match or skip from either string</td></tr>
+            <tr><td>LIS</td><td>DP</td><td class="ok">O(n²) / O(n log n)</td><td class="good">O(n)</td><td>Extend previous increasing subsequences</td></tr>
+            <tr><td>0/1 Knapsack</td><td>DP</td><td class="ok">O(nW)</td><td class="ok">O(nW) / O(W)</td><td>Take or skip each item</td></tr>
+            <tr><td>Fractional Knapsack</td><td>Greedy</td><td class="good">O(n log n)</td><td class="good">O(1)</td><td>Sort by v/w ratio</td></tr>
+            <tr><td>MCM</td><td>DP</td><td class="ok">O(n³)</td><td class="ok">O(n²)</td><td>Split at k, recurse on both halves</td></tr>
+            <tr><td>Edit Distance</td><td>DP</td><td class="ok">O(mn)</td><td class="ok">O(mn) / O(n)</td><td>Insert, delete, substitute at each position</td></tr>
+            <tr><td>Coin Change (min)</td><td>DP</td><td class="ok">O(nW)</td><td class="good">O(W)</td><td>Use each coin, take min over all choices</td></tr>
+            <tr><td>Activity Selection</td><td>Greedy</td><td class="good">O(n log n)</td><td class="good">O(1)</td><td>Sort by finish time, take compatible</td></tr>
+            <tr><td>Huffman Coding</td><td>Greedy</td><td class="good">O(n log n)</td><td class="good">O(n)</td><td>Merge two lowest-frequency nodes</td></tr>
+            <tr><td>MST (Kruskal/Prim)</td><td>Greedy</td><td class="good">O(E log V)</td><td class="ok">O(V+E)</td><td>Cut property guarantees optimality</td></tr>
+            <tr><td>Floyd-Warshall</td><td>DP</td><td class="bad">Θ(V³)</td><td class="ok">O(V²)</td><td>Route through intermediate vertex k</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>LCS length NAT:</strong> "Find LCS of AGGTAB and GXTXAYB." Fill the dp table. Answer: 4 (GTAB). 2-mark NAT.</li>
+        <li><strong>Knapsack value:</strong> "Given items and capacity, what is the maximum value?" Trace the DP table. Very common 2-mark question — verify with the recurrence, don't guess.</li>
+        <li><strong>MCM cost:</strong> "Given matrix dimensions, what is the minimum number of multiplications?" Apply MCM DP. Answer depends on which split minimizes cost.</li>
+        <li><strong>Greedy vs DP distinction:</strong> "Which problems can be solved optimally by a greedy algorithm?" Activity selection YES. 0/1 Knapsack NO. Fractional Knapsack YES. Coin Change (general) NO. Huffman YES. 1-mark MCQ.</li>
+        <li><strong>Huffman code length:</strong> "Given character frequencies, what is the code length for character X?" Build the Huffman tree step by step, trace the path to X.</li>
+        <li><strong>NP-Complete classification:</strong> "Which of the following is NP-Complete?" SAT, TSP (decision), 3-Coloring, Hamiltonian Cycle — all NP-Complete. Shortest Path, MST, Sorting — in P. 1-mark MCQ.</li>
+        <li><strong>NP reduction direction:</strong> "If 3-SAT reduces to Problem X in polynomial time, what can you conclude?" X is NP-Hard. If also X ∈ NP, then X is NP-Complete.</li>
+        <li><strong>P vs NP:</strong> "If a polynomial algorithm is found for SAT, what follows?" P = NP (since SAT is NP-Complete, polynomial algorithm for SAT → every NP problem solvable in polynomial time). 1-mark reasoning.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Algorithms · DP, Greedy &amp; Divide-Conquer · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

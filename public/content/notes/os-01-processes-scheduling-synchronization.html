@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operating Systems — Processes, Scheduling & Synchronization · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+/* Gantt chart */
+.gantt{overflow-x:auto;margin:14px 0;}
+.gantt-row{display:flex;align-items:stretch;font-family:'Courier New',monospace;font-size:13px;margin:3px 0;}
+.gantt-label{min-width:80px;padding:4px 8px;font-family:var(--hand);font-size:11px;color:var(--ink3);display:flex;align-items:center;}
+.gantt-block{padding:5px 0;text-align:center;border:1px solid var(--ink);font-size:12px;font-weight:bold;}
+.gb-p1{background:var(--hl-b);}
+.gb-p2{background:var(--hl-g);}
+.gb-p3{background:var(--hl-o);}
+.gb-p4{background:var(--hl-p);}
+.gb-idle{background:var(--paper3);color:var(--ink3);}
+.gantt-tick{display:flex;margin-left:80px;font-family:'Courier New',monospace;font-size:11px;color:var(--ink3);}
+.gantt-t{text-align:center;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Operating Systems</div>
+    <h1>Processes, Scheduling<br><em>&amp; Synchronization</em></h1>
+    <p class="cover-desc">
+      Process and thread models, complete CPU scheduling algorithms with Gantt chart analysis, the critical section problem, semaphores, monitors, classical synchronization problems, and deadlock theory — every formula, every GATE trace, every trap.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Processes &amp; Threads</span>
+      <span class="chip">Ch 2 · CPU Scheduling Algorithms</span>
+      <span class="chip">Ch 3 · Scheduling Metrics &amp; Analysis</span>
+      <span class="chip">Ch 4 · Critical Section Problem</span>
+      <span class="chip">Ch 5 · Semaphores &amp; Monitors</span>
+      <span class="chip">Ch 6 · Classical Synchronization Problems</span>
+      <span class="chip">Ch 7 · Deadlocks</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Processes &amp; Threads</a>
+    <a href="#ch2"><span class="tn">02</span>CPU Scheduling Algorithms</a>
+    <a href="#ch3"><span class="tn">03</span>Scheduling Metrics &amp; Analysis</a>
+    <a href="#ch4"><span class="tn">04</span>Critical Section Problem</a>
+    <a href="#ch5"><span class="tn">05</span>Semaphores &amp; Monitors</a>
+    <a href="#ch6"><span class="tn">06</span>Classical Synchronization Problems</a>
+    <a href="#ch7"><span class="tn">07</span>Deadlocks — Detection, Prevention, Avoidance</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Complete Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — PROCESSES & THREADS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Processes <em>&amp; Threads</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="process-def">
+      <h2 class="sh">1.1 &nbsp; Process — Definition &amp; State Machine <span class="tag tc">Core</span></h2>
+      <p>
+        A <strong>process</strong> is a program in execution — an active entity. A program is passive (a file on disk); a process is that program loaded into memory with a program counter, stack, heap, and data segment actively being executed. Multiple processes can run the same program simultaneously — they are distinct instances.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Process Control Block (PCB)</span>
+        <p>Each process is represented by a PCB (also called Task Control Block) containing: Process ID (PID), process state, program counter, CPU registers, memory management info (page tables, base/limit), I/O status info, and accounting info. The OS uses the PCB to save and restore process context during context switches.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">Process State Diagram</span>
+           ┌──────────────────────────────────────────────────────┐
+           │                  ADMITTED                            │
+    new ──→│── → ──── ready ◄────── running ──→ terminated       │
+           │             │  scheduler    ↑  ↓                    │
+           │             │  dispatch     │  I/O or event wait     │
+           │             │               └── ← ── waiting        │
+           │             └──────────────────── (I/O complete)    │
+           └──────────────────────────────────────────────────────┘
+
+States:
+  New:       process being created
+  Ready:     in memory, waiting for CPU
+  Running:   instructions being executed
+  Waiting:   waiting for I/O or event
+  Terminated: finished execution
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Ready ≠ Running</span>
+        <p>A process in the <strong>ready</strong> state has all resources it needs EXCEPT the CPU. It is queued, waiting to be scheduled. A process in the <strong>running</strong> state is currently using the CPU. Only one process per CPU core can be running at any moment. The transition from ready→running is called <strong>dispatch</strong> (done by the scheduler). Running→ready happens on preemption or time quantum expiry.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="threads">
+      <h2 class="sh">1.2 &nbsp; Threads — Lightweight Processes <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Thread</span>
+        <p>A <strong>thread</strong> is a lightweight unit of execution within a process. Multiple threads in the same process share: code segment, data segment, open files, and signal handlers. Each thread has its own: thread ID, program counter, register set, and stack.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Attribute</th><th>Shared across threads</th><th>Per-thread (private)</th></tr></thead>
+          <tbody>
+            <tr><td>Code (text segment)</td><td class="good">Shared</td><td>—</td></tr>
+            <tr><td>Global variables (data segment)</td><td class="good">Shared</td><td>—</td></tr>
+            <tr><td>Heap memory</td><td class="good">Shared</td><td>—</td></tr>
+            <tr><td>Open file descriptors</td><td class="good">Shared</td><td>—</td></tr>
+            <tr><td>Stack</td><td>—</td><td class="bad">Private</td></tr>
+            <tr><td>Program counter</td><td>—</td><td class="bad">Private</td></tr>
+            <tr><td>Register set</td><td>—</td><td class="bad">Private</td></tr>
+            <tr><td>Thread ID</td><td>—</td><td class="bad">Private</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">User-Level Threads</div>
+          <p>Managed by a user-space library. Kernel unaware — sees one process. Fast context switch. If one thread blocks (I/O), all threads in the process block.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Kernel-Level Threads</div>
+          <p>Managed by the OS kernel directly. Each thread scheduled independently. One blocking thread doesn't block others. More overhead — kernel involvement for every context switch.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Context Switch Cost</span>
+        <p>Switching between threads within the same process is cheaper than switching between processes — there's no need to switch the memory address space (page tables, TLB flush). Process context switch = thread context switch + address space switch. This is the primary reason threads exist as a concurrency primitive.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — CPU SCHEDULING ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">CPU Scheduling — <em>All Algorithms</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="scheduling-intro">
+      <h2 class="sh">2.1 &nbsp; Scheduling Criteria &amp; Terminology <span class="tag tc">Core</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Arrival Time (AT)</strong></td><td>When the process enters the ready queue</td></tr>
+            <tr><td><strong>Burst Time (BT)</strong></td><td>CPU time needed to complete the process</td></tr>
+            <tr><td><strong>Completion Time (CT)</strong></td><td>When the process finishes execution</td></tr>
+            <tr><td><strong>Turnaround Time (TAT)</strong></td><td>CT − AT &nbsp; (total time from arrival to completion)</td></tr>
+            <tr><td><strong>Waiting Time (WT)</strong></td><td>TAT − BT &nbsp; (time spent waiting in ready queue)</td></tr>
+            <tr><td><strong>Response Time (RT)</strong></td><td>Time from arrival to first CPU response (first scheduling)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Preemptive Scheduling</div>
+          <p>CPU can be taken away from a running process. A higher-priority or shorter process can preempt. Better response time, but higher overhead from context switches.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Non-Preemptive Scheduling</div>
+          <p>Once a process gets the CPU, it keeps it until it finishes or voluntarily releases (I/O wait). Simpler implementation. Lower overhead. May cause poor response for short jobs.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="fcfs">
+      <h2 class="sh">2.2 &nbsp; FCFS — First Come First Served <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Non-preemptive. Processes served in order of arrival. Simple to implement. Suffers from the <strong>convoy effect</strong> — a long process can hold up many short ones.</p>
+
+      <div class="eg">
+        <p><strong>Processes: P1(AT=0,BT=24), P2(AT=1,BT=3), P3(AT=2,BT=3)</strong></p>
+        <div class="gantt">
+          <div class="gantt-row">
+            <div class="gantt-label">CPU:</div>
+            <div class="gantt-block gb-p1" style="flex:24">P1 (24)</div>
+            <div class="gantt-block gb-p2" style="flex:3">P2</div>
+            <div class="gantt-block gb-p3" style="flex:3">P3</div>
+          </div>
+          <div class="gantt-tick">
+            <div class="gantt-t" style="width:0">0</div>
+            <div class="gantt-t" style="flex:24">→24</div>
+            <div class="gantt-t" style="flex:3">→27</div>
+            <div class="gantt-t" style="flex:3">→30</div>
+          </div>
+        </div>
+        <p>TAT: P1=24, P2=26, P3=28. Average TAT = 78/3 = 26. WT: P1=0, P2=23, P3=25. Average WT = 48/3 = 16.</p>
+        <p>Convoy effect: P2 and P3 (3 units each) wait 23 and 25 units behind P1 (24 units). Very unfair to short jobs.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sjf">
+      <h2 class="sh">2.3 &nbsp; SJF — Shortest Job First &amp; SRTF <span class="tag tg">GATE Critical</span></h2>
+
+      <p>SJF selects the process with the smallest burst time from the ready queue. Non-preemptive version = SJF. Preemptive version = <strong>SRTF</strong> (Shortest Remaining Time First) — preempts if a new arrival has shorter remaining time.</p>
+
+      <div class="def-box">
+        <span class="lbl">SJF is Optimal for Average Waiting Time</span>
+        <p>SJF (non-preemptive) gives the minimum average waiting time among all non-preemptive algorithms for a given set of processes. SRTF gives the minimum average waiting time among ALL scheduling algorithms (preemptive or not). This is a proved theorem, not just an observation.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>SJF (non-preemptive): P1(AT=0,BT=6), P2(AT=2,BT=8), P3(AT=4,BT=7), P4(AT=6,BT=3)</strong></p>
+        <div class="cb">At t=0: Only P1 available → run P1 (BT=6)
+At t=6: Ready queue = {P2(8), P3(7), P4(3)} → pick P4 (shortest)
+At t=9: Ready queue = {P2(8), P3(7)} → pick P3 (shorter)
+At t=16: Only P2 remains → run P2
+
+Gantt: [P1: 0-6][P4: 6-9][P3: 9-16][P2: 16-24]
+CT: P1=6, P2=24, P3=16, P4=9
+TAT: P1=6, P2=22, P3=12, P4=3.  Avg TAT = 43/4 = 10.75
+WT:  P1=0, P2=14, P3=5,  P4=0.  Avg WT  = 19/4 = 4.75</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>SRTF (preemptive SJF): P1(AT=0,BT=8), P2(AT=1,BT=4), P3(AT=2,BT=9), P4(AT=3,BT=5)</strong></p>
+        <div class="cb">t=0: P1 arrives (remaining=8). Run P1.
+t=1: P2 arrives (remaining=4). P2 < P1(remaining=7) → preempt. Run P2.
+t=2: P3 arrives (remaining=9). P2(3) < P3(9) → no preempt. Continue P2.
+t=3: P4 arrives (remaining=5). P2(2) < P4(5) → no preempt. Continue P2.
+t=5: P2 finishes. Ready={P1(7),P3(9),P4(5)}. Pick P4(5).
+t=10: P4 finishes. Ready={P1(7),P3(9)}. Pick P1(7).
+t=17: P1 finishes. Only P3. Run P3.
+t=26: Done.
+
+Gantt: [P1:0-1][P2:1-5][P4:5-10][P1:10-17][P3:17-26]
+TAT: P1=17, P2=4, P3=24, P4=7. Avg TAT = 13
+WT:  P1=9,  P2=0, P3=15, P4=2. Avg WT  = 6.5</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">SJF Requires Knowledge of Future — Impractical</span>
+        <p>SJF requires knowing the burst time in advance — which the OS cannot know precisely for general processes. In practice, burst time is estimated using exponential averaging: τₙ₊₁ = α·tₙ + (1−α)·τₙ where tₙ is the actual last burst and τₙ is the previous estimate. α controls how much weight recent history gets.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="priority">
+      <h2 class="sh">2.4 &nbsp; Priority Scheduling &amp; Round Robin <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Priority Scheduling</h3>
+      <p>
+        Each process has a priority. CPU goes to the highest-priority ready process. Can be preemptive (new high-priority process preempts) or non-preemptive. Problem: <strong>starvation</strong> — low-priority processes may wait indefinitely. Solution: <strong>aging</strong> — gradually increase priority of waiting processes.
+      </p>
+
+      <div class="warn-box">
+        <span class="lbl">Priority Convention — Check the Problem</span>
+        <p>Some problems define priority 1 = highest priority. Others define higher number = higher priority. GATE specifies the convention explicitly — always read it. Getting this backwards flips the entire answer.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Round Robin (RR)</h3>
+      <div class="def-box">
+        <span class="lbl">Round Robin</span>
+        <p>Each process gets a fixed time quantum q. After q time units, the process is preempted and added to the back of the ready queue. Best for time-sharing systems. Fair — no starvation. Response time bounded by (n−1)×q where n is the number of processes.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>RR with q=4: P1(AT=0,BT=24), P2(AT=0,BT=3), P3(AT=0,BT=3)</strong></p>
+        <div class="cb">Queue order at t=0: P1, P2, P3
+
+t=0-4:   P1 runs 4 units (remaining=20). Preempted. Queue: P2,P3,P1
+t=4-7:   P2 runs 3 units (finishes). CT[P2]=7. Queue: P3,P1
+t=7-10:  P3 runs 3 units (finishes). CT[P3]=10. Queue: P1
+t=10-14: P1 runs 4 units (remaining=16). Preempted. Queue: P1
+... (P1 gets quanta at 14-18, 18-22, 22-26, 26-30)
+t=26-30: P1 finishes. CT[P1]=30.
+
+TAT: P1=30, P2=7, P3=10.  Avg TAT = 47/3 ≈ 15.67
+WT:  P1=6,  P2=4, P3=7.   Avg WT  = 17/3 ≈ 5.67</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Effect of Time Quantum on Round Robin</span>
+        <p>Very large quantum → behaves like FCFS. Very small quantum → low response time but high context switch overhead. Optimal quantum: large enough to minimize overhead, small enough to give good response. Rule of thumb: 80% of CPU bursts should be shorter than the quantum.</p>
+      </div>
+
+      <h3 class="ssh">Multilevel Queue &amp; Multilevel Feedback Queue</h3>
+      <p>
+        <strong>Multilevel Queue:</strong> Ready queue partitioned into multiple queues (foreground/interactive vs background/batch). Each queue has its own scheduling algorithm. Fixed assignment — processes don't move between queues.
+      </p>
+      <p>
+        <strong>Multilevel Feedback Queue (MLFQ):</strong> Processes can move between queues based on behavior. CPU-bound processes drop to lower-priority queues. I/O-bound processes stay in higher-priority queues. Most sophisticated and most flexible — approximates optimal scheduling. Used in modern Unix/Linux systems.
+      </p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — SCHEDULING METRICS ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Scheduling Metrics <em>&amp; Analysis</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="metrics">
+      <h2 class="sh">3.1 &nbsp; Complete Scheduling Algorithm Comparison <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead>
+            <tr><th>Algorithm</th><th>Preemptive?</th><th>Starvation?</th><th>Convoy Effect?</th><th>Overhead</th><th>Optimal for</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>FCFS</strong></td><td class="bad">No</td><td class="bad">No (but unfair)</td><td class="bad">Yes</td><td class="good">Low</td><td>Batch systems</td></tr>
+            <tr><td><strong>SJF</strong></td><td class="bad">No</td><td class="bad">Yes (long jobs)</td><td class="good">No</td><td class="good">Low</td><td>Min avg WT (non-preemptive)</td></tr>
+            <tr><td><strong>SRTF</strong></td><td class="good">Yes</td><td class="bad">Yes</td><td class="good">No</td><td class="ok">Medium</td><td>Min avg WT (overall)</td></tr>
+            <tr><td><strong>Priority</strong></td><td>Both</td><td class="bad">Yes</td><td class="ok">Depends</td><td class="ok">Medium</td><td>Real-time systems</td></tr>
+            <tr><td><strong>Round Robin</strong></td><td class="good">Yes</td><td class="good">No</td><td class="good">No</td><td class="ok">Medium</td><td>Time-sharing, fairness</td></tr>
+            <tr><td><strong>MLFQ</strong></td><td class="good">Yes</td><td class="good">No (with aging)</td><td class="good">No</td><td class="bad">High</td><td>Interactive systems</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>GATE NAT pattern — Compute average TAT and WT:</strong></p>
+        <p>Given: P1(AT=0,BT=5), P2(AT=1,BT=3), P3(AT=2,BT=8), P4(AT=3,BT=6) under FCFS.</p>
+        <div class="cb">Gantt (FCFS, non-preemptive):
+[P1: 0-5][P2: 5-8][P3: 8-16][P4: 16-22]
+
+CT:  P1=5,  P2=8,  P3=16, P4=22
+TAT: P1=5,  P2=7,  P3=14, P4=19   (CT − AT)
+WT:  P1=0,  P2=4,  P3=6,  P4=13   (TAT − BT)
+
+Avg TAT = (5+7+14+19)/4 = 45/4 = 11.25
+Avg WT  = (0+4+6+13)/4  = 23/4 = 5.75</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — CRITICAL SECTION ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Critical Section Problem — <em>Requirements &amp; Solutions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="cs-def">
+      <h2 class="sh">4.1 &nbsp; The Critical Section Problem <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Critical Section</span>
+        <p>A <strong>critical section</strong> is a code segment that accesses shared resources (shared variables, files, hardware) and must not be executed by more than one process simultaneously. The problem: design a protocol so processes can enter their critical sections safely.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Three Requirements for a Correct CS Solution</span>
+        <p>
+          <strong>1. Mutual Exclusion:</strong> At most one process can be in its critical section at any time.<br>
+          <strong>2. Progress:</strong> If no process is in its CS and some processes want to enter, only those processes waiting to enter participate in the decision, and this selection cannot be postponed indefinitely.<br>
+          <strong>3. Bounded Waiting:</strong> There must exist a bound on how many times other processes can enter their CS after a process has made a request to enter — before that request is granted.
+        </p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Progress ≠ No Starvation (Bounded Waiting)</span>
+        <p>Progress and bounded waiting are different. Progress says the system makes forward progress — it doesn't deadlock (indefinite postponement at the group level is prevented). Bounded waiting says no individual process starves — it will eventually enter its CS. A solution can satisfy progress but violate bounded waiting (unfair to one process).</p>
+      </div>
+
+      <h3 class="ssh">Peterson's Solution — Software Solution for 2 Processes</h3>
+      <div class="cb"><span class="cm">// Shared variables</span>
+boolean flag[2] = {false, false}
+int turn
+
+<span class="cm">// Process i (other process is j = 1-i)</span>
+<span class="kw">Entry Section:</span>
+    flag[i] = true        <span class="cm">// "I want to enter"</span>
+    turn = j              <span class="cm">// "But you go first if you want"</span>
+    while (flag[j] && turn == j) ; <span class="cm">// Wait if j wants in AND it's j's turn</span>
+
+<span class="cm">// Critical Section</span>
+
+<span class="kw">Exit Section:</span>
+    flag[i] = false       <span class="cm">// "I'm done"</span></div>
+
+      <p>Peterson's solution satisfies all three requirements for 2 processes. However, it relies on memory accesses being atomic and sequential — modern CPUs with reordering may violate it without memory barriers.</p>
+    </div>
+
+    <div class="sec" data-m="hardware-sync">
+      <h2 class="sh">4.2 &nbsp; Hardware Synchronization — TestAndSet &amp; CompareAndSwap <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">TestAndSet — Atomic Hardware Instruction</span>
+        <p>TestAndSet(lock) atomically reads the value of lock and sets it to true, returning the old value. If the old value was false (lock was free), the caller acquired the lock. Implemented as a single indivisible CPU instruction.</p>
+      </div>
+
+      <div class="cb"><span class="cm">// Atomic hardware instruction</span>
+boolean TestAndSet(boolean *lock):
+    old = *lock
+    *lock = true
+    return old
+
+<span class="cm">// Using TestAndSet for mutual exclusion</span>
+shared boolean lock = false
+
+Process i:
+    while (TestAndSet(&lock)) ;  <span class="cm">// Spin until lock acquired</span>
+    <span class="cm">// Critical Section</span>
+    lock = false                  <span class="cm">// Release</span></div>
+
+      <p>
+        This satisfies mutual exclusion (only one process can find lock=false) and progress (the while loop will terminate if the lock is free). However, it does NOT satisfy bounded waiting — a process can be perpetually bypassed by others who repeatedly acquire the lock.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">CompareAndSwap (CAS)</span>
+        <p>CAS(ptr, expected, new_val) atomically: if *ptr == expected, set *ptr = new_val and return true. Otherwise return false. More powerful than TestAndSet — the foundation of lock-free data structures.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — SEMAPHORES & MONITORS ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Semaphores <em>&amp; Monitors</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="semaphore-def">
+      <h2 class="sh">5.1 &nbsp; Semaphores — Definition &amp; Types <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Semaphore</span>
+        <p>A <strong>semaphore</strong> S is an integer variable accessed only through two atomic operations:<br>
+        <strong>wait(S)</strong> (also P, down): while S ≤ 0: block; S--<br>
+        <strong>signal(S)</strong> (also V, up): S++; wake one waiting process if any</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Binary Semaphore (Mutex)</div>
+          <p>S ∈ {0, 1}. Used for mutual exclusion. Initialize S=1. wait() before CS, signal() after CS. Exactly one process in CS at a time.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Counting Semaphore</div>
+          <p>S can be any non-negative integer. Represents a count of available resources. Initialize S = number of resource units. Used for resource management and synchronization.</p>
+        </div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Mutual exclusion using semaphore (initialized to 1):</strong></p>
+        <div class="cb">Semaphore mutex = 1
+
+Process P₁:           Process P₂:
+wait(mutex)           wait(mutex)
+  <span class="cm">// critical section</span>   <span class="cm">// critical section</span>
+signal(mutex)         signal(mutex)</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Synchronization: P₂ must execute AFTER P₁ completes statement S₁.</strong></p>
+        <div class="cb">Semaphore sync = 0   <span class="cm">// Initialize to 0, not 1!</span>
+
+Process P₁:           Process P₂:
+    S₁                    wait(sync)   <span class="cm">// Block until P₁ signals</span>
+    signal(sync)          S₂           <span class="cm">// Now safe to execute</span></div>
+        <p>Key: for synchronization (ordering), initialize semaphore to 0. For mutual exclusion, initialize to 1 (or the number of resources).</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Busy Waiting vs Blocking</span>
+        <p>The simple wait(S) shown above uses <strong>busy waiting</strong> (spin lock) — the process loops and wastes CPU. OS implementations use <strong>blocking</strong>: when S ≤ 0, the process is put to sleep on a waiting queue and woken up by signal(). Busy waiting is acceptable in multi-core systems for very short critical sections (spinlocks in OS kernels) but unacceptable for user processes.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="monitors">
+      <h2 class="sh">5.2 &nbsp; Monitors — High-Level Synchronization <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Monitor</span>
+        <p>A <strong>monitor</strong> is a high-level synchronization construct — a module (class) with: shared variables, procedures that operate on them, and an implicit mutex lock. Only one process can execute inside the monitor at any time. The monitor enforces mutual exclusion automatically without explicit wait/signal calls on mutexes.</p>
+      </div>
+
+      <p>Monitors include <strong>condition variables</strong> with two operations:</p>
+      <ul class="pl arr">
+        <li><strong>condition.wait()</strong>: atomically releases the monitor lock and suspends the calling process. The process will be resumed by a signal.</li>
+        <li><strong>condition.signal()</strong>: wakes one process waiting on the condition variable. If none waiting, the signal is lost (unlike semaphore where signal increments the counter).</li>
+      </ul>
+
+      <div class="warn-box">
+        <span class="lbl">Semaphore vs Monitor Condition Variable</span>
+        <p>A semaphore's signal() is never lost — it increments S even if no process is waiting. A monitor's condition.signal() IS lost if no process is waiting on that condition. This means the signaling code order matters for monitors but not semaphores. This is the classic exam distinction.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — CLASSICAL SYNCHRONIZATION ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Classical Synchronization Problems</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="producer-consumer">
+      <h2 class="sh">6.1 &nbsp; Producer-Consumer (Bounded Buffer) <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Producers add items to a shared buffer of size N. Consumers remove items. Constraints: producer must not add to a full buffer; consumer must not remove from an empty buffer; only one thread accesses the buffer at a time.</p>
+
+      <div class="cb">Semaphore mutex = 1     <span class="cm">// Mutual exclusion on buffer</span>
+Semaphore empty = N     <span class="cm">// Counts empty slots (init = N)</span>
+Semaphore full  = 0     <span class="cm">// Counts filled slots (init = 0)</span>
+
+Producer:               Consumer:
+while(true):            while(true):
+  produce item            wait(full)
+  wait(empty)             wait(mutex)
+  wait(mutex)             remove item from buffer
+  add item to buffer      signal(mutex)
+  signal(mutex)           signal(empty)
+  signal(full)            consume item</div>
+
+      <div class="warn-box">
+        <span class="lbl">Order of wait() Matters — Deadlock Risk</span>
+        <p>In the Producer: wait(empty) MUST come before wait(mutex). If reversed — wait(mutex) then wait(empty) — a producer holding mutex could block on empty (buffer full), while a consumer needing mutex to remove an item is also blocked. Deadlock. The rule: always acquire the counting semaphore before the mutex semaphore.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="readers-writers">
+      <h2 class="sh">6.2 &nbsp; Readers-Writers Problem <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Multiple readers can read simultaneously. A writer needs exclusive access — no reader or other writer during writing.</p>
+
+      <div class="cb">Semaphore rw_mutex = 1  <span class="cm">// Mutual exclusion for writers</span>
+Semaphore mutex = 1     <span class="cm">// Mutual exclusion on read_count</span>
+int read_count = 0      <span class="cm">// Number of active readers</span>
+
+Reader:                      Writer:
+wait(mutex)                  wait(rw_mutex)
+  read_count++               <span class="cm">// Exclusive write access</span>
+  if read_count == 1:        write data
+    wait(rw_mutex)           signal(rw_mutex)
+signal(mutex)
+read data
+wait(mutex)
+  read_count--
+  if read_count == 0:
+    signal(rw_mutex)
+signal(mutex)</div>
+
+      <p>This is the "first readers-writers" problem — readers have priority. If readers continuously arrive, writers can starve. The "second readers-writers" problem gives writers priority (once a writer is waiting, no new readers admitted).</p>
+    </div>
+
+    <div class="sec" data-m="dining-phil">
+      <h2 class="sh">6.3 &nbsp; Dining Philosophers Problem <span class="tag tg">GATE Tested</span></h2>
+
+      <p>5 philosophers sit at a round table. Between each pair: one fork (5 forks total). A philosopher needs BOTH adjacent forks to eat. The problem: design a protocol that avoids deadlock and starvation.</p>
+
+      <div class="eg">
+        <p><strong>Naïve solution (deadlocks):</strong></p>
+        <div class="cb">Semaphore fork[5] = {1,1,1,1,1}
+Philosopher i:
+    wait(fork[i])          <span class="cm">// Pick up left fork</span>
+    wait(fork[(i+1)%5])   <span class="cm">// Pick up right fork</span>
+    eat()
+    signal(fork[i])
+    signal(fork[(i+1)%5])</div>
+        <p>All 5 philosophers pick up their left fork simultaneously → circular wait → deadlock.</p>
+        <p><strong>Solutions:</strong></p>
+        <ul class="pl arr">
+          <li><strong>Asymmetric solution:</strong> One philosopher (say P4) picks up right fork first. Breaks circular wait.</li>
+          <li><strong>Allow at most 4 philosophers:</strong> Use a semaphore initialized to 4. At most 4 can try simultaneously — at least one can always get both forks.</li>
+          <li><strong>Both forks or neither:</strong> Use a mutex to pick up both forks atomically. Release both if can't get second.</li>
+          <li><strong>Monitor-based:</strong> A philosopher only picks up forks if both are available (checked under monitor lock).</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — DEADLOCKS ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Deadlocks — <em>Detection, Prevention &amp; Avoidance</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="deadlock-conditions">
+      <h2 class="sh">7.1 &nbsp; Conditions for Deadlock — Coffman's Four <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Coffman's Four Necessary Conditions</span>
+        <p>A deadlock can occur if and only if ALL four conditions hold simultaneously:<br>
+        <strong>1. Mutual Exclusion:</strong> At least one resource is held in a non-sharable mode.<br>
+        <strong>2. Hold and Wait:</strong> A process holds at least one resource and is waiting for additional resources held by other processes.<br>
+        <strong>3. No Preemption:</strong> Resources cannot be forcibly taken away — only voluntarily released by the holding process.<br>
+        <strong>4. Circular Wait:</strong> A circular chain of processes each waiting for a resource held by the next: P1 waits for P2's resource, P2 waits for P3's, ..., Pn waits for P1's.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Prevention — Negate One Condition</span>
+        <p>To prevent deadlocks, ensure at least one of the four conditions can never hold: (1) Allow sharing (weaken mutual exclusion — not always possible). (2) Require all resources at once (eliminate hold and wait — wastes resources). (3) Allow preemption (forcibly take resources — may cause inconsistency). (4) Order all resources and require acquisition in order (eliminate circular wait — practical and commonly used).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="resource-alloc-graph">
+      <h2 class="sh">7.2 &nbsp; Resource Allocation Graph <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Resource Allocation Graph (RAG)</span>
+        <p>A directed graph with two node types: processes (circles) and resources (rectangles with dots for instances). <strong>Request edge</strong> Pᵢ → Rⱼ: process Pᵢ is waiting for resource Rⱼ. <strong>Assignment edge</strong> Rⱼ → Pᵢ: an instance of Rⱼ is assigned to Pᵢ.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Graph Condition</th><th>Deadlock conclusion</th></tr></thead>
+          <tbody>
+            <tr><td>No cycle in RAG</td><td class="good">No deadlock</td></tr>
+            <tr><td>Cycle in RAG, each resource has exactly 1 instance</td><td class="bad">Deadlock definitely exists</td></tr>
+            <tr><td>Cycle in RAG, some resources have multiple instances</td><td class="ok">Deadlock MIGHT exist (need further analysis)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Cycle ≠ Deadlock (Multi-Instance Resources)</span>
+        <p>If a resource type has multiple instances, a cycle in the RAG does not guarantee deadlock. Example: R has 2 instances, P1 holds one and waits for the second, P2 holds one. There's a cycle (P1→R→P2→R→P1 in a sense) but P2 may finish and release its instance, allowing P1 to proceed. GATE directly tests this distinction.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bankers">
+      <h2 class="sh">7.3 &nbsp; Banker's Algorithm — Deadlock Avoidance <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Safe State</span>
+        <p>A system state is <strong>safe</strong> if there exists a <strong>safe sequence</strong> — an ordering P₁, P₂, ..., Pₙ of ALL processes such that for each Pᵢ, the resources Pᵢ needs can be satisfied by currently available resources PLUS resources held by all Pⱼ with j &lt; i. If no safe sequence exists → unsafe state → deadlock possible.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Banker's Algorithm Data Structures</span>
+        <p>
+          <strong>Available[j]</strong>: number of available instances of resource type j.<br>
+          <strong>Max[i][j]</strong>: maximum demand of process i for resource j.<br>
+          <strong>Allocation[i][j]</strong>: currently allocated to process i of resource j.<br>
+          <strong>Need[i][j]</strong>: remaining need = Max[i][j] − Allocation[i][j].
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Safety Algorithm (find safe sequence):</strong></p>
+        <div class="cb">Work = Available (initially)
+Finish[i] = false for all i
+
+Repeat until no progress:
+    Find i such that:
+      Finish[i] == false AND Need[i] ≤ Work
+    If found:
+      Work = Work + Allocation[i]   <span class="cm">// i finishes, releases resources</span>
+      Finish[i] = true
+
+If all Finish[i] == true → SAFE STATE (sequence = order found)
+Else → UNSAFE STATE</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Banker's Algorithm full example:</strong></p>
+        <div class="cb">Resources: A=10, B=5, C=7  (total instances)
+           Allocation    Max       Need       Available
+           A  B  C      A  B  C   A  B  C    A  B  C
+P0:        0  1  0      7  5  3   7  4  3     3  3  2
+P1:        2  0  0      3  2  2   1  2  2
+P2:        3  0  2      9  0  2   6  0  0
+P3:        2  1  1      2  2  2   0  1  1
+P4:        0  0  2      4  3  3   4  3  1
+
+Find safe sequence:
+Work = [3,3,2]
+
+P1: Need=[1,2,2] ≤ [3,3,2]? YES. Work=[3+2,3+0,2+0]=[5,3,2]. Finish[P1]=T
+P3: Need=[0,1,1] ≤ [5,3,2]? YES. Work=[5+2,3+1,2+1]=[7,4,3]. Finish[P3]=T
+P4: Need=[4,3,1] ≤ [7,4,3]? YES. Work=[7,4,3+2]=[7,4,5]. Finish[P4]=T
+P0: Need=[7,4,3] ≤ [7,4,5]? YES. Work=[7,4+1,5]=[7,5,5]. Finish[P0]=T
+P2: Need=[6,0,0] ≤ [7,5,5]? YES. Work=[7+3,5,5+2]=[10,5,7]. Finish[P2]=T
+
+Safe sequence: P1 → P3 → P4 → P0 → P2  ✓</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Safe ≠ No Deadlock Currently, Unsafe ≠ Deadlock Certainly</span>
+        <p>Safe state means there EXISTS a sequence that avoids deadlock — not that the system will necessarily follow it. Unsafe state means deadlock is POSSIBLE if processes make their maximum requests simultaneously — not that deadlock has occurred or is inevitable. Banker's algorithm is conservative — it may reject requests that would be safe in practice.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="deadlock-detection">
+      <h2 class="sh">7.4 &nbsp; Deadlock Detection &amp; Recovery <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        Instead of preventing or avoiding deadlock, detect it after it occurs and recover. Detection uses a variant of the Banker's safety algorithm — run it periodically or when processes are waiting long.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Strategy</th><th>Method</th><th>Cost</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Prevention</strong></td><td>Negate one of Coffman's four conditions</td><td class="ok">Medium — restricts resource use</td><td>Deadlock never occurs</td></tr>
+            <tr><td><strong>Avoidance</strong></td><td>Banker's algorithm — grant only safe requests</td><td class="ok">Medium — requires advance max info</td><td>Deadlock never occurs</td></tr>
+            <tr><td><strong>Detection + Recovery</strong></td><td>Detect cycles or run safety algorithm; kill or preempt processes</td><td class="bad">High — deadlock occurs, then fixed</td><td>Deadlock resolved after occurrence</td></tr>
+            <tr><td><strong>Ignorance (Ostrich)</strong></td><td>Pretend deadlock can't happen</td><td class="good">None</td><td>Deadlock may cause system restart — used in some real OS</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Recovery Strategies</h3>
+      <ul class="pl arr">
+        <li><strong>Process termination:</strong> Abort one or more deadlocked processes. Abort all (expensive) or abort one at a time until deadlock broken (cheaper but requires repeated detection).</li>
+        <li><strong>Resource preemption:</strong> Preempt resources from some processes and give to others. Requires rollback capability — the preempted process must restart from a safe checkpoint.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complete Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Ready and Running are the same</td><td>Ready = has all resources except CPU, waiting in queue. Running = currently executing on CPU. The scheduler dispatches from ready → running. On preemption, running → ready.</td></tr>
+            <tr><td>2</td><td>SJF is always optimal</td><td>SJF (non-preemptive) minimises average waiting time among non-preemptive algorithms. SRTF minimises average waiting time overall. Neither minimises turnaround time in general. Context: optimal means minimum avg WT only.</td></tr>
+            <tr><td>3</td><td>SRTF = SJF</td><td>SRTF (Shortest Remaining Time First) is the preemptive version of SJF. SJF = non-preemptive. They give different Gantt charts and different metrics on the same input if a shorter job arrives while another is running.</td></tr>
+            <tr><td>4</td><td>Priority convention (higher number = higher priority?)</td><td>No universal convention. GATE explicitly states whether lower number = higher priority or higher number = higher priority. Read carefully — flipping this changes which process runs and reverses all metrics.</td></tr>
+            <tr><td>5</td><td>RR with large quantum = FCFS exactly</td><td>As quantum → ∞, RR approaches FCFS behaviour (no preemptions). As quantum → 0, RR approaches processor sharing. For finite quantum, RR is distinct from FCFS even for large quanta.</td></tr>
+            <tr><td>6</td><td>Semaphore signal(S) is never lost</td><td>Correct for semaphores — signal() increments S even if nobody is waiting. But monitor condition.signal() IS lost if no process is waiting on the condition. This asymmetry is the key exam distinction between semaphores and monitors.</td></tr>
+            <tr><td>7</td><td>Cycle in RAG = deadlock</td><td>Cycle in RAG guarantees deadlock ONLY if every resource type has exactly one instance. With multiple instances, a cycle indicates potential deadlock only — further analysis (safety algorithm) is needed.</td></tr>
+            <tr><td>8</td><td>Unsafe state = deadlock</td><td>Unsafe state means deadlock is POSSIBLE, not certain. A safe state guarantees at least one execution order that avoids deadlock. An unsafe state just means that path cannot be guaranteed.</td></tr>
+            <tr><td>9</td><td>All four Coffman conditions must hold for deadlock</td><td>Correct. Deadlock requires ALL FOUR conditions simultaneously. Negating even one prevents deadlock. Prevention strategies target exactly one condition.</td></tr>
+            <tr><td>10</td><td>Peterson's solution works on modern hardware</td><td>Peterson's solution works under sequential consistency (memory accesses in order). Modern CPUs reorder memory accesses for performance — Peterson's may fail without explicit memory barriers (fences). It's theoretically correct but requires hardware support to be practically correct.</td></tr>
+            <tr><td>11</td><td>TAT = waiting time + burst time</td><td>TAT = CT − AT (completion time minus arrival time). WT = TAT − BT (turnaround time minus burst time). These are the standard formulas. WT is NOT simply the idle time in the queue — it includes any time not running (waiting for CPU).</td></tr>
+            <tr><td>12</td><td>Bounded waiting = no starvation</td><td>Bounded waiting means a process will enter its critical section within a bounded number of turns after requesting — this IS the no-starvation property for the critical section specifically. Progress prevents indefinite postponement at the group level; bounded waiting prevents individual starvation.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>TAT = CT − AT</td><td>Turnaround time = Completion time − Arrival time</td></tr>
+            <tr><td>WT = TAT − BT</td><td>Waiting time = Turnaround time − Burst time</td></tr>
+            <tr><td>RT = First CPU time − AT</td><td>Response time = time of first CPU response minus arrival</td></tr>
+            <tr><td>CPU utilisation = (Total burst time) / (Total time)</td><td>Fraction of time CPU is busy</td></tr>
+            <tr><td>Throughput = processes completed / unit time</td><td>Rate of process completion</td></tr>
+            <tr><td>Need[i][j] = Max[i][j] − Allocation[i][j]</td><td>Banker's algorithm remaining need</td></tr>
+            <tr><td>Avg TAT = Σ TAT / n</td><td>Average turnaround time over all processes</td></tr>
+            <tr><td>Avg WT = Σ WT / n</td><td>Average waiting time over all processes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Scheduling trace NAT:</strong> "Given 4 processes with arrival and burst times, find average waiting time under FCFS/SJF/RR(q=2)." Draw the Gantt chart, compute CT, TAT, WT for each, average them. Most common 2-mark question.</li>
+        <li><strong>Comparison MCQ:</strong> "Which algorithm minimizes average waiting time?" SRTF for any (preemptive optimal). SJF for non-preemptive. 1 mark.</li>
+        <li><strong>Deadlock conditions:</strong> "A system has 3 processes and 2 resource types. Is deadlock possible?" Apply Coffman's conditions — check if circular wait can occur. 1-2 marks.</li>
+        <li><strong>Banker's Algorithm:</strong> "Given allocation/max tables, is the state safe? Find safe sequence." Apply safety algorithm step by step. 2-mark computation question.</li>
+        <li><strong>RAG analysis:</strong> "Given a resource allocation graph, is there a deadlock?" Find cycles, check instance counts. 1-2 marks.</li>
+        <li><strong>Semaphore initialization:</strong> "What initial value should semaphore S have?" For mutex=1, for synchronization=0, for n-resource pool=n. 1 mark.</li>
+        <li><strong>CS requirements:</strong> "Does this solution satisfy mutual exclusion/progress/bounded waiting?" Analyze Peterson's or a given solution against the three properties. 2 marks.</li>
+        <li><strong>Producer-Consumer order:</strong> "What happens if wait(mutex) is done before wait(empty) in the Producer?" Deadlock when buffer is full — producer holds mutex, consumer can't acquire it. 1-2 marks.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Operating Systems · Processes, Scheduling &amp; Synchronization · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

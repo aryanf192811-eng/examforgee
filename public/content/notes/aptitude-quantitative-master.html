@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Aptitude — Quantitative Master Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:880px;margin:0 auto;}
+
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:580px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tq{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+h4.sssh{font-family:var(--body);font-size:14px;font-weight:600;color:var(--green);margin:16px 0 6px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.trick{background:#fffbea;border:2px solid #d4a800;border-radius:4px;padding:14px 18px;margin:14px 0;position:relative;}
+.trick::before{content:'⚡ Trick';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#a07800;position:absolute;top:-9px;left:14px;background:#fffbea;padding:0 6px;}
+.trick p{font-family:var(--prose);font-size:16.5px;color:var(--ink);margin:0 0 6px;line-height:1.82;}
+.trick p:last-child{margin:0;}
+.trick strong{color:#7a5800;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;} .c-p{color:var(--purple);font-weight:600;}
+
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+.formula{background:var(--paper3);border:2px solid var(--ink);border-radius:4px;padding:16px 20px;margin:14px 0;font-family:'Courier New',monospace;font-size:15px;color:var(--ink);line-height:2;text-align:center;}
+.formula strong{color:var(--blue);font-size:16px;}
+
+.visual{margin:20px 0;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.visual-lbl{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);}
+.visual{overflow:hidden;border-radius:4px;}.visual svg{max-width:100%;height:auto;display:block;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+@media(max-width:600px){.two-col{grid-template-columns:1fr;}}
+
+.trap-row{display:grid;grid-template-columns:auto 1fr 1fr;gap:0;border:1.5px solid #b0a080;border-radius:4px;overflow:hidden;margin:10px 0;}
+.trap-num{background:var(--ink);color:var(--paper);font-family:var(--hand);font-size:14px;padding:12px 14px;display:flex;align-items:center;justify-content:center;min-width:44px;}
+.trap-wrong{background:#fff1f1;padding:10px 14px;border-right:1px dashed #c0a880;}
+.trap-right{background:#f0fff4;padding:10px 14px;}
+.trap-wrong p,.trap-right p{font-family:var(--prose);font-size:15px;margin:0;line-height:1.7;}
+.trap-wrong p{color:var(--red);} .trap-right p{color:var(--green);}
+.trap-lbl{font-family:var(--hand);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:3px;}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+
+/* Formula cards — quick reference tiles */
+.fcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0;}
+.fcard{background:var(--paper);border:2px solid var(--ink);border-radius:4px;padding:15px 17px;box-shadow:3px 4px 0 #9a8a6e;}
+.fcard-title{font-family:var(--hand);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--ink);}
+.fcard ul{list-style:none;margin:0;padding:0;}
+.fcard ul li{font-family:'Courier New',monospace;font-size:12.5px;color:var(--ink2);padding:3px 0;border-bottom:1px dashed #d0c0a0;line-height:1.55;}
+.fcard ul li:last-child{border-bottom:none;}
+
+/* How-to-use banner */
+.how-box{background:#f0f4ff;border:1.5px solid #1a4a8c;border-radius:4px;padding:14px 22px;margin-bottom:28px;display:flex;gap:16px;align-items:flex-start;}
+.how-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.how-box p{font-family:var(--prose);font-size:15.5px;color:var(--ink2);margin:0;line-height:1.82;}
+.how-box strong{color:var(--blue);}
+
+/* Chapter progress ribbon */
+.ch-progress{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.cp{width:28px;height:4px;background:rgba(245,240,230,0.2);border-radius:2px;}
+.cp.done{background:#e8c870;}
+
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}.trap-row{grid-template-columns:auto 1fr;}.trap-right{grid-column:2;border-top:1px dashed #c0a880;}.fcards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-tag">GATE CSE + Placements</span>
+  <div class="cover-inner">
+    <div class="cover-subject">General Aptitude · Quantitative Master Reference</div>
+    <h1>The Complete Quant Bible<br>for <em>Engineers &amp; CSE</em></h1>
+    <p class="cover-desc">
+      Every quantitative topic tested in GATE CSE, placements &amp; technical interviews — under one roof. Divisibility, primes, P&amp;C, progressions, logarithms, number bases, geometry, clocks, calendars, speed–distance, SI/CI, ratio, percentages, and a complete 28-trap watchlist. Built for depth, not just coverage.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch A · Number Theory</span>
+      <span class="chip">Ch B · Permutations &amp; Combinations</span>
+      <span class="chip">Ch C · Progressions: AP, GP, HP, AGP</span>
+      <span class="chip">Ch D · Algebra, Logs &amp; Functions</span>
+      <span class="chip">Ch E · Number Bases &amp; Conversions</span>
+      <span class="chip">Ch F · Geometry &amp; Mensuration</span>
+      <span class="chip">Ch G · Speed, Distance &amp; Work</span>
+      <span class="chip">Ch H · Percentages, Ratio &amp; Profit</span>
+      <span class="chip">Ch I · Clocks, Calendars &amp; SI/CI</span>
+      <span class="chip">Ch J · Master Formula &amp; Trap Sheet</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#chA"><span class="tn">A</span>Number Theory — Complete</a>
+    <a href="#chB"><span class="tn">B</span>Permutations &amp; Combinations</a>
+    <a href="#chC"><span class="tn">C</span>Progressions: AP, GP, HP, AGP</a>
+    <a href="#chD"><span class="tn">D</span>Algebra, Logarithms &amp; Functions</a>
+    <a href="#chE"><span class="tn">E</span>Number Bases &amp; Conversions</a>
+    <a href="#chF"><span class="tn">F</span>Geometry &amp; Mensuration</a>
+    <a href="#chG"><span class="tn">G</span>Speed, Distance, Time &amp; Work</a>
+    <a href="#chH"><span class="tn">H</span>Percentages, Ratio &amp; Profit/Loss</a>
+    <a href="#chI"><span class="tn">I</span>Clocks, Calendars &amp; SI/CI</a>
+    <a href="#chJ"><span class="tn">J</span>Master Formula &amp; Trap Sheet</a>
+  </div>
+</div>
+
+<!-- How to use -->
+<div class="how-box">
+  <div class="how-icon">📖</div>
+  <p><strong>How to use this document:</strong> Read each chapter once for coverage, then revisit the <em>Tricks</em> and <em>Trap Sheet</em> (Ch J) before every mock. The formula cards in Ch J are designed for active recall — cover the answers and test yourself. Every example problem has a worked solution you should verify by hand, not just read through.</p>
+</div>
+
+
+<!-- ═══ CH A — NUMBER THEORY ═══ -->
+<div class="chapter" id="chA">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter A</div>
+    <div class="ch-title">Number Theory — <em>The Complete Treatment</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="divisibility">
+      <h2 class="sh">A.1 &nbsp; Divisibility Rules — All 15 <span class="tag tg">GATE Tested</span></h2>
+      <p>Rules for 2, 3, 5, 9 are universally known. The ones for <strong>7, 11, 12, 13, 14, 15, 25</strong> are tested precisely because most candidates skip them.</p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Divisor</th><th>Rule</th><th>Verify on 91</th></tr></thead>
+          <tbody>
+            <tr><td><strong>2</strong></td><td>Last digit ∈ {0,2,4,6,8}</td><td>Last=1 → <span class="bad">No</span></td></tr>
+            <tr><td><strong>3</strong></td><td>Sum of digits divisible by 3</td><td>9+1=10 → <span class="bad">No</span></td></tr>
+            <tr><td><strong>4</strong></td><td>Last two digits divisible by 4</td><td>91÷4=22.75 → <span class="bad">No</span></td></tr>
+            <tr><td><strong>5</strong></td><td>Last digit is 0 or 5</td><td><span class="bad">No</span></td></tr>
+            <tr><td><strong>6</strong></td><td>Divisible by both 2 AND 3</td><td>Both tests must pass simultaneously</td></tr>
+            <tr><td><strong>7</strong></td><td>Double last digit, subtract from rest. Repeat till ≤ 2 digits. Divisible by 7 → Yes</td><td>91: 2×1=2; 9−2=7 → <span class="good">Yes ✓</span></td></tr>
+            <tr><td><strong>8</strong></td><td>Last three digits divisible by 8</td><td>1912 → 912÷8=114 → Yes</td></tr>
+            <tr><td><strong>9</strong></td><td>Sum of digits divisible by 9</td><td>9+1=10 → <span class="bad">No</span></td></tr>
+            <tr><td><strong>10</strong></td><td>Last digit is 0</td><td>—</td></tr>
+            <tr><td><strong>11</strong></td><td>(Odd-position digits) − (Even-position digits) = 0 or ÷11</td><td>121: 1−2+1=0 → <span class="good">Yes ✓</span></td></tr>
+            <tr><td><strong>12</strong></td><td>Divisible by both 3 AND 4</td><td>Both tests</td></tr>
+            <tr><td><strong>13</strong></td><td>Multiply last digit by 4, ADD to rest. Repeat till small. ÷13 → Yes</td><td>91: 4×1=4; 9+4=13 → <span class="good">Yes ✓</span></td></tr>
+            <tr><td><strong>14</strong></td><td>Divisible by both 2 AND 7</td><td>Both tests</td></tr>
+            <tr><td><strong>15</strong></td><td>Divisible by both 3 AND 5</td><td>Both tests</td></tr>
+            <tr><td><strong>25</strong></td><td>Last two digits ∈ {00, 25, 50, 75}</td><td>375 → 75 → <span class="good">Yes ✓</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SVG: Div by 7 visual -->
+      <div class="visual">
+        <div class="visual-lbl">Divisibility by 7 — Step-by-Step on 1001</div>
+        <svg width="100%" height="130" viewBox="0 0 640 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="130" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Step boxes -->
+          <rect x="18" y="18" width="96" height="40" rx="4" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="66" y="41" text-anchor="middle" font-family="Courier New" font-size="16" fill="#1a4a8c" font-weight="bold">1001</text>
+          <text x="66" y="54" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Start</text>
+          <text x="124" y="30" font-family="Architects Daughter,cursive" font-size="11" fill="#b85a10">last=1 → ×2=2</text>
+          <text x="124" y="46" font-family="Architects Daughter,cursive" font-size="11" fill="#b85a10">100 − 2 = 98</text>
+          <rect x="258" y="18" width="110" height="40" rx="4" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.5"/>
+          <text x="313" y="41" text-anchor="middle" font-family="Courier New" font-size="16" fill="#1a4a8c" font-weight="bold">98</text>
+          <text x="313" y="54" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Step 1</text>
+          <text x="380" y="30" font-family="Architects Daughter,cursive" font-size="11" fill="#b85a10">last=8 → ×2=16</text>
+          <text x="380" y="46" font-family="Architects Daughter,cursive" font-size="11" fill="#b85a10">9 − 16 = −7</text>
+          <rect x="510" y="18" width="112" height="40" rx="4" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.5"/>
+          <text x="566" y="39" text-anchor="middle" font-family="Courier New" font-size="14" fill="#1a6b40" font-weight="bold">−7 ≡ 0 mod 7</text>
+          <text x="566" y="54" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#1a6b40">Divisible ✓</text>
+          <line x1="114" y1="38" x2="258" y2="38" stroke="#b85a10" stroke-width="1" stroke-dasharray="4,3"/>
+          <line x1="368" y1="38" x2="510" y2="38" stroke="#b85a10" stroke-width="1" stroke-dasharray="4,3"/>
+          <!-- Bottom notes — broken into two lines each -->
+          <text x="20" y="84" font-family="Lora,serif" font-size="12" fill="#3a2e22">∴ 1001 is divisible by 7. Also by 11 and 13 — 1001 = 7 × 11 × 13. All three rules converge.</text>
+          <text x="20" y="102" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Div by 7: double last digit, subtract. Div by 13: multiply last digit by 4, add.</text>
+          <text x="20" y="118" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">Multiplier chosen so the operation cancels correctly mod each prime.</text>
+        </svg>
+      </div>
+
+      <div class="trick">
+        <p><strong>Why div-by-11 uses alternating sums:</strong> 10 ≡ −1 (mod 11). So 10² ≡ +1, 10³ ≡ −1, … alternating. For number <code>abcde</code>: value = a·10⁴ + b·10³ + c·10² + d·10 + e ≡ a − b + c − d + e (mod 11). That's your alternating digit sum.</p>
+        <p><strong>Why div-by-13 adds instead of subtracts:</strong> 10 ≡ 10 (mod 13), but 4×10 = 40 ≡ 1 (mod 13). So multiplying by 4 and adding creates a congruence that telescopes correctly for 13.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="primes">
+      <h2 class="sh">A.2 &nbsp; Primes, Factors &amp; Euler's Totient <span class="tag tc">Core</span></h2>
+
+      <h3 class="ssh">Testing Primality — Efficient Method</h3>
+      <div class="def-box">
+        <span class="lbl">Primality Test Rule</span>
+        <p>To test if N is prime: check divisibility by all primes up to <strong>√N</strong>. If none divide N → N is prime.<br>
+        Efficiency shortcut: All primes &gt; 3 are of the form <strong>6k ± 1</strong>. Test only those candidates.<br>
+        Example: Is 149 prime? √149 ≈ 12.2. Test 7, 11 (the 6k±1 values ≤ 12): neither divides 149 → <strong>Prime</strong>.</p>
+      </div>
+
+      <!-- SVG: Prime number sieve visual -->
+      <div class="visual">
+        <div class="visual-lbl">Primes up to 30 — Blue = Prime · Gray = Composite</div>
+        <svg width="100%" height="90" viewBox="0 0 640 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="90" rx="5" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <text x="320" y="14" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">All primes &gt; 3 appear at positions 6k±1 (5,7,11,13,17,19,23,29…)</text>
+          <text x="320" y="26" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">*25=5² is composite — 6k±1 filters candidates, not guarantees primality</text>
+          <g transform="translate(20,34)">
+            <circle cx="16" cy="16" r="13" fill="#1a4a8c"/><text x="16" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">2</text>
+            <circle cx="48" cy="16" r="13" fill="#1a4a8c"/><text x="48" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">3</text>
+            <circle cx="80" cy="16" r="13" fill="#d0c8b8"/><text x="80" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">4</text>
+            <circle cx="112" cy="16" r="13" fill="#1a4a8c"/><text x="112" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">5</text>
+            <circle cx="144" cy="16" r="13" fill="#d0c8b8"/><text x="144" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">6</text>
+            <circle cx="176" cy="16" r="13" fill="#1a4a8c"/><text x="176" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">7</text>
+            <circle cx="208" cy="16" r="13" fill="#d0c8b8"/><text x="208" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">8</text>
+            <circle cx="240" cy="16" r="13" fill="#d0c8b8"/><text x="240" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">9</text>
+            <circle cx="272" cy="16" r="13" fill="#d0c8b8"/><text x="272" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">10</text>
+            <circle cx="304" cy="16" r="13" fill="#1a4a8c"/><text x="304" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">11</text>
+            <circle cx="336" cy="16" r="13" fill="#d0c8b8"/><text x="336" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">12</text>
+            <circle cx="368" cy="16" r="13" fill="#1a4a8c"/><text x="368" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">13</text>
+            <circle cx="400" cy="16" r="13" fill="#d0c8b8"/><text x="400" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">14</text>
+            <circle cx="432" cy="16" r="13" fill="#d0c8b8"/><text x="432" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">15</text>
+            <circle cx="464" cy="16" r="13" fill="#d0c8b8"/><text x="464" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">16</text>
+            <circle cx="496" cy="16" r="13" fill="#1a4a8c"/><text x="496" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">17</text>
+            <circle cx="528" cy="16" r="13" fill="#d0c8b8"/><text x="528" y="21" text-anchor="middle" fill="#6b5a47" font-family="Lora,serif" font-size="13">18</text>
+            <circle cx="560" cy="16" r="13" fill="#1a4a8c"/><text x="560" y="21" text-anchor="middle" fill="white" font-family="Lora,serif" font-weight="bold" font-size="13">19</text>
+            <text x="596" y="21" font-family="Lora,serif" font-size="16" fill="#6b5a47">···</text>
+          </g>
+        </svg>
+      </div>
+
+      <h3 class="ssh">Factor Count Formula</h3>
+      <div class="def-box">
+        <span class="lbl">Number of Divisors</span>
+        <p>If N = p₁ᵃ × p₂ᵇ × p₃ᶜ × … (prime factorisation), then:<br>
+        <strong>Total factors = (a+1)(b+1)(c+1)…</strong><br>
+        <strong>Odd factors:</strong> set the power of 2 to 0, apply formula.<br>
+        <strong>Sum of factors</strong> = (1+p₁+p₁²+…+p₁ᵃ)(1+p₂+…+p₂ᵇ)… [product of GP sums]<br>
+        <strong>Product of all factors</strong> = N^(τ(N)/2), where τ(N) = total number of factors.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Q: Find total factors, odd factors, and even factors of 720.</strong></p>
+        <div class="cb">720 = 2⁴ × 3² × 5¹
+
+Total factors = (4+1)(2+1)(1+1) = 5 × 3 × 2 = 30
+
+Odd factors → force power of 2 to 0:
+  (0+1)(2+1)(1+1) = 1 × 3 × 2 = 6
+  (The 6 odd factors are: 1, 3, 5, 9, 15, 45)
+
+Even factors = Total − Odd = 30 − 6 = 24</div>
+      </div>
+
+      <h3 class="ssh">Euler's Totient φ(n)</h3>
+      <div class="def-box">
+        <span class="lbl">φ(n) — Count of Integers Co-prime to n</span>
+        <p>φ(n) = count of integers from 1 to n where GCD(k, n) = 1.<br>
+        <strong>Formula:</strong> φ(n) = n × ∏(1 − 1/p) for each prime p | n.<br>
+        φ(12) = 12 × (1−½) × (1−⅓) = 4 &nbsp;→&nbsp; co-primes are {1, 5, 7, 11} ✓<br>
+        φ(prime p) = p−1 &nbsp;|&nbsp; φ(pⁿ) = pⁿ − pⁿ⁻¹ &nbsp;|&nbsp; φ(mn) = φ(m)φ(n) when GCD(m,n)=1<br><br>
+        <strong>Fermat's Little Theorem:</strong> If p is prime, GCD(a,p)=1 → aᵖ⁻¹ ≡ 1 (mod p).<br>
+        <strong>Euler's Theorem (generalised):</strong> a^φ(n) ≡ 1 (mod n) when GCD(a,n)=1.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find 3¹⁰⁰ mod 7.</strong></p>
+        <div class="cb">φ(7) = 6 (since 7 is prime)
+By Euler: 3⁶ ≡ 1 (mod 7)
+100 = 16 × 6 + 4 → 3¹⁰⁰ = (3⁶)¹⁶ × 3⁴ ≡ 1¹⁶ × 81 ≡ 81 mod 7
+81 = 11×7 + 4 → Answer: 3¹⁰⁰ ≡ 4 (mod 7)</div>
+      </div>
+
+      <h3 class="ssh">HCF / LCM Word Problem Patterns</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem Type</th><th>Formula to Use</th></tr></thead>
+          <tbody>
+            <tr><td>Largest divisor leaving remainders r₁, r₂, r₃ from a, b, c</td><td><code>HCF(a−r₁, b−r₂, c−r₃)</code></td></tr>
+            <tr><td>Largest divisor leaving the <em>same</em> remainder from a, b, c</td><td><code>HCF(a−b, b−c, c−a)</code></td></tr>
+            <tr><td>Smallest number divisible by a, b, c</td><td><code>LCM(a, b, c)</code></td></tr>
+            <tr><td>Smallest number leaving remainder r when divided by a, b, c</td><td><code>LCM(a,b,c) + r</code></td></tr>
+            <tr><td>Events recurring every a, b, c minutes — next coincidence</td><td><code>LCM(a, b, c)</code> minutes from now</td></tr>
+            <tr><td>Always true: LCM × HCF = ?</td><td><strong>LCM × HCF = a × b</strong> (only for two numbers)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Modular Arithmetic & Last-Digit Cycles</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Last Digit of Powers</div>
+          <p><strong>2, 3, 7, 8:</strong> cycle of 4 last digits<br><strong>4, 9:</strong> cycle of 2 (4→6→4; 9→1→9)<br><strong>0, 1, 5, 6:</strong> always same last digit<br>Find last digit: compute exponent <strong>mod 4</strong>, look up cycle position.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Last Two Digits</div>
+          <p>Last two digits = number <strong>mod 100</strong>.<br>φ(100) = 40, so for GCD(a,100)=1: a⁴⁰ ≡ 1 (mod 100).<br>Find n mod 40, compute aⁿ mod 100.<br>Example: 7⁸⁶ → 86 mod 40 = 6 → 7⁶ = 117649 → last two: <strong>49</strong>.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Chinese Remainder Theorem</div>
+          <p>Solve: x ≡ r₁ (mod n₁) and x ≡ r₂ (mod n₂), GCD(n₁,n₂)=1.<br>Method: List multiples of n₁ giving r₁. Find one that gives r₂ mod n₂.<br>Ex: x≡3(mod 5), x≡2(mod 7). List: 3,8,13,18,<strong>23</strong>. 23 mod 7=2 ✓.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH B — P&C ═══ -->
+<div class="chapter" id="chB">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter B</div>
+    <div class="ch-title">Permutations &amp; Combinations — <em>Complete Treatment</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="P&C">
+      <h2 class="sh">B.1 &nbsp; Core Counting Framework <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="two-col">
+        <div class="def-box">
+          <span class="lbl">Permutation — Order Matters</span>
+          <p>Choose and arrange r items from n distinct items.<br><strong>nPr = n! / (n−r)!</strong><br>Example: Top-3 rank from 10 students = 10P3 = 10×9×8 = 720.</p>
+        </div>
+        <div class="def-box">
+          <span class="lbl">Combination — Order Ignored</span>
+          <p>Choose r items from n distinct items (groups, not arrangements).<br><strong>nCr = n! / [r!(n−r)!]</strong><br>Example: Committee of 3 from 10 = 10C3 = 120.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scenario</th><th>Formula</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>n distinct objects in a row</td><td>n!</td><td>5 books: 5! = 120 ways</td></tr>
+            <tr><td>n distinct in a <em>circle</em></td><td>(n−1)!</td><td>6 people around table: 5! = 120</td></tr>
+            <tr><td>Necklace (flipped = same)</td><td>(n−1)!/2</td><td>6 beads: 5!/2 = 60</td></tr>
+            <tr><td>Repeated identical objects (p alike, q alike…)</td><td>n! / (p!q!…)</td><td>MISSISSIPPI: 11!/(4!4!2!) = 34650</td></tr>
+            <tr><td>r from n <em>with repetition</em> allowed</td><td>(n+r−1)Cr</td><td>3 from 5 colors with repeat: 7C3=35</td></tr>
+            <tr><td>n identical into r distinct bins (Stars &amp; Bars)</td><td>(n+r−1)C(r−1)</td><td>10 sweets into 4 kids: 13C3=286</td></tr>
+            <tr><td>Derangements (no item in its original position)</td><td>D(n) = n!·Σ(−1)ᵏ/k!, k=0..n</td><td>D3=2, D4=9, D5=44 — memorize these!</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>"Must stay together" — Bundle Trick:</strong> Treat the group as one unit. If 3 people must always sit together in a row of 8: treat them as 1 unit → 6 units total → 6! arrangements × 3! internal arrangements = 4320.</p>
+        <p><strong>"Must NOT be together" — Always use complement:</strong> Not-together = Total − Always-together. Trying to count "not together" directly is 3× harder. Always subtract from total.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>In how many ways can 6 men and 4 women be seated in a row so that no two women are adjacent?</strong></p>
+        <div class="cb">Step 1: Arrange 6 men: 6! = 720 ways
+Step 2: Identify gaps — between and around 6 men there are 7 gaps:
+        _ M _ M _ M _ M _ M _ M _
+Step 3: Place 4 women in 7 gaps (order matters): 7P4 = 7×6×5×4 = 840
+Answer: 720 × 840 = 604,800</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="binomial">
+      <h2 class="sh">B.2 &nbsp; Binomial Theorem &amp; Key Identities <span class="tag tp">Interview Level</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Binomial Expansion</span>
+        <p><strong>(x + y)ⁿ = Σ nCk · xⁿ⁻ᵏ · yᵏ</strong> for k = 0 to n<br>
+        General term: <strong>T_{k+1} = nCk · xⁿ⁻ᵏ · yᵏ</strong><br>
+        Sum of all binomial coefficients = <strong>2ⁿ</strong> (set x=y=1)<br>
+        Middle term (n even): T_{n/2+1} = nC(n/2) · x^(n/2) · y^(n/2)<br>
+        <strong>To find term independent of x:</strong> set the exponent of x = 0, solve for k.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find the term independent of x in (x + 1/x²)⁹.</strong></p>
+        <div class="cb">General term = 9Ck · x^(9−k) · (x^−2)^k = 9Ck · x^(9−k−2k) = 9Ck · x^(9−3k)
+Set exponent = 0: 9 − 3k = 0 → k = 3
+Term = 9C3 = 84</div>
+      </div>
+
+      <h3 class="ssh">Pascal's Rule &amp; Key Identities</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Pascal's Rule</div>
+          <p>nCr + nC(r−1) = (n+1)Cr<br>Each entry in Pascal's triangle is the sum of the two entries above it.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Symmetry</div>
+          <p>nCr = nC(n−r)<br>So nC2 = nC(n−2), etc. Quickly simplify when r is large.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Vandermonde's Identity</div>
+          <p>Σ (rCk)(n−rC(m−k)) = nCm<br>Combining selections from two separate groups.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Alternating Sum</div>
+          <p>nC0 − nC1 + nC2 − … = 0 for n≥1<br>Set x=−1, y=1 in binomial theorem.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH C — PROGRESSIONS ═══ -->
+<div class="chapter" id="chC">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter C</div>
+    <div class="ch-title">Progressions — <em>AP, GP, HP &amp; AGP</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="AP GP">
+      <h2 class="sh">C.1 &nbsp; AP and GP — All Formulas <span class="tag tg">GATE Tested</span></h2>
+
+      <!-- SVG: AP vs GP growth comparison -->
+      <div class="visual">
+        <div class="visual-lbl">AP (Linear) vs GP (Exponential) — Growth Comparison</div>
+        <svg width="100%" height="120" viewBox="0 0 620 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="620" height="120" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- AP row -->
+          <text x="20" y="38" font-family="Architects Daughter,cursive" font-size="11" fill="#1a4a8c" font-weight="bold">AP (d=3):</text>
+          <rect x="100" y="24" width="42" height="24" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.2"/><text x="121" y="40" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a4a8c">2</text>
+          <rect x="152" y="24" width="42" height="24" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.2"/><text x="173" y="40" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a4a8c">5</text>
+          <rect x="204" y="24" width="42" height="24" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.2"/><text x="225" y="40" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a4a8c">8</text>
+          <rect x="256" y="24" width="42" height="24" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.2"/><text x="277" y="40" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a4a8c">11</text>
+          <rect x="308" y="24" width="42" height="24" rx="3" fill="#eef3ff" stroke="#1a4a8c" stroke-width="1.2"/><text x="329" y="40" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a4a8c">14</text>
+          <text x="362" y="40" font-family="Lora,serif" font-size="14" fill="#6b5a47"> ··· +3 each time (linear)</text>
+          <!-- GP row -->
+          <text x="20" y="88" font-family="Architects Daughter,cursive" font-size="11" fill="#1a6b40" font-weight="bold">GP (r=2):</text>
+          <rect x="100" y="72" width="42" height="24" rx="3" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.2"/><text x="121" y="88" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a6b40">1</text>
+          <rect x="152" y="72" width="42" height="24" rx="3" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.2"/><text x="173" y="88" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a6b40">2</text>
+          <rect x="204" y="72" width="42" height="24" rx="3" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.2"/><text x="225" y="88" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a6b40">4</text>
+          <rect x="256" y="72" width="42" height="24" rx="3" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.2"/><text x="277" y="88" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a6b40">8</text>
+          <rect x="308" y="72" width="42" height="24" rx="3" fill="#f0fff4" stroke="#1a6b40" stroke-width="1.2"/><text x="329" y="88" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#1a6b40">16</text>
+          <text x="362" y="88" font-family="Lora,serif" font-size="14" fill="#6b5a47"> ··· ×2 each time (exponential)</text>
+        </svg>
+      </div>
+
+      <div class="two-col">
+        <div class="def-box">
+          <span class="lbl">Arithmetic Progression (AP)</span>
+          <p><strong>nth term:</strong> aₙ = a + (n−1)d<br>
+          <strong>Sum of n terms:</strong> Sₙ = n/2 · (2a + (n−1)d)<br>
+          <strong>Also:</strong> Sₙ = n/2 · (a + last term)<br>
+          <strong>AM:</strong> (a + l) / 2<br>
+          <strong>3-term AP setup:</strong> Use (a−d), a, (a+d) → sum = 3a, solving is clean.</p>
+        </div>
+        <div class="def-box">
+          <span class="lbl">Geometric Progression (GP)</span>
+          <p><strong>nth term:</strong> aₙ = a · rⁿ⁻¹<br>
+          <strong>Sum of n terms:</strong> Sₙ = a(rⁿ−1)/(r−1), r≠1<br>
+          <strong>Infinite sum:</strong> S∞ = a/(1−r), |r|&lt;1<br>
+          <strong>GM:</strong> √(first × last)<br>
+          <strong>3-term GP setup:</strong> Use a/r, a, ar → product = a³.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Special Sums — Must Know Cold</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Series</th><th>Sum Formula</th><th>Trick to Remember</th></tr></thead>
+          <tbody>
+            <tr><td>1 + 2 + 3 + … + n</td><td><strong>n(n+1)/2</strong></td><td>Triangle number</td></tr>
+            <tr><td>1² + 2² + … + n²</td><td><strong>n(n+1)(2n+1)/6</strong></td><td>"n n+1 two-n+1 over six"</td></tr>
+            <tr><td>1³ + 2³ + … + n³</td><td><strong>[n(n+1)/2]²</strong></td><td>Square of Σn — beautiful identity!</td></tr>
+            <tr><td>Sum of first n odd numbers</td><td><strong>n²</strong></td><td>1+3+5+…+(2n−1) = n²</td></tr>
+            <tr><td>Sum of first n even numbers</td><td><strong>n(n+1)</strong></td><td>2+4+6+…+2n = n(n+1)</td></tr>
+            <tr><td>a + ar + ar² + … ∞, |r|&lt;1</td><td><strong>a/(1−r)</strong></td><td>Infinite GP — only valid when |r|&lt;1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="HP AGP">
+      <h2 class="sh">C.2 &nbsp; HP, AGP and AM≥GM≥HM Inequality <span class="tag tp">Interview Level</span></h2>
+
+      <h3 class="ssh">Harmonic Progression (HP)</h3>
+      <p>A sequence is in HP if its <strong>reciprocals form an AP</strong>. There is no direct sum formula — always convert to AP, solve, then convert back.</p>
+      <div class="def-box">
+        <span class="lbl">Harmonic Mean</span>
+        <p>For two numbers a and b: <strong>HM = 2ab/(a+b)</strong><br>
+        For three terms a, b, c in HP: b = 2ac/(a+c)<br>
+        <mark>HM is always used for average speed over equal distances.</mark></p>
+      </div>
+
+      <h3 class="ssh">AM ≥ GM ≥ HM — The Golden Inequality</h3>
+      <!-- SVG: AM GM HM number line -->
+      <div class="visual">
+        <div class="visual-lbl">AM ≥ GM ≥ HM for any two positive numbers a, b</div>
+        <svg width="100%" height="80" viewBox="0 0 600 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="80" rx="5" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <line x1="40" y1="40" x2="560" y2="40" stroke="#b0a088" stroke-width="2"/>
+          <!-- HM -->
+          <circle cx="120" cy="40" r="10" fill="#b83030"/><text x="120" y="44" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="white" font-weight="bold">HM</text>
+          <text x="120" y="68" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#b83030">2ab/(a+b)</text>
+          <!-- GM -->
+          <circle cx="300" cy="40" r="10" fill="#1a6b40"/><text x="300" y="44" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="white" font-weight="bold">GM</text>
+          <text x="300" y="68" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#1a6b40">√(ab)</text>
+          <!-- AM -->
+          <circle cx="480" cy="40" r="10" fill="#1a4a8c"/><text x="480" y="44" text-anchor="middle" font-family="Lora,serif" font-size="11" fill="white" font-weight="bold">AM</text>
+          <text x="480" y="68" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#1a4a8c">(a+b)/2</text>
+          <!-- inequalities -->
+          <text x="210" y="36" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#b85a10">≤</text>
+          <text x="390" y="36" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#b85a10">≤</text>
+          <text x="300" y="18" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="11" fill="#6b5a47">Equality holds only when a = b</text>
+        </svg>
+      </div>
+
+      <h3 class="ssh">Arithmetico-Geometric Progression (AGP)</h3>
+      <div class="def-box">
+        <span class="lbl">AGP — Each term = (AP term) × (GP term)</span>
+        <p>Form: a, (a+d)r, (a+2d)r², …<br>
+        <strong>Infinite AGP sum (|r|&lt;1):</strong> S = a/(1−r) + dr/(1−r)²<br>
+        <strong>Finite AGP:</strong> Multiply S by r → get rS. Subtract to get S−rS, which telescopes.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find S = 1 + 2(½) + 3(¼) + 4(⅛) + …</strong></p>
+        <div class="cb">S   = 1 + 2(1/2) + 3(1/4) + 4(1/8) + …
+S/2 =     1(1/2) + 2(1/4) + 3(1/8) + …    [multiply by r = ½]
+──────────────────────────────────────────
+S − S/2 = 1 + (1/2) + (1/4) + (1/8) + …   [subtract: the "shifts" cancel]
+S/2 = 1/(1 − ½) = 2
+∴ S = 4</div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH D — ALGEBRA, LOGS, FUNCTIONS ═══ -->
+<div class="chapter" id="chD">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter D</div>
+    <div class="ch-title">Algebra, Logarithms &amp; <em>Functions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="algebra">
+      <h2 class="sh">D.1 &nbsp; Equations, Indices &amp; Inequalities <span class="tag tc">Core</span></h2>
+
+      <h3 class="ssh">Quadratic ax² + bx + c = 0</h3>
+      <div class="def-box">
+        <span class="lbl">Quadratic Formula &amp; Vieta's Formulas</span>
+        <p>Roots: x = (−b ± √(b²−4ac)) / 2a<br>
+        <strong>α + β = −b/a</strong> &nbsp;&nbsp; <strong>αβ = c/a</strong> &nbsp;&nbsp; <strong>Discriminant D = b²−4ac</strong><br>
+        D &gt; 0: two distinct real roots &nbsp;|&nbsp; D = 0: one repeated root &nbsp;|&nbsp; D &lt; 0: complex conjugate roots<br>
+        <strong>Build quadratic from roots:</strong> x² − (α+β)x + αβ = 0</p>
+      </div>
+
+      <div class="trick">
+        <p><strong>Inequality Sign Flip Rule:</strong> Multiplying or dividing an inequality by a <em>negative</em> number reverses the sign. −3x &lt; 9 → x &gt; −3 (sign flipped!). Never multiply an inequality by a variable without knowing its sign — split into cases.</p>
+      </div>
+
+      <h3 class="ssh">Laws of Indices — Common Traps</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Law</th><th>Rule</th><th>Common Trap</th></tr></thead>
+          <tbody>
+            <tr><td>aᵐ · aⁿ</td><td>a^(m+n)</td><td>Only works if <em>base is same</em></td></tr>
+            <tr><td>(aᵐ)ⁿ</td><td>a^(mn)</td><td>Power-of-power: multiply exponents</td></tr>
+            <tr><td>(ab)ⁿ</td><td>aⁿbⁿ</td><td>Distributes over × not over +</td></tr>
+            <tr><td>a⁰</td><td>1 (any a≠0)</td><td>0⁰ is indeterminate — not 1!</td></tr>
+            <tr><td>a^(−n)</td><td>1/aⁿ</td><td>Negative exponent = reciprocal</td></tr>
+            <tr><td>a^(m/n)</td><td>ⁿ√(aᵐ)</td><td>Fractional = nth root of mth power</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="logarithms">
+      <h2 class="sh">D.2 &nbsp; Logarithms — From Scratch <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p><strong>log_b(x) = y</strong> means <strong>bʸ = x</strong>.<br>
+        "The power to which b must be raised to get x."<br>
+        log₂(8) = 3 because 2³ = 8 &nbsp;|&nbsp; log₁₀(1000) = 3 because 10³ = 1000.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Formula</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Product rule</td><td><strong>log_b(xy) = log_b(x) + log_b(y)</strong></td><td>Multiplication → Addition</td></tr>
+            <tr><td>Quotient rule</td><td><strong>log_b(x/y) = log_b(x) − log_b(y)</strong></td><td>Division → Subtraction</td></tr>
+            <tr><td>Power rule</td><td><strong>log_b(xⁿ) = n · log_b(x)</strong></td><td>Exponent comes down as multiplier</td></tr>
+            <tr><td>Root rule</td><td><strong>log_b(ⁿ√x) = log_b(x)/n</strong></td><td>Root = 1/n power</td></tr>
+            <tr><td>Base change</td><td><strong>log_a(b) = log_c(b) / log_c(a)</strong></td><td>Any common base c works</td></tr>
+            <tr><td>Flip formula</td><td><strong>log_a(b) = 1/log_b(a)</strong></td><td>Special case of base change</td></tr>
+            <tr><td>Chain formula</td><td><strong>log_a(b) · log_b(c) = log_a(c)</strong></td><td>Telescoping chain — b cancels!</td></tr>
+            <tr><td>Log of 1</td><td><strong>log_b(1) = 0</strong></td><td>b⁰ = 1 always</td></tr>
+            <tr><td>Log of base</td><td><strong>log_b(b) = 1</strong></td><td>b¹ = b always</td></tr>
+            <tr><td>Number of digits</td><td><strong>⌊log₁₀(N)⌋ + 1</strong></td><td>GATE classic — find digits in 2⁵⁰</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">⚠ Common Mistakes</span>
+        <p><strong>log(x+y) ≠ log(x) + log(y)</strong> — The product rule applies to log(xy), not log(x+y).<br>
+        <strong>Domain:</strong> log_b(x) requires x &gt; 0 and b &gt; 0, b ≠ 1. Always check domain when solving.<br>
+        <strong>Sign reversal:</strong> If 0 &lt; b &lt; 1, log_b is a <em>decreasing</em> function — inequality direction reverses!</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Solve: log₂(x) + log₂(x−2) = 3</strong></p>
+        <div class="cb">log₂(x(x−2)) = 3       [product rule]
+x(x−2) = 2³ = 8        [convert to exponential form]
+x² − 2x − 8 = 0
+(x−4)(x+2) = 0  →  x = 4 or x = −2
+
+Domain check: x > 0 AND x−2 > 0 → x > 2
+x = 4 ✓ (satisfies x > 2)
+x = −2 ✗ (negative — outside domain)
+Answer: x = 4</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>If log₁₀(2) = 0.3010, find the number of digits in 2⁵⁰.</strong></p>
+        <div class="cb">Number of digits in N = ⌊log₁₀(N)⌋ + 1
+log₁₀(2⁵⁰) = 50 × log₁₀(2) = 50 × 0.3010 = 15.05
+Number of digits = ⌊15.05⌋ + 1 = 15 + 1 = 16</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">CSE Connection — Why Logs Appear in Algorithms</span>
+        <p><strong>Binary Search O(log₂ n):</strong> Each step halves the problem. After k steps: n/2ᵏ=1 → k=log₂n comparisons. For n=1000: log₂(1000) ≈ 10 comparisons.<br>
+        <strong>Merge Sort O(n log n):</strong> n log n is the theoretical minimum for comparison-based sorting (from information theory: log₂(n!) ≈ n log₂ n by Stirling's approximation).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="functions">
+      <h2 class="sh">D.3 &nbsp; Functions, Modulus &amp; Graph Transformations <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Modulus (Absolute Value)</span>
+        <p>|x| = x if x≥0, −x if x&lt;0. Geometrically: distance from 0.<br>
+        |x| = k → x = ±k (two solutions, k≥0)<br>
+        |x| &lt; k → −k &lt; x &lt; k (open interval, k&gt;0)<br>
+        |x| &gt; k → x &lt; −k OR x &gt; k (two rays)<br>
+        <strong>Triangle inequality:</strong> |a+b| ≤ |a|+|b| and |a−b| ≥ ||a|−|b||</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Transformation</th><th>Effect on Graph</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>f(x) + c (c &gt; 0)</td><td>Shift UP by c units</td><td>x² + 3 moves parabola up 3</td></tr>
+            <tr><td>f(x) − c (c &gt; 0)</td><td>Shift DOWN by c units</td><td>sin(x) − 1 shifts sine down 1</td></tr>
+            <tr><td>f(x − c) (c &gt; 0)</td><td>Shift RIGHT by c units ← <mark>counterintuitive!</mark></td><td>(x−2)² has vertex at x=2</td></tr>
+            <tr><td>f(x + c) (c &gt; 0)</td><td>Shift LEFT by c units</td><td>(x+2)² has vertex at x=−2</td></tr>
+            <tr><td>−f(x)</td><td>Reflect about x-axis</td><td>−x² is downward parabola</td></tr>
+            <tr><td>f(−x)</td><td>Reflect about y-axis</td><td>Reverses direction along x-axis</td></tr>
+            <tr><td>k·f(x), k &gt; 1</td><td>Vertical stretch by k</td><td>2sin(x) has amplitude 2</td></tr>
+            <tr><td>f(kx), k &gt; 1</td><td>Horizontal compress by k</td><td>sin(2x) has half the period</td></tr>
+            <tr><td>|f(x)|</td><td>Reflect portions below x-axis upward</td><td>|sin(x)| — all arcs go positive</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>The RIGHT-shift trap:</strong> f(x−c) shifts the graph RIGHT by c, not left. Reason: to get the same function value that f(0) gave, you now need x=c (since f(c−c)=f(0)). The argument decreases by c, so x must increase by c. Exam options exploit this confusion constantly.</p>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH E — NUMBER BASES ═══ -->
+<div class="chapter" id="chE">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter E</div>
+    <div class="ch-title">Number Bases &amp; <em>Conversions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bases">
+      <h2 class="sh">E.1 &nbsp; Base Systems — Concepts &amp; Conversions <span class="tag tg">GATE + Digital Logic</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">What a Base Means</span>
+        <p>In base B, each digit position represents a power of B. The digit must be 0 to B−1.<br>
+        (1011)₂ = 1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8+0+2+1 = <strong>11</strong> in decimal.<br>
+        Common bases: Binary (2), Octal (8), Decimal (10), Hexadecimal (16).<br>
+        Hex digits: 10=A, 11=B, 12=C, 13=D, 14=E, 15=F.</p>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <h3 class="ssh">Decimal → Base B (Repeated Division)</h3>
+          <div class="eg">
+            <p><strong>Convert 156 to binary:</strong></p>
+            <div class="cb">156 ÷ 2 = 78  rem 0  ←
+ 78 ÷ 2 = 39  rem 0  ←
+ 39 ÷ 2 = 19  rem 1  ←
+ 19 ÷ 2 = 9   rem 1  ←
+  9 ÷ 2 = 4   rem 1  ←
+  4 ÷ 2 = 2   rem 0  ←
+  2 ÷ 2 = 1   rem 0  ←
+  1 ÷ 2 = 0   rem 1  ← (top)
+
+Read BOTTOM to TOP: 10011100₂
+Verify: 128+16+8+4 = 156 ✓</div>
+          </div>
+        </div>
+        <div>
+          <h3 class="ssh">Base B → Decimal (Positional Expansion)</h3>
+          <div class="eg">
+            <p><strong>Convert (3A7)₁₆ to decimal:</strong></p>
+            <div class="cb">3×16² + A×16¹ + 7×16⁰
+= 3×256 + 10×16 + 7×1
+= 768 + 160 + 7
+= 935</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trick">
+        <p><strong>Binary ↔ Hex shortcut (no decimal needed):</strong> Group binary digits in sets of <strong>4</strong> from right. Each group maps to one hex digit. 10011100₂ → 1001 1100 → 9 C → <strong>9C₁₆</strong>. Works because 2⁴=16.</p>
+        <p><strong>Binary ↔ Octal:</strong> Group in sets of <strong>3</strong> from right (since 2³=8). Much faster than going through decimal.</p>
+      </div>
+
+      <h3 class="ssh">Arithmetic in Non-Decimal Bases</h3>
+      <div class="note-box">
+        <span class="lbl">Key Rule</span>
+        <p>Carry happens when a digit sum reaches B (not 10). Borrow from next column gives B units (not 10). Work column by column exactly like base-10 addition/subtraction, just with a different carry threshold.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>(123)₅ + (44)₅:</strong></p>
+        <div class="cb">  1 2 3  (base 5)
++   4 4
+────────
+Rightmost: 3+4=7 = 1×5+2 → write 2, carry 1
+Middle:    2+4+1 = 7 = 1×5+2 → write 2, carry 1
+Left:      1+0+1 = 2 → write 2, no carry
+Result: (222)₅   Verify: 38+24=62 = 2×25+2×5+2 ✓</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Decimal</th><th>Binary</th><th>Octal</th><th>Hex</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>0000</td><td>0</td><td>0</td></tr>
+            <tr><td>4</td><td>0100</td><td>4</td><td>4</td></tr>
+            <tr><td>8</td><td>1000</td><td>10</td><td>8</td></tr>
+            <tr><td>10</td><td>1010</td><td>12</td><td>A</td></tr>
+            <tr><td>12</td><td>1100</td><td>14</td><td>C</td></tr>
+            <tr><td>15</td><td>1111</td><td>17</td><td>F</td></tr>
+            <tr><td>16</td><td>10000</td><td>20</td><td>10</td></tr>
+            <tr><td>255</td><td>11111111</td><td>377</td><td>FF</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH F — GEOMETRY ═══ -->
+<div class="chapter" id="chF">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter F</div>
+    <div class="ch-title">Geometry &amp; <em>Mensuration</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="triangles">
+      <h2 class="sh">F.1 &nbsp; Triangles — Properties &amp; Theorems <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Key Property</th><th>Area</th></tr></thead>
+          <tbody>
+            <tr><td>Equilateral (side s)</td><td>All angles 60°, all sides equal</td><td>√3s²/4</td></tr>
+            <tr><td>Isosceles</td><td>Two equal sides; equal base angles</td><td>½ × base × height</td></tr>
+            <tr><td>Right-angled (a,b,c=hyp)</td><td>a² + b² = c² (Pythagorean theorem)</td><td>½ × a × b</td></tr>
+            <tr><td>30-60-90</td><td>Sides in ratio 1 : √3 : 2</td><td>½ × 1 × √3 = √3/2</td></tr>
+            <tr><td>45-45-90</td><td>Sides in ratio 1 : 1 : √2</td><td>½ × 1 × 1 = ½</td></tr>
+            <tr><td>General (sides a,b,c)</td><td>s = (a+b+c)/2 (semi-perimeter)</td><td>√(s(s−a)(s−b)(s−c)) — Heron's Formula</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Pythagorean Triples to Memorise</div>
+          <p>(3,4,5), (5,12,13), (8,15,17), (7,24,25), (9,40,41). Any multiple works: (6,8,10), (10,24,26). Recognising these instantly tells you if a triangle is right-angled <em>without computing</em>.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Similar Triangles</div>
+          <p><strong>Area ratio = (side ratio)²</strong>. If sides are 2:3, areas are 4:9. This is tested constantly — the wrong answer always says "ratio = 2:3".</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Key Theorems</div>
+          <p>Exterior angle = sum of two non-adjacent interior angles.<br>Angle bisector: BD/DC = AB/AC.<br>Midpoint theorem: line joining midpoints ∥ third side and = half its length.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="mensuration">
+      <h2 class="sh">F.2 &nbsp; Complete Mensuration Table <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Shape</th><th>Area / Volume</th><th>Perimeter / Surface Area</th></tr></thead>
+          <tbody>
+            <tr><td>Square (s)</td><td>s²</td><td>4s</td></tr>
+            <tr><td>Rectangle (l,b)</td><td>lb</td><td>2(l+b)</td></tr>
+            <tr><td>Parallelogram</td><td>base × height</td><td>2(a+b)</td></tr>
+            <tr><td>Rhombus (diag d₁,d₂)</td><td>d₁d₂/2</td><td>4 × side</td></tr>
+            <tr><td>Trapezium (a,b parallel, h)</td><td>(a+b)h/2</td><td>a+b+sides</td></tr>
+            <tr><td>Circle (r)</td><td>πr²</td><td>2πr</td></tr>
+            <tr><td>Sector (angle θ rad)</td><td>r²θ/2</td><td>arc = rθ</td></tr>
+            <tr><td>Cube (a)</td><td>a³ (volume)</td><td>6a² total surface; 4a² lateral</td></tr>
+            <tr><td>Cuboid (l,b,h)</td><td>lbh (volume)</td><td>2(lb+bh+hl)</td></tr>
+            <tr><td>Cylinder (r,h)</td><td>πr²h (volume)</td><td>2πr(r+h) total; 2πrh lateral</td></tr>
+            <tr><td>Cone (r,h, l=slant)</td><td>πr²h/3 (volume)</td><td>πr(r+l); l = √(r²+h²)</td></tr>
+            <tr><td>Sphere (r)</td><td>4πr³/3 (volume)</td><td>4πr²</td></tr>
+            <tr><td>Hemisphere</td><td>2πr³/3 (volume)</td><td>3πr² total; 2πr² curved</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="trick">
+        <p><strong>Melting &amp; Recasting — Volume Conservation:</strong> Volume is conserved when melting one shape into another. Set V₁ = V₂ and solve for the unknown dimension. Example: Sphere (radius 6) recast into cylinders (radius 2, height 3): 4π(216)/3 = n × π(4)(3) → 288π = 12nπ → n = 24 cylinders.</p>
+        <p><strong>Slant height ≠ height (Cone):</strong> Slant l = √(r²+h²). Use l in lateral surface area formula, not h. This is one of the most common exam errors.</p>
+      </div>
+
+      <h3 class="ssh">Coordinate Geometry</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Formula</th></tr></thead>
+          <tbody>
+            <tr><td>Distance between (x₁,y₁) and (x₂,y₂)</td><td>√((x₂−x₁)² + (y₂−y₁)²)</td></tr>
+            <tr><td>Midpoint</td><td>((x₁+x₂)/2, (y₁+y₂)/2)</td></tr>
+            <tr><td>Section formula (ratio m:n, internal)</td><td>((mx₂+nx₁)/(m+n), (my₂+ny₁)/(m+n))</td></tr>
+            <tr><td>Slope</td><td>m = (y₂−y₁)/(x₂−x₁)</td></tr>
+            <tr><td>Perpendicular lines condition</td><td>m₁ × m₂ = −1</td></tr>
+            <tr><td>Point-to-line distance (ax+by+c=0)</td><td>|ax₀+by₀+c| / √(a²+b²)</td></tr>
+            <tr><td>Triangle area from vertices</td><td>½|x₁(y₂−y₃)+x₂(y₃−y₁)+x₃(y₁−y₂)|</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH G — SPEED DISTANCE TIME ═══ -->
+<div class="chapter" id="chG">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter G</div>
+    <div class="ch-title">Speed, Distance, Time &amp; <em>Work</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="speed">
+      <h2 class="sh">G.1 &nbsp; Speed–Distance–Time Fundamentals <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="formula">
+        <strong>Speed = Distance / Time &nbsp;&nbsp;|&nbsp;&nbsp; Distance = Speed × Time &nbsp;&nbsp;|&nbsp;&nbsp; Time = Distance / Speed</strong>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scenario</th><th>Formula</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Average speed (equal distances at speeds a, b)</td><td><strong>2ab/(a+b)</strong> (Harmonic Mean)</td><td><span class="bad">Never use arithmetic mean!</span></td></tr>
+            <tr><td>Average speed (equal times at speeds a, b)</td><td>(a+b)/2 (Arithmetic Mean)</td><td>Equal time → AM is correct here</td></tr>
+            <tr><td>Relative speed (same direction)</td><td>|v₁ − v₂|</td><td>Faster one gains on slower</td></tr>
+            <tr><td>Relative speed (opposite direction)</td><td>v₁ + v₂</td><td>They approach each other</td></tr>
+            <tr><td>Train crossing a pole/person</td><td>Time = Length of train / Speed of train</td><td>Person/pole has negligible length</td></tr>
+            <tr><td>Train crossing a platform/bridge</td><td>Time = (Length of train + Length of platform) / Speed</td><td>Add both lengths</td></tr>
+            <tr><td>Boat upstream speed</td><td>B − R (B=boat speed, R=river current)</td><td>River opposes motion upstream</td></tr>
+            <tr><td>Boat downstream speed</td><td>B + R</td><td>River assists motion downstream</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>A man covers half a distance at 40 km/h and the other half at 60 km/h. Find average speed.</strong></p>
+        <div class="cb">Equal distances → use Harmonic Mean
+Average speed = 2 × 40 × 60 / (40 + 60)
+             = 4800 / 100 = 48 km/h
+
+[Wrong approach: (40+60)/2 = 50 km/h — arithmetic mean is WRONG for equal distances]</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="work">
+      <h2 class="sh">G.2 &nbsp; Time and Work <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Core Principle — Work as Rate</span>
+        <p>If A completes a job in <em>a</em> days, A's rate = <strong>1/a of the job per day</strong>.<br>
+        Combined rate = sum of individual rates → combined time = <strong>ab/(a+b)</strong> for two people.<br>
+        For three: time = 1/(1/a + 1/b + 1/c).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scenario</th><th>Formula / Approach</th></tr></thead>
+          <tbody>
+            <tr><td>A takes a days, B takes b days, together</td><td><strong>ab/(a+b)</strong> days</td></tr>
+            <tr><td>A and B together, then A leaves, B finishes</td><td>Set up: (days together)×(combined rate) + (remaining days)×(B's rate) = 1</td></tr>
+            <tr><td>Pipe fills in f hours, drain empties in e hours, net fill time</td><td><strong>fe/(e−f)</strong> hours (when e &gt; f)</td></tr>
+            <tr><td>MDH formula (industrial work)</td><td>M₁D₁H₁/W₁ = M₂D₂H₂/W₂ (men×days×hours per work unit)</td></tr>
+            <tr><td>Efficiency ratio</td><td>Time ratio is inverse of efficiency ratio: A twice as fast → takes half the time</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Pipes A (fills in 6 hrs) and B (fills in 9 hrs) are opened together; C (drain, empties in 12 hrs) is also open. Time to fill?</strong></p>
+        <div class="cb">Net rate = 1/6 + 1/9 − 1/12
+         = 6/36 + 4/36 − 3/36
+         = 7/36 of the tank per hour
+Time = 36/7 ≈ 5 hours 8.6 minutes</div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH H — PERCENTAGES RATIO PROFIT ═══ -->
+<div class="chapter" id="chH">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter H</div>
+    <div class="ch-title">Percentages, Ratio &amp; <em>Profit / Loss</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="percent">
+      <h2 class="sh">H.1 &nbsp; Percentages — All Patterns <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Successive % Changes</div>
+          <p>Multiply multipliers, don't add: +30% then −20% = 1.3 × 0.8 = 1.04 = <strong>+4% net</strong>, not +10%.<br>Two equal and opposite ±x% → net change = <strong>−x²/100 %</strong> (always a loss).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">% Change Formula</div>
+          <p>(New − Old) / Old × 100<br>If a price rises by x%, to get original: divide by (1+x/100), <em>not</em> subtract x%.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Population Problems</div>
+          <p>After n years at R%: P × (1+R/100)ⁿ<br>Same as compound interest — identical formula, different context.</p>
+        </div>
+      </div>
+
+      <div class="trick">
+        <p><strong>Alligation Rule:</strong> To mix two items at prices c₁ and c₂ to get a mixture at price m:<br>Ratio of quantities = (c₂ − m) : (m − c₁). Draw a cross: put m in center, c₁ and c₂ on sides; diagonals give the ratio.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="profit">
+      <h2 class="sh">H.2 &nbsp; Profit, Loss &amp; Discount <span class="tag tc">Core</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Term</th><th>Formula</th><th>Important Note</th></tr></thead>
+          <tbody>
+            <tr><td>Profit %</td><td>(Profit / Cost Price) × 100</td><td><span class="bad">Always on Cost Price</span>, not selling price unless explicitly stated</td></tr>
+            <tr><td>Selling Price (profit)</td><td>CP × (1 + P/100)</td><td>—</td></tr>
+            <tr><td>Selling Price (loss)</td><td>CP × (1 − L/100)</td><td>—</td></tr>
+            <tr><td>Cost Price from SP and P%</td><td>SP / (1 + P/100) = SP × 100/(100+P)</td><td>—</td></tr>
+            <tr><td>Discount %</td><td>(Discount / Marked Price) × 100</td><td>Discount is on <em>Marked Price</em></td></tr>
+            <tr><td>SP after discount d%</td><td>MP × (1 − d/100)</td><td>—</td></tr>
+            <tr><td>Effective profit after discount</td><td>Multiply multipliers: (1+P/100)(1−d/100)</td><td>For successive changes</td></tr>
+            <tr><td>Faulty weight trick</td><td>Gain % = (Error / True weight − Error) × 100</td><td>Merchant uses lighter weights</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Ratio &amp; Proportion</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Componendo-Dividendo</div>
+          <p>If a/b = c/d, then (a+b)/(a−b) = (c+d)/(c−d). Powerful shortcut to avoid messy substitutions in ratio problems.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Inverse Proportion</div>
+          <p>More workers → fewer days → inversely proportional. Always write: if x₁y₁ = x₂y₂ (when inversely proportional). Don't set up ratios blindly — think about the relationship first.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Mixture Problems</div>
+          <p>After removing x litres of mixture and adding x litres of pure liquid repeatedly, fraction of original liquid left = ((V−x)/V)ⁿ, where V = vessel volume, n = number of times.</p>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH I — CLOCKS CALENDARS SI CI ═══ -->
+<div class="chapter" id="chI">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter I</div>
+    <div class="ch-title">Clocks, Calendars &amp; <em>Simple/Compound Interest</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="clocks">
+      <h2 class="sh">I.1 &nbsp; Clock Problems — Angles &amp; Coincidences <span class="tag tg">GATE Tested</span></h2>
+
+      <!-- SVG: Clock face with angle explanation -->
+      <div class="visual">
+        <div class="visual-lbl">Clock Hand Speeds &amp; Angle Formula</div>
+        <svg width="100%" height="130" viewBox="0 0 560 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="560" height="130" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Clock face -->
+          <circle cx="80" cy="65" r="52" fill="#f3ede3" stroke="#1c1510" stroke-width="2"/>
+          <circle cx="80" cy="65" r="3" fill="#1c1510"/>
+          <!-- 12 o'clock mark -->
+          <line x1="80" y1="14" x2="80" y2="22" stroke="#1c1510" stroke-width="2"/>
+          <!-- 3 -->
+          <line x1="131" y1="65" x2="123" y2="65" stroke="#1c1510" stroke-width="2"/>
+          <!-- 6 -->
+          <line x1="80" y1="116" x2="80" y2="108" stroke="#1c1510" stroke-width="2"/>
+          <!-- 9 -->
+          <line x1="29" y1="65" x2="37" y2="65" stroke="#1c1510" stroke-width="2"/>
+          <!-- Hour hand at ~3:40 position (hour hand at 3+40/60 = 3.67 hours → 3.67×30=110°) -->
+          <line x1="80" y1="65" x2="110" y2="95" stroke="#1c1510" stroke-width="3" stroke-linecap="round"/>
+          <!-- Minute hand at 40 min (240°) -->
+          <line x1="80" y1="65" x2="53" y2="112" stroke="#b83030" stroke-width="2" stroke-linecap="round"/>
+          <text x="88" y="30" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">12</text>
+          <text x="122" y="70" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">3</text>
+          <text x="73" y="120" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">6</text>
+          <text x="22" y="70" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">9</text>
+          <!-- Info panel -->
+          <text x="160" y="30" font-family="Architects Daughter,cursive" font-size="12" fill="#1c1510" font-weight="bold">Hand Speeds:</text>
+          <text x="160" y="48" font-family="Lora,serif" font-size="13" fill="#1a4a8c">Hour hand: 0.5° per minute</text>
+          <text x="160" y="65" font-family="Lora,serif" font-size="13" fill="#b83030">Minute hand: 6° per minute</text>
+          <text x="160" y="82" font-family="Lora,serif" font-size="13" fill="#1a6b40">Relative gain: 5.5° per minute</text>
+          <line x1="155" y1="96" x2="540" y2="96" stroke="#c0a880" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="160" y="112" font-family="Architects Daughter,cursive" font-size="11" fill="#1c1510" font-weight="bold">Angle at H hours, M minutes:</text>
+          <text x="160" y="126" font-family="Lora,serif" font-size="13" fill="#5a1a8a">θ = |30H − 5.5M|  (if &gt; 180°, use 360° − θ)</text>
+        </svg>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Condition</th><th>Angle</th><th>Minutes Past H o'clock</th></tr></thead>
+          <tbody>
+            <tr><td>Hands coincide</td><td>0°</td><td><strong>M = 60H/11</strong></td></tr>
+            <tr><td>Hands at right angles (90°)</td><td>90°</td><td><strong>M = (60H ± 180)/11</strong></td></tr>
+            <tr><td>Hands in a straight line (opposite)</td><td>180°</td><td><strong>M = (60H + 360)/11</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find the angle between hands at 3:40.</strong></p>
+        <div class="cb">H = 3, M = 40
+θ = |30×3 − 5.5×40| = |90 − 220| = |−130| = 130°</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="calendars">
+      <h2 class="sh">I.2 &nbsp; Calendar Problems — Odd Days Method <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Odd Days</span>
+        <p>Odd days = total days mod 7. Encoding: <strong>0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat</strong>.<br>
+        Ordinary year: 365 = 52×7 + 1 → <strong>1 odd day</strong>.<br>
+        Leap year: 366 = 52×7 + 2 → <strong>2 odd days</strong>.<br>
+        100 years: 76 ordinary (76) + 24 leap (48) = 124 ≡ <strong>5 odd days</strong>.<br>
+        400 years: Gregorian cycle repeats perfectly → <strong>0 odd days</strong>.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Leap Year Rules — Check in Order!</span>
+        <p>1. Divisible by 4 → Leap year.<br>
+        2. But divisible by 100 → NOT a leap year (overrides rule 1).<br>
+        3. But divisible by 400 → IS a leap year (overrides rule 2).<br>
+        ∴ <strong>1900 is NOT leap</strong> (÷100, not ÷400). <strong>2000 IS leap</strong> (÷400). <strong>2100 is NOT leap</strong>.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="SI CI">
+      <h2 class="sh">I.3 &nbsp; Simple &amp; Compound Interest — All Formulas <span class="tag tg">GATE Tested</span></h2>
+
+      <!-- SVG: SI vs CI growth comparison -->
+      <div class="visual">
+        <div class="visual-lbl">₹1000 at 10% — SI (Linear) vs CI (Exponential)</div>
+        <svg width="100%" height="110" viewBox="0 0 580 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="580" height="110" rx="6" fill="#faf7f2" stroke="#b0a088" stroke-width="1.5"/>
+          <!-- Bars for years 0-5 -->
+          <!-- Year labels -->
+          <text x="60" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">0 yr</text>
+          <text x="150" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">1 yr</text>
+          <text x="240" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">2 yr</text>
+          <text x="330" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">3 yr</text>
+          <text x="420" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">4 yr</text>
+          <text x="510" y="105" text-anchor="middle" font-family="Architects Daughter,cursive" font-size="10" fill="#6b5a47">5 yr</text>
+          <!-- SI bars (blue, linear) -->
+          <rect x="40" y="45" width="18" height="52" fill="#1a4a8c" opacity="0.7"/>
+          <rect x="130" y="37" width="18" height="60" fill="#1a4a8c" opacity="0.7"/>
+          <rect x="220" y="30" width="18" height="67" fill="#1a4a8c" opacity="0.7"/>
+          <rect x="310" y="22" width="18" height="75" fill="#1a4a8c" opacity="0.7"/>
+          <rect x="400" y="14" width="18" height="83" fill="#1a4a8c" opacity="0.7"/>
+          <rect x="490" y="7" width="18" height="90" fill="#1a4a8c" opacity="0.7"/>
+          <!-- CI bars (red, compound) -->
+          <rect x="62" y="45" width="18" height="52" fill="#b83030" opacity="0.7"/>
+          <rect x="152" y="37" width="18" height="60" fill="#b83030" opacity="0.7"/>
+          <rect x="242" y="28" width="18" height="69" fill="#b83030" opacity="0.7"/>
+          <rect x="332" y="17" width="18" height="80" fill="#b83030" opacity="0.7"/>
+          <rect x="422" y="5" width="18" height="92" fill="#b83030" opacity="0.7"/>
+          <rect x="512" y="0" width="18" height="97" fill="#b83030" opacity="0.75"/>
+          <!-- Legend -->
+          <rect x="190" y="8" width="12" height="8" fill="#1a4a8c" opacity="0.8"/>
+          <text x="206" y="16" font-family="Architects Daughter,cursive" font-size="10" fill="#1a4a8c">Simple Interest (linear)</text>
+          <rect x="340" y="8" width="12" height="8" fill="#b83030" opacity="0.8"/>
+          <text x="356" y="16" font-family="Architects Daughter,cursive" font-size="10" fill="#b83030">Compound Interest (grows faster)</text>
+        </svg>
+      </div>
+
+      <div class="two-col">
+        <div class="def-box">
+          <span class="lbl">Simple Interest</span>
+          <p><strong>SI = PRT/100</strong><br>
+          <strong>A = P(1 + RT/100)</strong><br>
+          P = 100×SI/(R×T)<br>
+          T = 100×SI/(P×R)</p>
+        </div>
+        <div class="def-box">
+          <span class="lbl">Compound Interest</span>
+          <p><strong>A = P(1 + R/100)ᵀ</strong> (annual)<br>
+          Half-yearly: A = P(1+R/200)²ᵀ<br>
+          Quarterly: A = P(1+R/400)⁴ᵀ<br>
+          <strong>CI = A − P</strong></p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Situation</th><th>Shortcut</th></tr></thead>
+          <tbody>
+            <tr><td>CI − SI for 2 years</td><td><strong>P(R/100)² = PR²/10000</strong></td></tr>
+            <tr><td>CI − SI for 3 years</td><td><strong>PR²(R+300)/1000000</strong></td></tr>
+            <tr><td>Rule of 72 (doubling time)</td><td>T ≈ 72/R years at R% CI &nbsp;—&nbsp; At 8%: 9 years. At 12%: 6 years</td></tr>
+            <tr><td>Money triples in T years</td><td>T ≈ 114/R years</td></tr>
+            <tr><td>Doubles in n years → 4× in ?</td><td>4× in 2n years, 8× in 3n years (powers of 2)</td></tr>
+            <tr><td>Depreciation (R% per year)</td><td>Value = P(1 − R/100)ⁿ</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>A sum doubles at CI in 6 years. In how many years does it become 8×?</strong></p>
+        <div class="cb">(1+r)⁶ = 2 (given)
+8 = 2³ = ((1+r)⁶)³ = (1+r)¹⁸
+Answer: 18 years. (No need to find r at all!)</div>
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══ CH J — MASTER FORMULA + TRAP SHEET ═══ -->
+<div class="chapter" id="chJ">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter J</div>
+    <div class="ch-title">Master Formula Sheet &amp; <em>28-Trap Watchlist</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="formulas">
+      <h2 class="sh">J.1 &nbsp; Every Formula, One Place <span class="tag tq">Quick Reference</span></h2>
+      <p>Cover each card and test yourself from memory. These are the formulas most frequently needed under exam time pressure.</p>
+
+      <div class="fcards">
+        <div class="fcard">
+          <div class="fcard-title">Number Theory</div>
+          <ul>
+            <li>÷7: double last digit, subtract from rest</li>
+            <li>÷11: alternating digit sum (odd − even)</li>
+            <li>÷13: multiply last digit by 4, add to rest</li>
+            <li>Factors of p₁ᵃp₂ᵇ = (a+1)(b+1)…</li>
+            <li>φ(n) = n × ∏(1 − 1/p) for each prime p|n</li>
+            <li>a^φ(n) ≡ 1 (mod n) — Euler's Theorem</li>
+            <li>LCM × GCD = a × b — ONLY for 2 numbers</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Permutations &amp; Combinations</div>
+          <ul>
+            <li>nPr = n! / (n−r)!</li>
+            <li>nCr = n! / (r!(n−r)!)</li>
+            <li>Circular arrangement = (n−1)!</li>
+            <li>Necklace = (n−1)! / 2</li>
+            <li>Stars &amp; Bars = (n+r−1)C(r−1)</li>
+            <li>Derangements: D3=2, D4=9, D5=44</li>
+            <li>Sum of all binomial coefficients = 2ⁿ</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Progressions</div>
+          <ul>
+            <li>AP: aₙ = a + (n−1)d</li>
+            <li>AP Sₙ = n/2 × (2a + (n−1)d)</li>
+            <li>GP: aₙ = arⁿ⁻¹ ; S∞ = a/(1−r), |r|&lt;1</li>
+            <li>HM = 2ab/(a+b)</li>
+            <li>AM ≥ GM ≥ HM (equality iff a=b)</li>
+            <li>Σn² = n(n+1)(2n+1)/6</li>
+            <li>Σn³ = [n(n+1)/2]²</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Logarithms</div>
+          <ul>
+            <li>log(xy) = log x + log y</li>
+            <li>log(x/y) = log x − log y</li>
+            <li>log(xⁿ) = n · log x</li>
+            <li>log_a(b) = log_c(b) / log_c(a) — base change</li>
+            <li>log_a(b) · log_b(c) = log_a(c) — chain</li>
+            <li>Digits in N = ⌊log₁₀(N)⌋ + 1</li>
+            <li>Domain: x &gt; 0, b &gt; 0, b ≠ 1</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Geometry &amp; Mensuration</div>
+          <ul>
+            <li>Circle: A=πr², C=2πr</li>
+            <li>Equilateral △: A=√3s²/4</li>
+            <li>Heron's: A=√(s(s−a)(s−b)(s−c))</li>
+            <li>Sphere: V=4πr³/3, SA=4πr²</li>
+            <li>Cone: V=πr²h/3, LSA=πrl, l=√(r²+h²)</li>
+            <li>Cylinder: V=πr²h, TSA=2πr(r+h)</li>
+            <li>Pythagorean triples: (3,4,5),(5,12,13),(8,15,17)</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Clocks &amp; Calendars</div>
+          <ul>
+            <li>Angle at H hours M min = |30H − 5.5M|</li>
+            <li>Hands coincide: M = 60H/11 min past H</li>
+            <li>Ordinary year: 365 days → 1 odd day</li>
+            <li>Leap year: 366 days → 2 odd days</li>
+            <li>100 years → 5 odd days</li>
+            <li>400 years → 0 odd days (Gregorian cycle)</li>
+            <li>1900=not leap; 2000=leap; 2100=not leap</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">SI, CI &amp; Speed/Work</div>
+          <ul>
+            <li>SI = PRT/100 ; A = P + SI</li>
+            <li>CI: A = P(1 + R/100)ᵀ (annual)</li>
+            <li>CI−SI (2 yrs) = P(R/100)²</li>
+            <li>Rule of 72: double ≈ 72/R years</li>
+            <li>Avg speed (= dist) = 2ab/(a+b) — HM!</li>
+            <li>Work together = ab/(a+b) days</li>
+            <li>MDH rule: M₁D₁H₁/W₁ = M₂D₂H₂/W₂</li>
+          </ul>
+        </div>
+        <div class="fcard">
+          <div class="fcard-title">Number Bases</div>
+          <ul>
+            <li>Dec→Base B: divide repeatedly, read remainders ↑</li>
+            <li>Base B→Dec: positional value expansion</li>
+            <li>Binary ↔ Hex: group 4 bits from right</li>
+            <li>Binary ↔ Octal: group 3 bits from right</li>
+            <li>Carry/borrow in base B = B (not 10)</li>
+            <li>Hex digits: A=10, B=11, C=12, D=13, E=14, F=15</li>
+            <li>255 decimal = FF hex = 11111111 binary</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">J.2 &nbsp; The 28-Trap Watchlist — Every Exam Trick <span class="tag tg">Must Read</span></h2>
+      <p>These are the exact errors that distinguish 90-percentile from 70-percentile performance. Study them as a list — each one has cost candidates marks in real exams.</p>
+
+      <div style="margin-top:16px;">
+
+        <div class="trap-row">
+          <div class="trap-num">1</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Average speed = arithmetic mean of speeds</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Average speed = 2ab/(a+b) (Harmonic Mean) for equal distances. AM is only correct for equal times.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">2</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Successive % changes: 30% up then 20% down = +10% net</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Multiply multipliers: 1.3 × 0.8 = 1.04 = +4% net. Always multiply, never add.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">3</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Profit% is sometimes calculated on selling price</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Profit% is ALWAYS on Cost Price by default. If problem specifies "on SP", convert first.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">4</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Circular arrangement = n! (same as linear)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>(n−1)! — one position is fixed to eliminate rotational equivalence.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">5</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>CI and SI are different from year 1</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>CI = SI for exactly 1 year. They diverge from year 2. CI−SI(2yr) = P(R/100)².</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">6</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Infinite GP sum works for any ratio r</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Only valid for |r| &lt; 1. For |r| ≥ 1, the series diverges — no finite sum exists.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">7</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>log(x+y) = log x + log y</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>log(xy) = log x + log y. Product rule applies to multiplication, NOT addition inside the log.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">8</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>f(x−c) shifts the graph LEFT by c</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>f(x−c) shifts RIGHT by c. To get f(0), you now need x=c. Counterintuitive but correct.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">9</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Div by 11: use regular digit sum (÷11 → ÷3 rule by mistake)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>ALTERNATING digit sum: (odd positions) − (even positions) = 0 or ÷11. Regular sum tests ÷3, ÷9.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">10</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>(a+b)² = a² + b²</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>(a+b)² = a² + 2ab + b². The 2ab cross-term is always missing in wrong answers.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">11</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Leap year: divisible by 4 → always leap</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>÷100 overrides (not leap), unless ÷400 (then IS leap). 1900: not leap. 2000: leap. 2100: not leap.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">12</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Slant height of cone = vertical height h</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Slant l = √(r²+h²). Use l in lateral SA formula πrl. Never substitute h for l.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">13</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Area of rhombus = side² (same as square)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Rhombus area = d₁d₂/2 (half-product of diagonals). You cannot find area from side alone.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">14</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Similar triangle area ratio = side ratio</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Area ratio = SQUARE of side ratio. Sides 2:3 → areas 4:9. Volume ratio = CUBE of side ratio.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">15</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>HM = (a+b)/2</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>(a+b)/2 is the AM. HM = 2ab/(a+b). For speed over equal distances, always use HM.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">16</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Read base-conversion remainders top-to-bottom</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Read remainders BOTTOM to TOP. The last remainder is the most significant digit.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">17</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>log domain has no restriction</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>log_b(x) requires x&gt;0 AND b&gt;0, b≠1. Always verify domain before accepting solutions.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">18</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>|x| = k has one solution</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>|x| = k has TWO solutions: x=k and x=−k (for k≥0). |x| = −k has NO solution.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">19</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Binary subtraction: borrowing gives 10 (like decimal)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Binary borrow gives 2 (the base). Octal borrow gives 8. Borrow = the base value, not 10.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">20</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Multiplying inequality by a variable is always safe</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Multiplying by a negative REVERSES the sign. Never multiply by a variable without knowing its sign.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">21</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Volume conserved in melting → shape stays the same</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Volume is conserved, shape changes. Set V₁ = V₂ and solve for the unknown dimension of the new shape.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">22</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>0⁰ = 1 (always)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>0⁰ is indeterminate. In some contexts (combinatorics) it's defined as 1 by convention, but mathematically it's indeterminate.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">23</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Discount and profit% both operate on the same base</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Discount is on Marked Price. Profit% is on Cost Price. Different bases — don't confuse them.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">24</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>LCM × HCF = product of numbers (for 3 numbers too)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>LCM × HCF = a × b holds ONLY for exactly two numbers. For three or more, this relationship does not hold.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">25</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>GP ratio r can be anything for infinite sum to exist</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Infinite GP sum S∞ = a/(1−r) is ONLY valid when |r| &lt; 1. For |r| ≥ 1, the series diverges.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">26</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Euler's theorem: always a^(p−1) ≡ 1 (mod p)</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>Fermat's little theorem uses (p−1) only when p is prime. Euler's general theorem uses φ(n) for any n.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">27</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>Trains: crossing time = train length / speed</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>When crossing a platform: time = (train + platform length) / speed. Only for a pole/person: time = train length / speed.</p></div>
+        </div>
+
+        <div class="trap-row">
+          <div class="trap-num">28</div>
+          <div class="trap-wrong"><div class="trap-lbl" style="color:#b83030;">Wrong</div><p>The ÷11 rule uses regular sum of digits</p></div>
+          <div class="trap-right"><div class="trap-lbl" style="color:#1a6b40;">Correct</div><p>÷11 uses ALTERNATING digit sum. Regular digit sum is for ÷3 and ÷9. This confusion is the most common divisibility error.</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <a href="#top" class="bt">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">General Aptitude · Quantitative Master Reference · GATE CSE + Placements · ExamForge Pro</div>
+</div>
+</body>
+</html>

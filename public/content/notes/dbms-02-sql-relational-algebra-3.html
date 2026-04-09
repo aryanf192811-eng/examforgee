@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — SQL &amp; Relational Algebra · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+/* Gantt chart */
+.gantt{overflow-x:auto;margin:14px 0;}
+.gantt-row{display:flex;align-items:stretch;font-family:'Courier New',monospace;font-size:13px;margin:3px 0;}
+.gantt-label{min-width:80px;padding:4px 8px;font-family:var(--hand);font-size:11px;color:var(--ink3);display:flex;align-items:center;}
+.gantt-block{padding:5px 0;text-align:center;border:1px solid var(--ink);font-size:12px;font-weight:bold;}
+.gb-p1{background:var(--hl-b);}
+.gb-p2{background:var(--hl-g);}
+.gb-p3{background:var(--hl-o);}
+.gb-p4{background:var(--hl-p);}
+.gb-idle{background:var(--paper3);color:var(--ink3);}
+.gantt-tick{display:flex;margin-left:80px;font-family:'Courier New',monospace;font-size:11px;color:var(--ink3);}
+.gantt-t{text-align:center;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Database Management Systems</div>
+    <h1>SQL <em>&amp; Relational Algebra</em></h1>
+    <p class="cover-desc">Complete theory from first principles — Relational Algebra operators, SQL from DDL to advanced queries, joins, subqueries, aggregation, views, integrity constraints, and every GATE-relevant trap.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Relational Algebra</span>
+      <span class="chip">Ch 2 · Extended RA Operators</span>
+      <span class="chip">Ch 3 · SQL Foundations</span>
+      <span class="chip">Ch 4 · Joins</span>
+      <span class="chip">Ch 5 · Subqueries</span>
+      <span class="chip">Ch 6 · Aggregation &amp; Grouping</span>
+      <span class="chip">Ch 7 · Views &amp; Constraints</span>
+      <span class="chip">Ch 8 · GATE Traps</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Table of Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Relational Algebra — Core Operators</a>
+    <a href="#ch2"><span class="tn">02</span>Extended RA &amp; Query Trees</a>
+    <a href="#ch3"><span class="tn">03</span>SQL Foundations — DDL &amp; DML</a>
+    <a href="#ch4"><span class="tn">04</span>Joins in SQL</a>
+    <a href="#ch5"><span class="tn">05</span>Subqueries &amp; Nested SQL</a>
+    <a href="#ch6"><span class="tn">06</span>Aggregation, GROUP BY, HAVING</a>
+    <a href="#ch7"><span class="tn">07</span>Views &amp; Integrity Constraints</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Quick Reference</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — RELATIONAL ALGEBRA
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Relational Algebra — <em>Core Operators</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="intro">
+      <h2 class="sh">1.1 &nbsp; What Is Relational Algebra? <span class="tag tc">Core</span></h2>
+      <p>
+        Relational Algebra (RA) is a <strong>procedural query language</strong> for the relational model. It is procedural because you specify <em>how</em> to retrieve the data — a sequence of operations applied to relations. This contrasts with SQL, which is declarative (you specify <em>what</em> you want, not how to get it).
+      </p>
+      <p>
+        RA forms the theoretical foundation of SQL. Every SQL query you write is internally translated by the database engine into a relational algebra expression (a query tree), which is then optimized and executed. Understanding RA means understanding what SQL actually does underneath.
+      </p>
+      <p>
+        Every RA operation takes one or two relations as input and produces a new relation as output. This closure property — relations in, relation out — lets you compose operations freely.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">The Six Fundamental Operators</span>
+        <p>Selection (σ), Projection (π), Union (∪), Set Difference (−), Cartesian Product (×), Rename (ρ). All other RA operators can be derived from these six.</p>
+      </div>
+
+      <p>We will use two sample relations throughout this chapter:</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th colspan="4">Student (S)</th></tr><tr><th>SID</th><th>Name</th><th>Dept</th><th>CGPA</th></tr></thead>
+          <tbody>
+            <tr><td>101</td><td>Aryan</td><td>CSE</td><td>8.9</td></tr>
+            <tr><td>102</td><td>Meera</td><td>ECE</td><td>7.4</td></tr>
+            <tr><td>103</td><td>Karan</td><td>CSE</td><td>9.1</td></tr>
+            <tr><td>104</td><td>Priya</td><td>ME</td><td>6.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th colspan="3">Enrollment (E)</th></tr><tr><th>SID</th><th>CourseID</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>101</td><td>CS301</td><td>A</td></tr>
+            <tr><td>101</td><td>CS302</td><td>B</td></tr>
+            <tr><td>102</td><td>CS301</td><td>A</td></tr>
+            <tr><td>103</td><td>CS302</td><td>A</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="select">
+      <h2 class="sh">1.2 &nbsp; Selection — σ <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">σ</div>
+          <div>
+            <div class="op-name">Selection</div>
+            <div class="op-short">Filters rows that satisfy a condition. Operates on one relation.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p><strong>Syntax:</strong> <code>σ&lt;condition&gt;(R)</code></p>
+          <p>
+            Selection is the horizontal filter — it keeps only the rows (tuples) for which the condition evaluates to true. The output relation has the same schema as the input but fewer (or equal) rows.
+          </p>
+          <p>
+            The condition can use comparison operators (<code>=, ≠, &lt;, &gt;, ≤, ≥</code>), logical connectives (<code>∧ AND, ∨ OR, ¬ NOT</code>), and can reference attribute names or constants.
+          </p>
+          <div class="eg">
+            <p><strong>Query:</strong> Find all CSE students with CGPA above 8.5.</p>
+            <div class="code-block"><span class="op">σ</span>(Dept = 'CSE' <span class="kw">∧</span> CGPA > 8.5)(Student)</div>
+            <p><strong>Result:</strong> Tuples for Aryan (101, CSE, 8.9) and Karan (103, CSE, 9.1).</p>
+          </div>
+          <div class="warn-box">
+            <span class="lbl">Important Property</span>
+            <p>Selection does not change the schema (columns). It only filters rows. The degree of the output equals the degree of the input.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="project">
+      <h2 class="sh">1.3 &nbsp; Projection — π <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">π</div>
+          <div>
+            <div class="op-name">Projection</div>
+            <div class="op-short">Keeps only specified columns. Eliminates duplicates automatically.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p><strong>Syntax:</strong> <code>π&lt;attr list&gt;(R)</code></p>
+          <p>
+            Projection is the vertical filter — it keeps only the specified columns and discards the rest. Because the result is a relation (a set), any duplicate rows that arise from dropping columns are automatically eliminated.
+          </p>
+          <div class="eg">
+            <p><strong>Query:</strong> Get the names and departments of all students.</p>
+            <div class="code-block"><span class="op">π</span>(Name, Dept)(Student)</div>
+            <p><strong>Result:</strong> {(Aryan, CSE), (Meera, ECE), (Karan, CSE), (Priya, ME)}</p>
+            <p>Note: if two students had the same name AND department, the duplicate would be removed.</p>
+          </div>
+          <div class="warn-box">
+            <span class="lbl">GATE Trap — Duplicate Elimination</span>
+            <p>In formal RA, projection always eliminates duplicates (relation = set). In SQL, <code>SELECT</code> without <code>DISTINCT</code> does NOT eliminate duplicates. This distinction is tested explicitly in GATE.</p>
+          </div>
+          <div class="tip-box">
+            <span class="lbl">Combining Selection and Projection</span>
+            <p>These two operators are almost always used together. Convention: selection first (reduce rows), then projection (reduce columns). Example: get names of CSE students with CGPA &gt; 8: <code>π(Name)(σ(Dept='CSE' ∧ CGPA>8)(Student))</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="set-ops">
+      <h2 class="sh">1.4 &nbsp; Set Operations — ∪, −, ∩</h2>
+
+      <p>
+        The set operations treat relations as mathematical sets of tuples. For ∪ and − to be valid, both relations must be <strong>union-compatible</strong>: same number of attributes, and corresponding attributes must come from the same domain. Intersection (∩) is derived and also requires union-compatibility.
+      </p>
+
+      <hr class="dv">
+      <h3 class="ssh">Union — ∪</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>R ∪ S produces all tuples that appear in R, or in S, or in both. Duplicates are eliminated.</p>
+      </div>
+      <div class="eg">
+        <p>If Relation A has SIDs {101, 102} and Relation B has SIDs {102, 103}, then A ∪ B = {101, 102, 103}. The 102 duplicate is eliminated.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Set Difference — −</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>R − S produces all tuples that appear in R but NOT in S.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Query:</strong> Find students who are NOT enrolled in any course.</p>
+        <div class="code-block"><span class="op">π</span>(SID)(Student) <span class="op">−</span> <span class="op">π</span>(SID)(Enrollment)</div>
+        <p>Project all SIDs from Student, subtract those that appear in Enrollment. Result: {104} (Priya).</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Intersection — ∩</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>R ∩ S produces tuples that appear in BOTH R and S. Derived: R ∩ S = R − (R − S).</p>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">Union Compatibility</span>
+        <p>All three set operations require the operand relations to have the same number of attributes with compatible domains. Applying them to relations with different schemas is undefined. GATE sometimes presents such a case — recognize it as invalid immediately.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cartesian">
+      <h2 class="sh">1.5 &nbsp; Cartesian Product — × <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">×</div>
+          <div>
+            <div class="op-name">Cartesian Product</div>
+            <div class="op-short">Every tuple from R paired with every tuple from S. No condition.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p><strong>Syntax:</strong> <code>R × S</code></p>
+          <p>
+            Cartesian product generates every possible combination of a tuple from R with a tuple from S. If R has <em>m</em> tuples and degree <em>p</em>, and S has <em>n</em> tuples and degree <em>q</em>, then R × S has <mark>m × n tuples</mark> and degree <mark>p + q</mark>.
+          </p>
+          <div class="eg">
+            <p>Student has 4 rows, Enrollment has 4 rows. Student × Enrollment has 4 × 4 = <strong>16 rows</strong> and 4 + 3 = <strong>7 columns</strong>. Most of these 16 rows are meaningless — they pair, say, Priya with a course she never enrolled in.</p>
+          </div>
+          <p>
+            Cartesian product by itself is rarely useful. Its value is as a building block: when followed by a selection on the join condition, it becomes a join. This is exactly how join is defined in formal RA.
+          </p>
+          <div class="warn-box">
+            <span class="lbl">Naming Conflict</span>
+            <p>When both relations have an attribute with the same name (e.g., both have <code>SID</code>), the resulting relation has two columns both named SID. To disambiguate, use the relation name as a prefix: <code>Student.SID</code> and <code>Enrollment.SID</code>. This is where the Rename operator becomes necessary.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="rename">
+      <h2 class="sh">1.6 &nbsp; Rename — ρ</h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">ρ</div>
+          <div>
+            <div class="op-name">Rename</div>
+            <div class="op-short">Assigns a new name to a relation or its attributes. No data change.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p><strong>Syntax:</strong> <code>ρ&lt;new_name&gt;(R)</code> &nbsp; or &nbsp; <code>ρ&lt;new_name(a1, a2, ...)&gt;(R)</code></p>
+          <p>
+            Rename is necessary in two situations: (1) when a Cartesian product creates ambiguous attribute names, and (2) when you need to self-join a relation — join a table with itself. Without rename, you cannot distinguish the two copies of the same relation in a self-join.
+          </p>
+          <div class="eg">
+            <p><strong>Query:</strong> Find pairs of students in the same department.</p>
+            <div class="code-block"><span class="op">ρ</span>(S1)(Student) <span class="op">×</span> <span class="op">ρ</span>(S2)(Student)
+— then filter: <span class="op">σ</span>(S1.Dept = S2.Dept <span class="kw">∧</span> S1.SID ≠ S2.SID)(...)</div>
+            <p>Without rename, you can't distinguish the two copies of Student.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — EXTENDED RA & JOINS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Extended RA — <em>Joins &amp; More</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="join">
+      <h2 class="sh">2.1 &nbsp; Natural Join — ⋈ <span class="tag tg">Most Tested</span></h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">⋈</div>
+          <div>
+            <div class="op-name">Natural Join</div>
+            <div class="op-short">Joins on all common attribute names. Keeps one copy of each common attribute.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p><strong>Definition:</strong> R ⋈ S = π&lt;unique attrs&gt;(σ&lt;equal common attrs&gt;(R × S))</p>
+          <p>
+            Natural join automatically finds all attributes with the same name in both relations, matches tuples where those attributes are equal, and returns a single copy of the common attributes in the result.
+          </p>
+          <p>
+            Student and Enrollment both have <code>SID</code>. Natural join matches on SID, combining each student's info with their enrollment records.
+          </p>
+          <div class="eg">
+            <p><strong>Student ⋈ Enrollment:</strong></p>
+            <div class="tbl">
+              <table>
+                <thead><tr><th>SID</th><th>Name</th><th>Dept</th><th>CGPA</th><th>CourseID</th><th>Grade</th></tr></thead>
+                <tbody>
+                  <tr><td>101</td><td>Aryan</td><td>CSE</td><td>8.9</td><td>CS301</td><td>A</td></tr>
+                  <tr><td>101</td><td>Aryan</td><td>CSE</td><td>8.9</td><td>CS302</td><td>B</td></tr>
+                  <tr><td>102</td><td>Meera</td><td>ECE</td><td>7.4</td><td>CS301</td><td>A</td></tr>
+                  <tr><td>103</td><td>Karan</td><td>CSE</td><td>9.1</td><td>CS302</td><td>A</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Note: Priya (104) does not appear — she has no enrollment record. Natural join is an inner join by default.</p>
+          </div>
+          <div class="warn-box">
+            <span class="lbl">GATE Trap — Natural Join Pitfall</span>
+            <p>Natural join joins on ALL attributes with the same name. If two unrelated relations happen to share an attribute name (say both have a column called <code>ID</code>), natural join will incorrectly join on it. Always be explicit about which attributes you intend to join on — this is why SQL uses <code>JOIN ... ON</code> instead of relying on name matching alone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="theta-join">
+      <h2 class="sh">2.2 &nbsp; Theta Join and Equijoin</h2>
+
+      <h3 class="ssh">Theta Join — ⋈<sub>θ</sub></h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>R ⋈<sub>θ</sub> S = σ<sub>θ</sub>(R × S). It is a Cartesian product followed by selection on condition θ. The condition can be any comparison — not just equality.</p>
+      </div>
+      <p>This is the most general join. Any condition works: equalities, inequalities, range conditions.</p>
+
+      <h3 class="ssh">Equijoin</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A theta join where θ uses only equality conditions. Unlike natural join, equijoin keeps both copies of the join attributes (one from each relation).</p>
+      </div>
+
+      <div class="eg">
+        <p>Natural join vs equijoin on Student ⋈ Enrollment on SID:</p>
+        <ul class="pl arr">
+          <li><strong>Natural Join:</strong> Result has one <code>SID</code> column (common attribute merged).</li>
+          <li><strong>Equijoin:</strong> Result has two columns — <code>Student.SID</code> and <code>Enrollment.SID</code> — both with the same values.</li>
+        </ul>
+        <p>Natural join = equijoin + projection to remove duplicate join columns.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="outer-join">
+      <h2 class="sh">2.3 &nbsp; Outer Joins <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        All joins discussed so far are <strong>inner joins</strong> — they discard tuples that don't find a matching partner. Outer joins preserve unmatched tuples by padding them with NULLs.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Left Outer Join ⟕</div>
+          <p>All tuples from the left relation are kept. Unmatched left tuples are padded with NULL for the right relation's attributes.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Right Outer Join ⟖</div>
+          <p>All tuples from the right relation are kept. Unmatched right tuples are padded with NULL for the left relation's attributes.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Full Outer Join ⟗</div>
+          <p>All tuples from both relations are kept. Unmatched tuples from either side are padded with NULL.</p>
+        </div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Student LEFT OUTER JOIN Enrollment on SID:</strong></p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>SID</th><th>Name</th><th>Dept</th><th>CGPA</th><th>CourseID</th><th>Grade</th></tr></thead>
+            <tbody>
+              <tr><td>101</td><td>Aryan</td><td>CSE</td><td>8.9</td><td>CS301</td><td>A</td></tr>
+              <tr><td>101</td><td>Aryan</td><td>CSE</td><td>8.9</td><td>CS302</td><td>B</td></tr>
+              <tr><td>102</td><td>Meera</td><td>ECE</td><td>7.4</td><td>CS301</td><td>A</td></tr>
+              <tr><td>103</td><td>Karan</td><td>CSE</td><td>9.1</td><td>CS302</td><td>A</td></tr>
+              <tr><td>104</td><td>Priya</td><td>ME</td><td>6.8</td><td style="color:var(--red)">NULL</td><td style="color:var(--red)">NULL</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Priya is preserved with NULLs for the missing enrollment data.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="division">
+      <h2 class="sh">2.4 &nbsp; Division — ÷ <span class="tag tg">Frequently Asked</span></h2>
+
+      <div class="op-card">
+        <div class="op-head">
+          <div class="op-symbol">÷</div>
+          <div>
+            <div class="op-name">Division</div>
+            <div class="op-short">"Find all X that are associated with every Y." The universal quantification operator.</div>
+          </div>
+        </div>
+        <div class="op-body">
+          <p>
+            Division answers the class of queries that use "for all" or "every." Given R(A, B) ÷ S(B), the result contains every value of A in R such that for every tuple in S, there exists a matching tuple in R.
+          </p>
+          <p><strong>Formal definition:</strong> R ÷ S = π<sub>A</sub>(R) − π<sub>A</sub>((π<sub>A</sub>(R) × S) − R)</p>
+          <div class="eg">
+            <p><strong>Query:</strong> Find students who are enrolled in ALL courses that Aryan (101) is enrolled in.</p>
+            <p>Aryan is in {CS301, CS302}. We want SIDs such that for every course in that set, there is an enrollment record.</p>
+            <div class="code-block">Let R = <span class="op">π</span>(SID, CourseID)(Enrollment)
+Let S = <span class="op">π</span>(CourseID)(<span class="op">σ</span>(SID = 101)(Enrollment))
+        = {CS301, CS302}
+
+R ÷ S → {101}
+(Only Aryan himself is enrolled in both CS301 and CS302.)</div>
+          </div>
+          <div class="tip-box">
+            <span class="lbl">Recognition Pattern</span>
+            <p>Whenever a query has "all", "every", "each", or "for all" — think division. It is the only RA operator that naturally expresses universal quantification.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ra-equiv">
+      <h2 class="sh">2.5 &nbsp; RA Equivalences — Query Optimization <span class="tag tp">Advanced</span></h2>
+      <p>
+        The database query optimizer uses algebraic equivalences to rewrite a query into a more efficient form. These are tested in GATE in the form of "which two RA expressions are equivalent?"
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule</th><th>Equivalence</th><th>Why It Matters</th></tr></thead>
+          <tbody>
+            <tr><td>Selection cascade</td><td>σ<sub>c1 ∧ c2</sub>(R) = σ<sub>c1</sub>(σ<sub>c2</sub>(R))</td><td>Apply tighter filter first to reduce intermediate size</td></tr>
+            <tr><td>Selection commutativity</td><td>σ<sub>c1</sub>(σ<sub>c2</sub>(R)) = σ<sub>c2</sub>(σ<sub>c1</sub>(R))</td><td>Order of selection doesn't matter</td></tr>
+            <tr><td>Projection cascade</td><td>π<sub>L1</sub>(π<sub>L2</sub>(R)) = π<sub>L1</sub>(R) if L1 ⊆ L2</td><td>Outer projection dominates</td></tr>
+            <tr><td>Selection before join</td><td>σ<sub>c</sub>(R ⋈ S) = σ<sub>c</sub>(R) ⋈ S if c involves only R's attrs</td><td>Push selection down — key optimization</td></tr>
+            <tr><td>Join commutativity</td><td>R ⋈ S = S ⋈ R</td><td>Join order can be swapped</td></tr>
+            <tr><td>Join associativity</td><td>(R ⋈ S) ⋈ T = R ⋈ (S ⋈ T)</td><td>Grouping of multi-way joins is flexible</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">The Key Optimization Principle</span>
+        <p><strong>Push selections and projections as far down the query tree as possible</strong> — closer to the leaves. This reduces the size of intermediate relations before expensive operations like joins happen. A Cartesian product of two 1-million-row tables is catastrophic; a Cartesian product of a 10-row filtered result is trivial.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — SQL FOUNDATIONS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">SQL Foundations — <em>DDL &amp; DML</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sql-intro">
+      <h2 class="sh">3.1 &nbsp; SQL — Nature and Classification</h2>
+      <p>
+        SQL (Structured Query Language) is a <strong>declarative</strong> language — you describe what data you want, not how to retrieve it. The database engine's query optimizer decides the execution strategy. SQL is built on the relational algebra but extends it significantly: it allows duplicate rows (multiset semantics), NULLs, aggregation, ordering, and much more.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">DDL — Data Definition</div>
+          <p><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>TRUNCATE</code>. Defines and modifies schema structure.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">DML — Data Manipulation</div>
+          <p><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>. Operates on the data itself.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">DCL — Data Control</div>
+          <p><code>GRANT</code>, <code>REVOKE</code>. Manages permissions and access rights.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">TCL — Transaction Control</div>
+          <p><code>COMMIT</code>, <code>ROLLBACK</code>, <code>SAVEPOINT</code>. Manages transactions (covered in File 3).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ddl">
+      <h2 class="sh">3.2 &nbsp; DDL — Defining Structure</h2>
+
+      <h3 class="ssh">CREATE TABLE</h3>
+      <p>Defines a new relation with its attributes, data types, and constraints.</p>
+      <div class="code-block"><span class="kw">CREATE TABLE</span> Student (
+    SID     <span class="fn">INT</span>          <span class="kw">PRIMARY KEY</span>,
+    Name    <span class="fn">VARCHAR</span>(50)  <span class="kw">NOT NULL</span>,
+    Dept    <span class="fn">VARCHAR</span>(10),
+    CGPA    <span class="fn">DECIMAL</span>(3,1) <span class="kw">CHECK</span> (CGPA >= 0 <span class="kw">AND</span> CGPA <= 10),
+    <span class="kw">FOREIGN KEY</span> (Dept) <span class="kw">REFERENCES</span> Department(DeptName)
+);</div>
+
+      <h3 class="ssh">ALTER TABLE</h3>
+      <p>Modifies an existing table — add, drop, or modify columns and constraints.</p>
+      <div class="code-block"><span class="kw">ALTER TABLE</span> Student <span class="kw">ADD</span> Email <span class="fn">VARCHAR</span>(100);
+<span class="kw">ALTER TABLE</span> Student <span class="kw">DROP COLUMN</span> Email;
+<span class="kw">ALTER TABLE</span> Student <span class="kw">MODIFY</span> Name <span class="fn">VARCHAR</span>(100);</div>
+
+      <h3 class="ssh">DROP vs TRUNCATE vs DELETE</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Command</th><th>What It Does</th><th>Rollback Possible?</th><th>Removes Schema?</th></tr></thead>
+          <tbody>
+            <tr><td><code>DROP TABLE</code></td><td>Removes table + all data + schema</td><td>No (DDL — auto-committed)</td><td>Yes</td></tr>
+            <tr><td><code>TRUNCATE TABLE</code></td><td>Removes all rows, resets auto-increment</td><td>No (DDL in most DBs)</td><td>No</td></tr>
+            <tr><td><code>DELETE FROM</code></td><td>Removes rows matching a condition</td><td>Yes (DML — transactional)</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">GATE Trap</span>
+        <p>TRUNCATE is DDL in most databases (cannot be rolled back), but DELETE is DML (can be rolled back within a transaction). TRUNCATE is faster because it doesn't log individual row deletions. This distinction appears in GATE transaction and recovery questions.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="select-sql">
+      <h2 class="sh">3.3 &nbsp; The SELECT Statement — Anatomy <span class="tag tg">GATE Critical</span></h2>
+
+      <p>The full structure of a SQL SELECT statement, in the order you write it:</p>
+      <div class="code-block"><span class="kw">SELECT</span>   [<span class="kw">DISTINCT</span>] &lt;attribute list or expressions&gt;
+<span class="kw">FROM</span>     &lt;table list or join expressions&gt;
+[<span class="kw">WHERE</span>    &lt;condition&gt;]
+[<span class="kw">GROUP BY</span> &lt;grouping attributes&gt;]
+[<span class="kw">HAVING</span>   &lt;group condition&gt;]
+[<span class="kw">ORDER BY</span> &lt;sort attributes&gt; [<span class="kw">ASC</span>|<span class="kw">DESC</span>]]
+[<span class="kw">LIMIT</span>    &lt;n&gt;];</div>
+
+      <div class="warn-box">
+        <span class="lbl">Logical Execution Order — Different from Writing Order</span>
+        <p>SQL is written in one order but executed in a different order. GATE frequently tests this by asking what's valid in WHERE vs HAVING, or whether an alias defined in SELECT can be used in WHERE.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Step</th><th>Clause</th><th>What Happens</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><code>FROM</code></td><td>Identify source tables; compute joins/Cartesian products</td></tr>
+            <tr><td>2</td><td><code>WHERE</code></td><td>Filter individual rows — no aggregates allowed here</td></tr>
+            <tr><td>3</td><td><code>GROUP BY</code></td><td>Group remaining rows by specified attributes</td></tr>
+            <tr><td>4</td><td><code>HAVING</code></td><td>Filter groups — aggregates allowed here</td></tr>
+            <tr><td>5</td><td><code>SELECT</code></td><td>Compute output columns and expressions</td></tr>
+            <tr><td>6</td><td><code>DISTINCT</code></td><td>Remove duplicate rows from output</td></tr>
+            <tr><td>7</td><td><code>ORDER BY</code></td><td>Sort the final result</td></tr>
+            <tr><td>8</td><td><code>LIMIT</code></td><td>Return only the first n rows</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Why this matters:</strong> The query below is <span class="c-red">INVALID</span>:</p>
+        <div class="code-block"><span class="kw">SELECT</span> Dept <span class="kw">AS</span> Department, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> cnt
+<span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> cnt > 2;   <span class="cm">-- ERROR: 'cnt' is not defined yet when WHERE executes</span></div>
+        <p>WHERE executes before SELECT, so the alias <code>cnt</code> doesn't exist yet. Use HAVING instead, which runs after GROUP BY.</p>
+      </div>
+
+      <h3 class="ssh">DISTINCT</h3>
+      <p>
+        <code>SELECT DISTINCT</code> removes duplicate rows from the result. Without DISTINCT, SQL operates in <strong>multiset (bag) semantics</strong> — duplicates are preserved. Formal relational algebra always eliminates duplicates. This is a fundamental SQL vs RA difference.
+      </p>
+      <div class="code-block"><span class="kw">SELECT DISTINCT</span> Dept <span class="kw">FROM</span> Student;
+<span class="cm">-- Returns: CSE, ECE, ME (3 rows, not 4 — CSE appears only once)</span>
+
+<span class="kw">SELECT</span> Dept <span class="kw">FROM</span> Student;
+<span class="cm">-- Returns: CSE, ECE, CSE, ME (4 rows — both CSE rows preserved)</span></div>
+    </div>
+
+    <div class="sec" data-m="dml">
+      <h2 class="sh">3.4 &nbsp; DML — INSERT, UPDATE, DELETE</h2>
+
+      <h3 class="ssh">INSERT</h3>
+      <div class="code-block"><span class="cm">-- Insert a single row with explicit column list</span>
+<span class="kw">INSERT INTO</span> Student (SID, Name, Dept, CGPA)
+<span class="kw">VALUES</span> (<span class="num">105</span>, <span class="str">'Rahul'</span>, <span class="str">'CSE'</span>, <span class="num">7.8</span>);
+
+<span class="cm">-- Insert result of a SELECT query</span>
+<span class="kw">INSERT INTO</span> CSE_Students
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Dept = <span class="str">'CSE'</span>;</div>
+
+      <h3 class="ssh">UPDATE</h3>
+      <div class="code-block"><span class="cm">-- Update specific rows</span>
+<span class="kw">UPDATE</span> Student
+<span class="kw">SET</span> CGPA = CGPA + <span class="num">0.1</span>
+<span class="kw">WHERE</span> Dept = <span class="str">'CSE'</span>;
+
+<span class="cm">-- Without WHERE: updates ALL rows (common mistake)</span>
+<span class="kw">UPDATE</span> Student <span class="kw">SET</span> CGPA = <span class="num">10.0</span>;  <span class="cm">-- Every student now has CGPA = 10</span></div>
+
+      <h3 class="ssh">DELETE</h3>
+      <div class="code-block"><span class="cm">-- Delete specific rows</span>
+<span class="kw">DELETE FROM</span> Student <span class="kw">WHERE</span> CGPA < <span class="num">6.0</span>;
+
+<span class="cm">-- Without WHERE: deletes ALL rows (table structure remains)</span>
+<span class="kw">DELETE FROM</span> Student;  <span class="cm">-- Empty table, schema intact</span></div>
+
+      <div class="warn-box">
+        <span class="lbl">The Missing WHERE Clause Trap</span>
+        <p>UPDATE and DELETE without a WHERE clause affect every row in the table. GATE has presented this as a reasoning question: "After executing UPDATE Student SET CGPA = 0, how many rows have CGPA = 0?" Answer: all rows.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — JOINS IN SQL
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Joins <em>in SQL</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sql-joins">
+      <h2 class="sh">4.1 &nbsp; All Join Types — Complete Reference <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        SQL joins combine rows from two or more tables based on a related column. Each join type handles unmatched rows differently.
+      </p>
+
+      <h3 class="ssh">INNER JOIN</h3>
+      <p>Returns only rows where the join condition is satisfied in both tables. Equivalent to natural join / equijoin in RA. Unmatched rows from either table are discarded.</p>
+      <div class="code-block"><span class="kw">SELECT</span> S.Name, E.CourseID, E.Grade
+<span class="kw">FROM</span> Student S
+<span class="kw">INNER JOIN</span> Enrollment E <span class="kw">ON</span> S.SID = E.SID;</div>
+      <p>Result: 4 rows — Priya (104) is excluded because she has no enrollment.</p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">LEFT OUTER JOIN</h3>
+      <p>Returns all rows from the left table, plus matched rows from the right. Unmatched left rows get NULL for right table's columns.</p>
+      <div class="code-block"><span class="kw">SELECT</span> S.Name, E.CourseID
+<span class="kw">FROM</span> Student S
+<span class="kw">LEFT JOIN</span> Enrollment E <span class="kw">ON</span> S.SID = E.SID;</div>
+      <p>Result: 5 rows — Priya appears with CourseID = NULL.</p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">RIGHT OUTER JOIN</h3>
+      <p>Mirror of LEFT JOIN — all rows from right table are preserved, unmatched right rows get NULL for left table columns.</p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">FULL OUTER JOIN</h3>
+      <p>Union of LEFT and RIGHT JOIN. All rows from both tables appear. Unmatched rows on either side get NULL for the other table's columns.</p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">CROSS JOIN</h3>
+      <p>Cartesian product. Every row in left table is paired with every row in right table. No join condition. Rarely useful in practice, but often tested for result-size calculations.</p>
+      <div class="code-block"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Student <span class="kw">CROSS JOIN</span> Enrollment;
+<span class="cm">-- 4 students × 4 enrollments = 16 rows</span></div>
+
+      <hr class="dv">
+
+      <h3 class="ssh">NATURAL JOIN</h3>
+      <p>Automatically joins on all columns with the same name. Keeps one copy of the join column. Dangerous in practice — avoid if column name overlap is coincidental.</p>
+      <div class="code-block"><span class="kw">SELECT</span> * <span class="kw">FROM</span> Student <span class="kw">NATURAL JOIN</span> Enrollment;
+<span class="cm">-- Joins on SID (only common column), returns 4 rows</span></div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Join Type</th><th>Unmatched rows in Left</th><th>Unmatched rows in Right</th></tr></thead>
+          <tbody>
+            <tr><td>INNER JOIN</td><td style="color:var(--red)">Discarded</td><td style="color:var(--red)">Discarded</td></tr>
+            <tr><td>LEFT JOIN</td><td style="color:var(--green)">Kept (NULLs for right cols)</td><td style="color:var(--red)">Discarded</td></tr>
+            <tr><td>RIGHT JOIN</td><td style="color:var(--red)">Discarded</td><td style="color:var(--green)">Kept (NULLs for left cols)</td></tr>
+            <tr><td>FULL OUTER JOIN</td><td style="color:var(--green)">Kept (NULLs)</td><td style="color:var(--green)">Kept (NULLs)</td></tr>
+            <tr><td>CROSS JOIN</td><td colspan="2">No condition — every pair is produced</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="self-join">
+      <h2 class="sh">4.2 &nbsp; Self Join</h2>
+      <p>
+        A self-join joins a table with itself. You must use aliases to distinguish the two copies. This is used to compare rows within the same table.
+      </p>
+      <div class="eg">
+        <p><strong>Query:</strong> Find all pairs of students in the same department.</p>
+        <div class="code-block"><span class="kw">SELECT</span> A.Name <span class="kw">AS</span> Student1, B.Name <span class="kw">AS</span> Student2, A.Dept
+<span class="kw">FROM</span> Student A
+<span class="kw">JOIN</span> Student B <span class="kw">ON</span> A.Dept = B.Dept
+              <span class="kw">AND</span> A.SID < B.SID;  <span class="cm">-- prevents (Aryan,Karan) AND (Karan,Aryan)</span></div>
+        <p>The condition <code>A.SID &lt; B.SID</code> ensures each pair appears only once and no student is paired with themselves.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — SUBQUERIES
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Subqueries <em>&amp; Nested SQL</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="subquery-basics">
+      <h2 class="sh">5.1 &nbsp; What Is a Subquery?</h2>
+      <p>
+        A subquery (also called an inner query or nested query) is a complete SQL SELECT statement embedded inside another SQL statement. The outer query uses the result of the inner query. Subqueries can appear in the SELECT, FROM, WHERE, or HAVING clauses.
+      </p>
+
+      <h3 class="ssh">Scalar Subquery</h3>
+      <p>Returns exactly one row and one column — a single value. Can be used anywhere a single value is expected.</p>
+      <div class="code-block"><span class="cm">-- Find students with above-average CGPA</span>
+<span class="kw">SELECT</span> Name, CGPA
+<span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> CGPA > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(CGPA) <span class="kw">FROM</span> Student);</div>
+
+      <h3 class="ssh">Row Subquery</h3>
+      <p>Returns one row with multiple columns. Used with row-level comparison operators.</p>
+
+      <h3 class="ssh">Table Subquery</h3>
+      <p>Returns multiple rows and columns. Used in FROM clause (as a derived table) or with IN, ANY, ALL, EXISTS operators.</p>
+      <div class="code-block"><span class="cm">-- Subquery in FROM clause (derived table / inline view)</span>
+<span class="kw">SELECT</span> Dept, avg_cgpa
+<span class="kw">FROM</span> (
+    <span class="kw">SELECT</span> Dept, <span class="fn">AVG</span>(CGPA) <span class="kw">AS</span> avg_cgpa
+    <span class="kw">FROM</span> Student
+    <span class="kw">GROUP BY</span> Dept
+) <span class="kw">AS</span> dept_avg
+<span class="kw">WHERE</span> avg_cgpa > <span class="num">8.0</span>;</div>
+    </div>
+
+    <div class="sec" data-m="in-any-all">
+      <h2 class="sh">5.2 &nbsp; IN, NOT IN, ANY, ALL, EXISTS <span class="tag tg">GATE Critical</span></h2>
+
+      <h3 class="ssh">IN and NOT IN</h3>
+      <div class="code-block"><span class="cm">-- Students enrolled in CS301</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> SID <span class="kw">IN</span> (<span class="kw">SELECT</span> SID <span class="kw">FROM</span> Enrollment <span class="kw">WHERE</span> CourseID = <span class="str">'CS301'</span>);
+
+<span class="cm">-- Students NOT enrolled in any course</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> SID <span class="kw">NOT IN</span> (<span class="kw">SELECT</span> SID <span class="kw">FROM</span> Enrollment);</div>
+
+      <div class="warn-box">
+        <span class="lbl">NOT IN with NULLs — Killer Trap</span>
+        <p>If the subquery in <code>NOT IN</code> returns any NULL value, the entire <code>NOT IN</code> condition evaluates to UNKNOWN (not FALSE), which means <strong>no rows are returned</strong>. This is one of the most dangerous SQL NULL traps. Always use <code>NOT EXISTS</code> when NULLs may be present, or add <code>WHERE col IS NOT NULL</code> inside the subquery.</p>
+      </div>
+
+      <h3 class="ssh">ANY and ALL</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p><code>val op ANY (subquery)</code> — true if the condition holds for AT LEAST ONE value in the subquery result. <code>val op ALL (subquery)</code> — true if the condition holds for EVERY value in the subquery result.</p>
+      </div>
+      <div class="code-block"><span class="cm">-- Students with CGPA greater than at least one ECE student</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> CGPA > <span class="kw">ANY</span> (<span class="kw">SELECT</span> CGPA <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Dept = <span class="str">'ECE'</span>);
+
+<span class="cm">-- Students with CGPA greater than ALL ECE students (> max)</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student
+<span class="kw">WHERE</span> CGPA > <span class="kw">ALL</span> (<span class="kw">SELECT</span> CGPA <span class="kw">FROM</span> Student <span class="kw">WHERE</span> Dept = <span class="str">'ECE'</span>);</div>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">= ANY</div>
+          <p>Equivalent to <code>IN</code>. True if the value equals at least one in the set.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">&lt;&gt; ALL</div>
+          <p>Equivalent to <code>NOT IN</code>. True if the value differs from every value in the set.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">&gt; ALL</div>
+          <p>Equivalent to <code>&gt; MAX(...)</code>. Must exceed the largest value.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">&gt; ANY</div>
+          <p>Equivalent to <code>&gt; MIN(...)</code>. Must exceed the smallest value.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">EXISTS and NOT EXISTS</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p><code>EXISTS (subquery)</code> returns TRUE if the subquery produces at least one row. FALSE if the result is empty. Does not care about the actual values — just whether any row exists.</p>
+      </div>
+      <div class="code-block"><span class="cm">-- Students who have at least one enrollment</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student S
+<span class="kw">WHERE</span> <span class="kw">EXISTS</span> (
+    <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> Enrollment E
+    <span class="kw">WHERE</span> E.SID = S.SID  <span class="cm">-- correlated subquery</span>
+);
+
+<span class="cm">-- Students with NO enrollments</span>
+<span class="kw">SELECT</span> Name <span class="kw">FROM</span> Student S
+<span class="kw">WHERE</span> <span class="kw">NOT EXISTS</span> (
+    <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> Enrollment E
+    <span class="kw">WHERE</span> E.SID = S.SID
+);</div>
+
+      <div class="tip-box">
+        <span class="lbl">EXISTS vs IN — When to Use Which</span>
+        <p>Use <strong>IN</strong> when the subquery is small and returns a list you want to match against. Use <strong>EXISTS</strong> when the subquery is large, when NULLs may be present (EXISTS handles NULLs safely), or when the subquery is correlated. <code>NOT EXISTS</code> is almost always safer than <code>NOT IN</code> when NULLs are possible.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="correlated">
+      <h2 class="sh">5.3 &nbsp; Correlated Subqueries <span class="tag tp">Advanced</span></h2>
+      <p>
+        A correlated subquery references a column from the outer query. It is re-evaluated once for each row processed by the outer query — making it conceptually like a nested loop. This is different from an uncorrelated subquery, which is evaluated once and its result reused.
+      </p>
+      <div class="eg">
+        <p><strong>Query:</strong> Find students whose CGPA is above the average CGPA of their own department.</p>
+        <div class="code-block"><span class="kw">SELECT</span> Name, Dept, CGPA
+<span class="kw">FROM</span> Student S1
+<span class="kw">WHERE</span> CGPA > (
+    <span class="kw">SELECT</span> <span class="fn">AVG</span>(CGPA)
+    <span class="kw">FROM</span> Student S2
+    <span class="kw">WHERE</span> S2.Dept = S1.Dept  <span class="cm">-- correlated: references outer S1.Dept</span>
+);</div>
+        <p>For each row in S1, the inner query computes the average CGPA for that row's department. This cannot be done with a simple uncorrelated subquery.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — AGGREGATION
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Aggregation, <em>GROUP BY &amp; HAVING</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="agg-funcs">
+      <h2 class="sh">6.1 &nbsp; Aggregate Functions <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        Aggregate functions compute a single value from a set of rows. They collapse multiple rows into one summary value. They appear in SELECT and HAVING clauses (never in WHERE — WHERE runs before grouping).
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function</th><th>What It Computes</th><th>NULL Behavior</th></tr></thead>
+          <tbody>
+            <tr><td><code>COUNT(*)</code></td><td>Total number of rows</td><td>Counts ALL rows including NULLs</td></tr>
+            <tr><td><code>COUNT(col)</code></td><td>Number of non-NULL values in col</td><td>Ignores NULL values</td></tr>
+            <tr><td><code>COUNT(DISTINCT col)</code></td><td>Number of distinct non-NULL values</td><td>Ignores NULLs and duplicates</td></tr>
+            <tr><td><code>SUM(col)</code></td><td>Sum of all values in col</td><td>Ignores NULLs</td></tr>
+            <tr><td><code>AVG(col)</code></td><td>Average: SUM / COUNT of non-NULLs</td><td>Ignores NULLs (NOT divided by total rows)</td></tr>
+            <tr><td><code>MIN(col)</code></td><td>Smallest value</td><td>Ignores NULLs</td></tr>
+            <tr><td><code>MAX(col)</code></td><td>Largest value</td><td>Ignores NULLs</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">AVG and NULLs — Classic GATE Trap</span>
+        <p>
+          If a column has values {8, 9, NULL, NULL, NULL} for 5 rows, <code>AVG(col)</code> = (8+9)/2 = <strong>8.5</strong>, NOT (8+9)/5 = 3.4. AVG ignores NULLs in both numerator and denominator. But <code>COUNT(*)</code> = 5, while <code>COUNT(col)</code> = 2. These differences are a recurring GATE question source.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="groupby">
+      <h2 class="sh">6.2 &nbsp; GROUP BY and HAVING <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">GROUP BY</span>
+        <p>Partitions rows into groups based on one or more attributes. All rows with the same value(s) for the GROUP BY attribute(s) form one group. Aggregates are then computed per group.</p>
+      </div>
+
+      <div class="def-box" style="background:#f0fff4; border-color:var(--green);">
+        <span class="lbl" style="color:var(--green)">HAVING</span>
+        <p>Filters groups after GROUP BY is applied. Can use aggregate functions. HAVING is to groups what WHERE is to rows.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Query:</strong> For each department with more than 1 student, find the average CGPA.</p>
+        <div class="code-block"><span class="kw">SELECT</span> Dept, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> num_students, <span class="fn">AVG</span>(CGPA) <span class="kw">AS</span> avg_cgpa
+<span class="kw">FROM</span> Student
+<span class="kw">GROUP BY</span> Dept
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">1</span>;</div>
+        <p><strong>Execution:</strong></p>
+        <ol class="steps">
+          <li><div class="sn">1</div><div>FROM: load Student.</div></li>
+          <li><div class="sn">2</div><div>GROUP BY Dept: form groups — {CSE: Aryan, Karan}, {ECE: Meera}, {ME: Priya}.</div></li>
+          <li><div class="sn">3</div><div>HAVING: keep groups with COUNT(*) &gt; 1. Only CSE qualifies.</div></li>
+          <li><div class="sn">4</div><div>SELECT: compute AVG(CGPA) for CSE = (8.9 + 9.1)/2 = 9.0.</div></li>
+        </ol>
+        <p><strong>Result:</strong></p>
+        <div class="tbl"><table><thead><tr><th>Dept</th><th>num_students</th><th>avg_cgpa</th></tr></thead><tbody><tr><td>CSE</td><td>2</td><td>9.0</td></tr></tbody></table></div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">The GROUP BY Rule — Most Violated in GATE</span>
+        <p>Every attribute in the SELECT clause that is NOT inside an aggregate function MUST appear in the GROUP BY clause. Violating this is a syntax error. Example: <code>SELECT Dept, Name, COUNT(*) FROM Student GROUP BY Dept</code> is INVALID because <code>Name</code> is not aggregated and not in GROUP BY.</p>
+      </div>
+
+      <h3 class="ssh">WHERE vs HAVING — Exact Difference</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Aspect</th><th>WHERE</th><th>HAVING</th></tr></thead>
+          <tbody>
+            <tr><td>Filters</td><td>Individual rows (before grouping)</td><td>Groups (after GROUP BY)</td></tr>
+            <tr><td>Can use aggregates?</td><td>NO — aggregates not yet computed</td><td>YES — aggregates are computed by this point</td></tr>
+            <tr><td>Can use non-grouped attrs?</td><td>YES</td><td>Only grouped attrs or aggregates</td></tr>
+            <tr><td>Performance</td><td>Filters early → faster</td><td>Filters late → more work done before filter</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">Optimization Rule</span>
+        <p>If a condition does not involve an aggregate, put it in WHERE, not HAVING. WHERE filters rows before grouping, reducing the amount of work GROUP BY has to do. HAVING on a non-aggregate condition is valid but inefficient.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — VIEWS & CONSTRAINTS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Views <em>&amp; Integrity Constraints</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="views">
+      <h2 class="sh">7.1 &nbsp; Views <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>view</strong> is a named query stored in the database. It appears to the user as a virtual table — you can query it like a regular table — but it does not store data itself. Its data is computed from the underlying base tables each time the view is queried.</p>
+      </div>
+
+      <div class="code-block"><span class="cm">-- Create a view</span>
+<span class="kw">CREATE VIEW</span> CSE_Students <span class="kw">AS</span>
+    <span class="kw">SELECT</span> SID, Name, CGPA
+    <span class="kw">FROM</span> Student
+    <span class="kw">WHERE</span> Dept = <span class="str">'CSE'</span>;
+
+<span class="cm">-- Query the view like a table</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> CSE_Students <span class="kw">WHERE</span> CGPA > <span class="num">8.0</span>;
+
+<span class="cm">-- Drop a view</span>
+<span class="kw">DROP VIEW</span> CSE_Students;</div>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Purpose 1: Simplicity</div>
+          <p>Hide complex joins and conditions behind a simple name. Users query the view without knowing the underlying schema.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Purpose 2: Security</div>
+          <p>Expose only certain columns or rows to certain users. Grant SELECT on the view, not the base table.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Purpose 3: Logical Independence</div>
+          <p>If base table schema changes, update only the view definition — applications using the view are unaffected.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Updatable vs Non-Updatable Views</h3>
+      <p>
+        Not all views can be used for INSERT, UPDATE, DELETE. A view is <strong>updatable</strong> only if each row in the view maps uniquely to exactly one row in a single base table. A view becomes <strong>non-updatable</strong> if it contains any of: JOIN, GROUP BY, HAVING, DISTINCT, aggregate functions, subqueries in SELECT, UNION, or derived columns (expressions).
+      </p>
+
+      <h3 class="ssh">Materialized Views</h3>
+      <p>
+        A materialized view physically stores the result of the query (unlike a regular view). It must be refreshed periodically to stay current. Used for performance on expensive queries that are run frequently. This is a trade-off: stale data vs query speed.
+      </p>
+    </div>
+
+    <div class="sec" data-m="constraints">
+      <h2 class="sh">7.2 &nbsp; Integrity Constraints <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        Integrity constraints are rules enforced by the DBMS to maintain the correctness and consistency of data. They are defined at schema creation time and checked on every INSERT, UPDATE, and DELETE.
+      </p>
+
+      <h3 class="ssh">Domain Constraint</h3>
+      <p>Restricts the values an attribute can hold — enforced through data types and CHECK constraints.</p>
+      <div class="code-block">CGPA <span class="fn">DECIMAL</span>(3,1) <span class="kw">CHECK</span> (CGPA >= <span class="num">0.0</span> <span class="kw">AND</span> CGPA <= <span class="num">10.0</span>)</div>
+
+      <h3 class="ssh">NOT NULL Constraint</h3>
+      <p>Ensures an attribute cannot have a NULL value. Applied to columns where a value must always exist.</p>
+
+      <h3 class="ssh">UNIQUE Constraint</h3>
+      <p>Ensures all values in a column (or combination) are distinct. Unlike PRIMARY KEY, UNIQUE columns can contain NULL (and multiple NULLs are typically allowed — each NULL is considered distinct).</p>
+
+      <h3 class="ssh">PRIMARY KEY Constraint</h3>
+      <p>Combination of UNIQUE + NOT NULL. Exactly one per table. Uniquely identifies each row.</p>
+
+      <h3 class="ssh">FOREIGN KEY Constraint (Referential Integrity)</h3>
+      <p>
+        Ensures that a value in a column references a valid value in another table's primary key. When a referenced row is deleted or updated, the DBMS handles it according to the defined action:
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Action</th><th>On DELETE / UPDATE of Referenced Row</th></tr></thead>
+          <tbody>
+            <tr><td><code>RESTRICT</code></td><td>Prevent the delete/update if any referencing rows exist.</td></tr>
+            <tr><td><code>CASCADE</code></td><td>Automatically delete/update all referencing rows.</td></tr>
+            <tr><td><code>SET NULL</code></td><td>Set the FK column to NULL in all referencing rows.</td></tr>
+            <tr><td><code>SET DEFAULT</code></td><td>Set the FK column to its default value.</td></tr>
+            <tr><td><code>NO ACTION</code></td><td>Similar to RESTRICT but check is deferred to end of transaction.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="code-block"><span class="kw">CREATE TABLE</span> Enrollment (
+    SID      <span class="fn">INT</span>,
+    CourseID <span class="fn">VARCHAR</span>(10),
+    <span class="kw">PRIMARY KEY</span> (SID, CourseID),
+    <span class="kw">FOREIGN KEY</span> (SID) <span class="kw">REFERENCES</span> Student(SID)
+        <span class="kw">ON DELETE CASCADE</span>
+        <span class="kw">ON UPDATE RESTRICT</span>
+);</div>
+
+      <h3 class="ssh">Assertion</h3>
+      <p>A general constraint not tied to a specific table. Checked against the entire database state. Rarely supported in practice but theoretically important.</p>
+      <div class="code-block"><span class="kw">CREATE ASSERTION</span> max_courses
+<span class="kw">CHECK</span> (<span class="kw">NOT EXISTS</span> (
+    <span class="kw">SELECT</span> SID <span class="kw">FROM</span> Enrollment
+    <span class="kw">GROUP BY</span> SID
+    <span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">6</span>
+));
+<span class="cm">-- No student can be enrolled in more than 6 courses</span></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 8 — GATE TRAPS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Quick Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; The Critical GATE Traps for SQL &amp; RA</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>The Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>RA vs SQL duplicate semantics</td>
+              <td>RA projection always eliminates duplicates (set semantics). SQL SELECT without DISTINCT preserves duplicates (bag semantics). Two different behaviors on the same-looking operation.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>NOT IN with NULLs returns no rows</td>
+              <td>If the subquery in NOT IN returns any NULL, the result is empty. Use NOT EXISTS instead for safety.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>AVG ignores NULLs in denominator</td>
+              <td>AVG(col) = SUM(non-null values) / COUNT(non-null values). Not divided by total row count. COUNT(*) ≠ COUNT(col) when NULLs exist.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>WHERE cannot use aggregates</td>
+              <td>WHERE runs before GROUP BY. Aggregates are computed after. Use HAVING for conditions on aggregates.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>SELECT alias not available in WHERE</td>
+              <td>SELECT runs after WHERE in the logical execution order. An alias defined in SELECT doesn't exist when WHERE is evaluated.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>GROUP BY rule violation</td>
+              <td>Every non-aggregated attribute in SELECT must appear in GROUP BY. Forgetting this is a syntax error.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Natural join on coincidental column names</td>
+              <td>Natural join joins on ALL common column names. If two unrelated attributes have the same name, the join is incorrect.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>CROSS JOIN result size</td>
+              <td>Result has m × n rows where m and n are the cardinalities of the two tables. Often used to test if you can calculate intermediate result sizes.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>TRUNCATE vs DELETE vs DROP</td>
+              <td>DROP removes schema. TRUNCATE empties the table (DDL, no rollback in most DBs). DELETE is DML — transactional and can be rolled back.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Division operator recognition</td>
+              <td>"Find X associated with ALL Y" → think division. "Enrolled in all courses," "rated by every user" — these are division queries.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>= ANY vs IN, &lt;&gt; ALL vs NOT IN</td>
+              <td>These pairs are equivalent but NOT IN is dangerous with NULLs. ≠ ANY is NOT equivalent to NOT IN.</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Outer join and NULL generation</td>
+              <td>Left join preserves all left rows; missing right columns become NULL. Selecting only rows WHERE right.col IS NULL after a LEFT JOIN gives you rows with NO match — this is how you find "not in" without using NOT IN.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ra-sql-map">
+      <h2 class="sh">8.2 &nbsp; RA → SQL Translation Map</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Relational Algebra</th><th>SQL Equivalent</th></tr></thead>
+          <tbody>
+            <tr><td>σ<sub>condition</sub>(R)</td><td><code>SELECT * FROM R WHERE condition</code></td></tr>
+            <tr><td>π<sub>A,B</sub>(R)</td><td><code>SELECT DISTINCT A, B FROM R</code></td></tr>
+            <tr><td>R ∪ S</td><td><code>SELECT ... FROM R UNION SELECT ... FROM S</code></td></tr>
+            <tr><td>R − S</td><td><code>SELECT ... FROM R EXCEPT SELECT ... FROM S</code></td></tr>
+            <tr><td>R ∩ S</td><td><code>SELECT ... FROM R INTERSECT SELECT ... FROM S</code></td></tr>
+            <tr><td>R × S</td><td><code>SELECT * FROM R CROSS JOIN S</code></td></tr>
+            <tr><td>R ⋈ S (natural)</td><td><code>SELECT * FROM R NATURAL JOIN S</code></td></tr>
+            <tr><td>R ⋈<sub>θ</sub> S</td><td><code>SELECT * FROM R JOIN S ON θ</code></td></tr>
+            <tr><td>ρ<sub>new</sub>(R)</td><td><code>SELECT * FROM R AS new</code></td></tr>
+            <tr><td>R ÷ S</td><td>No direct SQL; use NOT EXISTS with double negation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Division in SQL — The NOT EXISTS Pattern</h3>
+      <p>Since SQL has no division operator, "find all X associated with every Y" is written as:</p>
+      <div class="code-block"><span class="cm">-- Find students enrolled in ALL courses that SID 101 is enrolled in</span>
+<span class="kw">SELECT DISTINCT</span> S.SID
+<span class="kw">FROM</span> Student S
+<span class="kw">WHERE NOT EXISTS</span> (
+    <span class="kw">SELECT</span> CourseID <span class="kw">FROM</span> Enrollment <span class="kw">WHERE</span> SID = <span class="num">101</span>
+    <span class="kw">EXCEPT</span>
+    <span class="kw">SELECT</span> CourseID <span class="kw">FROM</span> Enrollment <span class="kw">WHERE</span> SID = S.SID
+);
+<span class="cm">-- "There is no course that 101 is enrolled in that S is NOT enrolled in"</span></div>
+      <p>The double negation pattern: "there does not exist a Y such that X is NOT associated with Y" is the standard SQL translation of universal quantification.</p>
+    </div>
+
+    <div class="sec" data-m="quick-rev">
+      <h2 class="sh">8.3 &nbsp; Quick Revision — All Operators at a Glance</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operator</th><th>Symbol</th><th>Arity</th><th>One-line description</th><th>Fundamental?</th></tr></thead>
+          <tbody>
+            <tr><td>Selection</td><td>σ</td><td>Unary</td><td>Filter rows by condition</td><td>Yes</td></tr>
+            <tr><td>Projection</td><td>π</td><td>Unary</td><td>Keep specified columns, remove duplicates</td><td>Yes</td></tr>
+            <tr><td>Union</td><td>∪</td><td>Binary</td><td>All tuples from both (union-compatible)</td><td>Yes</td></tr>
+            <tr><td>Set Difference</td><td>−</td><td>Binary</td><td>Tuples in R but not in S</td><td>Yes</td></tr>
+            <tr><td>Cartesian Product</td><td>×</td><td>Binary</td><td>Every pair of tuples; m×n rows</td><td>Yes</td></tr>
+            <tr><td>Rename</td><td>ρ</td><td>Unary</td><td>Rename relation or attributes</td><td>Yes</td></tr>
+            <tr><td>Intersection</td><td>∩</td><td>Binary</td><td>Tuples in both (derived from − )</td><td>No</td></tr>
+            <tr><td>Natural Join</td><td>⋈</td><td>Binary</td><td>Join on all common attrs; merge dupes</td><td>No</td></tr>
+            <tr><td>Theta Join</td><td>⋈<sub>θ</sub></td><td>Binary</td><td>Cartesian product + selection on θ</td><td>No</td></tr>
+            <tr><td>Division</td><td>÷</td><td>Binary</td><td>"For all" queries — universal quantification</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  DBMS · File 2 of 2 &nbsp;·&nbsp; SQL &amp; Relational Algebra &nbsp;·&nbsp; GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

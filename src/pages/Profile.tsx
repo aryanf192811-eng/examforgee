@@ -1,109 +1,254 @@
-import { useState, useEffect } from 'react';
-import { useAuthStore } from '../lib/store/authStore';
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { AppShell } from '../components/layout/AppShell';
 import { Button } from '../components/ui/Button';
-import { useNavigate } from 'react-router-dom';
-import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
-import { fetchProfile } from '../lib/api';
-import type { UserProfile } from '../types';
+import { Input } from '../components/ui/Input';
+import { Badge } from '../components/ui/Badge';
+import { Skeleton } from '../components/ui/Skeleton';
+import { ConfirmModal } from '../components/ui/Modal';
+import { useToast } from '../hooks/useToast';
+import { useAuthStore } from '../lib/store/authStore';
+import { updateProfile } from '../lib/api';
+import { formatNumber, formatDate, getInitials, hashColor, safeNum } from '../lib/utils';
 
-export function Profile() {
-  const { user, clearUser } = useAuthStore();
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const navigate = useNavigate();
+export default function Profile() {
+  const { addToast } = useToast();
+  const user = useAuthStore((s) => s.user);
+  const setUser = useAuthStore((s) => s.setUser);
+  const signOut = useAuthStore((s) => s.signOut);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const data = await fetchProfile();
-        setProfile(data);
-      } catch (err) {
-        console.error("Failed to load profile:", err);
-      }
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState(user?.name || '');
+  const [editBio, setEditBio] = useState(user?.bio || '');
+  const [editCollege, setEditCollege] = useState(user?.college || '');
+  const [editTargetYear, setEditTargetYear] = useState(user?.target_year?.toString() || '2025');
+  const [editTargetScore, setEditTargetScore] = useState(user?.target_score?.toString() || '70');
+  const [isSaving, setIsSaving] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  if (!user) {
+    return (
+      <AppShell title="Profile">
+        <Skeleton variant="card" />
+      </AppShell>
+    );
+  }
+
+  const userName = user.name || 'Student';
+  const userBio = user.bio || 'No bio yet';
+  const totalScore = safeNum(user.total_points);
+  const streakDays = safeNum(user.current_streak);
+
+  async function handleSave() {
+    setIsSaving(true);
+    try {
+      const updated = await updateProfile({
+        name: editName,
+        bio: editBio,
+        college: editCollege,
+        target_year: parseInt(editTargetYear),
+        target_score: parseInt(editTargetScore)
+      });
+      setUser(updated);
+      setIsEditing(false);
+      addToast('Profile updated!', 'success');
+    } catch (err: unknown) {
+      addToast(err instanceof Error ? err.message : 'Failed to save', 'error');
+    } finally {
+      setIsSaving(false);
     }
-    load();
-  }, []);
-
-  const handleLogout = async () => {
-    await signOut(auth);
-    clearUser();
-    navigate('/login');
-  };
+  }
 
   return (
-    <div className="p-6 md:p-10 max-w-4xl mx-auto space-y-12 animate-fade-in relative min-h-[80vh]">
-      <header className="space-y-4 text-center md:text-left mt-10">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface text-transparent bg-clip-text academic-gradient">
-          Curator Identity
-        </h1>
-        <p className="text-on-surface-variant text-lg font-notes italic">The synthesized profile of your academic journey.</p>
-      </header>
-
-      <div className="bg-surface-container-low rounded-[3rem] p-10 shadow-sm border border-outline-variant/10 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none" />
-        <div className="relative z-10 w-32 h-32 md:w-40 md:h-40 rounded-full academic-gradient flex items-center justify-center border-8 border-surface shadow-2xl text-white font-display text-6xl group-hover:scale-105 transition-transform duration-500">
-           {profile?.name?.[0]?.toUpperCase() || user?.displayName?.[0]?.toUpperCase() || 'A'}
-        </div>
-        <div className="relative z-10 flex-1 text-center md:text-left space-y-4">
-          <h2 className="font-display text-4xl font-bold text-on-surface leading-tight">
-            {profile?.name || user?.displayName || 'Editorial Agent'}
-          </h2>
-          <p className="text-on-surface-variant font-mono text-lg">{user?.email}</p>
-          
-          <div className="pt-6 flex flex-wrap gap-8 justify-center md:justify-start">
-             <div className="flex flex-col">
-                <span className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">Total Points</span>
-                <span className="text-3xl font-display font-bold text-primary">
-                  {profile?.total_points.toLocaleString() || "0"}
-                </span>
-             </div>
-             <div className="w-px h-12 bg-outline-variant/20 hidden md:block"></div>
-             <div className="flex flex-col text-center md:text-left">
-                <span className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">Quizzes Taken</span>
-                <span className="text-3xl font-display font-bold text-on-surface">
-                  {profile?.quizzes_taken || 0}
-                </span>
-             </div>
+    <AppShell title="Profile">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+        className="max-w-lg mx-auto space-y-6"
+      >
+        {/* Avatar & Info */}
+        <div className="rounded-2xl bg-surface-container p-6 flex flex-col items-center text-center">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center text-headline-md font-bold text-white mb-4"
+            style={{ backgroundColor: hashColor(userName) }}
+          >
+            {getInitials(userName)}
           </div>
 
-          <div className="pt-6 flex flex-wrap gap-4 justify-center md:justify-start">
-            <span className="px-5 py-2 bg-primary/10 text-primary font-bold text-xs rounded-full uppercase tracking-widest border border-primary/20">
-              {profile?.role === 'pro' ? 'Pro Access' : 'Standard Tier'}
-            </span>
-            <span className="px-5 py-2 bg-surface-variant/30 text-on-surface-variant font-bold text-xs rounded-full uppercase tracking-widest border border-outline-variant/20">
-              GATE {profile?.gate_year || '2025'} Candidate
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-surface-container-low hover:bg-surface-container-high transition-all cursor-pointer rounded-[2rem] p-8 border border-outline-variant/10 flex items-center justify-between group shadow-sm hover:shadow-xl" onClick={() => navigate('/settings')}>
-          <div className="flex items-center gap-6">
-            <div className="w-14 h-14 bg-white dark:bg-surface rounded-2xl text-on-surface flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
-              <span className="material-symbols-outlined text-2xl">settings</span>
+          {isEditing ? (
+            <div role="form" className="w-full space-y-4 mt-2">
+              <Input
+                label="Name"
+                value={editName}
+                onChange={(e) => setEditName(e.target.value)}
+                icon="person"
+              />
+              <div className="flex flex-col gap-1.5 text-left">
+                <label className="font-body text-label-lg text-on-surface-variant">
+                  Bio
+                </label>
+                <textarea
+                  value={editBio}
+                  onChange={(e) => setEditBio(e.target.value)}
+                  placeholder="Tell us about yourself"
+                  className="w-full bg-surface-container-high text-on-surface text-body-md rounded-xl p-3 outline-none resize-none h-20 focus:ring-2 focus:ring-primary/30 placeholder:text-outline font-body border-none"
+                />
+              </div>
+              <Input
+                label="College"
+                value={editCollege}
+                onChange={(e) => setEditCollege(e.target.value)}
+                icon="school"
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <Input
+                  label="Target Year"
+                  type="number"
+                  value={editTargetYear}
+                  onChange={(e) => setEditTargetYear(e.target.value)}
+                  icon="calendar_today"
+                />
+                <Input
+                  label="Target Score"
+                  type="number"
+                  value={editTargetScore}
+                  onChange={(e) => setEditTargetScore(e.target.value)}
+                  icon="track_changes"
+                />
+              </div>
+              <div className="flex gap-3">
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsEditing(false)}
+                  fullWidth
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleSave} loading={isSaving} fullWidth>
+                  Save
+                </Button>
+              </div>
             </div>
-            <div className="font-bold text-xl text-on-surface">Workspace Settings</div>
-          </div>
-          <span className="material-symbols-outlined text-on-surface-variant group-hover:translate-x-2 transition-transform">chevron_right</span>
+          ) : (
+            <>
+              <h2 className="font-display text-headline-md text-on-surface mb-1">
+                {userName}
+              </h2>
+              <p className="text-body-md text-on-surface-variant mb-3">
+                {userBio}
+              </p>
+              <div className="flex items-center gap-2 mb-4">
+                <Badge variant="primary">{user.role}</Badge>
+              </div>
+              <Button
+                variant="secondary"
+                size="sm"
+                icon="edit"
+                onClick={() => {
+                  setEditName(user.name || '');
+                  setEditBio(user.bio || '');
+                  setEditCollege(user.college || '');
+                  setEditTargetYear(user.target_year?.toString() || '2025');
+                  setEditTargetScore(user.target_score?.toString() || '70');
+                  setIsEditing(true);
+                }}
+              >
+                Edit Profile
+              </Button>
+            </>
+          )}
         </div>
 
-        <div className="bg-surface-container-low hover:bg-surface-container-high transition-all cursor-pointer rounded-[2rem] p-8 border border-outline-variant/10 flex items-center justify-between group shadow-sm hover:shadow-xl">
-            <div className="flex items-center gap-6">
-            <div className="w-14 h-14 bg-white dark:bg-surface rounded-2xl text-on-surface flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-all shadow-sm">
-              <span className="material-symbols-outlined text-2xl">bookmarks</span>
-            </div>
-            <div className="font-bold text-xl text-on-surface">Saved Insights</div>
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4">
+          <div className="rounded-2xl bg-surface-container p-4 text-center">
+            <span className="font-display text-headline-sm text-primary block">
+              {formatNumber(totalScore)}
+            </span>
+            <span className="text-label-md text-on-surface-variant">Score</span>
           </div>
-          <span className="material-symbols-outlined text-on-surface-variant group-hover:translate-x-2 transition-transform">chevron_right</span>
+          <div className="rounded-2xl bg-surface-container p-4 text-center">
+            <span className="font-display text-headline-sm text-secondary block">
+              {streakDays}
+            </span>
+            <span className="text-label-md text-on-surface-variant">Streak</span>
+          </div>
+          <div className="rounded-2xl bg-surface-container p-4 text-center">
+             <span className="font-display text-headline-sm text-tertiary block truncate">
+              {user.created_at ? formatDate(user.created_at) : 'N/A'}
+            </span>
+            <span className="text-label-md text-on-surface-variant">Joined</span>
+          </div>
         </div>
-      </div>
 
-      <div className="pt-12 flex justify-center">
-        <Button variant="ghost" className="text-error border-error/20 px-10 h-14 rounded-full hover:bg-error/5 hover:border-error/50 transition-all font-bold" onClick={handleLogout}>
-          Sign Out Workspace
-        </Button>
-      </div>
-    </div>
+        {/* Info */}
+        <div className="rounded-2xl bg-surface-container p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-label-lg text-on-surface-variant">Email</span>
+            <span className="text-body-md text-on-surface">{user.email}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-label-lg text-on-surface-variant">College</span>
+            <span className="text-body-md text-on-surface">{user.college || 'Not set'}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-label-lg text-on-surface-variant">Target Year</span>
+            <span className="text-body-md text-on-surface">{user.target_year || 'Not set'}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-label-lg text-on-surface-variant">Target Score</span>
+            <span className="text-body-md text-on-surface">{user.target_score || 'Not set'}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-label-lg text-on-surface-variant">Role</span>
+            <Badge variant="primary" size="sm" className="bg-primary/10 text-primary">{user.role}</Badge>
+          </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="rounded-2xl bg-error-container/10 p-5 mt-8">
+          <h3 className="font-headline text-title-md text-error mb-2">
+            Workspace session
+          </h3>
+          <p className="text-body-sm text-on-surface-variant mb-4">
+             Manage your session or administrative identity.
+          </p>
+          <div className="flex gap-3">
+            <Button
+              variant="destructive"
+              size="sm"
+              icon="delete"
+              onClick={() => setShowDeleteModal(true)}
+              className="bg-error/10 text-error hover:bg-error hover:text-white"
+            >
+              Delete Account
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              icon="logout"
+              onClick={signOut}
+              className="text-on-surface-variant"
+            >
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+
+      <ConfirmModal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        onConfirm={() => {
+          setShowDeleteModal(false);
+          addToast('Account deletion requested. Contact support.', 'info');
+        }}
+        title="Delete Account"
+        description="Are you sure you want to delete your account? All data will be permanently removed. This action cannot be undone."
+        confirmLabel="Delete My Account"
+        variant="destructive"
+      />
+    </AppShell>
   );
 }

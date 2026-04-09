@@ -1,298 +1,339 @@
-import { useState, useEffect } from "react";
-import { Button } from "../components/ui/Button";
-import { fetchSubjects, fetchQuestions, startQuizSession, submitQuizSession } from "../lib/api";
-import type {
-  Subject,
-  Question,
-  QuizSession,
-} from "../types";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { AppShell } from '../components/layout/AppShell';
+import { Button } from '../components/ui/Button';
+import { Skeleton } from '../components/ui/Skeleton';
+import { Badge } from '../components/ui/Badge';
+import { useToast } from '../hooks/useToast';
+import { useQuizStore } from '../lib/store/quizStore';
+import { getSubjects, startQuiz, submitQuiz, saveQuizState } from '../lib/api';
+import { cn, formatPercent } from '../lib/utils';
+import { VirtualCalculator } from '../components/ui/VirtualCalculator';
+import type { SubjectResponse } from '../types';
 
-export function Practice() {
-  const [activeTab, setActiveTab] = useState<"daily" | "subjects" | "mocks">("daily");
-  const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [subjectsLoading, setSubjectsLoading] = useState(false);
-  const [currentSession, setCurrentSession] = useState<QuizSession | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [results, setResults] = useState<any | null>(null);
-  const [quizLoading, setQuizLoading] = useState(false);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [timeStarted, setTimeStarted] = useState<number>(0);
+const modes = [
+  { id: 'topic', label: 'Topic Focus', icon: 'subject', desc: 'Deep dive into specific chapters' },
+  { id: 'mixed', label: 'Grand Mix', icon: 'shuffle', desc: 'Randomized across all subjects' },
+  { id: 'mock', label: 'Full Mock', icon: 'timer', desc: 'Full-length 3-hour GATE simulation' },
+  { id: 'PYQ', label: 'Previous Years', icon: 'history', desc: 'Official questions from past exams' }
+];
 
+export default function Practice() {
+  const { addToast } = useToast();
+
+  const [subjects, setSubjects] = useState<SubjectResponse[]>([]);
+  const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
+  const [selectedSubjectId, setSelectedSubjectId] = useState('');
+  const [selectedMode, setSelectedMode] = useState('mixed');
+  const [questionCount, setQuestionCount] = useState(15);
+  const [isStarting, setIsStarting] = useState(false);
+  const [isCalcOpen, setIsCalcOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+  const {
+    sessionId, questions, answers, flags, currentIndex,
+    setSession, setQuestions, recordAnswer, toggleFlag,
+    nextQuestion, prevQuestion, goToQuestion,
+    setSubmitted, setSubmissionResult, isSubmitted, submissionResult, reset,
+  } = useQuizStore();
+
+  // Load subjects
   useEffect(() => {
-    if (activeTab === "subjects") {
-      async function load() {
-        try {
-          setSubjectsLoading(true);
-          const data = await fetchSubjects();
-          setSubjects(data);
-        } catch (err) {
-          console.error("Failed to load subjects:", err);
-        } finally {
-          setSubjectsLoading(false);
+    let cancelled = false;
+    async function load() {
+      setIsLoadingSubjects(true);
+      try {
+        const data = await getSubjects();
+        if (!cancelled) {
+          setSubjects(data ?? []);
+          if (data?.length > 0) setSelectedSubjectId(data[0].id);
         }
-      }
-      load();
+      } catch { /* handled */ }
+      finally { if (!cancelled) setIsLoadingSubjects(false); }
     }
-  }, [activeTab]);
+    load();
+    return () => { cancelled = true; };
+  }, []);
 
-  const startQuiz = async (subjectId: string, mode = "practice", count = 10) => {
+  // Timer logic
+  useEffect(() => {
+    if (!sessionId || isSubmitted || timeLeft === 0) return;
+    if (timeLeft === null && questions.length > 0) {
+      setTimeLeft(questions.length * 180); // 3 mins per question
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => (prev !== null && prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [sessionId, isSubmitted, questions.length, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    return `${h > 0 ? h + ':' : ''}${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  const handleStart = useCallback(async () => {
+    if (!selectedSubjectId && selectedMode !== 'mixed') {
+      addToast('Please select a subject.', 'warning');
+      return;
+    }
+    const subject = subjects.find(s => s.id === selectedSubjectId);
+
+    setIsStarting(true);
     try {
-      setQuizLoading(true);
-      setResults(null);
-      
-      // 1. Fetch questions from SQLite
-      const qData = await fetchQuestions(subjectId, undefined, mode, count);
-      setQuestions(qData);
-      
-      // 2. Create session in Supabase
-      const session = await startQuizSession({
-        subject_id: subjectId,
-        mode: mode,
-        total_questions: qData.length
-      });
-      
-      setCurrentSession(session);
-      setAnswers({});
-      setCurrentIndex(0);
-      setTimeStarted(Date.now());
-    } catch (err) {
-      console.error("Failed to start quiz:", err);
-    } finally {
-      setQuizLoading(false);
-    }
-  };
+      const slugs = selectedMode === 'mixed' 
+        ? subjects.map(s => s.slug).join(',') 
+        : (subject?.slug ?? '');
 
-  const submitCurrentQuiz = async () => {
-    if (!currentSession || !questions.length) return;
+      const session = await startQuiz(selectedMode, slugs, questionCount);
+      setSession(session.session_id);
+      setQuestions(session.questions ?? []);
+    } catch (err: unknown) {
+      addToast(err instanceof Error ? err.message : 'Failed to start quiz', 'error');
+    } finally {
+      setIsStarting(false);
+    }
+  }, [subjects, selectedSubjectId, selectedMode, questionCount, addToast, setSession, setQuestions]);
+
+  const handleSubmit = useCallback(async () => {
+    if (!sessionId) return;
     try {
-      setQuizLoading(true);
-      const timeTaken = Math.floor((Date.now() - timeStarted) / 1000);
-      
-      // Calculate score (Client side for instant feedback)
-      let correct = 0;
-      const submissionAnswers = questions.map(q => {
-        const isCorrect = answers[q.id] === q.correct_option;
-        if (isCorrect) correct++;
-        return {
-          question_id: q.id,
-          selected_option: answers[q.id] || null,
-          is_correct: isCorrect,
-          time_taken_s: 0 // Simplification
-        };
-      });
-
-      const score = correct * 1; // Basic 1 mark per question
-
-      await submitQuizSession(currentSession.id, {
-        score,
-        correct_count: correct,
-        time_taken_s: timeTaken,
-        answers: submissionAnswers
-      });
-
-      setResults({
-        score,
-        correct,
-        total: questions.length,
-        time_taken_s: timeTaken
-      });
-    } catch (err) {
-      console.error("Failed to submit quiz:", err);
-    } finally {
-      setQuizLoading(false);
+      await saveQuizState(sessionId, answers as Record<string, string>, flags);
+      const result = await submitQuiz(sessionId);
+      setSubmissionResult(result);
+      setSubmitted(true);
+      addToast('Simulation submitted successfully!', 'success');
+    } catch (err: unknown) {
+      addToast(err instanceof Error ? err.message : 'Submission failed', 'error');
     }
-  };
+  }, [sessionId, answers, flags, addToast, setSubmitted, setSubmissionResult]);
 
-  const handleAnswer = (questionId: string, optionKey: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: optionKey }));
-  };
+  const currentQuestion = useMemo(() => questions[currentIndex] ?? null, [questions, currentIndex]);
 
-  const goToQuestion = (index: number) => {
-    if (index >= 0 && index < questions.length) {
-      setCurrentIndex(index);
-    }
-  };
-
-  const currentQuestion = questions[currentIndex];
-
-  if (results) {
+  if (!sessionId || questions.length === 0) {
     return (
-      <div className="p-6 md:p-10 max-w-4xl mx-auto animate-fade-in space-y-10">
-        <header className="text-center space-y-4">
-          <h1 className="font-display text-4xl font-bold text-on-surface text-transparent bg-clip-text academic-gradient">Synthesis Complete</h1>
-          <p className="text-on-surface-variant font-notes italic">Performance analysis successful.</p>
-        </header>
+      <AppShell title="Console Prep">
+        {isLoadingSubjects ? (
+          <div className="max-w-4xl mx-auto grid gap-6">
+            <Skeleton className="h-48 rounded-3xl" />
+            <Skeleton className="h-96 rounded-3xl" />
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-5xl mx-auto space-y-10 py-8"
+          >
+            <div className="flex flex-col items-center text-center space-y-3">
+               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined text-display-md text-primary">terminal</span>
+               </div>
+               <h2 className="text-display-sm font-display font-bold tracking-tight text-on-surface">
+                  Engineering Practice Console
+               </h2>
+               <p className="text-body-lg text-on-surface-variant max-w-lg">
+                  Professional GATE-standard examination simulator. Select your domain and proceed to the console.
+               </p>
+            </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          <div className="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 text-center">
-            <div className="text-4xl font-display font-bold text-primary">{results.score}</div>
-            <div className="text-xs uppercase tracking-widest text-on-surface-variant font-label mt-2">Points Earned</div>
-          </div>
-          <div className="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 text-center">
-            <div className="text-4xl font-display font-bold text-on-surface">{results.correct} / {results.total}</div>
-            <div className="text-xs uppercase tracking-widest text-on-surface-variant font-label mt-2">Accuracy</div>
-          </div>
-          <div className="bg-surface-container-low p-8 rounded-3xl border border-outline-variant/10 text-center">
-            <div className="text-4xl font-display font-bold text-on-surface">{Math.floor(results.time_taken_s / 60)}m {results.time_taken_s % 60}s</div>
-            <div className="text-xs uppercase tracking-widest text-on-surface-variant font-label mt-2">Time Invested</div>
-          </div>
-        </div>
+            <div className="grid lg:grid-cols-12 gap-8">
+              <div className="lg:col-span-7 space-y-8">
+                 <section className="space-y-4">
+                    <h3 className="text-title-medium font-bold px-1 uppercase tracking-widest text-primary/70">1. Select Mode</h3>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                       {modes.map((m) => (
+                         <button
+                           key={m.id}
+                           onClick={() => setSelectedMode(m.id)}
+                           className={cn(
+                             "relative p-6 rounded-3xl border-2 text-left transition-all overflow-hidden group",
+                             selectedMode === m.id 
+                               ? "bg-primary-container border-primary shadow-xl shadow-primary/10" 
+                               : "bg-surface-container border-outline-variant hover:border-primary/50"
+                           )}
+                         >
+                           <h4 className="font-bold text-title-medium mb-1">{m.label}</h4>
+                           <p className="text-body-small text-on-surface-variant leading-snug">{m.desc}</p>
+                         </button>
+                       ))}
+                    </div>
+                 </section>
 
-        <div className="flex justify-center pt-8">
-          <Button variant="primary" onClick={() => { setCurrentSession(null); setResults(null); }} className="rounded-full px-12 py-6 text-lg academic-gradient">
-            Return to Arena
-          </Button>
-        </div>
-      </div>
+                 <section className="space-y-4">
+                    <div className="flex justify-between items-center px-1">
+                       <h3 className="text-title-medium font-bold uppercase tracking-widest text-primary/70">2. Session Intensity</h3>
+                       <Badge variant="primary" size="lg">{questionCount} Questions</Badge>
+                    </div>
+                    <div className="p-8 rounded-3xl bg-surface-container border border-outline-variant">
+                       <input
+                         type="range" min={5} max={65} step={5}
+                         value={questionCount}
+                         onChange={(e) => setQuestionCount(Number(e.target.value))}
+                         className="w-full h-2 bg-outline-variant rounded-full appearance-none cursor-pointer accent-primary"
+                       />
+                    </div>
+                 </section>
+              </div>
+
+              <div className="lg:col-span-5 flex flex-col gap-8">
+                 <section className="flex-1 space-y-4">
+                    <h3 className="text-title-medium font-bold px-1 uppercase tracking-widest text-primary/70">3. Target Domain</h3>
+                    <div className="p-4 rounded-3xl bg-surface-container border border-outline-variant max-h-[440px] overflow-y-auto custom-scrollbar">
+                       <div className="grid gap-2">
+                          <button
+                            onClick={() => setSelectedMode('mixed')}
+                            className={cn(
+                              "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all",
+                              selectedMode === 'mixed' ? "bg-secondary-container border-secondary" : "bg-surface border-transparent hover:bg-surface-container-high"
+                            )}
+                          >
+                             <span className="font-bold">Mixed GATE Subjects</span>
+                          </button>
+                          {subjects.map((s) => (
+                            <button
+                              key={s.id}
+                              onClick={() => { setSelectedSubjectId(s.id); setSelectedMode('topic'); }}
+                              className={cn(
+                                "flex items-center gap-4 p-4 rounded-2xl border-2 transition-all",
+                                selectedSubjectId === s.id && selectedMode !== 'mixed' ? "bg-primary-container border-primary" : "bg-surface border-transparent hover:bg-surface-container-high"
+                              )}
+                            >
+                               <span className="font-bold flex-1 text-left">{s.name}</span>
+                            </button>
+                          ))}
+                       </div>
+                    </div>
+                 </section>
+
+                 <Button 
+                   size="lg" 
+                   fullWidth 
+                   onClick={handleStart} 
+                   loading={isStarting} 
+                   icon="bolt"
+                   className="shadow-2xl shadow-primary/20 rounded-3xl py-8"
+                 >
+                   Launch Console
+                 </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AppShell>
     );
   }
 
-  if (currentSession && currentQuestion) {
+  if (isSubmitted && submissionResult) {
     return (
-      <div className="p-6 md:p-10 max-w-6xl mx-auto animate-fade-in">
-        <div className="flex justify-between items-center mb-8 pb-6 border-b border-outline-variant/10">
-          <button onClick={() => setCurrentSession(null)} className="flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary transition-colors">
-            <span className="material-symbols-outlined">arrow_back</span> Exit Quiz
-          </button>
-          <Button variant="primary" onClick={submitCurrentQuiz} disabled={quizLoading} className="rounded-full px-8 academic-gradient">
-            {quizLoading ? "Submitting..." : "Submit Synthesis"}
-          </Button>
-        </div>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10">
-            <div className="space-y-6">
-              <div className="flex gap-3">
-                <span className="text-xs font-label bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full uppercase tracking-wider">{currentQuestion.type}</span>
-                <span className="text-xs font-label bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full">{currentQuestion.marks} marks</span>
-              </div>
-              <h2 className="font-display text-2xl font-bold text-on-surface leading-tight">{currentQuestion.stem}</h2>
-            </div>
-
-            <div className="space-y-3 mt-10">
-              {['A', 'B', 'C', 'D'].map((key) => {
-                const optText = (currentQuestion as any)[`option_${key.toLowerCase()}`];
-                if (!optText) return null;
-                const selected = answers[currentQuestion.id] === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => handleAnswer(currentQuestion.id, key)}
-                    className={`w-full p-6 rounded-2xl text-left transition-all border-2 ${
-                      selected ? "border-primary bg-primary/5 text-on-surface shadow-sm" : "border-outline-variant/20 bg-surface-container hover:border-primary/30"
-                    }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-xl border-2 flex items-center justify-center font-bold ${
-                        selected ? "border-primary bg-primary text-white" : "border-outline text-on-surface-variant"
-                      }`}>
-                        {key}
-                      </div>
-                      <span className="flex-1 text-lg font-medium">{optText}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex gap-4 mt-12 pt-8 border-t border-outline-variant/10">
-              <Button variant="secondary" onClick={() => goToQuestion(currentIndex - 1)} disabled={currentIndex === 0} className="rounded-xl px-6">
-                <span className="material-symbols-outlined">arrow_back</span> Previous
-              </Button>
-              <Button variant="secondary" onClick={() => goToQuestion(currentIndex + 1)} disabled={currentIndex === questions.length - 1} className="rounded-xl px-6">
-                Next <span className="material-symbols-outlined">arrow_forward</span>
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-surface-container-low rounded-3xl p-6 border border-outline-variant/10 h-fit">
-            <h3 className="font-label text-xs uppercase tracking-widest text-on-surface-variant mb-6 font-bold">Navigational Matrix</h3>
-            <div className="grid grid-cols-5 gap-3">
-              {questions.map((q, idx) => (
-                <button
-                  key={q.id}
-                  onClick={() => goToQuestion(idx)}
-                  className={`aspect-square text-sm font-bold rounded-xl transition-all border-2 ${
-                    idx === currentIndex ? "border-primary bg-primary text-white shadow-lg shadow-primary/20 scale-110" : answers[q.id] ? "bg-secondary-container border-secondary/20 text-on-secondary-container" : "bg-surface-container border-transparent"
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <AppShell title="Analysis Dashboard">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="max-w-5xl mx-auto space-y-12 py-6">
+           <div className="relative p-12 rounded-[40px] bg-gradient-to-br from-primary to-primary-container text-white text-center shadow-3xl">
+              <h2 className="text-display-xl font-display font-bold">{formatPercent(submissionResult.accuracy_pct)}</h2>
+              <p className="text-headline-small opacity-80">Precision Index</p>
+           </div>
+           <Button size="lg" fullWidth onClick={reset} icon="refresh" className="rounded-3xl py-10">Return to Bridge</Button>
+        </motion.div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10 animate-fade-in min-h-[80vh]">
-      <header className="space-y-4 mb-8">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface text-transparent bg-clip-text academic-gradient">Practice Arena</h1>
-        <p className="text-on-surface-variant text-lg font-notes italic">Sharpen your problem-solving reflexes under exam conditions.</p>
-      </header>
-
-      <div className="flex gap-2 p-1 bg-surface-container-low rounded-2xl w-fit border border-outline-variant/10">
-        {["daily", "subjects", "mocks"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab as any)}
-            className={`px-8 py-3 rounded-xl text-sm font-bold capitalize transition-all ${
-              activeTab === tab ? "bg-white dark:bg-surface shadow-md text-primary" : "text-on-surface-variant hover:text-on-surface"
-            }`}
-          >
-            {tab}
-          </button>
-        ))}
+    <AppShell title="Live Assessment" headerActions={
+      <div className="flex items-center gap-6">
+         <span className={cn("font-mono text-headline-small font-black", (timeLeft ?? 0) < 180 ? "text-error" : "text-primary")}>
+            {formatTime(timeLeft ?? 0)}
+         </span>
+         <button onClick={() => setIsCalcOpen(true)} className="w-14 h-14 rounded-2xl bg-surface-container flex items-center justify-center border border-outline-variant">
+           <span className="material-symbols-outlined">calculate</span>
+         </button>
       </div>
+    }>
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 h-[calc(100vh-140px)]">
+         <div className="overflow-y-auto space-y-8 pr-4 custom-scrollbar">
+            <AnimatePresence mode="wait">
+              {currentQuestion && (
+                <motion.div key={currentQuestion.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-10">
+                   <div className="flex items-center gap-3">
+                      <Badge variant="primary">{currentQuestion.type}</Badge>
+                      <Badge variant="secondary">{currentQuestion.marks} Marks</Badge>
+                      <div className="flex-1" />
+                      <button onClick={() => toggleFlag(currentQuestion.id)} className={cn("px-5 py-2.5 rounded-xl font-black border-2", flags.includes(currentQuestion.id) ? "bg-warning/10 border-warning text-warning" : "bg-surface border-outline-variant text-outline")}>
+                        {flags.includes(currentQuestion.id) ? 'FLAGGED' : 'MARK REVIEW'}
+                      </button>
+                   </div>
 
-      {activeTab === "daily" && (
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="bg-surface-container-low p-10 rounded-[2.5rem] border border-outline-variant/10 group hover:border-primary/30 transition-all">
-            <div className="p-4 bg-primary/10 w-fit text-primary rounded-2xl mb-8 group-hover:bg-primary group-hover:text-white transition-all">
-              <span className="material-symbols-outlined text-3xl">timer</span>
+                   <div className="p-12 rounded-[48px] bg-surface-container border border-outline-variant">
+                      <p className="text-headline-small text-on-surface leading-[1.6]">
+                        {currentQuestion.question_text}
+                      </p>
+                   </div>
+
+                   <div className="space-y-4">
+                      {currentQuestion.type === 'MCQ' && (
+                          <div className="grid gap-4">
+                              {[
+                                  { key: 'A', text: currentQuestion.option_a },
+                                  { key: 'B', text: currentQuestion.option_b },
+                                  { key: 'C', text: currentQuestion.option_c },
+                                  { key: 'D', text: currentQuestion.option_d },
+                              ].filter(o => o.text).map((opt) => {
+                                  const isSelected = answers[currentQuestion.id] === opt.key;
+                                  return (
+                                      <button key={opt.key} onClick={() => recordAnswer(currentQuestion.id, opt.key)} className={cn("w-full flex items-center gap-6 p-6 rounded-[32px] border-2 transition-all", isSelected ? "bg-primary text-white border-primary" : "bg-surface-container border-transparent hover:bg-primary/5")}>
+                                          <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center font-black", isSelected ? "bg-white text-primary" : "bg-outline-variant/30 text-on-surface-variant")}>
+                                              {opt.key}
+                                          </div>
+                                          <span className="text-title-large flex-1 text-left">{opt.text}</span>
+                                      </button>
+                                  );
+                              })}
+                          </div>
+                      )}
+                      
+                      {currentQuestion.type === 'NAT' && (
+                          <div className="p-10 rounded-[48px] bg-primary/5 border-2 border-primary/20 flex flex-col items-center">
+                             <input
+                                 type="number"
+                                 value={String(answers[currentQuestion.id] ?? '')}
+                                 onChange={(e) => recordAnswer(currentQuestion.id, e.target.value)}
+                                 className="bg-transparent text-display-sm font-mono text-center outline-none w-64 border-b-4 border-primary pb-2"
+                             />
+                          </div>
+                      )}
+                   </div>
+
+                   <div className="flex items-center justify-between border-t-2 border-outline-variant/50 pt-10">
+                      <Button variant="ghost" onClick={prevQuestion} disabled={currentIndex === 0}>Previous</Button>
+                      <div className="flex items-center gap-4">
+                         <Button variant="secondary" onClick={() => recordAnswer(currentQuestion.id, null)}>Purge</Button>
+                         {currentIndex === questions.length - 1 ? (
+                           <Button onClick={handleSubmit}>Submit Final</Button>
+                         ) : (
+                           <Button onClick={nextQuestion}>Save & Next</Button>
+                         )}
+                      </div>
+                   </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+         </div>
+
+         <div className="hidden lg:flex flex-col bg-surface-container p-8 rounded-[48px] border border-outline-variant overflow-y-auto">
+            <h4 className="text-label-lg font-black uppercase tracking-[0.3em] mb-10">Question Palette</h4>
+            <div className="grid grid-cols-4 gap-4">
+               {questions.map((q, i) => (
+                 <button key={q.id} onClick={() => goToQuestion(i)} className={cn("w-full aspect-square rounded-2xl flex items-center justify-center font-black border-2", currentIndex === i ? "border-primary scale-110 shadow-lg" : "border-transparent", flags.includes(q.id) ? "bg-warning text-on-warning" : (answers[q.id] != null && answers[q.id] !== '') ? "bg-primary text-white" : "bg-surface-container-highest")}>
+                   {i + 1}
+                 </button>
+               ))}
             </div>
-            <h2 className="font-display text-3xl font-bold mb-4 text-on-surface">Daily Sprint</h2>
-            <p className="text-on-surface-variant mb-10 text-lg">A randomized 15-minute challenge to verify your conceptual synthesis.</p>
-            <Button variant="primary" onClick={() => startQuiz("algo", "daily", 15)} disabled={quizLoading} className="rounded-full px-12 py-7 text-xl shadow-xl shadow-primary/10 academic-gradient">
-              {quizLoading ? "Loading..." : "Commence Synthesis"}
-            </Button>
-          </div>
-        </div>
-      )}
-
-      {activeTab === "subjects" && (
-        <div>
-          {subjectsLoading ? (
-            <div className="py-20 text-center animate-pulse"><span className="material-symbols-outlined text-6xl text-primary/30">sync</span></div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {subjects.map((subject) => (
-                <div key={subject.id} className="bg-surface-container-low rounded-[2rem] p-8 border border-outline-variant/10 hover:shadow-2xl transition-all group">
-                  <div className="w-16 h-16 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center mb-8 text-3xl group-hover:scale-110 transition-transform">
-                    <span className="material-symbols-outlined">{subject.icon || "folder"}</span>
-                  </div>
-                  <h3 className="font-display text-2xl font-bold text-on-surface mb-3">{subject.name}</h3>
-                  <p className="text-on-surface-variant mb-10 line-clamp-2">Master {subject.name} with focused module practice.</p>
-                  <Button variant="primary" onClick={() => startQuiz(subject.id)} disabled={quizLoading} className="w-full rounded-full py-6 text-lg academic-gradient">
-                    Start Session
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {activeTab === "mocks" && (
-        <div className="text-center py-20 bg-surface-container-low rounded-[3rem] border-2 border-dashed border-outline-variant/30">
-          <span className="material-symbols-outlined text-7xl text-on-surface-variant/20 mb-6">lock</span>
-          <h3 className="text-2xl font-bold text-on-surface mb-3">Locked Matrix</h3>
-          <p className="text-on-surface-variant max-w-sm mx-auto">Pro subscription required for complete mock curriculum access.</p>
-        </div>
-      )}
-    </div>
+         </div>
+      </div>
+      <VirtualCalculator isOpen={isCalcOpen} onClose={() => setIsCalcOpen(false)} />
+    </AppShell>
   );
 }

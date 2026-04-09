@@ -1,43 +1,62 @@
-import { useEffect, useCallback } from 'react';
-import { useNotesStore } from '../lib/store/notesStore';
-import { fetchBookmarks, createBookmark, deleteBookmark } from '../lib/api';
-import { useToastStore } from '../lib/utils';
+import { useState, useEffect, useCallback } from 'react';
 
+interface Bookmark {
+  chapterId: string;
+  chapterTitle: string;
+  subjectName: string;
+  createdAt: string;
+}
+
+const STORAGE_KEY = 'ef_bookmarks';
+
+function loadBookmarks(): Bookmark[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return [];
+    return parsed as Bookmark[];
+  } catch {
+    return [];
+  }
+}
+
+function saveBookmarks(bookmarks: Bookmark[]): void {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+}
+
+/**
+ * Hook for managing chapter-level bookmarks (stored in localStorage).
+ * This provides immediate responsiveness while the user navigates notes.
+ */
 export function useBookmarks() {
-  const { bookmarks, setBookmarks, addBookmark, removeBookmark } = useNotesStore();
-  const addToast = useToastStore((s) => s.addToast);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>(loadBookmarks);
 
   useEffect(() => {
-    fetchBookmarks()
-      .then(setBookmarks)
-      .catch(() => addToast('error', 'Failed to load bookmarks'));
-  }, [setBookmarks, addToast]);
+    saveBookmarks(bookmarks);
+  }, [bookmarks]);
 
-  const handleCreate = useCallback(
-    async (chapterId: string, sectionId: string, sectionTitle: string) => {
-      try {
-        const bm = await createBookmark({ chapter_id: chapterId, section_id: sectionId, section_title: sectionTitle });
-        addBookmark(bm);
-        addToast('success', 'Bookmark added');
-      } catch {
-        addToast('error', 'Failed to create bookmark');
-      }
+  const addBookmark = useCallback(
+    (chapterId: string, chapterTitle: string, subjectName: string) => {
+      setBookmarks((prev) => {
+        if (prev.some((b) => b.chapterId === chapterId)) return prev;
+        return [
+          ...prev,
+          { chapterId, chapterTitle, subjectName, createdAt: new Date().toISOString() },
+        ];
+      });
     },
-    [addBookmark, addToast]
+    []
   );
 
-  const handleDelete = useCallback(
-    async (id: string) => {
-      try {
-        await deleteBookmark(id);
-        removeBookmark(id);
-        addToast('success', 'Bookmark removed');
-      } catch {
-        addToast('error', 'Failed to delete bookmark');
-      }
-    },
-    [removeBookmark, addToast]
+  const removeBookmark = useCallback((chapterId: string) => {
+    setBookmarks((prev) => prev.filter((b) => b.chapterId !== chapterId));
+  }, []);
+
+  const isBookmarked = useCallback(
+    (chapterId: string) => bookmarks.some((b) => b.chapterId === chapterId),
+    [bookmarks]
   );
 
-  return { bookmarks, createBookmark: handleCreate, deleteBookmark: handleDelete };
+  return { bookmarks, addBookmark, removeBookmark, isBookmarked };
 }

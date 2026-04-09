@@ -1,172 +1,258 @@
 import { useNavigate } from 'react-router-dom';
+import { motion, type Variants } from 'framer-motion';
+import { useAuthStore } from '../lib/store/authStore';
+import { Button } from '../components/ui/Button';
 
-export function Landing() {
+const stagger: Variants = {
+  animate: { transition: { staggerChildren: 0.06 } },
+};
+
+const fadeUp: Variants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 24 } },
+};
+
+const features = [
+  {
+    icon: 'menu_book',
+    title: 'Premium Notes',
+    desc: 'Comprehensive GATE CSE notes with KaTeX-rendered math, curated by top educators.',
+  },
+  {
+    icon: 'quiz',
+    title: 'Adaptive Practice',
+    desc: 'MCQ, MSQ, and NAT questions with Previous Year Questions from GATE archives.',
+  },
+  {
+    icon: 'psychology',
+    title: 'AI Doubt Resolution',
+    desc: 'Select any text in your notes and get instant, context-aware explanations.',
+  },
+  {
+    icon: 'leaderboard',
+    title: 'Live Leaderboard',
+    desc: 'Compete weekly with thousands of GATE aspirants and track your ranking.',
+  },
+  {
+    icon: 'style',
+    title: 'Smart Flashcards',
+    desc: 'Spaced-repetition flashcards that adapt to your learning pace.',
+  },
+  {
+    icon: 'insights',
+    title: 'Score Prediction',
+    desc: 'AI-powered GATE score estimator based on your practice performance.',
+  },
+];
+
+const stats = [
+  { value: '15+', label: 'Core Subjects' },
+  { value: '5000+', label: 'Practice Questions' },
+  { value: '200+', label: 'Detailed Notes' },
+  { value: '98%', label: 'Student Satisfaction' },
+];
+
+export default function Landing() {
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
 
   return (
-    <div className="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen">
-      {/* TopNavBar */}
-      <nav className="fixed top-0 right-0 w-full z-40 bg-surface/80 backdrop-blur-md flex justify-between items-center h-16 px-6">
-        <div className="flex items-center gap-8">
-          <span className="font-display text-xl font-semibold text-primary">ExamForge</span>
-          <div className="hidden md:flex items-center gap-6">
-            <button className="text-sm font-medium text-primary">Dashboard</button>
-            <button className="text-sm font-medium text-on-surface-variant hover:text-primary transition-all">Notes</button>
-            <button className="text-sm font-medium text-on-surface-variant hover:text-primary transition-all">Practice</button>
+    <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="grain-overlay" />
+
+      {/* ── Navbar ── */}
+      <nav className="sticky top-0 z-50 glass">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl gradient-cta flex items-center justify-center">
+              <span className="material-symbols-outlined text-on-primary text-[20px]">
+                local_library
+              </span>
+            </div>
+            <span className="font-display text-title-lg text-on-surface">
+              ExamForge
+            </span>
           </div>
-        </div>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => navigate('/login')}
-            className="px-5 py-2 rounded-full bg-surface-container-high text-sm font-semibold hover:bg-surface-container-highest transition-all"
-          >
-            Sign In
-          </button>
+          <div className="flex items-center gap-3">
+            {user ? (
+              <Button onClick={() => navigate('/dashboard')} size="sm">
+                Dashboard
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate('/login')}
+                  size="sm"
+                >
+                  Sign In
+                </Button>
+                <Button onClick={() => navigate('/signup')} size="sm">
+                  Get Started
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 lg:px-24 overflow-hidden min-h-[90vh] flex items-center">
-        <div className="absolute inset-0 bg-[url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPlTqcgzVP0piVJIwYf9zjS_Ic_vxamat3D_sDdIR-4qV3T3yJy6ZuCBlgONITy8sy5pukcA9LrjJ6T_pPzcsbShlhP5SoozvP5zeZ08j5x2s9ZXTNLEpAoaoyWPgqvtE-j95N0dlUtfTFnFMRNF7v7AorJlnQj9PuZyE1ksahsODutwstYZ7HeElWPnyVyutIfd_S_O5jBl4OOkNoIgTKd10haeN9eUAuJM7MbqmwnCTOY6TnFPk4rLrG75QNIgHVRVmpRQaZNNgy')] opacity-[0.03] pointer-events-none mix-blend-multiply"></div>
-        <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center relative z-10">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-secondary text-xs font-bold tracking-wider uppercase mb-6">
-              <span className="material-symbols-outlined text-sm">school</span>
-              FOR GATE CSE ASPIRANTS
+      {/* ── Hero ── */}
+      <section className="relative max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-24">
+        <motion.div
+          variants={stagger}
+          initial="initial"
+          animate="animate"
+          className="text-center max-w-3xl mx-auto"
+        >
+          <motion.div variants={fadeUp} className="mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-container text-on-primary-container text-label-lg">
+              <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
+              GATE CSE 2026 Ready
+            </span>
+          </motion.div>
+
+          <motion.h1
+            variants={fadeUp}
+            className="font-display text-display-lg text-on-surface mb-6"
+          >
+            The Art of <span className="text-primary">Technical Precision</span>
+          </motion.h1>
+
+          <motion.p
+            variants={fadeUp}
+            className="font-headline text-headline-sm text-on-surface-variant mb-10 max-w-2xl mx-auto"
+          >
+            Master every GATE CSE concept with premium notes, adaptive practice,
+            and AI-powered doubt resolution — all in one scholarly sanctuary.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="flex items-center justify-center gap-4 flex-wrap">
+            <Button
+              size="lg"
+              onClick={() => navigate(user ? '/dashboard' : '/signup')}
+              iconRight="arrow_forward"
+            >
+              Start Preparing
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => navigate(user ? '/notes' : '/login')}
+              icon="menu_book"
+            >
+              Browse Notes
+            </Button>
+          </motion.div>
+        </motion.div>
+
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      </section>
+
+      {/* ── Stats Bar ── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        >
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="flex flex-col items-center p-5 rounded-2xl bg-surface-container"
+            >
+              <span className="font-display text-headline-lg text-primary mb-1">
+                {stat.value}
+              </span>
+              <span className="text-label-md text-on-surface-variant">
+                {stat.label}
+              </span>
             </div>
-            <h1 className="font-display text-5xl lg:text-7xl font-bold leading-tight mb-8 text-on-surface">
-              The Art of <br />
-              <span className="italic text-primary">Technical Precision.</span>
-            </h1>
-            <p className="font-notes text-xl text-on-surface-variant leading-relaxed mb-10 max-w-lg">
-              Elevate your GATE preparation with a curated editorial experience. Master Computer Science through meticulously crafted notes and high-fidelity practice sets.
+          ))}
+        </motion.div>
+      </section>
+
+      {/* ── Features Grid ── */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-24">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <h2 className="font-display text-display-md text-on-surface mb-4">
+            Everything You Need to <span className="text-primary">Crack GATE</span>
+          </h2>
+          <p className="text-headline-sm text-on-surface-variant font-headline max-w-xl mx-auto">
+            A comprehensive platform designed with the precision and elegance that GATE preparation deserves.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.06, type: 'spring', stiffness: 300, damping: 24 }}
+              className="group p-6 rounded-2xl bg-surface-container hover:bg-surface-container-high transition-colors spring-transition"
+            >
+              <div className="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform spring-transition">
+                <span className="material-symbols-outlined text-on-primary-container text-[22px]">
+                  {f.icon}
+                </span>
+              </div>
+              <h3 className="font-headline text-title-lg text-on-surface mb-2">
+                {f.title}
+              </h3>
+              <p className="text-body-md text-on-surface-variant">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA Section ── */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="relative p-10 rounded-3xl bg-surface-container-high text-center overflow-hidden"
+        >
+          <div className="absolute inset-0 gradient-cta opacity-5" />
+          <div className="relative z-10">
+            <h2 className="font-display text-headline-lg text-on-surface mb-3">
+              Ready to begin your GATE journey?
+            </h2>
+            <p className="text-body-lg text-on-surface-variant mb-8 max-w-lg mx-auto">
+              Join thousands of aspirants who chose precision over improvisation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button 
-                onClick={() => navigate('/signup')}
-                className="px-8 py-4 rounded-full bg-primary text-white font-bold text-lg bg-gradient-to-br from-[#b6a0ff] to-[#7e51ff] hover:scale-[1.02] transition-transform shadow-[0_0_40px_rgba(182,160,255,0.15)]"
-              >
-                Start Learning for Free
-              </button>
-              <button className="px-8 py-4 rounded-full border border-outline-variant text-on-surface font-semibold hover:bg-surface-container-low transition-all">
-                Explore Curriculum
-              </button>
-            </div>
+            <Button
+              size="lg"
+              onClick={() => navigate(user ? '/dashboard' : '/signup')}
+              iconRight="arrow_forward"
+            >
+              Create Free Account
+            </Button>
           </div>
-          <div className="relative lg:block hidden">
-            <div className="clip-path-polygon-[0_0,100%_5%,100%_100%,0_95%] bg-surface-container-lowest p-4 shadow-[0_0_40px_rgba(182,160,255,0.15)]">
-              <img className="w-full h-[600px] object-cover rounded-sm" alt="Modern minimalist study space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2s3Lur8_8XMlNANP7gSuPJoNWNYuRgpLx007fevYupkFo33aVj8eEpx4AcDFBSIuHv1jgkgI8r8CgRiql-B6GJud0FrzO8albKMkz-R-bgwVsq1wXQQykcMwk1lZM9J8rpdwSFG_CwO5DpCVqUCTGvmt3UWbSRc4wOWg9ufBghifbQVxmnxA5Qfq9zgCH0etMgg8svaHK-h4Fap_m8ldGsSaSrU6_BfeM7KKi-dWnPy13ohplE-xjHmOgUW66F3CmgrxCnh0f6aoD" />
-            </div>
-            <div className="absolute -bottom-8 -left-8 bg-surface-container-lowest/80 backdrop-blur-md p-6 rounded-xl border border-outline-variant/40 max-w-xs">
-              <div className="flex gap-2 mb-2 text-primary">
-                {[1,2,3,4,5]?.map(i => (
-                  <span key={i} className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                ))}
-              </div>
-              <p className="text-sm font-medium leading-tight italic">"The most focused study environment I've ever used. No distractions, just pure knowledge."</p>
-              <p className="text-xs text-on-surface-variant mt-2">— AIR 42, GATE 2024</p>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Value Props */}
-      <section className="py-24 px-6 bg-surface-container-low border-y border-outline-variant/10">
-        <div className="container mx-auto">
-          <div className="mb-16">
-            <h2 className="font-display text-4xl font-bold mb-4">A Sanctuary for Deep Work</h2>
-            <p className="text-on-surface-variant max-w-xl">We've replaced the cluttered dashboard with a tactile, scholarly interface designed for absolute focus.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Notes Card */}
-            <div className="md:col-span-2 group relative overflow-hidden bg-surface-container-lowest rounded-xl p-8 hover:bg-primary/5 transition-all duration-500 border border-outline-variant/10">
-              <div className="flex justify-between items-start mb-12">
-                <div className="p-3 bg-primary-container rounded-lg text-primary">
-                  <span className="material-symbols-outlined text-3xl">description</span>
-                </div>
-                <span className="font-mono text-xs text-outline tracking-widest uppercase">Module 01</span>
-              </div>
-              <h3 className="font-display text-3xl font-bold mb-4">Curated Notes</h3>
-              <p className="font-notes text-lg text-on-surface-variant max-w-md mb-8">
-                Every topic is treated like a textbook chapter. Experience high-resolution diagrams and LaTeX-formatted proofs that make complex algorithms intuitive.
-              </p>
-              <img className="absolute -bottom-10 -right-10 w-64 h-64 object-cover rounded-full opacity-20 group-hover:scale-110 group-hover:opacity-40 transition-all" alt="Proofs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDL0j1XyDx2gHnG6Dq1t8hMWmZcsIdA82Ceb4nY445KrftIVG0YwAEFKpB4jkxMSwalXk6d4vlvIRkU5RAbLd60NKA_6iVn_nPjk6e7JtSTisjKi_HI7sowu9cSs7V2uNX5DEPs9KTxcX2oJlEsIf-su0UDB-wehzrZS0rTBi72PM5kGHxu_aua8_DdToXQg__dc_FmjMZFW82RbDITUqjvbbIoTjg1j6tzs4elKTfeml6aMLkzyyoSpeJBR9mcYS2FdAt81cSJ9edC" />
-            </div>
-            
-            {/* Practice Card */}
-            <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10">
-              <div className="p-3 bg-secondary-container rounded-lg text-secondary w-fit mb-12">
-                <span className="material-symbols-outlined text-3xl">quiz</span>
-              </div>
-              <h3 className="font-display text-2xl font-bold mb-4">Precision Practice</h3>
-              <p className="text-on-surface-variant mb-6 text-sm">Real-time simulation of the GATE environment with an editorial aesthetic that reduces test anxiety.</p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-2 text-sm font-medium"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> PYQ Analysis</li>
-                <li className="flex items-center gap-2 text-sm font-medium"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Virtual Calculator UI</li>
-                <li className="flex items-center gap-2 text-sm font-medium"><span className="material-symbols-outlined text-primary text-sm">check_circle</span> Adaptive Difficulty</li>
-              </ul>
-            </div>
-            
-            {/* Skills Card */}
-            <div className="bg-surface-container-lowest rounded-xl p-8 flex flex-col justify-between border border-outline-variant/10">
-              <div>
-                <div className="p-3 bg-tertiary-container rounded-lg text-tertiary w-fit mb-6">
-                  <span className="material-symbols-outlined text-3xl">psychology</span>
-                </div>
-                <h3 className="font-display text-2xl font-bold mb-4">Skill Mapping</h3>
-                <p className="text-on-surface-variant text-sm border-b">Visualize your cognitive strengths across Discrete Math, OS, and Architecture with our proprietary Progress Quill.</p>
-              </div>
-              <div className="mt-8 h-2 bg-surface-container rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-[#b6a0ff] to-[#7e51ff] w-3/4"></div>
-              </div>
-            </div>
-            
-            {/* Community Card */}
-            <div className="md:col-span-2 bg-inverse-surface text-inverse-on-surface rounded-xl p-8 flex items-center gap-12 border border-outline-variant/10">
-              <div className="flex-1">
-                <h3 className="font-display text-3xl font-bold mb-4">The Leaderboard</h3>
-                <p className="text-surface-variant mb-6">A healthy academic rivalry. Compete with the sharpest minds across the country in weekly mock curators.</p>
-                <button className="text-primary-container font-bold inline-flex items-center gap-2">View Rankings <span className="material-symbols-outlined">arrow_forward</span></button>
-              </div>
-              <div className="hidden sm:flex flex-col gap-2">
-                <div className="flex -space-x-4">
-                  <img alt="Student 1" className="w-12 h-12 rounded-full border-4 border-inverse-surface object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoGcR1VjTmaAjvxqVYtWYIOFZUUdPjeYfXXizCtSw9CTwHBqFWRAMhCaLfSGs9Sqzqg0PaUsBI2LJdKQqWhvF8uuuiiWXcZ0TlUktN4kNC-xa00d5GuqNQDtmhcZGTLwqLo1QECFK-m2HLpbxRuwdr4p9OxiY-rZXve4aR5RzKapuo3KTlqJeCAKIgdeMX6t_UO9HcbcbZ4zXcdMIGfnvPEL68xYTuGhOVzZkyBm1XfZDVp2MUr-vRN8QDAtbChRZlDcv1DGswpdls" />
-                  <img alt="Student 2" className="w-12 h-12 rounded-full border-4 border-inverse-surface object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJqseJlCYbGt_NgMwg8eEqUg4Cl9Q04_cvu44wXutMVVaaSQfz5uUt2ItOG3i_KoV-WWC795FA9TrR8TrrGHocMU6Eh1lLs1riB1c0B7KokdjTrEqth_QEphNDqDZXYXCb-oxnqr4RoZjis21I1wOW4A3FCG8gtnIWKz4JDdFoRPBK1mH7r8Tuaj8ho5u4mfDLFTh_JpmKJXT5f2Bmb9UlQ25Udw-emByxYVkE2-m23RHr3es2wu1OzcEmuUG3_hdW_iyqV6r5jX-W" />
-                  <img alt="Student 3" className="w-12 h-12 rounded-full border-4 border-inverse-surface object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDU0XRCADpMZVW7GmXzSBDC2AwxhIYeATF3PmgRnVIIFPSygncWU_WYacu50VbfOt_MKO_KKFWMvv0CCjTOoJslYM6Pu_NSed6rFIEL-Tfb7e48TAI442IdMbu5ExuYFJvkvQQSVq1nIZ7TPUyIvgbql_UO0pP8DVp9BAYNWzotyU1f6J_V7_MyWxRPmu98lbhYdYE5T52O9f6EX1KLe9T2W2ChNNmGGeTsokYBvtWdKu7KQCZzSaiofAZUHT2aQ9xgcarboNklEW4x" />
-                  <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-xs border-4 border-inverse-surface text-white">+4k</div>
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* ── Footer ── */}
+      <footer className="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
+            local_library
+          </span>
+          <span className="text-label-lg text-on-surface-variant">
+            ExamForge © {new Date().getFullYear()}
+          </span>
         </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="pt-24 pb-12 px-6 bg-surface">
-        <div className="container mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-2 lg:col-span-1">
-            <span className="font-display text-2xl font-semibold text-primary mb-6 block">ExamForge</span>
-            <p className="text-on-surface-variant text-sm leading-relaxed">Redefining technical education through the lens of aesthetic precision and cognitive clarity.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-widest mb-6">Product</h4>
-            <ul className="space-y-4 text-sm text-on-surface-variant">
-              <li><button className="hover:text-primary transition-colors">Curriculum</button></li>
-              <li><button className="hover:text-primary transition-colors">Study Notes</button></li>
-              <li><button className="hover:text-primary transition-colors">Mock Tests</button></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-sm uppercase tracking-widest mb-6">Company</h4>
-            <ul className="space-y-4 text-sm text-on-surface-variant">
-              <li><button className="hover:text-primary transition-colors">Our Story</button></li>
-              <li><button className="hover:text-primary transition-colors">Philosophy</button></li>
-            </ul>
-          </div>
-        </div>
-        <div className="container mx-auto border-t border-outline-variant/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-on-surface-variant">© 2026 ExamForge. The Digital Curator. All rights reserved.</p>
-        </div>
+        <span className="text-label-md text-outline">
+          The Academic Atelier — Built with precision.
+        </span>
       </footer>
     </div>
   );

@@ -1,24 +1,55 @@
 import { create } from 'zustand';
-import type { User } from '../firebase';
+import type { ProfileResponse } from '../../types';
+import { auth, firebaseSignOut, onIdTokenChanged, type FirebaseUser } from '../firebase';
 
-interface AuthStore {
-  user: User | null;
-  role: 'student' | 'admin' | 'free' | 'pro' | null;
+interface AuthState {
+  user: ProfileResponse | null;
   idToken: string | null;
-  isLoading: boolean;
-  setUser: (user: User | null, role: AuthStore['role'], token: string | null) => void;
-  setToken: (token: string | null) => void;
-  clearUser: () => void;
-  setLoading: (loading: boolean) => void;
+  firebaseUser: FirebaseUser | null;
+  isAuthLoading: boolean;
+  setUser: (user: ProfileResponse | null) => void;
+  setIdToken: (token: string | null) => void;
+  setFirebaseUser: (user: FirebaseUser | null) => void;
+  setAuthLoading: (loading: boolean) => void;
+  signOut: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
+/**
+ * Auth store — manages user session and profile data.
+ * Synchronized with Firebase Authentication via onIdTokenChanged.
+ */
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  role: null,
   idToken: null,
-  isLoading: true,
-  setUser: (user, role, token) => set({ user, role, idToken: token, isLoading: false }),
-  setToken: (token) => set({ idToken: token }),
-  clearUser: () => set({ user: null, role: null, idToken: null, isLoading: false }),
-  setLoading: (isLoading) => set({ isLoading }),
+  firebaseUser: null,
+  isAuthLoading: true,
+
+  setUser: (user) => set({ user }),
+  setIdToken: (idToken) => set({ idToken }),
+  setFirebaseUser: (firebaseUser) => set({ firebaseUser }),
+  setAuthLoading: (isAuthLoading) => set({ isAuthLoading }),
+
+  signOut: async () => {
+    try {
+      await firebaseSignOut(auth);
+    } catch {
+      // Firebase sign out failed — clear state anyway
+    }
+    set({ user: null, idToken: null, firebaseUser: null });
+  },
 }));
+
+// Subscribe to Firebase token changes — keeps idToken always current
+onIdTokenChanged(auth, async (firebaseUser) => {
+  const store = useAuthStore.getState();
+  if (firebaseUser) {
+    const token = await firebaseUser.getIdToken();
+    store.setFirebaseUser(firebaseUser);
+    store.setIdToken(token);
+  } else {
+    store.setFirebaseUser(null);
+    store.setIdToken(null);
+    store.setUser(null);
+  }
+  store.setAuthLoading(false);
+});

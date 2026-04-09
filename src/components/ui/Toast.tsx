@@ -1,66 +1,121 @@
+import { useState, useCallback, useContext, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useToastStore } from '../../lib/utils';
 import { cn } from '../../lib/utils';
+import { ToastContext, type ToastVariant } from '../../lib/contexts/ToastContext';
 
-const iconMap = {
-  success: 'check_circle',
-  error: 'error',
-  warning: 'warning',
-  info: 'info',
+// ── Toast Types ──
+
+interface Toast {
+  id: string;
+  message: string;
+  variant: ToastVariant;
+  duration?: number;
+}
+
+const MAX_VISIBLE = 3;
+
+const variantConfig: Record<ToastVariant, { icon: string; containerClass: string }> = {
+  info: {
+    icon: 'info',
+    containerClass: 'bg-surface-container-highest text-on-surface',
+  },
+  success: {
+    icon: 'check_circle',
+    containerClass: 'bg-secondary-container text-on-secondary-container',
+  },
+  warning: {
+    icon: 'warning',
+    containerClass: 'bg-tertiary-container text-on-tertiary',
+  },
+  error: {
+    icon: 'error',
+    containerClass: 'bg-error-container text-on-error-container',
+  },
 };
 
-const colorMap = {
-  success: 'text-green-400 bg-green-500/10',
-  error: 'text-error bg-error/10',
-  warning: 'text-amber-400 bg-amber-500/10',
-  info: 'text-tertiary bg-tertiary/10',
-};
+// ── Toast Provider ──
 
-export function ToastContainer() {
-  const toasts = useToastStore((s) => s.toasts);
-  const removeToast = useToastStore((s) => s.removeToast);
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const removeToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const addToast = useCallback(
+    (message: string, variant: ToastVariant = 'info', duration = 4000) => {
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const toast: Toast = { id, message, variant, duration };
+
+      setToasts((prev) => {
+        const next = [...prev, toast];
+        // Keep only the last MAX_VISIBLE
+        return next.slice(-MAX_VISIBLE);
+      });
+
+      if (duration > 0) {
+        setTimeout(() => removeToast(id), duration);
+      }
+    },
+    [removeToast]
+  );
 
   return (
-    <div className="fixed top-4 right-4 z-[200] flex flex-col gap-2 w-80">
-      <AnimatePresence mode="popLayout">
-        {toasts?.map((toast) => (
-          <motion.div
-            key={toast.id}
-            layout
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
-            transition={{ duration: 0.2 }}
-            className={cn(
-              'flex items-start gap-3 p-4 rounded-xl',
-              'bg-surface-container-high border border-outline-variant/10',
-              'backdrop-blur-xl'
-            )}
-          >
-            <span
-              className={cn(
-                'material-symbols-outlined text-xl p-1 rounded-lg shrink-0',
-                colorMap[toast.type]
-              )}
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              {iconMap[toast.type]}
-            </span>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-on-surface font-label">{toast.title}</p>
-              {toast.message && (
-                <p className="text-xs text-on-surface-variant mt-0.5">{toast.message}</p>
-              )}
-            </div>
-            <button
-              onClick={() => removeToast(toast.id)}
-              className="text-on-surface-variant hover:text-on-surface transition-colors shrink-0"
-            >
-              <span className="material-symbols-outlined text-base">close</span>
-            </button>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
+    <ToastContext.Provider value={{ addToast }}>
+      {children}
+      {/* Toast container — fixed bottom-right */}
+      <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none max-w-sm w-full">
+        <AnimatePresence mode="popLayout">
+          {toasts.map((toast) => (
+            <ToastItem
+              key={toast.id}
+              toast={toast}
+              onDismiss={() => removeToast(toast.id)}
+            />
+          ))}
+        </AnimatePresence>
+      </div>
+    </ToastContext.Provider>
   );
 }
+
+// ── Single Toast Item ──
+
+function ToastItem({
+  toast,
+  onDismiss,
+}: {
+  toast: Toast;
+  onDismiss: () => void;
+}) {
+  const config = variantConfig[toast.variant];
+
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, x: 80, scale: 0.95 }}
+      animate={{ opacity: 1, x: 0, scale: 1 }}
+      exit={{ opacity: 0, x: 80, scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className={cn(
+        'pointer-events-auto flex items-start gap-3 rounded-xl p-4',
+        'backdrop-blur-xl border border-outline-variant/10',
+        config.containerClass
+      )}
+    >
+      <span className="material-symbols-outlined text-[20px] shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>
+        {config.icon}
+      </span>
+      <p className="text-body-md flex-1">{toast.message}</p>
+      <button
+        onClick={onDismiss}
+        className="shrink-0 p-0.5 rounded-lg hover:bg-black/10 transition-colors cursor-pointer"
+      >
+        <span className="material-symbols-outlined text-[16px]">close</span>
+      </button>
+    </motion.div>
+  );
+}
+
+// Re-export the hook
+export { useToast } from '../../hooks/useToast';

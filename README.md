@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ExamForge Frontend
 
 Welcome to the **ExamForge** frontend, a high-fidelity academic platform built with React, Vite, and Tailwind CSS.
@@ -27,10 +28,35 @@ Ensure you have the following environment variables configured in your deploymen
    ```
 
 2. **Run the development server:**
+=======
+# ExamForge V2 Frontend
+
+This is the ExamForge frontend application built using **Vite**, **React**, and **TypeScript**. It features a modern, responsive interface connecting to a unified Python backend and Supabase.
+
+## Tech Stack
+- **Framework**: React 18, Vite 
+- **Language**: TypeScript
+- **State Management**: Zustand
+- **Styling**: Tailwind CSS / Vanilla CSS
+- **Authentication**: Firebase Auth
+- **Database / Storage**: Supabase (Backend sync)
+
+## Getting Started
+
+1. Clone this repository.
+2. Ensure you have Node.js and npm installed.
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+4. Create a `.env` file based on the required keys for Firebase, Supabase, and the API.
+5. Start the development server:
+>>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
    ```bash
    npm run dev
    ```
 
+<<<<<<< HEAD
 3. **Build for production:**
    ```bash
    npm run build
@@ -49,3 +75,9 @@ Ensure you have the following environment variables configured in your deploymen
 - **Animations:** Framer Motion
 - **Icons/Math:** Katex & SVG Icons
 - **State Management:** Zustand
+=======
+## Integrations
+- Connects to the main `examforge-backend` for core API routes (`/api/*`).
+- Handles authentications directly passing JWT tokens via Bearer headers to the backend to establish sessions seamlessly.
+- Responsive layout with fully implemented dashboard, profiles, subjects, notes, and quiz system.
+>>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d

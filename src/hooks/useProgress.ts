@@ -1,19 +1,41 @@
-import { useState, useEffect } from "react";
-import { fetchSubjects } from "../lib/api";
-import type { SubjectResponse } from "../types";
-import { useToastStore } from "../lib/utils";
+import { useState, useEffect } from 'react';
+import { getProgress } from '../lib/api';
+import type { ProfileResponse } from '../types';
 
+/**
+ * Hook for fetching user progress/stats.
+ * All stat fields are null-coalesced in the consuming components.
+ */
 export function useProgress() {
-  const [subjects, setSubjects] = useState<SubjectResponse[]>([]);
+  const [stats, setStats] = useState<ProfileResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const addToast = useToastStore((s) => s.addToast);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchSubjects()
-      .then(setSubjects)
-      .catch(() => addToast("error", "Failed to load progress"))
-      .finally(() => setIsLoading(false));
-  }, [addToast]);
+    let cancelled = false;
 
-  return { subjects, isLoading };
+    async function fetchStats() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await getProgress();
+        if (!cancelled) {
+          setStats(data);
+        }
+      } catch (err: unknown) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : 'Failed to load progress');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchStats();
+    return () => { cancelled = true; };
+  }, []);
+
+  return { stats, isLoading, error };
 }

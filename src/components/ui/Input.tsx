@@ -1,52 +1,67 @@
-import { type InputHTMLAttributes, forwardRef } from 'react';
+import { type ReactNode, forwardRef } from 'react';
+import { type HTMLMotionProps, motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends Omit<HTMLMotionProps<'input'>, 'onAnimationStart' | 'onDrag' | 'onDragStart' | 'onDragEnd' | 'ref'> {
   label?: string;
   error?: string;
   icon?: string;
+  trailing?: ReactNode;
+  fullWidth?: boolean;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, icon, className, id, ...props }, ref) => {
-    const inputId = id || label?.toLowerCase().replace(/\s/g, '-');
+  ({ label, error, icon, trailing, fullWidth = true, className, id, ...props }, ref) => {
+    const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
+    const { onAnimationStart: _, onDrag: __, onDragStart: ___, onDragEnd: ____, ...inputProps } = props as any;
+
     return (
-      <div className="w-full">
+      <div className={cn('flex flex-col gap-1.5', fullWidth && 'w-full')}>
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-xs font-label uppercase tracking-widest text-on-surface-variant ml-1 mb-2"
+            className="font-body text-label-lg text-on-surface-variant"
           >
             {label}
           </label>
         )}
-        <div className="relative">
+        <div className="relative flex items-center">
           {icon && (
-            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant text-base">
+            <span className="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px]">
               {icon}
             </span>
           )}
-          <input
+          <motion.input
             ref={ref}
             id={inputId}
             className={cn(
-              'w-full bg-transparent border-0 border-b border-outline-variant/30',
-              'py-3 px-1 text-on-surface font-body text-sm',
-              'placeholder:text-outline-variant',
-              'focus:ring-0 focus:outline-none focus:border-primary focus:bg-surface-container-low',
-              'transition-all duration-200',
-              icon && 'pl-10',
-              error && 'border-error',
+              'w-full bg-surface-container text-on-surface font-body text-body-md',
+              'rounded-xl px-4 py-3 outline-none',
+              'transition-all duration-200 spring-transition',
+              'placeholder:text-outline',
+              'focus:bg-surface-container-high focus:ring-2 focus:ring-primary/30',
+              icon ? 'pl-10' : '',
+              trailing ? 'pr-10' : '',
+              error ? 'ring-2 ring-error/40' : '',
               className
             )}
-            {...props}
+            {...inputProps}
           />
+          {trailing && (
+            <div className="absolute right-3 flex items-center">
+              {trailing}
+            </div>
+          )}
         </div>
         {error && (
-          <p className="text-xs text-error mt-1 ml-1 font-label">{error}</p>
+          <span className="text-label-md text-error flex items-center gap-1">
+            <span className="material-symbols-outlined text-[14px]">error</span>
+            {error}
+          </span>
         )}
       </div>
     );
   }
 );
+
 Input.displayName = 'Input';

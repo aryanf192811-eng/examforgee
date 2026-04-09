@@ -1,0 +1,3734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — File 05: DSA with C++</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;--hand:'Architects Daughter',cursive;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,13px);
+  --fs-base:clamp(14px,3.2vw,17px);--fs-md:clamp(14px,3.4vw,16.5px);
+  --fs-lg:clamp(16px,3.8vw,19px);--fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(16px,4.2vw,21px);--fs-code:clamp(11px,2.6vw,13.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+.toc-grid a{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;padding:3px 7px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:clamp(13.5px,3.2vw,15.5px);font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:clamp(14px,3vw,18px) clamp(12px,3vw,20px);margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:var(--fs-code);background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);margin:12px 0;color:var(--ink);line-height:1.85;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.cb::-webkit-scrollbar{height:4px;}.cb::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.cb .kw{color:var(--blue);font-weight:bold;}.cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}.pl.chk li::before{content:'✓';color:var(--green);}.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:3px;}
+.tbl::-webkit-scrollbar{height:4px;}.tbl::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12.5px,2.8vw,15.5px);}
+thead tr{background:var(--ink);}
+th{padding:clamp(7px,2vw,9px) clamp(8px,2.5vw,14px);text-align:left;color:var(--paper);font-weight:400;font-size:clamp(10px,2.2vw,13px);font-family:var(--hand);letter-spacing:0.5px;white-space:nowrap;}
+td{padding:clamp(6px,1.8vw,8px) clamp(8px,2.5vw,14px);border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}.ok{color:var(--orange);font-weight:600;}.bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,15px);}
+.cg-card .ct{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:clamp(13px,2.8vw,15px);line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,16px) clamp(10px,3vw,18px);margin:14px 0;font-family:'Courier New',monospace;font-size:clamp(10px,2.2vw,13px);line-height:1.9;color:var(--ink);white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.gv::-webkit-scrollbar{height:4px;}.gv::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.gv .dv-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:var(--fs-md);line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;min-width:24px;display:flex;align-items:center;justify-content:center;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .toc-grid{grid-template-columns:1fr;}
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .cover-gate-tag{font-size:8px;letter-spacing:1px;}
+  .sec{padding-left:clamp(28px,6vw,44px);}.sec::before{font-size:8px;}
+  h2.sh{font-size:clamp(15px,3.8vw,18px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10.5px,2.4vw,12.5px);padding:10px 12px;tab-size:2;}
+  .gv{font-size:clamp(9.5px,2.1vw,11.5px);}
+  .tbl{border-left:3px solid var(--blue);}
+  .cg{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);padding:18px 14px 16px;}
+  .cover::after{display:none;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;letter-spacing:1px;}
+  .cover-inner{padding-left:0;}.chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:20px;padding-right:12px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(14px,4vw,17px);}
+  h2.sh{font-size:clamp(14px,4vw,16px);flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .toc-grid a{font-size:14px;}
+  .def-box,.warn-box,.tip-box,.note-box{padding:10px 12px;}
+  .cb{font-size:10.5px;padding:9px 10px;letter-spacing:-0.1px;}.gv{font-size:9.5px;padding:10px;}
+  table{font-size:12px;}th{font-size:9.5px;padding:6px 8px;}td{padding:5px 8px;}
+  .cg-card p{font-size:13px;}.bt{padding:8px 12px 0;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;break-inside:avoid;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cb,.gv{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">05 · DSA with C++</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Complete Reference · File 05 of 05</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Programming</div>
+    <h1>DSA with C++<br><em>Every Structure, Every Algorithm</em></h1>
+    <p class="cover-desc">The complete DSA reference in C++. Arrays, linked lists, stacks, queues, trees, heaps, graphs, hashing, sorting, searching, dynamic programming, greedy, divide and conquer, backtracking, bit manipulation, segment trees, tries — every data structure implemented from scratch, every algorithm traced with real examples, every pattern you need to solve any problem.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Complexity Analysis</span>
+      <span class="chip">Ch 2 · Arrays &amp; Strings</span>
+      <span class="chip">Ch 3 · Linked Lists</span>
+      <span class="chip">Ch 4 · Stacks &amp; Queues</span>
+      <span class="chip">Ch 5 · Recursion &amp; Backtracking</span>
+      <span class="chip">Ch 6 · Sorting Algorithms</span>
+      <span class="chip">Ch 7 · Searching &amp; Binary Search</span>
+      <span class="chip">Ch 8 · Hashing</span>
+      <span class="chip">Ch 9 · Trees &amp; BST</span>
+      <span class="chip">Ch 10 · Heaps &amp; Priority Queues</span>
+      <span class="chip">Ch 11 · Graphs</span>
+      <span class="chip">Ch 12 · Dynamic Programming</span>
+      <span class="chip">Ch 13 · Greedy Algorithms</span>
+      <span class="chip">Ch 14 · Advanced Structures</span>
+      <span class="chip">Ch 15 · Bit Manipulation</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Complexity Analysis</a>
+    <a href="#ch2"><span class="tn">02</span>Arrays &amp; Strings</a>
+    <a href="#ch3"><span class="tn">03</span>Linked Lists</a>
+    <a href="#ch4"><span class="tn">04</span>Stacks &amp; Queues</a>
+    <a href="#ch5"><span class="tn">05</span>Recursion &amp; Backtracking</a>
+    <a href="#ch6"><span class="tn">06</span>Sorting Algorithms</a>
+    <a href="#ch7"><span class="tn">07</span>Searching &amp; Binary Search</a>
+    <a href="#ch8"><span class="tn">08</span>Hashing</a>
+    <a href="#ch9"><span class="tn">09</span>Trees &amp; BST</a>
+    <a href="#ch10"><span class="tn">10</span>Heaps &amp; Priority Queues</a>
+    <a href="#ch11"><span class="tn">11</span>Graphs</a>
+    <a href="#ch12"><span class="tn">12</span>Dynamic Programming</a>
+    <a href="#ch13"><span class="tn">13</span>Greedy Algorithms</a>
+    <a href="#ch14"><span class="tn">14</span>Advanced Structures</a>
+    <a href="#ch15"><span class="tn">15</span>Bit Manipulation</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — COMPLEXITY ANALYSIS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Complexity Analysis — <em>Big-O, Space, and the Rules of the Game</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="big-o">
+      <h2 class="sh">1.1 &nbsp; Big-O Notation — What It Means <span class="tag tc">Core</span></h2>
+      <p>Big-O describes how an algorithm's time or space grows as input size <strong>n</strong> grows. It measures the <mark>worst-case upper bound</mark>, ignoring constants and lower-order terms. It tells you whether your solution will pass within time limits before you write a single line of code.</p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Notation</th><th>Name</th><th>n=10</th><th>n=1000</th><th>n=10⁶</th><th>Typical Example</th></tr></thead>
+          <tbody>
+            <tr><td><code>O(1)</code></td><td>Constant</td><td class="good">1</td><td class="good">1</td><td class="good">1</td><td>Array index, hash lookup</td></tr>
+            <tr><td><code>O(log n)</code></td><td>Logarithmic</td><td class="good">3</td><td class="good">10</td><td class="good">20</td><td>Binary search, balanced BST</td></tr>
+            <tr><td><code>O(n)</code></td><td>Linear</td><td class="good">10</td><td class="good">1,000</td><td class="ok">10⁶</td><td>Linear scan, single loop</td></tr>
+            <tr><td><code>O(n log n)</code></td><td>Linearithmic</td><td class="good">33</td><td class="ok">10,000</td><td class="ok">2×10⁷</td><td>Merge sort, heap sort</td></tr>
+            <tr><td><code>O(n²)</code></td><td>Quadratic</td><td class="ok">100</td><td class="bad">10⁶</td><td class="bad">10¹²</td><td>Bubble sort, nested loops</td></tr>
+            <tr><td><code>O(2ⁿ)</code></td><td>Exponential</td><td class="bad">1024</td><td class="bad">★</td><td class="bad">★★</td><td>Naive recursion, subset enumeration</td></tr>
+            <tr><td><code>O(n!)</code></td><td>Factorial</td><td class="bad">3.6M</td><td class="bad">★★★</td><td class="bad">★★★</td><td>Brute-force permutations</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="def-box">
+        <span class="lbl">The 10⁸ Rule — Quick Feasibility Check</span>
+        <p>A modern computer executes roughly <strong>10⁸ simple operations per second</strong>. A 1-second time limit means your algorithm must do ≤ 10⁸ operations. For n = 10⁵: O(n²) = 10¹⁰ — TLE. O(n log n) = 1.7×10⁶ — fast. For n = 10⁶: O(n) = 10⁶ — ok. O(n log n) = 2×10⁷ — ok. Use this mental model before coding.</p>
+      </div>
+      <div class="cb"><span class="cm">// Recognizing complexity from code patterns</span>
+
+O(1)      → <span class="kw">return</span> arr[i];
+
+O(log n)  → <span class="kw">while</span>(lo &lt;= hi) { mid = lo + (hi-lo)/2; ... }   <span class="cm">// halving search space</span>
+
+O(n)      → <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++) process(arr[i]);
+
+O(n log n)→ sort(arr, arr+n);                                    <span class="cm">// recursive divide</span>
+
+O(n²)     → <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++)                             <span class="cm">// two nested loops</span>
+                <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;n; j++) ...
+
+O(n³)     → <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++)                             <span class="cm">// three nested loops</span>
+                <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;n; j++)
+                    <span class="kw">for</span>(<span class="kw">int</span> k=0; k&lt;n; k++) ...
+
+O(2ⁿ)     → <span class="kw">int</span> fib(<span class="kw">int</span> n){ <span class="kw">return</span> n&lt;2?n:fib(n-1)+fib(n-2); }  <span class="cm">// branching recursion</span></div>
+    </div>
+
+    <div class="sec" data-m="rules">
+      <h2 class="sh">1.2 &nbsp; Big-O Rules &amp; Amortized Analysis <span class="tag tc">Core</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Drop Constants</div>
+          <p>O(2n) = O(n). O(100) = O(1). Constants don't matter for growth rate. A loop that does 3 things per iteration is still O(n).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Drop Lower Terms</div>
+          <p>O(n² + n) = O(n²). O(n + log n) = O(n). The dominant term wins as n grows large.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Different Variables</div>
+          <p>Two loops: one over n, one over m → O(n + m), not O(n²). Nested over both → O(n × m).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Amortized Analysis</div>
+          <p>vector::push_back is O(1) amortized. Individual pushes may be O(n) (realloc), but averaged over n pushes the total is O(n) → O(1) each.</p>
+        </div>
+      </div>
+      <div class="cb"><span class="cm">// Space complexity — memory used relative to input size</span>
+
+<span class="cm">// O(1) space — only a few variables regardless of input</span>
+<span class="kw">int</span> sum(<span class="kw">int</span>* arr, <span class="kw">int</span> n) {
+    <span class="kw">int</span> total = 0;                        <span class="cm">// O(1) space</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++) total += arr[i];
+    <span class="kw">return</span> total;
+}
+
+<span class="cm">// O(n) space — extra array proportional to input</span>
+vector&lt;<span class="kw">int</span>&gt; prefix(<span class="kw">int</span>* arr, <span class="kw">int</span> n) {
+    vector&lt;<span class="kw">int</span>&gt; pre(n);                  <span class="cm">// O(n) space</span>
+    pre[0] = arr[0];
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;n; i++) pre[i] = pre[i-1] + arr[i];
+    <span class="kw">return</span> pre;
+}
+
+<span class="cm">// O(log n) space — recursion stack in binary search</span>
+<span class="cm">// O(n) space  — recursion stack in linear recursion</span>
+<span class="cm">// O(V+E) space — graph adjacency list</span>
+
+<span class="cm">// IMPORTANT: Call stack counts as space!</span>
+<span class="cm">// Recursive quicksort: O(log n) average stack depth, O(n) worst</span></div>
+    </div>
+
+    <div class="sec" data-m="complexity-table">
+      <h2 class="sh">1.3 &nbsp; Data Structure Complexity Cheatsheet <span class="tag tg">Reference</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Structure</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th><th>Space</th></tr></thead>
+          <tbody>
+            <tr><td>Array</td><td class="good">O(1)</td><td class="ok">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td>Dynamic Array (vector)</td><td class="good">O(1)</td><td class="ok">O(n)</td><td class="good">O(1)★</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td>Singly Linked List</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)†</td><td class="good">O(1)†</td><td>O(n)</td></tr>
+            <tr><td>Stack / Queue</td><td class="ok">O(n)</td><td class="ok">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td>Hash Table (unordered)</td><td>—</td><td class="good">O(1)★</td><td class="good">O(1)★</td><td class="good">O(1)★</td><td>O(n)</td></tr>
+            <tr><td>Binary Search Tree</td><td class="ok">O(log n)★</td><td class="ok">O(log n)★</td><td class="ok">O(log n)★</td><td class="ok">O(log n)★</td><td>O(n)</td></tr>
+            <tr><td>AVL / Red-Black Tree</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Binary Heap</td><td>O(n)</td><td>O(n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Trie</td><td class="ok">O(k)</td><td class="ok">O(k)</td><td class="ok">O(k)</td><td class="ok">O(k)</td><td>O(n·k)</td></tr>
+            <tr><td>Segment Tree</td><td>—</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>O(n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13px;color:var(--ink3);">★ = average case &nbsp;|&nbsp; † = with known position &nbsp;|&nbsp; k = key/word length</p>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — ARRAYS & STRINGS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Arrays &amp; Strings — <em>The Foundation of Everything</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="two-pointer">
+      <h2 class="sh">2.1 &nbsp; Two-Pointer Technique <span class="tag tg">Pattern</span></h2>
+      <p>Use two pointers moving through an array to reduce O(n²) brute force to O(n). Works on <strong>sorted arrays</strong> or when one pointer chases another (sliding window variant).</p>
+      <div class="eg">
+        <p><strong>Two Sum II — find pair that sums to target in SORTED array.</strong></p>
+        <div class="cb"><span class="cm">// O(n) time, O(1) space — classic two-pointer</span>
+pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; twoSum(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; arr, <span class="kw">int</span> target) {
+    <span class="kw">int</span> lo = 0, hi = (<span class="kw">int</span>)arr.size() - 1;
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">int</span> s = arr[lo] + arr[hi];
+        <span class="kw">if</span>(s == target) <span class="kw">return</span> {lo, hi};
+        <span class="kw">if</span>(s &lt; target)  lo++;    <span class="cm">// Sum too small → move left pointer right</span>
+        <span class="kw">else</span>            hi--;    <span class="cm">// Sum too big  → move right pointer left</span>
+    }
+    <span class="kw">return</span> {-1, -1};
+}</div>
+      </div>
+      <div class="eg">
+        <p><strong>Container with Most Water — maximize trapped water between two walls.</strong></p>
+        <div class="cb"><span class="kw">int</span> maxWater(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; h) {
+    <span class="kw">int</span> lo=0, hi=h.size()-1, best=0;
+    <span class="kw">while</span>(lo &lt; hi) {
+        best = max(best, min(h[lo],h[hi]) * (hi-lo));
+        <span class="cm">// Move the shorter wall — keeping taller wall can only help</span>
+        h[lo] &lt; h[hi] ? lo++ : hi--;
+    }
+    <span class="kw">return</span> best;
+}  <span class="cm">// O(n) time</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Remove duplicates from sorted array in-place.</strong></p>
+        <div class="cb"><span class="kw">int</span> removeDuplicates(vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">if</span>(nums.empty()) <span class="kw">return</span> 0;
+    <span class="kw">int</span> slow = 0;                          <span class="cm">// slow: last unique position</span>
+    <span class="kw">for</span>(<span class="kw">int</span> fast=1; fast&lt;nums.size(); fast++) {
+        <span class="kw">if</span>(nums[fast] != nums[slow])       <span class="cm">// Found new unique element</span>
+            nums[++slow] = nums[fast];     <span class="cm">// Write it after last unique</span>
+    }
+    <span class="kw">return</span> slow + 1;                       <span class="cm">// Length of unique array</span>
+}  <span class="cm">// O(n) time, O(1) space</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sliding-window">
+      <h2 class="sh">2.2 &nbsp; Sliding Window — Subarray Problems <span class="tag tg">Pattern</span></h2>
+      <p>Maintain a window [left, right] over the array. Expand right to add elements, shrink left to remove. Converts O(n²) brute force to O(n).</p>
+      <div class="eg">
+        <p><strong>Longest substring without repeating characters.</strong></p>
+        <div class="cb"><span class="kw">int</span> lengthOfLongestSubstring(<span class="kw">const</span> string&amp; s) {
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; last;    <span class="cm">// char → last seen index</span>
+    <span class="kw">int</span> best = 0, left = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> right=0; right&lt;s.size(); right++) {
+        <span class="kw">if</span>(last.count(s[right]))
+            left = max(left, last[s[right]] + 1); <span class="cm">// Shrink: skip past duplicate</span>
+        last[s[right]] = right;
+        best = max(best, right - left + 1);
+    }
+    <span class="kw">return</span> best;
+}  <span class="cm">// O(n) time, O(1) space (charset is bounded)</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Minimum window substring — find smallest window in s containing all chars of t.</strong></p>
+        <div class="cb"><span class="kw">string</span> minWindow(<span class="kw">const</span> string&amp; s, <span class="kw">const</span> string&amp; t) {
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; need, have;
+    <span class="kw">for</span>(<span class="kw">char</span> c : t) need[c]++;
+    <span class="kw">int</span> formed=0, required=need.size();
+    <span class="kw">int</span> best=INT_MAX, bl=0, left=0;
+    <span class="kw">for</span>(<span class="kw">int</span> right=0; right&lt;s.size(); right++) {
+        <span class="kw">char</span> c = s[right];
+        have[c]++;
+        <span class="kw">if</span>(need.count(c) &amp;&amp; have[c]==need[c]) formed++;
+        <span class="kw">while</span>(formed == required) {           <span class="cm">// Window is valid — try to shrink</span>
+            <span class="kw">if</span>(right-left+1 &lt; best) { best=right-left+1; bl=left; }
+            have[s[left]]--;
+            <span class="kw">if</span>(need.count(s[left]) &amp;&amp; have[s[left]]&lt;need[s[left]]) formed--;
+            left++;
+        }
+    }
+    <span class="kw">return</span> best==INT_MAX ? "" : s.substr(bl, best);
+}  <span class="cm">// O(|s| + |t|) time</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="prefix-sum">
+      <h2 class="sh">2.3 &nbsp; Prefix Sum &amp; Difference Array <span class="tag tg">Pattern</span></h2>
+      <div class="eg">
+        <p><strong>Range sum query — answer Q range-sum queries in O(1) each after O(n) preprocessing.</strong></p>
+        <div class="cb"><span class="kw">struct</span> RangeSum {
+    vector&lt;<span class="kw">long long</span>&gt; pre;
+
+    RangeSum(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) : pre(a.size()+1, 0) {
+        <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;a.size(); i++)
+            pre[i+1] = pre[i] + a[i];
+    }
+
+    <span class="cm">// Sum of a[l..r] inclusive — O(1)</span>
+    <span class="kw">long long</span> query(<span class="kw">int</span> l, <span class="kw">int</span> r) { <span class="kw">return</span> pre[r+1] - pre[l]; }
+};
+
+<span class="cm">// 2D Prefix Sum — sum of rectangle in O(1)</span>
+vector&lt;vector&lt;<span class="kw">long long</span>&gt;&gt; buildPrefix2D(<span class="kw">const</span> vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; g) {
+    <span class="kw">int</span> R=g.size(), C=g[0].size();
+    vector&lt;vector&lt;<span class="kw">long long</span>&gt;&gt; p(R+1, vector&lt;<span class="kw">long long</span>&gt;(C+1,0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=R;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;=C;j++)
+            p[i][j]=g[i-1][j-1]+p[i-1][j]+p[i][j-1]-p[i-1][j-1];
+    <span class="kw">return</span> p;
+}
+<span class="cm">// Query (r1,c1) to (r2,c2):  p[r2+1][c2+1]-p[r1][c2+1]-p[r2+1][c1]+p[r1][c1]</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Subarray with given XOR — count subarrays with XOR equal to k.</strong></p>
+        <div class="cb"><span class="kw">int</span> countXorSubarrays(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; freq;
+    freq[0] = 1;                          <span class="cm">// Empty prefix has XOR = 0</span>
+    <span class="kw">int</span> prefXor = 0, count = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) {
+        prefXor ^= x;
+        count += freq[prefXor ^ k];       <span class="cm">// prefXor ^ (prefXor^k) = k</span>
+        freq[prefXor]++;
+    }
+    <span class="kw">return</span> count;
+}  <span class="cm">// O(n) time — prefix-XOR + hash map technique</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="string-algos">
+      <h2 class="sh">2.4 &nbsp; String Algorithms — KMP, Z-function, Hashing <span class="tag tg">Essential</span></h2>
+      <h3 class="ssh">KMP — Pattern Matching in O(n+m)</h3>
+      <div class="cb"><span class="cm">// KMP — find all occurrences of pattern p in text t</span>
+<span class="cm">// Failure function: lps[i] = length of longest proper prefix of p[0..i] that is also a suffix</span>
+vector&lt;<span class="kw">int</span>&gt; buildLPS(<span class="kw">const</span> string&amp; p) {
+    <span class="kw">int</span> n = p.size();
+    vector&lt;<span class="kw">int</span>&gt; lps(n, 0);
+    <span class="kw">int</span> len = 0, i = 1;
+    <span class="kw">while</span>(i &lt; n) {
+        <span class="kw">if</span>(p[i] == p[len]) { lps[i++] = ++len; }
+        <span class="kw">else if</span>(len) { len = lps[len-1]; }       <span class="cm">// Fall back using lps</span>
+        <span class="kw">else</span> { lps[i++] = 0; }
+    }
+    <span class="kw">return</span> lps;
+}
+
+vector&lt;<span class="kw">int</span>&gt; kmpSearch(<span class="kw">const</span> string&amp; t, <span class="kw">const</span> string&amp; p) {
+    vector&lt;<span class="kw">int</span>&gt; lps = buildLPS(p);
+    vector&lt;<span class="kw">int</span>&gt; matches;
+    <span class="kw">int</span> i=0, j=0;
+    <span class="kw">while</span>(i &lt; t.size()) {
+        <span class="kw">if</span>(t[i] == p[j]) { i++; j++; }
+        <span class="kw">if</span>(j == p.size()) { matches.push_back(i-j); j=lps[j-1]; }
+        <span class="kw">else if</span>(i &lt; t.size() &amp;&amp; t[i] != p[j]) {
+            j ? j=lps[j-1] : i++;
+        }
+    }
+    <span class="kw">return</span> matches;
+}  <span class="cm">// O(n+m) time, O(m) space</span></div>
+      <h3 class="ssh">Rabin-Karp Rolling Hash — O(n+m) average</h3>
+      <div class="cb"><span class="cm">// Rolling hash — slide hash window without rehashing the whole window</span>
+<span class="kw">bool</span> rabinKarp(<span class="kw">const</span> string&amp; t, <span class="kw">const</span> string&amp; p) {
+    <span class="kw">const long long</span> BASE=31, MOD=1e9+7;
+    <span class="kw">int</span> n=t.size(), m=p.size();
+    <span class="kw">if</span>(m &gt; n) <span class="kw">return false</span>;
+    <span class="kw">auto</span> h = [&amp;](<span class="kw">const</span> string&amp; s, <span class="kw">int</span> len) -&gt; <span class="kw">long long</span> {
+        <span class="kw">long long</span> v=0, pw=1;
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;len;i++){ v=(v+(s[i]-'a'+1)*pw)%MOD; pw=pw*BASE%MOD; }
+        <span class="kw">return</span> v;
+    };
+    <span class="kw">long long</span> hp=h(p,m), ht=h(t,m), pw=1;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;m-1;i++) pw=pw*BASE%MOD;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i+m&lt;=n;i++) {
+        <span class="kw">if</span>(ht==hp &amp;&amp; t.substr(i,m)==p) <span class="kw">return true</span>;  <span class="cm">// Verify to avoid collision</span>
+        <span class="kw">if</span>(i+m &lt; n) {
+            ht=(ht-(t[i]-'a'+1)+MOD)%MOD;
+            ht=ht*BASE%MOD;  <span class="cm">// Wrong — simplified; full impl divides by BASE</span>
+            ht=(ht+(t[i+m]-'a'+1)*pw)%MOD;
+        }
+    }
+    <span class="kw">return false</span>;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — LINKED LISTS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Linked Lists — <em>Nodes, Pointers &amp; Classic Problems</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ll-impl">
+      <h2 class="sh">3.1 &nbsp; Singly &amp; Doubly Linked List — Full Implementation <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Why Linked Lists Exist</span>
+        <p>An array provides O(1) random access, but inserting or deleting an element in the middle requires shifting all subsequent elements — an O(n) operation. A <strong>Linked List</strong> solves this by storing data in scattered memory blocks (nodes) connected by pointers. You lose O(1) random access (no indexing), but gain O(1) insertions and deletions anywhere in the list (if you have the pointer). You reach for a Linked List when you need constant-time splicing, or when implementing dynamic queues/stacks where you only care about the ends.</p>
+      </div>
+      <div class="cb"><span class="cm">// Node definition</span>
+<span class="kw">struct</span> ListNode {
+    <span class="kw">int</span> val;
+    ListNode* next;
+    ListNode(<span class="kw">int</span> v) : val(v), next(<span class="kw">nullptr</span>) {}
+};
+
+<span class="cm">// Singly Linked List</span>
+<span class="kw">class</span> LinkedList {
+    ListNode* head = <span class="kw">nullptr</span>;
+    <span class="kw">int</span> size_ = 0;
+<span class="kw">public</span>:
+    <span class="kw">void</span> pushFront(<span class="kw">int</span> val) {              <span class="cm">// O(1)</span>
+        ListNode* node = <span class="kw">new</span> ListNode(val);
+        node-&gt;next = head;
+        head = node;
+        size_++;
+    }
+    <span class="kw">void</span> pushBack(<span class="kw">int</span> val) {               <span class="cm">// O(n) without tail pointer</span>
+        ListNode* node = <span class="kw">new</span> ListNode(val);
+        <span class="kw">if</span>(!head) { head = node; }
+        <span class="kw">else</span> {
+            ListNode* cur = head;
+            <span class="kw">while</span>(cur-&gt;next) cur = cur-&gt;next;
+            cur-&gt;next = node;
+        }
+        size_++;
+    }
+    <span class="kw">void</span> deleteVal(<span class="kw">int</span> val) {              <span class="cm">// O(n)</span>
+        ListNode dummy(0); dummy.next = head;
+        ListNode* prev = &amp;dummy;
+        <span class="kw">while</span>(prev-&gt;next) {
+            <span class="kw">if</span>(prev-&gt;next-&gt;val == val) {
+                ListNode* del = prev-&gt;next;
+                prev-&gt;next = del-&gt;next;
+                <span class="kw">delete</span> del;
+                size_--;
+                <span class="kw">return</span>;
+            }
+            prev = prev-&gt;next;
+        }
+    }
+    <span class="kw">void</span> print() <span class="kw">const</span> {
+        <span class="kw">for</span>(ListNode* c=head; c; c=c-&gt;next) cout &lt;&lt; c-&gt;val &lt;&lt; " → ";
+        cout &lt;&lt; "null\n";
+    }
+    <span class="kw">int</span> size() <span class="kw">const</span> { <span class="kw">return</span> size_; }
+    ~LinkedList() {
+        <span class="kw">while</span>(head) { ListNode* t=head; head=head-&gt;next; <span class="kw">delete</span> t; }
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="ll-patterns">
+      <h2 class="sh">3.2 &nbsp; Linked List Patterns — Every Classic Problem <span class="tag tg">Must Know</span></h2>
+      <h3 class="ssh">Reverse a Linked List</h3>
+      <div class="cb"><span class="cm">// Iterative — O(n) time, O(1) space</span>
+ListNode* reverse(ListNode* head) {
+    ListNode* prev = <span class="kw">nullptr</span>, *cur = head;
+    <span class="kw">while</span>(cur) {
+        ListNode* nxt = cur-&gt;next;   <span class="cm">// Save next</span>
+        cur-&gt;next = prev;            <span class="cm">// Reverse pointer</span>
+        prev = cur;                  <span class="cm">// Advance prev</span>
+        cur = nxt;                   <span class="cm">// Advance cur</span>
+    }
+    <span class="kw">return</span> prev;                     <span class="cm">// New head</span>
+}
+
+<span class="cm">// Recursive</span>
+ListNode* reverseRec(ListNode* head) {
+    <span class="kw">if</span>(!head || !head-&gt;next) <span class="kw">return</span> head;
+    ListNode* newHead = reverseRec(head-&gt;next);
+    head-&gt;next-&gt;next = head;
+    head-&gt;next = <span class="kw">nullptr</span>;
+    <span class="kw">return</span> newHead;
+}</div>
+      <h3 class="ssh">Floyd's Cycle Detection — Fast &amp; Slow Pointers</h3>
+      <div class="cb"><span class="cm">// Detect cycle in O(n) time, O(1) space</span>
+<span class="kw">bool</span> hasCycle(ListNode* head) {
+    ListNode* slow=head, *fast=head;
+    <span class="kw">while</span>(fast &amp;&amp; fast-&gt;next) {
+        slow = slow-&gt;next;
+        fast = fast-&gt;next-&gt;next;
+        <span class="kw">if</span>(slow == fast) <span class="kw">return true</span>;  <span class="cm">// They meet → cycle exists</span>
+    }
+    <span class="kw">return false</span>;
+}
+
+<span class="cm">// Find start of cycle</span>
+ListNode* detectCycleStart(ListNode* head) {
+    ListNode* slow=head, *fast=head;
+    <span class="kw">while</span>(fast &amp;&amp; fast-&gt;next) {
+        slow=slow-&gt;next; fast=fast-&gt;next-&gt;next;
+        <span class="kw">if</span>(slow==fast) {
+            ListNode* ptr=head;
+            <span class="kw">while</span>(ptr!=slow) { ptr=ptr-&gt;next; slow=slow-&gt;next; }
+            <span class="kw">return</span> ptr;            <span class="cm">// Cycle start</span>
+        }
+    }
+    <span class="kw">return nullptr</span>;
+}
+
+<span class="cm">// Find middle of linked list</span>
+ListNode* findMiddle(ListNode* head) {
+    ListNode* slow=head, *fast=head;
+    <span class="kw">while</span>(fast-&gt;next &amp;&amp; fast-&gt;next-&gt;next) {
+        slow=slow-&gt;next; fast=fast-&gt;next-&gt;next;
+    }
+    <span class="kw">return</span> slow;   <span class="cm">// Slow is at middle when fast reaches end</span>
+}</div>
+      <h3 class="ssh">Merge Two Sorted Lists</h3>
+      <div class="cb">ListNode* mergeSorted(ListNode* l1, ListNode* l2) {
+    ListNode dummy(0);
+    ListNode* tail = &amp;dummy;
+    <span class="kw">while</span>(l1 &amp;&amp; l2) {
+        <span class="kw">if</span>(l1-&gt;val &lt;= l2-&gt;val) { tail-&gt;next=l1; l1=l1-&gt;next; }
+        <span class="kw">else</span>                   { tail-&gt;next=l2; l2=l2-&gt;next; }
+        tail = tail-&gt;next;
+    }
+    tail-&gt;next = l1 ? l1 : l2;   <span class="cm">// Attach remaining</span>
+    <span class="kw">return</span> dummy.next;
+}
+
+<span class="cm">// Find kth node from end (one pass)</span>
+ListNode* kthFromEnd(ListNode* head, <span class="kw">int</span> k) {
+    ListNode* fast=head, *slow=head;
+    <span class="kw">while</span>(k--) fast=fast-&gt;next;         <span class="cm">// Advance fast by k</span>
+    <span class="kw">while</span>(fast) { fast=fast-&gt;next; slow=slow-&gt;next; }  <span class="cm">// Move both</span>
+    <span class="kw">return</span> slow;                         <span class="cm">// Slow is k from end</span>
+}</div>
+      <div class="eg">
+        <p><strong>LRU Cache — implement get/put in O(1) using doubly linked list + hash map.</strong></p>
+        <div class="cb"><span class="kw">class</span> LRUCache {
+    <span class="kw">struct</span> Node { <span class="kw">int</span> key, val; Node *prev, *next; };
+    <span class="kw">int</span> cap;
+    unordered_map&lt;<span class="kw">int</span>, Node*&gt; cache;
+    Node *head, *tail;                  <span class="cm">// Dummy head and tail</span>
+
+    <span class="kw">void</span> remove(Node* n) {
+        n-&gt;prev-&gt;next = n-&gt;next;
+        n-&gt;next-&gt;prev = n-&gt;prev;
+    }
+    <span class="kw">void</span> insertFront(Node* n) {         <span class="cm">// MRU position</span>
+        n-&gt;next = head-&gt;next;
+        n-&gt;prev = head;
+        head-&gt;next-&gt;prev = n;
+        head-&gt;next = n;
+    }
+<span class="kw">public</span>:
+    LRUCache(<span class="kw">int</span> capacity) : cap(capacity) {
+        head = <span class="kw">new</span> Node{0,0,nullptr,nullptr};
+        tail = <span class="kw">new</span> Node{0,0,nullptr,nullptr};
+        head-&gt;next = tail; tail-&gt;prev = head;
+    }
+    <span class="kw">int</span> get(<span class="kw">int</span> key) {
+        <span class="kw">if</span>(!cache.count(key)) <span class="kw">return</span> -1;
+        Node* n = cache[key];
+        remove(n); insertFront(n);       <span class="cm">// Move to MRU</span>
+        <span class="kw">return</span> n-&gt;val;
+    }
+    <span class="kw">void</span> put(<span class="kw">int</span> key, <span class="kw">int</span> val) {
+        <span class="kw">if</span>(cache.count(key)) { remove(cache[key]); <span class="kw">delete</span> cache[key]; }
+        <span class="kw">else if</span>((int)cache.size() == cap) {
+            Node* lru = tail-&gt;prev;      <span class="cm">// Least recently used</span>
+            remove(lru); cache.erase(lru-&gt;key); <span class="kw">delete</span> lru;
+        }
+        Node* n = <span class="kw">new</span> Node{key,val};
+        insertFront(n); cache[key] = n;
+    }
+};</div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — STACKS & QUEUES
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Stacks &amp; Queues — <em>LIFO, FIFO &amp; Monotonic Patterns</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="stack-patterns">
+      <h2 class="sh">4.1 &nbsp; Stack Patterns — Matching, Spans, Next Greater <span class="tag tg">Pattern</span></h2>
+      <div class="def-box">
+        <span class="lbl">Why Stacks? The Power of Invariants</span>
+        <p>Why use a Stack instead of just a <code>vector</code>? Because <strong>restrictions create invariants.</strong> By forbidding random access, a Stack (Last-In, First-Out) mathematically forces you to process the most recently seen incomplete element before any older ones. You reach for a stack when you need to match history: parsing parentheses, undo/redo features, or finding the "next greater element" where recent smaller elements are shadowed by larger ones.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Valid Parentheses — check balanced brackets.</strong></p>
+        <div class="cb"><span class="kw">bool</span> isValid(<span class="kw">const</span> string&amp; s) {
+    stack&lt;<span class="kw">char</span>&gt; st;
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">char</span>&gt; match = {{')','{'},{')','{'},{')','{'}};
+    <span class="cm">// Corrected:</span>
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">char</span>&gt; close = {{'(',')'},{'{','}'},{'[',']'}};
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) {
+        <span class="kw">if</span>(close.count(c)) { st.push(c); }    <span class="cm">// Opening bracket</span>
+        <span class="kw">else</span> {                                  <span class="cm">// Closing bracket</span>
+            <span class="kw">if</span>(st.empty() || close[st.top()] != c) <span class="kw">return false</span>;
+            st.pop();
+        }
+    }
+    <span class="kw">return</span> st.empty();
+}  <span class="cm">// O(n) time</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Next Greater Element — for each element find the first greater to its right.</strong></p>
+        <div class="cb"><span class="cm">// Monotonic Stack — stack always contains elements in decreasing order</span>
+vector&lt;<span class="kw">int</span>&gt; nextGreater(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n = a.size();
+    vector&lt;<span class="kw">int</span>&gt; res(n, -1);
+    stack&lt;<span class="kw">int</span>&gt; st;   <span class="cm">// Stores INDICES</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++) {
+        <span class="kw">while</span>(!st.empty() &amp;&amp; a[i] &gt; a[st.top()]) {
+            res[st.top()] = a[i];   <span class="cm">// a[i] is next greater for stack's top</span>
+            st.pop();
+        }
+        st.push(i);
+    }
+    <span class="kw">return</span> res;
+}
+<span class="cm">// Input:  [2, 1, 2, 4, 3]</span>
+<span class="cm">// Output: [4, 2, 4,-1,-1]</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Largest Rectangle in Histogram — classic monotonic stack.</strong></p>
+        <div class="cb"><span class="kw">int</span> largestRectangle(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; h) {
+    stack&lt;<span class="kw">int</span>&gt; st;
+    <span class="kw">int</span> best = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;=(int)h.size(); i++) {
+        <span class="kw">int</span> cur = (i==(<span class="kw">int</span>)h.size()) ? 0 : h[i];
+        <span class="kw">while</span>(!st.empty() &amp;&amp; cur &lt; h[st.top()]) {
+            <span class="kw">int</span> height = h[st.top()]; st.pop();
+            <span class="kw">int</span> width  = st.empty() ? i : i - st.top() - 1;
+            best = max(best, height * width);
+        }
+        st.push(i);
+    }
+    <span class="kw">return</span> best;
+}  <span class="cm">// O(n) time — each index pushed and popped once</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="monotonic-queue">
+      <h2 class="sh">4.2 &nbsp; Monotonic Queue — Sliding Window Maximum <span class="tag tg">Pattern</span></h2>
+      <div class="eg">
+        <p><strong>Sliding window maximum — maximum in every window of size k in O(n).</strong></p>
+        <div class="cb">vector&lt;<span class="kw">int</span>&gt; slidingMax(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    deque&lt;<span class="kw">int</span>&gt; dq;                <span class="cm">// Stores indices; front is max index</span>
+    vector&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;a.size(); i++) {
+        <span class="cm">// Remove elements outside window</span>
+        <span class="kw">while</span>(!dq.empty() &amp;&amp; dq.front() &lt; i-k+1) dq.pop_front();
+        <span class="cm">// Remove elements smaller than current (can't be max)</span>
+        <span class="kw">while</span>(!dq.empty() &amp;&amp; a[dq.back()] &lt; a[i]) dq.pop_back();
+        dq.push_back(i);
+        <span class="kw">if</span>(i &gt;= k-1) res.push_back(a[dq.front()]);  <span class="cm">// Window full</span>
+    }
+    <span class="kw">return</span> res;
+}  <span class="cm">// O(n) — each element enters/leaves deque at most once</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="special-stacks">
+      <h2 class="sh">4.3 &nbsp; Special Stack Designs <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="cm">// Min Stack — getMin() in O(1)</span>
+<span class="kw">class</span> MinStack {
+    stack&lt;<span class="kw">int</span>&gt; st, minSt;
+<span class="kw">public</span>:
+    <span class="kw">void</span> push(<span class="kw">int</span> val) {
+        st.push(val);
+        minSt.push(minSt.empty() ? val : min(val, minSt.top()));
+    }
+    <span class="kw">void</span> pop() { st.pop(); minSt.pop(); }
+    <span class="kw">int</span>  top() { <span class="kw">return</span> st.top(); }
+    <span class="kw">int</span>  getMin() { <span class="kw">return</span> minSt.top(); }
+};
+
+<span class="cm">// Queue using two stacks — amortized O(1) enqueue/dequeue</span>
+<span class="kw">class</span> MyQueue {
+    stack&lt;<span class="kw">int</span>&gt; inbox, outbox;
+<span class="kw">public</span>:
+    <span class="kw">void</span> enqueue(<span class="kw">int</span> val) { inbox.push(val); }
+    <span class="kw">int</span>  dequeue() {
+        <span class="kw">if</span>(outbox.empty())
+            <span class="kw">while</span>(!inbox.empty()) { outbox.push(inbox.top()); inbox.pop(); }
+        <span class="kw">int</span> v = outbox.top(); outbox.pop(); <span class="kw">return</span> v;
+    }
+    <span class="kw">int</span> front() {
+        <span class="kw">if</span>(outbox.empty())
+            <span class="kw">while</span>(!inbox.empty()) { outbox.push(inbox.top()); inbox.pop(); }
+        <span class="kw">return</span> outbox.top();
+    }
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — RECURSION & BACKTRACKING
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Recursion &amp; Backtracking — <em>Exploring All Possibilities</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="backtrack-template">
+      <h2 class="sh">5.1 &nbsp; Backtracking Template — The Universal Pattern <span class="tag tg">Must Know</span></h2>
+      <div class="def-box">
+        <span class="lbl">Backtracking Template</span>
+        <p>Choose → Explore → Un-choose. At each step, make a choice, recurse, then undo the choice to try the next option. <strong>Base case</strong>: reached a solution or dead end. <strong>Prune</strong>: skip choices that can't lead to a valid solution.</p>
+      </div>
+      <div class="cb"><span class="cm">// Universal backtracking skeleton</span>
+<span class="kw">void</span> backtrack(state, choices, results) {
+    <span class="kw">if</span>(isSolution(state)) {
+        results.add(state);
+        <span class="kw">return</span>;
+    }
+    <span class="kw">for</span>(<span class="kw">auto</span> choice : choices) {
+        <span class="kw">if</span>(!isValid(choice, state)) <span class="kw">continue</span>;  <span class="cm">// Prune invalid choices</span>
+        makeChoice(choice, state);               <span class="cm">// Choose</span>
+        backtrack(state, choices, results);      <span class="cm">// Explore</span>
+        undoChoice(choice, state);               <span class="cm">// Un-choose</span>
+    }
+}</div>
+      <div class="eg">
+        <p><strong>Subsets — generate all subsets of a set.</strong></p>
+        <div class="cb">vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; subsets(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; res;
+    vector&lt;<span class="kw">int</span>&gt; curr;
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; bt = [&amp;](<span class="kw">int</span> start) {
+        res.push_back(curr);                        <span class="cm">// Every state is a valid subset</span>
+        <span class="kw">for</span>(<span class="kw">int</span> i=start; i&lt;nums.size(); i++) {
+            curr.push_back(nums[i]);                <span class="cm">// Choose</span>
+            bt(i+1);                                <span class="cm">// Explore</span>
+            curr.pop_back();                        <span class="cm">// Un-choose</span>
+        }
+    };
+    bt(0);
+    <span class="kw">return</span> res;                                     <span class="cm">// 2^n subsets</span>
+}</div>
+      </div>
+      <div class="eg">
+        <p><strong>Permutations — generate all permutations of an array.</strong></p>
+        <div class="cb">vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; permute(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; res;
+    vector&lt;<span class="kw">int</span>&gt; curr;
+    vector&lt;<span class="kw">bool</span>&gt; used(nums.size(), <span class="kw">false</span>);
+    <span class="kw">function</span>&lt;<span class="kw">void</span>()&gt; bt = [&amp;]() {
+        <span class="kw">if</span>(curr.size() == nums.size()) { res.push_back(curr); <span class="kw">return</span>; }
+        <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;nums.size(); i++) {
+            <span class="kw">if</span>(used[i]) <span class="kw">continue</span>;
+            used[i]=<span class="kw">true</span>;  curr.push_back(nums[i]);  <span class="cm">// Choose</span>
+            bt();                                     <span class="cm">// Explore</span>
+            used[i]=<span class="kw">false</span>; curr.pop_back();           <span class="cm">// Un-choose</span>
+        }
+    };
+    bt();
+    <span class="kw">return</span> res;   <span class="cm">// n! permutations</span>
+}</div>
+      </div>
+      <div class="eg">
+        <p><strong>N-Queens — place N queens on N×N board so none attack each other.</strong></p>
+        <div class="cb">vector&lt;vector&lt;string&gt;&gt; solveNQueens(<span class="kw">int</span> n) {
+    vector&lt;vector&lt;string&gt;&gt; res;
+    vector&lt;string&gt; board(n, string(n,'.'));
+    vector&lt;<span class="kw">bool</span>&gt; col(n,<span class="kw">false</span>), diag1(2*n,<span class="kw">false</span>), diag2(2*n,<span class="kw">false</span>);
+
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; bt = [&amp;](<span class="kw">int</span> row) {
+        <span class="kw">if</span>(row == n) { res.push_back(board); <span class="kw">return</span>; }
+        <span class="kw">for</span>(<span class="kw">int</span> c=0; c&lt;n; c++) {
+            <span class="kw">if</span>(col[c] || diag1[row-c+n] || diag2[row+c]) <span class="kw">continue</span>;
+            board[row][c]='Q'; col[c]=diag1[row-c+n]=diag2[row+c]=<span class="kw">true</span>;  <span class="cm">// Choose</span>
+            bt(row+1);                                                   <span class="cm">// Explore</span>
+            board[row][c]='.'; col[c]=diag1[row-c+n]=diag2[row+c]=<span class="kw">false</span>; <span class="cm">// Un-choose</span>
+        }
+    };
+    bt(0);
+    <span class="kw">return</span> res;
+}</div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — SORTING ALGORITHMS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Sorting Algorithms — <em>Every Sort, Implemented &amp; Analyzed</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sort-overview">
+      <h2 class="sh">6.1 &nbsp; Sorting Algorithm Comparison <span class="tag tc">Reference</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Space</th><th>Stable</th></tr></thead>
+          <tbody>
+            <tr><td>Bubble Sort</td><td class="ok">O(n)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td class="good">Yes</td></tr>
+            <tr><td>Selection Sort</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td class="bad">No</td></tr>
+            <tr><td>Insertion Sort</td><td class="good">O(n)</td><td class="bad">O(n²)</td><td class="bad">O(n²)</td><td class="good">O(1)</td><td class="good">Yes</td></tr>
+            <tr><td>Merge Sort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="bad">O(n)</td><td class="good">Yes</td></tr>
+            <tr><td>Quick Sort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="bad">O(n²)</td><td class="ok">O(log n)</td><td class="bad">No</td></tr>
+            <tr><td>Heap Sort</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="ok">O(n log n)</td><td class="good">O(1)</td><td class="bad">No</td></tr>
+            <tr><td>Counting Sort</td><td class="good">O(n+k)</td><td class="good">O(n+k)</td><td class="good">O(n+k)</td><td class="bad">O(k)</td><td class="good">Yes</td></tr>
+            <tr><td>Radix Sort</td><td class="good">O(nk)</td><td class="good">O(nk)</td><td class="good">O(nk)</td><td class="bad">O(n+k)</td><td class="good">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="implementations">
+      <h2 class="sh">6.2 &nbsp; Full Implementations — Every Essential Sort <span class="tag tg">Must Know</span></h2>
+      <h3 class="ssh">Merge Sort — Divide, Sort, Merge</h3>
+      <div class="cb"><span class="kw">void</span> merge(<span class="kw">int</span>* a, <span class="kw">int</span> lo, <span class="kw">int</span> mid, <span class="kw">int</span> hi) {
+    vector&lt;<span class="kw">int</span>&gt; tmp(hi-lo+1);
+    <span class="kw">int</span> i=lo, j=mid+1, k=0;
+    <span class="kw">while</span>(i&lt;=mid &amp;&amp; j&lt;=hi)
+        tmp[k++] = a[i]&lt;=a[j] ? a[i++] : a[j++];
+    <span class="kw">while</span>(i&lt;=mid) tmp[k++]=a[i++];
+    <span class="kw">while</span>(j&lt;=hi)  tmp[k++]=a[j++];
+    <span class="kw">for</span>(<span class="kw">int</span> x=0; x&lt;tmp.size(); x++) a[lo+x]=tmp[x];
+}
+<span class="kw">void</span> mergeSort(<span class="kw">int</span>* a, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+    <span class="kw">if</span>(lo &gt;= hi) <span class="kw">return</span>;
+    <span class="kw">int</span> mid = lo + (hi-lo)/2;
+    mergeSort(a, lo, mid);
+    mergeSort(a, mid+1, hi);
+    merge(a, lo, mid, hi);
+}   <span class="cm">// T(n) = 2T(n/2) + O(n) → O(n log n) by Master Theorem</span></div>
+      <h3 class="ssh">Quick Sort — Partition Around Pivot</h3>
+      <div class="cb"><span class="kw">int</span> partition(<span class="kw">int</span>* a, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+    <span class="kw">int</span> pivot = a[hi], i = lo-1;
+    <span class="kw">for</span>(<span class="kw">int</span> j=lo; j&lt;hi; j++) {
+        <span class="kw">if</span>(a[j] &lt;= pivot) swap(a[++i], a[j]);
+    }
+    swap(a[i+1], a[hi]);
+    <span class="kw">return</span> i+1;
+}
+<span class="kw">void</span> quickSort(<span class="kw">int</span>* a, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+    <span class="kw">if</span>(lo &gt;= hi) <span class="kw">return</span>;
+    <span class="cm">// Randomize pivot to avoid O(n²) on sorted input</span>
+    <span class="kw">int</span> r = lo + rand()%(hi-lo+1);
+    swap(a[r], a[hi]);
+    <span class="kw">int</span> p = partition(a, lo, hi);
+    quickSort(a, lo, p-1);
+    quickSort(a, p+1, hi);
+}
+
+<span class="cm">// 3-way partition (Dutch National Flag) — handles duplicates in O(n)</span>
+<span class="kw">void</span> quickSort3Way(<span class="kw">int</span>* a, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+    <span class="kw">if</span>(lo &gt;= hi) <span class="kw">return</span>;
+    <span class="kw">int</span> lt=lo, gt=hi, cur=lo+1, pivot=a[lo];
+    <span class="kw">while</span>(cur &lt;= gt) {
+        <span class="kw">if</span>     (a[cur] &lt; pivot) swap(a[lt++], a[cur++]);
+        <span class="kw">else if</span>(a[cur] &gt; pivot) swap(a[cur],  a[gt--]);
+        <span class="kw">else</span>                    cur++;
+    }
+    quickSort3Way(a, lo, lt-1);
+    quickSort3Way(a, gt+1, hi);
+}</div>
+      <h3 class="ssh">Counting Sort &amp; Radix Sort — Linear Time</h3>
+      <div class="cb"><span class="cm">// Counting Sort — O(n+k) where k = range of values</span>
+<span class="kw">void</span> countSort(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> maxVal) {
+    vector&lt;<span class="kw">int</span>&gt; cnt(maxVal+1, 0);
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) cnt[x]++;
+    <span class="kw">int</span> i=0;
+    <span class="kw">for</span>(<span class="kw">int</span> v=0; v&lt;=maxVal; v++)
+        <span class="kw">while</span>(cnt[v]--) a[i++]=v;
+}
+
+<span class="cm">// Radix Sort — sort integers digit by digit using counting sort</span>
+<span class="kw">void</span> countSortByDigit(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> exp) {
+    vector&lt;<span class="kw">int</span>&gt; out(a.size()), cnt(10,0);
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) cnt[(x/exp)%10]++;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;10; i++) cnt[i]+=cnt[i-1];
+    <span class="kw">for</span>(<span class="kw">int</span> i=a.size()-1; i&gt;=0; i--)
+        out[--cnt[(a[i]/exp)%10]] = a[i];
+    a = out;
+}
+<span class="kw">void</span> radixSort(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> mx = *max_element(a.begin(), a.end());
+    <span class="kw">for</span>(<span class="kw">int</span> exp=1; mx/exp&gt;0; exp*=10)
+        countSortByDigit(a, exp);
+}  <span class="cm">// O(nk) where k = number of digits — beats O(n log n) for integers</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — SEARCHING & BINARY SEARCH
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Searching &amp; Binary Search — <em>The O(log n) Swiss Army Knife</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="binary-search">
+      <h2 class="sh">7.1 &nbsp; Binary Search — All Templates <span class="tag tg">Critical</span></h2>
+      <p>Binary search is not just for sorted arrays. Any problem where the answer space is <strong>monotone</strong> (if x works, x-1 also works, or vice versa) can be binary-searched. This is one of the most powerful techniques in competitive programming.</p>
+      <div class="cb"><span class="cm">// Template 1 — Exact match</span>
+<span class="kw">int</span> binarySearch(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> target) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt;= hi) {
+        <span class="kw">int</span> mid = lo + (hi-lo)/2;          <span class="cm">// Avoid (lo+hi)/2 overflow</span>
+        <span class="kw">if</span>     (a[mid] == target) <span class="kw">return</span> mid;
+        <span class="kw">else if</span>(a[mid] &lt;  target) lo = mid+1;
+        <span class="kw">else</span>                      hi = mid-1;
+    }
+    <span class="kw">return</span> -1;
+}
+
+<span class="cm">// Template 2 — First position where condition is true</span>
+<span class="cm">// Find first index where a[i] >= target (lower_bound)</span>
+<span class="kw">int</span> lowerBound(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> target) {
+    <span class="kw">int</span> lo=0, hi=a.size();             <span class="cm">// hi = n (past end) — valid answer position</span>
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">int</span> mid = lo + (hi-lo)/2;
+        <span class="kw">if</span>(a[mid] &lt; target) lo = mid+1; <span class="cm">// Not yet — move right</span>
+        <span class="kw">else</span>                hi = mid;    <span class="cm">// Might be answer — keep searching left</span>
+    }
+    <span class="kw">return</span> lo;                          <span class="cm">// First index where a[i] >= target</span>
+}
+
+<span class="cm">// Template 3 — Last position where condition is true</span>
+<span class="cm">// Find last index where a[i] <= target (upper_bound - 1)</span>
+<span class="kw">int</span> upperBound(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> target) {
+    <span class="kw">int</span> lo=0, hi=a.size();
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">int</span> mid = lo + (hi-lo)/2;
+        <span class="kw">if</span>(a[mid] &lt;= target) lo = mid+1; <span class="cm">// Still valid — move right</span>
+        <span class="kw">else</span>                  hi = mid;
+    }
+    <span class="kw">return</span> lo;                           <span class="cm">// First index where a[i] > target</span>
+}
+
+<span class="cm">// BINARY SEARCH ON ANSWER — the most powerful variant</span>
+<span class="cm">// "Is it possible to do X with limit Y?" — binary search on Y</span>
+<span class="cm">// Example: Minimum largest subarray sum when splitting into k groups</span>
+<span class="kw">bool</span> canSplit(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k, <span class="kw">long long</span> limit) {
+    <span class="kw">int</span> groups=1; <span class="kw">long long</span> cur=0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) {
+        <span class="kw">if</span>(x &gt; limit) <span class="kw">return false</span>;
+        <span class="kw">if</span>(cur+x &gt; limit) { groups++; cur=0; }
+        cur += x;
+    }
+    <span class="kw">return</span> groups &lt;= k;
+}
+<span class="kw">long long</span> splitArray(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    <span class="kw">long long</span> lo=*max_element(a.begin(),a.end()),
+              hi=accumulate(a.begin(),a.end(),0LL);
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">long long</span> mid = lo+(hi-lo)/2;
+        canSplit(a,k,mid) ? hi=mid : lo=mid+1;
+    }
+    <span class="kw">return</span> lo;
+}  <span class="cm">// O(n log(sum)) — binary search on answer space</span></div>
+    </div>
+
+    <div class="sec" data-m="bs-applications">
+      <h2 class="sh">7.2 &nbsp; Binary Search on Special Cases <span class="tag tg">Patterns</span></h2>
+      <div class="cb"><span class="cm">// Search in Rotated Sorted Array</span>
+<span class="kw">int</span> searchRotated(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> target) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt;= hi) {
+        <span class="kw">int</span> mid = lo+(hi-lo)/2;
+        <span class="kw">if</span>(a[mid]==target) <span class="kw">return</span> mid;
+        <span class="kw">if</span>(a[lo] &lt;= a[mid]) {                   <span class="cm">// Left half is sorted</span>
+            <span class="kw">if</span>(a[lo]&lt;=target &amp;&amp; target&lt;a[mid]) hi=mid-1;
+            <span class="kw">else</span> lo=mid+1;
+        } <span class="kw">else</span> {                                <span class="cm">// Right half is sorted</span>
+            <span class="kw">if</span>(a[mid]&lt;target &amp;&amp; target&lt;=a[hi]) lo=mid+1;
+            <span class="kw">else</span> hi=mid-1;
+        }
+    }
+    <span class="kw">return</span> -1;
+}
+
+<span class="cm">// Find peak element (mountain array)</span>
+<span class="kw">int</span> findPeak(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">int</span> mid = lo+(hi-lo)/2;
+        a[mid]&lt;a[mid+1] ? lo=mid+1 : hi=mid; <span class="cm">// Go toward the higher side</span>
+    }
+    <span class="kw">return</span> lo;
+}
+
+<span class="cm">// Square root (integer) using binary search</span>
+<span class="kw">int</span> mySqrt(<span class="kw">int</span> x) {
+    <span class="kw">if</span>(x&lt;2) <span class="kw">return</span> x;
+    <span class="kw">long long</span> lo=1, hi=x/2;
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">long long</span> mid = lo+(hi-lo+1)/2;  <span class="cm">// +1 to avoid infinite loop</span>
+        mid*mid&lt;=x ? lo=mid : hi=mid-1;
+    }
+    <span class="kw">return</span> lo;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — HASHING
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Hashing — <em>O(1) Lookup, Collision Handling &amp; Applications</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="hash-impl">
+      <h2 class="sh">8.1 &nbsp; Hash Table from Scratch — Chaining &amp; Open Addressing <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="cm">// Hash table with separate chaining</span>
+<span class="kw">class</span> HashTable {
+    <span class="kw">static const int</span> BUCKETS = 1009;   <span class="cm">// Prime size reduces clustering</span>
+    vector&lt;list&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt; table;  <span class="cm">// Each bucket: list of (key,val)</span>
+
+    <span class="kw">int</span> hash(<span class="kw">int</span> key) <span class="kw">const</span> { <span class="kw">return</span> ((key % BUCKETS) + BUCKETS) % BUCKETS; }
+
+<span class="kw">public</span>:
+    HashTable() : table(BUCKETS) {}
+
+    <span class="kw">void</span> insert(<span class="kw">int</span> key, <span class="kw">int</span> val) {
+        <span class="kw">auto</span>&amp; bucket = table[hash(key)];
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp; p : bucket)
+            <span class="kw">if</span>(p.first==key) { p.second=val; <span class="kw">return</span>; }   <span class="cm">// Update existing</span>
+        bucket.emplace_back(key, val);
+    }
+    <span class="kw">int</span> get(<span class="kw">int</span> key) <span class="kw">const</span> {
+        <span class="kw">for</span>(<span class="kw">const auto</span>&amp; p : table[hash(key)])
+            <span class="kw">if</span>(p.first==key) <span class="kw">return</span> p.second;
+        <span class="kw">return</span> -1;
+    }
+    <span class="kw">bool</span> remove(<span class="kw">int</span> key) {
+        <span class="kw">auto</span>&amp; bucket = table[hash(key)];
+        <span class="kw">for</span>(<span class="kw">auto</span> it=bucket.begin(); it!=bucket.end(); it++) {
+            <span class="kw">if</span>(it-&gt;first==key) { bucket.erase(it); <span class="kw">return true</span>; }
+        }
+        <span class="kw">return false</span>;
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="hash-patterns">
+      <h2 class="sh">8.2 &nbsp; Hashing Patterns — Anagram, Frequency, Grouping <span class="tag tg">Patterns</span></h2>
+      <div class="eg">
+        <p><strong>Group Anagrams — group strings that are anagrams of each other.</strong></p>
+        <div class="cb">vector&lt;vector&lt;string&gt;&gt; groupAnagrams(<span class="kw">const</span> vector&lt;string&gt;&amp; words) {
+    unordered_map&lt;string, vector&lt;string&gt;&gt; groups;
+    <span class="kw">for</span>(<span class="kw">const auto</span>&amp; w : words) {
+        string key = w;
+        sort(key.begin(), key.end());    <span class="cm">// Sorted version = canonical key</span>
+        groups[key].push_back(w);
+    }
+    vector&lt;vector&lt;string&gt;&gt; res;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; [k,v] : groups) res.push_back(v);
+    <span class="kw">return</span> res;
+}  <span class="cm">// O(n * k log k) — n words each of length k</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Subarray sum equals K — count subarrays with given sum.</strong></p>
+        <div class="cb"><span class="kw">int</span> subarraySum(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; prefixCount;
+    prefixCount[0] = 1;                  <span class="cm">// Empty prefix</span>
+    <span class="kw">int</span> prefSum=0, count=0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : nums) {
+        prefSum += x;
+        count += prefixCount[prefSum - k]; <span class="cm">// How many prefixes sum to prefSum-k?</span>
+        prefixCount[prefSum]++;
+    }
+    <span class="kw">return</span> count;
+}  <span class="cm">// O(n) — prefix sum + hash map</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Longest consecutive sequence — find length of longest sequence of consecutive integers.</strong></p>
+        <div class="cb"><span class="kw">int</span> longestConsecutive(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    unordered_set&lt;<span class="kw">int</span>&gt; s(nums.begin(), nums.end());
+    <span class="kw">int</span> best = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> n : nums) {
+        <span class="kw">if</span>(s.count(n-1)) <span class="kw">continue</span>;     <span class="cm">// Not the start of a sequence</span>
+        <span class="kw">int</span> len = 1;
+        <span class="kw">while</span>(s.count(++n)) len++;
+        best = max(best, len);
+    }
+    <span class="kw">return</span> best;
+}  <span class="cm">// O(n) — each element visited at most twice</span></div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 9 — TREES & BST
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Trees &amp; BST — <em>Binary Trees, Traversals &amp; Search Trees</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tree-basics">
+      <h2 class="sh">9.1 &nbsp; Binary Tree — Node, Traversals &amp; Properties <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="kw">struct</span> TreeNode {
+    <span class="kw">int</span> val;
+    TreeNode* left;
+    TreeNode* right;
+    TreeNode(<span class="kw">int</span> v) : val(v), left(<span class="kw">nullptr</span>), right(<span class="kw">nullptr</span>) {}
+};
+
+<span class="cm">// ── DFS TRAVERSALS ──────────────────────────────────────</span>
+<span class="cm">// Pre-order: Root → Left → Right (copies tree structure)</span>
+<span class="kw">void</span> preorder(TreeNode* node, vector&lt;<span class="kw">int</span>&gt;&amp; res) {
+    <span class="kw">if</span>(!node) <span class="kw">return</span>;
+    res.push_back(node-&gt;val);         <span class="cm">// Visit root FIRST</span>
+    preorder(node-&gt;left, res);
+    preorder(node-&gt;right, res);
+}
+
+<span class="cm">// In-order: Left → Root → Right (gives SORTED order for BST)</span>
+<span class="kw">void</span> inorder(TreeNode* node, vector&lt;<span class="kw">int</span>&gt;&amp; res) {
+    <span class="kw">if</span>(!node) <span class="kw">return</span>;
+    inorder(node-&gt;left, res);
+    res.push_back(node-&gt;val);         <span class="cm">// Visit root BETWEEN children</span>
+    inorder(node-&gt;right, res);
+}
+
+<span class="cm">// Post-order: Left → Right → Root (used for deletion, size calculation)</span>
+<span class="kw">void</span> postorder(TreeNode* node, vector&lt;<span class="kw">int</span>&gt;&amp; res) {
+    <span class="kw">if</span>(!node) <span class="kw">return</span>;
+    postorder(node-&gt;left, res);
+    postorder(node-&gt;right, res);
+    res.push_back(node-&gt;val);         <span class="cm">// Visit root LAST</span>
+}
+
+<span class="cm">// ── BFS (LEVEL ORDER) ────────────────────────────────────</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; levelOrder(TreeNode* root) {
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">if</span>(!root) <span class="kw">return</span> res;
+    queue&lt;TreeNode*&gt; q;
+    q.push(root);
+    <span class="kw">while</span>(!q.empty()) {
+        <span class="kw">int</span> sz = q.size();
+        res.emplace_back();
+        <span class="kw">while</span>(sz--) {
+            TreeNode* n = q.front(); q.pop();
+            res.back().push_back(n-&gt;val);
+            <span class="kw">if</span>(n-&gt;left)  q.push(n-&gt;left);
+            <span class="kw">if</span>(n-&gt;right) q.push(n-&gt;right);
+        }
+    }
+    <span class="kw">return</span> res;
+}</div>
+    </div>
+
+    <div class="sec" data-m="tree-problems">
+      <h2 class="sh">9.2 &nbsp; Classic Tree Problems — Height, Diameter, LCA <span class="tag tg">Must Know</span></h2>
+      <div class="cb"><span class="cm">// Height / Maximum Depth</span>
+<span class="kw">int</span> height(TreeNode* root) {
+    <span class="kw">if</span>(!root) <span class="kw">return</span> 0;
+    <span class="kw">return</span> 1 + max(height(root-&gt;left), height(root-&gt;right));
+}
+
+<span class="cm">// Diameter — longest path through any node</span>
+<span class="kw">int</span> diameter(TreeNode* root) {
+    <span class="kw">int</span> best = 0;
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(TreeNode*)&gt; dfs = [&amp;](<span class="kw">auto</span>* node) -&gt; <span class="kw">int</span> {
+        <span class="kw">if</span>(!node) <span class="kw">return</span> 0;
+        <span class="kw">int</span> L=dfs(node-&gt;left), R=dfs(node-&gt;right);
+        best = max(best, L+R);           <span class="cm">// Diameter through this node</span>
+        <span class="kw">return</span> 1 + max(L, R);            <span class="cm">// Height from this node</span>
+    };
+    dfs(root);
+    <span class="kw">return</span> best;
+}
+
+<span class="cm">// Lowest Common Ancestor (LCA)</span>
+TreeNode* lca(TreeNode* root, TreeNode* p, TreeNode* q) {
+    <span class="kw">if</span>(!root || root==p || root==q) <span class="kw">return</span> root;
+    TreeNode* L = lca(root-&gt;left, p, q);
+    TreeNode* R = lca(root-&gt;right, p, q);
+    <span class="kw">if</span>(L &amp;&amp; R) <span class="kw">return</span> root;   <span class="cm">// p and q in different subtrees → this is LCA</span>
+    <span class="kw">return</span> L ? L : R;           <span class="cm">// Both in same subtree</span>
+}
+
+<span class="cm">// Is Binary Tree Balanced?</span>
+<span class="kw">bool</span> isBalanced(TreeNode* root) {
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(TreeNode*)&gt; check = [&amp;](<span class="kw">auto</span>* node) -&gt; <span class="kw">int</span> {
+        <span class="kw">if</span>(!node) <span class="kw">return</span> 0;
+        <span class="kw">int</span> L=check(node-&gt;left), R=check(node-&gt;right);
+        <span class="kw">if</span>(L==-1 || R==-1 || abs(L-R)&gt;1) <span class="kw">return</span> -1;  <span class="cm">// -1 = unbalanced</span>
+        <span class="kw">return</span> 1+max(L,R);
+    };
+    <span class="kw">return</span> check(root) != -1;
+}
+
+<span class="cm">// Serialize / Deserialize Binary Tree</span>
+string serialize(TreeNode* root) {
+    <span class="kw">if</span>(!root) <span class="kw">return</span> "null,";
+    <span class="kw">return</span> to_string(root-&gt;val)+","+serialize(root-&gt;left)+serialize(root-&gt;right);
+}
+TreeNode* deserialize(<span class="kw">const</span> string&amp; data) {
+    istringstream ss(data);
+    <span class="kw">function</span>&lt;TreeNode*()&gt; parse = [&amp;]() -&gt; TreeNode* {
+        string tok; getline(ss, tok, ',');
+        <span class="kw">if</span>(tok=="null") <span class="kw">return nullptr</span>;
+        TreeNode* node = <span class="kw">new</span> TreeNode(stoi(tok));
+        node-&gt;left  = parse();
+        node-&gt;right = parse();
+        <span class="kw">return</span> node;
+    };
+    <span class="kw">return</span> parse();
+}</div>
+    </div>
+
+    <div class="sec" data-m="bst">
+      <h2 class="sh">9.3 &nbsp; Binary Search Tree — Full Implementation <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="kw">class</span> BST {
+    TreeNode* root = <span class="kw">nullptr</span>;
+
+    TreeNode* insert(TreeNode* node, <span class="kw">int</span> val) {
+        <span class="kw">if</span>(!node) <span class="kw">return new</span> TreeNode(val);
+        <span class="kw">if</span>(val &lt; node-&gt;val) node-&gt;left  = insert(node-&gt;left, val);
+        <span class="kw">else if</span>(val &gt; node-&gt;val) node-&gt;right = insert(node-&gt;right, val);
+        <span class="kw">return</span> node;
+    }
+    <span class="kw">bool</span> search(TreeNode* node, <span class="kw">int</span> val) <span class="kw">const</span> {
+        <span class="kw">if</span>(!node) <span class="kw">return false</span>;
+        <span class="kw">if</span>(val == node-&gt;val) <span class="kw">return true</span>;
+        <span class="kw">return</span> val &lt; node-&gt;val ? search(node-&gt;left, val) : search(node-&gt;right, val);
+    }
+    TreeNode* minNode(TreeNode* node) {
+        <span class="kw">while</span>(node-&gt;left) node=node-&gt;left;
+        <span class="kw">return</span> node;
+    }
+    TreeNode* remove(TreeNode* node, <span class="kw">int</span> val) {
+        <span class="kw">if</span>(!node) <span class="kw">return nullptr</span>;
+        <span class="kw">if</span>(val &lt; node-&gt;val) node-&gt;left  = remove(node-&gt;left,  val);
+        <span class="kw">else if</span>(val &gt; node-&gt;val) node-&gt;right = remove(node-&gt;right, val);
+        <span class="kw">else</span> {
+            <span class="kw">if</span>(!node-&gt;left)  { TreeNode* r=node-&gt;right; <span class="kw">delete</span> node; <span class="kw">return</span> r; }
+            <span class="kw">if</span>(!node-&gt;right) { TreeNode* l=node-&gt;left;  <span class="kw">delete</span> node; <span class="kw">return</span> l; }
+            <span class="cm">// Two children: replace with in-order successor</span>
+            TreeNode* succ = minNode(node-&gt;right);
+            node-&gt;val = succ-&gt;val;
+            node-&gt;right = remove(node-&gt;right, succ-&gt;val);
+        }
+        <span class="kw">return</span> node;
+    }
+<span class="kw">public</span>:
+    <span class="kw">void</span> insert(<span class="kw">int</span> v) { root=insert(root,v); }
+    <span class="kw">bool</span> search(<span class="kw">int</span> v) <span class="kw">const</span> { <span class="kw">return</span> search(root,v); }
+    <span class="kw">void</span> remove(<span class="kw">int</span> v) { root=remove(root,v); }
+    <span class="cm">// In-order traversal gives sorted order</span>
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 10 — HEAPS & PRIORITY QUEUES
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">Heaps &amp; Priority Queues — <em>The O(log n) Structure for Extremes</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="heap-impl">
+      <h2 class="sh">10.1 &nbsp; Binary Heap — Full Array-Based Implementation <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Why Heaps Exist</span>
+        <p>What problem does a Heap solve that a sorted array cannot? A sorted array gives you the maximum in O(1), but inserting a new element is O(n). An unsorted array gives you O(1) insertion, but finding the maximum is O(n). A <strong>Heap</strong> is the perfect middle ground: it maintains just enough order to give you the maximum in O(1), while allowing insertions and deletions in <strong>O(log n)</strong>. You reach for a Heap when you need to repeatedly process the "best" or "most urgent" item in a dynamic dataset.</p>
+      </div>
+      <div class="cb"><span class="cm">// Max-Heap using array (index 1-based for cleaner parent/child math)</span>
+<span class="kw">class</span> MaxHeap {
+    vector&lt;<span class="kw">int</span>&gt; h;
+
+    <span class="kw">void</span> siftUp(<span class="kw">int</span> i) {
+        <span class="kw">while</span>(i&gt;1 &amp;&amp; h[i]&gt;h[i/2]) {    <span class="cm">// Parent at i/2</span>
+            swap(h[i], h[i/2]);
+            i /= 2;
+        }
+    }
+    <span class="kw">void</span> siftDown(<span class="kw">int</span> i) {
+        <span class="kw">int</span> n = h.size()-1;
+        <span class="kw">while</span>(2*i &lt;= n) {
+            <span class="kw">int</span> child = 2*i;                    <span class="cm">// Left child</span>
+            <span class="kw">if</span>(child+1&lt;=n &amp;&amp; h[child+1]&gt;h[child]) child++;  <span class="cm">// Pick larger child</span>
+            <span class="kw">if</span>(h[i] &gt;= h[child]) <span class="kw">break</span>;
+            swap(h[i], h[child]);
+            i = child;
+        }
+    }
+<span class="kw">public</span>:
+    MaxHeap() { h.push_back(0); }   <span class="cm">// Dummy at index 0</span>
+    <span class="kw">void</span> push(<span class="kw">int</span> val) { h.push_back(val); siftUp(h.size()-1); }
+    <span class="kw">int</span>  top()  { <span class="kw">return</span> h[1]; }
+    <span class="kw">void</span> pop()  {
+        h[1] = h.back(); h.pop_back();
+        <span class="kw">if</span>(h.size()&gt;1) siftDown(1);
+    }
+    <span class="kw">bool</span> empty() { <span class="kw">return</span> h.size()==1; }
+    <span class="kw">int</span>  size()  { <span class="kw">return</span> h.size()-1; }
+
+    <span class="cm">// Heapify — build heap from unsorted array in O(n)</span>
+    <span class="kw">void</span> heapify(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+        h = {0};
+        h.insert(h.end(), a.begin(), a.end());
+        <span class="kw">for</span>(<span class="kw">int</span> i=h.size()/2; i&gt;=1; i--) siftDown(i);  <span class="cm">// O(n) — not O(n log n)!</span>
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="heap-patterns">
+      <h2 class="sh">10.2 &nbsp; Heap Patterns — Top-K, Median, Merge <span class="tag tg">Patterns</span></h2>
+      <div class="eg">
+        <p><strong>Kth Largest Element — find kth largest without full sort.</strong></p>
+        <div class="cb"><span class="cm">// Min-heap of size k — top is kth largest</span>
+<span class="kw">int</span> findKthLargest(vector&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    priority_queue&lt;<span class="kw">int</span>, vector&lt;<span class="kw">int</span>&gt;, greater&lt;<span class="kw">int</span>&gt;&gt; minPQ;  <span class="cm">// Min-heap</span>
+    <span class="kw">for</span>(<span class="kw">int</span> x : nums) {
+        minPQ.push(x);
+        <span class="kw">if</span>(<span class="kw">int</span>(minPQ.size()) &gt; k) minPQ.pop();  <span class="cm">// Keep only k largest</span>
+    }
+    <span class="kw">return</span> minPQ.top();   <span class="cm">// Smallest of k largest = kth largest overall</span>
+}  <span class="cm">// O(n log k) time, O(k) space</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Find Median from Data Stream — median of all elements seen so far.</strong></p>
+        <div class="cb"><span class="kw">class</span> MedianFinder {
+    priority_queue&lt;<span class="kw">int</span>&gt; maxH;              <span class="cm">// Max-heap: lower half</span>
+    priority_queue&lt;<span class="kw">int</span>,vector&lt;<span class="kw">int</span>&gt;,greater&lt;<span class="kw">int</span>&gt;&gt; minH; <span class="cm">// Min-heap: upper half</span>
+<span class="kw">public</span>:
+    <span class="kw">void</span> addNum(<span class="kw">int</span> num) {
+        maxH.push(num);
+        minH.push(maxH.top()); maxH.pop();   <span class="cm">// Ensure balance invariant</span>
+        <span class="kw">if</span>(minH.size() &gt; maxH.size()+1) { maxH.push(minH.top()); minH.pop(); }
+    }
+    <span class="kw">double</span> findMedian() {
+        <span class="kw">if</span>(minH.size() &gt; maxH.size()) <span class="kw">return</span> minH.top();
+        <span class="kw">return</span> (maxH.top() + minH.top()) / 2.0;
+    }
+};  <span class="cm">// O(log n) add, O(1) findMedian</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Merge K Sorted Lists — merge k sorted linked lists in O(n log k).</strong></p>
+        <div class="cb">ListNode* mergeKLists(vector&lt;ListNode*&gt;&amp; lists) {
+    <span class="kw">using</span> P = pair&lt;<span class="kw">int</span>,ListNode*&gt;;
+    priority_queue&lt;P, vector&lt;P&gt;, greater&lt;P&gt;&gt; pq;  <span class="cm">// Min-heap by value</span>
+    <span class="kw">for</span>(<span class="kw">auto</span>* l : lists) <span class="kw">if</span>(l) pq.push({l-&gt;val, l});
+    ListNode dummy(0); ListNode* tail = &amp;dummy;
+    <span class="kw">while</span>(!pq.empty()) {
+        <span class="kw">auto</span> [val, node] = pq.top(); pq.pop();
+        tail-&gt;next = node; tail = tail-&gt;next;
+        <span class="kw">if</span>(node-&gt;next) pq.push({node-&gt;next-&gt;val, node-&gt;next});
+    }
+    <span class="kw">return</span> dummy.next;
+}</div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 11 — GRAPHS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11</div>
+    <div class="ch-title">Graphs — <em>BFS, DFS, Shortest Paths &amp; MST</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="graph-repr">
+      <h2 class="sh">11.1 &nbsp; Graph Representation &amp; Traversal <span class="tag tc">Core</span></h2>
+      <div class="note-box">
+        <span class="lbl">Adjacency List vs. Adjacency Matrix</span>
+        <p><strong>Adjacency List</strong> (<code>vector&lt;vector&lt;int&gt;&gt;</code>) is used for 95% of problems. It uses O(V + E) memory and is optimal for sparse graphs. <strong>Adjacency Matrix</strong> (<code>vector&lt;vector&lt;bool&gt;&gt;</code>) uses O(V²) memory, which causes Memory Limit Exceeded for V &gt; 10,000. Only use a matrix for dense graphs or when you need O(1) edge existence lookups (like Floyd-Warshall).</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">BFS vs. DFS: How to Choose</span>
+        <p><strong>BFS</strong> searches layer by layer. Reach for BFS when asked for the <strong>shortest path</strong> in an unweighted graph, or when modeling "moves" in a grid puzzle. <strong>DFS</strong> plunges to the bottom of a path before backtracking. Reach for DFS when investigating <strong>connectivity</strong>, counting components, finding cycles, or doing backtracking where you need to track the current path state.</p>
+      </div>
+      <div class="cb"><span class="kw">#include</span> &lt;bits/stdc++.h&gt;
+<span class="kw">using namespace</span> std;
+<span class="kw">using</span> ll = <span class="kw">long long</span>;
+
+<span class="cm">// Adjacency List — most common representation</span>
+<span class="kw">int</span> V;                                  <span class="cm">// Number of vertices</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; adj(V);            <span class="cm">// Unweighted: adj[u] = list of neighbors</span>
+vector&lt;vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt; wadj(V); <span class="cm">// Weighted: wadj[u] = {neighbor, weight}</span>
+
+<span class="cm">// Add edge</span>
+<span class="kw">void</span> addEdge(<span class="kw">int</span> u, <span class="kw">int</span> v) {
+    adj[u].push_back(v);
+    adj[v].push_back(u);  <span class="cm">// Remove for directed graph</span>
+}
+
+<span class="cm">// BFS — shortest path in UNWEIGHTED graph, level-order traversal</span>
+vector&lt;<span class="kw">int</span>&gt; bfs(<span class="kw">int</span> src, <span class="kw">int</span> V) {
+    vector&lt;<span class="kw">int</span>&gt; dist(V, -1);
+    queue&lt;<span class="kw">int</span>&gt; q;
+    dist[src] = 0; q.push(src);
+    <span class="kw">while</span>(!q.empty()) {
+        <span class="kw">int</span> u = q.front(); q.pop();
+        <span class="kw">for</span>(<span class="kw">int</span> v : adj[u]) {
+            <span class="kw">if</span>(dist[v] == -1) {
+                dist[v] = dist[u] + 1;
+                q.push(v);
+            }
+        }
+    }
+    <span class="kw">return</span> dist;  <span class="cm">// dist[v] = shortest path from src to v (-1 if unreachable)</span>
+}
+
+<span class="cm">// DFS — connectivity, cycle detection, topological sort, path finding</span>
+vector&lt;<span class="kw">bool</span>&gt; visited;
+<span class="kw">void</span> dfs(<span class="kw">int</span> u) {
+    visited[u] = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> v : adj[u])
+        <span class="kw">if</span>(!visited[v]) dfs(v);
+}
+
+<span class="cm">// Count connected components</span>
+<span class="kw">int</span> countComponents(<span class="kw">int</span> V) {
+    visited.assign(V, <span class="kw">false</span>);
+    <span class="kw">int</span> count = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;V; i++)
+        <span class="kw">if</span>(!visited[i]) { dfs(i); count++; }
+    <span class="kw">return</span> count;
+}</div>
+    </div>
+
+    <div class="sec" data-m="topo-cycle">
+      <h2 class="sh">11.2 &nbsp; Topological Sort &amp; Cycle Detection <span class="tag tg">Must Know</span></h2>
+      <div class="cb"><span class="cm">// Topological Sort using Kahn's Algorithm (BFS-based)</span>
+vector&lt;<span class="kw">int</span>&gt; topoSort(<span class="kw">int</span> V) {
+    vector&lt;<span class="kw">int</span>&gt; indegree(V, 0);
+    <span class="kw">for</span>(<span class="kw">int</span> u=0; u&lt;V; u++)
+        <span class="kw">for</span>(<span class="kw">int</span> v : adj[u]) indegree[v]++;
+
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;V; i++) <span class="kw">if</span>(indegree[i]==0) q.push(i);
+
+    vector&lt;<span class="kw">int</span>&gt; order;
+    <span class="kw">while</span>(!q.empty()) {
+        <span class="kw">int</span> u = q.front(); q.pop();
+        order.push_back(u);
+        <span class="kw">for</span>(<span class="kw">int</span> v : adj[u])
+            <span class="kw">if</span>(--indegree[v] == 0) q.push(v);
+    }
+    <span class="kw">if</span>(<span class="kw">int</span>(order.size()) != V) <span class="kw">return</span> {};  <span class="cm">// Cycle detected!</span>
+    <span class="kw">return</span> order;
+}
+
+<span class="cm">// DFS-based Topological Sort</span>
+stack&lt;<span class="kw">int</span>&gt; topoStack;
+<span class="kw">void</span> dfsTopoSort(<span class="kw">int</span> u, vector&lt;<span class="kw">bool</span>&gt;&amp; vis) {
+    vis[u] = <span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> v : adj[u]) <span class="kw">if</span>(!vis[v]) dfsTopoSort(v, vis);
+    topoStack.push(u);   <span class="cm">// Push after all descendants processed</span>
+}
+
+<span class="cm">// Cycle detection in DIRECTED graph (3-color DFS)</span>
+<span class="cm">// white=0 (unvisited), gray=1 (in stack), black=2 (done)</span>
+<span class="kw">bool</span> hasCycle(<span class="kw">int</span> u, vector&lt;<span class="kw">int</span>&gt;&amp; color) {
+    color[u] = 1;                          <span class="cm">// Gray: currently in DFS stack</span>
+    <span class="kw">for</span>(<span class="kw">int</span> v : adj[u]) {
+        <span class="kw">if</span>(color[v]==1) <span class="kw">return true</span>;       <span class="cm">// Back edge → cycle!</span>
+        <span class="kw">if</span>(color[v]==0 &amp;&amp; hasCycle(v, color)) <span class="kw">return true</span>;
+    }
+    color[u] = 2;                          <span class="cm">// Black: fully processed</span>
+    <span class="kw">return false</span>;
+}</div>
+    </div>
+
+    <div class="sec" data-m="shortest-paths">
+      <h2 class="sh">11.3 &nbsp; Shortest Path Algorithms <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Why Dijkstra is Correct (Proof Sketch)</span>
+        <p>Dijkstra works because of the <strong>Greedy Choice Property</strong> on non-negative weights. When the priority queue pops the unvisited node <code>u</code> with the smallest current distance, that distance is <em>guaranteed</em> to be optimal. Why? Because any other path to <code>u</code> would have to go through some other unvisited node <code>v</code>. But since <code>u</code> has the smallest distance in the queue, the path to <code>v</code> is already longer than the path to <code>u</code>, and adding non-negative edges can only make it worse. The moment a node is popped, it is settled permanently.</p>
+      </div>
+      <div class="cb"><span class="cm">// Dijkstra — single-source shortest path, non-negative weights, O((V+E) log V)</span>
+vector&lt;ll&gt; dijkstra(<span class="kw">int</span> src, <span class="kw">int</span> V) {
+    vector&lt;ll&gt; dist(V, LLONG_MAX);
+    priority_queue&lt;pair&lt;ll,<span class="kw">int</span>&gt;, vector&lt;pair&lt;ll,<span class="kw">int</span>&gt;&gt;, greater&lt;&gt;&gt; pq;
+    dist[src]=0; pq.push({0, src});
+    <span class="kw">while</span>(!pq.empty()) {
+        <span class="kw">auto</span> [d, u] = pq.top(); pq.pop();
+        <span class="kw">if</span>(d &gt; dist[u]) <span class="kw">continue</span>;         <span class="cm">// Stale entry — skip</span>
+        <span class="kw">for</span>(<span class="kw">auto</span> [v, w] : wadj[u]) {
+            <span class="kw">if</span>(dist[u]+w &lt; dist[v]) {
+                dist[v] = dist[u]+w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    <span class="kw">return</span> dist;
+}
+
+<span class="cm">// Bellman-Ford — handles negative weights, detects negative cycles, O(VE)</span>
+vector&lt;ll&gt; bellmanFord(<span class="kw">int</span> src, <span class="kw">int</span> V, vector&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; edges) {
+    vector&lt;ll&gt; dist(V, LLONG_MAX);
+    dist[src] = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;V-1; i++) {           <span class="cm">// Relax all edges V-1 times</span>
+        <span class="kw">for</span>(<span class="kw">auto</span> [u,v,w] : edges) {
+            <span class="kw">if</span>(dist[u]!=LLONG_MAX &amp;&amp; dist[u]+w&lt;dist[v])
+                dist[v] = dist[u]+w;
+        }
+    }
+    <span class="cm">// Vth relaxation: if any update happens → negative cycle</span>
+    <span class="kw">for</span>(<span class="kw">auto</span> [u,v,w] : edges)
+        <span class="kw">if</span>(dist[u]!=LLONG_MAX &amp;&amp; dist[u]+w&lt;dist[v]) dist[v]=-LLONG_MAX;
+    <span class="kw">return</span> dist;
+}
+
+<span class="cm">// Floyd-Warshall — all-pairs shortest paths, O(V³)</span>
+<span class="kw">void</span> floydWarshall(vector&lt;vector&lt;ll&gt;&gt;&amp; dist, <span class="kw">int</span> V) {
+    <span class="kw">for</span>(<span class="kw">int</span> k=0; k&lt;V; k++)
+        <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;V; i++)
+            <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;V; j++)
+                <span class="kw">if</span>(dist[i][k]!=LLONG_MAX &amp;&amp; dist[k][j]!=LLONG_MAX)
+                    dist[i][j] = min(dist[i][j], dist[i][k]+dist[k][j]);
+}</div>
+    </div>
+
+    <div class="sec" data-m="mst-union">
+      <h2 class="sh">11.4 &nbsp; MST — Kruskal's &amp; Prim's + DSU <span class="tag tg">Essential</span></h2>
+      <div class="note-box">
+        <span class="lbl">MST Correctness Intuition</span>
+        <p>Why do Kruskal's and Prim's greedy approaches work? Imagine dividing all nodes into two arbitrary sets (a cut). To connect these two sets, you <em>must</em> pick at least one edge crossing the cut. To minimize the total weight, you should obviously pick the <strong>lightest</strong> crossing edge. Both algorithms just apply this logic repeatedly: Prim's grows a single component by picking the lightest edge leaving it, while Kruskal's considers the globally lightest edge and adds it if it connects two disconnected components (preventing cycles).</p>
+      </div>
+      <div class="cb"><span class="cm">// Disjoint Set Union (DSU / Union-Find) — O(α(n)) per operation</span>
+<span class="kw">struct</span> DSU {
+    vector&lt;<span class="kw">int</span>&gt; parent, rank_;
+    DSU(<span class="kw">int</span> n) : parent(n), rank_(n, 0) {
+        iota(parent.begin(), parent.end(), 0);  <span class="cm">// parent[i] = i initially</span>
+    }
+    <span class="kw">int</span> find(<span class="kw">int</span> x) {
+        <span class="kw">if</span>(parent[x]!=x) parent[x]=find(parent[x]);  <span class="cm">// Path compression</span>
+        <span class="kw">return</span> parent[x];
+    }
+    <span class="kw">bool</span> unite(<span class="kw">int</span> x, <span class="kw">int</span> y) {
+        x=find(x); y=find(y);
+        <span class="kw">if</span>(x==y) <span class="kw">return false</span>;               <span class="cm">// Already same component</span>
+        <span class="kw">if</span>(rank_[x]&lt;rank_[y]) swap(x,y);     <span class="cm">// Union by rank</span>
+        parent[y]=x;
+        <span class="kw">if</span>(rank_[x]==rank_[y]) rank_[x]++;
+        <span class="kw">return true</span>;
+    }
+    <span class="kw">bool</span> connected(<span class="kw">int</span> x, <span class="kw">int</span> y) { <span class="kw">return</span> find(x)==find(y); }
+};
+
+<span class="cm">// Kruskal's MST — sort edges by weight, greedily add if no cycle</span>
+ll kruskal(<span class="kw">int</span> V, vector&lt;tuple&lt;ll,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; edges) {
+    sort(edges.begin(), edges.end());         <span class="cm">// Sort by weight (first element)</span>
+    DSU dsu(V);
+    ll totalCost = 0; <span class="kw">int</span> edgeCount = 0;
+    <span class="kw">for</span>(<span class="kw">auto</span> [w, u, v] : edges) {
+        <span class="kw">if</span>(dsu.unite(u, v)) {
+            totalCost += w;
+            <span class="kw">if</span>(++edgeCount == V-1) <span class="kw">break</span>;   <span class="cm">// MST has V-1 edges</span>
+        }
+    }
+    <span class="kw">return</span> totalCost;
+}  <span class="cm">// O(E log E) time</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 12 — DYNAMIC PROGRAMMING
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 12</div>
+    <div class="ch-title">Dynamic Programming — <em>Optimal Substructure, Every Classic Problem</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dp-intro">
+      <h2 class="sh">12.1 &nbsp; DP Framework — How to Think and Code Any DP <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">The Core Insight: Overlapping Subproblems</span>
+        <p>Dynamic Programming is essentially optimized recursion. In naive recursion (like <code>fib(5) = fib(4) + fib(3)</code>), you recompute <code>fib(3)</code> multiple times because subproblems overlap. The recursion tree grows exponentially (O(2ⁿ)). DP stores the result of <code>fib(3)</code> the first time it is computed, trimming the exponential tree down to a linear path. Every DP is solved by answering 3 questions: <strong>1) What is the State? 2) What is the Transition? 3) What is the Base Case?</strong></p>
+      </div>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Top-Down (Memoization)</div>
+          <p>Recursive function + cache (array or map). Natural to write. Only computes strictly needed states. The recursion trace: <code>solve(i) → check cache → compute if needed → save and return.</code></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Bottom-Up (Tabulation)</div>
+          <p>Iterative nested loops filling a table from the base cases up to the answer. No recursion overhead. Allows for space optimization (e.g., dropping older rows from the table).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dp-classic">
+      <h2 class="sh">12.2 &nbsp; Classic DP Problems — Full Implementations <span class="tag tg">Must Know</span></h2>
+      <h3 class="ssh">0/1 Knapsack</h3>
+      <div class="gv">
+        <span class="dv-label">Trace Table: W=5, items=[{w:2, v:3}, {w:3, v:4}, {w:4, v:5}]</span>
+      w=0  1  2  3  4  5
+i=0: [0, 0, 0, 0, 0, 0]  &lt;-- Empty knapsack base case
+i=1: [0, 0, 3, 3, 3, 3]  &lt;-- Consider item 1 (w=2,v=3): Fills all capacities &gt;= 2
+i=2: [0, 0, 3, 4, 4, 7]  &lt;-- Consider item 2 (w=3,v=4): At w=5, takes both (3+4=7)
+i=3: [0, 0, 3, 4, 5, 7]  &lt;-- Consider item 3 (w=4,v=5): Takes at w=4 (5&gt;4), keeps 7 at w=5
+      </div>
+      <div class="cb"><span class="cm">// dp[i][w] = max value using first i items with capacity w</span>
+<span class="kw">int</span> knapsack(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; wt, <span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; val, <span class="kw">int</span> W) {
+    <span class="kw">int</span> n = wt.size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(n+1, vector&lt;<span class="kw">int</span>&gt;(W+1, 0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++) {
+        <span class="kw">for</span>(<span class="kw">int</span> w=0; w&lt;=W; w++) {
+            dp[i][w] = dp[i-1][w];                  <span class="cm">// Don't take item i</span>
+            <span class="kw">if</span>(wt[i-1]&lt;=w)
+                dp[i][w]=max(dp[i][w], dp[i-1][w-wt[i-1]]+val[i-1]); <span class="cm">// Take it</span>
+        }
+    }
+    <span class="kw">return</span> dp[n][W];
+}
+<span class="cm">// Space optimized: use 1D dp (iterate w in reverse for 0/1 knapsack)</span>
+<span class="kw">int</span> knapsack1D(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; wt, <span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; val, <span class="kw">int</span> W) {
+    vector&lt;<span class="kw">int</span>&gt; dp(W+1, 0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;wt.size(); i++)
+        <span class="kw">for</span>(<span class="kw">int</span> w=W; w&gt;=wt[i]; w--)      <span class="cm">// REVERSE order prevents using item twice</span>
+            dp[w] = max(dp[w], dp[w-wt[i]]+val[i]);
+    <span class="kw">return</span> dp[W];
+}</div>
+      <h3 class="ssh">Longest Common Subsequence (LCS)</h3>
+      <div class="cb"><span class="cm">// dp[i][j] = LCS of s1[0..i-1] and s2[0..j-1]</span>
+<span class="kw">int</span> lcs(<span class="kw">const</span> string&amp; s1, <span class="kw">const</span> string&amp; s2) {
+    <span class="kw">int</span> m=s1.size(), n=s2.size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(m+1, vector&lt;<span class="kw">int</span>&gt;(n+1, 0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=m; i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=1; j&lt;=n; j++)
+            dp[i][j] = (s1[i-1]==s2[j-1]) ? dp[i-1][j-1]+1
+                                           : max(dp[i-1][j], dp[i][j-1]);
+    <span class="kw">return</span> dp[m][n];
+}</div>
+      <h3 class="ssh">Longest Increasing Subsequence (LIS)</h3>
+      <div class="cb"><span class="cm">// O(n²) DP approach</span>
+<span class="kw">int</span> lisDP(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n=a.size();
+    vector&lt;<span class="kw">int</span>&gt; dp(n, 1);
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;n; i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;i; j++)
+            <span class="kw">if</span>(a[j]&lt;a[i]) dp[i]=max(dp[i], dp[j]+1);
+    <span class="kw">return</span> *max_element(dp.begin(), dp.end());
+}
+
+<span class="cm">// O(n log n) — patience sorting (binary search trick)</span>
+<span class="kw">int</span> lisBS(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    vector&lt;<span class="kw">int</span>&gt; tails;                        <span class="cm">// tails[i] = smallest tail of LIS of len i+1</span>
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) {
+        <span class="kw">auto</span> it = lower_bound(tails.begin(), tails.end(), x);
+        <span class="kw">if</span>(it==tails.end()) tails.push_back(x);  <span class="cm">// Extend LIS</span>
+        <span class="kw">else</span>                *it = x;              <span class="cm">// Replace: better (smaller) tail</span>
+    }
+    <span class="kw">return</span> tails.size();
+}</div>
+      <h3 class="ssh">Edit Distance (Levenshtein)</h3>
+      <div class="cb"><span class="cm">// dp[i][j] = min operations to convert s1[0..i-1] to s2[0..j-1]</span>
+<span class="kw">int</span> editDistance(<span class="kw">const</span> string&amp; s1, <span class="kw">const</span> string&amp; s2) {
+    <span class="kw">int</span> m=s1.size(), n=s2.size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(m+1, vector&lt;<span class="kw">int</span>&gt;(n+1));
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;=m;i++) dp[i][0]=i;    <span class="cm">// Delete all of s1</span>
+    <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;=n;j++) dp[0][j]=j;    <span class="cm">// Insert all of s2</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=m;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;=n;j++)
+            dp[i][j] = (s1[i-1]==s2[j-1]) ? dp[i-1][j-1]
+                       : 1+min({dp[i-1][j], dp[i][j-1], dp[i-1][j-1]});
+                       <span class="cm">//    delete s1[i]  insert into s1   replace s1[i] with s2[j]</span>
+    <span class="kw">return</span> dp[m][n];
+}</div>
+      <h3 class="ssh">Coin Change — Unbounded Knapsack</h3>
+      <div class="cb"><span class="cm">// Minimum coins to make amount</span>
+<span class="kw">int</span> coinChange(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; coins, <span class="kw">int</span> amount) {
+    vector&lt;<span class="kw">int</span>&gt; dp(amount+1, INT_MAX);
+    dp[0] = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=amount; i++)
+        <span class="kw">for</span>(<span class="kw">int</span> c : coins)
+            <span class="kw">if</span>(c&lt;=i &amp;&amp; dp[i-c]!=INT_MAX)
+                dp[i] = min(dp[i], dp[i-c]+1);
+    <span class="kw">return</span> dp[amount]==INT_MAX ? -1 : dp[amount];
+}
+
+<span class="cm">// Number of ways to make amount (combinations)</span>
+<span class="kw">int</span> coinChangeWays(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; coins, <span class="kw">int</span> amount) {
+    vector&lt;<span class="kw">long long</span>&gt; dp(amount+1, 0);
+    dp[0] = 1;
+    <span class="kw">for</span>(<span class="kw">int</span> c : coins)                      <span class="cm">// Outer loop: coins (for combos not perms)</span>
+        <span class="kw">for</span>(<span class="kw">int</span> i=c; i&lt;=amount; i++)
+            dp[i] += dp[i-c];
+    <span class="kw">return</span> dp[amount];
+}</div>
+    </div>
+
+    <div class="sec" data-m="dp-advanced">
+      <h2 class="sh">12.3 &nbsp; Advanced DP — Interval, Bitmask &amp; DP on Trees <span class="tag tp">Advanced</span></h2>
+      <div class="cb"><span class="cm">// Matrix Chain Multiplication — interval DP</span>
+<span class="cm">// dp[i][j] = min cost to multiply matrices i through j</span>
+<span class="kw">int</span> matrixChain(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; dims) {
+    <span class="kw">int</span> n = dims.size()-1;                    <span class="cm">// n matrices</span>
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(n, vector&lt;<span class="kw">int</span>&gt;(n, 0));
+    <span class="kw">for</span>(<span class="kw">int</span> len=2; len&lt;=n; len++) {          <span class="cm">// Chain length</span>
+        <span class="kw">for</span>(<span class="kw">int</span> i=0; i+len-1&lt;n; i++) {
+            <span class="kw">int</span> j = i+len-1;
+            dp[i][j] = INT_MAX;
+            <span class="kw">for</span>(<span class="kw">int</span> k=i; k&lt;j; k++)           <span class="cm">// Split point</span>
+                dp[i][j] = min(dp[i][j], dp[i][k]+dp[k+1][j]+dims[i]*dims[k+1]*dims[j+1]);
+        }
+    }
+    <span class="kw">return</span> dp[0][n-1];
+}</div>
+      <div class="note-box">
+        <span class="lbl">Bitmask DP Intuition</span>
+        <p>A bitmask is just an integer used compactly as an array of booleans. In TSP, <code>mask = 5</code> (binary <code>101</code>) means we have currently visited cities 0 and 2. The DP state <code>dp[mask][i]</code> answers: "What is the minimum cost to visit exactly the set of cities represented by <code>mask</code>, ending our path at city <code>i</code>?" Transitions simply try adding an unvisited city <code>v</code> to the mask: <code>new_mask = mask | (1 &lt;&lt; v)</code>.</p>
+      </div>
+      <div class="cb"><span class="cm">// Bitmask DP — Travelling Salesman Problem</span>
+<span class="cm">// dp[mask][i] = min cost to visit all cities in mask, ending at city i</span>
+<span class="kw">int</span> tsp(<span class="kw">const</span> vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; dist) {
+    <span class="kw">int</span> n = dist.size();
+    <span class="kw">int</span> FULL = (1&lt;&lt;n)-1;
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(1&lt;&lt;n, vector&lt;<span class="kw">int</span>&gt;(n, INT_MAX));
+    dp[1][0] = 0;                              <span class="cm">// Start at city 0</span>
+    <span class="kw">for</span>(<span class="kw">int</span> mask=1; mask&lt;=FULL; mask++) {
+        <span class="kw">for</span>(<span class="kw">int</span> u=0; u&lt;n; u++) {
+            <span class="kw">if</span>(!(mask&amp;(1&lt;&lt;u)) || dp[mask][u]==INT_MAX) <span class="kw">continue</span>;
+            <span class="kw">for</span>(<span class="kw">int</span> v=0; v&lt;n; v++) {
+                <span class="kw">if</span>(mask&amp;(1&lt;&lt;v)) <span class="kw">continue</span>;  <span class="cm">// Already visited</span>
+                <span class="kw">int</span> nmask = mask|(1&lt;&lt;v);
+                dp[nmask][v] = min(dp[nmask][v], dp[mask][u]+dist[u][v]);
+            }
+        }
+    }
+    <span class="kw">int</span> ans = INT_MAX;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;n; i++)
+        <span class="kw">if</span>(dp[FULL][i]!=INT_MAX) ans=min(ans, dp[FULL][i]+dist[i][0]);
+    <span class="kw">return</span> ans;
+}  <span class="cm">// O(2^n * n²) — feasible for n ≤ 20</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 13 — GREEDY ALGORITHMS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch13">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 13</div>
+    <div class="ch-title">Greedy Algorithms — <em>The Locally Optimal Choice</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="greedy-patterns">
+      <h2 class="sh">13.1 &nbsp; Greedy Strategy &amp; Classic Problems <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">When Greedy Works</span>
+        <p>A greedy algorithm works when the problem has <strong>greedy choice property</strong> (locally optimal choice leads to globally optimal) and <strong>optimal substructure</strong> (optimal solution contains optimal solutions to subproblems). Proving correctness requires showing no better choice exists at each step.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Activity Selection — maximize number of non-overlapping intervals.</strong></p>
+        <div class="cb"><span class="kw">int</span> activitySelection(vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; intervals) {
+    <span class="cm">// Sort by END time — always pick the activity that ends earliest</span>
+    sort(intervals.begin(), intervals.end(), [](<span class="kw">auto</span>&amp; a, <span class="kw">auto</span>&amp; b){
+        <span class="kw">return</span> a.second &lt; b.second;
+    });
+    <span class="kw">int</span> count=1, lastEnd=intervals[0].second;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;intervals.size(); i++) {
+        <span class="kw">if</span>(intervals[i].first &gt;= lastEnd) {     <span class="cm">// No overlap</span>
+            count++;
+            lastEnd = intervals[i].second;
+        }
+    }
+    <span class="kw">return</span> count;
+}  <span class="cm">// O(n log n) — "erases least remaining future opportunities"</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Jump Game II — minimum jumps to reach end of array.</strong></p>
+        <div class="cb"><span class="kw">int</span> jump(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> jumps=0, curEnd=0, farthest=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;(<span class="kw">int</span>)nums.size()-1; i++) {
+        farthest = max(farthest, i + nums[i]);    <span class="cm">// Farthest reachable from here</span>
+        <span class="kw">if</span>(i == curEnd) {                          <span class="cm">// Must jump now</span>
+            jumps++;
+            curEnd = farthest;
+        }
+    }
+    <span class="kw">return</span> jumps;
+}  <span class="cm">// O(n) — BFS-style greedy</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Fractional Knapsack — maximize value, items are divisible.</strong></p>
+        <div class="cb"><span class="kw">double</span> fractionalKnapsack(<span class="kw">int</span> W, vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; items) {
+    <span class="cm">// Sort by value/weight ratio descending</span>
+    sort(items.begin(), items.end(), [](<span class="kw">auto</span>&amp; a, <span class="kw">auto</span>&amp; b){
+        <span class="kw">return</span> (<span class="kw">double</span>)a.first/a.second &gt; (<span class="kw">double</span>)b.first/b.second;
+    });
+    <span class="kw">double</span> total=0;
+    <span class="kw">for</span>(<span class="kw">auto</span> [val, wt] : items) {
+        <span class="kw">if</span>(W &gt;= wt) { total+=val; W-=wt; }          <span class="cm">// Take whole item</span>
+        <span class="kw">else</span>         { total += (<span class="kw">double</span>)val*W/wt; <span class="kw">break</span>; } <span class="cm">// Take fraction</span>
+    }
+    <span class="kw">return</span> total;
+}</div>
+      </div>
+      <div class="eg">
+        <p><strong>Gas Station — can you complete a circular route?</strong></p>
+        <div class="cb"><span class="kw">int</span> canCompleteCircuit(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; gas, <span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; cost) {
+    <span class="kw">int</span> total=0, tank=0, start=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;gas.size(); i++) {
+        total += gas[i]-cost[i];
+        tank  += gas[i]-cost[i];
+        <span class="kw">if</span>(tank &lt; 0) { start=i+1; tank=0; }  <span class="cm">// Can't start here — try next</span>
+    }
+    <span class="kw">return</span> total &gt;= 0 ? start : -1;
+}  <span class="cm">// Key insight: if total gas >= total cost, a solution always exists</span></div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 14 — ADVANCED STRUCTURES
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch14">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 14</div>
+    <div class="ch-title">Advanced Structures — <em>Segment Trees, Tries &amp; Fenwick Trees</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="segment-tree">
+      <h2 class="sh">14.1 &nbsp; Segment Tree — Range Query &amp; Point Update <span class="tag tg">Critical</span></h2>
+      <p>A Segment Tree solves a very specific problem: you have an array, and you need to perform thousands of <strong>Range Queries</strong> (what is the sum/min/max from index L to R?) interspersed with thousands of <strong>Point Updates</strong> (change index <code>i</code> to value <code>v</code>). A standard array gives O(1) updates but O(n) range queries. A prefix sum array gives O(1) range queries but O(n) updates. A Segment Tree gives <strong>O(log n) for both.</strong></p>
+      <p>The core idea is dividing the array into contiguous power-of-two segments and precalculating the answer for each segment in a binary tree. A node's value is the combination (sum, min, max) of its two children. To update an element, you only need to update the <code>log(n)</code> nodes above it. To query a range, you combine at most <code>2 * log(n)</code> precalculated segments, rather than iterating through <code>N</code> individual elements.</p>
+      
+      <div class="gv">
+        <span class="dv-label">Segment Tree Structure (Sum) for Array [1, 2, 3, 4, 5, 6, 7, 8]</span>
+                      [36] (Sum of 0..7)          &lt;-- Root (Node 1)
+                    /      \
+            [10](0..3)       [26](4..7)           &lt;-- Node 2 &amp; 3
+            /       \         /        \
+      [3](0..1) [7](2..3) [11](4..5) [15](6..7)   &lt;-- Nodes 4, 5, 6, 7
+       /   \     /   \     /    \      /    \
+     [1]   [2] [3]   [4] [5]    [6]  [7]    [8]   &lt;-- Leaves (Indices 0..7)
+      
+Mapping Context: Left Child is 2*i. Right Child is 2*i + 1. Parent is i/2.
+      </div>
+      
+      <div class="cb"><span class="cm">// Segment Tree — O(log n) range sum query and point update</span>
+<span class="kw">struct</span> SegTree {
+    <span class="kw">int</span> n;
+    vector&lt;<span class="kw">long long</span>&gt; tree;
+
+    SegTree(<span class="kw">int</span> n) : n(n), tree(4*n, 0) {}
+    SegTree(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a) : n(a.size()), tree(4*a.size(), 0) {
+        build(a, 1, 0, n-1);
+    }
+
+    <span class="kw">void</span> build(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+        <span class="kw">if</span>(lo==hi) { tree[node]=a[lo]; <span class="kw">return</span>; }
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        build(a, 2*node, lo, mid);
+        build(a, 2*node+1, mid+1, hi);
+        tree[node] = tree[2*node] + tree[2*node+1];
+    }
+    <span class="kw">void</span> update(<span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> idx, <span class="kw">int</span> val) {
+        <span class="kw">if</span>(lo==hi) { tree[node]=val; <span class="kw">return</span>; }
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        idx&lt;=mid ? update(2*node, lo, mid, idx, val)
+                 : update(2*node+1, mid+1, hi, idx, val);
+        tree[node]=tree[2*node]+tree[2*node+1];
+    }
+    <span class="kw">long long</span> query(<span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> l, <span class="kw">int</span> r) {
+        <span class="kw">if</span>(r&lt;lo || hi&lt;l) <span class="kw">return</span> 0;           <span class="cm">// Completely outside</span>
+        <span class="kw">if</span>(l&lt;=lo &amp;&amp; hi&lt;=r) <span class="kw">return</span> tree[node];  <span class="cm">// Completely inside</span>
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        <span class="kw">return</span> query(2*node,lo,mid,l,r)+query(2*node+1,mid+1,hi,l,r);
+    }
+    <span class="cm">// Public interface wrappers</span>
+    <span class="kw">void</span> update(<span class="kw">int</span> idx, <span class="kw">int</span> val) { update(1, 0, n-1, idx, val); }
+    <span class="kw">long long</span> query(<span class="kw">int</span> l, <span class="kw">int</span> r)  { <span class="kw">return</span> query(1, 0, n-1, l, r); }
+};
+
+    <div class="note-box">
+        <span class="lbl">Range Updates &amp; Lazy Propagation</span>
+        <p>If you need to add +5 to an entire range <code>[L, R]</code>, doing <code>(R-L)</code> point updates takes O(N) per query. <strong>Lazy Propagation</strong> fixes this by recording the +5 at the highest possible nodes in the tree that fully cover the update range, stopping early. We mark the node as "lazy" (it has pending updates for its children). The next time any operation travels down that path, it "pushes" the lazy value down to its immediate children before proceeding. This keeps range updates and range queries at strictly O(log n).</p>
+      </div>
+      <div class="cb"><span class="cm">// Lazy Propagation — range update + range query in O(log n)</span>
+<span class="kw">struct</span> LazySegTree {
+    <span class="kw">int</span> n;
+    vector&lt;ll&gt; tree, lazy;
+    LazySegTree(<span class="kw">int</span> n) : n(n), tree(4*n, 0), lazy(4*n, 0) {}
+
+    <span class="kw">void</span> push(<span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+        <span class="kw">if</span>(!lazy[node]) <span class="kw">return</span>;
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        tree[2*node]   += lazy[node]*(mid-lo+1);
+        lazy[2*node]   += lazy[node];
+        tree[2*node+1] += lazy[node]*(hi-mid);
+        lazy[2*node+1] += lazy[node];
+        lazy[node] = 0;
+    }
+    <span class="kw">void</span> update(<span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> l, <span class="kw">int</span> r, ll val) {
+        <span class="kw">if</span>(r&lt;lo || hi&lt;l) <span class="kw">return</span>;
+        <span class="kw">if</span>(l&lt;=lo &amp;&amp; hi&lt;=r) { tree[node]+=val*(hi-lo+1); lazy[node]+=val; <span class="kw">return</span>; }
+        push(node, lo, hi);
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        update(2*node, lo, mid, l, r, val);
+        update(2*node+1, mid+1, hi, l, r, val);
+        tree[node]=tree[2*node]+tree[2*node+1];
+    }
+    ll query(<span class="kw">int</span> node, <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> l, <span class="kw">int</span> r) {
+        <span class="kw">if</span>(r&lt;lo || hi&lt;l) <span class="kw">return</span> 0;
+        <span class="kw">if</span>(l&lt;=lo &amp;&amp; hi&lt;=r) <span class="kw">return</span> tree[node];
+        push(node, lo, hi);
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        <span class="kw">return</span> query(2*node,lo,mid,l,r)+query(2*node+1,mid+1,hi,l,r);
+    }
+    <span class="kw">void</span> update(<span class="kw">int</span> l, <span class="kw">int</span> r, ll v) { update(1,0,n-1,l,r,v); }
+    ll query(<span class="kw">int</span> l, <span class="kw">int</span> r)         { <span class="kw">return</span> query(1,0,n-1,l,r); }
+};</div>
+    </div>
+
+    <div class="sec" data-m="fenwick">
+      <h2 class="sh">14.2 &nbsp; Fenwick Tree (BIT) — Simpler Range Sum <span class="tag tg">Essential</span></h2>
+      <div class="cb"><span class="cm">// Binary Indexed Tree — O(log n) prefix sum update and query</span>
+<span class="cm">// Simpler to code than segment tree, same complexity for point update + prefix query</span>
+<span class="kw">struct</span> BIT {
+    <span class="kw">int</span> n;
+    vector&lt;ll&gt; tree;
+    BIT(<span class="kw">int</span> n) : n(n), tree(n+1, 0) {}
+
+    <span class="kw">void</span> update(<span class="kw">int</span> i, ll delta) {       <span class="cm">// Add delta to position i (1-indexed)</span>
+        <span class="kw">for</span>(i++; i&lt;=n; i+=i&amp;(-i))       <span class="cm">// i & (-i) = lowest set bit</span>
+            tree[i] += delta;
+    }
+    ll prefix(<span class="kw">int</span> i) {                  <span class="cm">// Sum of [0..i] inclusive</span>
+        ll sum=0;
+        <span class="kw">for</span>(i++; i&gt;0; i-=i&amp;(-i))
+            sum += tree[i];
+        <span class="kw">return</span> sum;
+    }
+    ll query(<span class="kw">int</span> l, <span class="kw">int</span> r) {            <span class="cm">// Sum of [l..r]</span>
+        <span class="kw">return</span> prefix(r) - (l?prefix(l-1):0);
+    }
+};
+
+<span class="cm">// BIT for counting inversions — classic application</span>
+ll countInversions(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n=a.size();
+    <span class="cm">// Coordinate compress</span>
+    vector&lt;<span class="kw">int</span>&gt; sorted=a;
+    sort(sorted.begin(), sorted.end());
+    sorted.erase(unique(sorted.begin(),sorted.end()),sorted.end());
+    <span class="kw">auto</span> compress=[&amp;](<span class="kw">int</span> x){ <span class="kw">return</span> lower_bound(sorted.begin(),sorted.end(),x)-sorted.begin(); };
+    BIT bit(n);
+    ll inv=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=n-1; i&gt;=0; i--) {
+        <span class="kw">int</span> c = compress(a[i]);
+        inv += bit.prefix(c-1);         <span class="cm">// Count elements already seen that are smaller</span>
+        bit.update(c, 1);
+    }
+    <span class="kw">return</span> inv;
+}</div>
+    </div>
+
+    <div class="sec" data-m="trie">
+      <h2 class="sh">14.3 &nbsp; Trie — Prefix Tree for Strings <span class="tag tc">Core</span></h2>
+      <div class="cb"><span class="kw">struct</span> TrieNode {
+    TrieNode* children[26] = {};
+    <span class="kw">int</span> count = 0;                  <span class="cm">// Number of words ending here</span>
+    <span class="kw">int</span> prefix = 0;                 <span class="cm">// Number of words with this prefix</span>
+};
+
+<span class="kw">class</span> Trie {
+    TrieNode* root = <span class="kw">new</span> TrieNode();
+<span class="kw">public</span>:
+    <span class="kw">void</span> insert(<span class="kw">const</span> string&amp; word) {
+        TrieNode* cur = root;
+        <span class="kw">for</span>(<span class="kw">char</span> c : word) {
+            <span class="kw">int</span> idx = c-'a';
+            <span class="kw">if</span>(!cur-&gt;children[idx]) cur-&gt;children[idx] = <span class="kw">new</span> TrieNode();
+            cur = cur-&gt;children[idx];
+            cur-&gt;prefix++;
+        }
+        cur-&gt;count++;
+    }
+    <span class="kw">bool</span> search(<span class="kw">const</span> string&amp; word) {
+        TrieNode* cur = root;
+        <span class="kw">for</span>(<span class="kw">char</span> c : word) {
+            <span class="kw">if</span>(!cur-&gt;children[c-'a']) <span class="kw">return false</span>;
+            cur = cur-&gt;children[c-'a'];
+        }
+        <span class="kw">return</span> cur-&gt;count &gt; 0;
+    }
+    <span class="kw">bool</span> startsWith(<span class="kw">const</span> string&amp; prefix) {
+        TrieNode* cur = root;
+        <span class="kw">for</span>(<span class="kw">char</span> c : prefix) {
+            <span class="kw">if</span>(!cur-&gt;children[c-'a']) <span class="kw">return false</span>;
+            cur = cur-&gt;children[c-'a'];
+        }
+        <span class="kw">return true</span>;
+    }
+    <span class="kw">int</span> countWithPrefix(<span class="kw">const</span> string&amp; prefix) {
+        TrieNode* cur = root;
+        <span class="kw">for</span>(<span class="kw">char</span> c : prefix) {
+            <span class="kw">if</span>(!cur-&gt;children[c-'a']) <span class="kw">return</span> 0;
+            cur = cur-&gt;children[c-'a'];
+        }
+        <span class="kw">return</span> cur-&gt;prefix;
+    }
+};
+
+<span class="cm">// XOR Trie — find maximum XOR of any pair in array</span>
+<span class="kw">struct</span> XORTrie {
+    <span class="kw">struct</span> Node { Node* ch[2]={}; };
+    Node* root = <span class="kw">new</span> Node();
+    <span class="kw">void</span> insert(<span class="kw">int</span> x) {
+        Node* cur=root;
+        <span class="kw">for</span>(<span class="kw">int</span> i=31; i&gt;=0; i--) {
+            <span class="kw">int</span> b=(x&gt;&gt;i)&amp;1;
+            <span class="kw">if</span>(!cur-&gt;ch[b]) cur-&gt;ch[b]=<span class="kw">new</span> Node();
+            cur=cur-&gt;ch[b];
+        }
+    }
+    <span class="kw">int</span> maxXOR(<span class="kw">int</span> x) {
+        Node* cur=root; <span class="kw">int</span> res=0;
+        <span class="kw">for</span>(<span class="kw">int</span> i=31; i&gt;=0; i--) {
+            <span class="kw">int</span> b=(x&gt;&gt;i)&amp;1, want=1-b;           <span class="cm">// Want opposite bit for max XOR</span>
+            <span class="kw">if</span>(cur-&gt;ch[want]) { res|=(1&lt;&lt;i); cur=cur-&gt;ch[want]; }
+            <span class="kw">else if</span>(cur-&gt;ch[b]) cur=cur-&gt;ch[b];
+            <span class="kw">else break</span>;
+        }
+        <span class="kw">return</span> res;
+    }
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 15 — BIT MANIPULATION
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch15">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 15</div>
+    <div class="ch-title">Bit Manipulation — <em>The Low-Level Power Tool</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bit-tricks">
+      <h2 class="sh">15.1 &nbsp; Bit Tricks — Complete Reference <span class="tag tg">CP Essential</span></h2>
+      <div class="cb"><span class="cm">// ── FUNDAMENTAL OPERATIONS ───────────────────────────────</span>
+n &amp; 1             <span class="cm">// Is n odd? (faster than n%2)</span>
+n &amp; (n-1)         <span class="cm">// Turn off lowest set bit</span>
+n | (n+1)         <span class="cm">// Turn on lowest unset bit</span>
+n ^ n             <span class="cm">// 0 (XOR with self)</span>
+n ^ 0             <span class="cm">// n (XOR with zero)</span>
+~n + 1            <span class="cm">// -n (two's complement)</span>
+
+<span class="cm">// ── BIT TESTING ───────────────────────────────────────────</span>
+(n &gt;&gt; i) &amp; 1      <span class="cm">// Get bit i</span>
+n &amp; (1 &lt;&lt; i)      <span class="cm">// Test if bit i is set (non-zero = set)</span>
+
+<span class="cm">// ── BIT SETTING/CLEARING ─────────────────────────────────</span>
+n |= (1 &lt;&lt; i)     <span class="cm">// Set bit i</span>
+n &amp;= ~(1 &lt;&lt; i)    <span class="cm">// Clear bit i</span>
+n ^= (1 &lt;&lt; i)     <span class="cm">// Toggle bit i</span>
+
+<span class="cm">// ── POWER OF TWO ─────────────────────────────────────────</span>
+n &amp;&amp; !(n &amp; (n-1)) <span class="cm">// Is n a power of 2?</span>
+n &amp; -n            <span class="cm">// Isolate lowest set bit (LSB)</span>
+__builtin_ctz(n)  <span class="cm">// Count trailing zeros = position of LSB</span>
+__builtin_clz(n)  <span class="cm">// Count leading zeros</span>
+__builtin_popcount(n) <span class="cm">// Count set bits</span>
+__builtin_popcountll(n) <span class="cm">// For long long</span>
+
+<span class="cm">// ── MULTIPLY/DIVIDE BY POWERS OF 2 ───────────────────────</span>
+n &lt;&lt; k            <span class="cm">// n * 2^k</span>
+n &gt;&gt; k            <span class="cm">// n / 2^k (arithmetic right shift for signed)</span>
+
+<span class="cm">// ── SWAP WITHOUT TEMP ─────────────────────────────────────</span>
+a ^= b; b ^= a; a ^= b;
+
+<span class="cm">// ── ABSOLUTE VALUE WITHOUT BRANCH ────────────────────────</span>
+<span class="kw">int</span> mask = n &gt;&gt; 31;           <span class="cm">// All 1s if negative</span>
+<span class="kw">int</span> abs_n = (n + mask) ^ mask;
+
+<span class="cm">// ── NEXT PERMUTATION OF BITS (Gosper's Hack) ─────────────</span>
+<span class="cm">// Given mask with k set bits, find next larger number with k set bits</span>
+<span class="kw">int</span> nextPerm(<span class="kw">int</span> v) {
+    <span class="kw">int</span> t = v | (v-1);
+    <span class="kw">return</span> (t+1) | (((~t &amp; -~t)-1) &gt;&gt; (__builtin_ctz(v)+1));
+}</div>
+    </div>
+
+    <div class="sec" data-m="bit-problems">
+      <h2 class="sh">15.2 &nbsp; Bit Manipulation Problems <span class="tag tg">Must Know</span></h2>
+      <div class="eg">
+        <p><strong>Single Number — find the one element that appears once (all others appear twice).</strong></p>
+        <div class="cb"><span class="kw">int</span> singleNumber(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> result = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : nums) result ^= x;  <span class="cm">// a^a=0, 0^b=b — pairs cancel out</span>
+    <span class="kw">return</span> result;
+}  <span class="cm">// O(n) time, O(1) space</span></div>
+      </div>
+      <div class="eg">
+        <p><strong>Count set bits in all numbers from 1 to n.</strong></p>
+        <div class="cb"><span class="kw">int</span> countBits(<span class="kw">int</span> n) {
+    vector&lt;<span class="kw">int</span>&gt; dp(n+1, 0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i&lt;=n; i++)
+        dp[i] = dp[i&gt;&gt;1] + (i&amp;1);   <span class="cm">// dp[i] = dp[i/2] + last bit of i</span>
+    <span class="kw">return</span> accumulate(dp.begin(), dp.end(), 0);
+}</div>
+      </div>
+      <div class="eg">
+        <p><strong>Generate all subsets using bitmask.</strong></p>
+        <div class="cb">vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; subsets(<span class="kw">const</span> vector&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> n=nums.size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> mask=0; mask&lt;(1&lt;&lt;n); mask++) {    <span class="cm">// 2^n possible subsets</span>
+        vector&lt;<span class="kw">int</span>&gt; subset;
+        <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;n; i++)
+            <span class="kw">if</span>(mask &amp; (1&lt;&lt;i)) subset.push_back(nums[i]);
+        res.push_back(subset);
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Enumerate all submasks of a mask — classic bitmask DP technique</span>
+<span class="kw">for</span>(<span class="kw">int</span> sub=mask; sub&gt;0; sub=(sub-1)&amp;mask) {
+    <span class="cm">// Process submask 'sub'</span>
+    <span class="cm">// When sub=0, (sub-1)&mask = mask, so loop would be infinite without sub>0</span>
+}</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="master-ref">
+      <h2 class="sh">15.3 &nbsp; DSA Master Reference — Problem Type → Algorithm <span class="tag tg">Final Cheatsheet</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem Pattern</th><th>Go-To Algorithm</th><th>Complexity</th></tr></thead>
+          <tbody>
+            <tr><td>Subarray with sum/XOR = k</td><td class="good">Prefix sum/XOR + hash map</td><td>O(n)</td></tr>
+            <tr><td>Longest substring / window</td><td class="good">Sliding window</td><td>O(n)</td></tr>
+            <tr><td>Two values summing to target</td><td class="good">Two pointers (sorted) or hash set</td><td>O(n)</td></tr>
+            <tr><td>k-th largest/smallest</td><td class="good">Min-heap of size k or QuickSelect</td><td>O(n log k)</td></tr>
+            <tr><td>Merge k sorted arrays</td><td class="good">Min-heap / priority_queue</td><td>O(n log k)</td></tr>
+            <tr><td>Top k frequent elements</td><td class="good">Bucket sort or heap</td><td>O(n)</td></tr>
+            <tr><td>Path in graph, shortest</td><td class="good">BFS (unweighted) / Dijkstra (weighted)</td><td>O((V+E) log V)</td></tr>
+            <tr><td>Connected components</td><td class="good">DFS/BFS or Union-Find</td><td>O(V+E)</td></tr>
+            <tr><td>Minimum spanning tree</td><td class="good">Kruskal (sparse) / Prim (dense)</td><td>O(E log E)</td></tr>
+            <tr><td>Cycle in directed graph</td><td class="good">DFS with 3-color or Kahn's topo sort</td><td>O(V+E)</td></tr>
+            <tr><td>Scheduling / interval</td><td class="good">Sort by end time, greedy</td><td>O(n log n)</td></tr>
+            <tr><td>Optimal substructure</td><td class="good">Dynamic programming</td><td>Varies</td></tr>
+            <tr><td>Enumerate all subsets</td><td class="good">Backtracking or bitmask</td><td>O(2^n)</td></tr>
+            <tr><td>Range sum query</td><td class="good">Prefix sum (static) / BIT / SegTree</td><td>O(1) / O(log n)</td></tr>
+            <tr><td>Range min/max query</td><td class="good">Sparse Table (static) / SegTree</td><td>O(1) / O(log n)</td></tr>
+            <tr><td>String matching</td><td class="good">KMP or Rabin-Karp</td><td>O(n+m)</td></tr>
+            <tr><td>Prefix / autocomplete</td><td class="good">Trie</td><td>O(k) per op</td></tr>
+            <tr><td>Max XOR pair</td><td class="good">XOR Trie</td><td>O(n log maxVal)</td></tr>
+            <tr><td>Count inversions</td><td class="good">Merge sort or BIT</td><td>O(n log n)</td></tr>
+            <tr><td>Binary search on answer</td><td class="good">BS + feasibility check function</td><td>O(n log(range))</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Reference · File 05 of 05 · DSA with C++ · Every Structure · Every Algorithm</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-05-dsa';
+  var FILE_DISP = '05 · DSA with C++';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

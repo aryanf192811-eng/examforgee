@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Organization — CPU, ISA, Pipelining & Memory Hierarchy · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+.cb .hi{background:var(--hl-y);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+/* Pipeline diagram */
+.pipe-table{overflow-x:auto;margin:14px 0;}
+.pipe-table table{font-family:'Courier New',monospace;font-size:13px;}
+.pipe-table th{font-family:var(--hand);font-size:11px;text-align:center;padding:7px 10px;background:var(--ink);color:var(--paper);}
+.pipe-table td{padding:6px 10px;text-align:center;border:1px solid #d0c0a0;font-size:13px;}
+.pipe-table .IF{background:rgba(26,74,140,0.12);} .pipe-table .ID{background:rgba(26,107,58,0.12);}
+.pipe-table .EX{background:rgba(184,90,16,0.12);} .pipe-table .MA{background:rgba(90,26,138,0.12);}
+.pipe-table .WB{background:rgba(13,122,106,0.12);} .pipe-table .ST{background:rgba(220,60,60,0.08);}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Computer Organization &amp; Architecture</div>
+    <h1>CPU, ISA, Pipelining<br><em>&amp; Memory Hierarchy</em></h1>
+    <p class="cover-desc">
+      CPU datapath and control, instruction set design (RISC vs CISC, addressing modes), the complete 5-stage pipeline with hazards and forwarding, cache memory (direct mapped, set-associative, fully-associative), and the full memory hierarchy — every formula derived, every pipeline trace worked, every GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · CPU Datapath &amp; Control Unit</span>
+      <span class="chip">Ch 2 · Instruction Set Architecture</span>
+      <span class="chip">Ch 3 · Addressing Modes</span>
+      <span class="chip">Ch 4 · CPU Performance &amp; Amdahl's Law</span>
+      <span class="chip">Ch 5 · Pipelining — Stages &amp; Hazards</span>
+      <span class="chip">Ch 6 · Cache Memory</span>
+      <span class="chip">Ch 7 · Memory Hierarchy &amp; Virtual Memory</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>CPU Datapath &amp; Control Unit</a>
+    <a href="#ch2"><span class="tn">02</span>Instruction Set Architecture (ISA)</a>
+    <a href="#ch3"><span class="tn">03</span>Addressing Modes</a>
+    <a href="#ch4"><span class="tn">04</span>CPU Performance &amp; Amdahl's Law</a>
+    <a href="#ch5"><span class="tn">05</span>Pipelining — Stages, Hazards &amp; Forwarding</a>
+    <a href="#ch6"><span class="tn">06</span>Cache Memory</a>
+    <a href="#ch7"><span class="tn">07</span>Memory Hierarchy &amp; I/O</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — CPU DATAPATH ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">CPU Datapath <em>&amp; Control Unit</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="cpu-components">
+      <h2 class="sh">1.1 &nbsp; CPU Architecture — Core Components <span class="tag tc">Core</span></h2>
+      <p>
+        The CPU is responsible for fetching, decoding, and executing instructions. Its core components form the datapath and control path.
+      </p>
+
+      <div class="gv">
+        <span class="dv-label">Simplified CPU Datapath</span>
+┌──────────────────────────────────────────────────────────┐
+│                        CPU                               │
+│                                                          │
+│  ┌──────┐  instruction  ┌──────────┐   control signals  │
+│  │  PC  │──────────────→│  Control │──────────────────→ │
+│  └──┬───┘               │   Unit   │                    │
+│     │ address           └──────────┘                    │
+│     ↓                                                    │
+│  ┌──────────────┐  data/instr   ┌─────────┐             │
+│  │ Instruction  │──────────────→│Register │             │
+│  │    Memory    │               │  File   │←── WB       │
+│  └──────────────┘               └────┬────┘             │
+│                                      │ operands          │
+│  ┌──────────────┐  result       ┌────↓────┐             │
+│  │    Data      │←──────────────│   ALU   │             │
+│  │    Memory    │──────────────→│         │             │
+│  └──────────────┘               └─────────┘             │
+└──────────────────────────────────────────────────────────┘
+
+Key registers:
+  PC  (Program Counter):   address of next instruction
+  IR  (Instruction Reg):   currently executing instruction
+  MAR (Memory Address Reg): address being accessed in memory
+  MDR (Memory Data Reg):   data read from / to be written to memory
+  ACC (Accumulator):       ALU result in accumulator-based ISAs
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Instruction Cycle — Fetch-Decode-Execute</span>
+        <p>
+          <strong>Fetch:</strong> PC → MAR. Read instruction from memory → MDR → IR. PC ← PC + instruction_size.<br>
+          <strong>Decode:</strong> Control unit interprets opcode in IR. Determines operation, operand locations, addressing mode.<br>
+          <strong>Execute:</strong> ALU performs operation. Result written to register or memory. PC updated (for branches).
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="control-unit">
+      <h2 class="sh">1.2 &nbsp; Hardwired vs Microprogrammed Control <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Hardwired Control</th><th>Microprogrammed Control</th></tr></thead>
+          <tbody>
+            <tr><td>Implementation</td><td>Digital logic circuits (gates, FFs)</td><td>Microprogram stored in control memory (ROM)</td></tr>
+            <tr><td>Speed</td><td class="good">Fast</td><td class="bad">Slower (ROM access per cycle)</td></tr>
+            <tr><td>Flexibility</td><td class="bad">Hard to modify — hardware change needed</td><td class="good">Easy to modify — update control memory</td></tr>
+            <tr><td>Complexity</td><td class="bad">Complex for rich ISAs</td><td class="good">Manages complex ISAs cleanly</td></tr>
+            <tr><td>Used in</td><td>RISC processors (simple ISAs)</td><td>CISC processors (x86, complex ISAs)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Microprogramming</span>
+        <p>Each machine instruction is implemented as a sequence of <strong>microinstructions</strong> stored in control memory. The <strong>microprogram counter (μPC)</strong> steps through the microinstructions for each machine instruction. Each microinstruction generates the exact combination of control signals for one clock cycle. Allows complex instructions to be implemented without complex combinational logic.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — ISA ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Instruction Set Architecture — <em>RISC, CISC &amp; Instruction Format</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="risc-cisc">
+      <h2 class="sh">2.1 &nbsp; RISC vs CISC <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>RISC</th><th>CISC</th></tr></thead>
+          <tbody>
+            <tr><td>Instruction complexity</td><td>Simple, fixed-format instructions</td><td>Complex, variable-length instructions</td></tr>
+            <tr><td>Instruction count</td><td>Small (30–100 instructions)</td><td>Large (hundreds of instructions)</td></tr>
+            <tr><td>Instruction size</td><td>Fixed (usually 32-bit)</td><td>Variable (1–15 bytes in x86)</td></tr>
+            <tr><td>Execution time</td><td class="good">1 cycle per instruction (ideal)</td><td class="bad">Variable cycles per instruction</td></tr>
+            <tr><td>Memory access</td><td>Load/Store only (Register-to-Register ops)</td><td>Memory operands in ALU instructions</td></tr>
+            <tr><td>Registers</td><td class="good">Many (32+)</td><td class="bad">Few (8 in x86-32)</td></tr>
+            <tr><td>Pipeline-friendly</td><td class="good">Yes — simple uniform instructions</td><td class="bad">Harder — variable-length decode</td></tr>
+            <tr><td>Control unit</td><td>Hardwired (fast)</td><td>Microprogrammed (flexible)</td></tr>
+            <tr><td>Examples</td><td>MIPS, ARM, RISC-V, SPARC, PowerPC</td><td>x86, x86-64, VAX</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">RISC Philosophy — Simplicity Enables Speed</span>
+        <p>RISC designers recognized that compilers rarely use complex CISC instructions, so hardware complexity was wasted. By making every instruction simple (one clock cycle, fixed format, load/store only), every instruction could be pipelined efficiently. The "missing" complex operations are synthesized by the compiler as sequences of simple instructions — and the simple instructions execute so fast that the overall performance is better. Modern x86 chips actually translate CISC instructions to RISC-like micro-ops internally.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="instruction-format">
+      <h2 class="sh">2.2 &nbsp; Instruction Format &amp; Encoding <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="gv">
+        <span class="dv-label">Typical RISC Instruction Formats (32-bit)</span>
+R-type (Register):  [opcode 6][rs 5][rt 5][rd 5][shamt 5][funct 6]
+  Used for: ADD rd, rs, rt  (rd ← rs + rt)
+
+I-type (Immediate): [opcode 6][rs 5][rt 5][immediate 16]
+  Used for: ADDI rt, rs, imm  (rt ← rs + sign_extend(imm))
+            LW rt, offset(rs)  (rt ← Memory[rs + offset])
+            BEQ rs, rt, offset  (if rs==rt: PC ← PC+4+offset×4)
+
+J-type (Jump):      [opcode 6][target address 26]
+  Used for: J target  (PC ← {PC[31:28], target, 00})
+      </div>
+
+      <div class="eg">
+        <p><strong>How many instructions can a 32-bit ISA encode if opcode is 6 bits?</strong></p>
+        <p>2⁶ = 64 distinct opcodes (operation types). Each opcode then uses remaining bits for operands. RISC typically uses 6-bit opcode + addressing in remaining 26 bits.</p>
+      </div>
+
+      <h3 class="ssh">Instruction Types by Operand Count</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Format</th><th>Example</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>Zero-address (Stack)</td><td>opcode</td><td>PUSH, POP, ADD</td><td>All operands implicit on stack. Compact code.</td></tr>
+            <tr><td>One-address (Accumulator)</td><td>opcode operand</td><td>LOAD A, ADD A</td><td>ACC is implicit second operand/destination.</td></tr>
+            <tr><td>Two-address</td><td>opcode dst, src</td><td>ADD AX, BX</td><td>Source or destination may be in memory (CISC).</td></tr>
+            <tr><td>Three-address</td><td>opcode dst, src1, src2</td><td>ADD R1, R2, R3</td><td>All explicit — most flexible. RISC standard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — ADDRESSING MODES ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Addressing Modes — <em>How Operands Are Located</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="addressing">
+      <h2 class="sh">3.1 &nbsp; All Addressing Modes <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Mode</th><th>Effective Address / Operand</th><th>Example</th><th>Use Case</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Immediate</strong></td><td>Operand IS the literal value in instruction</td><td>ADD R1, #5 (adds 5 directly)</td><td>Constants, small literals. Fast (no memory access).</td></tr>
+            <tr><td><strong>Register</strong></td><td>Operand in specified register</td><td>ADD R1, R2</td><td>Most frequent — fastest (no memory).</td></tr>
+            <tr><td><strong>Direct (Absolute)</strong></td><td>EA = address field in instruction</td><td>LOAD R1, 2000</td><td>Global variables at fixed addresses.</td></tr>
+            <tr><td><strong>Indirect</strong></td><td>EA = Memory[address field]</td><td>LOAD R1, (2000)</td><td>Pointer dereference. One extra memory access.</td></tr>
+            <tr><td><strong>Register Indirect</strong></td><td>EA = register value</td><td>LOAD R1, (R2)</td><td>Pointer in register. Array access, linked lists.</td></tr>
+            <tr><td><strong>Register + Displacement (Base)</strong></td><td>EA = register + constant offset</td><td>LOAD R1, 8(R2)</td><td>Struct field access, stack frames. Most common in RISC.</td></tr>
+            <tr><td><strong>Indexed</strong></td><td>EA = base register + index register</td><td>LOAD R1, (R2+R3)</td><td>Array element access with variable index.</td></tr>
+            <tr><td><strong>PC-Relative</strong></td><td>EA = PC + constant offset</td><td>BEQ label (branch)</td><td>Branch instructions. Position-independent code.</td></tr>
+            <tr><td><strong>Auto-increment</strong></td><td>EA = register; register ← register + size</td><td>LOAD R1, (R2)+</td><td>Sequential array traversal.</td></tr>
+            <tr><td><strong>Auto-decrement</strong></td><td>register ← register − size; EA = register</td><td>LOAD R1, −(R2)</td><td>Stack operations (push: decrement then store).</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Effective address calculation — key GATE patterns:</strong></p>
+        <div class="cb">Instruction: LOAD R1, 100(R2)   where R2 = 300
+EA = R2 + 100 = 300 + 100 = 400
+Operand = Memory[400]
+
+Instruction: LOAD R1, @200   (indirect)
+EA = Memory[200]  (say Memory[200] = 500)
+Operand = Memory[500]
+
+Instruction: LOAD R1, (R2)+  (auto-increment, R2=1000, word size=4)
+Operand = Memory[1000]
+After: R2 = 1004
+
+Multiple levels of indirection (double indirect):
+  EA = Memory[Memory[address_field]]  ← two memory lookups before data</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Number of Memory Accesses Per Addressing Mode</span>
+        <p>Immediate: 0 extra (operand in instruction). Register: 0 extra (operand in register). Direct: 1 (fetch from memory). Register indirect: 1 (fetch from address in register). Indirect: 2 (fetch pointer, then fetch data). Each level of indirection adds one memory access. GATE frequently asks: "How many memory accesses for this instruction?"</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — CPU PERFORMANCE ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">CPU Performance <em>&amp; Amdahl's Law</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="performance-metrics">
+      <h2 class="sh">4.1 &nbsp; Performance Metrics &amp; Formulas <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Core CPU Performance Equation</span>
+        <p>
+          <strong>CPU Time = IC × CPI × T_clock</strong><br><br>
+          IC = Instruction Count (number of instructions executed)<br>
+          CPI = Cycles Per Instruction (average)<br>
+          T_clock = Clock cycle time = 1 / Clock frequency<br><br>
+          <strong>CPU Time = IC × CPI / f</strong><br>
+          where f = clock frequency in Hz.
+        </p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">MIPS — Millions of Instructions Per Second</span>
+        <p>MIPS = f / (CPI × 10⁶) = IC / (CPU_Time × 10⁶)<br>
+        MIPS is misleading as a performance metric — different ISAs have different instruction counts for the same task. A faster MIPS machine might be slower for real programs if it needs more instructions. GATE asks for MIPS calculations but also tests this conceptual limitation.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>CPU performance calculation:</strong></p>
+        <div class="cb">Program runs on 2 GHz CPU. IC = 10⁹ instructions. CPI = 2.
+
+CPU Time = IC × CPI × T_clock
+         = 10⁹ × 2 × (1/2×10⁹)
+         = 10⁹ × 2 / (2×10⁹)
+         = 1 second
+
+MIPS = 2×10⁹ / (2 × 10⁶) = 1000 MIPS
+
+If we upgrade to 4 GHz same CPU (same CPI=2):
+CPU Time = 10⁹ × 2 / (4×10⁹) = 0.5 seconds (2× speedup)
+
+If instead we optimize compiler to reduce CPI to 1.5 (same 2 GHz):
+CPU Time = 10⁹ × 1.5 / (2×10⁹) = 0.75 seconds (1.33× speedup)</div>
+      </div>
+
+      <h3 class="ssh">Weighted Average CPI</h3>
+      <div class="def-box">
+        <span class="lbl">Mixed-Instruction CPI</span>
+        <p>If a program uses different instruction types with different CPIs and frequencies:<br>
+        CPI_avg = Σ (fraction_i × CPI_i)<br>
+        where fraction_i = fraction of instructions of type i.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Program: 40% ALU (CPI=1), 30% Load (CPI=2), 20% Store (CPI=2), 10% Branch (CPI=3):</strong></p>
+        <div class="cb">CPI_avg = 0.40×1 + 0.30×2 + 0.20×2 + 0.10×3
+        = 0.40 + 0.60 + 0.40 + 0.30 = 1.70
+
+On 1 GHz processor running 10⁶ instructions:
+CPU Time = 10⁶ × 1.70 / 10⁹ = 1.7 ms</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="amdahls-law">
+      <h2 class="sh">4.2 &nbsp; Amdahl's Law <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Amdahl's Law</span>
+        <p>If a fraction f of a program can be sped up by a factor S, the overall speedup is:<br>
+        <strong>Speedup = 1 / ((1−f) + f/S)</strong><br>
+        As S → ∞: Maximum speedup = 1/(1−f).<br>
+        The non-parallelizable portion (1−f) limits overall improvement — diminishing returns as parallelism increases.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>80% of a program can be parallelized. Maximum speedup with infinite cores?</strong></p>
+        <div class="cb">f = 0.80, S = ∞
+Max speedup = 1 / (1 - 0.80) = 1 / 0.20 = 5×
+
+With 4 cores (S=4):
+Speedup = 1 / ((1-0.80) + 0.80/4) = 1 / (0.20 + 0.20) = 1/0.40 = 2.5×
+
+The sequential 20% creates a hard ceiling of 5× no matter how many cores.
+This is why single-thread performance still matters even for parallel workloads.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Gustafson's Law — The Counter-argument</span>
+        <p>Amdahl's law fixes the problem size — the sequential fraction stays constant. Gustafson argued that with more processors, people typically scale up the problem size, making the parallel fraction grow and the sequential fraction shrink proportionally. Gustafson's Law: Speedup = S + (1−S)×f (linear with processors for scalable workloads). GATE sticks to Amdahl's — but knowing the distinction shows depth.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — PIPELINING ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Pipelining — <em>Stages, Hazards &amp; Forwarding</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pipeline-basics">
+      <h2 class="sh">5.1 &nbsp; Pipeline Concept &amp; Performance <span class="tag tg">Most Tested</span></h2>
+
+      <p>
+        Pipelining overlaps the execution of multiple instructions — while one instruction is being executed, the next is being decoded, and the one after is being fetched. Like an assembly line: multiple items in different stages simultaneously.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Classic 5-Stage RISC Pipeline</span>
+        <p>
+          <strong>IF</strong> — Instruction Fetch: PC → instruction memory, load instruction into IR, PC ← PC+4.<br>
+          <strong>ID</strong> — Instruction Decode / Register Read: decode opcode, read source registers from register file.<br>
+          <strong>EX</strong> — Execute: ALU performs operation (arithmetic, address calculation, branch condition).<br>
+          <strong>MA</strong> — Memory Access: read or write data memory (load/store instructions only).<br>
+          <strong>WB</strong> — Write Back: write ALU result or loaded data to destination register.
+        </p>
+      </div>
+
+      <div class="pipe-table">
+        <table>
+          <thead>
+            <tr><th>Instruction</th><th>CC1</th><th>CC2</th><th>CC3</th><th>CC4</th><th>CC5</th><th>CC6</th><th>CC7</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>I1</td><td class="IF">IF</td><td class="ID">ID</td><td class="EX">EX</td><td class="MA">MA</td><td class="WB">WB</td><td></td><td></td></tr>
+            <tr><td>I2</td><td></td><td class="IF">IF</td><td class="ID">ID</td><td class="EX">EX</td><td class="MA">MA</td><td class="WB">WB</td><td></td></tr>
+            <tr><td>I3</td><td></td><td></td><td class="IF">IF</td><td class="ID">ID</td><td class="EX">EX</td><td class="MA">MA</td><td class="WB">WB</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Pipeline Performance Formulas</span>
+        <p>
+          <strong>Without pipeline:</strong> Time = n × k × t<br>
+          (n = instructions, k = stages, t = stage time)<br><br>
+          <strong>With pipeline (ideal, no hazards):</strong><br>
+          Time = (k + n − 1) × t<br>
+          (k cycles to fill pipeline, then one new instruction completes per cycle)<br><br>
+          <strong>Speedup (ideal):</strong> n×k / (k+n−1)<br>
+          As n → ∞: Speedup → k (stage count) — throughput improvement, not latency.<br><br>
+          <strong>Throughput = 1/t</strong> (one instruction per clock cycle in steady state)<br>
+          <strong>Latency (per instruction) = k×t</strong> (no improvement — same stages to traverse)
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>5-stage pipeline, stage time = 2ns, execute 100 instructions:</strong></p>
+        <div class="cb">Without pipeline: 100 × 5 × 2 = 1000 ns
+With pipeline: (5 + 100 - 1) × 2 = 104 × 2 = 208 ns
+Speedup: 1000/208 ≈ 4.81× (approaches 5× for large n)
+
+Single instruction latency: 5 × 2 = 10 ns (same as without pipeline)
+Pipeline improves THROUGHPUT, not latency of individual instructions.</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Pipeline Improves Throughput, Not Latency</span>
+        <p>A k-stage pipeline takes k cycles to complete ONE instruction — exactly the same as without a pipeline. The benefit is THROUGHPUT: after filling, one instruction completes every cycle instead of every k cycles. "Pipeline makes instructions faster" — false. "Pipeline makes the processor handle more instructions per second" — true. GATE tests this distinction directly.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="hazards">
+      <h2 class="sh">5.2 &nbsp; Pipeline Hazards — Three Types <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Structural Hazard</div>
+          <p>Two instructions need the same hardware resource at the same time. Example: a single memory used for both instruction fetch and data access — a load in MA and a fetch in IF conflict. Solution: separate instruction and data caches (Harvard architecture), or pipeline stall.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Data Hazard</div>
+          <p>An instruction needs data that a previous instruction hasn't produced yet. Three subtypes: RAW (Read After Write — the common one), WAR (Write After Read), WAW (Write After Write). RAW is the most critical.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">Control Hazard</div>
+          <p>Branch outcome not known until EX stage — the pipeline has already fetched and started decoding instructions after the branch that may be wrong. Solution: branch prediction, branch delay slots, flushing.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Data Hazard — RAW in Detail</h3>
+      <div class="eg">
+        <p><strong>RAW hazard: I2 reads R1 before I1 writes R1:</strong></p>
+        <div class="cb">I1: ADD R1, R2, R3    (writes R1 in WB stage — cycle 5)
+I2: SUB R4, R1, R5    (reads R1 in ID stage — cycle 3)
+I3: AND R6, R1, R7    (reads R1 in ID stage — cycle 4)
+
+Without forwarding:
+I2 reads R1 in CC3 (ID), but I1 writes R1 in CC5 (WB).
+I2 reads OLD value of R1. INCORRECT.
+
+Without forwarding, need 2 stall cycles between I1 and I2:
+I1: IF ID EX MA WB
+    stall stall (bubbles/NOPs inserted)
+I2:          IF ID EX MA WB</div>
+      </div>
+
+      <h3 class="ssh">Forwarding (Data Bypassing)</h3>
+      <div class="def-box">
+        <span class="lbl">Forwarding</span>
+        <p>Forward the ALU result directly from the EX/MA/WB pipeline register to the EX stage input — without waiting for WB to write and ID to read the register file. This eliminates most RAW stalls without requiring instruction stalls.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>With forwarding:</strong></p>
+        <div class="cb">I1: ADD R1, R2, R3
+     IF  ID  EX  MA  WB
+                  ↑
+                  │ EX→EX forward: R1 result available after I1's EX
+                  │ Forward to I2's EX input
+I2: SUB R4, R1, R5
+         IF  ID  EX  MA  WB
+                 ↑ receives forwarded R1 ← no stall needed
+
+For LOAD followed immediately by use:
+I1: LOAD R1, 200(R2)   ← R1 available after MA stage
+I2: ADD R4, R1, R5     ← needs R1 at start of EX stage
+
+Pipeline:
+I1: IF ID EX MA WB
+I2:    IF ID ** EX MA WB  ← ONE stall cycle needed (load-use hazard)
+
+Even with forwarding, load-use hazard requires 1 stall.
+MA result available → can forward to next EX, but 1 cycle gap required.</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Load-Use Hazard — 1 Stall Even with Forwarding</span>
+        <p>A LOAD instruction followed immediately by an instruction that uses the loaded value always requires exactly 1 stall cycle — even with full forwarding. The loaded data is available after the MA stage (end of cycle 4), but the next instruction needs it at the start of its EX stage (cycle 4 for no stall). The 1-cycle gap cannot be eliminated without reordering. GATE tests this distinction: ALU→ALU hazards can be fully forwarded; LOAD→USE always needs 1 stall.</p>
+      </div>
+
+      <h3 class="ssh">Control Hazard — Branch Handling</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Strategy</th><th>Description</th><th>Stall cycles (on misprediction)</th></tr></thead>
+          <tbody>
+            <tr><td>Flush (stall)</td><td>Stall pipeline until branch resolves (EX stage). Insert NOPs.</td><td>Always 2 stalls (EX is stage 3, fetch 2 after branch)</td></tr>
+            <tr><td>Predict Not Taken</td><td>Continue fetching sequentially. If branch taken: flush 2 instructions.</td><td>0 if not taken, 2 if taken</td></tr>
+            <tr><td>Predict Taken</td><td>Fetch from branch target immediately. If not taken: flush 2.</td><td>2 if not taken, 0 if taken</td></tr>
+            <tr><td>Branch Delay Slot</td><td>Instruction after branch always executes (MIPS). Compiler fills it with useful work.</td><td>0 (one delay slot instruction)</td></tr>
+            <tr><td>Dynamic Branch Prediction</td><td>Use branch history table (BHT), 2-bit predictor. High accuracy (95%+).</td><td>Full pipeline depth on misprediction</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pipeline-hazard-count">
+      <h2 class="sh">5.3 &nbsp; Hazard Counting — GATE NAT Method <span class="tag tg">Most Tested</span></h2>
+
+      <div class="eg">
+        <p><strong>Count stall cycles for this sequence (5-stage pipeline, full forwarding):</strong></p>
+        <div class="cb">I1: ADD R1, R2, R3
+I2: LOAD R4, 0(R1)    ← uses R1 (output of I1). ALU→ALU: forwarded, no stall.
+I3: SUB R5, R4, R6    ← uses R4 (output of I2 LOAD). Load-use hazard: 1 stall.
+I4: AND R7, R5, R8    ← uses R5 (output of I3 SUB). ALU→ALU: forwarded, no stall.
+I5: BEQ R7, R0, label ← uses R7 (output of I4 AND). ALU→ALU: forwarded, no stall.
+                         Branch itself: 1 stall (branch resolves in EX, fetched 2 wrong, but with
+                         predict-not-taken penalty = stalls if branch taken)
+
+Total data hazard stalls: 1 (between I2 and I3)
+Branch stall: depends on prediction strategy and taken/not-taken
+
+Execution with 1 data stall, no branch stall:
+Cycles = (5 + 5 - 1) + 1 = 10 cycles for 5 instructions (ideal: 9)</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Systematic Hazard Counting</span>
+        <p>For each instruction pair (producer, consumer): (1) Identify if consumer reads a register written by producer. (2) If ALU→ALU: with forwarding, 0 stalls. (3) If LOAD→use: 1 stall regardless. (4) Count stalls from all pairs. Total cycles = (k + n − 1) + total_stalls. GATE NAT questions give an instruction sequence and ask for total execution cycles — apply this method systematically.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — CACHE MEMORY ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Cache Memory — <em>Mapping, Replacement &amp; Performance</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="cache-basics">
+      <h2 class="sh">6.1 &nbsp; Cache Fundamentals &amp; Address Decomposition <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Cache</span>
+        <p>Cache is a small, fast memory between the CPU and main memory. It exploits <strong>temporal locality</strong> (recently accessed data will be accessed again soon) and <strong>spatial locality</strong> (nearby data will be accessed soon) to reduce average memory access time.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Cache Address Decomposition</span>
+        <p>A memory address is split into three fields depending on cache organization:<br>
+        <strong>Tag | Set Index | Block Offset</strong><br>
+        Block offset bits = log₂(block size in bytes)<br>
+        Set index bits = log₂(number of sets)<br>
+        Tag bits = address bits − set index bits − block offset bits</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Cache: 32-entry direct-mapped, block size = 16 bytes, 32-bit addresses.</strong></p>
+        <div class="cb">Block offset bits: log₂(16) = 4 bits (byte within a 16-byte block)
+Set index bits:   log₂(32) = 5 bits (which of the 32 cache lines)
+Tag bits:         32 − 5 − 4 = 23 bits
+
+Address decomposition: [Tag: 23 bits | Index: 5 bits | Offset: 4 bits]
+
+Cache size (data only): 32 lines × 16 bytes = 512 bytes
+Cache size (with tags): 32 × (1 valid bit + 23 tag bits + 16×8 data bits) = 32 × 152 bits</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cache-mapping">
+      <h2 class="sh">6.2 &nbsp; Cache Mapping Techniques <span class="tag tg">Most Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Mapping</th><th>Structure</th><th>Placement</th><th>Conflict misses</th><th>Hardware cost</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Direct Mapped</strong></td><td>1 line per set (1-way)</td><td>Block → exactly one cache line</td><td class="bad">High — only one slot per address mod size</td><td class="good">Low</td></tr>
+            <tr><td><strong>Fully Associative</strong></td><td>1 set of n lines</td><td>Block → any line in cache</td><td class="good">None (only capacity/compulsory)</td><td class="bad">High — compare all tags in parallel</td></tr>
+            <tr><td><strong>k-way Set Associative</strong></td><td>n/k sets of k lines</td><td>Block → any of k lines in its set</td><td class="ok">Reduced</td><td class="ok">Moderate</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Direct-mapped cache: 8 lines (0–7), block size = 1 word. Memory blocks 0–31.</strong></p>
+        <div class="cb">Memory block i maps to cache line: i mod 8
+
+Block 0  → line 0   Block 8  → line 0 (conflict with block 0!)
+Block 1  → line 1   Block 9  → line 1
+...
+Block 7  → line 7   Block 15 → line 7
+
+Access pattern: block 0, block 8, block 0, block 8, ...
+Every access is a miss (thrashing — two blocks competing for same cache line).
+This worst-case pattern doesn't exist with 2-way set associative.</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>2-way set associative: 8 lines in 4 sets of 2 ways each.</strong></p>
+        <div class="cb">Set index = address mod 4 (2 bits)
+Block 0 → set 0 (can go to way 0 or way 1)
+Block 4 → set 0 (same set as block 0)
+Block 8 → set 0 (same set, conflict with 0 and 4)
+
+With 2-way: blocks 0 and 4 can coexist (one per way).
+The thrashing pattern (block 0, 8 alternating) still conflicts (both map to set 0).
+Block 0 and block 4 can now coexist — improvement over direct-mapped.</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cache-performance">
+      <h2 class="sh">6.3 &nbsp; Cache Performance — AMAT Formula <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">AMAT — Average Memory Access Time</span>
+        <p>AMAT = Hit time + Miss rate × Miss penalty<br>
+        Where:<br>
+        <strong>Hit time:</strong> Time to access the cache (assuming hit) — typically 1–4 cycles.<br>
+        <strong>Miss rate:</strong> Fraction of accesses that miss in cache.<br>
+        <strong>Miss penalty:</strong> Additional time to fetch from next level — typically 50–200 cycles for main memory.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>L1 cache: hit time = 2 cycles, miss rate = 5%, miss penalty = 100 cycles.</strong></p>
+        <div class="cb">AMAT = 2 + 0.05 × 100 = 2 + 5 = 7 cycles
+
+Without cache (100 cycle memory): AMAT = 100 cycles.
+Cache gives 100/7 ≈ 14× improvement.
+
+With L2 cache (L1 miss goes to L2):
+AMAT = L1 hit time + L1 miss rate × (L2 hit time + L2 miss rate × Main memory time)
+     = 2 + 0.05 × (10 + 0.20 × 100)
+     = 2 + 0.05 × (10 + 20)
+     = 2 + 0.05 × 30
+     = 2 + 1.5 = 3.5 cycles</div>
+      </div>
+
+      <h3 class="ssh">Three Types of Cache Misses — The 3Cs</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Miss Type</th><th>Cause</th><th>Also called</th><th>Solution</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Compulsory</strong></td><td>First access to a block — never in cache before</td><td>Cold miss</td><td>Prefetching</td></tr>
+            <tr><td><strong>Capacity</strong></td><td>Cache too small to hold all working set blocks</td><td>—</td><td>Larger cache</td></tr>
+            <tr><td><strong>Conflict</strong></td><td>Multiple blocks map to same cache set, evicting each other</td><td>Collision miss</td><td>Higher associativity</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Cache Replacement Policies</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Policy</th><th>Description</th><th>Used in</th></tr></thead>
+          <tbody>
+            <tr><td>LRU (Least Recently Used)</td><td>Evict the block not accessed for the longest time. Best performance. Expensive to implement for high associativity.</td><td>Most real caches (approximations)</td></tr>
+            <tr><td>FIFO</td><td>Evict the oldest-loaded block. Simpler. Can suffer Bélády's anomaly.</td><td>Some TLBs</td></tr>
+            <tr><td>Random</td><td>Evict a random block. Surprisingly effective in practice. Simple hardware.</td><td>ARM processors</td></tr>
+            <tr><td>LFU (Least Frequently Used)</td><td>Evict the block accessed fewest times. Good for non-uniform access patterns.</td><td>Rare in hardware</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Write Policies</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Policy</th><th>On write hit</th><th>On write miss</th><th>Tradeoff</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Write-Through</strong></td><td>Write to both cache and memory immediately</td><td>Write to memory only (no-write-allocate)</td><td>Simple, memory always up-to-date, high memory bandwidth</td></tr>
+            <tr><td><strong>Write-Back</strong></td><td>Write to cache only, mark dirty bit</td><td>Fetch block, update in cache (write-allocate)</td><td>Fewer memory writes, more complex (dirty block tracking)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — MEMORY HIERARCHY ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Memory Hierarchy <em>&amp; I/O</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="memory-hierarchy">
+      <h2 class="sh">7.1 &nbsp; The Memory Hierarchy <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="gv">
+        <span class="dv-label">Memory Hierarchy — Speed vs Cost vs Size</span>
+                  FASTEST, SMALLEST, MOST EXPENSIVE
+                         ┌──────────┐
+                         │Registers │ ~0.3ns, 32-64 × 64-bit words
+                         ├──────────┤
+                         │  L1 Cache│ ~1-4 ns, 16–64 KB
+                         ├──────────┤
+                         │  L2 Cache│ ~4-15 ns, 256 KB – 1 MB
+                         ├──────────┤
+                         │  L3 Cache│ ~20-40 ns, 4–64 MB (shared)
+                         ├──────────┤
+                         │    RAM   │ ~60-100 ns, 4-64 GB
+                         ├──────────┤
+                         │   SSD    │ ~50-150 μs, 256GB-4TB
+                         ├──────────┤
+                         │   HDD    │ ~5-15 ms, 1-20 TB
+                         └──────────┘
+                  SLOWEST, LARGEST, LEAST EXPENSIVE
+
+Access time increases ~10× per level downward.
+Capacity increases ~1000× per level downward.
+      </div>
+
+      <h3 class="ssh">RAM Types</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Full Name</th><th>Key Property</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SRAM</strong></td><td>Static RAM</td><td>6-transistor flip-flop per bit. No refresh needed. Fast. Expensive.</td><td>L1/L2/L3 cache</td></tr>
+            <tr><td><strong>DRAM</strong></td><td>Dynamic RAM</td><td>1-transistor + 1-capacitor per bit. Must be refreshed periodically. Slower, denser, cheaper.</td><td>Main memory (RAM)</td></tr>
+            <tr><td><strong>SDRAM</strong></td><td>Synchronous DRAM</td><td>Synchronized to system clock. Transfers data on clock edges. DDR variants double the rate.</td><td>Modern main memory</td></tr>
+            <tr><td><strong>ROM</strong></td><td>Read-Only Memory</td><td>Non-volatile. Programmed at manufacture (mask ROM) or by user (EPROM, EEPROM, Flash).</td><td>BIOS, firmware, flash storage</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">SRAM vs DRAM — Know the Differences Cold</span>
+        <p>SRAM: fast (1–4 ns), expensive, doesn't need refresh, uses more area (6 transistors/bit). Used in caches. DRAM: slower (60–100 ns), cheap, needs periodic refresh (capacitor leaks charge), denser (1 transistor/bit). Used in main memory. GATE tests: "Which technology is used in cache?" → SRAM. "Which needs refresh?" → DRAM.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="io-systems">
+      <h2 class="sh">7.2 &nbsp; I/O Systems — Programmed, Interrupt &amp; DMA <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>I/O Method</th><th>CPU Involvement</th><th>Mechanism</th><th>Efficiency</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Programmed I/O (Polling)</strong></td><td class="bad">100% — CPU busy waits</td><td>CPU continuously checks status register of I/O device (busy loop)</td><td class="bad">Wastes CPU cycles</td></tr>
+            <tr><td><strong>Interrupt-Driven I/O</strong></td><td class="ok">Only during interrupt handling</td><td>CPU issues I/O command, continues other work. I/O device sends interrupt when done. CPU services interrupt.</td><td class="ok">Better — CPU free during I/O</td></tr>
+            <tr><td><strong>DMA (Direct Memory Access)</strong></td><td class="good">Minimal — only setup and completion</td><td>CPU programs DMA controller with source, destination, count. DMA handles data transfer directly between I/O device and memory without CPU involvement. Interrupt on completion.</td><td class="good">Best — CPU maximally free</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">DMA Operation</span>
+        <p>CPU sets up DMA: source address, destination address, byte count, direction (read/write). DMA controller takes over the system bus and performs the transfer word-by-word or burst-by-burst. During burst DMA, CPU cannot access the bus (cycle stealing or burst mode). On completion, DMA interrupts the CPU. Used for disk transfers, network packets, audio buffers.</p>
+      </div>
+
+      <h3 class="ssh">Memory-Mapped vs Port-Mapped I/O</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Address Space</th><th>Instructions</th><th>Used in</th></tr></thead>
+          <tbody>
+            <tr><td>Memory-Mapped I/O</td><td>I/O devices share memory address space. I/O registers at specific memory addresses.</td><td>Normal LOAD/STORE instructions access I/O</td><td>RISC architectures, ARM</td></tr>
+            <tr><td>Port-Mapped (Isolated) I/O</td><td>Separate I/O address space. I/O devices have port numbers.</td><td>Special IN/OUT instructions (x86)</td><td>x86 architecture</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Pipeline improves latency</td><td>Pipeline improves THROUGHPUT (instructions per second), not latency of a single instruction. A 5-stage pipeline takes 5 cycles per instruction — same latency as non-pipelined. Speedup applies to streams of instructions.</td></tr>
+            <tr><td>2</td><td>All data hazards require stalls</td><td>ALU→ALU RAW hazards are fully resolved by forwarding (0 stalls). LOAD→USE hazards require exactly 1 stall even with forwarding. WAR and WAW are rare and can also be resolved by forwarding/register renaming.</td></tr>
+            <tr><td>3</td><td>More pipeline stages = always better</td><td>More stages increase throughput but also increase: (1) branch misprediction penalty (more stages to flush), (2) hazard stall cycles (data must travel farther), (3) pipeline register overhead. Optimal stage count balances these tradeoffs.</td></tr>
+            <tr><td>4</td><td>Cache size = number of lines × block size</td><td>This gives DATA size only. Total cache size includes tag bits and valid/dirty bits: Total bits = lines × (tag bits + valid bit + dirty bit + block_size × 8). GATE sometimes asks "total bits" — include metadata.</td></tr>
+            <tr><td>5</td><td>Direct mapped: index bits = log₂(cache_size)</td><td>Index bits = log₂(number of lines/sets), NOT log₂(cache_size). For direct-mapped: lines = cache_size / block_size. Set associative: sets = lines / associativity. Always compute number of sets first.</td></tr>
+            <tr><td>6</td><td>Higher associativity always wins</td><td>Higher associativity reduces conflict misses but increases hit time (more tags to compare) and cost. Fully associative has the lowest miss rate but the highest hardware complexity. Real caches use 2-way or 4-way as sweet spots.</td></tr>
+            <tr><td>7</td><td>AMAT = hit rate × hit time + miss rate × miss penalty</td><td>AMAT = hit_time + miss_rate × miss_penalty. Hit time is ALWAYS paid (whether hit or miss). Miss penalty is ADDITIONAL time on a miss. Do NOT multiply hit time by hit rate.</td></tr>
+            <tr><td>8</td><td>RISC has fewer instructions therefore runs faster</td><td>RISC has fewer instruction TYPES but often executes MORE instructions than CISC for the same task (no complex multi-step instructions). RISC wins because its simple instructions execute in 1 cycle and pipeline efficiently — not because it executes fewer instructions.</td></tr>
+            <tr><td>9</td><td>DMA always uses interrupts</td><td>DMA completion generates an interrupt. But during the transfer itself, DMA steals bus cycles from the CPU (cycle stealing) or takes the bus for burst periods. The CPU is NOT interrupted during transfer — only after completion.</td></tr>
+            <tr><td>10</td><td>CPI = 1 always for pipelined processors</td><td>Ideal pipelined CPI = 1. With hazards: CPI > 1. Effective CPI = 1 + stalls_per_instruction. "A 5-stage pipeline with 10% load instructions and 1 load-use stall each: CPI = 1 + 0.10×1 = 1.10."</td></tr>
+            <tr><td>11</td><td>Addressing modes: direct and immediate are the same</td><td>Immediate: operand value IS in the instruction (no memory access). Direct: operand ADDRESS is in the instruction (1 memory access to fetch operand). Completely different. "ADD R1, #5" (immediate, no memory). "ADD R1, 1000" (direct, 1 memory access to address 1000).</td></tr>
+            <tr><td>12</td><td>SRAM is used for main memory</td><td>SRAM is used for CACHE (fast, expensive). DRAM is used for main memory (slower, cheaper, needs refresh). Flash (a type of EEPROM) is used for SSDs and USB drives (non-volatile). These three are tested together very frequently.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Complete Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>CPU Time = IC × CPI / f</td><td>Fundamental performance equation</td></tr>
+            <tr><td>MIPS = f / (CPI × 10⁶)</td><td>Million instructions per second</td></tr>
+            <tr><td>CPI_avg = Σ (frac_i × CPI_i)</td><td>Weighted average CPI</td></tr>
+            <tr><td>Speedup = 1 / ((1−f) + f/S)</td><td>Amdahl's Law</td></tr>
+            <tr><td>Max speedup = 1/(1−f)</td><td>Amdahl's Law, S→∞</td></tr>
+            <tr><td>Pipeline time = (k + n − 1) × t</td><td>k stages, n instructions, t stage time</td></tr>
+            <tr><td>Ideal speedup = n×k / (k+n−1)</td><td>Approaches k as n→∞</td></tr>
+            <tr><td>Effective CPI = 1 + stalls/instruction</td><td>Pipelined CPI with hazards</td></tr>
+            <tr><td>Block offset bits = log₂(block_size)</td><td>Cache address decomposition</td></tr>
+            <tr><td>Set index bits = log₂(number_of_sets)</td><td>Cache address decomposition</td></tr>
+            <tr><td>Tag bits = address_bits − index_bits − offset_bits</td><td>Cache address decomposition</td></tr>
+            <tr><td>AMAT = hit_time + miss_rate × miss_penalty</td><td>Average memory access time</td></tr>
+            <tr><td>AMAT (multi-level) = L1_hit + L1_miss_rate × (L2_hit + L2_miss_rate × Mem)</td><td>Two-level cache AMAT</td></tr>
+            <tr><td>Cache data size = sets × ways × block_size</td><td>Total data capacity</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>CPI calculation NAT:</strong> "40% load (CPI=2), 30% ALU (CPI=1), 30% branch (CPI=3). Find average CPI." 0.4×2+0.3×1+0.3×3=0.8+0.3+0.9=2.0. Then CPU Time = IC×2/f. 2 marks.</li>
+        <li><strong>Amdahl's Law NAT:</strong> "Program: 70% parallelizable. Speedup with 4 processors?" 1/(0.3+0.7/4)=1/(0.3+0.175)=1/0.475≈2.1×. 2 marks.</li>
+        <li><strong>Pipeline cycles NAT:</strong> "5-stage pipeline, 100 instructions, 10 load-use hazards (1 stall each). Total cycles?" (5+100−1)+10=114. 2 marks.</li>
+        <li><strong>Cache address decomposition NAT:</strong> "16KB direct-mapped cache, 32-byte blocks, 32-bit addresses. Number of tag bits?" Sets=16384/32=512. Index=log₂(512)=9. Offset=log₂(32)=5. Tag=32−9−5=18. 2 marks.</li>
+        <li><strong>AMAT NAT:</strong> "L1 hit time=2, miss rate=10%, L2 hit time=8, L2 miss rate=20%, RAM=100 cycles." AMAT=2+0.1×(8+0.2×100)=2+0.1×28=2+2.8=4.8 cycles. 2 marks.</li>
+        <li><strong>Addressing mode MCQ:</strong> "Instruction: LOAD R1, 4(R2). R2=1000. Effective address?" EA=1000+4=1004. "How many memory accesses?" 1 (read from address 1004). 1 mark.</li>
+        <li><strong>Forwarding MCQ:</strong> "With full forwarding, which hazard still requires a stall?" Load-use hazard — 1 stall always required. 1 mark.</li>
+        <li><strong>Cache miss types MCQ:</strong> "First access to a data element always causes which type of miss?" Compulsory (cold) miss. 1 mark.</li>
+        <li><strong>RISC vs CISC MCQ:</strong> "Which ISA type uses load/store architecture?" RISC. "Which uses hardwired control?" RISC. "Which has fixed instruction length?" RISC. 1-mark each.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Computer Organization &amp; Architecture · CPU, ISA, Pipelining &amp; Memory Hierarchy · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

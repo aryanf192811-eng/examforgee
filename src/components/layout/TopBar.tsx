@@ -1,33 +1,64 @@
-import { useThemeStore } from '../../lib/store/themeStore';
-import { useAuthStore } from '../../lib/store/authStore';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../lib/store/authStore';
+import { useTheme } from '../../hooks/useTheme';
+import { getInitials, hashColor } from '../../lib/utils';
+import type { ReactNode } from 'react';
 
-export function TopBar() {
-  const { isDark, toggle } = useThemeStore();
-  const user = useAuthStore((s) => s.user);
+interface TopBarProps {
+  title?: string;
+  headerActions?: ReactNode;
+}
+
+/**
+ * TopBar component — provides contextual actions and branding.
+ */
+export function TopBar({ title, headerActions }: TopBarProps) {
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
+  const { isDark, toggleTheme } = useTheme();
+
+  const userName = user?.name || 'Student';
 
   return (
-    <header className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 glass flex items-center justify-between px-4 border-b border-outline-variant/10">
-      <button onClick={() => navigate('/dashboard')} className="flex items-center gap-2">
-        <span className="font-display text-lg font-semibold text-primary">ExamForge</span>
-      </button>
-
-      <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-30 h-14 flex items-center justify-between px-4 md:px-6 glass">
+      {/* Mobile brand / page title */}
+      <div className="flex items-center gap-3">
         <button
-          onClick={toggle}
-          className="p-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-all"
+          className="md:hidden p-1.5 rounded-lg hover:bg-surface-container transition-colors spring-transition cursor-pointer"
+          onClick={() => navigate('/dashboard')}
         >
-          <span className="material-symbols-outlined text-xl">
+          <span className="material-symbols-outlined text-on-surface text-[22px]">
+            local_library
+          </span>
+        </button>
+        {title && (
+          <h2 className="font-headline text-title-lg text-on-surface hidden sm:block">
+            {title}
+          </h2>
+        )}
+      </div>
+
+      {/* Right actions */}
+      <div className="flex items-center gap-2">
+        {headerActions}
+        
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-xl hover:bg-surface-container transition-colors spring-transition cursor-pointer"
+        >
+          <span className="material-symbols-outlined text-on-surface-variant text-[22px]">
             {isDark ? 'light_mode' : 'dark_mode'}
           </span>
         </button>
 
+        {/* Profile avatar */}
         <button
           onClick={() => navigate('/profile')}
-          className="w-8 h-8 rounded-full academic-gradient flex items-center justify-center text-white text-xs font-bold"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-label-md font-bold text-white shrink-0 cursor-pointer"
+          style={{ backgroundColor: hashColor(userName) }}
         >
-          {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'U'}
+          {getInitials(userName)}
         </button>
       </div>
     </header>

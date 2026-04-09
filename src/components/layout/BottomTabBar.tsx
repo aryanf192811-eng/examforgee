@@ -1,43 +1,54 @@
-import { NavLink } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
-const tabs = [
-  { to: '/dashboard', icon: 'home', label: 'Home' },
-  { to: '/notes', icon: 'description', label: 'Notes' },
-  { to: '/practice', icon: 'quiz', label: 'Practice' },
-  { to: '/skills', icon: 'psychology', label: 'Skills' },
-  { to: '/leaderboard', icon: 'leaderboard', label: 'Rank' },
+interface TabItem {
+  label: string;
+  icon: string;
+  path: string;
+}
+
+const tabs: TabItem[] = [
+  { label: 'Home', icon: 'dashboard', path: '/dashboard' },
+  { label: 'Notes', icon: 'menu_book', path: '/notes' },
+  { label: 'Practice', icon: 'quiz', path: '/practice' },
+  { label: 'Ranks', icon: 'leaderboard', path: '/leaderboard' },
+  { label: 'Profile', icon: 'person', path: '/profile' },
 ];
 
+/**
+ * BottomTabBar component — mobile primary navigation.
+ * Features a glassmorphic aesthetic with reach-optimized touch targets.
+ * Matches the "Atelier" design system's interactive patterns.
+ */
 export function BottomTabBar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 w-full z-50 bg-surface/90 dark:bg-surface/90 backdrop-blur-2xl flex justify-around items-center px-4 pb-6 pt-3 shadow-[0_-10px_40px_rgba(104,52,235,0.08)] rounded-t-3xl border-t border-outline-variant/5">
-      {tabs?.map((tab) => (
-        <NavLink
-          key={tab.to}
-          to={tab.to}
-          className={({ isActive }) =>
-            cn(
-              'flex flex-col items-center justify-center transition-all duration-200',
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 glass flex items-center justify-around px-2 border-t border-outline-variant/10">
+      {tabs.map((tab) => {
+        const isActive = location.pathname.startsWith(tab.path);
+        return (
+          <button
+            key={tab.path}
+            onClick={() => navigate(tab.path)}
+            className={cn(
+              'flex flex-col items-center justify-center gap-0.5 min-w-[56px] py-1 rounded-xl transition-colors spring-transition cursor-pointer',
               isActive
-                ? 'bg-primary/10 text-primary rounded-2xl px-4 py-1'
-                : 'text-on-surface-variant px-4 py-1'
-            )
-          }
-        >
-          {({ isActive }) => (
-            <>
-              <span
-                className="material-symbols-outlined text-xl"
-                style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
-              >
-                {tab.icon}
-              </span>
-              <span className="font-label text-[10px] uppercase tracking-tighter mt-1">{tab.label}</span>
-            </>
-          )}
-        </NavLink>
-      ))}
-    </div>
+                ? 'text-primary'
+                : 'text-on-surface-variant'
+            )}
+          >
+            <span
+              className="material-symbols-outlined text-[24px]"
+              style={isActive ? { fontVariationSettings: '"FILL" 1' } : undefined}
+            >
+              {tab.icon}
+            </span>
+            <span className="text-label-sm font-medium">{tab.label}</span>
+          </button>
+        );
+      })}
+    </nav>
   );
 }

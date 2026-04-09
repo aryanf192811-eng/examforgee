@@ -1,75 +1,163 @@
-import { useThemeStore } from '../lib/store/themeStore';
-import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AppShell } from '../components/layout/AppShell';
+import { useTheme } from '../hooks/useTheme';
+import { useAuthStore } from '../lib/store/authStore';
+import { useToast } from '../hooks/useToast';
+import { cn } from '../lib/utils';
 
-export function Settings() {
-  const { isDark, toggle } = useThemeStore();
-  const navigate = useNavigate();
+export default function Settings() {
+  const { theme, isDark, toggleTheme } = useTheme();
+  const user = useAuthStore((s) => s.user);
+  const signOut = useAuthStore((s) => s.signOut);
+  const { addToast } = useToast();
 
   return (
-    <div className="p-6 md:p-10 max-w-3xl mx-auto space-y-10 animate-fade-in relative min-h-[80vh]">
-      <button 
-        onClick={() => navigate('/profile')} 
-        className="flex items-center gap-2 text-sm text-on-surface-variant hover:text-primary transition-colors mb-4"
+    <AppShell title="Settings">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+        className="max-w-lg mx-auto space-y-6"
       >
-        <span className="material-symbols-outlined text-sm">arrow_back</span>
-        Identity Settings
-      </button>
+        {/* Appearance */}
+        <div className="rounded-2xl bg-surface-container p-5">
+          <h3 className="font-headline text-title-lg text-on-surface mb-4">
+            Appearance
+          </h3>
 
-      <header className="space-y-2 mb-8">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-on-surface">Workspace Preferences</h1>
-      </header>
-
-      <div className="space-y-6">
-        <section className="bg-white dark:bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10 shadow-sm">
-          <h2 className="text-xl font-bold text-on-surface mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary">palette</span>
-            Aesthetic Configuration
-          </h2>
-          
-          <div className="flex items-center justify-between py-4 border-b border-outline-variant/10">
-            <div>
-              <h3 className="font-bold text-on-surface">Editorial Theme</h3>
-              <p className="text-sm text-on-surface-variant">Switch between Sakura Pastel and Tokyo Night.</p>
+          {/* Theme toggle */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="material-symbols-outlined text-on-surface-variant text-[22px]">
+                {isDark ? 'dark_mode' : 'light_mode'}
+              </span>
+              <div>
+                <span className="text-body-md text-on-surface block">Theme</span>
+                <span className="text-label-sm text-on-surface-variant capitalize">
+                  {theme === 'dark' ? 'Tokyo Night' : 'Sakura Pastel'}
+                </span>
+              </div>
             </div>
-            <button 
-              onClick={toggle}
-              className={`relative inline-flex h-7 w-14 items-center rounded-full transition-colors ${isDark ? 'bg-primary' : 'bg-surface-variant'}`}
+
+            {/* Toggle switch */}
+            <button
+              onClick={toggleTheme}
+              className={cn(
+                'relative w-12 h-7 rounded-full transition-colors spring-transition cursor-pointer',
+                isDark ? 'bg-primary' : 'bg-surface-container-highest'
+              )}
             >
-              <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${isDark ? 'translate-x-8' : 'translate-x-1'}`} />
+              <div
+                className={cn(
+                  'absolute top-0.5 w-6 h-6 rounded-full bg-white transition-transform spring-transition',
+                  isDark ? 'translate-x-5.5' : 'translate-x-0.5'
+                )}
+              />
             </button>
           </div>
+        </div>
 
-          <div className="flex items-center justify-between py-4">
-            <div>
-              <h3 className="font-bold text-on-surface opacity-50">Reduced Motion</h3>
-              <p className="text-sm text-on-surface-variant opacity-50">Minimize animation fluidity.</p>
-            </div>
-            <button 
-              disabled
-              className="relative inline-flex h-7 w-14 items-center rounded-full bg-surface-variant opacity-50 cursor-not-allowed"
+        {/* Notifications */}
+        <div className="rounded-2xl bg-surface-container p-5">
+          <h3 className="font-headline text-title-lg text-on-surface mb-4">
+            Notifications
+          </h3>
+          <div className="space-y-4">
+            <ToggleRow
+              icon="notifications"
+              label="Push Notifications"
+              description="Receive reminders for daily study goals"
+              defaultChecked={true}
+            />
+            <ToggleRow
+              icon="mail"
+              label="Email Notifications"
+              description="Weekly progress reports and updates"
+              defaultChecked={false}
+            />
+            <ToggleRow
+              icon="local_fire_department"
+              label="Streak Reminders"
+              description="Don't break your study streak"
+              defaultChecked={true}
+            />
+          </div>
+        </div>
+
+        {/* Account */}
+        <div className="rounded-2xl bg-surface-container p-5">
+          <h3 className="font-headline text-title-lg text-on-surface mb-4">
+            Account
+          </h3>
+          <div className="space-y-3">
+            <button
+              onClick={() => addToast('Password change requires re-authentication via Firebase.', 'info')}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-container-high transition-colors spring-transition cursor-pointer"
             >
-              <span className="inline-block h-5 w-5 transform rounded-full bg-white translate-x-1" />
+              <span className="material-symbols-outlined text-on-surface-variant text-[22px]">
+                lock
+              </span>
+              <div className="flex-1 text-left">
+                <span className="text-body-md text-on-surface block">Change Password</span>
+                <span className="text-label-sm text-on-surface-variant">
+                  {user?.email || 'your@email.com'}
+                </span>
+              </div>
+              <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
+                chevron_right
+              </span>
             </button>
-          </div>
-        </section>
 
-        <section className="bg-white dark:bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10 shadow-sm">
-          <h2 className="text-xl font-bold text-on-surface mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-secondary">notifications</span>
-            Academic Alerts
-          </h2>
-          
-          <div className="flex items-center justify-between py-4 border-b border-outline-variant/10">
-            <div>
-              <h3 className="font-bold text-on-surface">Daily Review Reminder</h3>
-              <p className="text-sm text-on-surface-variant">Notifications for spaced repetition queue.</p>
-            </div>
-            <button className="relative inline-flex h-7 w-14 items-center rounded-full bg-primary transition-colors">
-              <span className="inline-block h-5 w-5 transform rounded-full bg-white translate-x-8 transition-transform" />
+            <button
+              onClick={signOut}
+              className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-surface-container-high transition-colors spring-transition cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-error text-[22px]">
+                logout
+              </span>
+              <span className="text-body-md text-error">Sign Out</span>
             </button>
           </div>
-        </section>
+        </div>
+
+        {/* About */}
+        <div className="rounded-2xl bg-surface-container p-5 text-center">
+          <span className="text-label-md text-on-surface-variant">
+            ExamForge v2.0 · The Academic Atelier
+          </span>
+        </div>
+      </motion.div>
+    </AppShell>
+  );
+}
+
+function ToggleRow({
+  icon,
+  label,
+  description,
+  defaultChecked,
+}: {
+  icon: string;
+  label: string;
+  description: string;
+  defaultChecked: boolean;
+}) {
+  return (
+    <label className="flex items-center justify-between cursor-pointer">
+      <div className="flex items-center gap-3">
+        <span className="material-symbols-outlined text-on-surface-variant text-[22px]">
+          {icon}
+        </span>
+        <div>
+          <span className="text-body-md text-on-surface block">{label}</span>
+          <span className="text-label-sm text-on-surface-variant">{description}</span>
+        </div>
       </div>
-    </div>
+      <input
+        type="checkbox"
+        defaultChecked={defaultChecked}
+        className="w-5 h-5 accent-primary rounded cursor-pointer"
+      />
+    </label>
   );
 }

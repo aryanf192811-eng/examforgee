@@ -1,0 +1,3562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Problem Setbook — Part 1 · Q001–Q035</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,12.5px);
+  --fs-base:clamp(14px,3.2vw,16.5px);--fs-md:clamp(13.5px,3.2vw,15.5px);
+  --fs-lg:clamp(15px,3.6vw,18.5px);--fs-xl:clamp(20px,5vw,36px);
+  --fs-ch:clamp(15px,4vw,19px);--fs-code:clamp(10.5px,2.3vw,12.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:880px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.12;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:530px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,24px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(16px,3.5vw,26px) clamp(14px,3.5vw,30px) clamp(14px,3vw,22px) clamp(32px,6.5vw,58px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:30px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+/* HEADINGS */
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+h3.ssh{font-family:var(--body);font-size:clamp(13px,3vw,15px);font-weight:600;font-style:italic;color:var(--blue);margin:16px 0 7px;}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.9;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-b{color:var(--blue);font-weight:600;}.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}.c-r{color:var(--red);font-weight:600;}
+
+/* ═══════════════ QUESTION CARD ═══════════════ */
+.qcard{background:var(--paper2);border:1.5px solid #b0a088;border-radius:5px;margin:0 0 clamp(18px,3.5vw,32px);overflow:hidden;box-shadow:3px 4px 0 #9a8a6e;}
+
+/* Header bar */
+.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:clamp(10px,2vw,14px) clamp(12px,3vw,20px);background:var(--paper3);border-bottom:1.5px solid #c8b898;}
+.qnum{font-family:var(--hand);font-size:clamp(10px,2vw,11.5px);background:var(--ink);color:var(--paper);border-radius:3px;padding:3px 9px;letter-spacing:1px;flex-shrink:0;}
+.qnum.easy{background:var(--green);}.qnum.med{background:var(--orange);}.qnum.hard{background:var(--red);}.qnum.expert{background:var(--purple);}
+.qtitle{font-family:var(--body);font-size:clamp(13.5px,3.2vw,16px);font-weight:700;color:var(--ink);flex:1;min-width:0;}
+.qsrc{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:2px 8px;border:1px solid #c0a880;border-radius:2px;background:rgba(255,255,255,0.5);flex-shrink:0;white-space:nowrap;}
+.qtags{display:flex;gap:5px;flex-wrap:wrap;}
+.qt{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid currentColor;}
+.qt-a{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.qt-s{color:var(--teal);border-color:var(--teal);}
+.qt-tp{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.qt-sw{color:var(--teal);border-color:var(--teal);}
+.qt-h{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.qt-bs{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-st{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.qt-dp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-gr{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.qt-g{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.qt-m{color:var(--ink3);border-color:var(--ink3);}
+
+/* Hint badges */
+.hints{display:flex;gap:6px;flex-wrap:wrap;padding:8px clamp(12px,3vw,20px);background:rgba(255,255,255,0.3);border-bottom:1px dashed #c8b898;}
+.hint{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:1.5px solid currentColor;}
+.hm{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.hf{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ht{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.hc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+
+/* Body */
+.qbody{padding:clamp(12px,2.5vw,18px) clamp(12px,3vw,20px);}
+
+/* Problem statement */
+.qprob{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:12px;position:relative;}
+.qprob::before{content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink);position:absolute;top:-9px;left:12px;background:var(--paper);padding:0 6px;border:1px solid var(--ink);border-radius:2px;}
+.qprob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0 0 6px;line-height:1.82;}
+.qprob p:last-child{margin:0;}
+.io-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.io-box{flex:1;min-width:110px;background:var(--paper3);border:1px dashed #a09070;border-radius:3px;padding:8px 12px;}
+.io-lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;display:block;}
+.io-box code{font-family:var(--mono);font-size:var(--fs-code);color:var(--ink);background:none;border:none;padding:0;display:block;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.constraint{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink3);margin-top:8px;line-height:1.7;display:block;}
+
+/* Decode */
+.qdec{background:#fff8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qdec .dlbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:6px;display:block;}
+.qdec p{font-size:var(--fs-md);line-height:1.82;margin:0 0 5px;color:var(--ink2);}
+.qdec p:last-child{margin:0;}
+.qdec strong{color:var(--orange);}
+
+/* Approach */
+.qapp{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qapp .albl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:block;}
+.qapp p{font-size:var(--fs-md);line-height:1.85;margin:0 0 5px;color:var(--ink2);}
+.qapp p:last-child{margin:0;}
+.qapp strong{color:var(--blue);}
+
+/* Approach comparison cards */
+.ap-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;margin-bottom:12px;}
+.ap-c{background:var(--paper);border:1.5px solid #c0a880;border-radius:4px;padding:clamp(9px,2vw,12px);}
+.ap-b{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;border:1.5px solid currentColor;display:inline-block;margin-bottom:7px;}
+.ap-brute{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ap-ok{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ap-best{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.ap-c h4{font-family:var(--body);font-size:clamp(12.5px,2.8vw,14px);font-weight:700;color:var(--ink);margin-bottom:5px;}
+.ap-c p{font-family:var(--prose);font-size:clamp(12px,2.6vw,13.5px);color:var(--ink2);margin:0 0 5px;line-height:1.7;}
+.ap-c .cx{font-family:var(--mono);font-size:10px;color:var(--ink3);border-top:1px dashed #c8b898;padding-top:5px;margin-top:5px;}
+
+/* Dry run trace */
+.qtrace{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,17px);margin-bottom:12px;font-family:var(--mono);font-size:clamp(9.5px,2.1vw,12px);line-height:2;color:var(--ink);white-space: pre;
+        overflow-x: auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qtrace::-webkit-scrollbar{height:4px;}.qtrace::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.trl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:7px;display:block;}
+.tr-hi{background:var(--hl-y);border-radius:2px;padding:0 2px;}
+.tr-ok{color:var(--green);font-weight:700;}
+.tr-no{color:var(--red);font-weight:700;}
+.tr-cur{color:var(--blue);font-weight:700;}
+.tr-dim{color:var(--ink3);}
+
+/* Code block */
+.qcode{font-family:var(--mono);font-size:var(--fs-code);background:#f5f0e8;border:1.5px solid #c8b898;border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:10px;color:var(--ink);line-height:1.88;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qcode::-webkit-scrollbar{height:4px;}.qcode::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.qcode .kw{color:var(--blue);font-weight:700;}
+.qcode .cm{color:#8a7a5a;font-style:italic;}
+.qcode .st{color:var(--green);}
+.qcode .num{color:var(--orange);}
+.qcode .fn{color:var(--teal);}
+.qcode .pp{color:var(--red);}
+.clbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px;padding-bottom:5px;border-bottom:1px dashed #c8b898;}
+
+/* Complexity footer */
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;padding:clamp(8px,2vw,12px) clamp(12px,3vw,18px);background:var(--paper3);border-top:1px dashed #c8b898;}
+.qf{font-family:var(--mono);font-size:var(--fs-xs);background:var(--paper2);border:1px solid #c0a880;border-radius:3px;padding:3px 10px;color:var(--ink3);display:flex;align-items:center;gap:5px;}
+.qf .fl{font-style:italic;}.qf .fv{font-weight:700;}
+.qf.t .fv{color:var(--green);}.qf.s .fv{color:var(--purple);}.qf.x .fv{color:var(--blue);}
+
+/* Callout boxes */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:12px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+
+.pl{list-style:none;margin:6px 0 10px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.85;color:var(--ink2);padding:2px 0 2px 20px;position:relative;}
+.pl li::before{content:'→';position:absolute;left:0;color:var(--blue);}
+code{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:8px clamp(12px,3vw,28px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+.sep{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);letter-spacing:3px;padding:14px 0;border-top:1px dashed #c8b898;margin:14px 0 0;}
+
+@media(max-width:640px){
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .sec{padding-left:clamp(26px,5.5vw,40px);}
+  h2.sh{font-size:clamp(14px,3.8vw,17px);}
+  .qhead{gap:6px;}.qtitle{font-size:14px;}.qsrc{display:none;}
+  .ap-row{grid-template-columns:1fr;}.io-row{flex-direction:column;}
+  .qfoot{flex-direction:column;gap:5px;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{padding:18px 14px 16px;box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);}
+  .cover::after{display:none;}.cover-inner{padding-left:0;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;}
+  .chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:16px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(13px,4vw,16px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:5px;}
+  .qcode,.qtrace{font-size:9.5px;padding:9px 10px;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;}
+  .qcard{break-inside:avoid;box-shadow:none;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .qcode,.qtrace{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">IV · Part 1 · Q001–Q035</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Interview Setbook · Part 1 of 6 · Q001–Q035</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery Series · Interview Prep</div>
+    <h1>The Interview<br><em>Problem Setbook</em></h1>
+    <p class="cover-desc">35 problems per part. 6 parts. 210 problems total — all from LeetCode, Codeforces, HackerRank and CodeChef. Every problem is fully decoded, approached, dry-run traced, and solved with annotated C++ code. This is Part 1: Arrays, Strings, Two Pointers, Sliding Window.</p>
+    <div class="cover-chips">
+      <span class="chip">Part 1 · Q001–Q035</span>
+      <span class="chip">Arrays &amp; Strings</span>
+      <span class="chip">Two Pointer</span>
+      <span class="chip">Sliding Window</span>
+      <span class="chip">Hashing</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HOW TO USE THIS BOOK
+════════════════════════════════════════════ -->
+<div class="chapter">
+  <div class="ch-head">
+    <div class="ch-ey">Read This First</div>
+    <div class="ch-title">How to Use This Book — <em>The Right Way to Practice</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="guide">
+    <div class="def-box">
+      <span class="lbl">The Visual Key</span>
+      <p>
+        <span style="font-family:var(--hand);font-size:var(--fs-xs);background:var(--green);color:white;padding:2px 7px;border-radius:3px;">EASY</span> — Should be solved in 10–15 min. If taking longer, you need more fundamentals.<br><br>
+        <span style="font-family:var(--hand);font-size:var(--fs-xs);background:var(--orange);color:white;padding:2px 7px;border-radius:3px;">MED</span> — 20–35 min. The bulk of real interviews. This is where preparation shows.<br><br>
+        <span style="font-family:var(--hand);font-size:var(--fs-xs);background:var(--red);color:white;padding:2px 7px;border-radius:3px;">HARD</span> — 35–60 min. FAANG-level. Requires combining multiple patterns.<br><br>
+        <strong style="color:var(--orange);">Orange box</strong> = Decode: strip the problem to its algorithmic core<br>
+        <strong style="color:var(--blue);">Blue box</strong> = Approach: structured thinking before any code<br>
+        <strong style="color:var(--ink3);">Dashed trace</strong> = Dry Run: the algorithm animated on a real example<br>
+        <strong>Code block</strong> = Annotated C++ solution
+      </p>
+    </div>
+    <div class="note-box">
+      <span class="lbl">The Right Practice Habit</span>
+      <p>Read the problem. Close the book. Spend 10–20 minutes attempting it on paper or in an editor. THEN look at the Decode and Approach boxes. Still stuck? Read the trace. Only then look at the code. <strong>Copy-pasting solutions builds zero problem-solving muscle.</strong></p>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — ARRAYS & STRINGS (Q001–Q014)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01 · Q001–Q014 · Arrays &amp; Strings</div>
+    <div class="ch-title">Arrays &amp; Strings — <em>The Interview Bread and Butter</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="arrays">
+
+<!-- ───────────────── Q001 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q001 · EASY</span>
+    <span class="qtitle">Two Sum</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #1</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 10,000+</span>
+    <span class="hint hc">Classic</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given array <code>nums</code> and integer <code>target</code>, return the <strong>indices</strong> of the two numbers that add up to target. Exactly one solution exists. Same element can't be used twice.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>nums=[2,7,11,15]
+target=9</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[0,1]</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>nums=[3,2,4]
+target=6</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>[1,2]</code></div>
+      </div>
+      <span class="constraint">Constraints: 2 ≤ n ≤ 10⁴ · -10⁹ ≤ nums[i] ≤ 10⁹</span>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — What Is Really Being Asked</span>
+      <p>For each number x at position i, you need to know: <strong>does (target − x) exist somewhere in the array before or after i?</strong> This is a lookup problem — not a search problem. The word "indices" tells you to remember positions, not just values. The moment you frame it as a lookup, the hash map appears.</p>
+    </div>
+    <div class="ap-row">
+      <div class="ap-c"><span class="ap-b ap-brute">Brute O(n²)</span><h4>Nested Loops</h4><p>For every i, loop j from i+1 to end. Check if nums[i]+nums[j]==target.</p><div class="cx">Time: O(n²) · Space: O(1)</div></div>
+      <div class="ap-c"><span class="ap-b ap-best">Optimal O(n)</span><h4>Hash Map (One Pass)</h4><p>Walk array once. At each x, check if (target−x) is already in the map. If yes → answer. Else store x's index and move on.</p><div class="cx">Time: O(n) · Space: O(n) ✓</div></div>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Single-Pass Hash Map</span>
+      <p><strong>Key mental model:</strong> Don't look for pairs. Instead, at each element x, ask: "is my complement (target−x) already stored?" If yes — you have your pair. If no — store x so future elements can use it as their complement. This turns the O(n²) "check every pair" into O(n) "store and check in one pass."</p>
+      <p><strong>Critical detail:</strong> Look up BEFORE inserting. If you insert first, nums[0]+nums[0] could incorrectly match itself.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Dry Run: nums=[2,7,11,15], target=9</span>
+map = {}   (stores value → index)
+
+i=0: x=<span class="tr-cur">2</span>  complement=9-2=<span class="tr-hi">7</span>  Is 7 in map? <span class="tr-no">NO</span> → store {2:0}
+i=1: x=<span class="tr-cur">7</span>  complement=9-7=<span class="tr-hi">2</span>  Is 2 in map? <span class="tr-ok">YES</span> at index 0
+     → return [<span class="tr-ok">0, 1</span>]  ✓
+
+Dry Run 2: nums=[3,2,4], target=6
+i=0: x=3, comp=3, map has 3? NO → {3:0}
+i=1: x=2, comp=4, map has 4? NO → {3:0,2:1}
+i=2: x=4, comp=2, map has 2? <span class="tr-ok">YES at index 1</span> → return [<span class="tr-ok">1, 2</span>]</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(n) space</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">twoSum</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> target) {
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; seen;        <span class="cm">// value → index</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; (<span class="kw">int</span>)nums.size(); i++) {
+        <span class="kw">int</span> comp = target - nums[i];
+        <span class="kw">if</span> (seen.count(comp))             <span class="cm">// complement already seen?</span>
+            <span class="kw">return</span> {seen[comp], i};       <span class="cm">// YES → return both indices</span>
+        seen[nums[i]] = i;                <span class="cm">// NO → record for future lookups</span>
+    }
+    <span class="kw">return</span> {};
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">3Sum · Two Sum II (sorted) · 4Sum</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q002 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q002 · EASY</span>
+    <span class="qtitle">Best Time to Buy and Sell Stock</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-gr">Greedy</span></div>
+    <span class="qsrc">LeetCode #121</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 8,000+</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Array <code>prices[i]</code> = stock price on day i. Choose <strong>one day to buy</strong> and a <strong>later day to sell</strong>. Return the maximum profit. Return 0 if no profit is possible.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[7,1,5,3,6,4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>5</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>Buy day2(1)
+Sell day5(6) → 5</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>[7,6,4,3,1]</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>0</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Running Minimum to the Left</span>
+      <p>For each day, the best possible profit = <strong>today's price minus the cheapest price ever seen before today</strong>. You don't need to know the future — just track the minimum so far and compute the profit at each step.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Single Pass, Two Variables</span>
+      <p>Walk left to right. <code>minPrice</code> = cheapest day seen so far (update when you see something cheaper). <code>maxProfit</code> = best profit seen so far (update when today's price - minPrice is larger). No need to track which days — just the values.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">prices = [7, 1, 5, 3, 6, 4]</span>
+minPrice=∞, maxProfit=0
+
+day0: price=<span class="tr-cur">7</span>  minPrice=<span class="tr-hi">7</span>  profit=7-7=0   maxProfit=0
+day1: price=<span class="tr-cur">1</span>  minPrice=<span class="tr-hi">1</span>  profit=1-1=0   maxProfit=0
+day2: price=<span class="tr-cur">5</span>  minPrice=1   profit=5-1=<span class="tr-hi">4</span>  maxProfit=4
+day3: price=<span class="tr-cur">3</span>  minPrice=1   profit=3-1=2   maxProfit=4
+day4: price=<span class="tr-cur">6</span>  minPrice=1   profit=6-1=<span class="tr-hi">5</span>  maxProfit=<span class="tr-ok">5</span>
+day5: price=<span class="tr-cur">4</span>  minPrice=1   profit=4-1=3   maxProfit=5
+
+Answer: <span class="tr-ok">5</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">int</span> <span class="fn">maxProfit</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; prices) {
+    <span class="kw">int</span> minPrice = INT_MAX, maxProfit = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> p : prices) {
+        minPrice  = min(minPrice, p);            <span class="cm">// Cheapest day seen so far</span>
+        maxProfit = max(maxProfit, p - minPrice); <span class="cm">// Best profit if sold today</span>
+    }
+    <span class="kw">return</span> maxProfit;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">LC#122 multiple transactions · Kadane's Algorithm</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q003 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q003 · MEDIUM</span>
+    <span class="qtitle">Maximum Subarray (Kadane's Algorithm)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #53</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 7,000+</span>
+    <span class="hint hc">Named Algorithm</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the contiguous subarray with the largest sum and return its sum.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[-2,1,-3,4,-1,2,1,-5,4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>6</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>[4,-1,2,1] = 6</code></div>
+      </div>
+      <span class="constraint">Follow-up: Can you solve it in O(n) with O(1) space?</span>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — One Binary Choice at Every Position</span>
+      <p>At every index i, you have exactly two choices: <strong>extend the current subarray</strong> (add nums[i] to running sum) OR <strong>start fresh</strong> at nums[i]. You should start fresh whenever the running sum is negative — because a negative prefix can only drag down future sums. The key DP insight: <code>curSum = max(nums[i], curSum + nums[i])</code>.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Kadane's Algorithm</span>
+      <p>Two variables: <code>curSum</code> (best ending at current position) and <code>maxSum</code> (global best seen so far). At each step, either extend or restart. Update global max. This is O(1) space DP — the "previous state" is just one number.</p>
+      <p><strong>Edge case:</strong> Initialize both with nums[0], not 0. The subarray must contain at least one element, so an all-negative array should return its maximum (least negative) element.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]</span>
+i=0: cur=<span class="tr-hi">-2</span>         maxSum=-2
+i=1: cur=max(1,-2+1)=<span class="tr-hi">1</span>  maxSum=1
+i=2: cur=max(-3,1-3)=<span class="tr-hi">-2</span> maxSum=1
+i=3: cur=max(4,-2+4)=<span class="tr-hi">4</span>  maxSum=4
+i=4: cur=max(-1,4-1)=<span class="tr-hi">3</span>  maxSum=4
+i=5: cur=max(2,3+2)=<span class="tr-hi">5</span>   maxSum=5
+i=6: cur=max(1,5+1)=<span class="tr-hi">6</span>   maxSum=<span class="tr-ok">6</span>
+i=7: cur=max(-5,6-5)=<span class="tr-hi">1</span>  maxSum=6
+i=8: cur=max(4,1+4)=<span class="tr-hi">5</span>   maxSum=6
+
+Answer: <span class="tr-ok">6</span>  (subarray [4,-1,2,1])</div>
+    <div class="qcode"><span class="clbl">C++ Solution — Kadane's Algorithm</span>
+<span class="kw">int</span> <span class="fn">maxSubArray</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> curSum = nums[0], maxSum = nums[0];
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; (<span class="kw">int</span>)nums.size(); i++) {
+        curSum = max(nums[i], curSum + nums[i]); <span class="cm">// Extend or restart</span>
+        maxSum = max(maxSum, curSum);             <span class="cm">// Update global best</span>
+    }
+    <span class="kw">return</span> maxSum;
+}
+
+<span class="cm">// Extension: return the actual subarray [start, end] indices</span>
+<span class="kw">pair</span>&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; <span class="fn">maxSubarrayIndices</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> curSum=nums[0], maxSum=nums[0];
+    <span class="kw">int</span> start=0, end=0, tempStart=0;
+    <span class="kw">for</span> (<span class="kw">int</span> i=1;i&lt;(<span class="kw">int</span>)nums.size();i++){
+        <span class="kw">if</span> (nums[i] &gt; curSum+nums[i]){ curSum=nums[i]; tempStart=i; }
+        <span class="kw">else</span> curSum+=nums[i];
+        <span class="kw">if</span> (curSum&gt;maxSum){ maxSum=curSum; start=tempStart; end=i; }
+    }
+    <span class="kw">return</span> {start, end};
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">Maximum Product Subarray · Best Time to Buy Stock</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q004 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q004 · MEDIUM</span>
+    <span class="qtitle">Product of Array Except Self</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-m">Prefix</span></div>
+    <span class="qsrc">LeetCode #238</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Trick: No Division Allowed</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return array <code>answer</code> where <code>answer[i]</code> = product of all elements except <code>nums[i]</code>. Solve in O(n) <strong>without using division</strong>.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,3,4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[24,12,8,6]</code></div>
+        <div class="io-box"><span class="io-lbl">Verify</span><code>ans[0]=2×3×4=24
+ans[2]=1×2×4=8</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Split the Product into Left × Right</span>
+      <p><code>answer[i]</code> = (product of all to LEFT of i) × (product of all to RIGHT of i). <strong>Build left products in one forward pass</strong>, then <strong>multiply by right products in one backward pass</strong>. No extra array for right products — accumulate in a single variable.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">nums = [1, 2, 3, 4]</span>
+=== Left Pass (out[i] = product of everything LEFT of i) ===
+out[0] = 1          (nothing to the left)
+out[1] = 1×1 = 1
+out[2] = 1×2 = 2
+out[3] = 2×3 = 6
+out = [<span class="tr-hi">1, 1, 2, 6</span>]
+
+=== Right Pass (multiply by running right product) ===
+rightProd = 1
+i=3: out[3] = 6×1 = <span class="tr-hi">6</span>   rightProd = 1×4  = 4
+i=2: out[2] = 2×4 = <span class="tr-hi">8</span>   rightProd = 4×3  = 12
+i=1: out[1] = 1×12= <span class="tr-hi">12</span>  rightProd = 12×2 = 24
+i=0: out[0] = 1×24= <span class="tr-hi">24</span>  rightProd = 24×1 = 24
+
+Final: [<span class="tr-ok">24, 12, 8, 6</span>]  ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) extra space</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">productExceptSelf</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> n = nums.size();
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; out(n, 1);
+    <span class="cm">// Left pass: out[i] = product of all nums[j] where j &lt; i</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; n; i++)
+        out[i] = out[i-1] * nums[i-1];
+    <span class="cm">// Right pass: multiply out[i] by running right product</span>
+    <span class="kw">int</span> right = 1;
+    <span class="kw">for</span> (<span class="kw">int</span> i = n-1; i &gt;= 0; i--) {
+        out[i] *= right;    <span class="cm">// Multiply accumulated right product</span>
+        right  *= nums[i];  <span class="cm">// Extend right product leftward</span>
+    }
+    <span class="kw">return</span> out;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1) extra</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Prefix product · two-pass technique</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q005 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q005 · MEDIUM</span>
+    <span class="qtitle">Maximum Product Subarray</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #152</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Track Both Max and Min</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the contiguous subarray with the largest product and return that product.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[2,3,-2,4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>6</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>[-2,0,-1]</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>0</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Negatives Flip Sign: Track Both Max and Min</span>
+      <p>Unlike sum, a negative product can become positive when multiplied by another negative. So the current minimum (most negative) is just as important as the current maximum — a new negative could make it the new maximum. Track both <code>curMax</code> and <code>curMin</code> at all times. When you hit a negative number, swap them before computing.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">nums = [2, 3, -2, 4]</span>
+curMax=2, curMin=2, result=2
+
+i=1 (3):  curMax=max(3, 2×3, 2×3)=6   curMin=min(3, 6, 6)=3   result=6
+i=2 (-2): swap! (neg flips max/min)
+          curMax=max(-2, 3×-2, 6×-2)=-2   curMin=min(-2,-6,-12)=-12  result=6
+i=3 (4):  curMax=max(4,-2×4,-12×4)=4  Wait:
+          max(4, -2×4=-8, -12×4=-48)=4    curMin=min(4,-8,-48)=-48
+          result=max(6,4)=6
+
+Answer: <span class="tr-ok">6</span>   (subarray [2,3])</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">int</span> <span class="fn">maxProduct</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">int</span> res = nums[0], curMax = nums[0], curMin = nums[0];
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; (<span class="kw">int</span>)nums.size(); i++) {
+        <span class="kw">if</span> (nums[i] &lt; 0) swap(curMax, curMin); <span class="cm">// Negative flips max/min</span>
+        curMax = max(nums[i], curMax * nums[i]);
+        curMin = min(nums[i], curMin * nums[i]);
+        res    = max(res, curMax);
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Variant of Kadane's · two-state tracking</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q006 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q006 · MEDIUM</span>
+    <span class="qtitle">Find All Duplicates in an Array</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-m">Index Trick</span></div>
+    <span class="qsrc">LeetCode #442</span>
+  </div>
+  <div class="hints">
+    <span class="hint ht">Trick: Array as In-Place Hash Map</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Array of n integers, each in range [1,n]. Some appear twice, others once. Find all that appear twice. Must run in O(n) time with O(1) extra space.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[4,3,2,7,8,2,3,1]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[2,3]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Use the Array Index as a Hash Map Key</span>
+      <p>Since values are in [1,n], value v maps to index (v−1). When you "visit" value v, negate <code>nums[v−1]</code>. If you encounter v again and <code>nums[v−1]</code> is already negative, v has been seen twice → it's a duplicate. After processing, restore signs if needed.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">nums = [4, 3, 2, 7, 8, 2, 3, 1]</span>
+i=0: val=<span class="tr-cur">4</span> → nums[3]=7 > 0 → negate:  [...,<span class="tr-hi">-7</span>,...]
+i=1: val=<span class="tr-cur">3</span> → nums[2]=2 > 0 → negate:  [...,<span class="tr-hi">-2</span>,-7,...]
+i=2: val=<span class="tr-cur">|2|=2</span> → nums[1]=3 > 0 → negate: [4,<span class="tr-hi">-3</span>,-2,-7,...]
+i=3: val=<span class="tr-cur">|7|=7</span> → nums[6]=3 > 0 → negate: [...,<span class="tr-hi">-3</span>,...]
+i=4: val=<span class="tr-cur">8</span> → nums[7]=1 > 0 → negate: [...,<span class="tr-hi">-1</span>]
+i=5: val=<span class="tr-cur">|2|=2</span> → nums[1]=-3 < 0 → <span class="tr-ok">DUPLICATE: 2</span>
+i=6: val=<span class="tr-cur">|-3|=3</span> → nums[2]=-2 < 0 → <span class="tr-ok">DUPLICATE: 3</span>
+i=7: val=<span class="tr-cur">|-1|=1</span> → nums[0]=4 > 0 → negate
+
+Output: [<span class="tr-ok">2, 3</span>]</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">findDuplicates</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; result;
+    <span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+        <span class="kw">int</span> idx = abs(x) - 1;              <span class="cm">// Map value to index</span>
+        <span class="kw">if</span> (nums[idx] &lt; 0)
+            result.push_back(idx + 1);     <span class="cm">// Already negative = seen twice</span>
+        <span class="kw">else</span>
+            nums[idx] = -nums[idx];        <span class="cm">// Negate to mark as visited</span>
+    }
+    <span class="kw">return</span> result;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">LC#268 Missing Number · LC#41 First Missing Positive</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q007 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q007 · HARD</span>
+    <span class="qtitle">Trapping Rain Water</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-tp">Two Pointer</span><span class="qt qt-m">Prefix</span></div>
+    <span class="qsrc">LeetCode #42</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 7,000+</span>
+    <span class="hint ht">3 Different Approaches</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given an elevation map (heights array), compute how much water can be trapped after raining.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[0,1,0,2,1,0,1,3,2,1,2,1]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>6</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Water at Position i = min(maxLeft, maxRight) − height[i]</span>
+      <p>Water sits at position i up to the level of the shorter wall on either side. If that level is higher than h[i], water collects. The formula: <code>water[i] = max(0, min(maxLeft[i], maxRight[i]) - h[i])</code>. The challenge is computing maxLeft and maxRight efficiently.</p>
+    </div>
+    <div class="ap-row">
+      <div class="ap-c"><span class="ap-b ap-brute">O(n²)</span><h4>For Each i, Scan Both Sides</h4><p>For each i, scan left for max and right for max. O(n) per element.</p><div class="cx">Time: O(n²) · Space: O(1)</div></div>
+      <div class="ap-c"><span class="ap-b ap-ok">O(n) Space</span><h4>Prefix Max Arrays</h4><p>Precompute leftMax[i] and rightMax[i] arrays. Then sum contributions in one pass.</p><div class="cx">Time: O(n) · Space: O(n)</div></div>
+      <div class="ap-c"><span class="ap-b ap-best">O(1) Space</span><h4>Two Pointers</h4><p>Process from both ends. The shorter side's max is the bottleneck — compute its water, advance that pointer.</p><div class="cx">Time: O(n) · Space: O(1) ✓</div></div>
+    </div>
+    <div class="qapp">
+      <span class="albl">Two Pointer Approach — Why It Works</span>
+      <p>Two pointers lo (left) and hi (right). Track <code>maxL</code> and <code>maxR</code> (max heights seen from each side). At each step: if h[lo] &lt; h[hi], the left side is the bottleneck. If h[lo] >= maxL, update maxL (no water here, it's a wall). Else water = maxL - h[lo]. Advance lo. Symmetrically for the right side.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">h = [0,1,0,2,1,0,1,3,2,1,2,1]  (simplified trace)</span>
+lo=0 hi=11  maxL=0 maxR=0  water=0
+
+h[lo]=0 &lt; h[hi]=1 → left side
+  h[0]=0 ≥ maxL=0 → maxL=0 (update maxL, no water)  lo=1
+h[lo]=1 ≥ h[hi]=1 → right side
+  h[11]=1 ≥ maxR=0 → maxR=1 (update maxR)  hi=10
+h[lo]=1 &lt; h[hi]=2 → left side
+  h[1]=1 ≥ maxL=0 → maxL=1 (wall)  lo=2
+h[lo]=0 &lt; h[hi]=2 → left side
+  h[2]=0 &lt; maxL=1 → water += 1-0=<span class="tr-hi">1</span>  lo=3
+... (continue)
+
+Total water: <span class="tr-ok">6</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — Two Pointers O(n) O(1)</span>
+<span class="kw">int</span> <span class="fn">trap</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; h) {
+    <span class="kw">int</span> lo=0, hi=h.size()-1, water=0;
+    <span class="kw">int</span> maxL=0, maxR=0;
+    <span class="kw">while</span> (lo &lt; hi) {
+        <span class="kw">if</span> (h[lo] &lt; h[hi]) {
+            h[lo] &gt;= maxL ? maxL=h[lo] : water+=maxL-h[lo]; <span class="cm">// Left bottleneck</span>
+            lo++;
+        } <span class="kw">else</span> {
+            h[hi] &gt;= maxR ? maxR=h[hi] : water+=maxR-h[hi]; <span class="cm">// Right bottleneck</span>
+            hi--;
+        }
+    }
+    <span class="kw">return</span> water;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Prefix max · two-pointer · monotonic stack also possible</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q008 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q008 · MEDIUM</span>
+    <span class="qtitle">Container With Most Water</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-tp">Two Pointer</span></div>
+    <span class="qsrc">LeetCode #11</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Key Insight: Always Move Shorter Wall</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Array of heights. Find two lines forming a container that holds the most water. Return the max area. Area = min(h[l], h[r]) × (r − l).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,8,6,2,5,4,8,3,7]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>49</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>h[1]=8, h[8]=7
+min(8,7)×7 = 49</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Greedy: Moving the Taller Wall Never Helps</span>
+      <p>If we have pointers at l and r, the area is limited by the <strong>shorter wall</strong>. Moving the taller pointer inward: the width decreases, and the height is still bounded by the same or smaller value — area can only decrease or stay same. <strong>Moving the shorter pointer inward</strong> is the only way to possibly find a taller pair and improve area.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">int</span> <span class="fn">maxArea</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; h) {
+    <span class="kw">int</span> lo=0, hi=h.size()-1, best=0;
+    <span class="kw">while</span> (lo &lt; hi) {
+        best = max(best, min(h[lo],h[hi]) * (hi-lo));
+        h[lo] &lt; h[hi] ? lo++ : hi--;  <span class="cm">// Move shorter wall inward</span>
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">Trapping Rain Water · 3Sum</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q009 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q009 · MEDIUM</span>
+    <span class="qtitle">3Sum</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-tp">Two Pointer</span></div>
+    <span class="qsrc">LeetCode #15</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 6,000+</span>
+    <span class="hint ht">Sort First, Then Fix+Two Pointer</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find all unique triplets in the array that sum to zero. Answer must not contain duplicate triplets.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[-1,0,1,2,-1,-4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[[-1,-1,2],
+[-1,0,1]]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Fix One, Then Two-Sum on the Rest</span>
+      <p><strong>Sort first</strong>. Fix nums[i] as the first element. Use two pointers j=i+1 and k=end to find pairs summing to −nums[i]. Sort enables both two pointers AND easy duplicate skipping (skip if nums[i]==nums[i-1]).</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Sort + Fix + Two Pointer</span>
+      <p>Outer loop fixes nums[i]. Skip duplicates at i. Inner: two pointers j and k from both sides of the remaining array. If sum==0: record, skip duplicates on both j and k sides. If sum&lt;0: j++ (need larger). If sum&gt;0: k-- (need smaller). Total: O(n²) with O(1) extra space.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">sorted: [-4,-1,-1,0,1,2]</span>
+i=0: nums[i]=-4  j=1 k=5
+  sum=-4+(-1)+2=-3 &lt; 0 → j=2
+  sum=-4+(-1)+2=-3 &lt; 0 → j=3
+  sum=-4+0+2=-2   &lt; 0 → j=4
+  sum=-4+1+2=-1   &lt; 0 → j=5 → j>=k, stop
+
+i=1: nums[i]=-1  j=2 k=5
+  sum=-1+(-1)+2=0  → <span class="tr-ok">FOUND [-1,-1,2]</span>
+     skip dup j: j=3, skip dup k: k=4  j++,k--: j=4,k=3 → stop
+
+i=2: nums[2]=-1 == nums[1]=-1 → <span class="tr-dim">SKIP duplicate</span>
+
+i=3: nums[i]=0   j=4 k=5
+  sum=0+1+2=3 > 0 → k=4 → j>=k, stop
+  Wait: j=4,k=4 → j<k is false
+
+i=2 was skipped, try i=3 again: j=4,k=5
+  sum=0+1+2=3>0 → k=4 → j>=k stop
+
+Hmm let me redo i=2 skip, i=3 (0):
+j=4,k=5: 0+1+2=3>0 k=4 done
+i=4 (1): j=5,k=5 done
+
+Answer: <span class="tr-ok">[[-1,-1,2],[-1,0,1]]</span>
+
+Note: [-1,0,1] found when i=1, j=3(0), k=5... let me redo
+After recording [-1,-1,2]: j=3, k=4
+  sum=-1+0+1=0 → <span class="tr-ok">FOUND [-1,0,1]</span>
+j=4, k=3 → done ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n²) time · O(1) extra space</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">threeSum</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    sort(nums.begin(), nums.end());
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; (<span class="kw">int</span>)nums.size()-2; i++) {
+        <span class="kw">if</span> (i &gt; 0 &amp;&amp; nums[i] == nums[i-1]) <span class="kw">continue</span>; <span class="cm">// Skip dup at i</span>
+        <span class="kw">int</span> j = i+1, k = nums.size()-1;
+        <span class="kw">while</span> (j &lt; k) {
+            <span class="kw">int</span> s = nums[i]+nums[j]+nums[k];
+            <span class="kw">if</span> (s == 0) {
+                res.push_back({nums[i],nums[j],nums[k]});
+                <span class="kw">while</span>(j&lt;k &amp;&amp; nums[j]==nums[j+1]) j++; <span class="cm">// Skip dup j</span>
+                <span class="kw">while</span>(j&lt;k &amp;&amp; nums[k]==nums[k-1]) k--; <span class="cm">// Skip dup k</span>
+                j++; k--;
+            }
+            <span class="kw">else if</span> (s &lt; 0) j++;
+            <span class="kw">else</span>           k--;
+        }
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1) extra</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">4Sum · 3Sum Closest · Two Sum</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q010 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q010 · MEDIUM</span>
+    <span class="qtitle">Rotate Array by K Steps</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-m">Math</span></div>
+    <span class="qsrc">LeetCode #189</span>
+  </div>
+  <div class="hints">
+    <span class="hint ht">3-Reverse Trick</span>
+    <span class="hint hc">Interview Classic</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Rotate array to the right by k positions in-place with O(1) extra space.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,3,4,5,6,7]
+k=3</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[5,6,7,1,2,3,4]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Three Reverses Give Any Rotation</span>
+      <p>Right rotate by k: reverse entire array → reverse [0..k-1] → reverse [k..n-1]. Works because reversing strategically re-arranges elements in exactly the rotated order. Always take <code>k = k % n</code> first to handle k > n.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[1,2,3,4,5,6,7]  k=3</span>
+Step 1 — Reverse all:      [<span class="tr-hi">7,6,5,4,3,2,1</span>]
+Step 2 — Reverse [0..k-1]: [<span class="tr-hi">5,6,7</span>,4,3,2,1]
+Step 3 — Reverse [k..n-1]: [5,6,7,<span class="tr-hi">1,2,3,4</span>]
+
+Result: <span class="tr-ok">[5,6,7,1,2,3,4]</span>  ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">void</span> <span class="fn">rotate</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    k %= nums.size();                                  <span class="cm">// Handle k > n</span>
+    reverse(nums.begin(), nums.end());                 <span class="cm">// Reverse all</span>
+    reverse(nums.begin(), nums.begin() + k);           <span class="cm">// Reverse first k</span>
+    reverse(nums.begin() + k, nums.end());             <span class="cm">// Reverse rest</span>
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q011 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q011 · EASY</span>
+    <span class="qtitle">Valid Palindrome</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-tp">Two Pointer</span></div>
+    <span class="qsrc">LeetCode #125</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hc">String Basics</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Check if a string is a palindrome considering only alphanumeric characters and ignoring case. "A man, a plan, a canal: Panama" → true.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Two Pointer, Skip Non-Alphanumeric</span>
+      <p>Two pointers from both ends. Skip non-alphanumeric characters. Compare lowercased characters. If any mismatch → false.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution</span>
+<span class="kw">bool</span> <span class="fn">isPalindrome</span>(<span class="kw">string</span> s) {
+    <span class="kw">int</span> l=0, r=s.size()-1;
+    <span class="kw">while</span> (l &lt; r) {
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isalnum(s[l])) l++;
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isalnum(s[r])) r--;
+        <span class="kw">if</span>(tolower(s[l++]) != tolower(s[r--])) <span class="kw">return false</span>;
+    }
+    <span class="kw">return true</span>;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q012 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q012 · MEDIUM</span>
+    <span class="qtitle">Longest Palindromic Substring</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-dp">DP / Expand</span></div>
+    <span class="qsrc">LeetCode #5</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 6,000+</span>
+    <span class="hint ht">Expand Around Center</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the longest palindromic substring of string s.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>"babad"</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>"bab" or "aba"</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>"cbbd"</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>"bb"</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Every Palindrome Has a Center. Expand From It.</span>
+      <p>Every palindrome is symmetric about its center. There are 2n−1 possible centers (n single characters + n−1 gaps between characters). For each center, expand outward while characters match. Track the longest found. O(n²) time, O(1) space — better than O(n²) space DP.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Expand Around Center</span>
+      <p>For each index i, expand for <strong>odd-length</strong> palindromes (center at i) and <strong>even-length</strong> palindromes (center between i and i+1). Return the substring of the longest expansion found.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n²) time · O(1) space</span>
+<span class="kw">string</span> <span class="fn">longestPalindrome</span>(<span class="kw">string</span> s) {
+    <span class="kw">int</span> n=s.size(), start=0, maxLen=1;
+    <span class="cm">// Expand around center c1=c2 (odd) or c1,c2 adjacent (even)</span>
+    <span class="kw">auto</span> expand=[&amp;](<span class="kw">int</span> l, <span class="kw">int</span> r){
+        <span class="kw">while</span>(l&gt;=0 &amp;&amp; r&lt;n &amp;&amp; s[l]==s[r]){ l--; r++; }
+        <span class="kw">if</span>(r-l-1 &gt; maxLen){ maxLen=r-l-1; start=l+1; }
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++){
+        expand(i, i);   <span class="cm">// Odd length — center at i</span>
+        expand(i, i+1); <span class="cm">// Even length — center between i and i+1</span>
+    }
+    <span class="kw">return</span> s.substr(start, maxLen);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">O(n)</span><span class="fv">Manacher's Algorithm (see File 06)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q013 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q013 · MEDIUM</span>
+    <span class="qtitle">Encode and Decode Strings</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-m">Design</span></div>
+    <span class="qsrc">LeetCode #271 (Premium) / HackerRank</span>
+  </div>
+  <div class="hints">
+    <span class="hint ht">Length Prefix Encoding</span>
+    <span class="hint hc">System Design Pattern</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Design encode and decode functions to serialize a list of strings to a single string and back. Must handle any character including <code>#</code> and <code>/</code>.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Encode</span><code>["hello","world"]
+→ "5#hello5#world"</code></div>
+        <div class="io-box"><span class="io-lbl">Decode</span><code>"5#hello5#world"
+→ ["hello","world"]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Use Length as Prefix, Not a Delimiter Character</span>
+      <p>You can't use a fixed delimiter like '|' because strings might contain it. Instead, prefix each string with its length followed by a separator character (like '#'). During decode, read the number, skip the '#', read exactly that many characters. Works for any content.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution</span>
+<span class="kw">string</span> <span class="fn">encode</span>(<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&amp; strs) {
+    <span class="kw">string</span> res;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; s : strs)
+        res += to_string(s.size()) + <span class="st">"#"</span> + s; <span class="cm">// "len#string"</span>
+    <span class="kw">return</span> res;
+}
+<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; <span class="fn">decode</span>(<span class="kw">string</span> s) {
+    <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; res;
+    <span class="kw">int</span> i = 0;
+    <span class="kw">while</span>(i &lt; (<span class="kw">int</span>)s.size()){
+        <span class="kw">int</span> j = s.find('#', i);          <span class="cm">// Find the '#' separator</span>
+        <span class="kw">int</span> len = stoi(s.substr(i, j-i)); <span class="cm">// Parse the length prefix</span>
+        res.push_back(s.substr(j+1, len)); <span class="cm">// Extract exactly len chars</span>
+        i = j + 1 + len;                   <span class="cm">// Advance past this entry</span>
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">encode</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">decode</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q014 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q014 · HARD</span>
+    <span class="qtitle">Median of Two Sorted Arrays</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #4</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">FAANG Favorite</span>
+    <span class="hint ht">Binary Search on Partition</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given two sorted arrays of size m and n, return the median of the combined sorted array. Runtime must be O(log(min(m,n))).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>A=[1,3], B=[2]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>2.0</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>A=[1,2], B=[3,4]</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>2.5</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Binary Search a Partition, Not a Value</span>
+      <p>The median divides the combined sorted array in half. We need to find where to <strong>cut both arrays</strong> such that: every element on the left half ≤ every element on the right half. Binary search on the partition point in the shorter array — the other partition is determined automatically.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Binary Search on Shorter Array</span>
+      <p>Always binary search on A (the shorter array). Partition A at position i, B at position j=(m+n+1)/2−i. Check: A[i-1] ≤ B[j] AND B[j-1] ≤ A[i]. If A[i-1] &gt; B[j]: move i left. If B[j-1] &gt; A[i]: move i right. When correct: if (m+n) is odd → max(left halves). If even → average of (max left, min right).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(log min(m,n))</span>
+<span class="kw">double</span> <span class="fn">findMedianSortedArrays</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; A, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; B) {
+    <span class="kw">if</span> (A.size() &gt; B.size()) swap(A, B);  <span class="cm">// Ensure A is shorter</span>
+    <span class="kw">int</span> m=A.size(), n=B.size(), lo=0, hi=m;
+    <span class="kw">while</span> (lo &lt;= hi) {
+        <span class="kw">int</span> i=lo+(hi-lo)/2, j=(m+n+1)/2-i;
+        <span class="kw">int</span> AL=i==0 ? INT_MIN : A[i-1];
+        <span class="kw">int</span> AR=i==m ? INT_MAX : A[i];
+        <span class="kw">int</span> BL=j==0 ? INT_MIN : B[j-1];
+        <span class="kw">int</span> BR=j==n ? INT_MAX : B[j];
+        <span class="kw">if</span> (AL&lt;=BR &amp;&amp; BL&lt;=AR) {          <span class="cm">// Correct partition!</span>
+            <span class="kw">if</span>((m+n)%2) <span class="kw">return</span> max(AL,BL);
+            <span class="kw">return</span> (max(AL,BL)+min(AR,BR))/2.0;
+        }
+        AL&gt;BR ? hi=i-1 : lo=i+1;        <span class="cm">// Adjust search direction</span>
+    }
+    <span class="kw">return</span> 0.0;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(log min(m,n))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">BS on partition · not on value</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+
+  </div><!-- sec -->
+  </div><!-- ch-body -->
+</div><!-- chapter 1 -->
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — TWO POINTER & SLIDING WINDOW (Q015–Q028)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02 · Q015–Q028 · Two Pointer &amp; Sliding Window</div>
+    <div class="ch-title">Two Pointer &amp; Sliding Window — <em>Converting O(n²) to O(n)</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="tp-sw">
+
+    <div class="def-box">
+      <span class="lbl">When to Use Each Pattern</span>
+      <p><strong>Two Pointer (sorted array / opposite ends):</strong> When you need to find pairs/triplets. Works because sorted order lets you make greedy pointer movements — if sum is too small, move left pointer right; if too large, move right pointer left.<br><br>
+      <strong>Sliding Window (same direction):</strong> When you need a contiguous subarray/substring satisfying some condition. Fixed window: add right element, remove left element each step. Variable window: expand until invalid, shrink until valid again.</p>
+    </div>
+
+<!-- ───────────────── Q015 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q015 · MEDIUM</span>
+    <span class="qtitle">Longest Substring Without Repeating Characters</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-sw">Sliding Window</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #3</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 10,000+</span>
+    <span class="hint hc">Variable Window Template</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the length of the longest substring without repeating characters.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>"abcabcbb"</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>3</code> ("abc")</div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>"pwwkew"</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>3</code> ("wke")</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Expand Until Duplicate, Then Jump Left</span>
+      <p>Maintain a window [left, right]. Expand right freely. When a duplicate is found, advance <code>left</code> past the PREVIOUS occurrence of that character. Use a hash map to store the LAST seen position of each character — this lets you jump left in one step instead of inching forward.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">s = "abcabcbb"  left=0, best=0</span>
+r=0: 'a' → new, last={'a':0},  best=1
+r=1: 'b' → new, last={..,'b':1}, best=2
+r=2: 'c' → new, last={..,'c':2}, best=3
+r=3: 'a' → dup! last['a']=0, left=max(0,0+1)=<span class="tr-hi">1</span>, best=3
+r=4: 'b' → dup! last['b']=1, left=max(1,1+1)=<span class="tr-hi">2</span>, best=3
+r=5: 'c' → dup! last['c']=2, left=max(2,2+1)=<span class="tr-hi">3</span>, best=3
+r=6: 'b' → dup! last['b']=4, left=max(3,4+1)=<span class="tr-hi">5</span>
+           window="cb", best=3
+r=7: 'b' → dup! last['b']=6, left=max(5,6+1)=<span class="tr-hi">7</span>
+           window="b", best=3
+
+Answer: <span class="tr-ok">3</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(min(n, charset)) space</span>
+<span class="kw">int</span> <span class="fn">lengthOfLongestSubstring</span>(<span class="kw">string</span> s) {
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; last;   <span class="cm">// char → most recent index</span>
+    <span class="kw">int</span> best = 0, left = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> r = 0; r &lt; (<span class="kw">int</span>)s.size(); r++) {
+        <span class="kw">if</span> (last.count(s[r]))
+            left = max(left, last[s[r]] + 1); <span class="cm">// Jump left past the duplicate</span>
+        last[s[r]] = r;
+        best = max(best, r - left + 1);
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(min(n, charset))</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Variable window · jump left on duplicate</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q016 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q016 · HARD</span>
+    <span class="qtitle">Minimum Window Substring</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-sw">Sliding Window</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #76</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">FAANG Favorite</span>
+    <span class="hint hc">Template Problem</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the minimum window substring of s that contains all characters of t (including duplicates). Return "" if no such window.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>s="ADOBECODEBANC"
+t="ABC"</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>"BANC"</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Expand Until Valid, Then Shrink to Minimize</span>
+      <p>Track how many characters of t have been "satisfied" in the current window. Expand right until all are satisfied (window is valid). Then <strong>shrink left</strong> to find the smallest valid window. Record the best. When shrinking makes it invalid, expand right again. The key counter: <code>formed</code> = number of unique characters in t whose frequency in window matches the requirement.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Approach — Two Maps + Formed Counter</span>
+      <p><code>need</code> map: frequency of each char in t. <code>have</code> map: frequency of each char in current window. <code>formed</code>: incremented when have[c] == need[c] for some c. When formed == required (all t's unique chars satisfied), the window is valid — try to shrink left.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(|s| + |t|) time</span>
+<span class="kw">string</span> <span class="fn">minWindow</span>(<span class="kw">string</span> s, <span class="kw">string</span> t) {
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; need, have;
+    <span class="kw">for</span> (<span class="kw">char</span> c : t) need[c]++;
+    <span class="kw">int</span> formed=0, required=(<span class="kw">int</span>)need.size();
+    <span class="kw">int</span> best=INT_MAX, bl=0, left=0;
+    <span class="kw">for</span> (<span class="kw">int</span> r = 0; r &lt; (<span class="kw">int</span>)s.size(); r++) {
+        have[s[r]]++;
+        <span class="kw">if</span>(need.count(s[r]) &amp;&amp; have[s[r]]==need[s[r]]) formed++;
+        <span class="kw">while</span>(formed == required) {              <span class="cm">// Window is valid — shrink</span>
+            <span class="kw">if</span>(r-left+1 &lt; best){ best=r-left+1; bl=left; }
+            have[s[left]]--;
+            <span class="kw">if</span>(need.count(s[left]) &amp;&amp; have[s[left]] &lt; need[s[left]])
+                formed--;
+            left++;
+        }
+    }
+    <span class="kw">return</span> best==INT_MAX ? <span class="st">""</span> : s.substr(bl, best);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(|s|+|t|)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(|t|)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Expand-until-valid, Shrink-to-minimize</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q017 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q017 · MEDIUM</span>
+    <span class="qtitle">Maximum Sum Subarray of Size K (Fixed Window)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-sw">Sliding Window</span></div>
+    <span class="qsrc">GFG / HackerRank Classic</span>
+  </div>
+  <div class="hints">
+    <span class="hint hc">Fixed Window Template</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the maximum sum of any contiguous subarray of exactly size K.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[2,1,5,1,3,2], K=3</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>9</code> (5+1+3)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Fixed Window: Remove Left, Add Right, Each Step is O(1)</span>
+      <p>Build the first window of K elements. Then for each new element added (right), remove the element that left the window (left = right - K). This is the "fixed window" sliding pattern — no variable shrinking needed.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[2,1,5,1,3,2]  K=3</span>
+Init window [0..2]:  sum = 2+1+5 = <span class="tr-hi">8</span>   best=8
+Slide i=3: add a[3]=1, remove a[0]=2  sum=8-2+1=7   best=8
+Slide i=4: add a[4]=3, remove a[1]=1  sum=7-1+3=<span class="tr-hi">9</span>  best=<span class="tr-ok">9</span>
+Slide i=5: add a[5]=2, remove a[2]=5  sum=9-5+2=6   best=9
+
+Answer: <span class="tr-ok">9</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(1) space</span>
+<span class="kw">int</span> <span class="fn">maxSumK</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    <span class="kw">int</span> sum = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> i=0;i&lt;k;i++) sum += a[i];  <span class="cm">// Build initial window</span>
+    <span class="kw">int</span> best = sum;
+    <span class="kw">for</span> (<span class="kw">int</span> i=k;i&lt;(<span class="kw">int</span>)a.size();i++) {
+        sum += a[i] - a[i-k];             <span class="cm">// Slide: add right, remove left</span>
+        best = max(best, sum);
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q018 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q018 · MEDIUM</span>
+    <span class="qtitle">Longest Repeating Character Replacement</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-sw">Sliding Window</span></div>
+    <span class="qsrc">LeetCode #424</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Key: windowSize − maxFreq ≤ k</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given string s and integer k, find the length of the longest substring containing the same letter that can be obtained by replacing at most k characters.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>s="AABABBA", k=1</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>"AABA" → replace B → "AAAA"</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Window is Valid When (Size − MaxFreq) ≤ k</span>
+      <p>The number of replacements needed to make the entire window one character = window size − frequency of the most common character. If this is ≤ k, the window is valid. Maximize the window size while keeping this condition true.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Key Insight — Why maxF Doesn't Need to Decrease</span>
+      <p>maxF is a monotone value — once it increases, it never needs to go lower for our purpose. If shrinking the window decreases the max frequency, the window size also decreases, so the condition can't get worse than before. We only care about windows LARGER than the current best, and those require maxF to increase.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(26) space</span>
+<span class="kw">int</span> <span class="fn">characterReplacement</span>(<span class="kw">string</span> s, <span class="kw">int</span> k) {
+    <span class="kw">int</span> freq[26]={}, maxF=0, left=0, best=0;
+    <span class="kw">for</span> (<span class="kw">int</span> r=0;r&lt;(<span class="kw">int</span>)s.size();r++) {
+        maxF = max(maxF, ++freq[s[r]-'A']);
+        <span class="kw">while</span> ((r-left+1) - maxF &gt; k) {       <span class="cm">// Too many replacements</span>
+            freq[s[left]-'A']--;
+            left++;
+        }
+        best = max(best, r-left+1);
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(26)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q019 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q019 · MEDIUM</span>
+    <span class="qtitle">Permutation in String</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-sw">Sliding Window</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #567</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Fixed Window = Length of s1</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return true if s2 contains a permutation of s1 as a substring (i.e., some window in s2 is an anagram of s1).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>s1="ab", s2="eidbaooo"</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>true</code> ("ba" in s2)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Anagram = Same Character Counts. Fixed Window of Size |s1|.</span>
+      <p>A permutation of s1 in s2 = any window of length |s1| in s2 that has the same character frequencies as s1. Use two frequency arrays, maintain a <code>matches</code> counter (how many characters have matching frequencies). Update matches as you slide.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) with frequency matching counter</span>
+<span class="kw">bool</span> <span class="fn">checkInclusion</span>(<span class="kw">string</span> s1, <span class="kw">string</span> s2) {
+    <span class="kw">if</span>(s1.size() &gt; s2.size()) <span class="kw">return false</span>;
+    <span class="kw">int</span> need[26]={}, have[26]={}, matches=0;
+    <span class="kw">for</span>(<span class="kw">char</span> c:s1) need[c-'a']++;
+
+    <span class="kw">int</span> k=s1.size();
+    <span class="cm">// Build initial window</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;k;i++){
+        have[s2[i]-'a']++;
+        <span class="kw">if</span>(have[s2[i]-'a']==need[s2[i]-'a']) matches++;
+    }
+    <span class="kw">if</span>(matches==26) <span class="kw">return true</span>;
+
+    <span class="kw">for</span>(<span class="kw">int</span> r=k;r&lt;(<span class="kw">int</span>)s2.size();r++){
+        <span class="kw">int</span> add=s2[r]-'a', rem=s2[r-k]-'a';
+        <span class="cm">// Add right character</span>
+        have[add]++;
+        <span class="kw">if</span>(have[add]==need[add]) matches++;
+        <span class="kw">else if</span>(have[add]==need[add]+1) matches--;
+        <span class="cm">// Remove left character</span>
+        have[rem]--;
+        <span class="kw">if</span>(have[rem]==need[rem]) matches++;
+        <span class="kw">else if</span>(have[rem]==need[rem]-1) matches--;
+        <span class="kw">if</span>(matches==26) <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(26)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q020 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q020 · MEDIUM</span>
+    <span class="qtitle">Sliding Window Maximum</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-sw">Sliding Window</span><span class="qt qt-st">Monotonic Deque</span></div>
+    <span class="qsrc">LeetCode #239</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Hard but Patterned</span>
+    <span class="hint ht">Monotonic Decreasing Deque</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the maximum of each sliding window of size k as it slides across the array.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,3,-1,-3,5,3,6,7]
+k=3</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[3,3,5,5,6,7]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Maintain the Maximum Without Rescanning</span>
+      <p>Brute force: for each window, scan k elements. O(nk). Better: use a <strong>monotonic decreasing deque</strong> — it stores candidate maximums in decreasing order. The front is always the current window's maximum. Elements that can never be the maximum (smaller elements behind a larger one) are discarded. Each element enters and exits the deque once → O(n).</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[1,3,-1,-3,5,3,6,7]  k=3</span>
+dq=[] (stores indices, front=max)
+
+i=0: add 0(val=1). dq=[0]
+i=1: add 1(val=3). 3>1 → pop 0. dq=[1]
+i=2: add 2(val=-1). -1<3. dq=[1,2]. window full → output a[dq[0]]=a[1]=<span class="tr-ok">3</span>
+i=3: add 3(val=-3). dq=[1,2,3]. remove front if out of window (front=1, 3-1&lt;k). 
+     output a[1]=<span class="tr-ok">3</span>
+i=4: add 4(val=5). 5>a[3]=-3→pop, 5>a[2]=-1→pop, 5>a[1]=3→pop. dq=[4].
+     output a[4]=<span class="tr-ok">5</span>
+i=5: add 5(val=3). dq=[4,5]. output a[4]=<span class="tr-ok">5</span>
+i=6: add 6(val=6). 6>3→pop 5, 6>5? NO wait 6>a[4]=5→pop 4. dq=[6].
+     output a[6]=<span class="tr-ok">6</span>
+i=7: add 7(val=7). 7>a[6]=6→pop. dq=[7]. output a[7]=<span class="tr-ok">7</span>
+
+Result: [<span class="tr-ok">3,3,5,5,6,7</span>]</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(k) space</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">maxSlidingWindow</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    deque&lt;<span class="kw">int</span>&gt; dq;                          <span class="cm">// Stores indices (decreasing values)</span>
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span> (<span class="kw">int</span> i=0;i&lt;(<span class="kw">int</span>)a.size();i++) {
+        <span class="kw">while</span>(!dq.empty() &amp;&amp; a[dq.back()]&lt;=a[i])
+            dq.pop_back();                   <span class="cm">// Remove smaller elements</span>
+        dq.push_back(i);
+        <span class="kw">if</span>(dq.front() &lt;= i-k)
+            dq.pop_front();                  <span class="cm">// Remove out-of-window element</span>
+        <span class="kw">if</span>(i &gt;= k-1)
+            res.push_back(a[dq.front()]);    <span class="cm">// Front is always the max</span>
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(k)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Monotonic deque · appears in many hard sliding window problems</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q021 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q021 · MEDIUM</span>
+    <span class="qtitle">Subarray Sum Equals K</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Hash</span><span class="qt qt-m">Prefix Sum</span></div>
+    <span class="qsrc">LeetCode #560</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hf">Asked 5,000+</span>
+    <span class="hint ht">Prefix Sum + Hash Map</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given integer array and integer k, count the total number of subarrays whose sum equals k. Array may contain negative numbers.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,1,1], k=2</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>2</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>[1,1](0..1) and
+[1,1](1..2)</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — prefixSum[i] − prefixSum[j] = k means subarray [j+1..i] sums to k</span>
+      <p>Rearranged: we want to count positions j where <code>prefixSum[j] = prefixSum[i] - k</code>. Keep a frequency map of prefix sums seen so far. At each position i, add <code>freq[prefixSum - k]</code> to the answer, then increment <code>freq[prefixSum]</code>. Note: negative numbers make sliding window INVALID here — must use prefix sum approach.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">nums=[1,1,1], k=2</span>
+freq={0:1}  psum=0  count=0
+
+i=0: psum=1, need=1-2=-1, freq[-1]=0, count+=0. freq={0:1,1:1}
+i=1: psum=2, need=2-2=0,  freq[0]=1,  count+=<span class="tr-hi">1</span>. freq={0:1,1:1,2:1}
+i=2: psum=3, need=3-2=1,  freq[1]=1,  count+=<span class="tr-hi">1</span>. freq={...3:1}
+
+Answer: <span class="tr-ok">2</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(n) space</span>
+<span class="kw">int</span> <span class="fn">subarraySum</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; freq;
+    freq[0] = 1;              <span class="cm">// Empty prefix has sum 0</span>
+    <span class="kw">int</span> psum=0, count=0;
+    <span class="kw">for</span> (<span class="kw">int</span> x : nums) {
+        psum += x;
+        count += freq[psum - k]; <span class="cm">// How many prefixes sum to (psum - k)?</span>
+        freq[psum]++;
+    }
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Prefix sum + hash · same logic for XOR subarrays</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q022 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q022 · MEDIUM</span>
+    <span class="qtitle">Longest Consecutive Sequence</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Hash Set</span></div>
+    <span class="qsrc">LeetCode #128</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Only Start Counting from Sequence Beginnings</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the length of the longest consecutive sequence in an unsorted array. Required: O(n) time.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[100,4,200,1,3,2]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code> (1,2,3,4)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Start Counting Only at the Beginning of Each Sequence</span>
+      <p>An element n is the START of a sequence only if (n−1) is NOT in the set. Only then count consecutive elements from n. This avoids redundant counting — every element is visited at most twice total, giving O(n).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(n) space</span>
+<span class="kw">int</span> <span class="fn">longestConsecutive</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums) {
+    unordered_set&lt;<span class="kw">int</span>&gt; s(nums.begin(), nums.end());
+    <span class="kw">int</span> best = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> n : s) {
+        <span class="kw">if</span> (s.count(n-1)) <span class="kw">continue</span>;   <span class="cm">// n is not a sequence start → skip</span>
+        <span class="kw">int</span> len = 1;
+        <span class="kw">while</span> (s.count(++n)) len++;      <span class="cm">// Count consecutive elements</span>
+        best = max(best, len);
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q023 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q023 · EASY</span>
+    <span class="qtitle">Valid Anagram</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #242</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint hc">Frequency Array Basics</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return true if t is an anagram of s (same characters, same frequencies, any order).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>s="anagram"
+t="nagaram"</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>true</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>s="rat"
+t="car"</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>false</code></div>
+      </div>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Two Approaches</span>
+<span class="cm">// Method 1: Sort both strings (simplest) — O(n log n)</span>
+<span class="kw">bool</span> <span class="fn">isAnagramSort</span>(<span class="kw">string</span> s, <span class="kw">string</span> t) {
+    sort(s.begin(),s.end()); sort(t.begin(),t.end());
+    <span class="kw">return</span> s == t;
+}
+
+<span class="cm">// Method 2: Frequency array — O(n) time, O(1) space</span>
+<span class="kw">bool</span> <span class="fn">isAnagram</span>(<span class="kw">string</span> s, <span class="kw">string</span> t) {
+    <span class="kw">if</span>(s.size() != t.size()) <span class="kw">return false</span>;
+    <span class="kw">int</span> freq[26] = {};
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) freq[c-'a']++;         <span class="cm">// Count s</span>
+    <span class="kw">for</span>(<span class="kw">char</span> c : t) <span class="kw">if</span>(--freq[c-'a'] &lt; 0) <span class="kw">return false</span>; <span class="cm">// Subtract t</span>
+    <span class="kw">return true</span>;                            <span class="cm">// All zeroed out = anagram</span>
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(26) = O(1)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q024 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q024 · MEDIUM</span>
+    <span class="qtitle">Group Anagrams</span>
+    <div class="qtags"><span class="qt qt-s">String</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #49</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Canonical Key Trick</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given an array of strings, group the anagrams together.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>["eat","tea","tan","ate","nat","bat"]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[["bat"],["nat","tan"],["ate","eat","tea"]]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — All Anagrams Share the Same Sorted Form</span>
+      <p>"eat", "tea", "ate" all sort to "aet". Use the sorted form as the hash map key. All words with the same key belong to the same group.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n·k·log k) where k=avg string length</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; <span class="fn">groupAnagrams</span>(<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&amp; strs) {
+    unordered_map&lt;<span class="kw">string</span>,<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; groups;
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; s : strs) {
+        <span class="kw">string</span> key = s;
+        sort(key.begin(), key.end());  <span class="cm">// Canonical form</span>
+        groups[key].push_back(s);
+    }
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; res;
+    <span class="kw">for</span> (<span class="kw">auto</span>&amp; [k,v] : groups) res.push_back(v);
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n·k·log k)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n·k)</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q025 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q025 · MEDIUM</span>
+    <span class="qtitle">Top K Frequent Elements</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Hash</span><span class="qt qt-m">Bucket Sort</span></div>
+    <span class="qsrc">LeetCode #347</span>
+  </div>
+  <div class="hints">
+    <span class="hint hm">Must Know</span>
+    <span class="hint ht">Bucket Sort Beats Heap for O(n)</span>
+  </div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the k most frequent elements. Answer can be in any order.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,1,1,2,2,3], k=2</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[1,2]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Frequency can be at most n. Use n+1 Buckets.</span>
+      <p>Count frequencies. Create n+1 buckets where bucket[i] holds all elements with frequency i. Scan from the highest bucket downward, collecting elements until k are gathered. Total O(n) time — no sorting needed.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) Bucket Sort approach</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">topKFrequent</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    <span class="kw">int</span> n = nums.size();
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; freq;
+    <span class="kw">for</span>(<span class="kw">int</span> x : nums) freq[x]++;
+
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; buckets(n+1);     <span class="cm">// bucket[i] = elements with freq i</span>
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; [val,cnt] : freq)
+        buckets[cnt].push_back(val);
+
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=n; i&gt;=1 &amp;&amp; (<span class="kw">int</span>)res.size()&lt;k; i--)
+        <span class="kw">for</span>(<span class="kw">int</span> x : buckets[i])
+            <span class="kw">if</span>((<span class="kw">int</span>)res.size()&lt;k) res.push_back(x);
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Alt</span><span class="fv">Min-heap of size k: O(n log k)</span></div>
+  </div>
+</div>
+
+<div class="sep">— End of Chapter 2 preview — Q026–Q028 cover Subarray Product &lt; K, Binary Subarrays with Sum, Fruit Into Baskets —</div>
+
+<!-- ───────────────── Q026 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q026 · MEDIUM</span>
+    <span class="qtitle">Subarray Product Less Than K</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-sw">Sliding Window</span></div>
+    <span class="qsrc">LeetCode #713</span>
+  </div>
+  <div class="hints"><span class="hint hc">Variable Window on Product</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Count the number of contiguous subarrays where the product of all elements is strictly less than k. All nums[i] are positive.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[10,5,2,6], k=100</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>8</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Each Valid Window [left,right] Contributes (right−left+1) New Subarrays</span>
+      <p>For a valid window ending at right, the new subarrays added are: [right], [right-1,right], ..., [left,right]. That's exactly (right − left + 1) subarrays. Shrink window when product ≥ k. Positive numbers mean the product is monotone as the window grows.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> <span class="fn">numSubarrayProductLessThanK</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    <span class="kw">if</span>(k &lt;= 1) <span class="kw">return</span> 0;
+    <span class="kw">int</span> prod=1, left=0, count=0;
+    <span class="kw">for</span>(<span class="kw">int</span> r=0;r&lt;(<span class="kw">int</span>)a.size();r++){
+        prod *= a[r];
+        <span class="kw">while</span>(prod &gt;= k) prod /= a[left++];   <span class="cm">// Shrink left until valid</span>
+        count += r - left + 1;                  <span class="cm">// New subarrays ending at r</span>
+    }
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<!-- ───────────────── Q027 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q027 · MEDIUM</span>
+    <span class="qtitle">Fruit Into Baskets (Longest Subarray with at Most 2 Distinct)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-sw">Sliding Window</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #904</span>
+  </div>
+  <div class="hints"><span class="hint ht">Template: At Most K Distinct Values</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the longest subarray containing at most 2 distinct values. This is the general "at most K distinct" sliding window template (K=2 here).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,1,2,3]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code> ([1,2,1,2])</div>
+      </div>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — Variable Window with Map</span>
+<span class="kw">int</span> <span class="fn">totalFruit</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; fruits) {
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; basket;
+    <span class="kw">int</span> left=0, best=0;
+    <span class="kw">for</span>(<span class="kw">int</span> r=0;r&lt;(<span class="kw">int</span>)fruits.size();r++){
+        basket[fruits[r]]++;
+        <span class="kw">while</span>(basket.size() &gt; 2){          <span class="cm">// More than 2 types → shrink</span>
+            basket[fruits[left]]--;
+            <span class="kw">if</span>(!basket[fruits[left]]) basket.erase(fruits[left]);
+            left++;
+        }
+        best = max(best, r-left+1);
+    }
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(K)</span></div></div>
+</div>
+
+<!-- ───────────────── Q028 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q028 · MEDIUM</span>
+    <span class="qtitle">Minimum Size Subarray Sum</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-sw">Sliding Window</span></div>
+    <span class="qsrc">LeetCode #209</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Positive-Only Variable Window</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given positive integers array and target, find the minimum length of a subarray whose sum is ≥ target. Return 0 if impossible.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[2,3,1,2,4,3], target=7</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>2</code> ([4,3])</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Positive Numbers Make Sum Monotone → Variable Window Works</span>
+      <p>Expand right to increase sum. When sum ≥ target, the window is valid — record its length, then shrink left to see if a shorter window also satisfies. Since all values are positive, shrinking decreases the sum, so we can always know when to stop.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> <span class="fn">minSubArrayLen</span>(<span class="kw">int</span> target, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> left=0, sum=0, best=INT_MAX;
+    <span class="kw">for</span>(<span class="kw">int</span> r=0;r&lt;(<span class="kw">int</span>)a.size();r++){
+        sum += a[r];
+        <span class="kw">while</span>(sum &gt;= target){              <span class="cm">// Window valid → try to shrink</span>
+            best = min(best, r-left+1);
+            sum -= a[left++];
+        }
+    }
+    <span class="kw">return</span> best==INT_MAX ? 0 : best;
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+
+  </div><!-- sec -->
+  </div><!-- ch-body -->
+</div><!-- chapter 2 -->
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — BINARY SEARCH (Q029–Q035)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03 · Q029–Q035 · Binary Search</div>
+    <div class="ch-title">Binary Search — <em>Not Just for Sorted Arrays — Search the Answer Space</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="bs">
+
+    <div class="def-box">
+      <span class="lbl">The 3 Binary Search Templates — Learn All Three</span>
+      <p><strong>T1 — Exact match:</strong> <code>lo≤hi, mid=(lo+hi)/2</code>. Return index or -1.<br>
+      <strong>T2 — First position where condition is true (lower_bound):</strong> <code>lo=0, hi=n, lo&lt;hi</code>. If cond(mid): hi=mid. Else: lo=mid+1. Returns first valid index.<br>
+      <strong>T3 — Last position where condition is true:</strong> <code>lo=0, hi=n, lo&lt;hi</code>. If cond(mid): lo=mid+1. Else: hi=mid. Returns lo-1 = last valid.<br>
+      <strong>T4 — Search on Answer Space:</strong> lo=min_answer, hi=max_answer. Binary search on the answer, verify with a helper function in O(n).</p>
+    </div>
+
+<!-- ───────────────── Q029 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q029 · EASY</span>
+    <span class="qtitle">Binary Search (Foundation Template)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #704</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">All 3 Templates Here</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given sorted array of distinct integers and target, return its index or -1 in O(log n).</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Use lo+(hi−lo)/2 to Avoid Overflow</span>
+      <p>Never write <code>(lo+hi)/2</code> — it overflows for large indices. Always write <code>lo + (hi-lo)/2</code>. This is the single most common binary search bug.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — All 3 Templates</span>
+<span class="cm">// Template 1: Exact search</span>
+<span class="kw">int</span> <span class="fn">bsearch</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> t) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt;= hi){
+        <span class="kw">int</span> mid = lo + (hi-lo)/2;
+        <span class="kw">if</span>(a[mid]==t) <span class="kw">return</span> mid;
+        a[mid] &lt; t ? lo=mid+1 : hi=mid-1;
+    }
+    <span class="kw">return</span> -1;
+}
+
+<span class="cm">// Template 2: First index where a[mid] >= t (lower_bound)</span>
+<span class="kw">int</span> <span class="fn">lowerBound</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> t) {
+    <span class="kw">int</span> lo=0, hi=a.size();  <span class="cm">// hi=n (can be past end)</span>
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">int</span> mid=lo+(hi-lo)/2;
+        a[mid] &lt; t ? lo=mid+1 : hi=mid;
+    }
+    <span class="kw">return</span> lo;  <span class="cm">// First position where a[pos] >= t</span>
+}
+
+<span class="cm">// Template 3: Last index where a[mid] <= t (upper_bound - 1)</span>
+<span class="kw">int</span> <span class="fn">upperBound</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> t) {
+    <span class="kw">int</span> lo=0, hi=a.size();
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">int</span> mid=lo+(hi-lo)/2;
+        a[mid] &lt;= t ? lo=mid+1 : hi=mid;
+    }
+    <span class="kw">return</span> lo;  <span class="cm">// First position where a[pos] > t  →  last pos = lo-1</span>
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(log n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<!-- ───────────────── Q030 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q030 · MEDIUM</span>
+    <span class="qtitle">Search in Rotated Sorted Array</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #33</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">One Half Is Always Sorted</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Search for target in a rotated sorted array in O(log n).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[4,5,6,7,0,1,2]
+target=0</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — In Every Step, One Half Is Guaranteed Sorted</span>
+      <p>After a rotation, if we split at mid, either [lo..mid] or [mid..hi] is sorted. Check which half is sorted, then determine which half the target falls in, discard the other. This preserves O(log n) by eliminating half the search space each step.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[4,5,6,7,0,1,2]  target=0</span>
+lo=0 hi=6 mid=3 (val=7)
+  a[lo]=4 &lt;= a[mid]=7 → LEFT half [lo..mid] is sorted
+  Is target=0 in [4..7]? NO → lo = mid+1 = 4
+
+lo=4 hi=6 mid=5 (val=1)
+  a[lo]=0 &lt;= a[mid]=1 → LEFT half [lo..mid] is sorted
+  Is target=0 in [0..1]? YES → hi = mid-1 = 4... wait target=0 = a[lo]
+
+lo=4 hi=4 mid=4 (val=0)
+  a[mid]=0 == target=0 → return <span class="tr-ok">4</span>  ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(log n)</span>
+<span class="kw">int</span> <span class="fn">search</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> t) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt;= hi){
+        <span class="kw">int</span> mid = lo+(hi-lo)/2;
+        <span class="kw">if</span>(a[mid]==t) <span class="kw">return</span> mid;
+        <span class="kw">if</span>(a[lo] &lt;= a[mid]){            <span class="cm">// Left half [lo..mid] is sorted</span>
+            <span class="kw">if</span>(a[lo]&lt;=t &amp;&amp; t&lt;a[mid]) hi=mid-1;
+            <span class="kw">else</span>                       lo=mid+1;
+        } <span class="kw">else</span> {                         <span class="cm">// Right half [mid..hi] is sorted</span>
+            <span class="kw">if</span>(a[mid]&lt;t &amp;&amp; t&lt;=a[hi]) lo=mid+1;
+            <span class="kw">else</span>                       hi=mid-1;
+        }
+    }
+    <span class="kw">return</span> -1;
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(log n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<!-- ───────────────── Q031 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q031 · MEDIUM</span>
+    <span class="qtitle">Find Minimum in Rotated Sorted Array</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #153</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the minimum element in a rotated sorted array of unique integers in O(log n).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[3,4,5,1,2]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>1</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Minimum Is at the Rotation Inflection Point</span>
+      <p>If a[mid] &gt; a[hi], the rotation point (minimum) is in the right half → lo = mid+1. Otherwise, minimum is in the left half including mid → hi = mid. When lo == hi, we have the minimum.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(log n)</span>
+<span class="kw">int</span> <span class="fn">findMin</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">int</span> mid=lo+(hi-lo)/2;
+        a[mid] &gt; a[hi] ? lo=mid+1 : hi=mid; <span class="cm">// Min is in the unsorted side</span>
+    }
+    <span class="kw">return</span> a[lo];
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(log n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<!-- ───────────────── Q032 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q032 · MEDIUM</span>
+    <span class="qtitle">Koko Eating Bananas (Binary Search on Answer)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #875</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Binary Search on Answer Space</span><span class="hint hc">The Answer-Space Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Koko eats bananas at speed k bananas/hr (at most). Each pile must be finished before moving to the next. Find the minimum k to finish all piles within h hours.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>piles=[3,6,7,11]
+h=8</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Monotone Property → Binary Search on k</span>
+      <p>If speed k works, speed k+1 also works. This monotone property means: the feasible speeds form a contiguous range [minK, ∞). Binary search the boundary. Range: [1, max(piles)]. For each candidate k, check if all piles can be finished in ≤ h hours using ⌈pile/k⌉ for each pile.</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Answer Space Binary Search Pattern — Memorize This</span>
+      <p>Whenever you see "find the MINIMUM/MAXIMUM value such that some condition holds", suspect binary search on answer. The condition must be <strong>monotone</strong>: if it holds for x, it holds for all x' beyond x. Define the feasibility check function, then binary search the answer space [lo, hi].</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">piles=[3,6,7,11], h=8</span>
+lo=11 (max pile), hi=27 (sum), ... actually:
+lo=1, hi=max(piles)=11
+
+mid=6: hours=⌈3/6⌉+⌈6/6⌉+⌈7/6⌉+⌈11/6⌉=1+1+2+2=6 ≤ 8 → works → hi=6
+mid=3: hours=⌈3/3⌉+⌈6/3⌉+⌈7/3⌉+⌈11/3⌉=1+2+3+4=10 > 8 → fails → lo=4
+mid=5: hours=1+2+2+3=8 ≤ 8 → works → hi=5
+mid=4: hours=1+2+2+3=8 ≤ 8 → works → hi=4
+lo=hi=<span class="tr-ok">4</span>  Answer: 4</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n · log(max_pile))</span>
+<span class="kw">int</span> <span class="fn">minEatingSpeed</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; piles, <span class="kw">int</span> h) {
+    <span class="kw">auto</span> canFinish=[&amp;](<span class="kw">long long</span> k){
+        <span class="kw">long long</span> hours=0;
+        <span class="kw">for</span>(<span class="kw">int</span> p:piles) hours+=(p+k-1)/k;  <span class="cm">// ceil(p/k) = (p+k-1)/k</span>
+        <span class="kw">return</span> hours &lt;= h;
+    };
+    <span class="kw">int</span> lo=1, hi=*max_element(piles.begin(),piles.end());
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">int</span> mid=lo+(hi-lo)/2;
+        canFinish(mid) ? hi=mid : lo=mid+1;  <span class="cm">// Works → try smaller; fails → need bigger</span>
+    }
+    <span class="kw">return</span> lo;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n · log(max))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Same Pattern</span><span class="fv">Ship packages in D days · Painters partition · Aggressive cows</span></div>
+  </div>
+</div>
+
+<!-- ───────────────── Q033 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q033 · MEDIUM</span>
+    <span class="qtitle">Find Peak Element</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span></div>
+    <span class="qsrc">LeetCode #162</span>
+  </div>
+  <div class="hints"><span class="hint ht">Go Towards the Uphill Side</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the index of a peak element (greater than both neighbors). Array may have multiple peaks. Return any. O(log n) required.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[1,2,3,1]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>2</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Always Move Toward the Higher Neighbor</span>
+      <p>If a[mid] &lt; a[mid+1], the right side is "uphill" → there must be a peak somewhere to the right. Move lo = mid+1. If a[mid] &gt; a[mid+1], the left side has a peak → hi = mid. This always converges to a peak in O(log n).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution</span>
+<span class="kw">int</span> <span class="fn">findPeakElement</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> lo=0, hi=a.size()-1;
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">int</span> mid=lo+(hi-lo)/2;
+        a[mid] &lt; a[mid+1] ? lo=mid+1 : hi=mid; <span class="cm">// Go uphill</span>
+    }
+    <span class="kw">return</span> lo;
+}</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">Time</span><span class="fv">O(log n)</span></div><div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div></div>
+</div>
+
+<!-- ───────────────── Q034 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q034 · MEDIUM</span>
+    <span class="qtitle">Time-Based Key-Value Store</span>
+    <div class="qtags"><span class="qt qt-bs">Binary Search</span><span class="qt qt-m">Design</span></div>
+    <span class="qsrc">LeetCode #981</span>
+  </div>
+  <div class="hints"><span class="hint ht">BS on Timestamps — Floor Query</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Design a time-based key-value store with <code>set(key, value, timestamp)</code> and <code>get(key, timestamp)</code> — returns the value with the largest timestamp ≤ given timestamp, or "" if none.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Timestamps Are Strictly Increasing → Binary Search for Floor</span>
+      <p>Timestamps are always increasing (given in the problem). For each key, store all (timestamp, value) pairs in sorted order. For get, binary search for the largest timestamp ≤ query timestamp (floor query = upper_bound - 1 pattern).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution</span>
+<span class="kw">class</span> TimeMap {
+    unordered_map&lt;<span class="kw">string</span>, <span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">string</span>&gt;&gt;&gt; store;
+<span class="kw">public</span>:
+    <span class="kw">void</span> set(<span class="kw">string</span> key, <span class="kw">string</span> value, <span class="kw">int</span> ts){
+        store[key].push_back({ts, value});  <span class="cm">// Timestamps always increasing</span>
+    }
+    <span class="kw">string</span> get(<span class="kw">string</span> key, <span class="kw">int</span> ts){
+        <span class="kw">if</span>(!store.count(key)) <span class="kw">return</span> <span class="st">""</span>;
+        <span class="kw">auto</span>&amp; v = store[key];
+        <span class="cm">// Find largest timestamp <= ts</span>
+        <span class="kw">int</span> lo=0, hi=v.size()-1, res=-1;
+        <span class="kw">while</span>(lo &lt;= hi){
+            <span class="kw">int</span> mid=lo+(hi-lo)/2;
+            <span class="kw">if</span>(v[mid].first &lt;= ts){ res=mid; lo=mid+1; } <span class="cm">// Valid → go right</span>
+            <span class="kw">else</span>                   hi=mid-1;
+        }
+        <span class="kw">return</span> res==-1 ? <span class="st">""</span> : v[res].second;
+    }
+};</div>
+  </div>
+  <div class="qfoot"><div class="qf t"><span class="fl">set</span><span class="fv">O(1)</span></div><div class="qf s"><span class="fl">get</span><span class="fv">O(log n)</span></div></div>
+</div>
+
+<!-- ───────────────── Q035 ───────────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q035 · HARD</span>
+    <span class="qtitle">Split Array Largest Sum (BS on Answer)</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-bs">Binary Search</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #410</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Binary Search on Answer + Greedy Verification</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Split array into k non-empty subarrays to minimize the maximum subarray sum. Return that minimum possible maximum.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[7,2,5,10,8], k=2</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>18</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>[7,2,5] and [10,8]
+max=18, best possible</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Binary Search on the "Capacity" of Each Group</span>
+      <p>Instead of "find the optimal split" (hard), flip it: "given a maximum sum limit cap, can we split into ≤ k groups?" (easy greedy check). Monotone property: if cap works, cap+1 also works. Binary search on cap from [max(arr), sum(arr)].</p>
+    </div>
+    <div class="qapp">
+      <span class="albl">Greedy Check — Greedy works because we want MINIMUM groups</span>
+      <p>Walk left to right. Greedily pack each element into the current group as long as the sum doesn't exceed cap. When it would exceed, start a new group. Count groups needed. If groups ≤ k → cap works.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n · log(sum−max))</span>
+<span class="kw">int</span> <span class="fn">splitArray</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {
+    <span class="kw">auto</span> canSplit=[&amp;](<span class="kw">long long</span> cap){
+        <span class="kw">int</span> groups=1; <span class="kw">long long</span> cur=0;
+        <span class="kw">for</span>(<span class="kw">int</span> x:nums){
+            <span class="kw">if</span>(x&gt;cap) <span class="kw">return false</span>;    <span class="cm">// Single element exceeds cap → impossible</span>
+            <span class="kw">if</span>(cur+x&gt;cap){ groups++; cur=0; } <span class="cm">// Start new group</span>
+            cur+=x;
+        }
+        <span class="kw">return</span> groups &lt;= k;
+    };
+    <span class="kw">long long</span> lo=*max_element(nums.begin(),nums.end()),
+              hi=accumulate(nums.begin(),nums.end(),0LL);
+    <span class="kw">while</span>(lo &lt; hi){
+        <span class="kw">long long</span> mid=lo+(hi-lo)/2;
+        canSplit(mid) ? hi=mid : lo=mid+1;
+    }
+    <span class="kw">return</span> (<span class="kw">int</span>)lo;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n · log(sum))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Same as Koko · Ship packages · Painter's partition · Aggressive cows</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+
+  </div><!-- sec -->
+  </div><!-- ch-body -->
+</div><!-- chapter 3 -->
+
+<div class="footer">Interview Problem Setbook · Part 1 of 6 · Q001–Q035 · Arrays · Two Pointer · Sliding Window · Binary Search</div>
+
+</div><!-- book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'iv-01';
+  var FILE_DISP = 'IV · Part 1 · Q001–Q035';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

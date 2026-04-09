@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discrete Mathematics — Logic, Sets, Relations & Functions · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8; --paper4:#e4ddd0;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;
+}
+.book{max-width:840px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+/* HEADINGS */
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ta{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+
+/* BODY */
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* BOXES */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+
+/* EXAMPLE */
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+
+/* CODE */
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+
+/* HIGHLIGHTS */
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.hi-o{background:var(--hl-o);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.c-p{color:var(--purple);font-weight:600;}
+
+/* LISTS */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+
+/* TABLE */
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}
+.ok{color:var(--orange);font-weight:600;}
+.bad{color:var(--red);font-weight:600;}
+.cent{text-align:center;}
+
+/* TRUTH TABLE */
+.tt-wrap{overflow-x:auto;margin:14px 0;}
+.tt-wrap table{font-family:'Courier New',monospace;font-size:14px;}
+.tt-wrap th{font-family:var(--hand);font-size:11px;text-align:center;padding:8px 14px;}
+.tt-wrap td{text-align:center;padding:7px 14px;border-bottom:1px solid #d0c0a0;}
+.tt-wrap .T{color:var(--green);font-weight:bold;}
+.tt-wrap .F{color:var(--red);font-weight:bold;}
+.tt-wrap .hl-col{background:rgba(26,74,140,0.08);}
+
+/* CALLOUT GRID */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+/* VENN / SET VISUAL */
+.set-visual{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.set-visual .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+/* STEPS */
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+
+/* IMPLICATION TRUTH TABLE VISUAL */
+.impl-note{background:var(--hl-b);border:1.5px solid var(--blue);border-radius:4px;padding:12px 16px;margin:12px 0;font-family:var(--prose);font-size:16px;color:var(--ink);}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Discrete Mathematics</div>
+    <h1>Logic, Sets,<br><em>Relations &amp; Functions</em></h1>
+    <p class="cover-desc">
+      Propositional and predicate logic, set theory, relations and their properties, functions — from precise definitions to every GATE-level proof technique and numerical trap, built for mastery not memorization.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Propositional Logic</span>
+      <span class="chip">Ch 2 · Logical Equivalences &amp; Normal Forms</span>
+      <span class="chip">Ch 3 · Predicate Logic</span>
+      <span class="chip">Ch 4 · Proof Techniques</span>
+      <span class="chip">Ch 5 · Set Theory</span>
+      <span class="chip">Ch 6 · Relations</span>
+      <span class="chip">Ch 7 · Functions</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Propositional Logic</a>
+    <a href="#ch2"><span class="tn">02</span>Logical Equivalences &amp; Normal Forms</a>
+    <a href="#ch3"><span class="tn">03</span>Predicate Logic &amp; Quantifiers</a>
+    <a href="#ch4"><span class="tn">04</span>Proof Techniques</a>
+    <a href="#ch5"><span class="tn">05</span>Set Theory</a>
+    <a href="#ch6"><span class="tn">06</span>Relations &amp; Their Properties</a>
+    <a href="#ch7"><span class="tn">07</span>Functions</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — PROPOSITIONAL LOGIC
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Propositional Logic — <em>Connectives, Truth Tables &amp; Implication</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="prop-basics">
+      <h2 class="sh">1.1 &nbsp; Propositions &amp; Connectives <span class="tag tc">Core</span></h2>
+      <p>
+        A <strong>proposition</strong> is a declarative statement that is either true or false — never both, never neither. "It is raining" is a proposition. "What time is it?" is not. The truth value of a proposition is either T (true) or F (false).
+      </p>
+      <p>
+        Compound propositions are built from atomic propositions using <strong>logical connectives</strong>. Their truth value is determined entirely by the truth values of their components — this is called <em>truth-functional</em> semantics.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Connective</th><th>Symbol</th><th>Name</th><th>True when</th></tr></thead>
+          <tbody>
+            <tr><td>Negation</td><td>¬p, ~p, p̄</td><td>NOT</td><td>p is false</td></tr>
+            <tr><td>Conjunction</td><td>p ∧ q</td><td>AND</td><td>both p and q are true</td></tr>
+            <tr><td>Disjunction</td><td>p ∨ q</td><td>OR (inclusive)</td><td>at least one of p, q is true</td></tr>
+            <tr><td>Exclusive OR</td><td>p ⊕ q</td><td>XOR</td><td>exactly one of p, q is true</td></tr>
+            <tr><td>Implication</td><td>p → q</td><td>IF-THEN</td><td>p is false, OR q is true</td></tr>
+            <tr><td>Biconditional</td><td>p ↔ q</td><td>IFF</td><td>p and q have the same truth value</td></tr>
+            <tr><td>NAND</td><td>p ↑ q</td><td>NOT-AND (Sheffer stroke)</td><td>not both p and q are true</td></tr>
+            <tr><td>NOR</td><td>p ↓ q</td><td>NOT-OR (Peirce arrow)</td><td>both p and q are false</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p><strong>Operator precedence</strong> (highest to lowest): ¬ → ∧ → ∨ → → → ↔. Parentheses override everything.</p>
+    </div>
+
+    <div class="sec" data-m="implication">
+      <h2 class="sh">1.2 &nbsp; Implication — The Most Misunderstood Connective <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tt-wrap">
+        <table>
+          <thead><tr><th>p</th><th>q</th><th>p → q</th><th>¬p ∨ q</th><th>¬q → ¬p</th></tr></thead>
+          <tbody>
+            <tr><td class="T">T</td><td class="T">T</td><td class="T hl-col">T</td><td class="T">T</td><td class="T">T</td></tr>
+            <tr><td class="T">T</td><td class="F">F</td><td class="F hl-col">F</td><td class="F">F</td><td class="F">F</td></tr>
+            <tr><td class="F">F</td><td class="T">T</td><td class="T hl-col">T</td><td class="T">T</td><td class="T">T</td></tr>
+            <tr><td class="F">F</td><td class="F">F</td><td class="T hl-col">T</td><td class="T">T</td><td class="T">T</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="impl-note">
+        <strong>p → q is FALSE only when p is TRUE and q is FALSE.</strong><br>
+        In all other cases — including when p is false — the implication is vacuously TRUE.
+      </div>
+
+      <p>
+        The intuition: "If it rains, I will carry an umbrella." This promise is broken <em>only</em> if it rains AND I don't carry an umbrella. If it doesn't rain at all, the promise was never tested — it's trivially kept regardless of whether I carry an umbrella.
+      </p>
+
+      <h3 class="ssh">Forms of Implication — Four Related Statements</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Form</th><th>Expression</th><th>Equivalent to p→q?</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Implication (original)</strong></td><td>p → q</td><td>Yes (itself)</td></tr>
+            <tr><td><strong>Contrapositive</strong></td><td>¬q → ¬p</td><td class="good">Yes — logically equivalent</td></tr>
+            <tr><td><strong>Converse</strong></td><td>q → p</td><td class="bad">No — independent statement</td></tr>
+            <tr><td><strong>Inverse</strong></td><td>¬p → ¬q</td><td class="bad">No — equivalent to converse, not original</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Converse ≠ Contrapositive</span>
+        <p>p → q and its contrapositive ¬q → ¬p are logically equivalent. The converse q → p and the inverse ¬p → ¬q are logically equivalent to each other, but NOT to the original. GATE exploits this: "Which of the following is equivalent to p → q?" — only the contrapositive is correct.</p>
+      </div>
+
+      <h3 class="ssh">Complete Truth Table — All Connectives</h3>
+      <div class="tt-wrap">
+        <table>
+          <thead><tr><th>p</th><th>q</th><th>¬p</th><th>p∧q</th><th>p∨q</th><th>p⊕q</th><th>p→q</th><th>p↔q</th></tr></thead>
+          <tbody>
+            <tr><td class="T">T</td><td class="T">T</td><td class="F">F</td><td class="T">T</td><td class="T">T</td><td class="F">F</td><td class="T">T</td><td class="T">T</td></tr>
+            <tr><td class="T">T</td><td class="F">F</td><td class="F">F</td><td class="F">F</td><td class="T">T</td><td class="T">T</td><td class="F">F</td><td class="F">F</td></tr>
+            <tr><td class="F">F</td><td class="T">T</td><td class="T">T</td><td class="F">F</td><td class="T">T</td><td class="T">T</td><td class="T">T</td><td class="F">F</td></tr>
+            <tr><td class="F">F</td><td class="F">F</td><td class="T">T</td><td class="F">F</td><td class="F">F</td><td class="F">F</td><td class="T">T</td><td class="T">T</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Memory Aid for Connectives</span>
+        <p>∧ (AND): both must be T → only (T,T) → T. ∨ (OR): only (F,F) → F. ⊕ (XOR): same → F, different → T. → (implication): only (T,F) → F. ↔ (biconditional): same → T, different → F. XOR and ↔ are exact opposites — p⊕q = ¬(p↔q).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="tautology">
+      <h2 class="sh">1.3 &nbsp; Tautology, Contradiction &amp; Contingency <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Tautology</div>
+          <p>True for ALL assignments of truth values. Example: p ∨ ¬p (law of excluded middle). All rows in truth table are T.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Contradiction (Unsatisfiable)</div>
+          <p>False for ALL assignments. Example: p ∧ ¬p. All rows in truth table are F. Also called a "fallacy."</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">Contingency</div>
+          <p>True for some, false for others. Example: p → q. Neither tautology nor contradiction. Most propositions are contingencies.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Satisfiable</div>
+          <p>True for AT LEAST ONE assignment. Includes tautologies and contingencies. NOT satisfiable = contradiction.</p>
+        </div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classify: (p → q) ∧ (q → p)</strong></p>
+        <p>This is p ↔ q — a contingency. True when p and q have the same value, false otherwise.</p>
+        <p><strong>Classify: (p → q) ∨ (q → p)</strong></p>
+        <p>This is a tautology. Proof: if p=T, then p→q is T when q=T, and q→p=T always when p=T. If p=F, then p→q=T always. Every row is T.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — EQUIVALENCES & NORMAL FORMS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Logical Equivalences <em>&amp; Normal Forms</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="equivalences">
+      <h2 class="sh">2.1 &nbsp; Logical Equivalence Laws <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Two propositions P and Q are <strong>logically equivalent</strong> (P ≡ Q) if they have identical truth values for every possible assignment. Equivalently, P ↔ Q is a tautology.</p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Law</th><th>AND form</th><th>OR form</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Identity</strong></td><td>p ∧ T ≡ p</td><td>p ∨ F ≡ p</td></tr>
+            <tr><td><strong>Annihilation (Domination)</strong></td><td>p ∧ F ≡ F</td><td>p ∨ T ≡ T</td></tr>
+            <tr><td><strong>Idempotent</strong></td><td>p ∧ p ≡ p</td><td>p ∨ p ≡ p</td></tr>
+            <tr><td><strong>Double Negation</strong></td><td colspan="2">¬(¬p) ≡ p</td></tr>
+            <tr><td><strong>Complement</strong></td><td>p ∧ ¬p ≡ F</td><td>p ∨ ¬p ≡ T</td></tr>
+            <tr><td><strong>Commutative</strong></td><td>p ∧ q ≡ q ∧ p</td><td>p ∨ q ≡ q ∨ p</td></tr>
+            <tr><td><strong>Associative</strong></td><td>(p∧q)∧r ≡ p∧(q∧r)</td><td>(p∨q)∨r ≡ p∨(q∨r)</td></tr>
+            <tr><td><strong>Distributive</strong></td><td>p∧(q∨r) ≡ (p∧q)∨(p∧r)</td><td>p∨(q∧r) ≡ (p∨q)∧(p∨r)</td></tr>
+            <tr><td><strong>De Morgan's</strong></td><td>¬(p∧q) ≡ ¬p∨¬q</td><td>¬(p∨q) ≡ ¬p∧¬q</td></tr>
+            <tr><td><strong>Absorption</strong></td><td>p∧(p∨q) ≡ p</td><td>p∨(p∧q) ≡ p</td></tr>
+            <tr><td><strong>Implication</strong></td><td colspan="2">p→q ≡ ¬p∨q</td></tr>
+            <tr><td><strong>Biconditional</strong></td><td colspan="2">p↔q ≡ (p→q)∧(q→p) ≡ (p∧q)∨(¬p∧¬q)</td></tr>
+            <tr><td><strong>Exportation</strong></td><td colspan="2">(p∧q)→r ≡ p→(q→r)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">De Morgan's — Apply to Both AND and OR</span>
+        <p>De Morgan's law: negate the whole expression, flip AND↔OR, negate each part. ¬(p∧q) = ¬p∨¬q. ¬(p∨q) = ¬p∧¬q. This extends to n variables: ¬(p₁∧p₂∧...∧pₙ) = ¬p₁∨¬p₂∨...∨¬pₙ. GATE applies De Morgan's frequently in simplification questions.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="normal-forms">
+      <h2 class="sh">2.2 &nbsp; Normal Forms — CNF and DNF <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Literal</span>
+        <p>A variable or its negation: p, ¬p, q, ¬q. The building block of normal forms.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Conjunctive Normal Form (CNF)</span>
+        <p>A conjunction (AND) of clauses, where each clause is a disjunction (OR) of literals.<br>
+        Form: (l₁ ∨ l₂ ∨ ...) ∧ (l₃ ∨ l₄ ∨ ...) ∧ ...<br>
+        Also called: Product of Sums (POS). Every proposition has a CNF.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Disjunctive Normal Form (DNF)</span>
+        <p>A disjunction (OR) of clauses, where each clause is a conjunction (AND) of literals.<br>
+        Form: (l₁ ∧ l₂ ∧ ...) ∨ (l₃ ∧ l₄ ∧ ...) ∨ ...<br>
+        Also called: Sum of Products (SOP). Every proposition has a DNF.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Convert p → (q ∧ r) to CNF and DNF:</strong></p>
+        <div class="cb">Original: p → (q ∧ r)
+Step 1 — Eliminate →:  ¬p ∨ (q ∧ r)
+Step 2 — Distribute ∨ over ∧ (for CNF):
+  (¬p ∨ q) ∧ (¬p ∨ r)   ← CNF ✓
+
+For DNF — push negations in, use distributivity:
+  ¬p ∨ (q ∧ r)          ← already DNF ✓
+  (¬p is a clause with one literal; (q∧r) is a clause with two)</div>
+      </div>
+
+      <h3 class="ssh">Canonical Forms</h3>
+      <p>
+        The <strong>canonical CNF</strong> (or PCNF — Principal CNF) uses <em>maxterms</em> — one clause per row in the truth table where the formula is FALSE. The <strong>canonical DNF</strong> (or PDNF) uses <em>minterms</em> — one clause per row where the formula is TRUE.
+      </p>
+
+      <div class="eg">
+        <p><strong>From truth table of p → q (rows: TT→T, TF→F, FT→T, FF→T):</strong></p>
+        <p>False only at row (T,F): minterm for FALSE = (p ∧ ¬q). So PCNF has one maxterm: (¬p ∨ q). That IS p → q itself — already in canonical CNF.</p>
+        <p>True at rows (T,T), (F,T), (F,F): PDNF = (p∧q) ∨ (¬p∧q) ∨ (¬p∧¬q).</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">CNF and SAT — Why This Matters Beyond GATE</span>
+        <p>The SAT problem (Boolean Satisfiability) — "is there an assignment making a CNF formula true?" — is the canonical NP-complete problem (Cook-Levin theorem). Every problem in NP can be polynomial-time reduced to SAT. This is the theoretical reason why CNF appears everywhere in computer science — compilers, hardware verification, AI planning.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="functionally-complete">
+      <h2 class="sh">2.3 &nbsp; Functionally Complete Sets <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Functionally Complete</span>
+        <p>A set of connectives is <strong>functionally complete</strong> if every Boolean function can be expressed using only the connectives in that set.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Set</th><th>Functionally Complete?</th><th>Proof Idea</th></tr></thead>
+          <tbody>
+            <tr><td>{¬, ∧, ∨}</td><td class="good">Yes</td><td>Basis — any Boolean function has a DNF</td></tr>
+            <tr><td>{¬, ∧}</td><td class="good">Yes</td><td>p∨q = ¬(¬p∧¬q) by De Morgan's</td></tr>
+            <tr><td>{¬, ∨}</td><td class="good">Yes</td><td>p∧q = ¬(¬p∨¬q) by De Morgan's</td></tr>
+            <tr><td>{↑} (NAND alone)</td><td class="good">Yes</td><td>¬p = p↑p, p∧q = ¬(p↑q) = (p↑q)↑(p↑q)</td></tr>
+            <tr><td>{↓} (NOR alone)</td><td class="good">Yes</td><td>¬p = p↓p, p∨q = ¬(p↓q) = (p↓q)↓(p↓q)</td></tr>
+            <tr><td>{→, ¬}</td><td class="good">Yes</td><td>p∧q = ¬(p→¬q)</td></tr>
+            <tr><td>{∧, ∨}</td><td class="bad">No</td><td>Cannot express negation — only monotone functions</td></tr>
+            <tr><td>{⊕, ∧}</td><td class="good">Yes</td><td>¬p = p⊕T, complete with constant T</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">NAND and NOR Are Universal Gates</span>
+        <p>NAND (↑) and NOR (↓) are each individually functionally complete — this is why they are called "universal gates" in digital circuits. You can build any circuit using only NAND gates, or only NOR gates. This is a hardware design principle that comes directly from functional completeness.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — PREDICATE LOGIC
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Predicate Logic <em>&amp; Quantifiers</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="predicate-def">
+      <h2 class="sh">3.1 &nbsp; Predicates, Variables &amp; Quantifiers <span class="tag tc">Core</span></h2>
+      <p>
+        Propositional logic treats statements as atomic. Predicate logic (first-order logic) looks <em>inside</em> statements — it expresses properties of objects and relationships between them. This is the language of mathematics.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Predicate</span>
+        <p>A <strong>predicate</strong> P(x) is a propositional function — a statement with a variable that becomes a proposition when the variable is assigned a value from the domain. Example: P(x) = "x is prime." P(7) is true. P(6) is false.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Universal Quantifier — ∀</span>
+        <p>∀x P(x) means "For ALL x in the domain, P(x) is true." It is equivalent to the conjunction of P(x) over all domain elements: P(x₁) ∧ P(x₂) ∧ P(x₃) ∧ ...</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Existential Quantifier — ∃</span>
+        <p>∃x P(x) means "There EXISTS at least one x in the domain such that P(x) is true." It is equivalent to the disjunction: P(x₁) ∨ P(x₂) ∨ P(x₃) ∨ ...</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statement</th><th>When True</th><th>When False</th></tr></thead>
+          <tbody>
+            <tr><td>∀x P(x)</td><td>P(x) true for every x in domain</td><td>There exists some x where P(x) is false (counterexample)</td></tr>
+            <tr><td>∃x P(x)</td><td>P(x) true for at least one x</td><td>P(x) false for every x in domain</td></tr>
+            <tr><td>∀x ¬P(x)</td><td>P(x) false for every x</td><td>There exists some x where P(x) is true</td></tr>
+            <tr><td>∃x ¬P(x)</td><td>P(x) false for at least one x</td><td>P(x) true for every x</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="quantifier-negation">
+      <h2 class="sh">3.2 &nbsp; Negation of Quantifiers — De Morgan's for Predicate Logic <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Quantifier Negation Laws</span>
+        <p>
+          ¬(∀x P(x)) ≡ ∃x ¬P(x)<br>
+          ¬(∃x P(x)) ≡ ∀x ¬P(x)
+        </p>
+      </div>
+
+      <p>
+        These are the predicate-logic analog of De Morgan's laws. Negating a universal statement gives an existential one, and vice versa. To disprove "all X are Y," find one X that is not Y. To disprove "some X is Y," show that no X is Y.
+      </p>
+
+      <div class="eg">
+        <p><strong>Negate: "Every student in this class has studied calculus."</strong></p>
+        <p>Formal: ∀x (Student(x) → StudiedCalculus(x))</p>
+        <p>Negation: ∃x ¬(Student(x) → StudiedCalculus(x)) ≡ ∃x (Student(x) ∧ ¬StudiedCalculus(x))</p>
+        <p>English: "There is some student in this class who has NOT studied calculus."</p>
+        <p>Note: negation of (p → q) = p ∧ ¬q — this is the only case where implication is false.</p>
+      </div>
+
+      <h3 class="ssh">Nested Quantifiers — Order Matters</h3>
+      <div class="warn-box">
+        <span class="lbl">∀x∃y ≠ ∃y∀x — The Most Tested Quantifier Trap</span>
+        <p>
+          <strong>∀x ∃y P(x,y)</strong>: For every x, there exists some y (possibly different for each x) such that P(x,y).<br>
+          <strong>∃y ∀x P(x,y)</strong>: There exists one specific y that works for ALL x simultaneously.<br><br>
+          ∃y∀x implies ∀x∃y (the single y works for every x, so in particular for each x individually). But ∀x∃y does NOT imply ∃y∀x. The second is strictly stronger.<br><br>
+          Example: "Every person has a mother" = ∀x∃y Mother(y,x). "There is someone who is everyone's mother" = ∃y∀x Mother(y,x). Clearly the first is true and the second is false.
+        </p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statement</th><th>Reading</th><th>Strength</th></tr></thead>
+          <tbody>
+            <tr><td>∀x ∀y P(x,y)</td><td>P holds for every pair (x,y)</td><td>Strongest</td></tr>
+            <tr><td>∀x ∃y P(x,y)</td><td>For each x, some y works (y may depend on x)</td><td>Strong</td></tr>
+            <tr><td>∃x ∀y P(x,y)</td><td>Some specific x works for all y</td><td>Moderate</td></tr>
+            <tr><td>∃x ∃y P(x,y)</td><td>Some pair (x,y) satisfies P</td><td>Weakest</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="predicate-equivalences">
+      <h2 class="sh">3.3 &nbsp; Valid Arguments &amp; Inference Rules <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule of Inference</th><th>Form</th><th>Name</th></tr></thead>
+          <tbody>
+            <tr><td>Modus Ponens</td><td>p, p→q ⊢ q</td><td>Affirming the antecedent</td></tr>
+            <tr><td>Modus Tollens</td><td>¬q, p→q ⊢ ¬p</td><td>Denying the consequent</td></tr>
+            <tr><td>Hypothetical Syllogism</td><td>p→q, q→r ⊢ p→r</td><td>Chain rule</td></tr>
+            <tr><td>Disjunctive Syllogism</td><td>p∨q, ¬p ⊢ q</td><td>Process of elimination</td></tr>
+            <tr><td>Addition</td><td>p ⊢ p∨q</td><td>Introducing a disjunct</td></tr>
+            <tr><td>Simplification</td><td>p∧q ⊢ p</td><td>Extracting a conjunct</td></tr>
+            <tr><td>Conjunction</td><td>p, q ⊢ p∧q</td><td>Combining into conjunction</td></tr>
+            <tr><td>Resolution</td><td>p∨q, ¬p∨r ⊢ q∨r</td><td>Used in automated theorem proving</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Fallacies to Avoid</span>
+        <p>
+          <strong>Affirming the consequent:</strong> p→q, q ⊢ p. INVALID. q could be true for other reasons.<br>
+          <strong>Denying the antecedent:</strong> p→q, ¬p ⊢ ¬q. INVALID. q could still be true via other paths.<br>
+          GATE presents argument forms and asks "is this valid?" — recognize these fallacies.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — PROOF TECHNIQUES
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Proof Techniques — <em>Direct, Contrapositive, Contradiction &amp; Induction</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="proof-methods">
+      <h2 class="sh">4.1 &nbsp; Methods of Proof <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Direct Proof</h3>
+      <p>To prove p → q: assume p is true, use axioms, definitions, and previously proven theorems to derive q. Most straightforward method.</p>
+      <div class="eg">
+        <p><strong>Prove: if n is odd, then n² is odd.</strong></p>
+        <p>Assume n is odd. Then n = 2k+1 for some integer k. So n² = (2k+1)² = 4k²+4k+1 = 2(2k²+2k)+1. This is of the form 2m+1, hence odd. ∎</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Proof by Contrapositive</h3>
+      <p>To prove p → q: equivalently prove ¬q → ¬p. Often easier when the conclusion q is simpler to negate than to directly prove.</p>
+      <div class="eg">
+        <p><strong>Prove: if n² is even, then n is even.</strong></p>
+        <p>Contrapositive: if n is odd, then n² is odd. (Proved directly above.) ∎</p>
+        <p>The direct proof would require working with "n² is even" which requires extracting a square root — much harder. Contrapositive is the clean path.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Proof by Contradiction</h3>
+      <p>To prove p: assume ¬p, derive a contradiction (something known to be false, like r ∧ ¬r). Conclude p must be true. Also called <em>reductio ad absurdum</em>.</p>
+      <div class="eg">
+        <p><strong>Prove: √2 is irrational.</strong></p>
+        <div class="cb">Assume √2 is rational. Then √2 = a/b where a,b are integers, b≠0, gcd(a,b)=1 (fully reduced).
+Then 2 = a²/b², so a² = 2b².
+→ a² is even → a is even (from contrapositive proved above).
+Let a = 2k. Then (2k)² = 2b², so 4k² = 2b², so b² = 2k².
+→ b² is even → b is even.
+But then gcd(a,b) ≥ 2. Contradicts gcd(a,b)=1. ∎</div>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Mathematical Induction</h3>
+      <div class="def-box">
+        <span class="lbl">Principle of Mathematical Induction</span>
+        <p>To prove ∀n ≥ n₀, P(n):<br>
+        <strong>Base case:</strong> Prove P(n₀) is true.<br>
+        <strong>Inductive step:</strong> Assume P(k) is true for some arbitrary k ≥ n₀ (inductive hypothesis). Prove P(k+1) is true.<br>
+        <strong>Conclusion:</strong> P(n) is true for all n ≥ n₀.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Prove: 1 + 2 + 3 + ... + n = n(n+1)/2</strong></p>
+        <div class="cb">Base case: n=1. LHS = 1. RHS = 1(2)/2 = 1. ✓
+Inductive step: Assume 1+2+...+k = k(k+1)/2.
+Prove 1+2+...+k+(k+1) = (k+1)(k+2)/2.
+LHS = k(k+1)/2 + (k+1) = (k+1)[k/2 + 1] = (k+1)(k+2)/2 = RHS. ✓ ∎</div>
+      </div>
+
+      <h3 class="ssh">Strong Induction</h3>
+      <div class="def-box">
+        <span class="lbl">Strong (Complete) Induction</span>
+        <p>To prove ∀n ≥ n₀, P(n):<br>
+        <strong>Base case(s):</strong> Prove P(n₀) (and possibly a few more).<br>
+        <strong>Inductive step:</strong> Assume P(n₀), P(n₀+1), ..., P(k) are ALL true. Prove P(k+1).<br>
+        Used when P(k+1) depends on multiple prior values, not just P(k). Example: Fibonacci, prime factorization proofs.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Structural Induction</span>
+        <p>Induction generalized to recursively defined structures (trees, lists, strings). Base case: smallest elements. Inductive step: if property holds for parts, show it holds for the whole. Used in proofs about parse trees, expression evaluation, and BST properties.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — SET THEORY
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Set Theory — <em>Operations, Identities &amp; Counting</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sets-def">
+      <h2 class="sh">5.1 &nbsp; Sets — Definitions &amp; Operations <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Set</span>
+        <p>An unordered collection of distinct objects, called <strong>elements</strong> or members. a ∈ A means "a is an element of A." a ∉ A means "a is not." Sets are equal iff they contain exactly the same elements.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operation</th><th>Symbol</th><th>Definition</th><th>Analogy to Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Union</td><td>A ∪ B</td><td>{x | x∈A OR x∈B}</td><td>A ∪ B ↔ p ∨ q</td></tr>
+            <tr><td>Intersection</td><td>A ∩ B</td><td>{x | x∈A AND x∈B}</td><td>A ∩ B ↔ p ∧ q</td></tr>
+            <tr><td>Difference</td><td>A − B or A\B</td><td>{x | x∈A AND x∉B}</td><td>A − B ↔ p ∧ ¬q</td></tr>
+            <tr><td>Complement</td><td>Ā or A'</td><td>{x ∈ U | x∉A}</td><td>Ā ↔ ¬p</td></tr>
+            <tr><td>Symmetric Diff.</td><td>A △ B</td><td>(A−B) ∪ (B−A) = (A∪B)−(A∩B)</td><td>A △ B ↔ p ⊕ q</td></tr>
+            <tr><td>Cartesian Product</td><td>A × B</td><td>{(a,b) | a∈A, b∈B}</td><td>—</td></tr>
+            <tr><td>Power Set</td><td>2^A or P(A)</td><td>Set of all subsets of A</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">∅ ≠ {∅} — A Perennial Trap</span>
+        <p>∅ is the empty set — it has no elements, |∅| = 0. {∅} is a set containing one element (the empty set), |{∅}| = 1. The power set of ∅ is {∅} (one element). The power set of {∅} is {∅, {∅}} (two elements). GATE tests this as a direct 1-mark question.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="set-identities">
+      <h2 class="sh">5.2 &nbsp; Set Identities <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Identity</th><th>Law</th></tr></thead>
+          <tbody>
+            <tr><td>A ∪ ∅ = A, A ∩ U = A</td><td>Identity</td></tr>
+            <tr><td>A ∪ U = U, A ∩ ∅ = ∅</td><td>Domination</td></tr>
+            <tr><td>A ∪ A = A, A ∩ A = A</td><td>Idempotent</td></tr>
+            <tr><td>(Ā)‾ = A</td><td>Complementation</td></tr>
+            <tr><td>A ∪ B = B ∪ A, A ∩ B = B ∩ A</td><td>Commutative</td></tr>
+            <tr><td>(A∪B)∪C = A∪(B∪C)</td><td>Associative</td></tr>
+            <tr><td>A∪(B∩C)=(A∪B)∩(A∪C)</td><td>Distributive</td></tr>
+            <tr><td>A∩(B∪C)=(A∩B)∪(A∩C)</td><td>Distributive</td></tr>
+            <tr><td>Ā(∪)B̄ = A̅∩̅B̅, Ā(∩)B̄ → (A∩B)‾=Ā∪B̄, (A∪B)‾=Ā∩B̄</td><td>De Morgan's</td></tr>
+            <tr><td>A∪(A∩B)=A, A∩(A∪B)=A</td><td>Absorption</td></tr>
+            <tr><td>A∪Ā=U, A∩Ā=∅</td><td>Complement</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="counting-sets">
+      <h2 class="sh">5.3 &nbsp; Counting — Inclusion-Exclusion &amp; Power Set <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Inclusion-Exclusion Principle</span>
+        <p>|A ∪ B| = |A| + |B| − |A ∩ B|<br>
+        |A ∪ B ∪ C| = |A| + |B| + |C| − |A∩B| − |A∩C| − |B∩C| + |A∩B∩C|<br>
+        General: |∪Aᵢ| = Σ|Aᵢ| − Σ|Aᵢ∩Aⱼ| + Σ|Aᵢ∩Aⱼ∩Aₖ| − ... ± |A₁∩...∩Aₙ|</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>In a group of 100 students: 60 study Maths, 50 study Physics, 30 study both. How many study at least one?</strong></p>
+        <p>|M ∪ P| = |M| + |P| − |M∩P| = 60 + 50 − 30 = <strong>80</strong>.</p>
+        <p>How many study neither? 100 − 80 = <strong>20</strong>.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Set / Operation</th><th>Size</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>A × B (Cartesian product)</td><td>|A| × |B|</td><td>All ordered pairs</td></tr>
+            <tr><td>Power set 2^A</td><td>2^|A|</td><td>Every subset of A</td></tr>
+            <tr><td>Number of subsets of size k from n-element set</td><td>C(n,k) = n!/(k!(n-k)!)</td><td>Binomial coefficient</td></tr>
+            <tr><td>A^n (n-tuples from A)</td><td>|A|^n</td><td>Ordered sequences of length n</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Power Set of Power Set</span>
+        <p>If |A| = n, then |P(A)| = 2ⁿ, and |P(P(A))| = 2^(2ⁿ). For A = {1,2}: |P(A)| = 4, |P(P(A))| = 16. This grows astronomically fast and GATE uses it to test if you apply the formula correctly at each level.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — RELATIONS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Relations — <em>Properties &amp; Closures</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="relation-def">
+      <h2 class="sh">6.1 &nbsp; Relations — Definition &amp; Representation <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Binary Relation</span>
+        <p>A <strong>binary relation R</strong> from set A to set B is a subset of A × B. If (a,b) ∈ R we write aRb ("a is related to b"). A relation on A is a subset of A × A (from A to itself).</p>
+      </div>
+
+      <p>
+        A relation on a set A with n elements can be represented as:
+      </p>
+      <ul class="pl arr">
+        <li><strong>Set of pairs:</strong> R = {(1,2), (2,3), (3,1)} ⊆ {1,2,3} × {1,2,3}</li>
+        <li><strong>Matrix representation:</strong> n×n boolean matrix M where M[i][j] = 1 iff (i,j) ∈ R</li>
+        <li><strong>Directed graph:</strong> nodes = elements, directed edge i→j iff (i,j) ∈ R</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="relation-props">
+      <h2 class="sh">6.2 &nbsp; Properties of Relations <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Definition</th><th>Matrix condition</th><th>Graph condition</th><th>Example on ℤ</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Reflexive</strong></td>
+              <td>∀a: (a,a) ∈ R</td>
+              <td>All diagonal entries = 1</td>
+              <td>Self-loop at every node</td>
+              <td>≤ (a≤a always)</td>
+            </tr>
+            <tr>
+              <td><strong>Irreflexive</strong></td>
+              <td>∀a: (a,a) ∉ R</td>
+              <td>All diagonal entries = 0</td>
+              <td>No self-loops at all</td>
+              <td>&lt; (a&lt;a never)</td>
+            </tr>
+            <tr>
+              <td><strong>Symmetric</strong></td>
+              <td>∀a,b: (a,b)∈R → (b,a)∈R</td>
+              <td>M = Mᵀ (symmetric matrix)</td>
+              <td>Every edge has reverse</td>
+              <td>= (a=b → b=a)</td>
+            </tr>
+            <tr>
+              <td><strong>Antisymmetric</strong></td>
+              <td>∀a,b: (a,b)∈R ∧ (b,a)∈R → a=b</td>
+              <td>M∧Mᵀ has 1s only on diagonal</td>
+              <td>No 2-cycles between distinct nodes</td>
+              <td>≤ (a≤b ∧ b≤a → a=b)</td>
+            </tr>
+            <tr>
+              <td><strong>Asymmetric</strong></td>
+              <td>∀a,b: (a,b)∈R → (b,a)∉R</td>
+              <td>M∧Mᵀ = zero matrix</td>
+              <td>No 2-cycles AND no self-loops</td>
+              <td>&lt; (a&lt;b → b≮a)</td>
+            </tr>
+            <tr>
+              <td><strong>Transitive</strong></td>
+              <td>∀a,b,c: (a,b)∈R ∧ (b,c)∈R → (a,c)∈R</td>
+              <td>M² ≤ M (boolean matrix mult.)</td>
+              <td>If path a→b→c, then edge a→c</td>
+              <td>≤ (a≤b ∧ b≤c → a≤c)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Symmetric vs Antisymmetric — NOT Opposites</span>
+        <p>A relation CAN be both symmetric and antisymmetric — example: the equality relation = on any set. (a=b ∧ b=a → a=b trivially; and (a,b)∈R ∧ (b,a)∈R means a=b=a, so symmetric.) A relation can also be neither symmetric nor antisymmetric — example: {(1,2),(2,1),(1,3)} is not symmetric (no (3,1)) and not antisymmetric ((1,2) and (2,1) with 1≠2).</p>
+      </div>
+
+      <h3 class="ssh">Equivalence Relations</h3>
+      <div class="def-box">
+        <span class="lbl">Equivalence Relation</span>
+        <p>A relation R on A is an <strong>equivalence relation</strong> if it is <strong>reflexive</strong>, <strong>symmetric</strong>, and <strong>transitive</strong>. An equivalence relation partitions A into disjoint <strong>equivalence classes</strong> [a] = {b ∈ A | aRb}.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Congruence modulo n:</strong> a ≡ b (mod n) iff n | (a−b). This is an equivalence relation on ℤ. The equivalence classes are {0,n,2n,...}, {1,n+1,2n+1,...}, ..., {n−1,2n−1,...} — exactly n classes.</p>
+      </div>
+
+      <h3 class="ssh">Partial Order Relations (POSET)</h3>
+      <div class="def-box">
+        <span class="lbl">Partial Order</span>
+        <p>A relation R on A is a <strong>partial order</strong> if it is <strong>reflexive</strong>, <strong>antisymmetric</strong>, and <strong>transitive</strong>. The pair (A, R) is a <strong>partially ordered set (POSET)</strong>. Example: (P(S), ⊆) — power set ordered by subset inclusion.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Total Order (Linear Order)</span>
+        <p>A partial order where every pair of elements is comparable: ∀a,b: (a,b)∈R OR (b,a)∈R. Example: (ℤ, ≤) — any two integers are comparable.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="closures">
+      <h2 class="sh">6.3 &nbsp; Relation Composition &amp; Closures <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Composition of Relations</span>
+        <p>If R ⊆ A×B and S ⊆ B×C, then R∘S = {(a,c) | ∃b: (a,b)∈R ∧ (b,c)∈S}. Also written S∘R in some books — check convention. Represented in matrix form as boolean matrix multiplication: M_{R∘S} = M_R · M_S (boolean).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Transitive Closure</span>
+        <p>The <strong>transitive closure</strong> R⁺ of R is the smallest transitive relation containing R. R⁺ = R ∪ R² ∪ R³ ∪ ... (where Rⁿ = R composed with itself n times). The matrix of R⁺ = M_R ∨ M_R² ∨ M_R³ ∨ ... (boolean OR).<br><br>
+        Computed efficiently using <strong>Warshall's algorithm</strong> in O(n³).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Closure Type</th><th>Add the minimum pairs to make R...</th><th>Method</th></tr></thead>
+          <tbody>
+            <tr><td>Reflexive closure</td><td>Reflexive</td><td>Add (a,a) for all a ∈ A: R ∪ Δ (diagonal)</td></tr>
+            <tr><td>Symmetric closure</td><td>Symmetric</td><td>Add (b,a) for every (a,b) ∈ R: R ∪ R⁻¹</td></tr>
+            <tr><td>Transitive closure</td><td>Transitive</td><td>R⁺ = ∪ Rⁿ for n≥1 (Warshall's algorithm)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">There Is No "Antisymmetric Closure"</span>
+        <p>You can always add pairs to make a relation reflexive, symmetric, or transitive — the added pairs only make the relation larger. But making a relation antisymmetric requires removing pairs, not adding them. Since closures only add pairs, there is no antisymmetric closure operation.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — FUNCTIONS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Functions — <em>Types, Composition &amp; Cardinality</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="function-def">
+      <h2 class="sh">7.1 &nbsp; Functions — Definition &amp; Types <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Function</span>
+        <p>A <strong>function</strong> f: A → B is a relation from A to B where every element of A is related to <em>exactly one</em> element of B. A is the <strong>domain</strong>, B is the <strong>codomain</strong>, and the set of actual output values is the <strong>range</strong> (or image): f(A) = {f(a) | a ∈ A} ⊆ B.</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Injective (One-to-One)</div>
+          <p>∀a₁,a₂: f(a₁)=f(a₂) → a₁=a₂.<br>Different inputs → different outputs. No two elements map to the same output. Range size = domain size.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Surjective (Onto)</div>
+          <p>∀b ∈ B, ∃a ∈ A: f(a) = b.<br>Every element of the codomain has at least one preimage. Range = Codomain.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Bijective (One-to-One Correspondence)</div>
+          <p>Both injective AND surjective. Perfect pairing — every element of B has exactly one preimage. Invertible.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">None of the above</div>
+          <p>Not injective (two inputs → same output) AND/OR not surjective (some output never reached). Most general case.</p>
+        </div>
+      </div>
+
+      <div class="eg">
+        <p><strong>f: ℤ → ℤ, f(n) = 2n</strong></p>
+        <ul class="pl arr">
+          <li>Injective? Yes — f(a)=f(b) means 2a=2b means a=b.</li>
+          <li>Surjective? No — f(n)=3 has no solution (3 is odd, 2n is always even).</li>
+          <li>Bijective? No (not surjective).</li>
+        </ul>
+        <p><strong>f: ℤ → ℤ, f(n) = n+1</strong></p>
+        <ul class="pl arr">
+          <li>Injective? Yes. Surjective? Yes (f(n-1)=n for any n). Bijective? Yes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec" data-m="function-counting">
+      <h2 class="sh">7.2 &nbsp; Counting Functions — GATE NAT Staple <span class="tag tg">Most Tested</span></h2>
+
+      <p>Given domain A with m elements, codomain B with n elements:</p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Count</th><th>Condition</th><th>Example m=3, n=4</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Total functions</strong></td><td>nᵐ</td><td>Each element of A maps to any of n choices</td><td>4³ = 64</td></tr>
+            <tr><td><strong>Injective functions</strong></td><td>P(n,m) = n!/(n−m)!</td><td>Requires m ≤ n. Each input gets a distinct output.</td><td>4×3×2 = 24</td></tr>
+            <tr><td><strong>Surjective functions</strong></td><td>Σ(−1)ᵏ C(n,k)(n−k)ᵐ</td><td>Requires m ≥ n. Inclusion-exclusion formula.</td><td>Requires m≥n; complex formula</td></tr>
+            <tr><td><strong>Bijective functions</strong></td><td>n!</td><td>Requires m = n exactly.</td><td>Only if m=n=4: 4!=24</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>How many functions f: {1,2,3} → {a,b,c,d} are injective?</strong></p>
+        <p>P(4,3) = 4!/(4−3)! = 4!/1! = 24. First element: 4 choices. Second: 3 remaining. Third: 2 remaining. Total: 4×3×2 = 24.</p>
+        <p><strong>How many functions f: {1,2,3,4} → {a,b} are surjective?</strong></p>
+        <p>Total = 2⁴ = 16. Subtract: all map to {a} = 1, all map to {b} = 1. By inclusion-exclusion: 16 − 1 − 1 = <strong>14</strong>.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Bijection and Cardinality</span>
+        <p>Two sets A and B have the same <strong>cardinality</strong> (|A| = |B|) if and only if there exists a bijection between them. This extends to infinite sets: ℕ and ℤ have the same cardinality (bijection exists). ℕ and ℝ do NOT (Cantor's diagonal argument — ℝ is uncountable). This is the foundation of infinite set theory.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="function-composition">
+      <h2 class="sh">7.3 &nbsp; Composition &amp; Inverse <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Composition</span>
+        <p>(g∘f)(x) = g(f(x)). Apply f first, then g. Note order: g∘f means "f first." Composition is associative: (h∘g)∘f = h∘(g∘f). Not commutative in general: g∘f ≠ f∘g.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Inverse Function</span>
+        <p>A function f: A→B has an inverse f⁻¹: B→A if and only if f is <strong>bijective</strong>. f⁻¹(b) = a where f(a)=b. f∘f⁻¹ = identity on B, f⁻¹∘f = identity on A.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Holds for composition?</th></tr></thead>
+          <tbody>
+            <tr><td>Injective ∘ Injective</td><td class="good">Injective ✓</td></tr>
+            <tr><td>Surjective ∘ Surjective</td><td class="good">Surjective ✓</td></tr>
+            <tr><td>Bijective ∘ Bijective</td><td class="good">Bijective ✓</td></tr>
+            <tr><td>If g∘f is injective, then f is injective</td><td class="good">True ✓ (g need not be)</td></tr>
+            <tr><td>If g∘f is surjective, then g is surjective</td><td class="good">True ✓ (f need not be)</td></tr>
+            <tr><td>If g∘f is bijective, then both f and g are bijective</td><td class="bad">False ✗ — f injective + g surjective suffices</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — GATE TRAPS & REFERENCE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Implication is false only when p is true and q is false</td><td>p→q is TRUE when p=F regardless of q. "False implies anything" is vacuously true. The promise is only testable when p is true.</td></tr>
+            <tr><td>2</td><td>Converse ≡ Contrapositive</td><td>p→q ≡ ¬q→¬p (contrapositive). Converse q→p is NOT equivalent. Students confuse these every year. Contrapositive: flip AND negate both. Converse: just flip.</td></tr>
+            <tr><td>3</td><td>∀x∃y ≡ ∃y∀x</td><td>These are NOT equivalent. ∃y∀x is strictly stronger — one y must work for all x. ∀x∃y allows y to depend on x. Swapping quantifiers of the same type is fine; swapping ∀ and ∃ changes meaning.</td></tr>
+            <tr><td>4</td><td>Affirming the consequent</td><td>p→q, q ⊢ p is INVALID. The correct rule is Modus Ponens: p→q, p ⊢ q. Having q doesn't tell you p was the cause.</td></tr>
+            <tr><td>5</td><td>∅ vs {∅}</td><td>∅ has 0 elements. {∅} has 1 element. P(∅) = {∅} has 1 element. P({∅}) = {∅, {∅}} has 2 elements. Each level adds a factor of 2 to the power set size.</td></tr>
+            <tr><td>6</td><td>Symmetric and Antisymmetric are opposites</td><td>They're not. The equality relation is BOTH symmetric and antisymmetric. A relation can also be neither. Symmetric: (a,b)∈R → (b,a)∈R. Antisymmetric: (a,b)∈R ∧ (b,a)∈R → a=b.</td></tr>
+            <tr><td>7</td><td>Antisymmetric means no (a,b) with a≠b</td><td>Antisymmetric only means: you can't have BOTH (a,b) and (b,a) with a≠b. You CAN have (a,b) alone. Having (a,b) without (b,a) is perfectly antisymmetric.</td></tr>
+            <tr><td>8</td><td>Range = Codomain</td><td>Codomain is declared; Range (image) is actual outputs. f: ℝ→ℝ, f(x)=x² has codomain ℝ but range [0,∞). Surjective means range=codomain. A function can be well-defined with range ⊊ codomain.</td></tr>
+            <tr><td>9</td><td>Counting functions: n^m vs P(n,m) vs n!</td><td>Total functions: nᵐ. Injections: P(n,m)=n!/(n-m)! requires m≤n. Bijections: n! requires m=n. Surjections: complex inclusion-exclusion. Match formula to function type before computing.</td></tr>
+            <tr><td>10</td><td>Transitive closure vs reflexive-transitive closure</td><td>R⁺ (transitive closure) includes R itself but may not include diagonal. R* (reflexive-transitive closure) = R⁺ ∪ Δ (also includes all identity pairs). For languages: Σ⁺ excludes ε, Σ* includes ε — same pattern.</td></tr>
+            <tr><td>11</td><td>CNF = Conjunctive Normal Form = AND of ORs</td><td>CNF = product of sums = AND of clauses = each clause is an OR of literals. DNF = sum of products = OR of clauses = each clause is AND of literals. CNF and DNF names are swapped by many students.</td></tr>
+            <tr><td>12</td><td>NAND/NOR alone are functionally complete; AND∨OR alone are not</td><td>{∧,∨} cannot express negation — only monotone Boolean functions. Adding ¬ makes it complete. NAND and NOR are individually complete because they subsume negation (p↑p = ¬p).</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="quick-ref">
+      <h2 class="sh">8.2 &nbsp; Quick Reference — Key Formulas</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>What It Counts</th></tr></thead>
+          <tbody>
+            <tr><td>nᵐ</td><td>Functions from m-element set to n-element set (total)</td></tr>
+            <tr><td>n!/(n−m)!</td><td>Injective functions (m≤n) = P(n,m)</td></tr>
+            <tr><td>n!</td><td>Bijective functions (m=n)</td></tr>
+            <tr><td>2ⁿ</td><td>Subsets of an n-element set = size of power set</td></tr>
+            <tr><td>C(n,k) = n!/(k!(n−k)!)</td><td>k-element subsets of n-element set</td></tr>
+            <tr><td>|A∪B| = |A|+|B|−|A∩B|</td><td>Inclusion-exclusion (2 sets)</td></tr>
+            <tr><td>|A×B| = |A|·|B|</td><td>Cartesian product size</td></tr>
+            <tr><td>Number of relations on A = 2^(n²)</td><td>All subsets of A×A where |A|=n</td></tr>
+            <tr><td>Number of equivalence relations on n-element set</td><td>Bell number Bₙ (1,1,2,5,15,52,...)</td></tr>
+            <tr><td>p→q ≡ ¬p∨q</td><td>Implication elimination</td></tr>
+            <tr><td>p↔q ≡ (p→q)∧(q→p) ≡ (p∧q)∨(¬p∧¬q)</td><td>Biconditional expansion</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pyq-patterns">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Truth table evaluation:</strong> Given a formula, find number of assignments that make it true. Count T rows — know operator precedence cold.</li>
+        <li><strong>Logical equivalence:</strong> "Which of the following is equivalent to p→q?" Options include converse, inverse, contrapositive, and unrelated. Only contrapositive is correct.</li>
+        <li><strong>Tautology check:</strong> Given a formula, determine if it's a tautology (all T), contradiction (all F), or contingency. Often done algebraically — use equivalence laws instead of full truth table.</li>
+        <li><strong>Quantifier negation:</strong> Given a statement with nested quantifiers, find its negation. Push ¬ inward: ¬∀→∃, ¬∃→∀, ¬(P→Q)→P∧¬Q.</li>
+        <li><strong>Relation properties:</strong> Given a relation as a set of pairs or matrix, determine which properties hold (reflexive, symmetric, transitive, etc.). Check all 5 properties systematically.</li>
+        <li><strong>Equivalence relation / POSET:</strong> Identify which properties a relation satisfies, classify it as equivalence relation or partial order. Find equivalence classes.</li>
+        <li><strong>Function counting NAT:</strong> "How many injective functions from a 3-element set to a 5-element set?" = P(5,3) = 60. Direct formula application, 1–2 marks.</li>
+        <li><strong>Set cardinality:</strong> Given |A|=m, |B|=n, find |P(A)|, |A×B|, |P(P(A))|. Apply formulas, 1 mark.</li>
+        <li><strong>Proof validity:</strong> Given an argument, identify if it uses a valid inference rule or a fallacy (affirming the consequent, denying the antecedent).</li>
+        <li><strong>Inclusion-exclusion:</strong> Given overlapping set sizes, find union or elements in exactly k sets. 2-mark calculation question.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<!-- ═══════ CH 9 — NUMBER THEORY ═══════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Number Theory — <em>GCD, Modular Arithmetic &amp; Fermat</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="gcd-lcm">
+      <h2 class="sh">9.1 &nbsp; GCD, LCM &amp; Euclidean Algorithm <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">GCD — Greatest Common Divisor</span>
+        <p>gcd(a, b) = largest positive integer that divides both a and b. <strong>Euclidean Algorithm:</strong> gcd(a, b) = gcd(b, a mod b). Repeat until remainder = 0; the non-zero argument at that point is the GCD. Time complexity: O(log min(a,b)).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Compute gcd(252, 105):</strong></p>
+        <div class="cb">gcd(252, 105): 252 = 2×105 + 42
+gcd(105, 42):  105 = 2×42  + 21
+gcd(42, 21):   42  = 2×21  + 0  → GCD = 21
+
+lcm(252, 105) = 252×105 / 21 = 26460 / 21 = 1260</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Bézout's Identity</span>
+        <p>For integers a and b with gcd(a,b) = d, there exist integers x and y such that ax + by = d. These x, y can be found by the Extended Euclidean Algorithm (back-substituting through the Euclidean steps). The equation ax + by = c has integer solutions iff d | c.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="modular-arithmetic">
+      <h2 class="sh">9.2 &nbsp; Modular Arithmetic <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Congruence and Modular Properties</span>
+        <p>a ≡ b (mod n) means n | (a − b). Equivalence relation on ℤ.<br>
+        If a ≡ b (mod n) and c ≡ d (mod n) then:<br>
+        a + c ≡ b + d (mod n) &nbsp; (addition preserved)<br>
+        a × c ≡ b × d (mod n) &nbsp; (multiplication preserved)<br>
+        aᵏ ≡ bᵏ (mod n) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (powers preserved)</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Modular Inverse</span>
+        <p>The modular inverse of a mod n is x such that ax ≡ 1 (mod n). It exists iff gcd(a, n) = 1 (a and n are coprime). Found using Extended Euclidean Algorithm or by Fermat's Little Theorem when n is prime: a⁻¹ ≡ a^(p−2) (mod p).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find 3⁻¹ mod 7:</strong></p>
+        <div class="cb">Need x such that 3x ≡ 1 (mod 7).
+Test: 3×1=3, 3×2=6, 3×3=9≡2, 3×4=12≡5, 3×5=15≡1 ✓
+So 3⁻¹ ≡ 5 (mod 7).
+
+Via Fermat: 3⁻¹ ≡ 3^(7−2) = 3⁵ = 243 ≡ 243 mod 7
+243 = 34×7 + 5 → 243 ≡ 5 (mod 7) ✓</div>
+      </div>
+
+      <h3 class="ssh">Modular Exponentiation — Fast Power</h3>
+      <div class="def-box">
+        <span class="lbl">Repeated Squaring</span>
+        <p>Compute aⁿ mod m in O(log n) multiplications:<br>
+        Write n in binary. Start with result = 1, base = a mod m.<br>
+        For each bit of n (from LSB): if bit = 1, multiply result by base (mod m). Square base (mod m). Continue.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Compute 3⁴⁴ mod 5:</strong></p>
+        <div class="cb">44 = 101100₂
+3¹  mod 5 = 3
+3²  mod 5 = 9 mod 5 = 4
+3⁴  mod 5 = 4² mod 5 = 16 mod 5 = 1
+3⁸  mod 5 = 1² mod 5 = 1
+3¹⁶ mod 5 = 1
+3³² mod 5 = 1
+
+44 = 32 + 8 + 4:
+3⁴⁴ = 3³² × 3⁸ × 3⁴ mod 5 = 1 × 1 × 1 = 1 mod 5</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="fermat-euler">
+      <h2 class="sh">9.3 &nbsp; Fermat's Little Theorem &amp; Euler's Totient <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Fermat's Little Theorem</span>
+        <p>If p is prime and gcd(a, p) = 1 (a not divisible by p):<br>
+        <strong>aᵖ⁻¹ ≡ 1 (mod p)</strong><br>
+        Equivalently: aᵖ ≡ a (mod p) for all a.<br>
+        Use: Reduces large exponents modulo (p−1) when working mod p. Finds modular inverses: a⁻¹ ≡ aᵖ⁻² (mod p).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Euler's Totient Function φ(n)</span>
+        <p>φ(n) = count of integers in [1, n] that are coprime to n (gcd = 1).<br>
+        φ(1) = 1. For prime p: φ(p) = p − 1. For prime power: φ(pᵏ) = pᵏ − pᵏ⁻¹ = pᵏ⁻¹(p−1).<br>
+        Multiplicative: if gcd(m,n)=1: φ(mn) = φ(m)·φ(n).<br>
+        For n = p₁^a₁ · p₂^a₂ · ... : φ(n) = n · (1−1/p₁) · (1−1/p₂) · ...<br>
+        <strong>Euler's Theorem:</strong> If gcd(a,n)=1: a^φ(n) ≡ 1 (mod n). Generalizes Fermat.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Compute φ(36) and φ(100):</strong></p>
+        <div class="cb">φ(36): 36 = 2²×3². φ(36) = 36×(1−1/2)×(1−1/3) = 36×1/2×2/3 = 12
+φ(100): 100 = 2²×5². φ(100) = 100×(1−1/2)×(1−1/5) = 100×1/2×4/5 = 40</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Chinese Remainder Theorem (CRT)</span>
+        <p>If n₁, n₂, ..., nₖ are pairwise coprime (gcd(nᵢ, nⱼ)=1 for i≠j), then the system:<br>
+        x ≡ a₁ (mod n₁), x ≡ a₂ (mod n₂), ..., x ≡ aₖ (mod nₖ)<br>
+        has a unique solution modulo N = n₁·n₂·...·nₖ.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find x: x ≡ 2 (mod 3), x ≡ 3 (mod 5), x ≡ 2 (mod 7):</strong></p>
+        <div class="cb">N = 3×5×7 = 105
+N₁ = 35, N₂ = 21, N₃ = 15
+
+Find inverses: 35y₁ ≡ 1 (mod 3) → 2y₁ ≡ 1 (mod 3) → y₁ = 2
+              21y₂ ≡ 1 (mod 5) → 1y₂ ≡ 1 (mod 5) → y₂ = 1
+              15y₃ ≡ 1 (mod 7) → 1y₃ ≡ 1 (mod 7) → y₃ = 1
+
+x = (2×35×2 + 3×21×1 + 2×15×1) mod 105
+  = (140 + 63 + 30) mod 105
+  = 233 mod 105 = 23
+
+Verify: 23 mod 3 = 2 ✓, 23 mod 5 = 3 ✓, 23 mod 7 = 2 ✓</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Theorem</th><th>Condition</th><th>Statement</th><th>Key Use</th></tr></thead>
+          <tbody>
+            <tr><td>Fermat's Little</td><td>p prime, p∤a</td><td>aᵖ⁻¹ ≡ 1 (mod p)</td><td>Modular inverse, reducing exponents</td></tr>
+            <tr><td>Euler's</td><td>gcd(a,n)=1</td><td>a^φ(n) ≡ 1 (mod n)</td><td>General version of Fermat</td></tr>
+            <tr><td>Wilson's</td><td>p prime</td><td>(p−1)! ≡ −1 (mod p)</td><td>Primality test (impractical but theoretically clean)</td></tr>
+            <tr><td>CRT</td><td>n₁,...,nₖ pairwise coprime</td><td>Unique x mod N</td><td>Solving simultaneous congruences</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Discrete Mathematics · Logic, Sets, Relations &amp; Functions · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

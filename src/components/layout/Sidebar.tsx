@@ -1,94 +1,158 @@
-import { NavLink } from 'react-router-dom';
+import { useLocation, useNavigate, NavLink } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
-import { useThemeStore } from '../../lib/store/themeStore';
 import { useAuthStore } from '../../lib/store/authStore';
+import { useModalStore } from '../../lib/store/modalStore';
+import { useTheme } from '../../hooks/useTheme';
+import { getInitials, hashColor } from '../../lib/utils';
 
-const navItems = [
-  { to: '/dashboard', icon: 'dashboard', label: 'Dashboard' },
-  { to: '/notes', icon: 'description', label: 'Notes' },
-  { to: '/practice', icon: 'quiz', label: 'Practice' },
-  { to: '/skills', icon: 'psychology', label: 'Skills' },
-  { to: '/leaderboard', icon: 'leaderboard', label: 'Leaderboard' },
-  { to: '/profile', icon: 'account_circle', label: 'Profile' },
+interface NavItem {
+  label: string;
+  icon: string;
+  path: string;
+}
+
+const navItems: NavItem[] = [
+  { label: 'Dashboard', icon: 'dashboard', path: '/dashboard' },
+  { label: 'Notes', icon: 'menu_book', path: '/notes' },
+  { label: 'Practice', icon: 'quiz', path: '/practice' },
+  { label: 'Skills', icon: 'psychology', path: '/skills' },
+  { label: 'Leaderboard', icon: 'leaderboard', path: '/leaderboard' },
 ];
 
+const bottomNavItems: NavItem[] = [
+  { label: 'Profile', icon: 'person', path: '/profile' },
+  { label: 'Settings', icon: 'settings', path: '/settings' },
+];
+
+/**
+ * Sidebar component — the primary navigation anchor for the ExamForge platform.
+ * Features the "Academic Atelier" branding and consistent navigation patterns.
+ */
 export function Sidebar() {
-  const { isDark, toggle } = useThemeStore();
+  const location = useLocation();
+  const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
+  const { openUpgradeModal } = useModalStore();
+  const { isDark, toggleTheme } = useTheme();
+
+  const userName = user?.name || 'Student';
+  const userRole = user?.role || 'free';
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-screen fixed left-0 top-0 z-30 bg-surface-container-low border-r border-outline-variant/10">
-      {/* Logo */}
-      <div className="h-16 flex items-center px-6">
-        <NavLink to="/dashboard" className="flex items-center gap-3">
-          <span className="font-display text-xl font-semibold text-primary">ExamForge</span>
-        </NavLink>
-      </div>
-
-      {/* Subtitle */}
-      <div className="px-6 mb-6">
-        <span className="text-[10px] font-label uppercase tracking-[0.2em] text-on-surface-variant">
-          The Digital Curator
-        </span>
+    <aside className="hidden md:flex flex-col w-60 h-screen fixed left-0 top-0 bg-surface-container-low z-40 border-r border-outline-variant/10">
+      {/* Brand */}
+      <div className="px-5 py-5 flex items-center gap-3">
+        <div className="w-9 h-9 rounded-xl gradient-cta flex items-center justify-center">
+          <span className="material-symbols-outlined text-on-primary text-[20px]">
+            local_library
+          </span>
+        </div>
+        <div>
+          <h1 className="font-display text-title-lg text-on-surface leading-tight">
+            ExamForge
+          </h1>
+          <span className="text-label-sm text-on-surface-variant">
+            GATE CSE Prep
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-3 space-y-1 overflow-y-auto custom-scrollbar">
-        {navItems?.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            className={({ isActive }) =>
-              cn(
-                'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
+      <nav className="flex-1 px-3 py-2 space-y-1 overflow-y-auto custom-scrollbar">
+        {navItems.map((item) => {
+          const isActive = location.pathname.startsWith(item.path);
+          return (
+            <motion.button
+              key={item.path}
+              whileHover={{ x: 2 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate(item.path)}
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-label-lg transition-colors spring-transition cursor-pointer',
                 isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
-              )
-            }
-          >
-            {({ isActive }) => (
-              <>
-                <span
-                  className="material-symbols-outlined text-xl"
-                  style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                >
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
+                  ? 'bg-primary-container text-on-primary-container font-semibold'
+                  : 'text-on-surface-variant hover:bg-surface-container'
+              )}
+            >
+              <span
+                className="material-symbols-outlined text-[22px]"
+                style={isActive ? { fontVariationSettings: '"FILL" 1' } : undefined}
+              >
+                {item.icon}
+              </span>
+              {item.label}
+            </motion.button>
+          );
+        })}
       </nav>
 
-      {/* Bottom Section */}
-      <div className="p-4 space-y-3 border-t border-outline-variant/10">
-        {/* Theme Toggle */}
+      {/* Bottom section */}
+      <div className="px-3 py-2 space-y-1">
+        {bottomNavItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={cn(
+                'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-label-lg transition-colors spring-transition cursor-pointer',
+                isActive
+                  ? 'bg-primary-container text-on-primary-container font-semibold'
+                  : 'text-on-surface-variant hover:bg-surface-container'
+              )}
+            >
+              <span className="material-symbols-outlined text-[22px]" style={isActive ? { fontVariationSettings: '"FILL" 1' } : undefined}>
+                {item.icon}
+              </span>
+              {item.label}
+            </button>
+          );
+        })}
+
+        {/* Theme toggle */}
         <button
-          onClick={toggle}
-          className="flex items-center gap-3 w-full px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-all"
+          onClick={toggleTheme}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-label-lg text-on-surface-variant hover:bg-surface-container transition-colors spring-transition cursor-pointer"
         >
-          <span className="material-symbols-outlined text-xl">
+          <span className="material-symbols-outlined text-[22px]">
             {isDark ? 'light_mode' : 'dark_mode'}
           </span>
-          <span>{isDark ? 'Sakura Pastel' : 'Tokyo Night'}</span>
+          {isDark ? 'Light Mode' : 'Dark Mode'}
         </button>
+      </div>
 
-        {/* User Chip */}
-        {user && (
-          <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container">
-            <div className="w-8 h-8 rounded-full academic-gradient flex items-center justify-center text-white text-xs font-bold">
-              {user.displayName?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+      {/* User card */}
+      <div className="px-3 pb-4 pt-2">
+        <button 
+          onClick={openUpgradeModal}
+          className="w-full flex items-center gap-3 px-3 py-3 rounded-xl bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer group"
+        >
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-label-md font-bold text-white shrink-0"
+            style={{ backgroundColor: hashColor(userName) }}
+          >
+            {getInitials(userName)}
+          </div>
+          <div className="flex-1 min-w-0 text-left">
+            <div className="text-label-lg text-on-surface truncate">
+              {userName}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-on-surface truncate">
-                {user.displayName || 'Student'}
-              </p>
-              <p className="text-[10px] text-on-surface-variant truncate">{user.email}</p>
+            <div className="flex items-center gap-1">
+              <div className="text-label-sm text-on-surface-variant capitalize">
+                {userRole}
+              </div>
+              {userRole === 'free' && (
+                <span className="material-symbols-outlined text-[14px] text-primary animate-pulse">
+                  workspace_premium
+                </span>
+              )}
             </div>
           </div>
-        )}
+          <span className="material-symbols-outlined text-[18px] text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
+            upgrade
+          </span>
+        </button>
       </div>
     </aside>
   );

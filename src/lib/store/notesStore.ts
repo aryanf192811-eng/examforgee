@@ -17,6 +17,10 @@ interface NotesStore {
   setLoading: (loading: boolean) => void;
 }
 
+/**
+ * Notes store — tracks currently selected chapter and user context.
+ * NEVER store signed URLs here. signedUrl lives in NotesViewer local state only.
+ */
 export const useNotesStore = create<NotesStore>((set) => ({
   activeChapterId: null,
   activeSubjectSlug: null,

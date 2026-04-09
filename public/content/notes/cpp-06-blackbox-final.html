@@ -1,0 +1,3575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Black Box — File 06 · ICPC & Codeforces</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════
+   THE BLACK BOX — Complete Dark Theme, High Contrast
+   Color philosophy: paper-dark bg, cream text, vivid accents
+══════════════════════════════════════════════════════ */
+:root{
+  /* Background layers */
+  --bg:#080b12;
+  --paper:#0e1117;--paper2:#13171f;--paper3:#191e2a;--paper4:#1e2435;
+  /* Text — HIGH contrast, warm cream */
+  --ink:#f0ece0;--ink2:#d8d0bc;--ink3:#9a8e78;--ink4:#6a6050;
+  /* Accent colors — ALL vivid enough to read on dark */
+  --blue:#7ab4ff;       /* bright cornflower */
+  --green:#5ddb9a;      /* mint green */
+  --red:#ff6b6b;        /* coral red */
+  --orange:#ffaa55;     /* warm amber */
+  --purple:#c792ea;     /* lavender */
+  --teal:#45d4cc;       /* cyan-teal */
+  --gold:#ffd060;       /* warm gold */
+  --cyan:#67e8f9;       /* bright cyan */
+  --pink:#f78da7;       /* soft pink */
+  /* Highlight overlays */
+  --hl-y:rgba(255,208,96,0.18);
+  --hl-b:rgba(122,180,255,0.16);
+  --hl-g:rgba(93,219,154,0.16);
+  --hl-r:rgba(255,107,107,0.16);
+  --hl-o:rgba(255,170,85,0.15);
+  --hl-p:rgba(199,146,234,0.15);
+  /* Rule lines */
+  --rule:rgba(122,180,255,0.07);
+  --mline:rgba(255,100,60,0.18);
+  /* Fonts */
+  --body:'Lora',Georgia,serif;
+  --prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;
+  --mono:'Courier New','Menlo',monospace;
+  /* Fluid sizes */
+  --fs-xs:clamp(9px,1.8vw,10px);
+  --fs-sm:clamp(11px,2.4vw,12.5px);
+  --fs-base:clamp(14px,3.2vw,16.5px);
+  --fs-md:clamp(13.5px,3.2vw,15.5px);
+  --fs-lg:clamp(15px,3.6vw,18.5px);
+  --fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(15px,4vw,20px);
+  --fs-code:clamp(11px,2.5vw,13px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+
+body{
+  background:var(--bg);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 10%, rgba(122,180,255,0.05) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 60% at 85% 90%, rgba(199,146,234,0.04) 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);
+  min-height:100vh;
+  padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);
+}
+.book{max-width:860px;margin:0 auto;}
+
+/* ═══════════════════════════════
+   COVER — BLACK BOX IDENTITY
+═══════════════════════════════ */
+.cover{
+  background:linear-gradient(135deg,#0b0e17 0%,#111622 60%,#0d1119 100%);
+  border:1px solid rgba(122,180,255,0.25);
+  border-radius:5px;
+  padding:clamp(24px,5vw,52px) clamp(16px,5vw,52px) clamp(20px,4vw,40px);
+  margin-bottom:clamp(14px,3vw,28px);
+  position:relative;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(122,180,255,0.1),0 16px 60px rgba(0,0,0,0.7),0 0 100px rgba(122,180,255,0.04);
+}
+/* Blue scan lines */
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(122,180,255,0.035) 31px,rgba(122,180,255,0.035) 32px);
+  background-size:100% 32px;background-position:0 52px;pointer-events:none;
+}
+/* Red margin line */
+.cover::after{
+  content:'';position:absolute;top:0;bottom:0;left:50px;
+  width:1px;background:rgba(255,80,60,0.28);pointer-events:none;
+}
+.cover-inner{position:relative;padding-left:clamp(10px,2.5vw,26px);}
+.cover-label{
+  font-family:var(--mono);font-size:10px;letter-spacing:4px;
+  text-transform:uppercase;color:var(--blue);
+  margin-bottom:14px;display:flex;align-items:center;gap:12px;
+  opacity:0.9;
+}
+.cover-label::before{content:'▶';font-size:8px;}
+.cover h1{
+  font-family:var(--body);font-size:var(--fs-xl);font-weight:700;
+  line-height:1.1;color:#ffffff;letter-spacing:-0.5px;
+}
+.cover h1 em{font-style:normal;color:var(--blue);}
+.cover-tagline{
+  font-family:var(--mono);font-size:clamp(10px,2.3vw,13px);
+  color:var(--ink3);letter-spacing:1.5px;margin:10px 0 18px;
+}
+.cover-desc{
+  font-family:var(--prose);font-size:var(--fs-base);color:var(--ink2);
+  line-height:1.82;max-width:540px;
+  border-left:2px solid rgba(122,180,255,0.5);padding-left:16px;margin-top:16px;
+}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(16px,3vw,28px);}
+.chip{
+  font-family:var(--mono);font-size:9px;
+  border:1px solid rgba(122,180,255,0.25);border-radius:3px;
+  padding:4px 10px;color:rgba(122,180,255,0.75);
+  background:rgba(122,180,255,0.07);letter-spacing:0.5px;
+}
+.chip.gold{color:rgba(255,208,96,0.8);border-color:rgba(255,208,96,0.25);background:rgba(255,208,96,0.07);}
+.cover-badge{
+  position:absolute;top:clamp(12px,2vw,20px);right:clamp(12px,2vw,24px);
+  font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:#080b12;background:var(--blue);padding:5px 12px;border-radius:3px;
+  max-width:calc(100% - 120px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ═══════════════════════════════
+   TABLE OF CONTENTS
+═══════════════════════════════ */
+.toc{
+  background:var(--paper2);border:1px solid rgba(122,180,255,0.18);
+  border-radius:4px;padding:clamp(14px,3vw,22px) clamp(16px,4vw,30px);
+  margin-bottom:clamp(14px,3vw,28px);box-shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+.toc-lbl{
+  font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:14px;display:flex;align-items:center;gap:12px;
+}
+.toc-lbl::after{content:'';flex:1;height:1px;background:rgba(122,180,255,0.2);}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px;}
+.toc-grid a{
+  font-family:var(--mono);font-size:clamp(10.5px,2.2vw,12px);color:var(--ink3);
+  text-decoration:none;display:flex;align-items:baseline;gap:8px;
+  padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);transition:color 0.2s;
+}
+.toc-grid a:hover{color:var(--blue);}
+.tn{font-family:var(--mono);font-size:9px;color:var(--blue);min-width:28px;opacity:0.8;}
+
+/* ═══════════════════════════════
+   CHAPTER STRUCTURE
+═══════════════════════════════ */
+.chapter{
+  background:var(--paper);border:1px solid rgba(122,180,255,0.12);
+  border-radius:4px;margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:0 4px 28px rgba(0,0,0,0.45);overflow:hidden;
+}
+.ch-head{
+  background:linear-gradient(90deg,#0b1020 0%,#0e1525 100%);
+  padding:clamp(13px,2.5vw,18px) clamp(16px,4vw,32px);
+  border-bottom:1px solid rgba(122,180,255,0.15);
+  position:relative;
+}
+.ch-head::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--blue) 0%,var(--purple) 100%);
+}
+.ch-ey{
+  font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:4px;opacity:0.75;
+}
+.ch-title{
+  font-family:var(--body);font-size:var(--fs-ch);font-weight:700;
+  color:var(--ink);line-height:1.2;
+}
+.ch-title em{font-style:italic;color:var(--gold);}
+
+/* Notebook ruled body */
+.ch-body{
+  background-image:
+    linear-gradient(var(--mline) 1px,transparent 1px),
+    repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size:50px 100%,100% 32px;
+  background-position:0 0,0 16px;
+}
+.sec{
+  padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(14px,3vw,24px) clamp(30px,6vw,56px);
+  border-bottom:1px solid rgba(255,255,255,0.05);position:relative;
+}
+.sec:last-child{border-bottom:none;}
+.sec::before{
+  content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:32px;
+  font-family:var(--hand);font-size:9px;color:rgba(255,80,60,0.2);
+  writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ═══════════════════════════════
+   HEADINGS & TAGS
+═══════════════════════════════ */
+h2.sh{
+  font-family:var(--body);font-size:var(--fs-lg);font-weight:700;
+  color:var(--ink);margin-bottom:14px;padding-bottom:7px;
+  border-bottom:1px solid rgba(122,180,255,0.2);
+  display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;
+}
+.tag{
+  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 8px;border-radius:3px;border:1px solid currentColor;
+  margin-left:auto;flex-shrink:0;
+}
+.tg{color:var(--red);border-color:rgba(255,107,107,0.5);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:rgba(122,180,255,0.4);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:rgba(255,170,85,0.4);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:rgba(199,146,234,0.4);background:var(--hl-p);}
+.tgold{color:var(--gold);border-color:rgba(255,208,96,0.4);background:var(--hl-y);}
+h3.ssh{
+  font-family:var(--body);font-size:clamp(13px,3vw,15px);font-weight:600;
+  font-style:italic;color:var(--teal);margin:20px 0 8px;
+}
+
+/* ═══════════════════════════════
+   BODY TEXT
+═══════════════════════════════ */
+p{
+  font-family:var(--prose);font-size:var(--fs-base);
+  line-height:1.9;color:var(--ink2);margin-bottom:10px;
+}
+strong{color:var(--ink);font-weight:600;}
+
+/* ═══════════════════════════════
+   CODE BLOCKS — High Contrast
+═══════════════════════════════ */
+.cb{
+  font-family:var(--mono);font-size:var(--fs-code);
+  background:#0a0d14;border:1px solid rgba(122,180,255,0.18);
+  border-radius:4px;
+  padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,20px);
+  margin:12px 0;color:#e8e4d8;line-height:1.9;
+  white-space:pre;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+  scrollbar-color:rgba(122,180,255,0.3) transparent;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,0.3);
+}
+.cb::-webkit-scrollbar{height:4px;}
+.cb::-webkit-scrollbar-thumb{background:rgba(122,180,255,0.3);border-radius:2px;}
+/* HIGH CONTRAST keyword colors */
+.cb .kw{color:#7ab4ff;font-weight:700;}          /* bright blue — keywords */
+.cb .cm{color:#6a8a6a;font-style:italic;}         /* muted green — comments */
+.cb .st{color:#ffd060;}                            /* gold — strings */
+.cb .num{color:#ff9966;}                           /* orange — numbers */
+.cb .fn{color:#5ddb9a;}                            /* mint — function names */
+.cb .ty{color:#c792ea;}                            /* purple — types */
+.cb .op{color:#67e8f9;}                            /* cyan — operators */
+.cb .pp{color:#ff7b72;}                            /* red-pink — preprocessor */
+.cb .good{color:#5ddb9a;font-weight:600;}          /* green — success/correct */
+.cb .bad{color:#ff6b6b;font-weight:600;}           /* red — error/wrong */
+.cb .note{color:#ffaa55;font-style:italic;}        /* amber — notes */
+
+/* Inline code */
+code{
+  font-family:var(--mono);font-size:var(--fs-code);
+  background:#141820;border:1px solid rgba(122,180,255,0.2);
+  border-radius:3px;padding:2px 6px;color:var(--blue);word-break:break-word;
+}
+
+/* ═══════════════════════════════
+   CALLOUT BOXES — dark variants
+═══════════════════════════════ */
+.def-box{
+  background:#0d1525;border-left:3px solid var(--blue);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,15px) clamp(14px,3vw,20px);margin:14px 0;
+}
+.def-box .lbl{
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:6px;display:block;
+}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink2);}
+
+.warn-box{
+  background:#1a0e0e;border-left:3px solid var(--red);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,14px) clamp(14px,3vw,20px);margin:14px 0;
+}
+.warn-box .lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:5px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:#ffaaaa;margin:0;line-height:1.78;}
+
+.tip-box{
+  background:#0a1a12;border-left:3px solid var(--green);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,14px) clamp(14px,3vw,20px);margin:14px 0;
+}
+.tip-box .lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:#a8e6c0;margin:0;line-height:1.78;}
+
+.note-box{
+  background:#1a1200;border-left:3px solid var(--orange);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,14px) clamp(14px,3vw,20px);margin:14px 0;
+}
+.note-box .lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:5px;display:block;}
+.note-box p{font-size:var(--fs-md);color:#ffcc88;margin:0;line-height:1.78;}
+
+.gold-box{
+  background:#181200;border-left:3px solid var(--gold);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,14px) clamp(14px,3vw,20px);margin:14px 0;
+  box-shadow:inset 0 0 30px rgba(255,208,96,0.03);
+}
+.gold-box .lbl{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:5px;display:block;}
+.gold-box p{font-size:var(--fs-md);color:#ffe8a0;margin:0;line-height:1.78;}
+
+/* Example box */
+.eg{
+  background:#111520;border:1px solid rgba(93,219,154,0.2);
+  border-radius:4px;padding:clamp(14px,3vw,18px) clamp(12px,3vw,20px);
+  margin:16px 0;position:relative;
+}
+.eg::before{
+  content:'Example';font-family:var(--mono);font-size:9px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--green);
+  position:absolute;top:-9px;left:14px;background:#111520;padding:0 6px;
+}
+.eg p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+
+/* ASCII Diagram */
+.gv{
+  background:#080b12;border:1px solid rgba(122,180,255,0.15);
+  border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);
+  margin:14px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,12.5px);
+  line-height:1.9;color:#a0b4cc;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;
+}
+.gv .dv-label{
+  font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:8px;display:block;opacity:0.8;
+}
+
+/* ═══════════════════════════════
+   LISTS
+═══════════════════════════════ */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{
+  font-family:var(--prose);font-size:var(--fs-md);
+  line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;
+}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.pl.star li::before{content:'★';color:var(--gold);}
+
+/* ═══════════════════════════════
+   TABLES
+═══════════════════════════════ */
+.tbl{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:4px;}
+.tbl::-webkit-scrollbar{height:4px;}
+.tbl::-webkit-scrollbar-thumb{background:rgba(122,180,255,0.3);border-radius:2px;}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:clamp(11px,2.5vw,13px);}
+thead tr{background:#0b1020;}
+th{
+  padding:clamp(7px,2vw,10px) clamp(8px,2.5vw,14px);text-align:left;
+  color:var(--blue);font-weight:600;font-size:clamp(9px,2vw,11px);letter-spacing:1px;
+  text-transform:uppercase;white-space:nowrap;border-bottom:1px solid rgba(122,180,255,0.2);
+}
+td{
+  padding:clamp(7px,1.8vw,9px) clamp(8px,2.5vw,14px);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  line-height:1.6;vertical-align:top;color:var(--ink2);
+}
+tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+tr:hover td{background:rgba(122,180,255,0.05);}
+.good{color:var(--green);font-weight:600;}
+.ok{color:var(--orange);font-weight:600;}
+.bad{color:var(--red);font-weight:600;}
+
+/* ═══════════════════════════════
+   CARD GRID
+═══════════════════════════════ */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;margin:14px 0;}
+.cg-card{
+  background:var(--paper3);border:1px solid rgba(122,180,255,0.15);
+  border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,16px);
+}
+.cg-card .ct{
+  font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--blue);margin-bottom:7px;padding-bottom:5px;
+  border-bottom:1px solid rgba(122,180,255,0.15);
+}
+.cg-card p{font-family:var(--prose);font-size:clamp(12.5px,2.7vw,14.5px);line-height:1.75;color:var(--ink2);margin:0;}
+
+/* Inline highlight */
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--gold);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;color:var(--blue);}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;color:var(--green);}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;color:var(--red);}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+.c-p{color:var(--purple);font-weight:600;}.c-gold{color:var(--gold);font-weight:600;}
+
+/* Back to top */
+.bt{
+  display:block;text-align:right;font-family:var(--mono);font-size:9px;
+  color:rgba(122,180,255,0.4);text-decoration:none;
+  padding:10px clamp(14px,3vw,32px) 0;letter-spacing:2px;
+  transition:color 0.2s;
+}
+.bt:hover{color:var(--blue);}
+
+/* Footer */
+.footer{
+  text-align:center;font-family:var(--mono);font-size:9px;
+  color:var(--ink4);letter-spacing:3px;padding:clamp(14px,3vw,24px) 0;
+}
+
+/* ═══════════════════════════════
+   RESPONSIVE
+═══════════════════════════════ */
+@media(max-width:640px){
+  .toc-grid{grid-template-columns:1fr;}
+  .cover::after{left:34px;}
+  .sec{padding-left:clamp(26px,5.5vw,40px);}
+  .sec::before{font-size:8px;}
+  h2.sh{font-size:clamp(14px,3.8vw,17px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10px,2.3vw,12px);padding:10px 12px;}
+  .gv{font-size:clamp(9px,2vw,11px);}
+  .tbl{border-left:2px solid var(--blue);}
+  .cg{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{padding:18px 14px 16px;}
+  .cover::after{display:none;}
+  .cover-badge{position:static;display:inline-block;margin-bottom:12px;}
+  .cover-inner{padding-left:0;}.chip{font-size:8px;padding:3px 8px;}
+  .sec{padding-left:18px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(13px,4vw,16px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .def-box,.warn-box,.tip-box,.note-box,.gold-box{padding:10px 12px;}
+  .cb{font-size:10px;padding:9px 10px;}
+  table{font-size:11px;}th{padding:6px 8px;font-size:9px;}td{padding:5px 8px;}
+  .bt{padding:8px 12px 0;}
+}
+@media print{
+  body{background:#fff;color:#111;padding:0;}.book{max-width:100%;}
+  .cb{background:#f5f5f5;color:#111;border:1px solid #ccc;white-space:pre-wrap;word-break:break-all;}
+  .cb .kw{color:#0000cc;}.cb .cm{color:#666;}.cb .st{color:#880000;}
+  .ch-head{background:#333;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chapter{box-shadow:none;break-inside:avoid;}
+  .cover{background:#111;box-shadow:none;border:2px solid #333;}
+  .bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">06 · The Black Box</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-badge">Complete Reference · File 06 of 06</span>
+  <div class="cover-inner">
+    <div class="cover-label">C++ Mastery Series · ICPC &amp; Codeforces Edition</div>
+    <h1>The <em>Black</em> Box</h1>
+    <div class="cover-tagline">// COPY. PASTE. WIN. — Contest-Grade Templates &amp; Algorithms</div>
+    <p class="cover-desc">This is not a textbook. This is your arsenal. Every template is contest-tested, every function is copy-paste ready, every pattern is mapped to the problem types that actually appear in ICPC and Codeforces Div 1/2. From the moment you open this file to the moment you submit AC — this is the only reference you need.</p>
+    <div class="cover-chips">
+      <span class="chip gold">Ch 16 · Silver Bullet Boilerplate</span>
+      <span class="chip">Ch 17 · Number Theory</span>
+      <span class="chip">Ch 18 · Heavy Tree Algorithms</span>
+      <span class="chip">Ch 19 · Advanced Range Queries</span>
+      <span class="chip">Ch 20 · String Mastery</span>
+      <span class="chip">Ch 21 · Coordinate Compression &amp; Mo's</span>
+      <span class="chip">Ch 22 · Network Flow &amp; Matching</span>
+      <span class="chip">Ch 23 · Computational Geometry</span>
+      <span class="chip">Ch 24 · Advanced Graph Algorithms</span>
+      <span class="chip">Ch 25 · Digit DP &amp; Advanced DP</span>
+      <span class="chip">Ch 26 · Game Theory &amp; Math</span>
+      <span class="chip gold">Ch 27 · ICPC Strategy &amp; Pattern Recognition</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">// INDEX</div>
+  <div class="toc-grid">
+    <a href="#ch16"><span class="tn">16</span>Silver Bullet Boilerplate</a>
+    <a href="#ch17"><span class="tn">17</span>Number Theory &amp; Modular Arithmetic</a>
+    <a href="#ch18"><span class="tn">18</span>Heavy Tree Algorithms</a>
+    <a href="#ch19"><span class="tn">19</span>Advanced Range Queries</a>
+    <a href="#ch20"><span class="tn">20</span>String Mastery</a>
+    <a href="#ch21"><span class="tn">21</span>Coordinate Compression &amp; Mo's</a>
+    <a href="#ch22"><span class="tn">22</span>Network Flow &amp; Matching</a>
+    <a href="#ch23"><span class="tn">23</span>Computational Geometry</a>
+    <a href="#ch24"><span class="tn">24</span>Advanced Graph Algorithms</a>
+    <a href="#ch25"><span class="tn">25</span>Digit DP &amp; Advanced DP</a>
+    <a href="#ch26"><span class="tn">26</span>Game Theory &amp; Math</a>
+    <a href="#ch27"><span class="tn">27</span>ICPC Strategy &amp; Pattern Map</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 16 — THE SILVER BULLET BOILERPLATE
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch16">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 16 · Start Here</div>
+    <div class="ch-title">The Silver Bullet — <em>Your Contest Starting File</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="template">
+      <h2 class="sh">16.1 &nbsp; The Ultimate CP Template <span class="tag tgold">Copy This First</span></h2>
+      <p>This is the file you paste at the start of every contest. Every macro, every typedef, every fast-I/O trick — pre-loaded and battle-tested. The goal: <mark>zero boilerplate overhead when the clock starts</mark>.</p>
+      
+      <div class="def-box">
+        <span class="lbl">Boilerplate Breakdown (Why It Forms the Silver Bullet)</span>
+        <ul class="pl">
+          <li><code>using ll = long long;</code>: Prevents 90% of integer overflow bugs. When in doubt, use <code>ll</code>.</li>
+          <li><code>#define pb push_back</code>: Saves seconds typing adjacency lists and array builders, which compound over a contest.</li>
+          <li><code>#define all(x) (x).begin(),(x).end()</code>: Turns <code>sort(v.begin(), v.end())</code> into <code>sort(all(v))</code>. Eliminates typo risks.</li>
+          <li><code>#define sz(x) (int)(x).size()</code>: <code>size()</code> yields an unsigned type, which breaks horribly when subtracting (e.g., <code>v.size() - 1</code> becomes 4 billion if the vector is empty). This casts it to signed int.</li>
+          <li><code>#define rep(i,a,b)</code>: Clean syntax for loops. Reduces loop index boundary errors (<code>&lt;</code> vs <code>&lt;=</code>).</li>
+          <li><code>chmin/chmax</code>: Turns <code>dp[i] = min(dp[i], cost)</code> into <code>chmin(dp[i], cost)</code>, streamlining DP transitions visually and textually.</li>
+        </ul>
+      </div>
+
+      <div class="cb"><span class="pp">#include</span> &lt;bits/stdc++.h&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="cm">// ─── TYPEDEFS ────────────────────────────────────────────────────────</span>
+<span class="kw">using</span> ll  = <span class="kw">long long</span>;
+<span class="kw">using</span> ull = <span class="kw">unsigned long long</span>;
+<span class="kw">using</span> ld  = <span class="kw">long double</span>;
+<span class="kw">using</span> pii = pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;;
+<span class="kw">using</span> pll = pair&lt;ll,ll&gt;;
+<span class="kw">using</span> vi  = vector&lt;<span class="kw">int</span>&gt;;
+<span class="kw">using</span> vll = vector&lt;ll&gt;;
+<span class="kw">using</span> vvi = vector&lt;vi&gt;;
+
+<span class="cm">// ─── CONSTANTS ───────────────────────────────────────────────────────</span>
+<span class="kw">const</span> ll  INF  = 2e18;
+<span class="kw">const</span> <span class="kw">int</span> INF32 = 2e9;
+<span class="kw">const</span> ll  MOD  = 1e9 + 7;     <span class="cm">// Also 998244353 for NTT problems</span>
+<span class="kw">const</span> ld  PI   = acosl(-1.0L);
+<span class="kw">const</span> <span class="kw">int</span> dx[] = {0,0,1,-1}; <span class="cm">// 4-directional grid movement</span>
+<span class="kw">const</span> <span class="kw">int</span> dy[] = {1,-1,0,0};
+
+<span class="cm">// ─── MACROS ──────────────────────────────────────────────────────────</span>
+<span class="pp">#define</span> pb           push_back
+<span class="pp">#define</span> eb           emplace_back
+<span class="pp">#define</span> all(x)       (x).begin(),(x).end()
+<span class="pp">#define</span> rall(x)      (x).rbegin(),(x).rend()
+<span class="pp">#define</span> sz(x)        (int)(x).size()
+<span class="pp">#define</span> fi           first
+<span class="pp">#define</span> se           second
+<span class="pp">#define</span> mp           make_pair
+<span class="pp">#define</span> YES          cout &lt;&lt; "YES\n"
+<span class="pp">#define</span> NO           cout &lt;&lt; "NO\n"
+<span class="pp">#define</span> rep(i,a,b)   for(int i=(a);i&lt;(b);i++)
+<span class="pp">#define</span> per(i,a,b)   for(int i=(b)-1;i&gt;=(a);i--)
+<span class="pp">#define</span> FOR(i,n)     for(int i=0;i&lt;(n);i++)
+
+<span class="cm">// ─── DEBUG (local-only, stripped in judge) ───────────────────────────</span>
+<span class="pp">#ifdef</span> LOCAL
+  <span class="pp">#define</span> dbg(x)   cerr &lt;&lt; "[" &lt;&lt; #x &lt;&lt; "] = " &lt;&lt; (x) &lt;&lt; "\n"
+  <span class="pp">#define</span> dbg2(x,y) cerr &lt;&lt;"["&lt;&lt;#x&lt;&lt;","&lt;&lt;#y&lt;&lt;"] = "&lt;&lt;(x)&lt;&lt;","&lt;&lt;(y)&lt;&lt;"\n"
+  <span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt;
+  <span class="kw">void</span> dbgVec(<span class="kw">const</span> vector&lt;T&gt;&amp; v, <span class="kw">const</span> string&amp; name) {
+    cerr &lt;&lt; name &lt;&lt; ": [";
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz(v);i++) cerr &lt;&lt; v[i] &lt;&lt; (i+1&lt;sz(v)?",":"]");
+    cerr &lt;&lt; "\n";
+  }
+<span class="pp">#else</span>
+  <span class="pp">#define</span> dbg(x)
+  <span class="pp">#define</span> dbg2(x,y)
+  <span class="pp">#define</span> dbgVec(v,n)
+<span class="pp">#endif</span>
+
+<span class="cm">// ─── UTILITY FUNCTIONS ───────────────────────────────────────────────</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt; <span class="kw">bool</span> chmin(T&amp; a, T b){ <span class="kw">return</span> a &gt; b ? a=b,<span class="kw">true</span>:<span class="kw">false</span>; }
+<span class="kw">template</span>&lt;<span class="kw">typename</span> T&gt; <span class="kw">bool</span> chmax(T&amp; a, T b){ <span class="kw">return</span> a &lt; b ? a=b,<span class="kw">true</span>:<span class="kw">false</span>; }
+
+ll safeMod(ll a, ll m){ <span class="kw">return</span> ((a%m)+m)%m; }
+
+<span class="cm">// ─── MAIN ────────────────────────────────────────────────────────────</span>
+<span class="kw">void</span> solve() {
+    <span class="cm">// Your solution here</span>
+}
+
+<span class="kw">int</span> main(){
+    ios_base::sync_with_stdio(<span class="kw">false</span>);
+    cin.tie(<span class="kw">NULL</span>);
+    <span class="kw">int</span> T=1;
+    <span class="cm">// cin >> T;          // Uncomment for multi-test problems</span>
+    <span class="kw">while</span>(T--) solve();
+    <span class="kw">return</span> 0;
+}</div>
+      <div class="note-box">
+        <span class="lbl">Compile on your machine with LOCAL</span>
+        <p>Add <code>-DLOCAL</code> to your compile command: <code>g++ -std=c++17 -O2 -DLOCAL -Wall sol.cpp -o sol</code>. Then use <code>dbg(variable)</code> freely. On the online judge, <code>-DLOCAL</code> is not set, so all debug output is compiled away — no performance impact, no runtime errors.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="io-tricks">
+      <h2 class="sh">16.2 &nbsp; I/O Tricks &amp; Reading Patterns <span class="tag tc">Essential</span></h2>
+      <div class="cb"><span class="cm">// ── Reading n integers into a vector ─────────────────────────────────</span>
+<span class="kw">int</span> n; cin &gt;&gt; n;
+vi a(n);
+<span class="kw">for</span>(<span class="kw">auto</span>&amp; x : a) cin &gt;&gt; x;
+
+<span class="cm">// ── Reading an n×m grid ───────────────────────────────────────────────</span>
+<span class="kw">int</span> n,m; cin&gt;&gt;n&gt;&gt;m;
+vector&lt;string&gt; grid(n);
+<span class="kw">for</span>(<span class="kw">auto</span>&amp; row : grid) cin &gt;&gt; row;  <span class="cm">// grid[i][j] = character</span>
+
+<span class="cm">// ── Weighted graph reading ────────────────────────────────────────────</span>
+<span class="kw">int</span> V,E; cin&gt;&gt;V&gt;&gt;E;
+vector&lt;vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt; adj(V+1);
+<span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;E;i++){
+    <span class="kw">int</span> u,v,w; cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+    adj[u].pb({v,w}); adj[v].pb({u,w});
+}
+
+<span class="cm">// ── printf/scanf speed alternative (when sync_with_stdio is on) ───────</span>
+<span class="cm">// For integer reads ONLY — use when cin is still too slow:</span>
+<span class="kw">inline</span> ll readInt(){
+    ll x=0; <span class="kw">char</span> c=getchar_unlocked();
+    <span class="kw">while</span>(c&lt;'0'||c&gt;'9') c=getchar_unlocked();
+    <span class="kw">while</span>(c&gt;='0'&amp;&amp;c&lt;='9'){ x=x*10+c-'0'; c=getchar_unlocked(); }
+    <span class="kw">return</span> x;
+}
+
+<span class="cm">// ── Output — avoid endl, use "\n" ─────────────────────────────────────</span>
+cout &lt;&lt; ans &lt;&lt; "\n";          <span class="cm">// GOOD</span>
+cout &lt;&lt; ans &lt;&lt; endl;          <span class="cm">// BAD — flushes buffer every time, 10x slower</span>
+
+<span class="cm">// ── Printing a vector ─────────────────────────────────────────────────</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz(a);i++) cout &lt;&lt; a[i] &lt;&lt; " \n"[i+1==sz(a)];</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 17 — NUMBER THEORY
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch17">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 17 · Number Theory</div>
+    <div class="ch-title">Modular Arithmetic &amp; Number Theory — <em>The Engine of Div2 D/E</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="modexp">
+      <h2 class="sh">17.1 &nbsp; Binary Exponentiation &amp; Modular Inverse <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Mod Inverse &amp; Expo</span>
+        <p><strong>Trigger:</strong> Any problem asking you to "output the answer modulo 10⁹+7" involving division (e.g., combinatorics <code>nCr</code>, probabilities <code>P/Q mod M</code>).<br>
+        <strong>Constraints:</strong> <code>MOD</code> must be prime for Fermat's Little Theorem (<code>inv(a) = a^(MOD-2)</code>). If <code>MOD</code> is not prime, use Extended Euclidean.<br>
+        <strong>Trap:</strong> Taking the inverse of 0 is undefined. Assure <code>a</code> and <code>MOD</code> are coprime.</p>
+      </div>
+      <div class="cb"><span class="cm">// Binary Exponentiation — a^b mod m in O(log b)</span>
+ll binpow(ll a, ll b, ll mod){
+    a %= mod;
+    ll res = 1;
+    <span class="kw">while</span>(b > 0){
+        <span class="kw">if</span>(b &amp; 1) res = res * a % mod;   <span class="cm">// Odd exponent: multiply current base</span>
+        a = a * a % mod;                  <span class="cm">// Square the base</span>
+        b >>= 1;                          <span class="cm">// Halve the exponent</span>
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Modular Inverse via Fermat's Little Theorem</span>
+<span class="cm">// Requires: MOD is PRIME, a is not divisible by MOD</span>
+<span class="cm">// inv(a) = a^(MOD-2) mod MOD</span>
+ll inv(ll a, ll mod = MOD){
+    <span class="kw">return</span> binpow(a, mod-2, mod);
+}
+
+<span class="cm">// Modular Inverse using Extended Euclidean — works for non-prime moduli</span>
+ll extgcd(ll a, ll b, ll&amp; x, ll&amp; y){
+    <span class="kw">if</span>(!b){ x=1; y=0; <span class="kw">return</span> a; }
+    ll x1,y1;
+    ll g = extgcd(b, a%b, x1, y1);
+    x = y1;
+    y = x1 - (a/b)*y1;
+    <span class="kw">return</span> g;
+}
+ll modinv(ll a, ll m){
+    ll x,y;
+    ll g = extgcd(a,m,x,y);
+    <span class="kw">if</span>(g != 1) <span class="kw">return</span> -1;   <span class="cm">// No inverse if gcd != 1</span>
+    <span class="kw">return</span> (x%m+m)%m;
+}</div>
+    </div>
+
+    <div class="sec" data-m="ncr">
+      <h2 class="sh">17.2 &nbsp; nCr with Precomputed Factorials <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">const</span> <span class="kw">int</span> MAXN = 2e6 + 5;
+ll fact[MAXN], inv_fact[MAXN];
+
+<span class="kw">void</span> precompute(){
+    fact[0] = 1;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;MAXN;i++) fact[i] = fact[i-1] * i % MOD;
+    inv_fact[MAXN-1] = binpow(fact[MAXN-1], MOD-2, MOD);
+    <span class="kw">for</span>(<span class="kw">int</span> i=MAXN-2;i&gt;=0;i--)
+        inv_fact[i] = inv_fact[i+1] * (i+1) % MOD;  <span class="cm">// inv_fact[i] = inv_fact[i+1]*(i+1)</span>
+}
+
+ll nCr(<span class="kw">int</span> n, <span class="kw">int</span> r){
+    <span class="kw">if</span>(r&lt;0||r&gt;n) <span class="kw">return</span> 0;
+    <span class="kw">return</span> fact[n] % MOD * inv_fact[r] % MOD * inv_fact[n-r] % MOD;
+}
+
+ll nPr(<span class="kw">int</span> n, <span class="kw">int</span> r){
+    <span class="kw">if</span>(r&lt;0||r&gt;n) <span class="kw">return</span> 0;
+    <span class="kw">return</span> fact[n] % MOD * inv_fact[n-r] % MOD;
+}</div>
+      <div class="note-box">
+        <span class="lbl">Lucas' Theorem — nCr when MOD is small or n is huge</span>
+        <p>If <code>n</code> or <code>r</code> &gt; MOD (or MOD is a small prime), use Lucas: nCr(n,r) mod p = nCr(n/p, r/p) * nCr(n%p, r%p) mod p. Call recursively until base case. Essential for problems where n can be up to 10¹⁸ but MOD is a small prime.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sieve">
+      <h2 class="sh">17.3 &nbsp; Linear Sieve — Primes &amp; SPF in O(n) <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Linear Sieve &amp; SPF</span>
+        <p><strong>Trigger:</strong> You need to prime factorize multiple queries (e.g., 10⁵ queries) of numbers up to 10⁷. Or you need to quickly compute Phi/Sigma for a range.<br>
+        <strong>Constraints:</strong> <code>N</code> can be up to 10⁷ minimum. Array size hits 40MB for 10⁷ integers.<br>
+        <strong>Trap:</strong> Don't use a sieve for N &gt; 10⁸ (Memory Limit Exceeded). Use Pollard-Rho if you need to factorize sparse, large numbers (up to 10¹⁸).</p>
+      </div>
+      <div class="cb"><span class="kw">const</span> <span class="kw">int</span> SIEVE_MAX = 1e7 + 5;
+<span class="kw">int</span>  spf[SIEVE_MAX];   <span class="cm">// spf[i] = smallest prime factor of i</span>
+<span class="kw">bool</span> isCmp[SIEVE_MAX]; <span class="cm">// isCmp[i] = true if i is composite</span>
+vi   primes;
+
+<span class="kw">void</span> linearSieve(){
+    <span class="kw">for</span>(<span class="kw">int</span> i=2;i&lt;SIEVE_MAX;i++){
+        <span class="kw">if</span>(!isCmp[i]){
+            primes.pb(i);
+            spf[i] = i;
+        }
+        <span class="kw">for</span>(<span class="kw">int</span> j=0; j&lt;sz(primes) &amp;&amp; (<span class="kw">long long</span>)i*primes[j]&lt;SIEVE_MAX; j++){
+            isCmp[i*primes[j]] = <span class="kw">true</span>;
+            spf[i*primes[j]]   = primes[j];
+            <span class="kw">if</span>(i % primes[j] == 0) <span class="kw">break</span>;  <span class="cm">// Key: ensures each composite marked once</span>
+        }
+    }
+}
+
+<span class="cm">// O(log n) factorization using SPF</span>
+map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; factorize(<span class="kw">int</span> n){
+    map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; f;
+    <span class="kw">while</span>(n &gt; 1){ f[spf[n]]++; n /= spf[n]; }
+    <span class="kw">return</span> f;
+}
+
+<span class="cm">// Count prime factors (with multiplicity)</span>
+<span class="kw">int</span> omega(<span class="kw">int</span> n){
+    <span class="kw">int</span> cnt=0;
+    <span class="kw">while</span>(n&gt;1){ cnt++; <span class="kw">int</span> p=spf[n]; <span class="kw">while</span>(n%p==0) n/=p; }
+    <span class="kw">return</span> cnt;
+}
+
+<span class="cm">// Euler's Totient Function using SPF</span>
+<span class="kw">int</span> phi(<span class="kw">int</span> n){
+    <span class="kw">int</span> result = n;
+    <span class="kw">int</span> tmp = n;
+    <span class="kw">while</span>(tmp &gt; 1){
+        <span class="kw">int</span> p = spf[tmp];
+        result -= result/p;
+        <span class="kw">while</span>(tmp%p==0) tmp/=p;
+    }
+    <span class="kw">return</span> result;
+}</div>
+    </div>
+
+    <div class="sec" data-m="crt-misc">
+      <h2 class="sh">17.4 &nbsp; CRT, GCD, LCM &amp; Number Theory Tricks <span class="tag tc">Reference</span></h2>
+      <div class="cb"><span class="cm">// Chinese Remainder Theorem — find x such that x ≡ r1 (mod m1), x ≡ r2 (mod m2)</span>
+<span class="cm">// m1, m2 must be coprime</span>
+ll crt(ll r1, ll m1, ll r2, ll m2){
+    ll x,y;
+    ll g = extgcd(m1, m2, x, y);      <span class="cm">// g should be 1 if coprime</span>
+    <span class="kw">return</span> (r1 + m1*((r2-r1)%m2*x%m2+m2)%m2) % (m1*m2);
+}
+
+<span class="cm">// Fast GCD (C++17 has __gcd, but this handles 0 correctly)</span>
+ll gcd(ll a, ll b){ <span class="kw">return</span> b ? gcd(b,a%b) : a; }
+ll lcm(ll a, ll b){ <span class="kw">return</span> a / gcd(a,b) * b; }   <span class="cm">// Divide first to avoid overflow</span>
+
+<span class="cm">// Integer square root (exact)</span>
+ll isqrt(ll n){
+    ll x = sqrtl(n);
+    <span class="kw">while</span>(x*x &gt; n) x--;
+    <span class="kw">while</span>((x+1)*(x+1) &lt;= n) x++;
+    <span class="kw">return</span> x;
+}
+
+<span class="cm">// Miller-Rabin Primality Test — O(k log² n), deterministic for n &lt; 3.3×10²⁴</span>
+ll mulmod(ll a, ll b, ll m){ <span class="kw">return</span> (__int128)a * b % m; }
+<span class="kw">bool</span> millerTest(ll n, ll a){
+    <span class="kw">if</span>(n%a==0) <span class="kw">return</span> n==a;
+    ll d=n-1; <span class="kw">int</span> r=0;
+    <span class="kw">while</span>(d%2==0){ d/=2; r++; }
+    ll x = binpow(a,d,n);
+    <span class="kw">if</span>(x==1||x==n-1) <span class="kw">return true</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;r-1;i++){
+        x=mulmod(x,x,n);
+        <span class="kw">if</span>(x==n-1) <span class="kw">return true</span>;
+    }
+    <span class="kw">return false</span>;
+}
+<span class="kw">bool</span> isPrime(ll n){
+    <span class="kw">if</span>(n&lt;2) <span class="kw">return false</span>;
+    <span class="kw">for</span>(ll a:{2,3,5,7,11,13,17,19,23,29,31,37})
+        <span class="kw">if</span>(!millerTest(n,a)) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 18 — HEAVY TREE ALGORITHMS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch18">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 18 · Trees</div>
+    <div class="ch-title">Heavy Tree Algorithms — <em>LCA, Euler Tour &amp; Centroid Decomposition</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="lca">
+      <h2 class="sh">18.1 &nbsp; Binary Lifting — LCA in O(log n) <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Binary Lifting LCA</span>
+        <p><strong>Trigger:</strong> "Find the distance between u and v on a tree", "Path sum on a static tree", or queries requiring the k-th ancestor of a node.<br>
+        <strong>Constraints:</strong> <code>N, Q ≤ 2·10⁵</code>. Precomputation takes <code>O(N log N)</code> memory and time. Queries are <code>O(log N)</code>.<br>
+        <strong>Trap:</strong> Array size for <code>par[MAXV][LOG]</code>. Ensure <code>LOG</code> is strictly &gt; <code>log2(MAXV)</code>. Also, don't swap <code>u</code> and <code>v</code> at the end of LCA if you need their original relative depth differences.</p>
+      </div>
+      <div class="cb"><span class="kw">const</span> <span class="kw">int</span> MAXV = 2e5+5, LOG = 18;
+
+<span class="kw">int</span>  par[MAXV][LOG];   <span class="cm">// par[v][k] = 2^k-th ancestor of v</span>
+<span class="kw">int</span>  depth[MAXV];
+vector&lt;<span class="kw">int</span>&gt; adj[MAXV];
+
+<span class="kw">void</span> dfsLCA(<span class="kw">int</span> u, <span class="kw">int</span> p, <span class="kw">int</span> d){
+    par[u][0] = p;
+    depth[u]  = d;
+    <span class="kw">for</span>(<span class="kw">int</span> k=1;k&lt;LOG;k++)
+        par[u][k] = par[par[u][k-1]][k-1];    <span class="cm">// 2^k ancestor = 2^(k-1) of 2^(k-1)</span>
+    <span class="kw">for</span>(<span class="kw">int</span> v : adj[u])
+        <span class="kw">if</span>(v != p) dfsLCA(v, u, d+1);
+}
+
+<span class="kw">void</span> buildLCA(<span class="kw">int</span> root, <span class="kw">int</span> n){
+    par[root][0] = root;
+    dfsLCA(root, root, 0);
+}
+
+<span class="kw">int</span> lca(<span class="kw">int</span> u, <span class="kw">int</span> v){
+    <span class="kw">if</span>(depth[u] &lt; depth[v]) swap(u,v);
+    <span class="kw">int</span> diff = depth[u] - depth[v];
+    <span class="kw">for</span>(<span class="kw">int</span> k=0;k&lt;LOG;k++)            <span class="cm">// Lift u to same depth as v</span>
+        <span class="kw">if</span>((diff>>k)&amp;1) u = par[u][k];
+    <span class="kw">if</span>(u == v) <span class="kw">return</span> u;
+    <span class="kw">for</span>(<span class="kw">int</span> k=LOG-1;k&gt;=0;k--)        <span class="cm">// Lift both until just below LCA</span>
+        <span class="kw">if</span>(par[u][k] != par[v][k]){ u=par[u][k]; v=par[v][k]; }
+    <span class="kw">return</span> par[u][0];
+}
+
+<span class="kw">int</span> dist(<span class="kw">int</span> u, <span class="kw">int</span> v){
+    <span class="kw">return</span> depth[u] + depth[v] - 2*depth[lca(u,v)];
+}
+
+<span class="cm">// Kth ancestor of u — O(log k)</span>
+<span class="kw">int</span> kthAnc(<span class="kw">int</span> u, <span class="kw">int</span> k){
+    <span class="kw">for</span>(<span class="kw">int</span> b=0;b&lt;LOG;b++)
+        <span class="kw">if</span>((k>>b)&amp;1) u=par[u][b];
+    <span class="kw">return</span> u;
+}</div>
+    </div>
+
+    <div class="sec" data-m="euler-tour">
+      <h2 class="sh">18.2 &nbsp; Euler Tour — Tree Flattening for Range Queries <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">int</span> tin[MAXV], tout[MAXV], euler[2*MAXV];
+<span class="kw">int</span> timer_e = 0, flat[MAXV];   <span class="cm">// flat[i] = node at euler-tour position i</span>
+<span class="kw">int</span> sz_tree[MAXV];              <span class="cm">// subtree size</span>
+
+<span class="kw">void</span> dfsEuler(<span class="kw">int</span> u, <span class="kw">int</span> p){
+    tin[u] = timer_e;
+    flat[timer_e++] = u;
+    sz_tree[u] = 1;
+    <span class="kw">for</span>(<span class="kw">int</span> v : adj[u]){
+        <span class="kw">if</span>(v != p){ dfsEuler(v, u); sz_tree[u] += sz_tree[v]; }
+    }
+    tout[u] = timer_e - 1;
+}
+<span class="cm">// Now: subtree of u spans positions [tin[u], tout[u]] in flat[]</span>
+<span class="cm">// Any query on subtree of u = range query on flat[tin[u]..tout[u]]</span>
+<span class="cm">// isAncestor(u,v): tin[u]<=tin[v] && tout[v]<=tout[u]</span>
+
+<span class="cm">// Heavy-Light Decomposition — path queries in O(log²n) with segment tree</span>
+<span class="kw">int</span> heavy[MAXV], head_[MAXV], pos_[MAXV], hld_timer=0;
+
+<span class="kw">void</span> dfsHLD(<span class="kw">int</span> u, <span class="kw">int</span> p){
+    sz_tree[u]=1; heavy[u]=-1;
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(v!=p){
+        dfsHLD(v,u); sz_tree[u]+=sz_tree[v];
+        <span class="kw">if</span>(heavy[u]==-1||sz_tree[v]&gt;sz_tree[heavy[u]]) heavy[u]=v;
+    }
+}
+<span class="kw">void</span> decomposeHLD(<span class="kw">int</span> u, <span class="kw">int</span> p, <span class="kw">int</span> h){
+    head_[u]=h; pos_[u]=hld_timer++;
+    <span class="kw">if</span>(heavy[u]!=-1) decomposeHLD(heavy[u],u,h);
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(v!=p&amp;&amp;v!=heavy[u]) decomposeHLD(v,u,v);
+}
+<span class="cm">// Path query u→v: while heads differ, query chain [pos[head], pos[u]], go up</span>
+ll pathQuery(<span class="kw">int</span> u, <span class="kw">int</span> v, <span class="kw">auto</span>&amp; seg){
+    ll res=0;
+    <span class="kw">while</span>(head_[u]!=head_[v]){
+        <span class="kw">if</span>(depth[head_[u]]&lt;depth[head_[v]]) swap(u,v);
+        res += seg.query(pos_[head_[u]], pos_[u]);
+        u = par[head_[u]][0];
+    }
+    <span class="kw">if</span>(depth[u]&gt;depth[v]) swap(u,v);
+    res += seg.query(pos_[u], pos_[v]);
+    <span class="kw">return</span> res;
+}</div>
+    </div>
+
+    <div class="sec" data-m="centroid">
+      <h2 class="sh">18.3 &nbsp; Centroid Decomposition — Path Problems on Trees <span class="tag tp">Advanced</span></h2>
+      <div class="cb"><span class="kw">int</span>  subtreeSz[MAXV];
+<span class="kw">bool</span> removed[MAXV];
+<span class="kw">int</span>  centTree[MAXV];      <span class="cm">// centTree[v] = parent in centroid decomposition tree</span>
+
+<span class="kw">int</span> getSubtreeSize(<span class="kw">int</span> u, <span class="kw">int</span> p){
+    subtreeSz[u]=1;
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(!removed[v]&amp;&amp;v!=p) subtreeSz[u]+=getSubtreeSize(v,u);
+    <span class="kw">return</span> subtreeSz[u];
+}
+<span class="kw">int</span> getCentroid(<span class="kw">int</span> u, <span class="kw">int</span> p, <span class="kw">int</span> treeSize){
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(!removed[v]&amp;&amp;v!=p&amp;&amp;subtreeSz[v]&gt;treeSize/2)
+        <span class="kw">return</span> getCentroid(v,u,treeSize);
+    <span class="kw">return</span> u;
+}
+<span class="kw">void</span> buildCentroid(<span class="kw">int</span> u, <span class="kw">int</span> p){
+    <span class="kw">int</span> sz = getSubtreeSize(u,-1);
+    <span class="kw">int</span> c  = getCentroid(u,-1,sz);
+    centTree[c] = p;
+    removed[c]  = <span class="kw">true</span>;             <span class="cm">// Remove centroid and recurse on subtrees</span>
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[c]) <span class="kw">if</span>(!removed[v]) buildCentroid(v,c);
+}
+<span class="cm">// Use case: count paths of length k</span>
+<span class="cm">// For each centroid c, count paths passing through c using two DFS passes</span>
+<span class="cm">// O(n log²n) for most path queries on trees</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 19 — ADVANCED RANGE QUERIES
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch19">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 19 · Range Queries</div>
+    <div class="ch-title">Advanced Range Queries — <em>Sparse Table, Lazy SegTree &amp; 2D BIT</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sparse-table">
+      <h2 class="sh">19.1 &nbsp; Sparse Table — O(1) Range Minimum Query <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Sparse Table</span>
+        <p><strong>Trigger:</strong> Static array (NO updates) with 10⁶+ range queries for MIN, MAX, GCD, or Bitwise AND/OR.<br>
+        <strong>Constraints:</strong> <code>N ≤ 2·10⁵</code> (due to <code>O(N log N)</code> memory). <code>Q</code> can be up to 10⁷ since query is <code>O(1)</code>.<br>
+        <strong>Trap:</strong> The operation <em>must</em> be idempotent (<code>f(x, x) = x</code>). Do <strong>not</strong> use Sparse Table for Range Sum queries (use Prefix Sums or BIT instead).</p>
+      </div>
+      <div class="cb"><span class="cm">// O(n log n) build, O(1) query — only for IDEMPOTENT operations (min, max, gcd)</span>
+<span class="cm">// NOT for sum (use BIT/SegTree for sum)</span>
+<span class="kw">struct</span> SparseTable {
+    vvi  table;   <span class="cm">// table[k][i] = min of a[i..i+2^k-1]</span>
+    vi   log2_;
+    <span class="kw">int</span>  n;
+
+    SparseTable(<span class="kw">const</span> vi&amp; a) : n(sz(a)), table(20, vi(sz(a))), log2_(sz(a)+1) {
+        log2_[1] = 0;
+        <span class="kw">for</span>(<span class="kw">int</span> i=2;i&lt;=n;i++) log2_[i] = log2_[i/2]+1;
+        table[0] = a;
+        <span class="kw">for</span>(<span class="kw">int</span> k=1;(1&lt;&lt;k)&lt;=n;k++)
+            <span class="kw">for</span>(<span class="kw">int</span> i=0;i+(1&lt;&lt;k)&lt;=n;i++)
+                table[k][i] = min(table[k-1][i], table[k-1][i+(1&lt;&lt;(k-1))]);
+    }
+
+    <span class="cm">// Range minimum query [l, r] inclusive — O(1)</span>
+    <span class="kw">int</span> query(<span class="kw">int</span> l, <span class="kw">int</span> r){
+        <span class="kw">int</span> k = log2_[r-l+1];
+        <span class="kw">return</span> min(table[k][l], table[k][r-(1&lt;&lt;k)+1]);
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="lazy-seg">
+      <h2 class="sh">19.2 &nbsp; Lazy Propagation Segment Tree — Modular Version <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// Generic segment tree with lazy propagation</span>
+<span class="cm">// SWAP the merge() function for sum/min/max/gcd problems</span>
+<span class="kw">struct</span> SegTree {
+    <span class="kw">int</span> n;
+    vector&lt;ll&gt; tree, lazy;
+
+    SegTree(<span class="kw">int</span> n) : n(n), tree(4*n,0), lazy(4*n,0) {}
+    SegTree(<span class="kw">const</span> vector&lt;ll&gt;&amp; a) : n(sz(a)), tree(4*sz(a),0), lazy(4*sz(a),0) {
+        build(a,1,0,n-1);
+    }
+
+    ll merge(ll L, ll R){ <span class="kw">return</span> L+R; }  <span class="cm">// ← SWAP THIS: min(L,R) / max(L,R) / gcd(L,R)</span>
+
+    <span class="kw">void</span> build(<span class="kw">const</span> vector&lt;ll&gt;&amp; a,<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi){
+        <span class="kw">if</span>(lo==hi){tree[nd]=a[lo];<span class="kw">return</span>;}
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        build(a,2*nd,lo,mid); build(a,2*nd+1,mid+1,hi);
+        tree[nd]=merge(tree[2*nd],tree[2*nd+1]);
+    }
+    <span class="kw">void</span> push(<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi){
+        <span class="kw">if</span>(!lazy[nd]) <span class="kw">return</span>;
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        tree[2*nd]   += lazy[nd]*(mid-lo+1);   <span class="cm">// ← Adjust for non-sum operations</span>
+        lazy[2*nd]   += lazy[nd];
+        tree[2*nd+1] += lazy[nd]*(hi-mid);
+        lazy[2*nd+1] += lazy[nd];
+        lazy[nd]=0;
+    }
+    <span class="kw">void</span> update(<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi,<span class="kw">int</span> l,<span class="kw">int</span> r,ll val){
+        <span class="kw">if</span>(r&lt;lo||hi&lt;l) <span class="kw">return</span>;
+        <span class="kw">if</span>(l&lt;=lo&amp;&amp;hi&lt;=r){tree[nd]+=val*(hi-lo+1);lazy[nd]+=val;<span class="kw">return</span>;}
+        push(nd,lo,hi);
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        update(2*nd,lo,mid,l,r,val); update(2*nd+1,mid+1,hi,l,r,val);
+        tree[nd]=merge(tree[2*nd],tree[2*nd+1]);
+    }
+    ll query(<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi,<span class="kw">int</span> l,<span class="kw">int</span> r){
+        <span class="kw">if</span>(r&lt;lo||hi&lt;l) <span class="kw">return</span> 0;   <span class="cm">// ← identity: 0 for sum, INF for min, -INF for max</span>
+        <span class="kw">if</span>(l&lt;=lo&amp;&amp;hi&lt;=r) <span class="kw">return</span> tree[nd];
+        push(nd,lo,hi);
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        <span class="kw">return</span> merge(query(2*nd,lo,mid,l,r),query(2*nd+1,mid+1,hi,l,r));
+    }
+    <span class="kw">void</span> update(<span class="kw">int</span> l,<span class="kw">int</span> r,ll v){update(1,0,n-1,l,r,v);}
+    ll   query(<span class="kw">int</span> l,<span class="kw">int</span> r)    {<span class="kw">return</span> query(1,0,n-1,l,r);}
+    <span class="kw">void</span> pointSet(<span class="kw">int</span> i,ll v)   {update(i,i,v);}
+};</div>
+    </div>
+
+    <div class="sec" data-m="bit2d">
+      <h2 class="sh">19.3 &nbsp; 2D Fenwick Tree — Grid Range Sums <span class="tag tc">Important</span></h2>
+      <div class="cb"><span class="kw">struct</span> BIT2D {
+    <span class="kw">int</span> n, m;
+    vector&lt;vector&lt;ll&gt;&gt; tree;
+
+    BIT2D(<span class="kw">int</span> n, <span class="kw">int</span> m) : n(n), m(m), tree(n+1, vector&lt;ll&gt;(m+1,0)) {}
+
+    <span class="kw">void</span> update(<span class="kw">int</span> x, <span class="kw">int</span> y, ll delta){
+        <span class="kw">for</span>(<span class="kw">int</span> i=x;i&lt;=n;i+=i&amp;-i)
+            <span class="kw">for</span>(<span class="kw">int</span> j=y;j&lt;=m;j+=j&amp;-j)
+                tree[i][j]+=delta;
+    }
+    ll prefix(<span class="kw">int</span> x,<span class="kw">int</span> y){
+        ll s=0;
+        <span class="kw">for</span>(<span class="kw">int</span> i=x;i&gt;0;i-=i&amp;-i)
+            <span class="kw">for</span>(<span class="kw">int</span> j=y;j&gt;0;j-=j&amp;-j)
+                s+=tree[i][j];
+        <span class="kw">return</span> s;
+    }
+    <span class="cm">// Sum of rectangle (r1,c1) to (r2,c2) — 1-indexed</span>
+    ll query(<span class="kw">int</span> r1,<span class="kw">int</span> c1,<span class="kw">int</span> r2,<span class="kw">int</span> c2){
+        <span class="kw">return</span> prefix(r2,c2)-prefix(r1-1,c2)-prefix(r2,c1-1)+prefix(r1-1,c1-1);
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="merge-sort-tree">
+      <h2 class="sh">19.4 &nbsp; Merge Sort Tree — Kth Smallest in Range <span class="tag tp">Advanced</span></h2>
+      <div class="cb"><span class="cm">// Segment tree where each node stores sorted elements of its range</span>
+<span class="cm">// Answers: "how many elements in [l,r] are ≤ x?" in O(log²n)</span>
+<span class="kw">struct</span> MergeSortTree {
+    <span class="kw">int</span> n;
+    vector&lt;vi&gt; t;
+    MergeSortTree(<span class="kw">const</span> vi&amp; a) : n(sz(a)), t(4*sz(a)) { build(a,1,0,n-1); }
+    <span class="kw">void</span> build(<span class="kw">const</span> vi&amp; a,<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi){
+        <span class="kw">if</span>(lo==hi){t[nd]={a[lo]};<span class="kw">return</span>;}
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        build(a,2*nd,lo,mid); build(a,2*nd+1,mid+1,hi);
+        merge(all(t[2*nd]),all(t[2*nd+1]),back_inserter(t[nd]));
+    }
+    <span class="cm">// Count elements &lt;= x in [l,r]</span>
+    <span class="kw">int</span> countLE(<span class="kw">int</span> nd,<span class="kw">int</span> lo,<span class="kw">int</span> hi,<span class="kw">int</span> l,<span class="kw">int</span> r,<span class="kw">int</span> x){
+        <span class="kw">if</span>(r&lt;lo||hi&lt;l) <span class="kw">return</span> 0;
+        <span class="kw">if</span>(l&lt;=lo&amp;&amp;hi&lt;=r) <span class="kw">return</span> upper_bound(all(t[nd]),x)-t[nd].begin();
+        <span class="kw">int</span> mid=(lo+hi)/2;
+        <span class="kw">return</span> countLE(2*nd,lo,mid,l,r,x)+countLE(2*nd+1,mid+1,hi,l,r,x);
+    }
+    <span class="kw">int</span> countLE(<span class="kw">int</span> l,<span class="kw">int</span> r,<span class="kw">int</span> x){<span class="kw">return</span> countLE(1,0,n-1,l,r,x);}
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 20 — STRING MASTERY
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch20">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 20 · Strings</div>
+    <div class="ch-title">String Mastery — <em>Z, Manacher, Double Hashing &amp; Suffix Arrays</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="z-algo">
+      <h2 class="sh">20.1 &nbsp; Z-Algorithm — Cleaner Pattern Matching <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Z-Algorithm</span>
+        <p><strong>Trigger:</strong> String matching ("find all occurrences of P in T"), finding the shortest repeating period of a string, or prefix-suffix overlaps.<br>
+        <strong>Constraints:</strong> <code>N + M ≤ 10⁶</code>. Linear O(N) time and space.<br>
+        <strong>Trap:</strong> When concatenating <code>P + "#" + T</code>, ensure the separator character <code>#</code> is absolutely <em>not</em> present in either string. Without it, the Z-array might exceed <code>length(P)</code> and give false positives.</p>
+      </div>
+      <div class="cb"><span class="cm">// z[i] = length of longest string starting at s[i] that is also a PREFIX of s</span>
+<span class="cm">// z[0] = 0 by convention (or n, depending on implementation)</span>
+vi zFunction(<span class="kw">const</span> string&amp; s){
+    <span class="kw">int</span> n=sz(s);
+    vi z(n,0);
+    z[0]=n;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1,l=0,r=0;i&lt;n;i++){
+        <span class="kw">if</span>(i&lt;r) z[i]=min(r-i,z[i-l]);
+        <span class="kw">while</span>(i+z[i]&lt;n &amp;&amp; s[z[i]]==s[i+z[i]]) z[i]++;
+        <span class="kw">if</span>(i+z[i]&gt;r){ l=i; r=i+z[i]; }
+    }
+    <span class="kw">return</span> z;
+}
+
+<span class="cm">// Find all occurrences of pattern p in text t — O(n+m)</span>
+vi findOccurrences(<span class="kw">const</span> string&amp; t, <span class="kw">const</span> string&amp; p){
+    string s = p + "#" + t;           <span class="cm">// Concatenate with separator not in alphabet</span>
+    vi z = zFunction(s);
+    vi res;
+    <span class="kw">int</span> m = sz(p);
+    <span class="kw">for</span>(<span class="kw">int</span> i=m+1;i&lt;sz(s);i++)
+        <span class="kw">if</span>(z[i]==m) res.pb(i-m-1);   <span class="cm">// Match at position i-(m+1) in t</span>
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Minimum period of string</span>
+<span class="kw">int</span> minPeriod(<span class="kw">const</span> string&amp; s){
+    vi z = zFunction(s);
+    <span class="kw">for</span>(<span class="kw">int</span> p=1;p&lt;sz(s);p++)
+        <span class="kw">if</span>(sz(s)%p==0 &amp;&amp; z[p]==sz(s)-p) <span class="kw">return</span> p;
+    <span class="kw">return</span> sz(s);
+}</div>
+    </div>
+
+    <div class="sec" data-m="manacher">
+      <h2 class="sh">20.2 &nbsp; Manacher's Algorithm — All Palindromes in O(n) <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// d1[i] = radius of longest ODD palindrome centered at i</span>
+<span class="cm">// d2[i] = radius of longest EVEN palindrome centered between i-1 and i</span>
+pair&lt;vi,vi&gt; manacher(<span class="kw">const</span> string&amp; s){
+    <span class="kw">int</span> n=sz(s);
+    vi d1(n), d2(n);
+    <span class="cm">// Odd palindromes</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0,l=0,r=-1;i&lt;n;i++){
+        <span class="kw">int</span> k = i&gt;r ? 1 : min(d1[l+r-i],r-i+1);
+        <span class="kw">while</span>(i-k&gt;=0 &amp;&amp; i+k&lt;n &amp;&amp; s[i-k]==s[i+k]) k++;
+        d1[i]=k--;
+        <span class="kw">if</span>(i+k&gt;r){l=i-k;r=i+k;}
+    }
+    <span class="cm">// Even palindromes</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0,l=0,r=-1;i&lt;n;i++){
+        <span class="kw">int</span> k = i&gt;r ? 0 : min(d2[l+r-i+1],r-i+1);
+        <span class="kw">while</span>(i-k-1&gt;=0 &amp;&amp; i+k&lt;n &amp;&amp; s[i-k-1]==s[i+k]) k++;
+        d2[i]=k--;
+        <span class="kw">if</span>(i+k&gt;r){l=i-k-1;r=i+k;}
+    }
+    <span class="kw">return</span> {d1,d2};
+}
+<span class="cm">// isPalindrome(l,r): if (r-l)%2==0 → d1[(l+r)/2]>(r-l)/2</span>
+<span class="cm">// Count total palindromic substrings: sum(d1[i]) + sum(d2[i])</span></div>
+    </div>
+
+    <div class="sec" data-m="hashing">
+      <h2 class="sh">20.3 &nbsp; Polynomial Double Hashing — Anti-Hack Template <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// Double hashing: two independent hashes to make collision probability ~1/MOD²</span>
+<span class="cm">// Use with random BASE to prevent anti-hash hacks on Codeforces</span>
+<span class="kw">struct</span> StringHash {
+    <span class="kw">static const</span> ll MOD1=1e9+7, MOD2=1e9+9;
+    <span class="kw">static const</span> ll B1=131, B2=137;  <span class="cm">// Or randomize: mt19937 rng(chrono::steady_clock::now().time_since_epoch().count())</span>
+    vector&lt;ll&gt; h1,h2,p1,p2;
+    <span class="kw">int</span> n;
+
+    StringHash(<span class="kw">const</span> string&amp; s) : n(sz(s)),h1(n+1,0),h2(n+1,0),p1(n+1,1),p2(n+1,1){
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++){
+            h1[i+1]=(h1[i]*B1+(s[i]-'a'+1))%MOD1;
+            h2[i+1]=(h2[i]*B2+(s[i]-'a'+1))%MOD2;
+            p1[i+1]=p1[i]*B1%MOD1;
+            p2[i+1]=p2[i]*B2%MOD2;
+        }
+    }
+    <span class="cm">// Hash of s[l..r] — O(1)</span>
+    pair&lt;ll,ll&gt; get(<span class="kw">int</span> l,<span class="kw">int</span> r){
+        ll v1=(h1[r+1]-h1[l]*p1[r-l+1]%MOD1+MOD1*2)%MOD1;
+        ll v2=(h2[r+1]-h2[l]*p2[r-l+1]%MOD2+MOD2*2)%MOD2;
+        <span class="kw">return</span> {v1,v2};
+    }
+    <span class="kw">bool</span> equal(<span class="kw">int</span> l1,<span class="kw">int</span> r1,<span class="kw">int</span> l2,<span class="kw">int</span> r2){ <span class="kw">return</span> get(l1,r1)==get(l2,r2); }
+    <span class="cm">// Binary search for longest common prefix of s[a..] and s[b..]</span>
+    <span class="kw">int</span> lcp(<span class="kw">int</span> a,<span class="kw">int</span> b){
+        <span class="kw">int</span> lo=0,hi=min(n-a,n-b);
+        <span class="kw">while</span>(lo&lt;hi){
+            <span class="kw">int</span> mid=(lo+hi+1)/2;
+            equal(a,a+mid-1,b,b+mid-1)?lo=mid:hi=mid-1;
+        }
+        <span class="kw">return</span> lo;
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="suffix-array">
+      <h2 class="sh">20.4 &nbsp; Suffix Array + LCP Array — O(n log n) <span class="tag tp">Advanced</span></h2>
+      <div class="cb"><span class="cm">// SA-IS / prefix doubling approach</span>
+<span class="cm">// sa[i] = starting position of i-th lexicographically smallest suffix</span>
+<span class="cm">// lcp[i] = LCP of sa[i-1] and sa[i]</span>
+vi buildSA(<span class="kw">const</span> string&amp; s){
+    <span class="kw">int</span> n=sz(s);
+    vi sa(n),rank_(n),tmp(n);
+    iota(all(sa),0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) rank_[i]=s[i];
+    <span class="kw">for</span>(<span class="kw">int</span> k=1;k&lt;n;k&lt;&lt;=1){
+        <span class="kw">auto</span> cmp=[&amp;](<span class="kw">int</span> a,<span class="kw">int</span> b){
+            <span class="kw">if</span>(rank_[a]!=rank_[b]) <span class="kw">return</span> rank_[a]&lt;rank_[b];
+            <span class="kw">int</span> ra=a+k&lt;n?rank_[a+k]:-1;
+            <span class="kw">int</span> rb=b+k&lt;n?rank_[b+k]:-1;
+            <span class="kw">return</span> ra&lt;rb;
+        };
+        sort(all(sa),cmp);
+        tmp[sa[0]]=0;
+        <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;n;i++)
+            tmp[sa[i]]=tmp[sa[i-1]]+(cmp(sa[i-1],sa[i])?1:0);
+        rank_=tmp;
+        <span class="kw">if</span>(rank_[sa[n-1]]==n-1) <span class="kw">break</span>;
+    }
+    <span class="kw">return</span> sa;
+}
+vi buildLCP(<span class="kw">const</span> string&amp; s,<span class="kw">const</span> vi&amp; sa){
+    <span class="kw">int</span> n=sz(s);
+    vi rank_(n), lcp(n,0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) rank_[sa[i]]=i;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0,h=0;i&lt;n;i++){
+        <span class="kw">if</span>(rank_[i]&gt;0){
+            <span class="kw">int</span> j=sa[rank_[i]-1];
+            <span class="kw">while</span>(i+h&lt;n&amp;&amp;j+h&lt;n&amp;&amp;s[i+h]==s[j+h]) h++;
+            lcp[rank_[i]]=h;
+            <span class="kw">if</span>(h) h--;
+        }
+    }
+    <span class="kw">return</span> lcp;
+}
+<span class="cm">// Number of distinct substrings = n*(n+1)/2 - sum(lcp)</span>
+<span class="cm">// All occurrences of pattern p: binary search on SA</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 21 — COORDINATE COMPRESSION & MO'S
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch21">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 21 · Offline Algorithms</div>
+    <div class="ch-title">Coordinate Compression &amp; Mo's — <em>Offline Range Mastery</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="coord-compress">
+      <h2 class="sh">21.1 &nbsp; Coordinate Compression — Shrink 10⁹ to 10⁵ <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// Problem: values up to 10^9, but only n≤10^5 distinct values</span>
+<span class="cm">// Compress: map each value to its 0-indexed rank</span>
+<span class="kw">struct</span> Compress {
+    vi vals;
+    <span class="kw">void</span> add(<span class="kw">int</span> x){ vals.pb(x); }
+    <span class="kw">void</span> build(){
+        sort(all(vals));
+        vals.erase(unique(all(vals)),vals.end());
+    }
+    <span class="kw">int</span> get(<span class="kw">int</span> x){            <span class="cm">// O(log n) — compressed index of x</span>
+        <span class="kw">return</span> lower_bound(all(vals),x)-vals.begin();
+    }
+    <span class="kw">int</span> size(){ <span class="kw">return</span> sz(vals); }
+};
+
+<span class="cm">// One-liner compress for a single array:</span>
+vi compress(<span class="kw">const</span> vi&amp; a){
+    vi sorted=a; sort(all(sorted)); sorted.erase(unique(all(sorted)),sorted.end());
+    vi res(sz(a));
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz(a);i++) res[i]=lower_bound(all(sorted),a[i])-sorted.begin();
+    <span class="kw">return</span> res;
+}</div>
+    </div>
+
+    <div class="sec" data-m="mos-algo">
+      <h2 class="sh">21.2 &nbsp; Mo's Algorithm — O((n+q)√n) Offline Queries <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// Answer range queries [l,r] offline by sorting queries cleverly</span>
+<span class="cm">// Expands/shrinks [curL, curR] to answer each query</span>
+<span class="cm">// Cost: O((n+q)*sqrt(n)) — each pointer moves O(n*sqrt(n)) total</span>
+
+<span class="kw">int</span> blockSize;
+
+<span class="kw">struct</span> Query {
+    <span class="kw">int</span> l,r,idx;
+    <span class="kw">bool</span> <span class="kw">operator</span>&lt;(<span class="kw">const</span> Query&amp; o) <span class="kw">const</span> {
+        <span class="kw">if</span>(l/blockSize != o.l/blockSize) <span class="kw">return</span> l/blockSize &lt; o.l/blockSize;
+        <span class="kw">return</span> (l/blockSize &amp; 1) ? r&gt;o.r : r&lt;o.r;  <span class="cm">// Alternating sort = Mo's optimization</span>
+    }
+};
+
+<span class="cm">// State — modify these for your problem:</span>
+<span class="kw">int</span>  cnt[MAXV];          <span class="cm">// frequency of each element</span>
+<span class="kw">int</span>  distinct = 0;       <span class="cm">// current answer (e.g., count of distinct elements)</span>
+vi   a;                  <span class="cm">// input array (coordinate-compressed)</span>
+
+<span class="kw">void</span> add(<span class="kw">int</span> x){ <span class="kw">if</span>(cnt[x]++==0) distinct++; }
+<span class="kw">void</span> rem(<span class="kw">int</span> x){ <span class="kw">if</span>(--cnt[x]==0) distinct--; }
+
+vi mosSolve(<span class="kw">int</span> n, vector&lt;Query&gt;&amp; qs){
+    blockSize = max(1,(<span class="kw">int</span>)sqrt(n));
+    sort(all(qs));
+    vi ans(sz(qs));
+    <span class="kw">int</span> curL=0, curR=-1;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; q : qs){
+        <span class="kw">while</span>(curR &lt; q.r) add(a[++curR]);
+        <span class="kw">while</span>(curL &gt; q.l) add(a[--curL]);
+        <span class="kw">while</span>(curR &gt; q.r) rem(a[curR--]);
+        <span class="kw">while</span>(curL &lt; q.l) rem(a[curL++]);
+        ans[q.idx] = distinct;
+    }
+    <span class="kw">return</span> ans;
+}
+
+<span class="cm">// Mo's on Trees — flatten with Euler tour, then run Mo's on the flat array</span>
+<span class="cm">// Mo's with updates — block size = n^(2/3), O(n^(5/3))</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 22 — NETWORK FLOW & MATCHING
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch22">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 22 · Flows</div>
+    <div class="ch-title">Network Flow &amp; Matching — <em>Dinic's, Bipartite &amp; Min-Cost Flow</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dinic">
+      <h2 class="sh">22.1 &nbsp; Dinic's Max Flow — O(V²E) General, O(E√V) for Unit Graphs <span class="tag tg">Must Have</span></h2>
+      <div class="def-box">
+        <span class="lbl">Deployment Guide: Dinic's</span>
+        <p><strong>Trigger:</strong> "Find the maximum bipartite matching", "Minimum number of cuts to separate A and B", "Assign items to buckets with capacities". If constraints allow <code>V, E ≤ 10³</code>, think Flow.<br>
+        <strong>Constraints:</strong> In practice, Dinic's is insanely fast. It often crushes graphs with <code>V=10⁴, E=10⁵</code> easily, especially on bipartite graphs (where it runs in <code>O(E√V)</code>).<br>
+        <strong>Trap:</strong> Building the graph correctly is 99% of the problem. Don't forget to add reverse edges with <code>0</code> capacity for directed graphs. Remember that Min-Cut edges are those going from the BFS-reachable component to the non-reachable component in the residual graph.</p>
+      </div>
+      <div class="cb"><span class="kw">struct</span> Dinic {
+    <span class="kw">struct</span> Edge { <span class="kw">int</span> to, rev; ll cap; };
+    vector&lt;vector&lt;Edge&gt;&gt; g;
+    vi level, iter_;
+    <span class="kw">int</span> n;
+
+    Dinic(<span class="kw">int</span> n) : n(n), g(n), level(n), iter_(n) {}
+
+    <span class="kw">void</span> addEdge(<span class="kw">int</span> u,<span class="kw">int</span> v,ll cap,<span class="kw">bool</span> directed=<span class="kw">true</span>){
+        g[u].push_back({v,(<span class="kw">int</span>)sz(g[v]),cap});
+        g[v].push_back({u,(<span class="kw">int</span>)sz(g[u])-1,directed?0:cap});
+    }
+    <span class="kw">bool</span> bfs(<span class="kw">int</span> s,<span class="kw">int</span> t){
+        fill(all(level),-1);
+        queue&lt;<span class="kw">int</span>&gt; q;
+        level[s]=0; q.push(s);
+        <span class="kw">while</span>(!q.empty()){
+            <span class="kw">int</span> u=q.front();q.pop();
+            <span class="kw">for</span>(<span class="kw">auto</span>&amp; e:g[u]) <span class="kw">if</span>(e.cap&gt;0&amp;&amp;level[e.to]&lt;0){
+                level[e.to]=level[u]+1; q.push(e.to);
+            }
+        }
+        <span class="kw">return</span> level[t]&gt;=0;
+    }
+    ll dfs(<span class="kw">int</span> u,<span class="kw">int</span> t,ll f){
+        <span class="kw">if</span>(u==t) <span class="kw">return</span> f;
+        <span class="kw">for</span>(<span class="kw">int</span>&amp; i=iter_[u];i&lt;sz(g[u]);i++){
+            Edge&amp; e=g[u][i];
+            <span class="kw">if</span>(e.cap&gt;0&amp;&amp;level[e.to]==level[u]+1){
+                ll d=dfs(e.to,t,min(f,e.cap));
+                <span class="kw">if</span>(d&gt;0){ e.cap-=d; g[e.to][e.rev].cap+=d; <span class="kw">return</span> d; }
+            }
+        }
+        <span class="kw">return</span> 0;
+    }
+    ll maxflow(<span class="kw">int</span> s,<span class="kw">int</span> t){
+        ll flow=0;
+        <span class="kw">while</span>(bfs(s,t)){
+            fill(all(iter_),0);
+            ll d;
+            <span class="kw">while</span>((d=dfs(s,t,INF))&gt;0) flow+=d;
+        }
+        <span class="kw">return</span> flow;
+    }
+    <span class="cm">// Min cut: after maxflow, S-side = nodes reachable from s in residual (level[v]!=-1)</span>
+};</div>
+      <div class="tip-box">
+        <span class="lbl">Flow Problem Recognition</span>
+        <p>Max flow = min cut (König's theorem). Bipartite matching = max flow with source/sink. Assignment problem = min-cost max-flow. Circulation problems = flow with lower bounds. If you see "maximum number of non-conflicting paths" or "minimum number of elements to remove to disconnect" — it's flow.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bipartite">
+      <h2 class="sh">22.2 &nbsp; Bipartite Matching — Hopcroft-Karp O(E√V) <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">struct</span> HopcroftKarp {
+    <span class="kw">int</span> n, m;
+    vvi g;         <span class="cm">// g[u] = neighbors in right partition</span>
+    vi matchL, matchR, dist_;
+
+    HopcroftKarp(<span class="kw">int</span> n,<span class="kw">int</span> m):n(n),m(m),g(n),matchL(n,-1),matchR(m,-1),dist_(n) {}
+
+    <span class="kw">void</span> addEdge(<span class="kw">int</span> u,<span class="kw">int</span> v){ g[u].pb(v); }
+
+    <span class="kw">bool</span> bfs(){
+        queue&lt;<span class="kw">int</span>&gt; q;
+        <span class="kw">for</span>(<span class="kw">int</span> u=0;u&lt;n;u++){
+            <span class="kw">if</span>(matchL[u]==-1){ dist_[u]=0; q.push(u); } <span class="kw">else</span> dist_[u]=INF32;
+        }
+        <span class="kw">bool</span> found=<span class="kw">false</span>;
+        <span class="kw">while</span>(!q.empty()){
+            <span class="kw">int</span> u=q.front();q.pop();
+            <span class="kw">for</span>(<span class="kw">int</span> v:g[u]){
+                <span class="kw">int</span> w=matchR[v];
+                <span class="kw">if</span>(w==-1) found=<span class="kw">true</span>;
+                <span class="kw">else if</span>(dist_[w]==INF32){ dist_[w]=dist_[u]+1; q.push(w); }
+            }
+        }
+        <span class="kw">return</span> found;
+    }
+    <span class="kw">bool</span> dfs(<span class="kw">int</span> u){
+        <span class="kw">for</span>(<span class="kw">int</span> v:g[u]){
+            <span class="kw">int</span> w=matchR[v];
+            <span class="kw">if</span>(w==-1||(dist_[w]==dist_[u]+1&amp;&amp;dfs(w))){
+                matchL[u]=v; matchR[v]=u; <span class="kw">return true</span>;
+            }
+        }
+        dist_[u]=INF32;
+        <span class="kw">return false</span>;
+    }
+    <span class="kw">int</span> maxMatching(){
+        <span class="kw">int</span> res=0;
+        <span class="kw">while</span>(bfs()) <span class="kw">for</span>(<span class="kw">int</span> u=0;u&lt;n;u++) <span class="kw">if</span>(matchL[u]==-1) res+=dfs(u);
+        <span class="kw">return</span> res;
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="mcf">
+      <h2 class="sh">22.3 &nbsp; Min-Cost Max-Flow — SPFA based O(VEf) <span class="tag tp">Advanced</span></h2>
+      <div class="cb"><span class="kw">struct</span> MCMF {
+    <span class="kw">struct</span> Edge{<span class="kw">int</span> to,rev;ll cap,cost;};
+    vector&lt;vector&lt;Edge&gt;&gt; g;
+    <span class="kw">int</span> n;
+    MCMF(<span class="kw">int</span> n):n(n),g(n){}
+    <span class="kw">void</span> addEdge(<span class="kw">int</span> u,<span class="kw">int</span> v,ll cap,ll cost){
+        g[u].push_back({v,(<span class="kw">int</span>)sz(g[v]),cap,cost});
+        g[v].push_back({u,(<span class="kw">int</span>)sz(g[u])-1,0,-cost});
+    }
+    pair&lt;ll,ll&gt; flow(<span class="kw">int</span> s,<span class="kw">int</span> t){
+        ll totalFlow=0,totalCost=0;
+        <span class="kw">while</span>(<span class="kw">true</span>){
+            vector&lt;ll&gt; dist(n,INF); vi prevv(n),preve(n); vector&lt;<span class="kw">bool</span>&gt; inQ(n);
+            deque&lt;<span class="kw">int</span>&gt; q;
+            dist[s]=0; q.push_back(s); inQ[s]=<span class="kw">true</span>;
+            <span class="kw">while</span>(!q.empty()){
+                <span class="kw">int</span> u=q.front();q.pop_front();inQ[u]=<span class="kw">false</span>;
+                <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz(g[u]);i++){
+                    <span class="kw">auto</span>&amp; e=g[u][i];
+                    <span class="kw">if</span>(e.cap&gt;0&amp;&amp;dist[u]+e.cost&lt;dist[e.to]){
+                        dist[e.to]=dist[u]+e.cost; prevv[e.to]=u; preve[e.to]=i;
+                        <span class="kw">if</span>(!inQ[e.to]){inQ[e.to]=<span class="kw">true</span>;q.push_back(e.to);}
+                    }
+                }
+            }
+            <span class="kw">if</span>(dist[t]==INF) <span class="kw">break</span>;
+            ll d=INF; <span class="kw">for</span>(<span class="kw">int</span> v=t;v!=s;v=prevv[v]) d=min(d,g[prevv[v]][preve[v]].cap);
+            <span class="kw">for</span>(<span class="kw">int</span> v=t;v!=s;v=prevv[v]){ g[prevv[v]][preve[v]].cap-=d; g[v][g[prevv[v]][preve[v]].rev].cap+=d; }
+            totalFlow+=d; totalCost+=d*dist[t];
+        }
+        <span class="kw">return</span> {totalFlow,totalCost};
+    }
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 23 — COMPUTATIONAL GEOMETRY
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch23">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 23 · Geometry</div>
+    <div class="ch-title">Computational Geometry — <em>Points, Lines, Convex Hull &amp; Intersections</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="geometry">
+      <h2 class="sh">23.1 &nbsp; Geometry Toolkit — The Complete Template <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">using</span> ld = <span class="kw">long double</span>;
+<span class="kw">const</span> ld EPS = 1e-9;
+<span class="kw">int</span> sign(ld x){ <span class="kw">return</span> (x&gt;EPS)-(x&lt;-EPS); }
+
+<span class="kw">struct</span> P {
+    ld x,y;
+    P(<span class="kw">ld</span> x=0,<span class="kw">ld</span> y=0):x(x),y(y){}
+    P  operator+(P o)<span class="kw">const</span>{<span class="kw">return</span> {x+o.x,y+o.y};}
+    P  operator-(P o)<span class="kw">const</span>{<span class="kw">return</span> {x-o.x,y-o.y};}
+    P  operator*(ld t)<span class="kw">const</span>{<span class="kw">return</span> {x*t,y*t};}
+    P  operator/(ld t)<span class="kw">const</span>{<span class="kw">return</span> {x/t,y/t};}
+    ld dot(P o) <span class="kw">const</span>  {<span class="kw">return</span> x*o.x+y*o.y;}
+    ld cross(P o)<span class="kw">const</span> {<span class="kw">return</span> x*o.y-y*o.x;}
+    ld norm() <span class="kw">const</span>    {<span class="kw">return</span> x*x+y*y;}
+    ld abs() <span class="kw">const</span>     {<span class="kw">return</span> sqrtl(norm());}
+    P  perp() <span class="kw">const</span>    {<span class="kw">return</span> {-y,x};}                <span class="cm">// Rotate 90° CCW</span>
+    P  unit() <span class="kw">const</span>    {<span class="kw">return</span> *<span class="kw">this</span>/abs();}
+    <span class="kw">bool</span> <span class="kw">operator</span>&lt;(P o)<span class="kw">const</span>{<span class="kw">return</span> x&lt;o.x-EPS||(sign(x-o.x)==0&amp;&amp;y&lt;o.y-EPS);}
+    <span class="kw">bool</span> <span class="kw">operator</span>==(P o)<span class="kw">const</span>{<span class="kw">return</span> sign(x-o.x)==0&amp;&amp;sign(y-o.y)==0;}
+};
+
+<span class="cm">// Signed area of triangle (a,b,c) — positive if CCW</span>
+ld area2(P a,P b,P c){ <span class="kw">return</span> (b-a).cross(c-a); }
+
+<span class="cm">// Orientation: 1=CCW, -1=CW, 0=collinear</span>
+<span class="kw">int</span> orient(P a,P b,P c){ <span class="kw">return</span> sign(area2(a,b,c)); }
+
+<span class="cm">// Segment intersection test</span>
+<span class="kw">bool</span> onSegment(P a,P b,P p){
+    <span class="kw">return</span> sign((b-a).cross(p-a))==0 &amp;&amp; sign((p-a).dot(b-a))&gt;=0 &amp;&amp; sign((p-b).dot(a-b))&gt;=0;
+}
+<span class="kw">bool</span> segmentsIntersect(P a,P b,P c,P d){
+    <span class="kw">int</span> d1=orient(c,d,a),d2=orient(c,d,b),d3=orient(a,b,c),d4=orient(a,b,d);
+    <span class="kw">if</span>(((d1&gt;0&amp;&amp;d2&lt;0)||(d1&lt;0&amp;&amp;d2&gt;0))&amp;&amp;((d3&gt;0&amp;&amp;d4&lt;0)||(d3&lt;0&amp;&amp;d4&gt;0))) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!d1&amp;&amp;onSegment(c,d,a)) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!d2&amp;&amp;onSegment(c,d,b)) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!d3&amp;&amp;onSegment(a,b,c)) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!d4&amp;&amp;onSegment(a,b,d)) <span class="kw">return true</span>;
+    <span class="kw">return false</span>;
+}
+
+<span class="cm">// Convex Hull — Graham scan O(n log n)</span>
+vector&lt;P&gt; convexHull(vector&lt;P&gt; pts){
+    <span class="kw">int</span> n=sz(pts); <span class="kw">if</span>(n&lt;2) <span class="kw">return</span> pts;
+    sort(all(pts));
+    vector&lt;P&gt; hull;
+    <span class="kw">for</span>(<span class="kw">int</span> phase=0;phase&lt;2;phase++){
+        <span class="kw">int</span> start=sz(hull);
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp; p:pts){
+            <span class="kw">while</span>(sz(hull)&gt;=start+2&amp;&amp;orient(hull[sz(hull)-2],hull.back(),p)&lt;=0)
+                hull.pop_back();
+            hull.pb(p);
+        }
+        hull.pop_back();
+        reverse(all(pts));
+    }
+    <span class="kw">return</span> hull;
+}
+
+<span class="cm">// Polygon area (signed, positive if CCW)</span>
+ld polyArea(vector&lt;P&gt;&amp; poly){
+    ld area=0; <span class="kw">int</span> n=sz(poly);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) area+=poly[i].cross(poly[(i+1)%n]);
+    <span class="kw">return</span> area/2;
+}
+
+<span class="cm">// Point in polygon (ray casting) — O(n)</span>
+<span class="kw">bool</span> pointInPolygon(vector&lt;P&gt;&amp; poly, P p){
+    <span class="kw">int</span> n=sz(poly), cnt=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++){
+        P a=poly[i], b=poly[(i+1)%n];
+        <span class="kw">if</span>(onSegment(a,b,p)) <span class="kw">return true</span>;   <span class="cm">// On boundary</span>
+        <span class="kw">if</span>((a.y&lt;=p.y&amp;&amp;p.y&lt;b.y)||(b.y&lt;=p.y&amp;&amp;p.y&lt;a.y))
+            <span class="kw">if</span>(sign((b-a).cross(p-a))*sign(b.y-a.y)&gt;0) cnt++;
+    }
+    <span class="kw">return</span> cnt&amp;1;
+}
+
+<span class="cm">// Rotating Calipers — diameter of convex hull</span>
+ld convexDiameter(vector&lt;P&gt; hull){
+    <span class="kw">int</span> n=sz(hull); <span class="kw">if</span>(n==1) <span class="kw">return</span> 0;
+    ld res=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0,j=1;i&lt;n;i++){
+        <span class="kw">while</span>((hull[(i+1)%n]-hull[i]).cross(hull[(j+1)%n]-hull[j])&gt;0) j=(j+1)%n;
+        res=max(res,max((hull[i]-hull[j]).abs(),(hull[(i+1)%n]-hull[j]).abs()));
+    }
+    <span class="kw">return</span> res;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 24 — ADVANCED GRAPH ALGORITHMS
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch24">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 24 · Advanced Graphs</div>
+    <div class="ch-title">Advanced Graph Algorithms — <em>SCC, Bridges, Articulation &amp; Convex Hull Trick</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="scc">
+      <h2 class="sh">24.1 &nbsp; Strongly Connected Components — Tarjan's O(V+E) <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">struct</span> Tarjan {
+    <span class="kw">int</span> n, timer_=0, numSCC=0;
+    vector&lt;vi&gt; g;
+    vi disc,low,comp;
+    vector&lt;<span class="kw">bool</span>&gt; onStack;
+    stack&lt;<span class="kw">int</span>&gt; st;
+
+    Tarjan(<span class="kw">int</span> n):n(n),g(n),disc(n,-1),low(n),comp(n,-1),onStack(n,<span class="kw">false</span>){}
+    <span class="kw">void</span> addEdge(<span class="kw">int</span> u,<span class="kw">int</span> v){g[u].pb(v);}
+
+    <span class="kw">void</span> dfs(<span class="kw">int</span> u){
+        disc[u]=low[u]=timer_++;
+        st.push(u); onStack[u]=<span class="kw">true</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:g[u]){
+            <span class="kw">if</span>(disc[v]==-1){ dfs(v); low[u]=min(low[u],low[v]); }
+            <span class="kw">else if</span>(onStack[v]) low[u]=min(low[u],disc[v]);
+        }
+        <span class="kw">if</span>(low[u]==disc[u]){         <span class="cm">// Root of SCC</span>
+            <span class="kw">while</span>(<span class="kw">true</span>){
+                <span class="kw">int</span> v=st.top();st.pop(); onStack[v]=<span class="kw">false</span>; comp[v]=numSCC;
+                <span class="kw">if</span>(v==u) <span class="kw">break</span>;
+            }
+            numSCC++;
+        }
+    }
+    <span class="kw">void</span> solve(){
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(disc[i]==-1) dfs(i);
+    }
+    <span class="cm">// comp[v] = SCC id of vertex v (numbered in reverse topological order)</span>
+    <span class="cm">// Build condensation DAG: for each edge (u,v) where comp[u]!=comp[v], add edge</span>
+};</div>
+    </div>
+
+    <div class="sec" data-m="bridges">
+      <h2 class="sh">24.2 &nbsp; Bridges &amp; Articulation Points — O(V+E) <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="kw">int</span>  disc_b[MAXV],low_b[MAXV],par_b[MAXV];
+<span class="kw">bool</span> isAP[MAXV];
+<span class="kw">int</span>  timer_b=0;
+vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; bridges;
+
+<span class="kw">void</span> dfsBridge(<span class="kw">int</span> u,<span class="kw">int</span> p){
+    disc_b[u]=low_b[u]=timer_b++;
+    <span class="kw">int</span> children=0;
+    <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]){
+        <span class="kw">if</span>(disc_b[v]==-1){
+            children++;
+            par_b[v]=u;
+            dfsBridge(v,u);
+            low_b[u]=min(low_b[u],low_b[v]);
+            <span class="cm">// Bridge condition: no back edge from subtree of v can reach above u</span>
+            <span class="kw">if</span>(low_b[v]&gt;disc_b[u]) bridges.pb({u,v});
+            <span class="cm">// Articulation point condition</span>
+            <span class="kw">if</span>(p==-1&amp;&amp;children&gt;1) isAP[u]=<span class="kw">true</span>;
+            <span class="kw">if</span>(p!=-1&amp;&amp;low_b[v]&gt;=disc_b[u]) isAP[u]=<span class="kw">true</span>;
+        } <span class="kw">else if</span>(v!=p){
+            low_b[u]=min(low_b[u],disc_b[v]);
+        }
+    }
+}
+
+<span class="kw">void</span> findBridges(<span class="kw">int</span> V){
+    fill(disc_b,disc_b+V,-1);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;V;i++) <span class="kw">if</span>(disc_b[i]==-1) dfsBridge(i,-1);
+}</div>
+    </div>
+
+    <div class="sec" data-m="cht">
+      <h2 class="sh">24.3 &nbsp; Convex Hull Trick — O(n) DP Optimization <span class="tag tp">Expert</span></h2>
+      <div class="cb"><span class="cm">// When dp[i] = min over j<i of (m[j]*x[i] + b[j])</span>
+<span class="cm">// Lines y = m*x + b — query minimum at each x</span>
+<span class="cm">// Requires: queries in sorted order (monotone stack), or use Li Chao tree for arbitrary</span>
+
+<span class="kw">struct</span> Line {
+    ll m, b;
+    ll eval(ll x){ <span class="kw">return</span> m*x+b; }
+};
+
+<span class="kw">struct</span> CHT {
+    deque&lt;Line&gt; hull;
+    <span class="kw">bool</span> bad(Line l1,Line l2,Line l3){
+        <span class="cm">// l2 is never minimum if intersection of l1,l3 is to the left of l1,l2</span>
+        <span class="kw">return</span> (__int128)(l3.b-l1.b)*(l1.m-l2.m)&lt;=(__int128)(l2.b-l1.b)*(l1.m-l3.m);
+    }
+    <span class="kw">void</span> addLine(ll m,ll b){   <span class="cm">// Add line y=m*x+b; slopes must be DECREASING for min</span>
+        Line l={m,b};
+        <span class="kw">while</span>(sz(hull)&gt;=2&amp;&amp;bad(hull[sz(hull)-2],hull[sz(hull)-1],l)) hull.pop_back();
+        hull.pb(l);
+    }
+    ll query(ll x){            <span class="cm">// x must be INCREASING for O(1) amortized</span>
+        <span class="kw">while</span>(sz(hull)&gt;1&amp;&amp;hull[0].eval(x)&gt;=hull[1].eval(x)) hull.pop_front();
+        <span class="kw">return</span> hull[0].eval(x);
+    }
+};
+
+<span class="cm">// Li Chao Tree — arbitrary query order, O(n log RANGE)</span>
+<span class="kw">struct</span> LiChao {
+    <span class="kw">struct</span> Node{ Line line; <span class="kw">int</span> l=-1,r=-1; };
+    vector&lt;Node&gt; t;
+    ll lo,hi;
+    LiChao(ll lo,ll hi):lo(lo),hi(hi){ t.push_back({{0,LLONG_MAX}}); }
+    <span class="kw">void</span> addLine(<span class="kw">int</span> nd,ll l,ll r,Line line){
+        ll mid=(l+r)/2;
+        <span class="kw">bool</span> leftBetter=line.eval(l)&lt;t[nd].line.eval(l);
+        <span class="kw">bool</span> midBetter =line.eval(mid)&lt;t[nd].line.eval(mid);
+        <span class="kw">if</span>(midBetter) swap(t[nd].line,line);
+        <span class="kw">if</span>(l==r) <span class="kw">return</span>;
+        <span class="kw">if</span>(leftBetter!=midBetter){
+            <span class="kw">if</span>(t[nd].l==-1){t[nd].l=sz(t);t.push_back({{0,LLONG_MAX}});}
+            addLine(t[nd].l,l,mid,line);
+        } <span class="kw">else</span> {
+            <span class="kw">if</span>(t[nd].r==-1){t[nd].r=sz(t);t.push_back({{0,LLONG_MAX}});}
+            addLine(t[nd].r,mid+1,r,line);
+        }
+    }
+    <span class="kw">void</span> addLine(ll m,ll b){ addLine(0,lo,hi,{m,b}); }
+    ll query(<span class="kw">int</span> nd,ll l,ll r,ll x){
+        ll res=t[nd].line.eval(x);
+        <span class="kw">if</span>(l==r) <span class="kw">return</span> res;
+        ll mid=(l+r)/2;
+        <span class="kw">if</span>(x&lt;=mid&amp;&amp;t[nd].l!=-1) res=min(res,query(t[nd].l,l,mid,x));
+        <span class="kw">if</span>(x&gt;mid &amp;&amp;t[nd].r!=-1) res=min(res,query(t[nd].r,mid+1,r,x));
+        <span class="kw">return</span> res;
+    }
+    ll query(ll x){ <span class="kw">return</span> query(0,lo,hi,x); }
+};</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 25 — DIGIT DP & ADVANCED DP
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch25">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 25 · Advanced DP</div>
+    <div class="ch-title">Digit DP &amp; Advanced DP — <em>SOS, Profile, Divide &amp; Conquer Opt</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="digit-dp">
+      <h2 class="sh">25.1 &nbsp; Digit DP — Count Numbers with Property in [L,R] <span class="tag tg">Must Have</span></h2>
+      <p>Digit DP counts numbers in a range satisfying a digit-based constraint (sum of digits = k, no consecutive equal digits, etc.) by processing digits one by one, tracking a state and a "tight" flag.</p>
+      <div class="cb"><span class="cm">// Template: count numbers in [0, n] with digit sum = target</span>
+string num;   <span class="cm">// Digits of the upper bound n as string</span>
+<span class="kw">int</span>  target;
+<span class="kw">int</span>  memo[20][200][2][2]; <span class="cm">// [pos][sum][tight][started]</span>
+
+<span class="cm">// pos=digit position, sum=running digit sum, tight=still <= n's digits, started=no leading zeros</span>
+<span class="kw">int</span> dp(<span class="kw">int</span> pos, <span class="kw">int</span> sum, <span class="kw">bool</span> tight, <span class="kw">bool</span> started){
+    <span class="kw">if</span>(pos == sz(num)) <span class="kw">return</span> (!started || sum==target) ? 1 : 0;
+    <span class="kw">int</span>&amp; ret = memo[pos][sum][tight][started];
+    <span class="kw">if</span>(ret != -1) <span class="kw">return</span> ret;
+    ret = 0;
+    <span class="kw">int</span> limit = tight ? (num[pos]-'0') : 9;
+    <span class="kw">for</span>(<span class="kw">int</span> d=0; d&lt;=limit; d++){
+        <span class="kw">if</span>(sum+d &gt; target) <span class="kw">break</span>;   <span class="cm">// Prune: already exceeded target</span>
+        <span class="kw">bool</span> newTight   = tight &amp;&amp; (d==limit);
+        <span class="kw">bool</span> newStarted = started || (d&gt;0);
+        ret += dp(pos+1, started?(sum+d):0, newTight, newStarted);
+    }
+    <span class="kw">return</span> ret;
+}
+
+ll digitDP(ll n, <span class="kw">int</span> tgt){
+    num = to_string(n);
+    target = tgt;
+    memset(memo, -1, <span class="kw">sizeof</span>(memo));
+    <span class="kw">return</span> dp(0, 0, <span class="kw">true</span>, <span class="kw">false</span>);
+}
+<span class="cm">// Answer for [L,R]: digitDP(R, target) - digitDP(L-1, target)</span>
+
+<span class="cm">// State customization examples:</span>
+<span class="cm">// No two adjacent digits equal: track prev digit in state</span>
+<span class="cm">// Divisible by k: track current_number % k in state</span>
+<span class="cm">// Count of 1s, 0s, etc.: track count in state</span></div>
+    </div>
+
+    <div class="sec" data-m="sos-dp">
+      <h2 class="sh">25.2 &nbsp; SOS DP — Sum over Subsets in O(n·2ⁿ) <span class="tag tg">Must Have</span></h2>
+      <div class="cb"><span class="cm">// SOS DP: dp[mask] = sum of f[sub] for all submasks sub of mask</span>
+<span class="cm">// Used in bitmask DP problems where you need sum over all subsets</span>
+
+<span class="kw">int</span> n = 20;              <span class="cm">// Number of bits</span>
+vector&lt;ll&gt; dp(1&lt;&lt;n);   <span class="cm">// dp[mask] = initially f[mask]</span>
+
+<span class="cm">// Build SOS: O(n * 2^n)</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++)
+    <span class="kw">for</span>(<span class="kw">int</span> mask=0;mask&lt;(1&lt;&lt;n);mask++)
+        <span class="kw">if</span>(mask&amp;(1&lt;&lt;i))
+            dp[mask] += dp[mask^(1&lt;&lt;i)];  <span class="cm">// Add contribution from subset missing bit i</span>
+
+<span class="cm">// After: dp[mask] = sum of original dp[sub] for all sub ⊆ mask</span>
+
+<span class="cm">// Superset sum (dual): sum over all supersets</span>
+<span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++)
+    <span class="kw">for</span>(<span class="kw">int</span> mask=(1&lt;&lt;n)-1;mask&gt;=0;mask--)
+        <span class="kw">if</span>(!(mask&amp;(1&lt;&lt;i)))
+            dp[mask] += dp[mask|(1&lt;&lt;i)];</div>
+    </div>
+
+    <div class="sec" data-m="dnc-opt">
+      <h2 class="sh">25.3 &nbsp; Divide &amp; Conquer DP Optimization — O(n log n) <span class="tag tp">Expert</span></h2>
+      <div class="cb"><span class="cm">// When: dp[i][j] = min over k<j of dp[i-1][k] + cost(k,j)</span>
+<span class="cm">// AND: opt[i][j-1] <= opt[i][j] <= opt[i][j+1] (monge array condition)</span>
+<span class="cm">// Reduces O(n²) DP to O(n log n)</span>
+
+vector&lt;ll&gt; cur, prev_;
+<span class="kw">auto</span> cost = [&amp;](<span class="kw">int</span> l,<span class="kw">int</span> r) -&gt; ll {
+    <span class="cm">/* compute cost(l,r) here */</span>
+    <span class="kw">return</span> 0;
+};
+
+<span class="kw">void</span> solve(<span class="kw">int</span> lo,<span class="kw">int</span> hi,<span class="kw">int</span> optL,<span class="kw">int</span> optR){
+    <span class="kw">if</span>(lo&gt;hi) <span class="kw">return</span>;
+    <span class="kw">int</span> mid=(lo+hi)/2, opt=optL;
+    cur[mid] = INF;
+    <span class="kw">for</span>(<span class="kw">int</span> k=optL;k&lt;=min(mid-1,optR);k++){
+        ll val = prev_[k] + cost(k,mid);
+        <span class="kw">if</span>(val &lt; cur[mid]){ cur[mid]=val; opt=k; }
+    }
+    solve(lo,mid-1,optL,opt);
+    solve(mid+1,hi,opt,optR);
+}</div>
+    </div>
+
+    <div class="sec" data-m="knuth-opt">
+      <h2 class="sh">25.4 &nbsp; Knuth's Optimization — O(n²) Interval DP <span class="tag tp">Expert</span></h2>
+      <div class="cb"><span class="cm">// When: dp[i][j] = min over i<=k<j of dp[i][k] + dp[k+1][j] + cost(i,j)</span>
+<span class="cm">// AND: cost satisfies quadrangle inequality: cost(a,c)+cost(b,d)<=cost(a,d)+cost(b,c) for a<=b<=c<=d</span>
+<span class="cm">// opt[i][j] = optimal split point for dp[i][j]</span>
+<span class="cm">// Claim: opt[i][j-1] <= opt[i][j] <= opt[i+1][j]  → reduces O(n³) to O(n²)</span>
+
+<span class="kw">int</span> opt[MAXV][MAXV];
+ll  dp_k[MAXV][MAXV];
+
+<span class="kw">void</span> knuth(<span class="kw">int</span> n){
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) opt[i][i]=i;
+    <span class="kw">for</span>(<span class="kw">int</span> len=2;len&lt;=n;len++){
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i+len-1&lt;n;i++){
+            <span class="kw">int</span> j=i+len-1;
+            dp_k[i][j]=INF;
+            <span class="kw">for</span>(<span class="kw">int</span> k=opt[i][j-1];k&lt;=opt[i+1][j];k++){
+                ll val = dp_k[i][k]+dp_k[k+1][j]+cost(i,j);
+                <span class="kw">if</span>(val&lt;dp_k[i][j]){ dp_k[i][j]=val; opt[i][j]=k; }
+            }
+        }
+    }
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 26 — GAME THEORY & MATH
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch26">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 26 · Math &amp; Game Theory</div>
+    <div class="ch-title">Game Theory &amp; Math — <em>Sprague-Grundy, Nim &amp; Combinatorics</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="game-theory">
+      <h2 class="sh">26.1 &nbsp; Sprague-Grundy Theorem &amp; Nim <span class="tag tg">Important</span></h2>
+      <div class="cb"><span class="cm">// Nim: given piles of stones, players alternate removing any amount from one pile</span>
+<span class="cm">// First player LOSES iff XOR of all pile sizes = 0 (Grundy theorem)</span>
+<span class="kw">bool</span> nimWins(vi&amp; piles){
+    <span class="kw">int</span> xorSum=0;
+    <span class="kw">for</span>(<span class="kw">int</span> p:piles) xorSum^=p;
+    <span class="kw">return</span> xorSum!=0;   <span class="cm">// true = first player wins</span>
+}
+
+<span class="cm">// Sprague-Grundy: compute Grundy number (mex) for each game state</span>
+<span class="cm">// mex = minimum excludant = smallest non-negative integer not in set</span>
+<span class="kw">int</span> mex(set&lt;<span class="kw">int</span>&gt;&amp; s){
+    <span class="kw">int</span> m=0;
+    <span class="kw">while</span>(s.count(m)) m++;
+    <span class="kw">return</span> m;
+}
+
+<span class="cm">// Precompute Grundy values for game states</span>
+<span class="cm">// G(state) = mex of {G(state') : state' reachable from state}</span>
+<span class="cm">// Sum game (multiple independent games): G = XOR of all Grundy values</span>
+<span class="cm">// G(state)==0 → current player LOSES (P-position)</span>
+<span class="cm">// G(state)!=0 → current player WINS  (N-position)</span>
+
+<span class="cm">// Staircase Nim — only odd positions matter:</span>
+<span class="cm">// XOR of piles at positions 1,3,5,... (1-indexed from top)</span>
+<span class="kw">bool</span> staircaseNimWins(vi&amp; piles){
+    <span class="kw">int</span> xorSum=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz(piles);i++) <span class="kw">if</span>(i&amp;1) xorSum^=piles[i];
+    <span class="kw">return</span> xorSum!=0;
+}</div>
+    </div>
+
+    <div class="sec" data-m="math-misc">
+      <h2 class="sh">26.2 &nbsp; Advanced Math — FFT, Matrix Expo, Catalan <span class="tag tp">Expert</span></h2>
+      <div class="cb"><span class="cm">// Matrix Exponentiation — compute A^n in O(k³ log n)</span>
+<span class="cm">// Use: linear recurrences, counting paths in graph of length n</span>
+<span class="kw">using</span> Matrix = vector&lt;vector&lt;ll&gt;&gt;;
+Matrix multiply(Matrix&amp; A, Matrix&amp; B, ll mod){
+    <span class="kw">int</span> n=sz(A);
+    Matrix C(n, vector&lt;ll&gt;(n,0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">for</span>(<span class="kw">int</span> k=0;k&lt;n;k++) <span class="kw">if</span>(A[i][k])
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++) C[i][j]=(C[i][j]+A[i][k]*B[k][j])%mod;
+    <span class="kw">return</span> C;
+}
+Matrix matpow(Matrix A, ll p, ll mod){
+    <span class="kw">int</span> n=sz(A); Matrix R(n,vector&lt;ll&gt;(n,0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) R[i][i]=1;   <span class="cm">// Identity</span>
+    <span class="kw">while</span>(p){ <span class="kw">if</span>(p&amp;1) R=multiply(R,A,mod); A=multiply(A,A,mod); p>>=1; }
+    <span class="kw">return</span> R;
+}
+
+<span class="cm">// Fibonacci(n) in O(log n) using matrix:</span>
+<span class="cm">// [F(n+1)]   [1 1]^n   [1]</span>
+<span class="cm">// [F(n)  ] = [1 0]   * [0]</span>
+
+<span class="cm">// Catalan Number: C(n) = nCr(2n,n)/(n+1)</span>
+<span class="cm">// C(0)=1, C(1)=1, C(2)=2, C(3)=5, C(4)=14...</span>
+<span class="cm">// Counts: balanced parentheses, BST shapes, triangulations, monotonic paths</span>
+ll catalan(<span class="kw">int</span> n){ <span class="kw">return</span> nCr(2*n,n)*inv(n+1)%MOD; }
+
+<span class="cm">// Burnside's Lemma — counting distinct objects under symmetry</span>
+<span class="cm">// |orbits| = (1/|G|) * sum over g in G of |Fix(g)|</span>
+<span class="cm">// Fix(g) = number of arrangements fixed by rotation g</span>
+
+<span class="cm">// Inclusion-Exclusion Principle</span>
+<span class="cm">// |A ∪ B ∪ C| = |A|+|B|+|C| - |A∩B| - |A∩C| - |B∩C| + |A∩B∩C|</span>
+<span class="cm">// For bitmask: iterate over all non-empty subsets</span>
+ll inclusionExclusion(<span class="kw">int</span> n, vector&lt;ll&gt;&amp; a){  <span class="cm">// a[i] = |set_i|</span>
+    ll ans=0;
+    <span class="kw">for</span>(<span class="kw">int</span> mask=1;mask&lt;(1&lt;&lt;n);mask++){
+        ll term=1; <span class="kw">int</span> bits=__builtin_popcount(mask);
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(mask&amp;(1&lt;&lt;i)) term*=a[i];
+        ans += (bits&amp;1?1:-1)*term;
+    }
+    <span class="kw">return</span> ans;
+}</div>
+
+      <h3 class="ssh">Fast Fourier Transform — Polynomial Multiplication in O(n log n)</h3>
+      <div class="cb"><span class="cm">// NTT (Number Theoretic Transform) — FFT mod prime (998244353 = 119*2^23+1)</span>
+<span class="cm">// Use for polynomial multiplication with exact integer results</span>
+<span class="kw">const</span> <span class="kw">int</span> MOD_NTT = 998244353;
+<span class="kw">const</span> <span class="kw">int</span> PRIM_ROOT = 3;
+
+<span class="kw">void</span> ntt(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">bool</span> invert){
+    <span class="kw">int</span> n=sz(a);
+    <span class="kw">for</span>(<span class="kw">int</span> i=1,j=0;i&lt;n;i++){
+        <span class="kw">int</span> bit=n>>1;
+        <span class="kw">for</span>(;j&amp;bit;bit>>=1) j^=bit;
+        j^=bit;
+        <span class="kw">if</span>(i&lt;j) swap(a[i],a[j]);
+    }
+    <span class="kw">for</span>(<span class="kw">int</span> len=2;len&lt;=n;len&lt;&lt;=1){
+        ll w=invert?binpow(PRIM_ROOT,MOD_NTT-1-(MOD_NTT-1)/len,MOD_NTT)
+                   :binpow(PRIM_ROOT,(MOD_NTT-1)/len,MOD_NTT);
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i+=len){
+            ll wn=1;
+            <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;len/2;j++){
+                ll u=a[i+j], v=a[i+j+len/2]*wn%MOD_NTT;
+                a[i+j]=(u+v)%MOD_NTT;
+                a[i+j+len/2]=(u-v+MOD_NTT)%MOD_NTT;
+                wn=wn*w%MOD_NTT;
+            }
+        }
+    }
+    <span class="kw">if</span>(invert){
+        ll n_inv=binpow(n,MOD_NTT-2,MOD_NTT);
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp; x:a) x=x*n_inv%MOD_NTT;
+    }
+}
+
+vector&lt;<span class="kw">int</span>&gt; multiply(vector&lt;<span class="kw">int</span>&gt; a, vector&lt;<span class="kw">int</span>&gt; b){
+    <span class="kw">int</span> result_size=sz(a)+sz(b)-1, n=1;
+    <span class="kw">while</span>(n&lt;result_size) n&lt;&lt;=1;
+    a.resize(n); b.resize(n);
+    ntt(a,<span class="kw">false</span>); ntt(b,<span class="kw">false</span>);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) a[i]=(<span class="kw">long long</span>)a[i]*b[i]%MOD_NTT;
+    ntt(a,<span class="kw">true</span>);
+    a.resize(result_size);
+    <span class="kw">return</span> a;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 27 — ICPC STRATEGY
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch27">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 27 · The Endgame</div>
+    <div class="ch-title">ICPC Strategy &amp; Pattern Recognition — <em>How to Win Contests</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="problem-map">
+      <h2 class="sh">27.1 &nbsp; Problem → Algorithm Pattern Map <span class="tag tgold">The Black Map</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Problem Pattern (what you read)</th><th>Algorithm (what you code)</th><th>Complexity</th></tr></thead>
+          <tbody>
+            <tr><td>"Count numbers in [L,R] with property on digits"</td><td class="good">Digit DP</td><td>O(D·S)</td></tr>
+            <tr><td>"Maximum flow / minimum cut between nodes"</td><td class="good">Dinic's Algorithm</td><td>O(V²E)</td></tr>
+            <tr><td>"Minimum path/cut to disconnect graph"</td><td class="good">Min-Cut = Max-Flow</td><td>O(V²E)</td></tr>
+            <tr><td>"Maximum matching in bipartite graph"</td><td class="good">Hopcroft-Karp</td><td>O(E√V)</td></tr>
+            <tr><td>"k-th ancestor of node / LCA queries"</td><td class="good">Binary Lifting</td><td>O(log N)</td></tr>
+            <tr><td>"Path sum / range update on tree path"</td><td class="good">HLD + Segment Tree</td><td>O(log²N)</td></tr>
+            <tr><td>"Count paths of length k on tree"</td><td class="good">Centroid Decomposition</td><td>O(N log N)</td></tr>
+            <tr><td>"Range min/max query (static array)"</td><td class="good">Sparse Table</td><td>O(1) query</td></tr>
+            <tr><td>"Range update + range query (dynamic)"</td><td class="good">Lazy Propagation SegTree</td><td>O(log N)</td></tr>
+            <tr><td>"Find all palindromes in string"</td><td class="good">Manacher's O(n)</td><td>O(N)</td></tr>
+            <tr><td>"String matching / pattern in text"</td><td class="good">KMP or Z-Algorithm</td><td>O(N+M)</td></tr>
+            <tr><td>"Compare substrings quickly"</td><td class="good">Polynomial Hashing</td><td>O(1) per query</td></tr>
+            <tr><td>"Find bridges / articulation points"</td><td class="good">Tarjan's DFS</td><td>O(V+E)</td></tr>
+            <tr><td>"Strongly connected components"</td><td class="good">Tarjan's / Kosaraju's</td><td>O(V+E)</td></tr>
+            <tr><td>"Is there a way to order tasks? / Cycle?"</td><td class="good">Topological Sort / Kahn's</td><td>O(V+E)</td></tr>
+            <tr><td>"Shortest path with negative edges"</td><td class="good">Bellman-Ford</td><td>O(VE)</td></tr>
+            <tr><td>"All-pairs shortest paths, small V"</td><td class="good">Floyd-Warshall</td><td>O(V³)</td></tr>
+            <tr><td>"Minimum spanning tree"</td><td class="good">Kruskal + DSU</td><td>O(E log E)</td></tr>
+            <tr><td>"Count/sum of subset queries"</td><td class="good">SOS DP (bitmask)</td><td>O(N·2ⁿ)</td></tr>
+            <tr><td>"Polynomial multiplication / counting"</td><td class="good">NTT / FFT</td><td>O(N log N)</td></tr>
+            <tr><td>"Many range queries offline"</td><td class="good">Mo's Algorithm</td><td>O((N+Q)√N)</td></tr>
+            <tr><td>"DP with lines y=mx+b optimization"</td><td class="good">Convex Hull Trick / Li Chao</td><td>O(N) or O(N log N)</td></tr>
+            <tr><td>"Monotone optimal split in DP"</td><td class="good">D&amp;C Optimization / Knuth's</td><td>O(N log N) or O(N²)</td></tr>
+            <tr><td>"Game: who wins / Grundy values"</td><td class="good">Sprague-Grundy, Nim</td><td>Problem-specific</td></tr>
+            <tr><td>"Permutation / symmetry counting"</td><td class="good">Burnside + Pólya</td><td>O(|G|)</td></tr>
+            <tr><td>"Large n mod prime / choose"</td><td class="good">Lucas' Theorem</td><td>O(p log n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="contest-meta">
+      <h2 class="sh">27.2 &nbsp; Contest Execution — The 3-Hour Playbook <span class="tag tgold">ICPC Meta</span></h2>
+      <div class="note-box">
+        <span class="lbl">The "Easy Problems First" Trap</span>
+        <p>Yes, you must solve the easy problems first to secure your rank. But the biggest trap is <strong>the whole team tunnel-visioning on a single tricky "easy" problem</strong> while abandoning the rest of the problem set. If a problem is rated "easy" but has an implementation trap or brutal edge cases, move on. Do not spend 90 minutes debugging Problem B while Problem E is actually a standard textbook algorithm you know completely. Keep reading, keep moving.</p>
+      </div>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Minutes 0–30: Triage &amp; Setup</div>
+          <p>One person reads ALL problems simultaneously from front to back, catching the obvious templates. Classify each: Easy, Medium, Hard. Attack easiest first — getting points on the board early matters quickly. Set up environment.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Minutes 30–90: Rapid Execution</div>
+          <p>Submit the guaranteed A/B/C tier problems. Any WA — print the code, jump off the PC, and debug on paper. PC time is gold. Never think for hours on a single problem if teammates are idle. Rotate if stuck.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Minutes 90–150: The Meat</div>
+          <p>This is where contests are won. One person defends already-solved problems (edge cases, WA fixes). One person attacks the next hardest unsolved. The third person validates ideas before coding — 30 minutes writing the wrong algorithm is fatal.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Minutes 150–180: The Endgame</div>
+          <p>Freeze the scoreboard. Do not start new implementations from scratch unless it's 20 lines. Focus entirely on debugging the closest remaining problem. Write stress tests. Scrutinize constraints, variable overflows, and modulos.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Team Communication</div>
+          <p>Announce when you "think you have it" — teammate sanity-checks before you spend 45 minutes coding. Use the shared notebook. Agree on variable naming conventions beforehand.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">When You're Stuck</div>
+          <p>Read the problem again from scratch — you often misread constraints. Check: is the answer always a specific structure? Can you brute force small cases and observe a pattern? Is there a simpler equivalent problem?</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Constraint Analysis</div>
+          <p>n≤10 → brute force. n≤20 → bitmask/meet-in-middle. n≤10³ → O(n²). n≤10⁵ → O(n log n). n≤10⁶ → O(n). n≤10¹⁸ → O(log n) or O(1). Let constraints tell you the algorithm.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Debugging Checklist — When You Get WA</h3>
+      <ul class="pl arr">
+        <li><strong>Integer overflow:</strong> Did you use <code>ll</code> for all intermediate products? Multiply two ints before casting?</li>
+        <li><strong>Array bounds:</strong> Off-by-one? Is your array large enough? 1-indexed vs 0-indexed mismatch?</li>
+        <li><strong>Edge cases:</strong> n=1, empty input, all same values, negative numbers, disconnected graph?</li>
+        <li><strong>Modular arithmetic:</strong> Did you take mod after every addition/multiplication? Is (a-b) possibly negative before mod?</li>
+        <li><strong>Graph:</strong> Is the graph directed/undirected? Are self-loops possible? Multiple edges?</li>
+        <li><strong>Floating point:</strong> Use <code>long double</code>. Never compare with <code>==</code>. Use <code>fabsl(a-b) &lt; EPS</code>.</li>
+        <li><strong>Multi-test reset:</strong> Did you reinitialize all global arrays between test cases?</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="rating-roadmap">
+      <h2 class="sh">27.3 &nbsp; Codeforces Rating Roadmap <span class="tag tgold">Your Path</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rating</th><th>What to Master</th><th>Problems to Solve</th></tr></thead>
+          <tbody>
+            <tr><td><span class="c-g">Newbie → Pupil (800–1200)</span></td><td>Implementation, basic math, greedy, simple arrays/strings, brute force</td><td>Solve every A+B from Div3 contests</td></tr>
+            <tr><td><span class="c-b">Pupil → Specialist (1200–1600)</span></td><td>Binary search, two pointers, prefix sums, basic DP, basic graphs (BFS/DFS)</td><td>150+ problems rated 1200–1500</td></tr>
+            <tr><td><span class="c-o">Specialist → Expert (1600–1900)</span></td><td>Sorting with custom comparator, segment trees, DSU, Dijkstra, basic backtracking, divide and conquer</td><td>200+ problems rated 1500–1800</td></tr>
+            <tr><td><span class="c-p">Expert → Candidate Master (1900–2100)</span></td><td>Advanced DP (bitmask, interval, D&amp;C opt), flows, binary lifting, CHT, Sparse Table, HLD</td><td>File 05 + File 06 mastery + 300+ problems</td></tr>
+            <tr><td><span class="c-gold">Master+ (2100+)</span></td><td>Everything in this file + FFT/NTT, advanced geometry, research-level insights, speed</td><td>Thousands of problems + ICPC practice</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="gold-box">
+        <span class="lbl">The Truth About Competitive Programming</span>
+        <p>Knowing algorithms is 20%. Reading problems fast, not panicking under time pressure, clean bug-free code at speed — that's 80%. <strong>This file gives you the weapons. You build the instincts by solving problems, thousands of them, consistently.</strong> There is no shortcut. The ones who reach ICPC World Finals solve 2000+ problems before they get there. Start today.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="practice-list">
+      <h2 class="sh">27.4 &nbsp; Curated Practice Problem List by Topic <span class="tag tc">Study Plan</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Binary Search Problems</div>
+          <p>CF: 1288C, 1204C, 1117C, 862B, 1284B. CSES: Array Division, Factory Machines, Subarray Distinct Values. Key: practice BS on answer space.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">DP Problems</div>
+          <p>CF: 837D (DP+BIT), 1498E (digit DP), 436E (DP opt), 660F (bitmask). CSES: full DP section (15 problems). AtCoder DP Contest: all 26 problems.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Graph Problems</div>
+          <p>CF: 1030E (LCA), 916E (centroid), 1239D (SCC+2-SAT), 962F (flow). CSES: full graph section. Must do: 2-SAT, SCC condensation problems.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">String Problems</div>
+          <p>CF: 1063F (suffix array), 1063G (hashing+BS), 126E (Manacher). CSES: string hashing section. Hackerrank: advanced strings.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Tree Problems</div>
+          <p>CF: 600E (HLD), 916E (centroid decomp), 1017E (binary lifting+DP). CSES: full tree section (15 problems). Must do: tree diameter, tree DP.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">ICPC Archives</div>
+          <p>ICPC World Finals problems (all years). Kattis: ICPC problem set. SPOJ: CLAS, QTREE series. POJ: classic ICPC-style problems. Solve old regionals.</p>
+        </div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ top</a>
+  </div>
+</div>
+
+<div class="footer">// C++ Mastery Series · Complete Reference · File 06 of 06 · The Black Box · ICPC &amp; Codeforces Edition</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<script>
+/* File 06 seeds dark mode if no preference set yet */
+if (localStorage.getItem('cpp_dark') === null) {
+  localStorage.setItem('cpp_dark', JSON.stringify('1'));
+}
+</script>
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-06-blackbox';
+  var FILE_DISP = '06 · The Black Box';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

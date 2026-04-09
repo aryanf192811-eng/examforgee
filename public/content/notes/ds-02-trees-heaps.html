@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures — Trees & Heaps · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:   #faf7f2; --paper2: #f3ede3; --paper3: #ece5d8; --paper4: #e4ddd0;
+  --ink:     #1c1510; --ink2:   #3a2e22; --ink3:   #6b5a47;
+  --rule:    rgba(100,130,180,0.14); --mline: rgba(210,100,80,0.28);
+  --red:     #b83030; --blue:   #1a4a8c; --green:  #1a6b40;
+  --orange:  #b85a10; --purple: #5a1a8a; --teal:   #0d7a6a;
+  --hl-y: rgba(255,236,60,0.42); --hl-b: rgba(100,160,255,0.17);
+  --hl-g: rgba(60,180,100,0.17); --hl-r: rgba(220,60,60,0.12);
+  --hl-o: rgba(220,130,30,0.14); --hl-p: rgba(120,40,180,0.11);
+  --body: 'Lora', Georgia, serif;
+  --prose: 'Crimson Pro', Georgia, serif;
+  --hand: 'Architects Daughter', cursive;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: #bfb49a;
+  background-image: radial-gradient(ellipse 70% 50% at 15% 25%, #b0a48c 0%, transparent 65%), radial-gradient(ellipse 55% 65% at 85% 75%, #ccc0a6 0%, transparent 55%);
+  font-family: var(--body); color: var(--ink); min-height:100vh; padding:24px 16px 64px;
+}
+.book { max-width:840px; margin:0 auto; }
+
+/* COVER */
+.cover {
+  background:var(--paper2); border:2px solid var(--ink); border-radius:4px;
+  padding:44px 48px 36px; margin-bottom:28px; position:relative; overflow:hidden;
+  box-shadow: 5px 6px 0 #8a7a60, 9px 10px 0 #6a5a40, 12px 14px 28px rgba(0,0,0,0.28);
+}
+.cover::before { content:''; position:absolute; inset:0; background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px); background-size:100% 32px; background-position:0 48px; pointer-events:none; }
+.cover::after  { content:''; position:absolute; top:0; bottom:0; left:52px; width:1.5px; background:rgba(210,100,80,0.32); pointer-events:none; }
+.cover-inner { position:relative; padding-left:20px; }
+.cover-subject { font-family:var(--hand); font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--ink3); margin-bottom:10px; display:flex; align-items:center; gap:10px; }
+.cover-subject::before { content:''; display:inline-block; width:28px; height:1.5px; background:var(--orange); }
+.cover h1 { font-family:var(--body); font-size:42px; font-weight:700; line-height:1.15; color:var(--ink); }
+.cover h1 em { font-style:italic; color:var(--blue); }
+.cover-desc { font-family:var(--prose); font-size:17px; color:var(--ink3); margin-top:14px; line-height:1.8; max-width:520px; border-left:3px solid var(--orange); padding-left:14px; }
+.cover-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:28px; }
+.chip { font-family:var(--hand); font-size:10px; border:1.5px solid #b0a080; border-radius:2px; padding:4px 12px; color:var(--ink3); background:rgba(255,255,255,0.5); }
+.cover-gate-tag { position:absolute; top:20px; right:24px; font-family:var(--hand); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--paper); background:var(--ink); padding:5px 12px; border-radius:2px; }
+
+/* TOC */
+.toc { background:var(--paper); border:1.5px solid #b0a080; border-radius:3px; padding:20px 28px; margin-bottom:28px; box-shadow:3px 4px 0 #9a8a6e; }
+.toc-lbl { font-family:var(--hand); font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--ink3); margin-bottom:12px; }
+.toc-grid { display:grid; grid-template-columns:1fr 1fr; gap:3px 24px; }
+@media(max-width:560px){ .toc-grid { grid-template-columns:1fr; } }
+.toc-grid a { font-family:var(--prose); font-size:15.5px; color:var(--ink2); text-decoration:none; display:flex; align-items:baseline; gap:7px; padding:4px 0; border-bottom:1px dashed transparent; transition:all 0.2s; }
+.toc-grid a:hover { color:var(--blue); border-color:var(--ink3); }
+.tn { font-family:var(--hand); font-size:11px; color:var(--ink3); min-width:24px; }
+
+/* CHAPTER */
+.chapter { background:var(--paper); border:1.5px solid #b0a088; border-radius:3px; margin-bottom:28px; box-shadow:4px 5px 0 #9a8a6e, 7px 8px 0 #7a6a50; overflow:hidden; }
+.ch-head { background:var(--ink); padding:16px 32px; }
+.ch-ey { font-family:var(--hand); font-size:10px; letter-spacing:2px; text-transform:uppercase; color:rgba(245,240,230,0.38); margin-bottom:3px; }
+.ch-title { font-family:var(--body); font-size:21px; font-weight:600; color:var(--paper); line-height:1.25; }
+.ch-title em { font-style:italic; color:#e8c870; }
+.ch-body { background-image: linear-gradient(var(--mline) 1px,transparent 1px), repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px); background-size:54px 100%, 100% 32px; background-position:0 0, 0 16px; }
+
+/* SECTION */
+.sec { padding:28px 32px 26px 62px; border-bottom:1px dashed #c8b898; position:relative; }
+.sec:last-child { border-bottom:none; }
+.sec::before { content:attr(data-m); position:absolute; left:10px; top:34px; font-family:var(--hand); font-size:10px; color:rgba(200,100,80,0.26); writing-mode:vertical-lr; transform:rotate(180deg); letter-spacing:1px; text-transform:uppercase; }
+
+/* HEADINGS */
+h2.sh { font-family:var(--body); font-size:19px; font-weight:700; color:var(--ink); margin-bottom:14px; padding-bottom:6px; border-bottom:2px solid var(--ink); display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.tag { font-family:var(--hand); font-size:9px; letter-spacing:1.5px; text-transform:uppercase; padding:3px 8px; border-radius:2px; border:1.5px solid currentColor; margin-left:auto; flex-shrink:0; }
+.tg { color:var(--red);    border-color:var(--red);    background:var(--hl-r); }
+.tc { color:var(--blue);   border-color:var(--blue);   background:var(--hl-b); }
+.tt { color:var(--orange); border-color:var(--orange); background:var(--hl-o); }
+.ta { color:var(--teal);   border-color:var(--teal);   background:rgba(13,122,106,0.09); }
+.tp { color:var(--purple); border-color:var(--purple); background:var(--hl-p); }
+h3.ssh { font-family:var(--body); font-size:15.5px; font-weight:600; font-style:italic; color:var(--blue); margin:20px 0 8px; }
+
+/* BODY TEXT */
+p { font-family:var(--prose); font-size:17px; line-height:1.92; color:var(--ink2); margin-bottom:10px; }
+strong { color:var(--ink); font-weight:600; }
+
+/* BOXES */
+.def-box { background:#eef3ff; border-left:4px solid var(--blue); border-radius:0 4px 4px 0; padding:13px 18px; margin:14px 0; }
+.def-box .lbl { font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--blue); margin-bottom:5px; display:block; }
+.def-box p { font-size:16.5px; line-height:1.82; margin:0; color:var(--ink); }
+.warn-box { background:#fff1f1; border-left:4px solid var(--red); border-radius:0 4px 4px 0; padding:12px 18px; margin:14px 0; }
+.warn-box .lbl { font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:4px; display:block; }
+.warn-box p { font-size:16px; color:var(--red); margin:0; line-height:1.78; }
+.tip-box { background:#f0fff4; border-left:4px solid var(--green); border-radius:0 4px 4px 0; padding:12px 18px; margin:14px 0; }
+.tip-box .lbl { font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--green); margin-bottom:4px; display:block; }
+.tip-box p { font-size:16px; color:var(--green); margin:0; line-height:1.78; }
+.note-box { background:#fdf8ee; border-left:4px solid var(--orange); border-radius:0 4px 4px 0; padding:12px 18px; margin:14px 0; }
+.note-box .lbl { font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:4px; display:block; }
+.note-box p { font-size:16px; color:var(--orange); margin:0; line-height:1.78; }
+
+/* EXAMPLE */
+.eg { background:var(--paper2); border:1.5px solid #b8a882; border-radius:4px; padding:18px 20px; margin:16px 0; position:relative; }
+.eg::before { content:'Example'; font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); position:absolute; top:-9px; left:14px; background:var(--paper2); padding:0 6px; }
+.eg p { font-family:var(--prose); font-size:16px; color:var(--ink2); margin:0 0 6px; line-height:1.82; }
+.eg p:last-child { margin:0; }
+
+/* CODE */
+.cb { font-family:'Courier New',monospace; font-size:13.5px; background:var(--paper3); border:1.5px dashed #a09070; border-radius:4px; padding:14px 18px; margin:12px 0; color:var(--ink); line-height:1.9; white-space:pre; overflow-x:auto; }
+.cb .kw { color:var(--blue); font-weight:bold; } .cb .cm { color:var(--ink3); font-style:italic; }
+.cb .num { color:var(--orange); } .cb .fn { color:var(--purple); } .cb .op { color:var(--red); }
+code { font-family:'Courier New',monospace; font-size:13.5px; background:var(--paper3); border:1px solid #c0a880; border-radius:3px; padding:1px 5px; color:var(--blue); }
+
+/* HIGHLIGHTS */
+mark     { background:var(--hl-y); padding:0 2px; border-radius:2px; color:var(--ink); }
+.hi-b    { background:var(--hl-b); padding:0 3px; border-radius:2px; }
+.hi-g    { background:var(--hl-g); padding:0 3px; border-radius:2px; }
+.hi-r    { background:var(--hl-r); padding:0 3px; border-radius:2px; }
+.hi-o    { background:var(--hl-o); padding:0 3px; border-radius:2px; }
+.c-r { color:var(--red);    font-weight:600; }
+.c-b { color:var(--blue);   font-weight:600; }
+.c-g { color:var(--green);  font-weight:600; }
+.c-o { color:var(--orange); font-weight:600; }
+.c-p { color:var(--purple); font-weight:600; }
+
+/* LISTS */
+.pl { list-style:none; margin:8px 0 12px; padding:0; }
+.pl li { font-family:var(--prose); font-size:16.5px; line-height:1.88; color:var(--ink2); padding:3px 0 3px 22px; position:relative; }
+.pl li::before         { content:'—'; position:absolute; left:0; color:var(--orange); font-weight:600; }
+.pl.arr li::before     { content:'→'; color:var(--blue);  }
+.pl.chk li::before     { content:'✓'; color:var(--green); }
+.pl.crs li::before     { content:'✗'; color:var(--red);   }
+
+/* TABLE */
+.tbl { overflow-x:auto; margin:16px 0; }
+table { width:100%; border-collapse:collapse; font-family:var(--prose); font-size:15.5px; }
+thead tr { background:var(--ink); }
+th { padding:9px 14px; text-align:left; color:var(--paper); font-weight:400; font-size:13px; font-family:var(--hand); letter-spacing:0.5px; }
+td { padding:8px 14px; border-bottom:1px dashed #c0a880; line-height:1.65; vertical-align:top; color:var(--ink2); }
+tr:nth-child(even) td { background:rgba(0,0,0,0.024); }
+tr:hover td { background:rgba(255,240,150,0.22); }
+.good { color:var(--green); font-weight:600; }
+.ok   { color:var(--orange); font-weight:600; }
+.bad  { color:var(--red); font-weight:600; }
+
+/* CALLOUT GRID */
+.cg { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:13px; margin:14px 0; }
+.cg-card { background:var(--paper2); border:1.5px solid #b0a080; border-radius:4px; padding:13px 15px; }
+.cg-card .ct { font-family:var(--hand); font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--ink3); margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid #c0a880; }
+.cg-card p { font-family:var(--prose); font-size:15px; line-height:1.75; color:var(--ink2); margin:0; }
+
+/* DS VISUAL */
+.ds-visual { background:var(--paper3); border:1.5px dashed #a09070; border-radius:4px; padding:16px 18px; margin:14px 0; font-family:'Courier New',monospace; font-size:13px; line-height:1.9; color:var(--ink); overflow-x:auto; }
+.ds-visual .dv-label { font-family:var(--hand); font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); margin-bottom:8px; display:block; }
+
+/* ROTATION CARD */
+.rot-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0; }
+@media(max-width:580px){ .rot-grid { grid-template-columns:1fr; } }
+.rot-card { background:var(--paper2); border:2px solid var(--ink); border-radius:4px; overflow:hidden; }
+.rot-card-head { background:var(--ink); padding:8px 14px; font-family:var(--body); font-size:15px; font-weight:600; color:var(--paper); display:flex; align-items:center; gap:10px; }
+.rot-badge { font-family:var(--hand); font-size:10px; letter-spacing:1px; padding:2px 8px; border-radius:2px; }
+.rot-ll { background:var(--red); color:white; }
+.rot-rr { background:var(--blue); color:white; }
+.rot-lr { background:var(--purple); color:white; }
+.rot-rl { background:var(--teal); color:white; }
+.rot-card-body { padding:12px 14px; }
+.rot-card-body pre { font-family:'Courier New',monospace; font-size:12px; line-height:1.75; color:var(--ink); white-space:pre; }
+.rot-card-body p { font-family:var(--prose); font-size:14px; color:var(--ink2); margin:6px 0 0; line-height:1.7; }
+
+/* HEAP VISUAL */
+.heap-row { display:flex; justify-content:center; gap:8px; margin:6px 0; }
+.hnode { width:36px; height:36px; border-radius:50%; border:2px solid var(--ink); display:flex; align-items:center; justify-content:center; font-family:var(--body); font-size:13px; font-weight:600; background:var(--paper); }
+.hnode.hl { background:var(--hl-y); border-color:var(--orange); }
+.hnode.red { background:var(--hl-r); border-color:var(--red); }
+
+/* STEPS */
+.steps { list-style:none; margin:10px 0; padding:0; }
+.steps li { display:flex; gap:13px; align-items:flex-start; margin-bottom:10px; font-family:var(--prose); font-size:16.5px; line-height:1.82; color:var(--ink2); }
+.sn { font-family:var(--hand); font-size:11px; background:var(--ink); color:var(--paper); border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:3px; }
+
+hr.dv { border:none; border-top:1.5px dashed #c0a880; margin:22px 0; }
+.bt { display:block; text-align:right; font-family:var(--hand); font-size:10px; color:var(--ink3); text-decoration:none; padding:10px 32px 0; letter-spacing:1px; }
+.bt:hover { color:var(--blue); }
+.footer { text-align:center; font-family:var(--hand); font-size:10px; color:#7a6a50; letter-spacing:2px; padding:20px 0; }
+@media(max-width:600px){ .cover{padding:28px 22px;} .cover h1{font-size:28px;} .ch-head{padding:14px 20px;} .sec{padding:22px 18px 22px 44px;} }
+</style>
+</head>
+<body>
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Data Structures</div>
+    <h1>Trees, BST, AVL<br><em>&amp; Heaps</em></h1>
+    <p class="cover-desc">
+      Non-linear data structures from first principles — binary tree properties, traversals, BST analysis, AVL rotations with full visuals, heap construction, and every GATE counting trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Binary Trees — Properties &amp; Formulae</span>
+      <span class="chip">Ch 2 · Tree Traversals</span>
+      <span class="chip">Ch 3 · BST — Operations &amp; Analysis</span>
+      <span class="chip">Ch 4 · AVL Trees &amp; Rotations</span>
+      <span class="chip">Ch 5 · Heaps — Build, Insert, Sort</span>
+      <span class="chip">Ch 6 · GATE Traps &amp; Complexity Matrix</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Binary Trees — Properties &amp; Formulae</a>
+    <a href="#ch2"><span class="tn">02</span>Tree Traversals &amp; Reconstruction</a>
+    <a href="#ch3"><span class="tn">03</span>Binary Search Trees</a>
+    <a href="#ch4"><span class="tn">04</span>AVL Trees — Balance &amp; Rotations</a>
+    <a href="#ch5"><span class="tn">05</span>Heaps — Build, Insert, Heap Sort</a>
+    <a href="#ch6"><span class="tn">06</span>GATE Traps &amp; Complexity Matrix</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — BINARY TREE PROPERTIES
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Binary Trees — <em>Properties, Formulae &amp; Bounds</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bt-def">
+      <h2 class="sh">1.1 &nbsp; Definitions &amp; Terminology <span class="tag tc">Core</span></h2>
+      <p>
+        A <strong>tree</strong> is a connected, acyclic undirected graph with a designated root node. A <strong>binary tree</strong> is a tree where every node has at most two children, conventionally called the <em>left child</em> and <em>right child</em>.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Anatomy of a binary tree</span>
+              A          ← Root (depth 0, level 1)
+            /   \
+           B     C      ← Internal nodes (depth 1)
+          / \     \
+         D   E     F   ← D, E, F are leaves (no children)
+
+Height of tree = 2 (longest root-to-leaf path, counting edges)
+Height of node = length of longest path from node to a leaf
+Depth of node  = length of path from root to that node
+      </div>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Full Binary Tree</div>
+          <p>Every node has either <strong>0 or 2</strong> children. No node has exactly one child. Also called a "strictly binary tree."</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Complete Binary Tree</div>
+          <p>All levels are completely filled <strong>except possibly the last</strong>, which is filled from left to right. This is the shape used by heaps.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Perfect Binary Tree</div>
+          <p>All internal nodes have exactly 2 children and <strong>all leaves are at the same level</strong>. Most restrictive. A perfect binary tree is both full and complete.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Skewed Binary Tree</div>
+          <p>Every node has only one child — all to the left (left-skewed) or all to the right (right-skewed). Degenerates to a linked list. Worst case for BST.</p>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Definitions Differ by Source</span>
+        <p>Some textbooks define "full binary tree" as what others call a "perfect binary tree" (all levels completely filled). GATE follows the strict definition: full = every node has 0 or 2 children. Always use this definition unless the problem specifies otherwise.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bt-props">
+      <h2 class="sh">1.2 &nbsp; Mathematical Properties — The Complete Formulae Set <span class="tag tg">1-Mark Staples</span></h2>
+
+      <h3 class="ssh">The Leaf-Degree Relationship — L = n₂ + 1</h3>
+      <div class="def-box">
+        <span class="lbl">Theorem — Most Tested Formula in Tree Chapter</span>
+        <p>In any binary tree: &nbsp; <strong>L = n₂ + 1</strong><br>
+        where L = number of leaf nodes (degree 0), and n₂ = number of nodes with exactly 2 children (degree 2).</p>
+      </div>
+      <p><strong>Proof intuition:</strong> Count edges from two directions. Total edges = n − 1 (tree property). Edges going <em>down</em> from parent side = n₁ + 2×n₂ (nodes with 1 child contribute 1 edge, nodes with 2 children contribute 2). Edges going <em>up</em> from child side = n − 1 (every non-root node has one parent edge). Setting equal: n₁ + 2n₂ = n − 1. Substituting n = L + n₁ + n₂ gives L = n₂ + 1.</p>
+
+      <div class="eg">
+        <p><strong>Verification on the tree above:</strong> Nodes A, B, C have children. A has 2 (B,C) → n₂ contribution. B has 2 (D,E) → n₂ contribution. C has 1 (F) → n₁. Leaves: D, E, F → L = 3. n₂ = 2 (nodes A and B). Formula: L = n₂ + 1 = 2 + 1 = <strong>3 ✓</strong></p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Pattern</span>
+        <p>"A binary tree has 20 nodes with exactly 2 children. How many leaf nodes?" → L = 20 + 1 = <strong>21</strong>. This appears directly as a 1-mark question almost every alternate year.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Height, Node, and Level Bounds</h3>
+
+      <div class="tbl">
+        <table>
+          <thead>
+            <tr><th>Tree Type</th><th>Min Nodes (given height h)</th><th>Max Nodes (given height h)</th><th>Min Height (given n nodes)</th><th>Max Height (given n nodes)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Any Binary Tree</strong></td>
+              <td>h + 1<br><small>(single path — skewed)</small></td>
+              <td>2<sup>h+1</sup> − 1<br><small>(perfect tree)</small></td>
+              <td>⌊log₂ n⌋<br><small>(perfect shape)</small></td>
+              <td>n − 1<br><small>(skewed)</small></td>
+            </tr>
+            <tr>
+              <td><strong>Full Binary Tree</strong></td>
+              <td>2h + 1<br><small>(1 node at each level except last, then 2 leaves)</small></td>
+              <td>2<sup>h+1</sup> − 1</td>
+              <td>⌈log₂(n+1)⌉ − 1</td>
+              <td>(n − 1) / 2</td>
+            </tr>
+            <tr>
+              <td><strong>Complete Binary Tree</strong></td>
+              <td>2<sup>h</sup><br><small>(exactly one node at last level)</small></td>
+              <td>2<sup>h+1</sup> − 1</td>
+              <td>⌊log₂ n⌋</td>
+              <td>⌊log₂ n⌋</td>
+            </tr>
+            <tr>
+              <td><strong>Perfect Binary Tree</strong></td>
+              <td colspan="2">Exactly 2<sup>h+1</sup> − 1 nodes (unique count for given h)</td>
+              <td colspan="2">Exactly log₂(n+1) − 1 (must be integer)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note-box">
+        <span class="lbl">Height Convention — Read the Question</span>
+        <p>Some problems define height as number of <strong>edges</strong> on the longest root-to-leaf path. Others define it as number of <strong>nodes</strong>. A tree with just the root has height 0 (edge-based) or height 1 (node-based). GATE usually uses edge-based. Always check — the answer changes by 1.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Additional Counting Formulae</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>n = L + n₁ + n₂</td><td>Total nodes = leaves + 1-child nodes + 2-child nodes</td></tr>
+            <tr><td>L = n₂ + 1</td><td>Leaf-degree relationship (derived above)</td></tr>
+            <tr><td>Number of NULL links = n + 1</td><td>In any binary tree with n nodes, there are n+1 empty (NULL) child pointers</td></tr>
+            <tr><td>Max nodes at level i = 2<sup>i</sup></td><td>Level 0 (root) has 1 = 2⁰, level 1 has 2 = 2¹, etc.</td></tr>
+            <tr><td>Total nodes in perfect tree of height h = 2<sup>h+1</sup> − 1</td><td>Sum of geometric series: 1 + 2 + 4 + ... + 2ʰ</td></tr>
+            <tr><td>Number of internal nodes in perfect tree = 2ʰ − 1</td><td>Total minus leaves (2ʰ)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>NAT-style question:</strong> A binary tree has 15 nodes. What is the minimum and maximum possible height?</p>
+        <p>Min height (most spread out = complete/perfect): ⌊log₂ 15⌋ = ⌊3.9⌋ = <strong>3</strong> (a perfect tree of height 3 has 15 nodes — perfect fit).</p>
+        <p>Max height (most skewed): 15 − 1 = <strong>14</strong> (every node has exactly one child — a path).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — TRAVERSALS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Tree Traversals <em>&amp; Reconstruction</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traversals">
+      <h2 class="sh">2.1 &nbsp; The Four Traversal Orders <span class="tag tc">Core</span></h2>
+      <p>
+        A traversal visits every node in a tree exactly once in a defined order. The four standard traversals differ only in <em>when</em> the current node is processed relative to its children.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Reference tree for all traversal examples</span>
+              1
+            /   \
+           2     3
+          / \   / \
+         4   5 6   7
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Traversal</th><th>Order</th><th>Result on tree above</th><th>Primary Use</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Inorder</strong></td><td>Left → Root → Right</td><td>4, 2, 5, 1, 6, 3, 7</td><td>Sorted output for BST</td></tr>
+            <tr><td><strong>Preorder</strong></td><td>Root → Left → Right</td><td>1, 2, 4, 5, 3, 6, 7</td><td>Tree copying, serialization</td></tr>
+            <tr><td><strong>Postorder</strong></td><td>Left → Right → Root</td><td>4, 5, 2, 6, 7, 3, 1</td><td>Tree deletion, expression eval</td></tr>
+            <tr><td><strong>Level Order</strong></td><td>Level by level (BFS)</td><td>1, 2, 3, 4, 5, 6, 7</td><td>BFS, complete tree check</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">BST Inorder = Sorted Sequence — Always</span>
+        <p>The inorder traversal of any Binary Search Tree always produces elements in <strong>strictly ascending sorted order</strong>. This is not a coincidence — it is a direct consequence of the BST property (left subtree &lt; root &lt; right subtree). GATE uses this to ask "what is the 3rd element visited in inorder traversal of this BST?" — which equals the 3rd smallest element.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="reconstruction">
+      <h2 class="sh">2.2 &nbsp; Tree Reconstruction — The Uniqueness Rule <span class="tag tg">GATE Trap</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">The Uniqueness Theorem</span>
+        <p>Given the traversal sequences of a binary tree, a <strong>unique tree can be reconstructed</strong> if and only if you have the <strong>Inorder sequence PLUS either Preorder OR Postorder</strong>. Preorder + Postorder alone is NOT sufficient for a unique reconstruction (unless the tree is a full binary tree).</p>
+      </div>
+
+      <p><strong>Why is Inorder essential?</strong> Preorder tells you the root first. Postorder tells you the root last. But neither alone tells you which elements belong to the left subtree vs right subtree. Inorder splits elements around the root — everything to its left in inorder goes to the left subtree, everything to its right goes to the right subtree.</p>
+
+      <div class="eg">
+        <p><strong>Reconstruct from: Inorder = [4,2,5,1,6,3,7] &nbsp; Preorder = [1,2,4,5,3,6,7]</strong></p>
+        <div class="cb"><span class="kw">Step 1:</span> Preorder[0] = 1 → Root is 1
+<span class="kw">Step 2:</span> Find 1 in Inorder → index 3
+         Left subtree inorder  = [4,2,5] (indices 0-2)
+         Right subtree inorder = [6,3,7] (indices 4-6)
+<span class="kw">Step 3:</span> Left subtree has 3 nodes → Preorder[1..3] = [2,4,5]
+         Right subtree has 3 nodes → Preorder[4..6] = [3,6,7]
+<span class="kw">Step 4:</span> Recurse: Left root = 2 (Preorder[1]). Find 2 in [4,2,5] → index 1
+         Left-left = [4], Left-right = [5]
+<span class="kw">Result:</span> Uniquely reconstructed tree with root 1, exactly as shown.</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Preorder + Postorder = NOT Unique (in general)</span>
+        <p>Consider: Preorder = [A, B], Postorder = [B, A]. This could be a tree where B is A's left child, OR B is A's right child — two different trees with the same pre and post orders. You cannot distinguish left from right without inorder. Exception: if the tree is a full binary tree (every node has 0 or 2 children), then pre + post IS sufficient.</p>
+      </div>
+
+      <h3 class="ssh">Traversal from Expression Trees</h3>
+      <p>Expression trees are a classic application. For the expression (A+B) × (C−D):</p>
+      <ul class="pl arr">
+        <li><strong>Inorder traversal</strong> = A + B × C − D (infix expression, may need parentheses)</li>
+        <li><strong>Preorder traversal</strong> = × + A B − C D (prefix / Polish notation)</li>
+        <li><strong>Postorder traversal</strong> = A B + C D − × (postfix / Reverse Polish notation)</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — BST
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Binary Search Trees — <em>Operations &amp; Analysis</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bst-def">
+      <h2 class="sh">3.1 &nbsp; BST Property &amp; Structure <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">BST Property</span>
+        <p>For every node N in a BST: all keys in N's <strong>left subtree are strictly less than</strong> N's key, and all keys in N's <strong>right subtree are strictly greater than</strong> N's key. This holds recursively for every subtree.</p>
+      </div>
+
+      <p>This property is what makes BST search efficient — at each node, you eliminate an entire subtree from consideration. In a balanced BST, you eliminate roughly half the remaining nodes at each step, yielding O(log n) search.</p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Valid BST: every node satisfies left &lt; root &lt; right at all levels</span>
+            8
+          /   \
+         3     10
+        / \      \
+       1   6      14
+          / \    /
+         4   7  13
+
+Inorder: 1, 3, 4, 6, 7, 8, 10, 13, 14 ← sorted, confirms BST property
+      </div>
+    </div>
+
+    <div class="sec" data-m="bst-ops">
+      <h2 class="sh">3.2 &nbsp; BST Operations — Algorithms &amp; Complexity <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Search</h3>
+      <p>Compare target with current node. If equal: found. If target &lt; current: recurse left. If target &gt; current: recurse right. If NULL: not found.</p>
+      <div class="cb">Search(node, key):
+    if node == NULL: return NOT FOUND
+    if key == node.key: return node
+    if key < node.key:  return Search(node.left, key)
+    else:               return Search(node.right, key)</div>
+
+      <h3 class="ssh">Insertion</h3>
+      <p>Search for the key (it won't be found). Insert at the position where the search failed (the NULL pointer location).</p>
+
+      <h3 class="ssh">Deletion — Three Cases</h3>
+      <ul class="pl arr">
+        <li><strong>Case 1 — Node is a leaf:</strong> Simply remove it. No restructuring needed.</li>
+        <li><strong>Case 2 — Node has one child:</strong> Replace the node with its only child. Bypass the node.</li>
+        <li><strong>Case 3 — Node has two children:</strong> Replace the node's key with its <strong>inorder successor</strong> (smallest key in right subtree) OR <strong>inorder predecessor</strong> (largest key in left subtree). Then delete the successor/predecessor (which has at most one child — Case 1 or 2).</li>
+      </ul>
+
+      <div class="eg">
+        <p><strong>Delete node 6 from the BST above (has two children: 4 and 7):</strong></p>
+        <p>Inorder successor of 6 = 7 (smallest in right subtree {7}). Replace 6 with 7, then delete original node 7 (it's a leaf — Case 1).</p>
+        <p>Result: BST property maintained. Inorder still sorted.</p>
+      </div>
+
+      <h3 class="ssh">Complexity Analysis</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operation</th><th>Best Case</th><th>Average Case</th><th>Worst Case</th><th>Worst Case Scenario</th></tr></thead>
+          <tbody>
+            <tr><td>Search</td><td class="good">O(1)</td><td class="ok">O(log n)</td><td class="bad">O(n)</td><td>Skewed tree (sorted insertion)</td></tr>
+            <tr><td>Insert</td><td class="good">O(1)</td><td class="ok">O(log n)</td><td class="bad">O(n)</td><td>Skewed tree</td></tr>
+            <tr><td>Delete</td><td class="good">O(1)</td><td class="ok">O(log n)</td><td class="bad">O(n)</td><td>Skewed tree</td></tr>
+            <tr><td>Inorder Traversal</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>Must visit all nodes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">BST Worst Case — Sorted Input is the Killer</span>
+        <p>Insert elements 1, 2, 3, 4, 5 into an empty BST in sorted order. Each new element becomes the right child of the previous — the tree degenerates to a linked list of height n−1. Every operation becomes O(n). This is why self-balancing trees (AVL, Red-Black) exist: they prevent this degeneration at the cost of rotation overhead.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bst-gate">
+      <h2 class="sh">3.3 &nbsp; Number of Structurally Distinct BSTs <span class="tag tg">GATE NAT</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Catalan Numbers</span>
+        <p>The number of structurally distinct BSTs that can be formed with n distinct keys is the n-th Catalan number: <strong>C(n) = (2n)! / ((n+1)! × n!)</strong></p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>n (nodes)</th><th>Number of distinct BSTs</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>1</td></tr>
+            <tr><td>2</td><td>2</td></tr>
+            <tr><td>3</td><td>5</td></tr>
+            <tr><td>4</td><td>14</td></tr>
+            <tr><td>5</td><td>42</td></tr>
+            <tr><td>n</td><td>C(n) = ¹⁄(n+1) × C(2n,n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>For n=3: the 5 distinct BSTs correspond to 5 different choices of root (1, 2, or 3) combined with arrangement of remaining elements. This appears directly in GATE as "how many BSTs can be formed with keys {1,2,3}?"</p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — AVL TREES
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">AVL Trees — <em>Balance Factors &amp; Rotations</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="avl-def">
+      <h2 class="sh">4.1 &nbsp; What Is an AVL Tree? <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>An <strong>AVL tree</strong> (Adelson-Velsky and Landis, 1962) is a self-balancing BST where the <strong>Balance Factor</strong> of every node is in {−1, 0, +1}. Balance Factor = Height(left subtree) − Height(right subtree). NULL subtrees have height −1.</p>
+      </div>
+
+      <p>
+        Whenever an insertion or deletion causes any node's balance factor to go outside {−1, 0, +1}, a <strong>rotation</strong> is performed to restore balance. This guarantees that the height of an AVL tree with n nodes is always O(log n), making all operations O(log n) in the worst case — unlike a plain BST.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Balance Factor calculation</span>
+Node heights (counting edges to deepest leaf):
+      8 [BF=0]          ← Height(left)=1, Height(right)=1
+    /   \
+   3[BF=1] 10[BF=-1]   ← BF=+1 means left-heavy, -1 means right-heavy
+  / \
+ 1   6                  Any BF outside {-1,0,+1} → VIOLATION → rotate
+      </div>
+    </div>
+
+    <div class="sec" data-m="avl-rotations">
+      <h2 class="sh">4.2 &nbsp; The Four Rotation Cases — Visual Guide <span class="tag tg">GATE Critical</span></h2>
+
+      <p>
+        When a node Z becomes imbalanced (|BF| = 2), identify the insertion direction on the path from Z to the inserted node. The first two letters describe this path: <strong>LL</strong> = inserted in Z's Left subtree's Left child. <strong>RR</strong> = Right-Right. <strong>LR</strong> = Left-Right. <strong>RL</strong> = Right-Left.
+      </p>
+
+      <div class="rot-grid">
+        <div class="rot-card">
+          <div class="rot-card-head">
+            <span class="rot-badge rot-ll">LL</span>
+            Left-Left Case
+          </div>
+          <div class="rot-card-body">
+            <pre>Before:         After (Right Rotate Z):
+    Z [BF=+2]          Y
+   /                 /   \
+  Y [BF=+1]        X     Z
+ /
+X
+(inserted here)</pre>
+            <p><strong>Fix:</strong> Single Right Rotation on Z. Y becomes new root. Z becomes Y's right child. Y's original right child becomes Z's left child.</p>
+          </div>
+        </div>
+
+        <div class="rot-card">
+          <div class="rot-card-head">
+            <span class="rot-badge rot-rr">RR</span>
+            Right-Right Case
+          </div>
+          <div class="rot-card-body">
+            <pre>Before:        After (Left Rotate Z):
+Z [BF=-2]          Y
+  \               / \
+   Y [BF=-1]     Z   X
+     \
+      X
+(inserted here)</pre>
+            <p><strong>Fix:</strong> Single Left Rotation on Z. Y becomes new root. Z becomes Y's left child. Y's original left child becomes Z's right child.</p>
+          </div>
+        </div>
+
+        <div class="rot-card">
+          <div class="rot-card-head">
+            <span class="rot-badge rot-lr">LR</span>
+            Left-Right Case
+          </div>
+          <div class="rot-card-body">
+            <pre>Before:       Step 1 (Left on Y):   Step 2 (Right on Z):
+Z [BF=+2]       Z [BF=+2]               X
+/               /                      / \
+Y[BF=-1]       X                      Y   Z
+  \           /
+   X         Y
+(inserted)</pre>
+            <p><strong>Fix:</strong> Double Rotation — first Left Rotate on Y, then Right Rotate on Z. Reduces to LL case after step 1.</p>
+          </div>
+        </div>
+
+        <div class="rot-card">
+          <div class="rot-card-head">
+            <span class="rot-badge rot-rl">RL</span>
+            Right-Left Case
+          </div>
+          <div class="rot-card-body">
+            <pre>Before:        Step 1 (Right on Y):  Step 2 (Left on Z):
+Z [BF=-2]      Z [BF=-2]                X
+  \              \                     / \
+  Y[BF=+1]        X                  Z   Y
+ /                  \
+X                    Y
+(inserted)</pre>
+            <p><strong>Fix:</strong> Double Rotation — first Right Rotate on Y, then Left Rotate on Z. Reduces to RR case after step 1.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Case</th><th>BF at unbalanced node Z</th><th>BF at Z's child</th><th>Fix</th><th>Rotations</th></tr></thead>
+          <tbody>
+            <tr><td>LL</td><td>+2</td><td>+1 or 0 (left child)</td><td>Right rotate Z</td><td>1</td></tr>
+            <tr><td>RR</td><td>−2</td><td>−1 or 0 (right child)</td><td>Left rotate Z</td><td>1</td></tr>
+            <tr><td>LR</td><td>+2</td><td>−1 (left child)</td><td>Left rotate Y, then Right rotate Z</td><td>2</td></tr>
+            <tr><td>RL</td><td>−2</td><td>+1 (right child)</td><td>Right rotate Y, then Left rotate Z</td><td>2</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Identifying the Case</span>
+        <p>The case is determined by the <em>path of insertion</em>, not just the balance factors. Specifically: BF at the unbalanced node AND the sign of the BF at the child in the heavy direction. If they have the same sign → single rotation (LL or RR). If they have opposite signs → double rotation (LR or RL). Get the child's BF wrong and you'll apply the wrong rotation.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="avl-complexity">
+      <h2 class="sh">4.3 &nbsp; AVL Complexity &amp; Properties</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operation</th><th>BST Worst Case</th><th>AVL Worst Case</th><th>Why AVL is Better</th></tr></thead>
+          <tbody>
+            <tr><td>Search</td><td class="bad">O(n)</td><td class="good">O(log n)</td><td>Height guaranteed ≤ 1.44 log₂(n+2)</td></tr>
+            <tr><td>Insert</td><td class="bad">O(n)</td><td class="good">O(log n)</td><td>At most 1 rotation needed after insert</td></tr>
+            <tr><td>Delete</td><td class="bad">O(n)</td><td class="good">O(log n)</td><td>At most O(log n) rotations after delete</td></tr>
+            <tr><td>Space</td><td>O(n)</td><td>O(n)</td><td>Extra BF field per node (constant)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Minimum Nodes in AVL Tree of Height h — Fibonacci Relation</span>
+        <p>Let N(h) = minimum number of nodes in an AVL tree of height h.<br>
+        N(0) = 1, &nbsp; N(1) = 2, &nbsp; N(h) = N(h−1) + N(h−2) + 1<br>
+        This recurrence is similar to Fibonacci numbers. N(h) ≈ φʰ/√5 where φ = 1.618 (golden ratio). This gives max height ≈ 1.44 log₂ n for n nodes.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Height h</th><th>Min nodes N(h)</th><th>Max nodes</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>2</td><td>3</td></tr>
+            <tr><td>2</td><td>4</td><td>7</td></tr>
+            <tr><td>3</td><td>7</td><td>15</td></tr>
+            <tr><td>4</td><td>12</td><td>31</td></tr>
+            <tr><td>h</td><td>N(h−1)+N(h−2)+1</td><td>2ʰ⁺¹−1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — HEAPS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Heaps — <em>Build, Insert &amp; Heap Sort</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="heap-def">
+      <h2 class="sh">5.1 &nbsp; Heap — Definition &amp; Properties <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>heap</strong> is a complete binary tree satisfying the <strong>heap property</strong>. In a <em>max-heap</em>: every node's key ≥ its children's keys (root = maximum). In a <em>min-heap</em>: every node's key ≤ its children's keys (root = minimum).</p>
+      </div>
+
+      <p>
+        Because a heap is always a <strong>complete binary tree</strong>, it can be efficiently stored as an array with no wasted space and no pointers. This array representation is the key insight that makes heap operations fast in practice.
+      </p>
+
+      <div class="def-box" style="background:#f0fff4; border-color:var(--green)">
+        <span class="lbl" style="color:var(--green)">Array Representation — Index Formulae (1-indexed)</span>
+        <p>
+          For node at index i:<br>
+          <strong>Parent:</strong> ⌊i/2⌋ &nbsp;&nbsp;
+          <strong>Left child:</strong> 2i &nbsp;&nbsp;
+          <strong>Right child:</strong> 2i+1<br>
+          <em>(0-indexed: Parent = ⌊(i−1)/2⌋, Left = 2i+1, Right = 2i+2)</em>
+        </p>
+      </div>
+
+      <div class="ds-visual">
+        <span class="dv-label">Max-Heap — tree view and array representation (1-indexed)</span>
+Tree:                Array: [_, 16, 14, 10, 8, 7, 9, 3, 2, 4, 1]
+         16                  idx:  1   2   3  4  5  6  7  8  9  10
+       /    \
+     14      10         Node at index 4 (value 8):
+    /  \    /  \          Parent = ⌊4/2⌋ = 2 → value 14  ✓
+   8    7  9    3          Left  = 2×4  = 8 → value 2    ✓
+  / \  /                  Right = 2×4+1= 9 → value 4    ✓
+ 2   4 1
+      </div>
+    </div>
+
+    <div class="sec" data-m="heap-ops">
+      <h2 class="sh">5.2 &nbsp; Heapify, Insert &amp; Extract <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Heapify (Sift-Down)</h3>
+      <p>
+        <strong>Max-Heapify</strong> restores the heap property at a single node by pushing it <em>down</em> to its correct position. Assumes both children's subtrees are already valid heaps.
+      </p>
+      <div class="cb">Max-Heapify(A, i, n):
+    largest = i
+    left  = 2i,  right = 2i+1
+    if left ≤ n and A[left] > A[largest]:   largest = left
+    if right ≤ n and A[right] > A[largest]: largest = right
+    if largest ≠ i:
+        swap(A[i], A[largest])
+        Max-Heapify(A, largest, n)   <span class="cm">// recurse down</span>
+
+Time: O(log n) — height of tree is log n, at most log n swaps downward.</div>
+
+      <h3 class="ssh">Insert — O(log n)</h3>
+      <p>Add new element at the end (next position in complete binary tree order). Then <strong>sift up</strong>: compare with parent, swap if larger, repeat until heap property holds.</p>
+      <div class="cb">Insert(A, key):
+    n = n + 1
+    A[n] = key
+    i = n
+    <span class="kw">while</span> i > 1 and A[⌊i/2⌋] < A[i]:   <span class="cm">// sift up</span>
+        swap(A[i], A[⌊i/2⌋])
+        i = ⌊i/2⌋
+Time: O(log n) — path from leaf to root.</div>
+
+      <h3 class="ssh">Extract-Max — O(log n)</h3>
+      <div class="cb">Extract-Max(A):
+    max = A[1]
+    A[1] = A[n]      <span class="cm">// move last element to root</span>
+    n = n - 1
+    Max-Heapify(A, 1, n)  <span class="cm">// sift down from root</span>
+    return max
+Time: O(log n) — one heapify call from root.</div>
+    </div>
+
+    <div class="sec" data-m="build-heap">
+      <h2 class="sh">5.3 &nbsp; Build-Heap: O(n) vs O(n log n) — The Classic Theory Trap <span class="tag tg">GATE Critical</span></h2>
+
+      <p>This is one of the most commonly tested complexity distinctions in GATE. Two ways to build a heap from an unsorted array of n elements:</p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Method 1 — Repeated Insertion: O(n log n)</div>
+          <p>Start with an empty heap. Insert each of the n elements one by one using the Insert operation. Each insert costs O(log k) where k is the current heap size. Total: Σ log k ≈ O(n log n).</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Method 2 — Bottom-up Build-Heap: O(n)</div>
+          <p>Place all n elements in array order (any order). Call Heapify on all internal nodes starting from the last internal node (⌊n/2⌋) down to the root. Total cost = O(n).</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Why Build-Heap is O(n) — The Mathematical Argument</h3>
+      <p>
+        This is counterintuitive. You call Heapify O(n) times, and each call is O(log n), so it seems like O(n log n). But this analysis is too loose — it ignores that most nodes are near the <em>bottom</em> of the tree and their Heapify calls are very cheap.
+      </p>
+      <p>
+        At height h in the tree, there are at most ⌈n/2ʰ⁺¹⌉ nodes, and Heapify on a node at height h costs O(h). The total work is:
+      </p>
+      <div class="cb">Total work = Σ(h=0 to log n) [ ⌈n/2ʰ⁺¹⌉ × O(h) ]
+             = O(n × Σ(h=0 to ∞) h/2ʰ)
+             = O(n × 2)           ← the sum h/2ʰ converges to 2
+             = O(n)</div>
+
+      <p>
+        The key: <mark>most nodes are leaves or near-leaves, and Heapify on a leaf costs O(1)</mark>. Only the root's Heapify costs O(log n). Bottom-up build exploits this — it processes cheap nodes (near the bottom) first and does all the expensive work just once (at the root).
+      </p>
+
+      <div class="eg">
+        <p><strong>NAT Pattern:</strong> Build a max-heap from array [4, 1, 3, 2, 16, 9, 10, 14, 8, 7] (n=10). How many comparisons/swaps in the worst case?</p>
+        <p>Last internal node = ⌊10/2⌋ = 5 (index 5, value 16). Start heapifying from index 5 down to 1.</p>
+        <div class="cb">Initial: [_, 4, 1, 3, 2, 16, 9, 10, 14, 8, 7]
+                    idx:   1  2  3  4   5  6   7   8  9  10
+
+Heapify(5): value=16, children: A[10]=7. 16>7, no swap.
+Heapify(4): value=2, children: A[8]=14, A[9]=8. 14>2, swap → [_,4,1,3,14,16,9,10,2,8,7]
+Heapify(3): value=3, children: A[6]=9, A[7]=10. 10>3, swap → [_,4,1,10,14,16,9,3,2,8,7]
+Heapify(2): value=1, children: A[4]=14, A[5]=16. 16>1, swap →
+            [_,4,16,10,14,1,9,3,2,8,7]. Now heapify at idx 5: 1 < children? A[10]=7, swap.
+            → [_,4,16,10,14,7,9,3,2,8,1]
+Heapify(1): value=4, children: A[2]=16, A[3]=10. 16>4, swap →
+            [_,16,4,10,14,7,9,3,2,8,1]. Now heapify at idx 2: 4 < 14, swap →
+            [_,16,14,10,4,7,9,3,2,8,1]. Now heapify at idx 4: 4 < 8, swap →
+            [_,16,14,10,8,7,9,3,2,4,1]
+
+Final max-heap: [16, 14, 10, 8, 7, 9, 3, 2, 4, 1]
+Total swaps in this example: 5</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="heapsort">
+      <h2 class="sh">5.4 &nbsp; Heap Sort — Algorithm &amp; Analysis <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Heap Sort Algorithm</span>
+        <p>Phase 1: Build-Heap on all n elements → O(n). Phase 2: Repeatedly extract the maximum — swap root with last element, reduce heap size by 1, call Heapify → n−1 times × O(log n) each = O(n log n). Total: O(n log n).</p>
+      </div>
+
+      <div class="cb"><span class="kw">Heap-Sort</span>(A, n):
+    Build-Max-Heap(A, n)          <span class="cm">// O(n)</span>
+    for i = n downto 2:
+        swap(A[1], A[i])          <span class="cm">// largest goes to sorted position</span>
+        Max-Heapify(A, 1, i-1)    <span class="cm">// O(log n)</span>
+    <span class="cm">// Total Phase 2: O(n log n)</span></div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Heap Sort</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Time (all cases)</td><td class="ok">Θ(n log n)</td><td>Build-Heap O(n) + n extractions each O(log n)</td></tr>
+            <tr><td>Space (auxiliary)</td><td class="good">O(1)</td><td>In-place — sorts within the array</td></tr>
+            <tr><td>Stable?</td><td class="bad">No</td><td>Swapping root with last element disrupts relative order</td></tr>
+            <tr><td>Adaptive?</td><td class="bad">No</td><td>Always Θ(n log n) regardless of input order</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Build-Heap O(n) Does NOT Make Heap Sort O(n)</span>
+        <p>Students often confuse this. Build-Heap is O(n), yes. But Heap Sort then does n extractions, each O(log n) = O(n log n). The fast build-heap just saves a constant factor in phase 1. The bottleneck is phase 2. Overall: Θ(n log n). You cannot sort n elements faster than O(n log n) in the comparison model (proven lower bound).</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Number of Swaps in Build-Heap (NAT Answer)</span>
+        <p>In the worst case, Build-Heap on n elements performs at most <strong>n − ⌊log₂ n⌋ − 1</strong> swaps. For n = 100: 100 − ⌊6.64⌋ − 1 = 100 − 6 − 1 = <strong>93 swaps maximum</strong>. This formula arises from summing the maximum sift-down distances across all internal nodes.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — GATE TRAPS & COMPLEXITY MATRIX
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complete Complexity Matrix</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="complexity-matrix">
+      <h2 class="sh">6.1 &nbsp; Complete Complexity Matrix <span class="tag tg">Quick Reference</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead>
+            <tr><th>Structure</th><th>Search</th><th>Insert</th><th>Delete</th><th>Find-Min/Max</th><th>Space</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Unsorted Array</strong></td><td class="bad">O(n)</td><td class="good">O(1)*</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Sorted Array</strong></td><td class="ok">O(log n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td><strong>BST (avg)</strong></td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td>O(n)</td></tr>
+            <tr><td><strong>BST (worst)</strong></td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td><strong>AVL Tree</strong></td><td class="good">O(log n)</td><td class="good">O(log n)</td><td class="good">O(log n)</td><td class="good">O(log n)</td><td>O(n)</td></tr>
+            <tr><td><strong>Max-Heap</strong></td><td class="bad">O(n)</td><td class="ok">O(log n)</td><td class="ok">O(log n)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td><strong>Build-Heap</strong></td><td colspan="2" style="text-align:center" class="good">O(n) bottom-up</td><td colspan="2" style="text-align:center" class="bad">O(n log n) if inserting one-by-one</td><td>O(n)</td></tr>
+            <tr><td><strong>Heap Sort</strong></td><td colspan="4" style="text-align:center" class="ok">Θ(n log n) always, O(1) auxiliary space, not stable</td><td>O(1) aux</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:var(--hand); font-size:11px; color:var(--ink3);">* O(1) insert in unsorted array = insert at end (if space available). Search is O(n).</p>
+    </div>
+
+    <div class="sec" data-m="gate-traps">
+      <h2 class="sh">6.2 &nbsp; All GATE Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>The Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>L = n₂ + 1 formula</td>
+              <td>Applies to ANY binary tree (not just full or perfect). "A binary tree has 30 nodes with 2 children — how many leaves?" → L = 30 + 1 = 31. Total nodes = 31 + n₁ + 30. If n₁ = 0 (full BT), total = 61.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Full BT definition</td>
+              <td>Full = every node has 0 or 2 children. NOT "all levels fully filled." That's a perfect binary tree. Don't mix up based on textbook variation.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Height convention</td>
+              <td>A single-node tree has height 0 (edge-based) or 1 (node-based). GATE typically uses edges. Always check. An answer of ⌊log₂ n⌋ vs ⌊log₂ n⌋ + 1 often depends on this.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Inorder + Preorder uniqueness</td>
+              <td>Inorder + Preorder → unique tree. Inorder + Postorder → unique tree. Preorder + Postorder → NOT unique in general. Only Inorder allows splitting elements into left and right subtrees.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>BST worst case = sorted input</td>
+              <td>Inserting 1, 2, 3, ..., n in order into an empty BST gives a right-skewed tree of height n−1. Every operation becomes O(n). This is the BST's Achilles heel.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>AVL rotation case identification</td>
+              <td>Check BF at unbalanced node AND at its child in the heavy direction. Same sign → single rotation. Opposite sign → double rotation. Don't guess from the shape alone.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Build-Heap vs Insert n times</td>
+              <td>Build-Heap = O(n). Inserting n elements one-by-one = O(n log n). The factor of log n matters significantly for large n. GATE asks "what is the time to build a heap of n elements from scratch?" — answer is O(n) if Build-Heap algorithm is used.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Heap Sort is always Θ(n log n)</td>
+              <td>Unlike Quicksort (O(n²) worst) or Merge Sort (O(n log n) always but O(n) space), Heap Sort is Θ(n log n) always AND O(1) space. But it is NOT stable. Merge Sort is stable; Heap Sort is not.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Heap ≠ sorted array</td>
+              <td>A heap only guarantees root is max (or min). It does NOT sort the array. The parent-child relationship is maintained, but siblings have no defined order. Finding the 2nd largest in a max-heap requires O(log n), not O(1).</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>NULL pointers = n+1</td>
+              <td>A binary tree with n nodes has exactly n+1 NULL (empty) child pointers. Proof: total child pointers = 2n (each of n nodes has 2 slots). Filled pointers = n−1 (edges = non-root nodes). NULL pointers = 2n − (n−1) = n+1.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>AVL tree min nodes — Fibonacci</td>
+              <td>N(h) = N(h-1) + N(h-2) + 1 with N(0)=1, N(1)=2. This is the Fibonacci recurrence. GATE asks: "minimum nodes in AVL tree of height 4?" → N(4) = N(3)+N(2)+1 = 7+4+1 = 12.</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>Catalan number for BSTs</td>
+              <td>Number of distinct BSTs with n keys = Catalan(n). For n=3: 5 BSTs. For n=4: 14. These appear as MCQ answer choices — know the sequence: 1, 1, 2, 5, 14, 42...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pyq-patterns">
+      <h2 class="sh">6.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>L = n₂ + 1:</strong> Given n₂ or n₁, find L or total nodes. Direct application, 1 mark.</li>
+        <li><strong>Height bounds:</strong> Given n, find min/max height. Or given h, find min/max nodes. Apply the bounds table.</li>
+        <li><strong>Traversal reconstruction:</strong> Given two traversals, reconstruct the tree or identify the root of a subtree. 2 marks.</li>
+        <li><strong>BST inorder = sorted:</strong> "What is the 5th element visited in inorder traversal?" = 5th smallest element. 1 mark.</li>
+        <li><strong>AVL rotation trace:</strong> Insert a sequence of keys, identify when imbalance occurs, apply correct rotation. 2 marks, most missed question type.</li>
+        <li><strong>Build-Heap complexity:</strong> "What is the time complexity of constructing a binary heap from n elements?" Answer: O(n) using build-heap. 1 mark but very frequently wrong.</li>
+        <li><strong>Heap sort swaps:</strong> Given an array, trace Heap Sort and count comparisons or swaps. NAT type.</li>
+        <li><strong>Catalan numbers:</strong> "How many BSTs can be formed with keys {1, 2, 3, 4}?" = 14. 1 mark.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Data Structures · Trees, BST, AVL &amp; Heaps · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>
