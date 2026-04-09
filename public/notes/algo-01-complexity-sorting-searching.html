@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithms — Complexity, Sorting & Searching · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8; --paper4:#e4ddd0;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:#bfb49a;
+  background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;
+}
+.book{max-width:840px;margin:0 auto;}
+
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+
+/* HEADINGS */
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ta{color:var(--teal);border-color:var(--teal);background:rgba(13,122,106,0.09);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+
+/* BODY */
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* BOXES */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+
+/* EXAMPLE */
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+
+/* CODE */
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .fn{color:var(--purple);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+
+/* HIGHLIGHTS */
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.hi-o{background:var(--hl-o);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.c-p{color:var(--purple);font-weight:600;}
+
+/* LISTS */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+
+/* TABLE */
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}
+.ok{color:var(--orange);font-weight:600;}
+.bad{color:var(--red);font-weight:600;}
+
+/* CALLOUT GRID */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+
+/* VISUAL */
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+/* COMPLEXITY TABLE — colour-coded cells */
+.cx-tbl{overflow-x:auto;margin:16px 0;}
+.cx-tbl table{font-family:var(--prose);font-size:14.5px;}
+.cx-tbl th{font-family:var(--hand);font-size:12px;padding:9px 12px;}
+.cx-tbl td{padding:7px 12px;text-align:center;border-bottom:1px dashed #c0a880;}
+.cx-tbl td:first-child{text-align:left;font-weight:600;font-family:var(--body);font-size:14.5px;}
+.O1 {color:var(--green);font-weight:700;}
+.Ologn{color:#1a7a3a;font-weight:600;}
+.On {color:var(--orange);font-weight:600;}
+.Onlogn{color:var(--orange);font-weight:600;}
+.On2 {color:var(--red);font-weight:700;}
+.stab{color:var(--green);font-weight:600;}
+.unstab{color:var(--red);font-weight:600;}
+.inpl{color:var(--blue);font-weight:600;}
+
+/* STEPS */
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+
+/* ASYMPTOTIC HIERARCHY */
+.asym{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:14px 0;}
+.asym-box{background:var(--paper2);border:1.5px solid #b0a080;border-radius:3px;padding:8px 14px;font-family:'Courier New',monospace;font-size:13px;color:var(--ink);white-space:nowrap;}
+.asym-lt{font-family:var(--body);font-size:18px;color:var(--ink3);padding:0 6px;}
+
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Algorithms</div>
+    <h1>Complexity, Sorting<br><em>&amp; Searching</em></h1>
+    <p class="cover-desc">
+      Asymptotic analysis from precise definitions, all sorting algorithms with complete derivations of their complexities, lower bounds for comparison-based sorting, linear-time sorting, and searching — every formula, proof, and GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Asymptotic Notations</span>
+      <span class="chip">Ch 2 · Recurrences &amp; Master Theorem</span>
+      <span class="chip">Ch 3 · Comparison-Based Sorting</span>
+      <span class="chip">Ch 4 · Non-Comparison Sorting</span>
+      <span class="chip">Ch 5 · Lower Bound for Sorting</span>
+      <span class="chip">Ch 6 · Searching Algorithms</span>
+      <span class="chip">Ch 7 · Order Statistics</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Asymptotic Notations — Precise Definitions</a>
+    <a href="#ch2"><span class="tn">02</span>Recurrences &amp; Master Theorem</a>
+    <a href="#ch3"><span class="tn">03</span>Comparison-Based Sorting</a>
+    <a href="#ch4"><span class="tn">04</span>Non-Comparison Sorting</a>
+    <a href="#ch5"><span class="tn">05</span>Lower Bound for Comparison Sorting</a>
+    <a href="#ch6"><span class="tn">06</span>Searching Algorithms</a>
+    <a href="#ch7"><span class="tn">07</span>Order Statistics</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 1 — ASYMPTOTIC NOTATIONS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Asymptotic Notations — <em>Precise Definitions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="notation-def">
+      <h2 class="sh">1.1 &nbsp; The Five Asymptotic Notations <span class="tag tc">Core</span></h2>
+      <p>
+        Asymptotic analysis describes how an algorithm's resource usage (time or space) grows as the input size n → ∞. It abstracts away constants and lower-order terms to focus on the dominant growth rate. The five notations each capture a different relationship between two functions.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Big-O — Upper Bound</span>
+        <p>f(n) = O(g(n)) means: ∃ positive constants c and n₀ such that for all n ≥ n₀, <strong>f(n) ≤ c·g(n)</strong>.<br>
+        "f grows no faster than g." g is an upper bound on f (up to a constant factor).</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Big-Ω — Lower Bound</span>
+        <p>f(n) = Ω(g(n)) means: ∃ c > 0 and n₀ such that for all n ≥ n₀, <strong>f(n) ≥ c·g(n)</strong>.<br>
+        "f grows at least as fast as g." g is a lower bound on f.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Big-Θ — Tight Bound</span>
+        <p>f(n) = Θ(g(n)) means: f(n) = O(g(n)) AND f(n) = Ω(g(n)).<br>
+        Equivalently: ∃ c₁, c₂ > 0 and n₀ such that for all n ≥ n₀, <strong>c₁·g(n) ≤ f(n) ≤ c₂·g(n)</strong>.<br>
+        "f grows at exactly the same rate as g." Θ is the strongest and most precise statement.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Little-o &amp; Little-ω — Strict Bounds</span>
+        <p>f(n) = o(g(n)): f grows strictly slower than g. lim_{n→∞} f(n)/g(n) = 0.<br>
+        f(n) = ω(g(n)): f grows strictly faster than g. lim_{n→∞} f(n)/g(n) = ∞.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Notation</th><th>Intuitive meaning</th><th>Set definition</th><th>Analogous to</th></tr></thead>
+          <tbody>
+            <tr><td>O(g)</td><td>At most as fast as g</td><td>f ≤ c·g for large n</td><td>≤</td></tr>
+            <tr><td>Ω(g)</td><td>At least as fast as g</td><td>f ≥ c·g for large n</td><td>≥</td></tr>
+            <tr><td>Θ(g)</td><td>Exactly as fast as g</td><td>c₁·g ≤ f ≤ c₂·g</td><td>=</td></tr>
+            <tr><td>o(g)</td><td>Strictly slower than g</td><td>f/g → 0</td><td>&lt;</td></tr>
+            <tr><td>ω(g)</td><td>Strictly faster than g</td><td>f/g → ∞</td><td>&gt;</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">O ≠ Θ — The Most Common Confusion</span>
+        <p>O is an upper bound — it says "at most." Saying an algorithm is O(n²) doesn't mean it takes n² steps — it could be O(n) and still technically be O(n²). When GATE says "what is the time complexity?" it is asking for the tight bound Θ, not just an upper bound O. A correct answer is precise: Merge Sort is Θ(n log n), not just O(n²) (though both are technically true).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="notation-rules">
+      <h2 class="sh">1.2 &nbsp; Asymptotic Hierarchy &amp; Rules <span class="tag tg">GATE Tested</span></h2>
+
+      <p><strong>The growth rate hierarchy</strong> (slowest to fastest):</p>
+      <div class="asym">
+        <div class="asym-box">1</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">log log n</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">log n</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">√n</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">n</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">n log n</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">n²</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">n³</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">2ⁿ</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">n!</div><div class="asym-lt">&lt;</div>
+        <div class="asym-box">nⁿ</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule</th><th>Statement</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Transitivity</strong></td><td>f=O(g) and g=O(h) → f=O(h). Same for Ω and Θ.</td></tr>
+            <tr><td><strong>Sum rule</strong></td><td>O(f) + O(g) = O(max(f,g)). The larger term dominates.</td></tr>
+            <tr><td><strong>Product rule</strong></td><td>O(f) · O(g) = O(f·g).</td></tr>
+            <tr><td><strong>Constant factor</strong></td><td>O(c·f) = O(f) for any positive constant c.</td></tr>
+            <tr><td><strong>Polynomial</strong></td><td>Any polynomial p(n) of degree k is Θ(nᵏ).</td></tr>
+            <tr><td><strong>Log base</strong></td><td>log_a(n) = Θ(log_b(n)) for any constants a,b>1. Base doesn't matter asymptotically.</td></tr>
+            <tr><td><strong>Exponential dominates polynomial</strong></td><td>nᵏ = o(aⁿ) for any constant a>1, k≥0.</td></tr>
+            <tr><td><strong>Log dominated by polynomial</strong></td><td>logᵏ(n) = o(nᵉ) for any constants k≥0, ε>0.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classify: T(n) = 3n² + 7n log n + 100</strong></p>
+        <p>Dominant term is n². Lower-order terms 7n log n and 100 are asymptotically insignificant. T(n) = Θ(n²).</p>
+        <p><strong>Is 2^(n+1) = O(2ⁿ)?</strong></p>
+        <p>2^(n+1) = 2·2ⁿ. With constant c=2: 2·2ⁿ ≤ 2·2ⁿ for all n≥1. Yes, 2^(n+1) = O(2ⁿ). The "+1" in the exponent only multiplies by 2 — a constant factor.</p>
+        <p><strong>Is 2^(2n) = O(2ⁿ)?</strong></p>
+        <p>2^(2n) = (2ⁿ)². For no constant c does (2ⁿ)² ≤ c·2ⁿ for all large n. No — 2^(2n) ≠ O(2ⁿ).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="space-complexity">
+      <h2 class="sh">1.3 &nbsp; Space Complexity &amp; Auxiliary Space <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Total Space</div>
+          <p>All memory used including input storage. Always at least O(n) for n-element input.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Auxiliary Space</div>
+          <p>Extra memory beyond the input. In-place algorithms have O(1) or O(log n) auxiliary space. This is what GATE asks for.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Auxiliary Space</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Bubble / Selection / Insertion Sort</td><td class="good">O(1)</td><td>Only a few variables regardless of n</td></tr>
+            <tr><td>Merge Sort</td><td class="ok">O(n)</td><td>Temporary array for merging</td></tr>
+            <tr><td>Quicksort (avg)</td><td class="Ologn">O(log n)</td><td>Recursion stack depth (balanced partition)</td></tr>
+            <tr><td>Quicksort (worst)</td><td class="bad">O(n)</td><td>Recursion stack depth (skewed partition)</td></tr>
+            <tr><td>Heapsort</td><td class="good">O(1)</td><td>In-place using heap property on original array</td></tr>
+            <tr><td>Binary Search (recursive)</td><td class="Ologn">O(log n)</td><td>Recursion call stack</td></tr>
+            <tr><td>Binary Search (iterative)</td><td class="good">O(1)</td><td>Only a few pointer variables</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 2 — RECURRENCES & MASTER THEOREM
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Recurrences <em>&amp; Master Theorem</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="recurrence-methods">
+      <h2 class="sh">2.1 &nbsp; Solving Recurrences — Three Methods <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Method 1 — Substitution (Guess and Verify)</h3>
+      <p>Guess the form of the solution, then use mathematical induction to prove the guess is correct. Used when you have a good intuition about the answer.</p>
+      <div class="eg">
+        <p><strong>Solve T(n) = 2T(n/2) + n by substitution:</strong></p>
+        <div class="cb">Guess: T(n) = O(n log n). Assume T(k) ≤ ck log k for all k < n.
+
+T(n) = 2T(n/2) + n
+     ≤ 2·c(n/2)log(n/2) + n     (by inductive hypothesis)
+     = cn·log(n/2) + n
+     = cn(log n − log 2) + n
+     = cn log n − cn + n
+     = cn log n + n(1 − c)
+     ≤ cn log n                   (for c ≥ 1)
+
+Induction holds. T(n) = O(n log n). ✓</div>
+      </div>
+
+      <h3 class="ssh">Method 2 — Recursion Tree</h3>
+      <p>Draw the recursion tree. At each level, compute the work done. Sum across all levels to get total work.</p>
+      <div class="eg">
+        <p><strong>T(n) = 2T(n/2) + n:</strong></p>
+        <div class="cb">Level 0 (root):     n work,         1 node
+Level 1:          n/2+n/2 = n work, 2 nodes
+Level 2:          4×n/4 = n work,   4 nodes
+...
+Level k:          n work,           2ᵏ nodes
+
+Depth: log₂n levels (until subproblems reach size 1)
+Total work: n × log n = Θ(n log n)</div>
+      </div>
+
+      <h3 class="ssh">Method 3 — Master Theorem</h3>
+      <div class="def-box">
+        <span class="lbl">Master Theorem — T(n) = aT(n/b) + f(n), a≥1, b>1</span>
+        <p>
+          Let <strong>c* = log_b(a)</strong> (the "critical exponent").<br><br>
+          <strong>Case 1:</strong> f(n) = O(nᶜ) for some c &lt; c* → <strong>T(n) = Θ(n^c*)</strong><br>
+          (subproblems dominate — f(n) is polynomially smaller than n^c*)<br><br>
+          <strong>Case 2:</strong> f(n) = Θ(n^c* · logᵏn) for some k ≥ 0 → <strong>T(n) = Θ(n^c* · logᵏ⁺¹n)</strong><br>
+          (equal contribution at every level)<br><br>
+          <strong>Case 3:</strong> f(n) = Ω(nᶜ) for some c > c*, AND regularity condition af(n/b) ≤ δf(n) for some δ&lt;1 → <strong>T(n) = Θ(f(n))</strong><br>
+          (root dominates — f(n) is polynomially larger than n^c*)
+        </p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Recurrence</th><th>a</th><th>b</th><th>c* = log_b a</th><th>f(n)</th><th>Case</th><th>T(n)</th></tr></thead>
+          <tbody>
+            <tr><td>Merge Sort: 2T(n/2)+n</td><td>2</td><td>2</td><td>1</td><td>n = n¹log⁰n</td><td>2 (k=0)</td><td class="good">Θ(n log n)</td></tr>
+            <tr><td>Binary Search: T(n/2)+1</td><td>1</td><td>2</td><td>0</td><td>1 = n⁰log⁰n</td><td>2 (k=0)</td><td class="good">Θ(log n)</td></tr>
+            <tr><td>Strassen: 7T(n/2)+n²</td><td>7</td><td>2</td><td>log₂7≈2.81</td><td>n²&lt;n^2.81</td><td>1</td><td class="good">Θ(n^log₂7)</td></tr>
+            <tr><td>Naive multiply: 8T(n/2)+n²</td><td>8</td><td>2</td><td>3</td><td>n²&lt;n³</td><td>1</td><td class="ok">Θ(n³)</td></tr>
+            <tr><td>T(n)=4T(n/2)+n³</td><td>4</td><td>2</td><td>2</td><td>n³&gt;n²</td><td>3</td><td class="good">Θ(n³)</td></tr>
+            <tr><td>T(n)=2T(n/2)+n log n</td><td>2</td><td>2</td><td>1</td><td>n log n = n¹log¹n</td><td>2 (k=1)</td><td class="ok">Θ(n log²n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Master Theorem Gaps</span>
+        <p>The Master Theorem does NOT apply when: (1) T(n) = T(n−1) + f(n) — subtraction, not division. (2) f(n) is not polynomially related to n^c*. Example: T(n) = 2T(n/2) + n/log n — falls in a "gap" between Cases 1 and 2 where f(n)=o(n) but not O(n^(1-ε)). Use recursion tree or substitution instead.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="common-recurrences">
+      <h2 class="sh">2.2 &nbsp; Common Algorithm Recurrences Reference <span class="tag tg">GATE Tested</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Recurrence</th><th>Solution</th><th>Example Algorithm</th></tr></thead>
+          <tbody>
+            <tr><td>T(n) = T(n−1) + 1</td><td>Θ(n)</td><td>Linear search</td></tr>
+            <tr><td>T(n) = T(n−1) + n</td><td>Θ(n²)</td><td>Insertion sort</td></tr>
+            <tr><td>T(n) = T(n/2) + 1</td><td>Θ(log n)</td><td>Binary search</td></tr>
+            <tr><td>T(n) = T(n/2) + n</td><td>Θ(n)</td><td>Quickselect (avg)</td></tr>
+            <tr><td>T(n) = 2T(n/2) + 1</td><td>Θ(n)</td><td>Finding max in array</td></tr>
+            <tr><td>T(n) = 2T(n/2) + n</td><td>Θ(n log n)</td><td>Merge Sort</td></tr>
+            <tr><td>T(n) = 2T(n−1) + 1</td><td>Θ(2ⁿ)</td><td>Tower of Hanoi</td></tr>
+            <tr><td>T(n) = T(n−1) + T(n−2)</td><td>Θ(φⁿ) ≈ Θ(1.618ⁿ)</td><td>Naive Fibonacci</td></tr>
+            <tr><td>T(n) = 9T(n/3) + n</td><td>Θ(n²)</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">T(n) = T(n−1) + T(n−2) — Exponential Without Dynamic Programming</span>
+        <p>The naive recursive Fibonacci is Θ(φⁿ) where φ≈1.618 — exponential. With memoization (top-down DP) or bottom-up DP, it becomes Θ(n). This is the canonical example of how overlapping subproblems make recursion exponential and DP makes it polynomial. GATE tests both the naive recurrence and the DP improvement.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 3 — COMPARISON-BASED SORTING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Comparison-Based <em>Sorting Algorithms</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="sorting-overview">
+      <h2 class="sh">3.1 &nbsp; Complete Sorting Algorithm Reference <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cx-tbl">
+        <table>
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Best</th>
+              <th>Average</th>
+              <th>Worst</th>
+              <th>Space (Aux)</th>
+              <th>Stable?</th>
+              <th>In-Place?</th>
+              <th>Method</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bubble Sort</td>
+              <td class="On">Ω(n)</td>
+              <td class="On2">Θ(n²)</td>
+              <td class="On2">O(n²)</td>
+              <td class="O1">O(1)</td>
+              <td class="stab">Yes</td>
+              <td class="inpl">Yes</td>
+              <td>Exchange</td>
+            </tr>
+            <tr>
+              <td>Selection Sort</td>
+              <td class="On2">Θ(n²)</td>
+              <td class="On2">Θ(n²)</td>
+              <td class="On2">Θ(n²)</td>
+              <td class="O1">O(1)</td>
+              <td class="unstab">No</td>
+              <td class="inpl">Yes</td>
+              <td>Selection</td>
+            </tr>
+            <tr>
+              <td>Insertion Sort</td>
+              <td class="On">Ω(n)</td>
+              <td class="On2">Θ(n²)</td>
+              <td class="On2">O(n²)</td>
+              <td class="O1">O(1)</td>
+              <td class="stab">Yes</td>
+              <td class="inpl">Yes</td>
+              <td>Insertion</td>
+            </tr>
+            <tr>
+              <td>Merge Sort</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="On">O(n)</td>
+              <td class="stab">Yes</td>
+              <td class="unstab">No</td>
+              <td>Divide &amp; Conquer</td>
+            </tr>
+            <tr>
+              <td>Quicksort</td>
+              <td class="Onlogn">Ω(n log n)</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="On2">O(n²)</td>
+              <td class="Ologn">O(log n)*</td>
+              <td class="unstab">No</td>
+              <td class="inpl">Yes</td>
+              <td>Divide &amp; Conquer</td>
+            </tr>
+            <tr>
+              <td>Heapsort</td>
+              <td class="Onlogn">Ω(n log n)</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="Onlogn">Θ(n log n)</td>
+              <td class="O1">O(1)</td>
+              <td class="unstab">No</td>
+              <td class="inpl">Yes</td>
+              <td>Selection (Heap)</td>
+            </tr>
+            <tr>
+              <td>Shell Sort</td>
+              <td class="On">Ω(n log n)</td>
+              <td class="On2">depends on gap</td>
+              <td class="On2">O(n²)</td>
+              <td class="O1">O(1)</td>
+              <td class="unstab">No</td>
+              <td class="inpl">Yes</td>
+              <td>Insertion (gap)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:var(--hand);font-size:11px;color:var(--ink3);margin-top:-8px;">* Quicksort auxiliary space: O(log n) average (recursion stack), O(n) worst case (skewed partition)</p>
+    </div>
+
+    <div class="sec" data-m="bubble-insertion">
+      <h2 class="sh">3.2 &nbsp; Bubble, Selection &amp; Insertion Sort — Analysis <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Bubble Sort</h3>
+      <p>
+        Repeatedly passes through the array, swapping adjacent elements that are out of order. After pass k, the k largest elements are in their final positions ("bubbled" to the end).
+      </p>
+      <div class="cb"><span class="kw">for</span> i = 0 to n−2:
+    <span class="kw">for</span> j = 0 to n−2−i:
+        <span class="kw">if</span> A[j] > A[j+1]: swap(A[j], A[j+1])
+
+Total comparisons (worst): (n−1)+(n−2)+...+1 = n(n−1)/2 = Θ(n²)
+Best case (already sorted) with early termination flag: Ω(n)</div>
+
+      <h3 class="ssh">Selection Sort</h3>
+      <p>
+        In pass i, find the minimum element in A[i..n−1] and swap it into position i. Always makes exactly n(n−1)/2 comparisons regardless of input — <mark>no best case advantage</mark>.
+      </p>
+      <div class="cb">Total comparisons: (n−1)+(n−2)+...+1 = n(n−1)/2 regardless of input order
+Total swaps: exactly n−1 (one swap per pass, except possibly 0 swaps for already-placed elements)
+→ Selection Sort makes the FEWEST swaps of all O(n²) sorts</div>
+
+      <div class="tip-box">
+        <span class="lbl">Selection Sort — Minimum Swaps Property</span>
+        <p>Selection Sort makes at most n−1 swaps. This makes it optimal for situations where swaps are expensive (e.g., writing to flash memory). GATE tests this: "Which sort makes the fewest writes?" → Selection Sort.</p>
+      </div>
+
+      <h3 class="ssh">Insertion Sort</h3>
+      <p>
+        Builds a sorted subarray left to right. For each new element, finds its correct position in the sorted part by shifting elements right.
+      </p>
+      <div class="cb">Comparisons:
+  Best case (sorted):    n−1 comparisons, 0 shifts → Θ(n)
+  Worst case (reversed): n(n−1)/2 comparisons → Θ(n²)
+  Average case:          ~n²/4 → Θ(n²)
+
+Key property: number of comparisons = number of inversions + (n−1)</div>
+
+      <div class="def-box">
+        <span class="lbl">Inversion</span>
+        <p>A pair (i,j) is an <strong>inversion</strong> if i &lt; j but A[i] &gt; A[j]. A sorted array has 0 inversions. A reverse-sorted array has n(n−1)/2 inversions (maximum). The number of swaps in Bubble Sort and comparisons in Insertion Sort = number of inversions.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="merge-quick">
+      <h2 class="sh">3.3 &nbsp; Merge Sort &amp; Quicksort — Deep Analysis <span class="tag tg">GATE Critical</span></h2>
+
+      <h3 class="ssh">Merge Sort</h3>
+      <p>
+        Divide the array in half, recursively sort each half, merge the sorted halves. The merge step takes Θ(n). Recurrence: T(n) = 2T(n/2) + Θ(n) → T(n) = Θ(n log n).
+      </p>
+      <div class="cb"><span class="kw">MergeSort</span>(A, l, r):
+    if l ≥ r: return
+    mid = (l+r)/2
+    MergeSort(A, l, mid)
+    MergeSort(A, mid+1, r)
+    Merge(A, l, mid, r)        <span class="cm">// O(n) merge step</span>
+
+Properties:
+  Time:    Θ(n log n) always — best, average, worst
+  Space:   O(n) auxiliary — temporary array for merge
+  Stable:  YES — equal elements maintain original relative order
+  Online:  NO — needs entire array upfront</div>
+
+      <div class="warn-box">
+        <span class="lbl">Merge Sort is the ONLY stable O(n log n) sort that's always guaranteed</span>
+        <p>Heapsort is O(n log n) but NOT stable. Quicksort is O(n log n) average but NOT stable and has O(n²) worst case. Merge Sort is the only comparison-based sort that is both guaranteed Θ(n log n) in all cases AND stable. This distinction is directly tested in GATE.</p>
+      </div>
+
+      <h3 class="ssh">Quicksort</h3>
+      <p>
+        Choose a pivot, partition the array so elements ≤ pivot are on the left and elements ≥ pivot are on the right, recursively sort both partitions.
+      </p>
+      <div class="cb">Best/Average case: pivot splits array roughly in half each time
+  T(n) = 2T(n/2) + Θ(n) → Θ(n log n)
+
+Worst case: pivot is always min or max (sorted/reverse-sorted input)
+  T(n) = T(n−1) + Θ(n) → Θ(n²)
+
+Worst-case input: already sorted array with first/last element as pivot
+Average-case analysis: random pivot → expected Θ(n log n)
+
+Partition strategies:
+  Lomuto: last element as pivot, simpler to implement
+  Hoare:  two pointers from both ends, fewer swaps on average</div>
+
+      <div class="tip-box">
+        <span class="lbl">Quicksort in Practice — Why It's Often Fastest</span>
+        <p>Despite its O(n²) worst case, Quicksort is often faster than Merge Sort in practice because: (1) O(1) auxiliary space vs O(n) for Merge Sort. (2) Better cache performance — in-place operations on the same array. (3) Small constants in the average-case Θ(n log n). Production libraries use introsort — quicksort that switches to heapsort when recursion depth exceeds 2 log n to avoid worst case.</p>
+      </div>
+
+      <h3 class="ssh">Number of Comparisons — Exact Counts</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Worst case comparisons</th><th>Best case comparisons</th></tr></thead>
+          <tbody>
+            <tr><td>Bubble Sort</td><td>n(n−1)/2</td><td>n−1 (with early exit)</td></tr>
+            <tr><td>Selection Sort</td><td>n(n−1)/2</td><td>n(n−1)/2 (always)</td></tr>
+            <tr><td>Insertion Sort</td><td>n(n−1)/2</td><td>n−1</td></tr>
+            <tr><td>Merge Sort</td><td>n log n − n + 1</td><td>n/2 · log n</td></tr>
+            <tr><td>Quicksort (Lomuto)</td><td>n(n−1)/2</td><td>n log n</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 4 — NON-COMPARISON SORTING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Non-Comparison Sorting — <em>Breaking the Ω(n log n) Barrier</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="linear-sorts">
+      <h2 class="sh">4.1 &nbsp; Counting Sort <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Counting Sort — Idea</span>
+        <p>For integers in range [0, k], count occurrences of each value, compute cumulative counts (positions), and place elements directly into sorted output. No comparisons — uses the integer values as indices.</p>
+      </div>
+
+      <div class="cb"><span class="kw">CountingSort</span>(A, n, k):
+    C[0..k] = 0                           <span class="cm">// count array</span>
+    for i = 1 to n: C[A[i]]++            <span class="cm">// count occurrences</span>
+    for i = 1 to k: C[i] += C[i−1]       <span class="cm">// cumulative counts = final positions</span>
+    for i = n downto 1:                   <span class="cm">// fill output (reverse for stability)</span>
+        B[C[A[i]]] = A[i]
+        C[A[i]]--
+    return B
+
+Time: Θ(n + k)
+Space: Θ(n + k)
+Stable: YES (reverse loop preserves order)</div>
+
+      <div class="warn-box">
+        <span class="lbl">Counting Sort Requires Bounded Integer Range</span>
+        <p>Counting sort only works when k = O(n) — otherwise the Θ(n+k) becomes dominated by Θ(k) which could be much larger than n. For k = n, time is Θ(n). For k = n², time is Θ(n²) — worse than comparison-based sorts. Never use counting sort for large key ranges.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="radix-bucket">
+      <h2 class="sh">4.2 &nbsp; Radix Sort &amp; Bucket Sort <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Radix Sort</h3>
+      <div class="def-box">
+        <span class="lbl">Radix Sort</span>
+        <p>Sort multi-digit integers digit by digit, from <strong>least significant digit (LSD)</strong> to most significant digit. Use a stable sort (Counting Sort) at each digit position. For n numbers with d digits each in base b:</p>
+      </div>
+      <div class="cb">Time: Θ(d · (n + b))
+For d = Θ(log_b k) where k is max value:
+  Time = Θ(log_b(k) · (n + b))
+
+Optimal when b = n: Time = Θ((log n / log n) · 2n) = Θ(n)
+  (When n-bit numbers sorted in base n: d=1 digit, n+n values)</div>
+
+      <div class="eg">
+        <p><strong>Sort {329, 457, 657, 839, 436, 720, 355} by Radix Sort (base 10, d=3):</strong></p>
+        <div class="cb">Pass 1 (units digit): 720, 355, 436, 457, 657, 329, 839
+Pass 2 (tens digit):  720, 329, 436, 839, 355, 457, 657
+Pass 3 (hundreds):    329, 355, 436, 457, 657, 720, 839  ← sorted</div>
+        <p>3 passes of Counting Sort on 7 elements with digits 0-9. Time: Θ(3 × (7+10)) = Θ(51) = Θ(1) for fixed d — scales as Θ(n) for the general case.</p>
+      </div>
+
+      <h3 class="ssh">Bucket Sort</h3>
+      <div class="def-box">
+        <span class="lbl">Bucket Sort</span>
+        <p>For uniformly distributed input in [0,1): create n buckets covering equal-sized intervals, distribute elements into buckets, sort each bucket (Insertion Sort), concatenate. Expected time: Θ(n) when input is uniformly distributed.</p>
+      </div>
+      <div class="cb">Time: Θ(n) expected (uniform distribution), Θ(n²) worst case
+Space: Θ(n) for buckets
+Stable: depends on the sort used within each bucket</div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Time</th><th>Space</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>Counting Sort</td><td class="good">Θ(n+k)</td><td class="ok">Θ(n+k)</td><td>Integers in small range [0,k], k=O(n)</td></tr>
+            <tr><td>Radix Sort</td><td class="good">Θ(d(n+b))</td><td class="ok">Θ(n+b)</td><td>Fixed-length integers or strings</td></tr>
+            <tr><td>Bucket Sort</td><td class="good">Θ(n) expected</td><td class="ok">Θ(n)</td><td>Uniformly distributed real numbers in [0,1)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 5 — LOWER BOUND FOR SORTING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Lower Bound — <em>Why Sorting Can't Be Faster Than Ω(n log n)</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="lower-bound">
+      <h2 class="sh">5.1 &nbsp; Decision Tree Lower Bound <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        This is one of the most elegant results in algorithms. We prove that any comparison-based sorting algorithm must make at least Ω(n log n) comparisons in the worst case — regardless of how clever the algorithm is. It's a lower bound on the entire class of algorithms, not just specific ones.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Decision Tree Model</span>
+        <p>Any comparison-based sorting algorithm can be modeled as a <strong>decision tree</strong>: a binary tree where each internal node is a comparison (Aᵢ ≤ Aⱼ?), with left branch for "yes" and right branch for "no," and each leaf represents a complete permutation of the input (the sorted output).</p>
+      </div>
+
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>An array of n elements has n! possible orderings (permutations). A correct sorting algorithm must distinguish between all of them — so the decision tree must have at least n! leaves.</div></li>
+        <li><div class="pl-num">2</div><div>A binary tree of height h has at most 2ʰ leaves. So: 2ʰ ≥ n!, which means h ≥ log₂(n!).</div></li>
+        <li><div class="pl-num">3</div><div>By Stirling's approximation: log₂(n!) = Θ(n log n). Specifically: log₂(n!) ≥ n/2 · log₂(n/2) = Ω(n log n).</div></li>
+        <li><div class="pl-num">4</div><div>The height h of the decision tree equals the worst-case number of comparisons. Therefore, any comparison-based sort requires <strong>Ω(n log n)</strong> comparisons in the worst case.</div></li>
+      </ol>
+
+      <div class="tip-box">
+        <span class="lbl">The Consequence — Merge Sort and Heapsort Are Optimal</span>
+        <p>Since Merge Sort and Heapsort both run in Θ(n log n) worst case, and the lower bound is Ω(n log n), these algorithms are <strong>asymptotically optimal</strong> for comparison-based sorting. No comparison-based algorithm can do asymptotically better in the worst case. Non-comparison sorts (Counting, Radix, Bucket) escape this lower bound by not using comparisons.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Lower Bound Applies to WORST CASE, Not All Cases</span>
+        <p>The Ω(n log n) lower bound is for worst-case complexity. An algorithm CAN do better on specific inputs — Insertion Sort is Θ(n) on nearly-sorted input. The lower bound says: for any comparison-based algorithm A, there exists a permutation on which A makes Ω(n log n) comparisons. Timsort exploits this by using Insertion Sort on already-sorted runs and Merge Sort to combine them.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 6 — SEARCHING
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Searching Algorithms — <em>Linear, Binary &amp; Interpolation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="searching">
+      <h2 class="sh">6.1 &nbsp; Linear Search &amp; Binary Search <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Linear Search</h3>
+      <p>Scan from left to right until element found or array exhausted. Works on unsorted arrays.</p>
+      <div class="cb">Best case:    O(1)  — element at position 0
+Average case: Θ(n)  — element at position n/2 on average
+Worst case:   O(n)  — element at last position or absent</div>
+
+      <h3 class="ssh">Binary Search</h3>
+      <p>Requires a sorted array. At each step, compare with the middle element. Eliminate half the remaining search space.</p>
+      <div class="cb"><span class="kw">BinarySearch</span>(A, l, r, key):
+    <span class="kw">while</span> l ≤ r:
+        mid = l + (r−l)/2          <span class="cm">// avoid integer overflow vs (l+r)/2</span>
+        if A[mid] == key: return mid
+        else if A[mid] < key:  l = mid + 1
+        else:                  r = mid − 1
+    return −1  <span class="cm">// not found</span>
+
+Time: Θ(log n)  — recurrence T(n) = T(n/2) + 1
+Space: O(1) iterative, O(log n) recursive</div>
+
+      <div class="eg">
+        <p><strong>Binary search in sorted array [2,5,8,12,16,23,38,56,72,91], search for 23:</strong></p>
+        <div class="cb">l=0, r=9 → mid=4 → A[4]=16 < 23 → l=5
+l=5, r=9 → mid=7 → A[7]=56 > 23 → r=6
+l=5, r=6 → mid=5 → A[5]=23 == 23 → FOUND at index 5
+
+3 comparisons for n=10. ⌊log₂(10)⌋+1 = 4 max comparisons.</div>
+      </div>
+
+      <h3 class="ssh">Interpolation Search</h3>
+      <div class="def-box">
+        <span class="lbl">Interpolation Search</span>
+        <p>Like binary search but uses an interpolated probe position instead of always choosing the midpoint: <br>
+        pos = l + [(key − A[l]) / (A[r] − A[l])] × (r − l)<br>
+        For <strong>uniformly distributed</strong> data: Θ(log log n) average. Worst case: O(n) (exponentially skewed data).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Search</th><th>Array Required</th><th>Best</th><th>Average</th><th>Worst</th></tr></thead>
+          <tbody>
+            <tr><td>Linear Search</td><td>None</td><td class="O1">O(1)</td><td class="On">Θ(n)</td><td class="On">O(n)</td></tr>
+            <tr><td>Binary Search</td><td>Sorted</td><td class="O1">O(1)</td><td class="Ologn">Θ(log n)</td><td class="Ologn">O(log n)</td></tr>
+            <tr><td>Interpolation Search</td><td>Sorted + uniform</td><td class="O1">O(1)</td><td class="good">Θ(log log n)</td><td class="On">O(n)</td></tr>
+            <tr><td>Jump Search</td><td>Sorted</td><td class="O1">O(1)</td><td class="good">Θ(√n)</td><td class="good">O(√n)</td></tr>
+            <tr><td>Exponential Search</td><td>Sorted</td><td class="O1">O(1)</td><td class="Ologn">Θ(log n)</td><td class="Ologn">O(log n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — ORDER STATISTICS
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Order Statistics — <em>Finding the k-th Smallest Element</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="order-stats">
+      <h2 class="sh">7.1 &nbsp; Selection Problem &amp; Quickselect <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Order Statistic</span>
+        <p>The <strong>k-th order statistic</strong> is the k-th smallest element. Finding it is called the selection problem. Naïve approach: sort the array in Θ(n log n) and return element at index k−1. But we can do better.</p>
+      </div>
+
+      <h3 class="ssh">Quickselect — O(n) Average</h3>
+      <p>
+        Use Quicksort's partition step. After partitioning around a pivot, the pivot is in its correct position. If pivot is at index k−1, done. If k−1 &lt; pivot_index, recurse on left. Else recurse on right. Unlike Quicksort, only one recursive call is made.
+      </p>
+      <div class="cb"><span class="kw">Quickselect</span>(A, l, r, k):
+    if l == r: return A[l]
+    pivot_idx = Partition(A, l, r)
+    if k == pivot_idx: return A[k]
+    elif k < pivot_idx: return Quickselect(A, l, pivot_idx−1, k)
+    else: return Quickselect(A, pivot_idx+1, r, k)
+
+Time: T(n) = T(n/2) + Θ(n) → Θ(n) average (random pivot)
+      T(n) = T(n−1) + Θ(n) → Θ(n²) worst case (bad pivot)</div>
+
+      <h3 class="ssh">Median of Medians — Guaranteed O(n) Worst Case</h3>
+      <p>
+        The Blum-Floyd-Pratt-Rivest-Tarjan algorithm (BFPRT) guarantees O(n) worst case selection by choosing a "good" pivot:
+      </p>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>Divide n elements into ⌈n/5⌉ groups of 5.</div></li>
+        <li><div class="pl-num">2</div><div>Find the median of each group (insertion sort each group — O(1) per group).</div></li>
+        <li><div class="pl-num">3</div><div>Recursively find the median of the ⌈n/5⌉ medians — this is the pivot.</div></li>
+        <li><div class="pl-num">4</div><div>Partition around this pivot and recurse on the appropriate side.</div></li>
+      </ol>
+      <div class="cb">Recurrence: T(n) = T(n/5) + T(7n/10) + Θ(n) → T(n) = Θ(n)
+The pivot is guaranteed to be in the range [30%, 70%] of the array,
+ensuring no partition is larger than 70% → linear time guaranteed.</div>
+
+      <div class="tip-box">
+        <span class="lbl">GATE Pattern — Min, Max, Both Min and Max</span>
+        <p>Finding minimum: n−1 comparisons (optimal). Finding maximum: n−1 comparisons. Finding both simultaneously: can be done in <strong>⌊3n/2⌋ − 2</strong> comparisons — better than 2(n−1) by pairing elements first. GATE asks for exact comparison counts on these problems.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — GATE TRAPS & REFERENCE
+═══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>O = Θ</td><td>O is an upper bound (at most). Θ is a tight bound (exactly). "O(n²) algorithm" could actually be Θ(n). Always specify Θ when you know the tight bound — GATE awards marks for precision.</td></tr>
+            <tr><td>2</td><td>2^(n+1) vs 2^(2n)</td><td>2^(n+1) = 2·2ⁿ = O(2ⁿ) — just multiplied by constant 2. But 2^(2n) = (2ⁿ)² ≠ O(2ⁿ). Adding a constant to the exponent = O(same). Multiplying the exponent = different complexity class.</td></tr>
+            <tr><td>3</td><td>Master theorem Case 2 exponent</td><td>Case 2: T(n)=Θ(nᶜ logᵏ⁺¹n) — the log exponent INCREASES by 1. T(n)=2T(n/2)+n gives Θ(n log n), NOT Θ(n). The extra log is the price of equal work at every level.</td></tr>
+            <tr><td>4</td><td>Selection Sort is never adaptive</td><td>Selection Sort always makes exactly n(n−1)/2 comparisons regardless of input. No best-case improvement possible (without extra data structure). Bubble and Insertion Sort can be O(n) on sorted input.</td></tr>
+            <tr><td>5</td><td>Stability of Heapsort</td><td>Heapsort is NOT stable. The heap's swap operations can change the relative order of equal elements. Merge Sort is the canonical stable O(n log n) sort.</td></tr>
+            <tr><td>6</td><td>Quicksort space complexity</td><td>Quicksort is in-place for data but uses O(log n) auxiliary space for the recursion stack (average) or O(n) in the worst case. Not O(1) like Bubble/Selection/Insertion. Heapsort is truly O(1) auxiliary.</td></tr>
+            <tr><td>7</td><td>Counting sort key range</td><td>Counting sort is Θ(n+k). If k >> n (large value range), it becomes slow. It's only efficient when k = O(n). The "linear sort" claim only holds under the bounded key assumption.</td></tr>
+            <tr><td>8</td><td>Lower bound is for worst case</td><td>The Ω(n log n) lower bound for sorting applies to worst-case complexity. Algorithms CAN sort specific inputs faster — Insertion Sort sorts a nearly-sorted array in Θ(n). The lower bound says no algorithm can avoid O(n log n) on ALL inputs.</td></tr>
+            <tr><td>9</td><td>Binary search mid computation</td><td>mid = (l+r)/2 can overflow for large l and r. Correct: mid = l + (r−l)/2. This is a software engineering concern but GATE has asked about it in correctness questions.</td></tr>
+            <tr><td>10</td><td>Number of comparisons to find min AND max</td><td>Finding min alone: n−1. Finding max alone: n−1. Finding BOTH: ⌊3n/2⌋ − 2 (not 2(n−1) = 2n−2). Pair elements first: compare each pair (n/2 comparisons), find local max/min, then find global max from local maxima (n/2−1) and global min from local minima (n/2−1). Total: 3n/2 − 2.</td></tr>
+            <tr><td>11</td><td>Quickselect is NOT O(n) worst case</td><td>Quickselect with random pivot is O(n) EXPECTED (average). Worst case is still O(n²) — happens when pivot is always min or max. Median-of-medians achieves O(n) worst case but with larger constants — rarely used in practice.</td></tr>
+            <tr><td>12</td><td>Radix sort stability requirement</td><td>Radix Sort REQUIRES a stable sort at each digit pass. Using an unstable sort (like Selection Sort) for each pass breaks the algorithm. Counting Sort is the standard stable subroutine — this is why Counting Sort is covered before Radix Sort.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="master-ref">
+      <h2 class="sh">8.2 &nbsp; Complete Complexity Master Table</h2>
+
+      <div class="cx-tbl">
+        <table>
+          <thead>
+            <tr><th>Algorithm</th><th>Best</th><th>Average</th><th>Worst</th><th>Aux Space</th><th>Stable</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Bubble Sort</td><td class="On">Ω(n)</td><td class="On2">Θ(n²)</td><td class="On2">O(n²)</td><td class="O1">O(1)</td><td class="stab">✓</td></tr>
+            <tr><td>Selection Sort</td><td class="On2">Θ(n²)</td><td class="On2">Θ(n²)</td><td class="On2">Θ(n²)</td><td class="O1">O(1)</td><td class="unstab">✗</td></tr>
+            <tr><td>Insertion Sort</td><td class="On">Ω(n)</td><td class="On2">Θ(n²)</td><td class="On2">O(n²)</td><td class="O1">O(1)</td><td class="stab">✓</td></tr>
+            <tr><td>Merge Sort</td><td class="Onlogn">Θ(n log n)</td><td class="Onlogn">Θ(n log n)</td><td class="Onlogn">Θ(n log n)</td><td class="On">O(n)</td><td class="stab">✓</td></tr>
+            <tr><td>Quicksort</td><td class="Onlogn">Ω(n log n)</td><td class="Onlogn">Θ(n log n)</td><td class="On2">O(n²)</td><td class="Ologn">O(log n)*</td><td class="unstab">✗</td></tr>
+            <tr><td>Heapsort</td><td class="Onlogn">Ω(n log n)</td><td class="Onlogn">Θ(n log n)</td><td class="Onlogn">Θ(n log n)</td><td class="O1">O(1)</td><td class="unstab">✗</td></tr>
+            <tr><td>Counting Sort</td><td class="good">Θ(n+k)</td><td class="good">Θ(n+k)</td><td class="good">Θ(n+k)</td><td class="ok">O(n+k)</td><td class="stab">✓</td></tr>
+            <tr><td>Radix Sort</td><td class="good">Θ(d(n+b))</td><td class="good">Θ(d(n+b))</td><td class="good">Θ(d(n+b))</td><td class="ok">O(n+b)</td><td class="stab">✓</td></tr>
+            <tr><td>Bucket Sort</td><td class="good">Θ(n)</td><td class="good">Θ(n)</td><td class="On2">Θ(n²)</td><td class="ok">O(n)</td><td class="stab">✓*</td></tr>
+            <tr><td>Linear Search</td><td class="O1">O(1)</td><td class="On">Θ(n)</td><td class="On">O(n)</td><td class="O1">O(1)</td><td>—</td></tr>
+            <tr><td>Binary Search</td><td class="O1">O(1)</td><td class="Ologn">Θ(log n)</td><td class="Ologn">O(log n)</td><td class="O1">O(1)</td><td>—</td></tr>
+            <tr><td>Quickselect</td><td class="O1">O(1)</td><td class="On">Θ(n)</td><td class="On2">O(n²)</td><td class="Ologn">O(log n)*</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:var(--hand);font-size:11px;color:var(--ink3);margin-top:-8px;">* Average case stack depth</p>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Asymptotic classification NAT:</strong> "Arrange in increasing order: n!, 2ⁿ, n³, n log n, √n." Use the growth hierarchy. n log n &lt; n³ &lt; 2ⁿ &lt; n!.</li>
+        <li><strong>Master Theorem:</strong> "T(n) = 3T(n/4) + n log n. What is T(n)?" c*=log₄3≈0.79. f(n)=n log n = Ω(n^0.79+ε). Regularity: 3f(n/4) ≤ (3/4)f(n). Case 3: T(n)=Θ(n log n).</li>
+        <li><strong>Sorting property MCQ:</strong> "Which sorting algorithm is both stable AND in-place AND O(n log n) worst case?" No such algorithm exists — Merge Sort (stable, O(n log n) worst) uses O(n) space. Heapsort (in-place, O(n log n) worst) is unstable.</li>
+        <li><strong>Comparison count NAT:</strong> "How many comparisons does Selection Sort make on an 8-element array?" n(n−1)/2 = 8×7/2 = 28, regardless of input.</li>
+        <li><strong>Inversion count:</strong> "How many comparisons does Insertion Sort make on [5,4,3,2,1]?" Inversions = 10 = n(n−1)/2. Comparisons = inversions + (n−1) = 10+4 = 14? No — comparisons = inversions for reverse-sorted = n(n-1)/2 = 10. Check: n(n-1)/2 = 4×5/2 = 10.</li>
+        <li><strong>Lower bound question:</strong> "Is O(n) sorting possible in a comparison model?" No — proven Ω(n log n) lower bound. Possible in non-comparison model with bounded keys.</li>
+        <li><strong>Recurrence solving:</strong> T(n) = T(n-1) + log n. Neither subtraction recurrence fits Master Theorem. Use summation: T(n) = Σᵢ log i = log(n!) = Θ(n log n).</li>
+        <li><strong>Worst case trigger:</strong> "For which input does Quicksort (with first element as pivot) perform worst?" Already sorted or reverse-sorted arrays — pivot always ends up at boundary position.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Algorithms · Complexity Analysis, Sorting &amp; Searching · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

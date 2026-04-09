@@ -1,0 +1,3337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Problem Setbook — Part 4 · Q106–Q140</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,12.5px);
+  --fs-base:clamp(14px,3.2vw,16.5px);--fs-md:clamp(13.5px,3.2vw,15.5px);
+  --fs-lg:clamp(15px,3.6vw,18.5px);--fs-xl:clamp(20px,5vw,36px);
+  --fs-ch:clamp(15px,4vw,19px);--fs-code:clamp(10.5px,2.3vw,12.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:880px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.12;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:530px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,24px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(16px,3.5vw,26px) clamp(14px,3.5vw,30px) clamp(14px,3vw,22px) clamp(32px,6.5vw,58px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:30px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.9;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.qcard{background:var(--paper2);border:1.5px solid #b0a088;border-radius:5px;margin:0 0 clamp(18px,3.5vw,32px);overflow:hidden;box-shadow:3px 4px 0 #9a8a6e;}
+.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:clamp(10px,2vw,14px) clamp(12px,3vw,20px);background:var(--paper3);border-bottom:1.5px solid #c8b898;}
+.qnum{font-family:var(--hand);font-size:clamp(10px,2vw,11.5px);background:var(--ink);color:var(--paper);border-radius:3px;padding:3px 9px;letter-spacing:1px;flex-shrink:0;}
+.qnum.easy{background:var(--green);}.qnum.med{background:var(--orange);}.qnum.hard{background:var(--red);}
+.qtitle{font-family:var(--body);font-size:clamp(13.5px,3.2vw,16px);font-weight:700;color:var(--ink);flex:1;min-width:0;}
+.qsrc{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:2px 8px;border:1px solid #c0a880;border-radius:2px;background:rgba(255,255,255,0.5);flex-shrink:0;white-space:nowrap;}
+.qtags{display:flex;gap:5px;flex-wrap:wrap;}
+.qt{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid currentColor;}
+.qt-g{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.qt-b{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.qt-d{color:var(--teal);border-color:var(--teal);}
+.qt-u{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-r{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.qt-m{color:var(--ink3);border-color:var(--ink3);}
+.qt-dp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-gr{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.hints{display:flex;gap:6px;flex-wrap:wrap;padding:8px clamp(12px,3vw,20px);background:rgba(255,255,255,0.3);border-bottom:1px dashed #c8b898;}
+.hint{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:1.5px solid currentColor;}
+.hm{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.hf{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ht{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.hc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.hd{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.qbody{padding:clamp(12px,2.5vw,18px) clamp(12px,3vw,20px);}
+.qprob{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:12px;position:relative;}
+.qprob::before{content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink);position:absolute;top:-9px;left:12px;background:var(--paper);padding:0 6px;border:1px solid var(--ink);border-radius:2px;}
+.qprob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0 0 6px;line-height:1.82;}
+.qprob p:last-child{margin:0;}
+.io-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.io-box{flex:1;min-width:110px;background:var(--paper3);border:1px dashed #a09070;border-radius:3px;padding:8px 12px;}
+.io-lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;display:block;}
+.io-box code{font-family:var(--mono);font-size:var(--fs-code);color:var(--ink);background:none;border:none;padding:0;display:block;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.qdec{background:#fff8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qdec .dlbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:6px;display:block;}
+.qdec p{font-size:var(--fs-md);line-height:1.82;margin:0 0 5px;color:var(--ink2);}
+.qdec p:last-child{margin:0;}
+.qdec strong{color:var(--orange);}
+.qapp{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qapp .albl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:block;}
+.qapp p{font-size:var(--fs-md);line-height:1.85;margin:0 0 5px;color:var(--ink2);}
+.qapp p:last-child{margin:0;}
+.qapp strong{color:var(--blue);}
+.ap-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;margin-bottom:12px;}
+.ap-c{background:var(--paper);border:1.5px solid #c0a880;border-radius:4px;padding:clamp(9px,2vw,12px);}
+.ap-b{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;border:1.5px solid currentColor;display:inline-block;margin-bottom:7px;}
+.ap-brute{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ap-ok{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ap-best{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.ap-c h4{font-family:var(--body);font-size:clamp(12.5px,2.8vw,14px);font-weight:700;color:var(--ink);margin-bottom:5px;}
+.ap-c p{font-family:var(--prose);font-size:clamp(12px,2.6vw,13.5px);color:var(--ink2);margin:0 0 5px;line-height:1.7;}
+.ap-c .cx{font-family:var(--mono);font-size:10px;color:var(--ink3);border-top:1px dashed #c8b898;padding-top:5px;margin-top:5px;}
+.qtrace{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,17px);margin-bottom:12px;font-family:var(--mono);font-size:clamp(9.5px,2.1vw,12px);line-height:2;color:var(--ink);white-space: pre;
+        overflow-x: auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qtrace::-webkit-scrollbar{height:4px;}.qtrace::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.trl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:7px;display:block;}
+.tr-hi{background:var(--hl-y);border-radius:2px;padding:0 2px;}
+.tr-ok{color:var(--green);font-weight:700;}
+.tr-no{color:var(--red);font-weight:700;}
+.tr-cur{color:var(--blue);font-weight:700;}
+.tr-dim{color:var(--ink3);}
+.qcode{font-family:var(--mono);font-size:var(--fs-code);background:#f5f0e8;border:1.5px solid #c8b898;border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:10px;color:var(--ink);line-height:1.88;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qcode::-webkit-scrollbar{height:4px;}.qcode::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.qcode .kw{color:var(--blue);font-weight:700;}
+.qcode .cm{color:#8a7a5a;font-style:italic;}
+.qcode .st{color:var(--green);}
+.qcode .num{color:var(--orange);}
+.qcode .fn{color:var(--teal);}
+.qcode .pp{color:var(--red);}
+.clbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px;padding-bottom:5px;border-bottom:1px dashed #c8b898;}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;padding:clamp(8px,2vw,12px) clamp(12px,3vw,18px);background:var(--paper3);border-top:1px dashed #c8b898;}
+.qf{font-family:var(--mono);font-size:var(--fs-xs);background:var(--paper2);border:1px solid #c0a880;border-radius:3px;padding:3px 10px;color:var(--ink3);display:flex;align-items:center;gap:5px;}
+.qf .fl{font-style:italic;}.qf .fv{font-weight:700;}
+.qf.t .fv{color:var(--green);}.qf.s .fv{color:var(--purple);}.qf.x .fv{color:var(--blue);}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:12px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+code{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+.toc-grid a{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);}
+.tn{font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:8px clamp(12px,3vw,28px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .sec{padding-left:clamp(26px,5.5vw,40px);}
+  h2.sh{font-size:clamp(14px,3.8vw,17px);}
+  .qhead{gap:6px;}.qtitle{font-size:14px;}.qsrc{display:none;}
+  .ap-row{grid-template-columns:1fr;}.io-row{flex-direction:column;}
+  .qfoot{flex-direction:column;gap:5px;}.toc-grid{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{padding:18px 14px 16px;box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);}
+  .cover::after{display:none;}.cover-inner{padding-left:0;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;}
+  .chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:16px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(13px,4vw,16px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:5px;}
+  .qcode,.qtrace{font-size:9.5px;padding:9px 10px;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;}
+  .qcard{break-inside:avoid;box-shadow:none;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .qcode,.qtrace{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">IV · Part 4 · Q106–Q140</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Interview Setbook · Part 4 of 6 · Q106–Q140</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery Series · Interview Prep</div>
+    <h1>The Interview<br><em>Problem Setbook</em></h1>
+    <p class="cover-desc">Part 4 of 6. Graphs — the most expansive topic in interviews. BFS/DFS on grids and adjacency lists, topological sort, Dijkstra, Bellman-Ford, Union-Find, and the hardest graph problems that separate Codeforces Pupil from Expert.</p>
+    <div class="cover-chips">
+      <span class="chip">Part 4 · Q106–Q140</span>
+      <span class="chip">BFS &amp; DFS on Graphs</span>
+      <span class="chip">Topological Sort</span>
+      <span class="chip">Shortest Paths</span>
+      <span class="chip">Union-Find / DSU</span>
+      <span class="chip">Advanced Graph</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Part 4 Contents</div>
+  <div class="toc-grid">
+    <a href="#ch10"><span class="tn">Ch10</span>Graph BFS &amp; DFS — Q106–Q118</a>
+    <a href="#ch11"><span class="tn">Ch11</span>Topological Sort — Q119–Q125</a>
+    <a href="#ch12"><span class="tn">Ch12</span>Shortest Paths — Q126–Q132</a>
+    <a href="#ch13"><span class="tn">Ch13</span>Union-Find &amp; Advanced — Q133–Q140</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 10 — GRAPH BFS & DFS (Q106–Q118)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10 · Q106–Q118 · Graph BFS &amp; DFS</div>
+    <div class="ch-title">Graph BFS &amp; DFS — <em>Traversals, Connectivity &amp; Grid Problems</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="graphbfs">
+
+    <div class="def-box">
+      <span class="lbl">BFS vs DFS — When to Use Which</span>
+      <p><strong>BFS (Queue, level-by-level):</strong> Use when you need the SHORTEST PATH in an unweighted graph, minimum number of steps/moves, or level-order processing. BFS guarantees the first time you reach a node is via the shortest path.<br>
+      <strong>DFS (Stack/Recursion, depth-first):</strong> Use when you need to explore all paths, detect cycles, find connected components, or check reachability. DFS explores one branch fully before backtracking.<br>
+      <strong>Grid = Graph:</strong> Every grid problem where you move between cells is a graph. Cells are nodes, valid moves are edges. The 4-directional movement array <code>dx[]={0,0,1,-1}, dy[]={1,-1,0,0}</code> is your adjacency list.</p>
+    </div>
+
+<!-- ─────────── Q106 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q106 · MEDIUM</span>
+    <span class="qtitle">Number of Islands</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #200</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">Asked 8,000+</span><span class="hint hc">Grid DFS Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Count the number of islands in a 2D binary grid ('1'=land, '0'=water). An island is a group of '1's connected 4-directionally.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[["1","1","0","0","0"],
+["1","1","0","0","0"],
+["0","0","1","0","0"],
+["0","0","0","1","1"]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>3</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Flood Fill: Each DFS Burns One Complete Island</span>
+      <p>Scan the grid. When you find an unvisited '1': increment count, then DFS from that cell to mark all connected land as visited (change to '0'). Each DFS call explores one complete island. Count = number of DFS calls made.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Grid (simplified 3×3): [[1,1,0],[1,0,0],[0,0,1]]</span>
+Scan (0,0)='1' → count=1, DFS floods:
+  (0,0)→'0', visit (0,1)→'0', visit (1,0)→'0'
+  All connected land marked '0'
+
+Scan (0,1)='0' skip, (0,2)='0' skip
+Scan (1,0)='0' skip, (1,1)='0' skip, (1,2)='0' skip
+Scan (2,0)='0' skip, (2,1)='0' skip
+Scan (2,2)='1' → count=2, DFS floods (2,2)→'0'
+
+Answer: <span class="tr-ok">2</span></div>
+    <div class="qcode"><span class="clbl">C++ — DFS Flood Fill O(R×C)</span>
+<span class="kw">int</span> <span class="fn">numIslands</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">char</span>&gt;&gt;&amp; grid) {
+    <span class="kw">int</span> R=grid.size(), C=grid[0].size(), count=0;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>,<span class="kw">int</span>)&gt; dfs=[&amp;](<span class="kw">int</span> r, <span class="kw">int</span> c){
+        <span class="kw">if</span>(r&lt;0||r&gt;=R||c&lt;0||c&gt;=C||grid[r][c]!='1') <span class="kw">return</span>;
+        grid[r][c]='0';                              <span class="cm">// Mark visited</span>
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++) dfs(r+dx[d],c+dy[d]); <span class="cm">// Visit all 4 neighbours</span>
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+            <span class="kw">if</span>(grid[i][j]=='1'){ dfs(i,j); count++; }
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C) stack</span></div>
+    <div class="qf x"><span class="fl">Variants</span><span class="fv">Max Area of Island · Surrounded Regions · Pacific Atlantic</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q107 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q107 · MEDIUM</span>
+    <span class="qtitle">Max Area of Island</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #695</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">DFS Returns Area Count</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the maximum area (number of cells) of an island. Return 0 if no island.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — DFS Returns Island Size; Track Maximum</span>
+      <p>Same flood fill as Q106, but DFS now <strong>returns the count of cells</strong> in the island instead of just marking. Each recursive call returns 1 (current cell) + sum of sizes from valid neighbours.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">int</span> <span class="fn">maxAreaOfIsland</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid) {
+    <span class="kw">int</span> R=grid.size(), C=grid[0].size(), best=0;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(<span class="kw">int</span>,<span class="kw">int</span>)&gt; dfs=[&amp;](<span class="kw">int</span> r,<span class="kw">int</span> c)-&gt;<span class="kw">int</span>{
+        <span class="kw">if</span>(r&lt;0||r&gt;=R||c&lt;0||c&gt;=C||grid[r][c]!=1) <span class="kw">return</span> 0;
+        grid[r][c]=0;
+        <span class="kw">int</span> area=1;
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++) area+=dfs(r+dx[d],c+dy[d]);
+        <span class="kw">return</span> area;
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+            <span class="kw">if</span>(grid[i][j]==1) best=max(best, dfs(i,j));
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q108 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q108 · MEDIUM</span>
+    <span class="qtitle">Rotting Oranges (Multi-Source BFS)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Multi-BFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #994</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Multi-Source BFS Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Grid: 0=empty, 1=fresh orange, 2=rotten. Each minute, rotten oranges rot adjacent (4-dir) fresh ones. Return minimum minutes until no fresh oranges, or -1 if impossible.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[[2,1,1],[1,1,0],[0,1,1]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>4</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — All Rotten Oranges Start Simultaneously (Multi-Source BFS)</span>
+      <p>Key insight: ALL rotten oranges start spreading at minute 0 simultaneously. Push them ALL into the BFS queue before starting. Then process level by level — each level = 1 minute. Count fresh oranges; after BFS, if any remain → return -1.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[[2,1,1],[1,1,0],[0,1,1]]</span>
+Init: queue=[(0,0)], fresh=6
+
+Minute 1: process (0,0). Rot (0,1) and (1,0). fresh=4
+           queue=[(0,1),(1,0)]
+Minute 2: process (0,1). Rot (0,2). process (1,0). Rot (1,1). fresh=2
+           queue=[(0,2),(1,1)]
+Minute 3: process (0,2) no new. process (1,1). Rot (2,1). fresh=1
+           queue=[(2,1)]
+Minute 4: process (2,1). Rot (2,2). fresh=0
+           queue=[(2,2)]
+
+fresh=0 → return <span class="tr-ok">4</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">int</span> <span class="fn">orangesRotting</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid) {
+    <span class="kw">int</span> R=grid.size(), C=grid[0].size(), fresh=0, minutes=0;
+    queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++){
+        <span class="kw">if</span>(grid[i][j]==2) q.push({i,j}); <span class="cm">// All rotten oranges start together</span>
+        <span class="kw">if</span>(grid[i][j]==1) fresh++;
+    }
+    <span class="kw">while</span>(!q.empty() &amp;&amp; fresh&gt;0){
+        minutes++;
+        <span class="kw">for</span>(<span class="kw">int</span> sz=q.size();sz&gt;0;sz--){
+            <span class="kw">auto</span>[r,c]=q.front(); q.pop();
+            <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+                <span class="kw">int</span> nr=r+dx[d], nc=c+dy[d];
+                <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C&amp;&amp;grid[nr][nc]==1){
+                    grid[nr][nc]=2; fresh--; q.push({nr,nc});
+                }
+            }
+        }
+    }
+    <span class="kw">return</span> fresh==0 ? minutes : -1;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Multi-source BFS · Walls and Gates · 0-1 Matrix</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q109 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q109 · MEDIUM</span>
+    <span class="qtitle">01 Matrix — Nearest 0 Distance</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Multi-BFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #542</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Multi-Source BFS from All 0s Simultaneously</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given a binary matrix, return a matrix of the same size where each cell contains the distance to the nearest 0.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[[0,0,0],[0,1,0],[1,1,1]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[[0,0,0],[0,1,0],[1,2,1]]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — BFS from All 0s Simultaneously; Distance Radiates Outward</span>
+      <p>Don't BFS from each 1 to find its nearest 0 (that would be O(n²)). Instead, <strong>start BFS from ALL 0 cells simultaneously</strong>. Distance = BFS level when you first reach a cell. This is the same multi-source BFS pattern as Q108.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">updateMatrix</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; mat) {
+    <span class="kw">int</span> R=mat.size(), C=mat[0].size();
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; dist(R, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;(C, INT_MAX));
+    queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+    <span class="cm">// Seed: all 0 cells have distance 0</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+        <span class="kw">if</span>(mat[i][j]==0){ dist[i][j]=0; q.push({i,j}); }
+    <span class="cm">// BFS radiates distance outward</span>
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">auto</span>[r,c]=q.front(); q.pop();
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d], nc=c+dy[d];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C &amp;&amp; dist[nr][nc]==INT_MAX){
+                dist[nr][nc]=dist[r][c]+1;
+                q.push({nr,nc});
+            }
+        }
+    }
+    <span class="kw">return</span> dist;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q110 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q110 · MEDIUM</span>
+    <span class="qtitle">Walls and Gates</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Multi-BFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #286 (Premium) / GFG</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Same Multi-Source BFS Pattern</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Fill each empty room (INF) with distance to its nearest gate (0). Walls are -1. Multi-source BFS from all gates simultaneously.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — same as Q109 with gate=0, wall=-1, room=INF</span>
+<span class="kw">void</span> <span class="fn">wallsAndGates</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; rooms){
+    <span class="kw">int</span> R=rooms.size(), C=rooms[0].size(), INF=2147483647;
+    queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+    <span class="cm">// Seed all gates</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+        <span class="kw">if</span>(rooms[i][j]==0) q.push({i,j});
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">auto</span>[r,c]=q.front();q.pop();
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C&amp;&amp;rooms[nr][nc]==INF){
+                rooms[nr][nc]=rooms[r][c]+1;
+                q.push({nr,nc});
+            }
+        }
+    }
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q111 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q111 · MEDIUM</span>
+    <span class="qtitle">Pacific Atlantic Water Flow</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #417</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Reverse Flow — BFS from Oceans Inward</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find all cells from which water can flow to BOTH the Pacific (top/left edges) and Atlantic (bottom/right edges). Water flows to equal or lower neighbours.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Reverse the Direction: BFS Uphill from Each Ocean's Border</span>
+      <p>Instead of simulating water flow downward from each cell (O(n²m²)), reverse: BFS/DFS <strong>uphill</strong> from each ocean's border cells. A cell can "reach the ocean" if the next cell is equal or higher. Do this separately for Pacific and Atlantic. Cells in both sets are the answer.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">pacificAtlantic</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; h) {
+    <span class="kw">int</span> R=h.size(), C=h[0].size();
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt;&gt; pac(R,<span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt;(C,<span class="kw">false</span>));
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt;&gt; atl(R,<span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt;(C,<span class="kw">false</span>));
+
+    <span class="kw">auto</span> bfs=[&amp;](queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; q, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt;&gt;&amp; vis){
+        <span class="kw">while</span>(!q.empty()){
+            <span class="kw">auto</span>[r,c]=q.front();q.pop();
+            <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+                <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d];
+                <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C&amp;&amp;!vis[nr][nc]&amp;&amp;h[nr][nc]&gt;=h[r][c]){
+                    vis[nr][nc]=<span class="kw">true</span>; q.push({nr,nc});
+                }
+            }
+        }
+    };
+    queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; pq, aq;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++){
+        pac[i][0]=atl[i][C-1]=<span class="kw">true</span>; pq.push({i,0}); aq.push({i,C-1});
+    }
+    <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++){
+        pac[0][j]=atl[R-1][j]=<span class="kw">true</span>; pq.push({0,j}); aq.push({R-1,j});
+    }
+    bfs(pq,pac); bfs(aq,atl);
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+        <span class="kw">if</span>(pac[i][j]&amp;&amp;atl[i][j]) res.push_back({i,j});
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q112 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q112 · MEDIUM</span>
+    <span class="qtitle">Surrounded Regions</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #130</span>
+  </div>
+  <div class="hints"><span class="hint ht">Mark Border-Connected 'O's First, Then Flip</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Flip all 'O' regions not connected to the border to 'X'. Border-connected 'O' regions remain.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[["X","X","X","X"],
+["X","O","O","X"],
+["X","X","O","X"],
+["X","O","X","X"]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[["X","X","X","X"],
+["X","X","X","X"],
+["X","X","X","X"],
+["X","O","X","X"]]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Solve the Complement: Mark What Should NOT Be Flipped</span>
+      <p>Instead of finding enclosed regions (hard), find border-connected 'O' regions (easy: DFS from each border 'O'). Mark them safe (e.g., 'S'). Then flip all remaining 'O' to 'X' and restore 'S' to 'O'.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">void</span> <span class="fn">solve</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">char</span>&gt;&gt;&amp; b) {
+    <span class="kw">int</span> R=b.size(), C=b[0].size();
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>,<span class="kw">int</span>)&gt; safe=[&amp;](<span class="kw">int</span> r,<span class="kw">int</span> c){
+        <span class="kw">if</span>(r&lt;0||r&gt;=R||c&lt;0||c&gt;=C||b[r][c]!='O') <span class="kw">return</span>;
+        b[r][c]='S';                                  <span class="cm">// Mark as safe</span>
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++) safe(r+dx[d],c+dy[d]);
+    };
+    <span class="cm">// Mark all border-connected O's as safe</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) safe(i,0), safe(i,C-1);
+    <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++) safe(0,j), safe(R-1,j);
+    <span class="cm">// Flip: O→X (enclosed), S→O (safe/border)</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+        b[i][j] = b[i][j]=='S' ? 'O' : (b[i][j]=='O' ? 'X' : b[i][j]);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q113 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q113 · HARD</span>
+    <span class="qtitle">Word Ladder (BFS State Space)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">BFS</span><span class="qt qt-m">String</span></div>
+    <span class="qsrc">LeetCode #127</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">FAANG Favourite</span><span class="hint ht">Strings as Graph Nodes</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given beginWord, endWord, and a wordList, find the shortest transformation sequence from begin to end where each step changes exactly one letter and each intermediate word must be in wordList. Return the number of words in the shortest sequence (0 if impossible).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>begin="hit", end="cog"
+list=["hot","dot","dog","lot","log","cog"]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>5</code></div>
+        <div class="io-box"><span class="io-lbl">Path</span><code>hit→hot→dot→dog→cog</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Words are Nodes; Edge Exists if They Differ by One Letter</span>
+      <p>This is BFS on an implicit graph. Each word is a node. Two words are connected if they differ by exactly one character. BFS finds the shortest path from beginWord to endWord. For each word in the queue, try changing each character to 'a'-'z' and check if the result is in the word set.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">begin="hit" end="cog"</span>
+Level 1: {hit}
+  Try all 1-char changes of "hit":
+  "ait","bit",...,"hot" ← in wordList! add to queue
+Level 2: {hot}
+  1-char changes: "dot","lot" ← both in list
+Level 3: {dot,lot}
+  dot→"dog","log"; lot→"log"
+Level 4: {dog,log}
+  dog→"cog" ← endWord! return level+1=<span class="tr-ok">5</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(N×M²) where N=words, M=word length</span>
+<span class="kw">int</span> <span class="fn">ladderLength</span>(<span class="kw">string</span> begin, <span class="kw">string</span> end, <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&amp; wordList) {
+    unordered_set&lt;<span class="kw">string</span>&gt; wordSet(wordList.begin(), wordList.end());
+    <span class="kw">if</span>(!wordSet.count(end)) <span class="kw">return</span> 0;
+    queue&lt;<span class="kw">string</span>&gt; q; q.push(begin);
+    <span class="kw">int</span> level=1;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">for</span>(<span class="kw">int</span> sz=q.size();sz&gt;0;sz--){
+            <span class="kw">string</span> word=q.front();q.pop();
+            <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;(<span class="kw">int</span>)word.size();i++){
+                <span class="kw">char</span> orig=word[i];
+                <span class="kw">for</span>(<span class="kw">char</span> c='a';c&lt;='z';c++){
+                    <span class="kw">if</span>(c==orig) <span class="kw">continue</span>;
+                    word[i]=c;
+                    <span class="kw">if</span>(word==end) <span class="kw">return</span> level+1;
+                    <span class="kw">if</span>(wordSet.count(word)){
+                        q.push(word); wordSet.erase(word); <span class="cm">// Mark visited</span>
+                    }
+                    word[i]=orig;
+                }
+            }
+        }
+        level++;
+    }
+    <span class="kw">return</span> 0;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(N×M²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(N×M)</span></div>
+    <div class="qf x"><span class="fl">Extension</span><span class="fv">Bidirectional BFS halves the time in practice</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q114 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q114 · MEDIUM</span>
+    <span class="qtitle">Clone Graph</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-m">Hash</span></div>
+    <span class="qsrc">LeetCode #133</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Map Old Nodes to New Nodes</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Deep copy (clone) an undirected graph. Each node has a value and a list of neighbours.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Hash Map of Old→New, DFS to Wire Neighbours</span>
+      <p>Use a hash map: <code>visited[old_node] = new_node</code>. DFS: if current node is already in map, return its clone (handles cycles). Otherwise: create clone, add to map, recursively clone all neighbours and add them to the clone's neighbour list.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(V+E)</span>
+unordered_map&lt;Node*,Node*&gt; visited;
+Node* <span class="fn">cloneGraph</span>(Node* node){
+    <span class="kw">if</span>(!node) <span class="kw">return nullptr</span>;
+    <span class="kw">if</span>(visited.count(node)) <span class="kw">return</span> visited[node]; <span class="cm">// Already cloned</span>
+    Node* clone = <span class="kw">new</span> Node(node-&gt;val);
+    visited[node] = clone;                         <span class="cm">// Register BEFORE recursing (handles cycles)</span>
+    <span class="kw">for</span>(Node* nb : node-&gt;neighbors)
+        clone-&gt;neighbors.push_back(cloneGraph(nb));
+    <span class="kw">return</span> clone;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q115 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q115 · MEDIUM</span>
+    <span class="qtitle">Number of Connected Components</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-u">Union-Find</span></div>
+    <span class="qsrc">LeetCode #323 (Premium)</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">DFS or Union-Find Both Work</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given n nodes (0 to n-1) and edges list, find the number of connected components.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — DFS approach O(V+E)</span>
+<span class="kw">int</span> <span class="fn">countComponents</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; edges){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; e:edges){ adj[e[0]].push_back(e[1]); adj[e[1]].push_back(e[0]); }
+    <span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt; vis(n,<span class="kw">false</span>); <span class="kw">int</span> count=0;
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; dfs=[&amp;](<span class="kw">int</span> u){
+        vis[u]=<span class="kw">true</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(!vis[v]) dfs(v);
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(!vis[i]){ dfs(i); count++; }
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q116 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q116 · MEDIUM</span>
+    <span class="qtitle">Is Graph Bipartite?</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">BFS</span><span class="qt qt-d">DFS</span></div>
+    <span class="qsrc">LeetCode #785</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">2-Coloring — BFS/DFS Assigns Colors</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>A graph is bipartite if nodes can be split into two sets where every edge connects a node from set A to set B (no edges within a set). Check if the given graph is bipartite.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — 2-Coloring: Try to Color Graph With 2 Colors, No Conflicts</span>
+      <p>BFS/DFS with two colors (0 and 1). Color each node; assign the opposite color to all neighbours. If a neighbour already has the same color as the current node → conflict → not bipartite. Equivalent to: does the graph contain an odd-length cycle?</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(V+E)</span>
+<span class="kw">bool</span> <span class="fn">isBipartite</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; graph){
+    <span class="kw">int</span> n=graph.size();
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; color(n,-1);
+    <span class="kw">for</span>(<span class="kw">int</span> start=0;start&lt;n;start++){
+        <span class="kw">if</span>(color[start]!=-1) <span class="kw">continue</span>;
+        queue&lt;<span class="kw">int</span>&gt; q; q.push(start); color[start]=0;
+        <span class="kw">while</span>(!q.empty()){
+            <span class="kw">int</span> u=q.front();q.pop();
+            <span class="kw">for</span>(<span class="kw">int</span> v:graph[u]){
+                <span class="kw">if</span>(color[v]==-1){ color[v]=1-color[u]; q.push(v); }
+                <span class="kw">else if</span>(color[v]==color[u]) <span class="kw">return false</span>; <span class="cm">// Conflict!</span>
+            }
+        }
+    }
+    <span class="kw">return true</span>;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q117 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q117 · HARD</span>
+    <span class="qtitle">Minimum Steps in Infinite Grid (Chebyshev Distance)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-m">Math</span></div>
+    <span class="qsrc">Codeforces 263A</span>
+  </div>
+  <div class="hints"><span class="hint ht">Chess King Distance = max(|dx|,|dy|)</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>A chess king moves to any of 8 adjacent cells per step. Given a sequence of points to visit in order, find the minimum total steps.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — King Distance Between Two Points = max(|Δx|, |Δy|)</span>
+      <p>A king can move diagonally so it covers both horizontal and vertical distance simultaneously. To move from (x1,y1) to (x2,y2): the king needs max(|x2-x1|, |y2-y1|) steps — diagonal moves cover both coordinates at once.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">long long</span> <span class="fn">minSteps</span>(<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; pts){
+    <span class="kw">long long</span> total=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;(<span class="kw">int</span>)pts.size();i++){
+        <span class="kw">int</span> dx=abs(pts[i].first -pts[i-1].first);
+        <span class="kw">int</span> dy=abs(pts[i].second-pts[i-1].second);
+        total += max(dx,dy);  <span class="cm">// Chebyshev distance</span>
+    }
+    <span class="kw">return</span> total;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q118 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q118 · HARD</span>
+    <span class="qtitle">Shortest Path in Binary Matrix</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">BFS</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #1091</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">BFS on 8-Directional Grid</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the shortest clear path (all 0s) from top-left to bottom-right of a binary matrix. Movement is 8-directional. Return path length or -1.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(N²) BFS</span>
+<span class="kw">int</span> <span class="fn">shortestPathBinaryMatrix</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid){
+    <span class="kw">int</span> n=grid.size();
+    <span class="kw">if</span>(grid[0][0]||grid[n-1][n-1]) <span class="kw">return</span> -1;
+    queue&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q; <span class="cm">// {r,c,dist}</span>
+    q.push({0,0,1}); grid[0][0]=1; <span class="cm">// Mark visited</span>
+    <span class="kw">int</span> dirs[8][2]={{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">auto</span>[r,c,d]=q.front();q.pop();
+        <span class="kw">if</span>(r==n-1&amp;&amp;c==n-1) <span class="kw">return</span> d;
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp; dir:dirs){
+            <span class="kw">int</span> nr=r+dir[0],nc=c+dir[1];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;n&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;n&amp;&amp;!grid[nr][nc]){
+                grid[nr][nc]=1; q.push({nr,nc,d+1});
+            }
+        }
+    }
+    <span class="kw">return</span> -1;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(N²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(N²)</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 11 — TOPOLOGICAL SORT (Q119–Q125)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11 · Q119–Q125 · Topological Sort</div>
+    <div class="ch-title">Topological Sort — <em>Dependencies, Ordering &amp; Cycle Detection in DAGs</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="topo">
+
+    <div class="def-box">
+      <span class="lbl">Topological Sort — Two Algorithms, One Purpose</span>
+      <p><strong>Kahn's Algorithm (BFS):</strong> Compute in-degrees. Push all nodes with in-degree 0 into a queue. Process: pop node, add to order, decrement neighbours' in-degrees. If a neighbour reaches 0, push it. If final order size &lt; n → cycle exists.<br>
+      <strong>DFS-based:</strong> Run DFS. After exploring all neighbours of a node, push it onto a stack. Reverse the stack = topological order. Use 3-state coloring (white/grey/black) for cycle detection.<br>
+      <strong>When to use:</strong> Task scheduling, build systems, course prerequisites, dependency resolution — anything with "A must come before B" constraints.</p>
+    </div>
+
+<!-- ─────────── Q119 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q119 · MEDIUM</span>
+    <span class="qtitle">Course Schedule I — Detect Cycle</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span></div>
+    <span class="qsrc">LeetCode #207</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">Asked 5,000+</span><span class="hint hc">Kahn's Algorithm Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>n courses, prereqs[i]=[a,b] means take b before a. Can you finish all courses? (= Does the prerequisite graph have a cycle?)</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>n=2, prereqs=[[1,0]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>true</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>n=2, prereqs=[[1,0],[0,1]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>false</code> (cycle)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Can Finish All = Graph Has No Cycle</span>
+      <p>Build a directed graph where edge b→a means "b is prerequisite of a". Apply Kahn's algorithm. If all n nodes are processed (added to topological order), no cycle exists and all courses can be finished.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">n=4, prereqs=[[1,0],[2,0],[3,1],[3,2]]</span>
+Graph: 0→1, 0→2, 1→3, 2→3
+in-degree: [0, 1, 1, 2]
+
+Queue (in-degree=0): [<span class="tr-cur">0</span>]
+Process 0: done=1, decrement 1,2 → in-degree=[0,<span class="tr-hi">0</span>,<span class="tr-hi">0</span>,2]
+Queue: [<span class="tr-cur">1,2</span>]
+Process 1: done=2, decrement 3 → in-degree=[0,0,0,<span class="tr-hi">1</span>]
+Process 2: done=3, decrement 3 → in-degree=[0,0,0,<span class="tr-hi">0</span>]
+Queue: [<span class="tr-cur">3</span>]
+Process 3: done=4
+
+done==n → <span class="tr-ok">No cycle → true ✓</span></div>
+    <div class="qcode"><span class="clbl">C++ — Kahn's Algorithm O(V+E)</span>
+<span class="kw">bool</span> <span class="fn">canFinish</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; prereqs) {
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; indeg(n,0);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; p:prereqs){ adj[p[1]].push_back(p[0]); indeg[p[0]]++; }
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(indeg[i]==0) q.push(i);
+    <span class="kw">int</span> done=0;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> u=q.front();q.pop(); done++;
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(--indeg[v]==0) q.push(v);
+    }
+    <span class="kw">return</span> done==n;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q120 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q120 · MEDIUM</span>
+    <span class="qtitle">Course Schedule II — Return Order</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span></div>
+    <span class="qsrc">LeetCode #210</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Kahn's — Return the Order Vector</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the order in which to take courses such that all prerequisites are satisfied. Return empty array if impossible (cycle).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Kahn's Modified to Record Order</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">findOrder</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; prereqs){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; indeg(n,0);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; p:prereqs){ adj[p[1]].push_back(p[0]); indeg[p[0]]++; }
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(indeg[i]==0) q.push(i);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; order;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> u=q.front();q.pop();
+        order.push_back(u);            <span class="cm">// Record in topological order</span>
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(--indeg[v]==0) q.push(v);
+    }
+    <span class="kw">return</span> (<span class="kw">int</span>)order.size()==n ? order : <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;{};
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q121 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q121 · HARD</span>
+    <span class="qtitle">Alien Dictionary</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span></div>
+    <span class="qsrc">LeetCode #269 (Premium) / LintCode</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">FAANG Favourite</span><span class="hint ht">Derive Order from Adjacent Words</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given a sorted alien language dictionary (sorted by alien alphabet), derive the character ordering. Return one valid ordering of characters, or "" if invalid.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>["wrt","wrf","er","ett","rftt"]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>"wertf"</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Compare Adjacent Words to Extract Character Order Constraints</span>
+      <p>Compare each pair of adjacent words. Find the first position where they differ — that character must come before the other in the alien alphabet. Build a directed graph from these constraints. Apply topological sort. Watch for: word2 is prefix of word1 (invalid), cycles (invalid).</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">["wrt","wrf","er","ett","rftt"]</span>
+Compare "wrt" vs "wrf": first diff at pos 2: 't' before 'f' → t→f
+Compare "wrf" vs "er":  first diff at pos 0: 'w' before 'e' → w→e
+Compare "er" vs "ett":  first diff at pos 1: 'r' before 't' → r→t
+Compare "ett" vs "rftt":first diff at pos 0: 'e' before 'r' → e→r
+
+Edges: t→f, w→e, r→t, e→r
+Topo sort: w→e→r→t→f → "<span class="tr-ok">wertf</span>"</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(C) where C=total chars in all words</span>
+<span class="kw">string</span> <span class="fn">alienOrder</span>(<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&amp; words){
+    map&lt;<span class="kw">char</span>,set&lt;<span class="kw">char</span>&gt;&gt; adj;
+    map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; indeg;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; w:words) <span class="kw">for</span>(<span class="kw">char</span> c:w) indeg[c]=0;
+
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;(<span class="kw">int</span>)words.size()-1;i++){
+        <span class="kw">string</span>&amp; w1=words[i], &amp;w2=words[i+1];
+        <span class="kw">int</span> len=min(w1.size(),w2.size());
+        <span class="kw">bool</span> found=<span class="kw">false</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;len;j++){
+            <span class="kw">if</span>(w1[j]!=w2[j]){
+                <span class="kw">if</span>(!adj[w1[j]].count(w2[j])){ adj[w1[j]].insert(w2[j]); indeg[w2[j]]++; }
+                found=<span class="kw">true</span>; <span class="kw">break</span>;
+            }
+        }
+        <span class="kw">if</span>(!found&amp;&amp;w1.size()&gt;w2.size()) <span class="kw">return</span> <span class="st">""</span>; <span class="cm">// w1 is prefix of w2 — invalid</span>
+    }
+    queue&lt;<span class="kw">char</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp;[c,d]:indeg) <span class="kw">if</span>(d==0) q.push(c);
+    <span class="kw">string</span> res;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">char</span> c=q.front();q.pop(); res+=c;
+        <span class="kw">for</span>(<span class="kw">char</span> nb:adj[c]) <span class="kw">if</span>(--indeg[nb]==0) q.push(nb);
+    }
+    <span class="kw">return</span> res.size()==indeg.size() ? res : <span class="st">""</span>;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1) — 26 chars max</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q122 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q122 · MEDIUM</span>
+    <span class="qtitle">Sequence Reconstruction — Unique Shortest Supersequence</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span></div>
+    <span class="qsrc">LeetCode #444 (Premium)</span>
+  </div>
+  <div class="hints"><span class="hint ht">Topo Sort with Queue Never Has &gt;1 Choice</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Check if org is the only shortest supersequence that can be reconstructed from sequences. I.e., the topological order is unique and matches org.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Unique Topo Order = Queue Never Has More Than 1 Element</span>
+      <p>Apply Kahn's algorithm. At each step, if the queue has more than 1 element, multiple valid orderings exist → org cannot be the unique reconstruction. Also verify each step matches org.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution</span>
+<span class="kw">bool</span> <span class="fn">sequenceReconstruction</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; org, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; seqs){
+    <span class="kw">int</span> n=org.size();
+    <span class="kw">vector</span>&lt;set&lt;<span class="kw">int</span>&gt;&gt; adj(n+1);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; indeg(n+1,0);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; s:seqs)
+        <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;(<span class="kw">int</span>)s.size();i++)
+            <span class="kw">if</span>(!adj[s[i-1]].count(s[i])){ adj[s[i-1]].insert(s[i]); indeg[s[i]]++; }
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=n;i++) <span class="kw">if</span>(indeg[i]==0) q.push(i);
+    <span class="kw">int</span> idx=0;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">if</span>(q.size()&gt;1) <span class="kw">return false</span>;         <span class="cm">// Multiple choices → not unique</span>
+        <span class="kw">int</span> u=q.front();q.pop();
+        <span class="kw">if</span>(org[idx++]!=u) <span class="kw">return false</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(--indeg[v]==0) q.push(v);
+    }
+    <span class="kw">return</span> idx==n;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q123 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q123 · MEDIUM</span>
+    <span class="qtitle">Find Eventual Safe States</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span><span class="qt qt-b">Topo Sort</span></div>
+    <span class="qsrc">LeetCode #802</span>
+  </div>
+  <div class="hints"><span class="hint ht">Safe = Not on Any Cycle. Reverse Graph + Topo Sort.</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>A node is "safe" if every path from it eventually leads to a terminal node (no cycles reachable). Return all safe nodes sorted.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Reverse the Graph, Apply Kahn's from Terminal Nodes</span>
+      <p>In the reversed graph, terminal nodes (sinks → no outgoing) become sources. Safe nodes in original = nodes reachable from terminals in reversed graph = apply Kahn's starting from nodes with outdegree 0 in original (= indegree 0 in reversed).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — Reverse Graph + Kahn's</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">eventualSafeNodes</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; graph){
+    <span class="kw">int</span> n=graph.size();
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; rev(n);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; outdeg(n,0);
+    <span class="kw">for</span>(<span class="kw">int</span> u=0;u&lt;n;u++) <span class="kw">for</span>(<span class="kw">int</span> v:graph[u]){ rev[v].push_back(u); outdeg[u]++; }
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(outdeg[i]==0) q.push(i);
+    <span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt; safe(n,<span class="kw">false</span>);
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> u=q.front();q.pop(); safe[u]=<span class="kw">true</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:rev[u]) <span class="kw">if</span>(--outdeg[v]==0) q.push(v);
+    }
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(safe[i]) res.push_back(i);
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q124 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q124 · HARD</span>
+    <span class="qtitle">Minimum Height Trees</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo-like</span></div>
+    <span class="qsrc">LeetCode #310</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Leaf Pruning — Remove Leaves Layer by Layer</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find all roots of minimum height trees in an undirected tree with n nodes. Return all such root labels.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — The Optimal Roots Are in the Centre. Prune Leaves to Find Them.</span>
+      <p>The center of a tree minimizes its height (at most 2 central nodes). Use a topological-sort-like approach: repeatedly remove leaf nodes (degree 1) layer by layer. The last 1 or 2 remaining nodes are the centers and the answer.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">findMinHeightTrees</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; edges){
+    <span class="kw">if</span>(n==1) <span class="kw">return</span> {0};
+    <span class="kw">vector</span>&lt;<span class="kw">set</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; e:edges){ adj[e[0]].insert(e[1]); adj[e[1]].insert(e[0]); }
+    queue&lt;<span class="kw">int</span>&gt; leaves;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(adj[i].size()==1) leaves.push(i);
+    <span class="kw">int</span> remaining=n;
+    <span class="kw">while</span>(remaining&gt;2){
+        <span class="kw">int</span> sz=leaves.size(); remaining-=sz;
+        <span class="kw">while</span>(sz--){
+            <span class="kw">int</span> u=leaves.front();leaves.pop();
+            <span class="kw">int</span> nb=*adj[u].begin();
+            adj[nb].erase(u);
+            <span class="kw">if</span>(adj[nb].size()==1) leaves.push(nb);
+        }
+    }
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">while</span>(!leaves.empty()){ res.push_back(leaves.front());leaves.pop(); }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q125 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q125 · HARD</span>
+    <span class="qtitle">Parallel Courses III (Critical Path)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #2050</span>
+  </div>
+  <div class="hints"><span class="hint ht">Topo DP: dp[v] = max(dp[u] for u in prereqs) + time[v]</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>n courses with durations and prerequisites. Courses can be taken in parallel. Find the minimum time to finish all courses (= longest path in DAG = critical path).</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Critical Path = Longest Path in DAG via Topo DP</span>
+      <p>Process nodes in topological order. dp[v] = earliest finish time for course v = time[v] + max(dp[u]) for all prerequisites u. The answer is max(dp[i]) over all nodes.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(V+E)</span>
+<span class="kw">int</span> <span class="fn">minimumTime</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; rels, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; time){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n+1);
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; indeg(n+1,0);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; r:rels){ adj[r[0]].push_back(r[1]); indeg[r[1]]++; }
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; dp(n+1,0);
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=n;i++) <span class="kw">if</span>(indeg[i]==0){ q.push(i); dp[i]=time[i-1]; }
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> u=q.front();q.pop();
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]){
+            dp[v]=max(dp[v], dp[u]+time[v-1]); <span class="cm">// Earliest finish = max prerequisite + own time</span>
+            <span class="kw">if</span>(--indeg[v]==0) q.push(v);
+        }
+    }
+    <span class="kw">return</span> *max_element(dp.begin(),dp.end());
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 12 — SHORTEST PATHS (Q126–Q132)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 12 · Q126–Q132 · Shortest Paths</div>
+    <div class="ch-title">Shortest Paths — <em>Dijkstra, Bellman-Ford &amp; Floyd-Warshall</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="shortest">
+
+    <div class="def-box">
+      <span class="lbl">Shortest Path Algorithm Selection Guide</span>
+      <p><strong>Unweighted graph:</strong> BFS. O(V+E). First time a node is visited = shortest path.<br>
+      <strong>Weighted graph, no negative edges:</strong> Dijkstra. O((V+E) log V). Use a min-heap.<br>
+      <strong>Weighted graph, negative edges (no neg cycle):</strong> Bellman-Ford. O(VE). Relax all edges V-1 times.<br>
+      <strong>Negative cycle detection:</strong> Bellman-Ford Vth iteration. If relaxation still happens → negative cycle.<br>
+      <strong>All-pairs shortest path:</strong> Floyd-Warshall. O(V³). DP through intermediate nodes.<br>
+      <strong>DAG shortest/longest path:</strong> Topological order DP. O(V+E).</p>
+    </div>
+
+<!-- ─────────── Q126 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q126 · MEDIUM</span>
+    <span class="qtitle">Network Delay Time (Dijkstra)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Dijkstra</span></div>
+    <span class="qsrc">LeetCode #743</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Dijkstra Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Network of n nodes with directed weighted edges. Signal sent from node k. Return time for all nodes to receive the signal, or -1 if not all reachable. (= single-source shortest path, find max)</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Single-Source Shortest Path from k; Answer = Maximum Distance</span>
+      <p>Classic Dijkstra from source k. The time for node i to receive signal = shortest path from k to i. The time for ALL nodes to receive signal = maximum shortest path distance from k.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">times=[[2,1,1],[2,3,1],[3,4,1]], n=4, k=2</span>
+dist=[INF,INF,0,INF,INF] (1-indexed, k=2 has dist=0)
+pq={(0,2)}
+
+pop (0,2): process node 2
+  edge 2→1 w=1: dist[1]=0+1=1 → push (1,1)
+  edge 2→3 w=1: dist[3]=0+1=1 → push (1,3)
+pq={(1,1),(1,3)}
+
+pop (1,1): process node 1 (no outgoing)
+pop (1,3): process node 3
+  edge 3→4 w=1: dist[4]=1+1=2 → push (2,4)
+
+pop (2,4): process node 4 (no outgoing)
+
+dist=[INF,<span class="tr-hi">1</span>,<span class="tr-hi">0</span>,<span class="tr-hi">1</span>,<span class="tr-hi">2</span>]
+max(1,0,1,2) = <span class="tr-ok">2</span></div>
+    <div class="qcode"><span class="clbl">C++ — Dijkstra with Min-Heap O((V+E) log V)</span>
+<span class="kw">int</span> <span class="fn">networkDelayTime</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; times, <span class="kw">int</span> n, <span class="kw">int</span> k) {
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt; adj(n+1);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; t:times) adj[t[0]].push_back({t[1],t[2]});
+
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; dist(n+1,INT_MAX);
+    priority_queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;,<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;,greater&lt;&gt;&gt; pq;
+    dist[k]=0; pq.push({0,k});
+
+    <span class="kw">while</span>(!pq.empty()){
+        <span class="kw">auto</span>[d,u]=pq.top();pq.pop();
+        <span class="kw">if</span>(d&gt;dist[u]) <span class="kw">continue</span>;          <span class="cm">// Stale entry — skip</span>
+        <span class="kw">for</span>(<span class="kw">auto</span>[v,w]:adj[u])
+            <span class="kw">if</span>(dist[u]+w &lt; dist[v]){
+                dist[v]=dist[u]+w;
+                pq.push({dist[v],v});
+            }
+    }
+    <span class="kw">int</span> ans=*max_element(dist.begin()+1, dist.end());
+    <span class="kw">return</span> ans==INT_MAX ? -1 : ans;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O((V+E) log V)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q127 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q127 · HARD</span>
+    <span class="qtitle">Cheapest Flights Within K Stops (Bellman-Ford)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Bellman-Ford</span></div>
+    <span class="qsrc">LeetCode #787</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Bellman-Ford k Iterations = At Most k Edges</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>n cities, flights with prices. Find cheapest price from src to dst with at most k stops. Return -1 if impossible. (At most k stops = at most k+1 edges)</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>n=4,flights=[[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]]
+src=0,dst=3,k=1</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>700</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Bellman-Ford: Relax k+1 Times = Paths Using at Most k+1 Edges</span>
+      <p>Standard Bellman-Ford relaxes V-1 times for shortest paths. Here, relax exactly k+1 times — this finds shortest paths using at most k+1 edges (k stops). Use a copy of the distance array per iteration to prevent using more edges than allowed in one iteration.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Bellman-Ford k+1 Iterations O(k×E)</span>
+<span class="kw">int</span> <span class="fn">findCheapestPrice</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; flights, <span class="kw">int</span> src, <span class="kw">int</span> dst, <span class="kw">int</span> k){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; dist(n, INT_MAX);
+    dist[src]=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;=k;i++){                  <span class="cm">// k+1 relaxation rounds</span>
+        <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; tmp=dist;               <span class="cm">// Copy: prevent using more edges in one round</span>
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp; f:flights)
+            <span class="kw">if</span>(dist[f[0]]!=INT_MAX &amp;&amp; dist[f[0]]+f[2]&lt;tmp[f[1]])
+                tmp[f[1]]=dist[f[0]]+f[2];
+        dist=tmp;
+    }
+    <span class="kw">return</span> dist[dst]==INT_MAX ? -1 : dist[dst];
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(k×E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Alt</span><span class="fv">Modified Dijkstra with state (node, stops_used)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q128 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q128 · HARD</span>
+    <span class="qtitle">Path With Minimum Effort (Dijkstra on Grid)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Dijkstra</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #1631</span>
+  </div>
+  <div class="hints"><span class="hint ht">Dijkstra Where Edge Weight = |h1-h2| and Path Weight = Max Edge</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find a path from top-left to bottom-right of a grid minimizing the maximum absolute difference in heights between consecutive cells.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Non-Standard Dijkstra: Minimize Maximum Edge Weight</span>
+      <p>Dijkstra works here because the "distance" = max absolute difference along the path, and this is monotone (adding more edges can only increase or maintain the max). Edge weight = abs(height[nr][nc] - height[r][c]). Path "distance" = max edge encountered, not sum.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C × log(R×C))</span>
+<span class="kw">int</span> <span class="fn">minimumEffortPath</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; h){
+    <span class="kw">int</span> R=h.size(),C=h[0].size();
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; dist(R,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;(C,INT_MAX));
+    <span class="kw">int</span> dx[]={0,0,1,-1},dy[]={1,-1,0,0};
+    priority_queue&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;,<span class="kw">vector</span>&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;,greater&lt;&gt;&gt; pq;
+    dist[0][0]=0; pq.push({0,0,0});
+    <span class="kw">while</span>(!pq.empty()){
+        <span class="kw">auto</span>[effort,r,c]=pq.top();pq.pop();
+        <span class="kw">if</span>(r==R-1&amp;&amp;c==C-1) <span class="kw">return</span> effort;
+        <span class="kw">if</span>(effort&gt;dist[r][c]) <span class="kw">continue</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C){
+                <span class="kw">int</span> newEff=max(effort,abs(h[nr][nc]-h[r][c]));
+                <span class="kw">if</span>(newEff&lt;dist[nr][nc]){ dist[nr][nc]=newEff; pq.push({newEff,nr,nc}); }
+            }
+        }
+    }
+    <span class="kw">return</span> 0;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C·log(R×C))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q129 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q129 · HARD</span>
+    <span class="qtitle">Find the City With the Smallest Number of Neighbours (Floyd-Warshall)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Floyd-Warshall</span></div>
+    <span class="qsrc">LeetCode #1334</span>
+  </div>
+  <div class="hints"><span class="hint hc">All-Pairs Shortest Path → Count Reachable Cities</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the city with the fewest other cities reachable within a distance threshold. All-pairs shortest paths needed.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Floyd-Warshall Gives All-Pairs Shortest Paths in O(V³)</span>
+      <p>Init dist[i][i]=0, dist[i][j]=edge weight or INF. For each intermediate node k: dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]). Then count reachable cities per city and find the answer.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Floyd-Warshall O(n³)</span>
+<span class="kw">int</span> <span class="fn">findTheCity</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; edges, <span class="kw">int</span> threshold){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">long</span>&gt;&gt; d(n,<span class="kw">vector</span>&lt;<span class="kw">long</span>&gt;(n,1e9));
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) d[i][i]=0;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; e:edges){ d[e[0]][e[1]]=d[e[1]][e[0]]=e[2]; }
+    <span class="cm">// Floyd-Warshall</span>
+    <span class="kw">for</span>(<span class="kw">int</span> k=0;k&lt;n;k++)
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++)
+            <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++)
+                d[i][j]=min(d[i][j], d[i][k]+d[k][j]);
+    <span class="kw">int</span> ans=-1, minCount=n;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++){
+        <span class="kw">int</span> cnt=0;
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++) <span class="kw">if</span>(i!=j &amp;&amp; d[i][j]&lt;=threshold) cnt++;
+        <span class="kw">if</span>(cnt&lt;=minCount){ minCount=cnt; ans=i; } <span class="cm">// Largest label on tie</span>
+    }
+    <span class="kw">return</span> ans;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n³)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n²)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q130 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q130 · HARD</span>
+    <span class="qtitle">Swim in Rising Water</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Dijkstra</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #778</span>
+  </div>
+  <div class="hints"><span class="hint ht">Minimize Maximum Node Value on Path — Same as Q128 but Nodes not Edges</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Grid where grid[i][j] = time when cell becomes accessible. Find the minimum time T such that there is a path from top-left to bottom-right where all cells are accessible at time T.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Dijkstra minimizing max node value on path</span>
+<span class="kw">int</span> <span class="fn">swimInWater</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid){
+    <span class="kw">int</span> n=grid.size();
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; dist(n,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;(n,INT_MAX));
+    <span class="kw">int</span> dx[]={0,0,1,-1},dy[]={1,-1,0,0};
+    priority_queue&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;,<span class="kw">vector</span>&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;,greater&lt;&gt;&gt; pq;
+    dist[0][0]=grid[0][0]; pq.push({grid[0][0],0,0});
+    <span class="kw">while</span>(!pq.empty()){
+        <span class="kw">auto</span>[t,r,c]=pq.top();pq.pop();
+        <span class="kw">if</span>(r==n-1&amp;&amp;c==n-1) <span class="kw">return</span> t;
+        <span class="kw">if</span>(t&gt;dist[r][c]) <span class="kw">continue</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;n&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;n){
+                <span class="kw">int</span> nt=max(t,grid[nr][nc]);
+                <span class="kw">if</span>(nt&lt;dist[nr][nc]){ dist[nr][nc]=nt; pq.push({nt,nr,nc}); }
+            }
+        }
+    }
+    <span class="kw">return</span> -1;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n² log n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n²)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q131 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q131 · HARD</span>
+    <span class="qtitle">Minimum Cost to Make at Least One Valid Path in a Grid</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">0-1 BFS</span><span class="qt qt-m">Deque</span></div>
+    <span class="qsrc">LeetCode #1368</span>
+  </div>
+  <div class="hints"><span class="hint ht">0-1 BFS: Cost 0 if Following Arrow, Cost 1 if Changing Direction</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Grid has arrows (1=right,2=left,3=down,4=up). Cost 0 to follow arrow, cost 1 to change it. Find minimum cost path from top-left to bottom-right.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — 0-1 BFS (Deque) for Graphs with Only 0 and 1 Edge Weights</span>
+      <p>When edge weights are only 0 or 1, use a deque instead of a priority queue. Cost 0 → push to front. Cost 1 → push to back. This gives Dijkstra-like guarantees in O(V+E) instead of O((V+E) log V).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — 0-1 BFS with Deque O(R×C)</span>
+<span class="kw">int</span> <span class="fn">minCost</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid){
+    <span class="kw">int</span> R=grid.size(),C=grid[0].size();
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; dist(R,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;(C,INT_MAX));
+    <span class="cm">// Arrow directions: 1=right,2=left,3=down,4=up</span>
+    <span class="kw">int</span> dx[]={0,0,1,-1},dy[]={1,-1,0,0};
+    deque&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; dq; dq.push_front({0,0}); dist[0][0]=0;
+    <span class="kw">while</span>(!dq.empty()){
+        <span class="kw">auto</span>[r,c]=dq.front();dq.pop_front();
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d];
+            <span class="kw">if</span>(nr&lt;0||nr&gt;=R||nc&lt;0||nc&gt;=C) <span class="kw">continue</span>;
+            <span class="kw">int</span> cost=(grid[r][c]-1==d)?0:1; <span class="cm">// 0 if following arrow, 1 if changing</span>
+            <span class="kw">if</span>(dist[r][c]+cost&lt;dist[nr][nc]){
+                dist[nr][nc]=dist[r][c]+cost;
+                cost==0 ? dq.push_front({nr,nc}) : dq.push_back({nr,nc});
+            }
+        }
+    }
+    <span class="kw">return</span> dist[R-1][C-1];
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(R×C)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(R×C)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q132 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q132 · HARD</span>
+    <span class="qtitle">K-th Shortest Path (Yen's / Dijkstra with K Visits)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Dijkstra</span></div>
+    <span class="qsrc">LeetCode #2642 / CSES</span>
+  </div>
+  <div class="hints"><span class="hint ht">Allow Each Node to Be Visited Up to K Times</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the Kth shortest path from source to destination in a weighted directed graph (paths can repeat nodes).</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Modified Dijkstra: Each Node Can Be Popped K Times</span>
+      <p>In standard Dijkstra, skip a node once visited. For Kth shortest path: allow each node to be processed up to K times. The Kth time destination is popped = Kth shortest path. Use a visit counter array.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Kth Shortest Path O(KE log V)</span>
+<span class="kw">int</span> <span class="fn">kthShortestPath</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt;&amp; adj,
+                     <span class="kw">int</span> src, <span class="kw">int</span> dst, <span class="kw">int</span> K){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; count(n+1,0);
+    priority_queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;,<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;,greater&lt;&gt;&gt; pq;
+    pq.push({0,src});
+    <span class="kw">while</span>(!pq.empty()){
+        <span class="kw">auto</span>[d,u]=pq.top();pq.pop();
+        count[u]++;
+        <span class="kw">if</span>(count[u]&gt;K) <span class="kw">continue</span>;       <span class="cm">// Only process each node K times</span>
+        <span class="kw">if</span>(u==dst&amp;&amp;count[u]==K) <span class="kw">return</span> d; <span class="cm">// Kth time we reach dst</span>
+        <span class="kw">for</span>(<span class="kw">auto</span>[v,w]:adj[u]) pq.push({d+w,v});
+    }
+    <span class="kw">return</span> -1;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(KE log V)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(K·V)</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 13 — UNION-FIND & ADVANCED GRAPH (Q133–Q140)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch13">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 13 · Q133–Q140 · Union-Find &amp; Advanced Graph</div>
+    <div class="ch-title">Union-Find &amp; Advanced — <em>DSU, MST, Bridges &amp; SCCs</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="dsu">
+
+    <div class="def-box">
+      <span class="lbl">Union-Find (DSU) — The Essential Template</span>
+      <p>Two operations, both near-O(1) with path compression + union by rank:<br>
+      <strong>find(x):</strong> Return the root/representative of x's component. Path compression: make every node on the path point directly to root.<br>
+      <strong>unite(x,y):</strong> Merge two components. Union by rank: attach smaller tree under larger to keep height low.<br>
+      <strong>When to use:</strong> Detecting cycles in undirected graphs. Counting connected components. Kruskal's MST. Dynamic connectivity problems. "Are x and y in the same group?"</p>
+    </div>
+
+<!-- ─────────── Q133 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q133 · MEDIUM</span>
+    <span class="qtitle">Union-Find (DSU) Template + Redundant Connection</span>
+    <div class="qtags"><span class="qt qt-u">Union-Find</span><span class="qt qt-g">Graph</span></div>
+    <span class="qsrc">LeetCode #684</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">DSU Template — Memorise This</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Given a tree with one extra edge creating a cycle. Find and return the redundant edge. (= First edge that connects two nodes already in the same component)</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Edge is Redundant if Both Endpoints Already in Same Component</span>
+      <p>Process edges one by one. For each edge (u,v): if find(u) == find(v) → they're already connected → this edge creates a cycle → it's the redundant edge. Otherwise unite(u, v).</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">edges=[[1,2],[1,3],[2,3]]</span>
+parent=[0,1,2,3], rank=[0,0,0,0]
+
+edge(1,2): find(1)=1, find(2)=2 ≠ → unite. parent[2]=1
+edge(1,3): find(1)=1, find(3)=3 ≠ → unite. parent[3]=1
+edge(2,3): find(2)=find(1)=1, find(3)=find(1)=1 → SAME! → <span class="tr-ok">return [2,3]</span></div>
+    <div class="qcode"><span class="clbl">C++ — DSU Template + Redundant Connection</span>
+<span class="kw">struct</span> DSU {
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; parent, rank_;
+    DSU(<span class="kw">int</span> n): parent(n), rank_(n,0){ iota(parent.begin(),parent.end(),0); }
+
+    <span class="kw">int</span> find(<span class="kw">int</span> x){
+        <span class="kw">if</span>(parent[x]!=x) parent[x]=find(parent[x]); <span class="cm">// Path compression</span>
+        <span class="kw">return</span> parent[x];
+    }
+    <span class="kw">bool</span> unite(<span class="kw">int</span> x, <span class="kw">int</span> y){
+        x=find(x); y=find(y);
+        <span class="kw">if</span>(x==y) <span class="kw">return false</span>;            <span class="cm">// Already connected!</span>
+        <span class="kw">if</span>(rank_[x]&lt;rank_[y]) swap(x,y);   <span class="cm">// Union by rank</span>
+        parent[y]=x;
+        <span class="kw">if</span>(rank_[x]==rank_[y]) rank_[x]++;
+        <span class="kw">return true</span>;
+    }
+};
+
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">findRedundantConnection</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; edges){
+    DSU dsu(edges.size()+1);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; e:edges)
+        <span class="kw">if</span>(!dsu.unite(e[0],e[1])) <span class="kw">return</span> e; <span class="cm">// Returns false = already connected = redundant</span>
+    <span class="kw">return</span> {};
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">per op</span><span class="fv">O(α(n)) ≈ O(1)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Same DSU</span><span class="fv">Used in Q134, Q135, Q136, Q137, Q138</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q134 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q134 · HARD</span>
+    <span class="qtitle">Number of Islands II (Online Query)</span>
+    <div class="qtags"><span class="qt qt-u">Union-Find</span><span class="qt qt-g">Graph</span></div>
+    <span class="qsrc">LeetCode #305 (Premium)</span>
+  </div>
+  <div class="hints"><span class="hint ht">DSU for Dynamic Connectivity; Track Component Count</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>m×n grid, initially water. Process operations adding land cells one at a time. After each addition, return the current number of islands.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — DSU: Add Land = Create Component, Then Merge with Adjacent Land</span>
+      <p>Maintain a DSU for land cells. When adding cell (r,c): create a new component (islandCount++). For each of 4 neighbours that are land and in a different component: unite them (islandCount--). DSU handles all merging efficiently.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(operations × α(R×C))</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">numIslands2</span>(<span class="kw">int</span> R, <span class="kw">int</span> C, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; ops){
+    <span class="kw">int</span> dx[]={0,0,1,-1},dy[]={1,-1,0,0};
+    DSU dsu(R*C);
+    <span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt; isLand(R*C,<span class="kw">false</span>);
+    <span class="kw">int</span> islands=0;
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; op:ops){
+        <span class="kw">int</span> r=op[0],c=op[1],id=r*C+c;
+        <span class="kw">if</span>(!isLand[id]){
+            isLand[id]=<span class="kw">true</span>; islands++;
+            <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+                <span class="kw">int</span> nr=r+dx[d],nc=c+dy[d],nid=nr*C+nc;
+                <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C&amp;&amp;isLand[nid])
+                    <span class="kw">if</span>(dsu.unite(id,nid)) islands--;
+            }
+        }
+        res.push_back(islands);
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(Q × α(RC))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(RC)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q135 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q135 · HARD</span>
+    <span class="qtitle">Minimum Spanning Tree — Kruskal's Algorithm</span>
+    <div class="qtags"><span class="qt qt-u">Union-Find</span><span class="qt qt-g">Graph</span><span class="qt qt-gr">Greedy</span></div>
+    <span class="qsrc">CSES / LeetCode #1584</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Sort Edges + DSU</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the minimum spanning tree (MST) of a weighted undirected graph. Return the total weight of the MST.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Greedy: Always Add Cheapest Edge That Doesn't Form a Cycle</span>
+      <p>Sort all edges by weight. Process in order: if an edge connects two different components (DSU find gives different roots) → add it to MST (unite). Otherwise skip (would create cycle). Stop when n-1 edges added.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">n=4, edges sorted by weight: (1,2,1),(2,3,2),(3,4,3),(1,4,10),(2,4,5)</span>
+edge(1,2,w=1): find(1)≠find(2) → UNITE. MST cost=1. components: {1,2},{3},{4}
+edge(2,3,w=2): find(2)≠find(3) → UNITE. MST cost=3. components: {1,2,3},{4}
+edge(3,4,w=3): find(3)≠find(4) → UNITE. MST cost=6. n-1=3 edges added.
+
+MST total weight: <span class="tr-ok">6</span> (skip edge 1-4 and 2-4 — not needed)</div>
+    <div class="qcode"><span class="clbl">C++ — Kruskal's O(E log E)</span>
+<span class="kw">int</span> <span class="fn">kruskalMST</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; edges){
+    sort(edges.begin(),edges.end());    <span class="cm">// Sort by weight (first element)</span>
+    DSU dsu(n+1);
+    <span class="kw">int</span> cost=0, count=0;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp;[w,u,v]:edges){
+        <span class="kw">if</span>(dsu.unite(u,v)){
+            cost+=w; count++;
+            <span class="kw">if</span>(count==n-1) <span class="kw">break</span>;       <span class="cm">// MST complete</span>
+        }
+    }
+    <span class="kw">return</span> count==n-1 ? cost : -1;    <span class="cm">// -1 if graph disconnected</span>
+}
+
+<span class="cm">// LeetCode 1584: Min Cost to Connect All Points</span>
+<span class="cm">// Build all |n*(n-1)/2| edges, apply Kruskal's</span>
+<span class="kw">int</span> <span class="fn">minCostConnectPoints</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; pts){
+    <span class="kw">int</span> n=pts.size();
+    <span class="kw">vector</span>&lt;tuple&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; edges;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">for</span>(<span class="kw">int</span> j=i+1;j&lt;n;j++)
+        edges.push_back({abs(pts[i][0]-pts[j][0])+abs(pts[i][1]-pts[j][1]),i,j});
+    <span class="kw">return</span> kruskalMST(n,edges);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(E log E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q136 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q136 · HARD</span>
+    <span class="qtitle">Accounts Merge</span>
+    <div class="qtags"><span class="qt qt-u">Union-Find</span><span class="qt qt-g">Graph</span></div>
+    <span class="qsrc">LeetCode #721</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">DSU on Email Strings</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Merge accounts with overlapping emails. Each account is [name, email1, email2...]. If two accounts share an email, they belong to the same person. Return merged accounts sorted.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Emails are Nodes; Shared Email = Union. Group by Component.</span>
+      <p>Map each email to an index. For each account, unite all emails with the first email of that account. After all unions, group emails by their root component. Sort each group and prepend the name.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — DSU on Emails O(n·k·α(n))</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; <span class="fn">accountsMerge</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt;&amp; accs){
+    unordered_map&lt;<span class="kw">string</span>,<span class="kw">int</span>&gt; emailId;
+    unordered_map&lt;<span class="kw">string</span>,<span class="kw">string</span>&gt; emailName;
+    <span class="kw">int</span> id=0;
+    DSU dsu(10001);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; acc:accs){
+        <span class="kw">string</span>&amp; name=acc[0];
+        <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;(<span class="kw">int</span>)acc.size();i++){
+            <span class="kw">if</span>(!emailId.count(acc[i])){ emailId[acc[i]]=id++; emailName[acc[i]]=name; }
+            dsu.unite(emailId[acc[1]],emailId[acc[i]]); <span class="cm">// Unite with first email</span>
+        }
+    }
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; groups;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp;[email,idx]:emailId)
+        groups[dsu.find(idx)].push_back(email);
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&gt; res;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp;[root,emails]:groups){
+        sort(emails.begin(),emails.end());
+        emails.insert(emails.begin(), emailName[emails[0]]);
+        res.push_back(emails);
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n·k·log(n·k))</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n·k)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q137 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q137 · HARD</span>
+    <span class="qtitle">Making a Large Island (DSU on Grid)</span>
+    <div class="qtags"><span class="qt qt-u">Union-Find</span><span class="qt qt-g">Graph</span><span class="qt qt-m">Grid</span></div>
+    <span class="qsrc">LeetCode #827</span>
+  </div>
+  <div class="hints"><span class="hint ht">Label Islands, Then Check Each 0 Cell for Max Merge</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>You can change one 0 to 1. Find the size of the largest island you can create after this change.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Label Islands with DSU, Then Find Best 0 to Flip</span>
+      <p>Step 1: Use DSU to label all existing islands and record their sizes. Step 2: For each 0 cell, check 4 neighbours' island roots (use a set to avoid double-counting same island). The best flip = 1 + sum of distinct neighbour island sizes.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(R×C)</span>
+<span class="kw">int</span> <span class="fn">largestIsland</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; grid){
+    <span class="kw">int</span> n=grid.size(), best=0;
+    <span class="kw">int</span> dx[]={0,0,1,-1},dy[]={1,-1,0,0};
+    DSU dsu(n*n);
+    <span class="cm">// Step 1: Union all existing land cells</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++) <span class="kw">if</span>(grid[i][j])
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> ni=i+dx[d],nj=j+dy[d];
+            <span class="kw">if</span>(ni&gt;=0&amp;&amp;ni&lt;n&amp;&amp;nj&gt;=0&amp;&amp;nj&lt;n&amp;&amp;grid[ni][nj]) dsu.unite(i*n+j,ni*n+nj);
+        }
+    <span class="cm">// Compute island sizes</span>
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; sz(n*n,0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++) <span class="kw">if</span>(grid[i][j]) sz[dsu.find(i*n+j)]++;
+    <span class="cm">// Step 2: Try flipping each 0</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;n;j++) <span class="kw">if</span>(!grid[i][j]){
+        set&lt;<span class="kw">int</span>&gt; seen; <span class="kw">int</span> gain=1;
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> ni=i+dx[d],nj=j+dy[d];
+            <span class="kw">if</span>(ni&gt;=0&amp;&amp;ni&lt;n&amp;&amp;nj&gt;=0&amp;&amp;nj&lt;n&amp;&amp;grid[ni][nj]){
+                <span class="kw">int</span> root=dsu.find(ni*n+nj);
+                <span class="kw">if</span>(!seen.count(root)){ gain+=sz[root]; seen.insert(root); }
+            }
+        }
+        best=max(best,gain);
+    }
+    <span class="kw">return</span> best==0 ? n*n : best; <span class="cm">// If no 0 found, entire grid is one island</span>
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n²)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q138 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q138 · HARD</span>
+    <span class="qtitle">Bridges in a Graph (Tarjan's Algorithm)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span></div>
+    <span class="qsrc">LeetCode #1192</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Discovery Time + Low-Link Values</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find all critical connections (bridges) in a network — edges whose removal would disconnect the graph.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Bridge = Edge (u,v) Where Low[v] &gt; disc[u]</span>
+      <p>DFS assigns each node a discovery time. <code>low[v]</code> = minimum discovery time reachable from v's subtree (including back edges). Edge (u,v) is a bridge if <code>low[v] &gt; disc[u]</code> — v's subtree cannot reach u or above without this edge.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Tarjan's Bridge Finding O(V+E)</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">criticalConnections</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; connections){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; adj(n), bridges;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; c:connections){ adj[c[0]].push_back(c[1]); adj[c[1]].push_back(c[0]); }
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; disc(n,-1), low(n);
+    <span class="kw">int</span> timer=0;
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>,<span class="kw">int</span>)&gt; dfs=[&amp;](<span class="kw">int</span> u, <span class="kw">int</span> parent){
+        disc[u]=low[u]=timer++;
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]){
+            <span class="kw">if</span>(v==parent) <span class="kw">continue</span>;     <span class="cm">// Skip parent edge</span>
+            <span class="kw">if</span>(disc[v]==-1){
+                dfs(v,u);
+                low[u]=min(low[u],low[v]);
+                <span class="kw">if</span>(low[v]&gt;disc[u]) bridges.push_back({u,v}); <span class="cm">// Bridge!</span>
+            } <span class="kw">else</span> low[u]=min(low[u],disc[v]); <span class="cm">// Back edge</span>
+        }
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(disc[i]==-1) dfs(i,-1);
+    <span class="kw">return</span> bridges;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q139 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q139 · HARD</span>
+    <span class="qtitle">Strongly Connected Components (Kosaraju's)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-d">DFS</span></div>
+    <span class="qsrc">CSES / Codeforces Edu</span>
+  </div>
+  <div class="hints"><span class="hint ht">Two-Pass DFS: Order then Reverse Graph</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find all Strongly Connected Components (SCCs) in a directed graph. An SCC is a maximal group of nodes where every node is reachable from every other.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Kosaraju: DFS to Get Finish Order, Then DFS on Reversed Graph</span>
+      <p>Pass 1: DFS on original graph, record finish order (push to stack when DFS completes a node). Pass 2: Reverse all edges. Process nodes in reverse finish order (pop from stack). Each DFS call in pass 2 explores one complete SCC.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Kosaraju's O(V+E)</span>
+<span class="kw">int</span> <span class="fn">countSCCs</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; adj){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; radj(n);
+    <span class="kw">for</span>(<span class="kw">int</span> u=0;u&lt;n;u++) <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) radj[v].push_back(u);
+
+    <span class="kw">vector</span>&lt;<span class="kw">bool</span>&gt; vis(n,<span class="kw">false</span>);
+    stack&lt;<span class="kw">int</span>&gt; order;
+
+    <span class="cm">// Pass 1: Fill order by finish time</span>
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; dfs1=[&amp;](<span class="kw">int</span> u){
+        vis[u]=<span class="kw">true</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) <span class="kw">if</span>(!vis[v]) dfs1(v);
+        order.push(u);                 <span class="cm">// Push after all descendants</span>
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(!vis[i]) dfs1(i);
+
+    <span class="cm">// Pass 2: DFS on reversed graph in finish order</span>
+    fill(vis.begin(),vis.end(),<span class="kw">false</span>);
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; dfs2=[&amp;](<span class="kw">int</span> u){
+        vis[u]=<span class="kw">true</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> v:radj[u]) <span class="kw">if</span>(!vis[v]) dfs2(v);
+    };
+    <span class="kw">int</span> sccs=0;
+    <span class="kw">while</span>(!order.empty()){
+        <span class="kw">int</span> u=order.top();order.pop();
+        <span class="kw">if</span>(!vis[u]){ dfs2(u); sccs++; } <span class="cm">// Each DFS = one SCC</span>
+    }
+    <span class="kw">return</span> sccs;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V+E)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q140 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q140 · HARD</span>
+    <span class="qtitle">Longest Path in a DAG (Critical Path)</span>
+    <div class="qtags"><span class="qt qt-g">Graph</span><span class="qt qt-b">Topo Sort</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">CSES / Codeforces Edu</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Topo DP: dp[v] = max(dp[u]+w) for all edges u→v</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the longest path in a DAG (weighted or unweighted). Used in: critical path analysis, scheduling, project management.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Process Nodes in Topological Order, DP Relaxes Forward</span>
+      <p>Process nodes in topological order. For each node u: for each edge u→v, update dp[v] = max(dp[v], dp[u] + weight). The final answer is max(dp[i]). To reconstruct the path, track the predecessor that gave the maximum.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Topo DP O(V+E)</span>
+<span class="kw">long long</span> <span class="fn">longestPathDAG</span>(<span class="kw">int</span> n, <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&gt;&amp; adj){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; indeg(n,0);
+    <span class="kw">for</span>(<span class="kw">int</span> u=0;u&lt;n;u++) <span class="kw">for</span>(<span class="kw">auto</span>&amp;[v,w]:adj[u]) indeg[v]++;
+    queue&lt;<span class="kw">int</span>&gt; q;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) <span class="kw">if</span>(indeg[i]==0) q.push(i);
+    <span class="kw">vector</span>&lt;<span class="kw">long long</span>&gt; dp(n,0);
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> u=q.front();q.pop();
+        <span class="kw">for</span>(<span class="kw">auto</span>&amp;[v,w]:adj[u]){
+            dp[v]=max(dp[v], dp[u]+w);   <span class="cm">// Relax forward</span>
+            <span class="kw">if</span>(--indeg[v]==0) q.push(v);
+        }
+    }
+    <span class="kw">return</span> *max_element(dp.begin(),dp.end());
+}
+<span class="cm">// Unweighted: all edges have w=1 → longest path = DAG's "diameter"</span>
+<span class="cm">// Negative weights allowed! Just negate all weights and find shortest path.</span></div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(V+E)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(V)</span></div>
+    <div class="qf x"><span class="fl">Related</span><span class="fv">Parallel Courses III (Q125) · Project Scheduling</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<div class="footer">Interview Problem Setbook · Part 4 of 6 · Q106–Q140 · Graphs · BFS/DFS · Topological Sort · Shortest Paths · Union-Find</div>
+</div>
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'iv-04';
+  var FILE_DISP = 'IV · Part 4 · Q106–Q140';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

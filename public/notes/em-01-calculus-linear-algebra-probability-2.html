@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Mathematics — Calculus, Linear Algebra & Probability · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Engineering Mathematics</div>
+    <h1>Calculus, Linear Algebra<br><em>&amp; Probability</em></h1>
+    <p class="cover-desc">
+      Limits and continuity, differentiation and integration, multivariable calculus, matrix algebra and determinants, systems of equations, eigenvalues and eigenvectors, probability theory, random variables, distributions, and Bayes' theorem — every proof, every GATE formula, every trap.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Limits &amp; Continuity</span>
+      <span class="chip">Ch 2 · Differentiation</span>
+      <span class="chip">Ch 3 · Integration</span>
+      <span class="chip">Ch 4 · Multivariable Calculus</span>
+      <span class="chip">Ch 5 · Linear Algebra — Matrices &amp; Determinants</span>
+      <span class="chip">Ch 6 · Systems of Equations &amp; Rank</span>
+      <span class="chip">Ch 7 · Eigenvalues &amp; Eigenvectors</span>
+      <span class="chip">Ch 8 · Probability Theory</span>
+      <span class="chip">Ch 9 · Random Variables &amp; Distributions</span>
+      <span class="chip">Ch 10 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Limits &amp; Continuity</a>
+    <a href="#ch2"><span class="tn">02</span>Differentiation</a>
+    <a href="#ch3"><span class="tn">03</span>Integration</a>
+    <a href="#ch4"><span class="tn">04</span>Multivariable Calculus</a>
+    <a href="#ch5"><span class="tn">05</span>Matrices &amp; Determinants</a>
+    <a href="#ch6"><span class="tn">06</span>Systems of Equations &amp; Rank</a>
+    <a href="#ch7"><span class="tn">07</span>Eigenvalues &amp; Eigenvectors</a>
+    <a href="#ch8"><span class="tn">08</span>Probability Theory</a>
+    <a href="#ch9"><span class="tn">09</span>Random Variables &amp; Distributions</a>
+    <a href="#ch10"><span class="tn">10</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — LIMITS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Limits <em>&amp; Continuity</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="limits">
+      <h2 class="sh">1.1 &nbsp; Limits — Definition &amp; Evaluation <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Limit — ε-δ Definition</span>
+        <p>lim_{x→a} f(x) = L means: for every ε > 0, there exists δ > 0 such that 0 < |x−a| < δ implies |f(x)−L| < ε. The function value at a doesn't matter — only the behaviour near a.</p>
+      </div>
+
+      <h3 class="ssh">Standard Limit Formulas</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Limit</th><th>Value</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>lim_{x→0} sin(x)/x</td><td>1</td><td>Fundamental — used in differentiation</td></tr>
+            <tr><td>lim_{x→0} (1 − cos x)/x</td><td>0</td><td>From Taylor: cos x ≈ 1 − x²/2</td></tr>
+            <tr><td>lim_{x→0} (1 − cos x)/x²</td><td>1/2</td><td>Important for GATE NAT</td></tr>
+            <tr><td>lim_{x→0} tan(x)/x</td><td>1</td><td>Since tan x ≈ x near 0</td></tr>
+            <tr><td>lim_{x→∞} (1 + 1/x)^x</td><td>e</td><td>Definition of e</td></tr>
+            <tr><td>lim_{x→0} (1 + x)^(1/x)</td><td>e</td><td>Equivalent form</td></tr>
+            <tr><td>lim_{x→0} (eˣ − 1)/x</td><td>1</td><td>From Taylor: eˣ ≈ 1 + x</td></tr>
+            <tr><td>lim_{x→0} ln(1+x)/x</td><td>1</td><td>From Taylor: ln(1+x) ≈ x</td></tr>
+            <tr><td>lim_{x→∞} xⁿ/eˣ</td><td>0</td><td>Exponential dominates any polynomial</td></tr>
+            <tr><td>lim_{x→∞} ln(x)/xⁿ (n>0)</td><td>0</td><td>Polynomial dominates logarithm</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">L'Hôpital's Rule</h3>
+      <div class="def-box">
+        <span class="lbl">L'Hôpital's Rule</span>
+        <p>If lim f(x)/g(x) gives indeterminate form 0/0 or ∞/∞, and both f and g are differentiable near a:<br>
+        lim_{x→a} f(x)/g(x) = lim_{x→a} f'(x)/g'(x)<br>
+        Apply repeatedly if the result is still indeterminate. Only valid for 0/0 or ∞/∞ — not for 0·∞, ∞−∞, 1^∞, 0^0 directly (convert first).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Evaluate lim_{x→0} (sin x − x)/x³:</strong></p>
+        <div class="cb">Form: 0/0. Apply L'Hôpital:
+  → lim (cos x − 1)/(3x²)   still 0/0
+  → lim (−sin x)/(6x)       still 0/0
+  → lim (−cos x)/(6)        = −1/6
+
+Answer: −1/6
+
+Alternative using Taylor: sin x = x − x³/6 + x⁵/120 − ...
+(sin x − x)/x³ = (−x³/6 + ...)/x³ = −1/6 + ... → −1/6 ✓</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="continuity">
+      <h2 class="sh">1.2 &nbsp; Continuity &amp; Differentiability <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Continuity — Three Conditions</span>
+        <p>f is continuous at x = a iff ALL THREE hold:<br>
+        1. f(a) is defined.<br>
+        2. lim_{x→a} f(x) exists (left limit = right limit).<br>
+        3. lim_{x→a} f(x) = f(a).<br>
+        A function continuous on a closed interval [a,b] satisfies the Extreme Value Theorem (attains max and min) and Intermediate Value Theorem.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Differentiability Implies Continuity</span>
+        <p>If f is differentiable at a, then f is continuous at a. The converse is false: |x| is continuous at 0 but not differentiable (corner). Continuity is necessary but not sufficient for differentiability.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>f(x) = |x|. Differentiable at x=0?</strong></p>
+        <div class="cb">Left derivative: lim_{h→0⁻} (|h| − 0)/h = lim h→0⁻ (−h)/h = −1
+Right derivative: lim_{h→0⁺} (|h| − 0)/h = lim h→0⁺ h/h = 1
+Left ≠ Right → NOT differentiable at 0.
+Continuous at 0 (limit = 0 = f(0)) but not differentiable. ✓</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — DIFFERENTIATION ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Differentiation — <em>Rules, Mean Value &amp; Taylor Series</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="diff-rules">
+      <h2 class="sh">2.1 &nbsp; Differentiation Rules &amp; Standard Derivatives <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function f(x)</th><th>Derivative f'(x)</th></tr></thead>
+          <tbody>
+            <tr><td>xⁿ</td><td>nxⁿ⁻¹</td></tr>
+            <tr><td>eˣ</td><td>eˣ</td></tr>
+            <tr><td>aˣ</td><td>aˣ ln a</td></tr>
+            <tr><td>ln x</td><td>1/x</td></tr>
+            <tr><td>log_a x</td><td>1/(x ln a)</td></tr>
+            <tr><td>sin x</td><td>cos x</td></tr>
+            <tr><td>cos x</td><td>−sin x</td></tr>
+            <tr><td>tan x</td><td>sec²x</td></tr>
+            <tr><td>sec x</td><td>sec x tan x</td></tr>
+            <tr><td>cosec x</td><td>−cosec x cot x</td></tr>
+            <tr><td>cot x</td><td>−cosec²x</td></tr>
+            <tr><td>sin⁻¹ x</td><td>1/√(1−x²)</td></tr>
+            <tr><td>cos⁻¹ x</td><td>−1/√(1−x²)</td></tr>
+            <tr><td>tan⁻¹ x</td><td>1/(1+x²)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule</th><th>Formula</th></tr></thead>
+          <tbody>
+            <tr><td>Product rule</td><td>(uv)' = u'v + uv'</td></tr>
+            <tr><td>Quotient rule</td><td>(u/v)' = (u'v − uv')/v²</td></tr>
+            <tr><td>Chain rule</td><td>(f∘g)'(x) = f'(g(x))·g'(x)</td></tr>
+            <tr><td>Implicit differentiation</td><td>Differentiate both sides w.r.t. x, solve for dy/dx</td></tr>
+            <tr><td>Logarithmic differentiation</td><td>Take ln of both sides before differentiating (for f(x)^g(x))</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="mean-value">
+      <h2 class="sh">2.2 &nbsp; Mean Value Theorems <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Rolle's Theorem</span>
+        <p>If f is continuous on [a,b], differentiable on (a,b), and f(a) = f(b), then there exists c ∈ (a,b) such that f'(c) = 0.<br>
+        Geometric meaning: there is at least one horizontal tangent between two points at the same height.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Mean Value Theorem (Lagrange's MVT)</span>
+        <p>If f is continuous on [a,b] and differentiable on (a,b), then there exists c ∈ (a,b) such that:<br>
+        f'(c) = [f(b) − f(a)] / (b − a)<br>
+        Geometric meaning: the instantaneous rate of change at c equals the average rate of change over [a,b]. Rolle's theorem is the special case f(a)=f(b).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Cauchy's Mean Value Theorem</span>
+        <p>If f and g are continuous on [a,b] and differentiable on (a,b), and g'(x) ≠ 0 on (a,b):<br>
+        [f(b)−f(a)] / [g(b)−g(a)] = f'(c)/g'(c) for some c ∈ (a,b).<br>
+        Setting g(x)=x recovers Lagrange's MVT.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="taylor">
+      <h2 class="sh">2.3 &nbsp; Taylor &amp; Maclaurin Series <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Taylor Series about x = a</span>
+        <p>f(x) = Σₙ₌₀^∞ f⁽ⁿ⁾(a)/n! · (x−a)ⁿ = f(a) + f'(a)(x−a) + f''(a)(x−a)²/2! + ...</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function</th><th>Maclaurin Series (a=0)</th><th>Radius of convergence</th></tr></thead>
+          <tbody>
+            <tr><td>eˣ</td><td>1 + x + x²/2! + x³/3! + ... = Σ xⁿ/n!</td><td>∞</td></tr>
+            <tr><td>sin x</td><td>x − x³/3! + x⁵/5! − ... = Σ (−1)ⁿx^(2n+1)/(2n+1)!</td><td>∞</td></tr>
+            <tr><td>cos x</td><td>1 − x²/2! + x⁴/4! − ... = Σ (−1)ⁿx^(2n)/(2n)!</td><td>∞</td></tr>
+            <tr><td>ln(1+x)</td><td>x − x²/2 + x³/3 − ... = Σ (−1)ⁿ⁺¹xⁿ/n</td><td>−1 &lt; x ≤ 1</td></tr>
+            <tr><td>1/(1−x)</td><td>1 + x + x² + x³ + ... = Σ xⁿ</td><td>|x| &lt; 1</td></tr>
+            <tr><td>(1+x)ⁿ</td><td>1 + nx + n(n−1)x²/2! + ... (Binomial)</td><td>|x| &lt; 1</td></tr>
+            <tr><td>tan⁻¹ x</td><td>x − x³/3 + x⁵/5 − ...</td><td>|x| ≤ 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Taylor Series for Limit Evaluation — Faster than L'Hôpital</span>
+        <p>For limits involving standard functions near 0, substitute the Taylor series and simplify — often faster than repeated L'Hôpital application. lim_{x→0} (eˣ − 1 − x)/x² = lim (1+x+x²/2+... −1−x)/x² = lim x²/2+.../x² = 1/2. Two lines vs three L'Hôpital applications.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — INTEGRATION ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Integration — <em>Techniques &amp; Applications</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="integration-rules">
+      <h2 class="sh">3.1 &nbsp; Standard Integrals &amp; Techniques <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>∫ f(x) dx</th><th>Result + C</th></tr></thead>
+          <tbody>
+            <tr><td>∫ xⁿ dx</td><td>xⁿ⁺¹/(n+1),  n≠−1</td></tr>
+            <tr><td>∫ 1/x dx</td><td>ln|x|</td></tr>
+            <tr><td>∫ eˣ dx</td><td>eˣ</td></tr>
+            <tr><td>∫ aˣ dx</td><td>aˣ/ln a</td></tr>
+            <tr><td>∫ sin x dx</td><td>−cos x</td></tr>
+            <tr><td>∫ cos x dx</td><td>sin x</td></tr>
+            <tr><td>∫ tan x dx</td><td>ln|sec x|</td></tr>
+            <tr><td>∫ sec²x dx</td><td>tan x</td></tr>
+            <tr><td>∫ 1/√(1−x²) dx</td><td>sin⁻¹x</td></tr>
+            <tr><td>∫ 1/(1+x²) dx</td><td>tan⁻¹x</td></tr>
+            <tr><td>∫ 1/(x²−a²) dx</td><td>(1/2a)ln|(x−a)/(x+a)|</td></tr>
+            <tr><td>∫ 1/√(x²+a²) dx</td><td>ln|x + √(x²+a²)|</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Integration Techniques</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Technique</th><th>When to use</th><th>Method</th></tr></thead>
+          <tbody>
+            <tr><td>Substitution (u-sub)</td><td>Composite function: ∫f(g(x))g'(x)dx</td><td>Let u=g(x), du=g'(x)dx</td></tr>
+            <tr><td>Integration by Parts</td><td>Product of two functions</td><td>∫u dv = uv − ∫v du. Choose u: LIATE order</td></tr>
+            <tr><td>Partial Fractions</td><td>Rational function P(x)/Q(x)</td><td>Decompose into simpler fractions by factoring Q</td></tr>
+            <tr><td>Trigonometric substitution</td><td>√(a²−x²), √(a²+x²), √(x²−a²)</td><td>x=a sinθ, x=a tanθ, x=a secθ respectively</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">LIATE Rule for Integration by Parts</span>
+        <p>Choose u in this order of preference: <strong>L</strong>ogarithmic, <strong>I</strong>nverse trig, <strong>A</strong>lgebraic (polynomial), <strong>T</strong>rigonometric, <strong>E</strong>xponential. The remaining factor becomes dv.<br>
+        Example: ∫x·eˣdx — choose u=x (Algebraic), dv=eˣdx. Then: x·eˣ − ∫eˣdx = xeˣ − eˣ + C.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Fundamental Theorem of Calculus</span>
+        <p><strong>Part 1:</strong> If F(x) = ∫_a^x f(t)dt, then F'(x) = f(x).<br>
+        <strong>Part 2:</strong> ∫_a^b f(x)dx = F(b) − F(a) where F is any antiderivative of f.<br>
+        These connect the two apparently different operations of differentiation and integration.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="definite-integrals">
+      <h2 class="sh">3.2 &nbsp; Definite Integrals — Properties &amp; Tricks <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Statement</th></tr></thead>
+          <tbody>
+            <tr><td>Reversal</td><td>∫_a^b f(x)dx = −∫_b^a f(x)dx</td></tr>
+            <tr><td>Splitting</td><td>∫_a^b f(x)dx = ∫_a^c f(x)dx + ∫_c^b f(x)dx</td></tr>
+            <tr><td>King's Property</td><td>∫_a^b f(x)dx = ∫_a^b f(a+b−x)dx</td></tr>
+            <tr><td>Even function</td><td>∫_{−a}^a f(x)dx = 2∫_0^a f(x)dx if f is even (f(−x)=f(x))</td></tr>
+            <tr><td>Odd function</td><td>∫_{−a}^a f(x)dx = 0 if f is odd (f(−x)=−f(x))</td></tr>
+            <tr><td>Periodic</td><td>∫_0^{nT} f(x)dx = n·∫_0^T f(x)dx if f has period T</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Evaluate ∫_0^π x sin(x) dx using integration by parts:</strong></p>
+        <div class="cb">u = x,  dv = sin(x)dx → v = −cos(x)
+∫_0^π x sin(x)dx = [x·(−cos x)]_0^π − ∫_0^π (−cos x)dx
+                  = [−x cos x]_0^π + [sin x]_0^π
+                  = (−π cos π − 0) + (sin π − sin 0)
+                  = (−π·(−1)) + (0 − 0)
+                  = π</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — MULTIVARIABLE CALCULUS ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Multivariable Calculus — <em>Partial Derivatives &amp; Optimization</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="partial-derivatives">
+      <h2 class="sh">4.1 &nbsp; Partial Derivatives &amp; Gradient <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Partial Derivative</span>
+        <p>∂f/∂x: differentiate f(x,y,...) treating all other variables as constants. ∂f/∂y: differentiate treating x (and others) as constants.<br>
+        The <strong>gradient</strong> ∇f = (∂f/∂x, ∂f/∂y) points in the direction of steepest increase of f.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>f(x,y) = x²y + sin(xy). Find ∂f/∂x and ∂f/∂y.</strong></p>
+        <div class="cb">∂f/∂x = 2xy + y·cos(xy)    (treat y as constant)
+∂f/∂y = x² + x·cos(xy)    (treat x as constant)</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Chain Rule for Partial Derivatives</span>
+        <p>If z = f(x,y) and x = x(t), y = y(t):<br>
+        dz/dt = (∂f/∂x)(dx/dt) + (∂f/∂y)(dy/dt)<br>
+        If z = f(x,y), x = x(s,t), y = y(s,t):<br>
+        ∂z/∂s = (∂f/∂x)(∂x/∂s) + (∂f/∂y)(∂y/∂s)</p>
+      </div>
+
+      <h3 class="ssh">Critical Points &amp; Second-Order Test</h3>
+      <div class="def-box">
+        <span class="lbl">Second Derivative Test for f(x,y)</span>
+        <p>At a critical point (∂f/∂x = 0, ∂f/∂y = 0), compute the Hessian determinant:<br>
+        D = f_{xx}·f_{yy} − (f_{xy})²<br>
+        If D > 0 and f_{xx} > 0: local minimum.<br>
+        If D > 0 and f_{xx} < 0: local maximum.<br>
+        If D < 0: saddle point.<br>
+        If D = 0: inconclusive.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Maxima and Minima — Lagrange Multipliers</span>
+        <p>To optimize f(x,y) subject to constraint g(x,y) = c:<br>
+        Solve: ∇f = λ∇g and g(x,y) = c simultaneously.<br>
+        The Lagrange multiplier λ represents the rate at which the optimal value of f changes with c.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — MATRICES ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Matrices <em>&amp; Determinants</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="matrix-ops">
+      <h2 class="sh">5.1 &nbsp; Matrix Operations &amp; Properties <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operation / Property</th><th>Rule</th></tr></thead>
+          <tbody>
+            <tr><td>Matrix multiplication</td><td>(AB)ᵢⱼ = Σₖ Aᵢₖ·Bₖⱼ. Requires A's columns = B's rows.</td></tr>
+            <tr><td>Not commutative</td><td>AB ≠ BA in general. BUT det(AB) = det(A)det(B).</td></tr>
+            <tr><td>Transpose: (AB)ᵀ</td><td>BᵀAᵀ (reverse order)</td></tr>
+            <tr><td>Inverse: (AB)⁻¹</td><td>B⁻¹A⁻¹ (reverse order). A⁻¹ exists iff det(A) ≠ 0.</td></tr>
+            <tr><td>Symmetric matrix</td><td>Aᵀ = A. All eigenvalues real. Eigenvectors orthogonal.</td></tr>
+            <tr><td>Orthogonal matrix</td><td>AᵀA = I, so Aᵀ = A⁻¹. Columns are orthonormal. det = ±1.</td></tr>
+            <tr><td>Idempotent matrix</td><td>A² = A. Eigenvalues are 0 or 1.</td></tr>
+            <tr><td>Involutory matrix</td><td>A² = I. Eigenvalues are ±1. A = A⁻¹.</td></tr>
+            <tr><td>Nilpotent matrix</td><td>Aᵏ = 0 for some k. All eigenvalues = 0.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="determinants">
+      <h2 class="sh">5.2 &nbsp; Determinants — Properties &amp; Computation <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Statement</th></tr></thead>
+          <tbody>
+            <tr><td>Row/column swap</td><td>Swapping two rows (or columns) negates the determinant</td></tr>
+            <tr><td>Scalar multiple</td><td>det(cA) = cⁿ·det(A) for n×n matrix (c multiplies each row)</td></tr>
+            <tr><td>Row with zeros</td><td>If any row or column is all zeros, det = 0</td></tr>
+            <tr><td>Identical rows</td><td>If two rows (or columns) are identical, det = 0</td></tr>
+            <tr><td>Row operation</td><td>Adding a multiple of one row to another: det unchanged</td></tr>
+            <tr><td>Transpose</td><td>det(Aᵀ) = det(A)</td></tr>
+            <tr><td>Product</td><td>det(AB) = det(A)·det(B)</td></tr>
+            <tr><td>Inverse</td><td>det(A⁻¹) = 1/det(A)</td></tr>
+            <tr><td>Triangular matrix</td><td>det = product of diagonal entries</td></tr>
+            <tr><td>Singular matrix</td><td>det = 0 ↔ matrix is singular (non-invertible)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Determinant shortcuts:</strong></p>
+        <div class="cb">2×2: |a b; c d| = ad − bc
+
+3×3 (Sarrus' rule or cofactor expansion):
+|a b c|
+|d e f| = a(ei−fh) − b(di−fg) + c(dh−eg)
+|g h i|
+
+If A is 3×3 and det(A)=5:
+  det(2A) = 2³·5 = 40
+  det(Aᵀ) = 5
+  det(A⁻¹) = 1/5
+  det(A²) = 25</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Trace of a Matrix</span>
+        <p>trace(A) = sum of diagonal elements = Σ aᵢᵢ.<br>
+        trace(AB) = trace(BA) even when AB ≠ BA.<br>
+        trace(A) = sum of eigenvalues of A.<br>
+        det(A) = product of eigenvalues of A.<br>
+        These two facts are powerful: given eigenvalues λ₁, λ₂, ..., you can verify trace and det without matrix multiplication.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — SYSTEMS OF EQUATIONS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Systems of Equations <em>&amp; Rank</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="rank-systems">
+      <h2 class="sh">6.1 &nbsp; Rank &amp; Consistency of Linear Systems <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Rank of a Matrix</span>
+        <p>The <strong>rank</strong> of matrix A is the number of linearly independent rows (= number of linearly independent columns). It equals the number of non-zero rows in the row-echelon form. rank(A) ≤ min(m, n) for an m×n matrix.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Consistency Conditions for Ax = b</span>
+        <p>Let A be m×n, [A|b] be the augmented matrix.<br>
+        <strong>No solution (inconsistent):</strong> rank(A) ≠ rank([A|b]).<br>
+        <strong>Unique solution:</strong> rank(A) = rank([A|b]) = n (full column rank).<br>
+        <strong>Infinitely many solutions:</strong> rank(A) = rank([A|b]) < n.<br>
+        Number of free variables = n − rank(A).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classify solutions of the system:</strong></p>
+        <div class="cb">A = [1 2 3; 2 4 6; 1 2 4], b = [6; 12; 7]
+
+Row reduce [A|b]:
+R2 ← R2 − 2R1:  [1 2 3 | 6]
+                 [0 0 0 | 0]
+                 [1 2 4 | 7]
+R3 ← R3 − R1:   [1 2 3 | 6]
+                 [0 0 0 | 0]
+                 [0 0 1 | 1]
+
+rank(A) = 2, rank([A|b]) = 2, n = 3.
+rank(A) = rank([A|b]) = 2 < 3 → infinitely many solutions.
+Free variables = 3 − 2 = 1 (x₂ is free).
+
+From R3: x₃ = 1.
+From R1: x₁ + 2x₂ + 3(1) = 6 → x₁ = 3 − 2x₂.
+Solution: x = [3, 0, 1] + t[−2, 1, 0] for any t ∈ ℝ.</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Homogeneous System Ax = 0</span>
+        <p>Ax = 0 always has the trivial solution x = 0. It has a non-trivial solution iff rank(A) < n iff det(A) = 0 (for square A). The solution space is called the <strong>null space</strong> of A, with dimension = n − rank(A) (nullity).<br>
+        <strong>Rank-Nullity Theorem:</strong> rank(A) + nullity(A) = n (number of columns).</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — EIGENVALUES ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Eigenvalues <em>&amp; Eigenvectors</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="eigenvalues">
+      <h2 class="sh">7.1 &nbsp; Eigenvalues — Computation &amp; Properties <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Eigenvalue Equation</span>
+        <p>λ is an eigenvalue of A and x (≠0) is the corresponding eigenvector if: <strong>Ax = λx</strong>.<br>
+        Equivalently: (A − λI)x = 0 has a non-trivial solution.<br>
+        This happens iff det(A − λI) = 0 — the <strong>characteristic equation</strong>.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find eigenvalues of A = [[3, 1], [1, 3]]:</strong></p>
+        <div class="cb">det(A − λI) = det([[3−λ, 1], [1, 3−λ]])
+             = (3−λ)² − 1
+             = 9 − 6λ + λ² − 1
+             = λ² − 6λ + 8 = (λ−2)(λ−4) = 0
+
+Eigenvalues: λ₁ = 2, λ₂ = 4
+
+Check: trace(A) = 3+3 = 6 = λ₁+λ₂ = 2+4 = 6 ✓
+       det(A) = 9−1 = 8 = λ₁·λ₂ = 2·4 = 8 ✓
+
+For λ=2: (A−2I)x = 0 → [[1,1],[1,1]]x = 0 → x₁+x₂=0 → x = t[1,−1]
+For λ=4: (A−4I)x = 0 → [[−1,1],[1,−1]]x = 0 → x = t[1,1]</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Statement</th></tr></thead>
+          <tbody>
+            <tr><td>Sum of eigenvalues</td><td>= trace(A) = Σ aᵢᵢ</td></tr>
+            <tr><td>Product of eigenvalues</td><td>= det(A)</td></tr>
+            <tr><td>Eigenvalues of Aᵏ</td><td>λᵏ (same eigenvectors)</td></tr>
+            <tr><td>Eigenvalues of A⁻¹</td><td>1/λ (same eigenvectors)</td></tr>
+            <tr><td>Eigenvalues of A + cI</td><td>λ + c (same eigenvectors)</td></tr>
+            <tr><td>Eigenvalues of cA</td><td>cλ (same eigenvectors)</td></tr>
+            <tr><td>Eigenvalues of Aᵀ</td><td>Same as A (transposing doesn't change eigenvalues)</td></tr>
+            <tr><td>Symmetric matrix</td><td>All eigenvalues are real. Eigenvectors for different eigenvalues are orthogonal.</td></tr>
+            <tr><td>Triangular matrix</td><td>Eigenvalues = diagonal entries</td></tr>
+            <tr><td>Idempotent matrix (A²=A)</td><td>Eigenvalues ∈ {0, 1}</td></tr>
+            <tr><td>Nilpotent matrix (Aᵏ=0)</td><td>All eigenvalues = 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Cayley-Hamilton Theorem</span>
+        <p>Every square matrix satisfies its own characteristic equation. If p(λ) = det(A−λI) = 0 is the characteristic polynomial, then p(A) = 0. Uses: compute Aᵏ for large k by reducing via the characteristic equation. Compute A⁻¹ without Gaussian elimination.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>If char poly of A is λ² − 5λ + 6 = 0, find A⁻¹ using Cayley-Hamilton:</strong></p>
+        <div class="cb">By Cayley-Hamilton: A² − 5A + 6I = 0
+→ A² = 5A − 6I
+→ 6I = 5A − A²  → I = (5A − A²)/6
+→ A⁻¹ = A⁻¹·I = A⁻¹·(5A−A²)/6 = (5I − A)/6</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — PROBABILITY ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Probability Theory — <em>Axioms, Conditional &amp; Bayes</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="probability-basics">
+      <h2 class="sh">8.1 &nbsp; Probability Axioms &amp; Rules <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Kolmogorov Axioms</span>
+        <p>For a sample space Ω and event A ⊆ Ω:<br>
+        1. P(A) ≥ 0 for all events A.<br>
+        2. P(Ω) = 1.<br>
+        3. For mutually exclusive events A and B (A∩B=∅): P(A∪B) = P(A) + P(B).<br>
+        These three axioms imply all probability rules.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Rule</th><th>Formula</th></tr></thead>
+          <tbody>
+            <tr><td>Complement</td><td>P(Ā) = 1 − P(A)</td></tr>
+            <tr><td>Union</td><td>P(A∪B) = P(A) + P(B) − P(A∩B)</td></tr>
+            <tr><td>Union (mutually exclusive)</td><td>P(A∪B) = P(A) + P(B) when A∩B=∅</td></tr>
+            <tr><td>Conditional</td><td>P(A|B) = P(A∩B)/P(B), B≠∅</td></tr>
+            <tr><td>Multiplication</td><td>P(A∩B) = P(A|B)·P(B) = P(B|A)·P(A)</td></tr>
+            <tr><td>Independence</td><td>A⊥B iff P(A∩B) = P(A)·P(B) iff P(A|B) = P(A)</td></tr>
+            <tr><td>Total Probability</td><td>P(A) = Σ P(A|Bᵢ)·P(Bᵢ) for partition {Bᵢ}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Bayes' Theorem</span>
+        <p>P(Bᵢ|A) = P(A|Bᵢ)·P(Bᵢ) / Σⱼ P(A|Bⱼ)·P(Bⱼ)<br>
+        Updates prior probability P(Bᵢ) to posterior P(Bᵢ|A) after observing evidence A.<br>
+        <strong>Terminology:</strong> P(Bᵢ) = prior, P(A|Bᵢ) = likelihood, P(Bᵢ|A) = posterior, Σ P(A|Bⱼ)P(Bⱼ) = evidence.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classic Bayes: Disease testing. P(D)=0.01 (disease prevalence). Test: P(+|D)=0.99, P(+|Dᶜ)=0.05. Given positive test, what is P(D|+)?</strong></p>
+        <div class="cb">P(+) = P(+|D)·P(D) + P(+|Dᶜ)·P(Dᶜ)
+     = 0.99×0.01 + 0.05×0.99
+     = 0.0099 + 0.0495 = 0.0594
+
+P(D|+) = P(+|D)·P(D) / P(+)
+        = (0.99×0.01) / 0.0594
+        = 0.0099 / 0.0594
+        ≈ 0.167 (≈ 16.7%)
+
+Counterintuitive: despite 99% sensitive test, only 16.7% chance of disease
+given positive result — because the disease is rare (prior = 1%).</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="counting-prob">
+      <h2 class="sh">8.2 &nbsp; Counting for Probability <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scenario</th><th>Count</th></tr></thead>
+          <tbody>
+            <tr><td>Ordered, no repetition (permutation)</td><td>P(n,r) = n!/(n−r)!</td></tr>
+            <tr><td>Ordered, with repetition</td><td>nʳ</td></tr>
+            <tr><td>Unordered, no repetition (combination)</td><td>C(n,r) = n!/(r!(n−r)!)</td></tr>
+            <tr><td>Unordered, with repetition (stars and bars)</td><td>C(n+r−1, r)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Probability of getting exactly 2 heads in 3 fair coin flips:</strong></p>
+        <div class="cb">Sample space: 2³ = 8 equally likely outcomes.
+Favorable: {HHT, HTH, THH} = C(3,2) = 3 outcomes.
+P(exactly 2 heads) = 3/8.
+
+Using Binomial: P(X=2) = C(3,2)·(1/2)²·(1/2)¹ = 3·(1/4)·(1/2) = 3/8 ✓</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 9 — RANDOM VARIABLES ═══════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Random Variables <em>&amp; Distributions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="random-variables">
+      <h2 class="sh">9.1 &nbsp; Random Variables — Expectation &amp; Variance <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Discrete Random Variable</span>
+        <p>X takes countable values. PMF (Probability Mass Function): P(X=x) for each x.<br>
+        <strong>E[X] = Σ x·P(X=x)</strong> (expected value / mean)<br>
+        <strong>E[g(X)] = Σ g(x)·P(X=x)</strong><br>
+        <strong>Var(X) = E[X²] − (E[X])²</strong><br>
+        <strong>SD(X) = √Var(X)</strong></p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Continuous Random Variable</span>
+        <p>X takes values in an interval. PDF (Probability Density Function): f(x) with ∫_{−∞}^∞ f(x)dx = 1.<br>
+        P(a ≤ X ≤ b) = ∫_a^b f(x)dx<br>
+        <strong>E[X] = ∫_{−∞}^∞ x·f(x)dx</strong><br>
+        <strong>Var(X) = ∫_{−∞}^∞ x²·f(x)dx − (E[X])²</strong></p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Formula</th></tr></thead>
+          <tbody>
+            <tr><td>Linearity of expectation</td><td>E[aX + b] = aE[X] + b</td></tr>
+            <tr><td>Expectation of sum</td><td>E[X+Y] = E[X] + E[Y] (always, no independence needed)</td></tr>
+            <tr><td>Variance formula</td><td>Var(X) = E[X²] − (E[X])²</td></tr>
+            <tr><td>Variance of linear transform</td><td>Var(aX + b) = a²Var(X)</td></tr>
+            <tr><td>Variance of sum (independent)</td><td>Var(X+Y) = Var(X) + Var(Y) if X⊥Y</td></tr>
+            <tr><td>Covariance</td><td>Cov(X,Y) = E[XY] − E[X]E[Y]</td></tr>
+            <tr><td>If independent</td><td>E[XY] = E[X]·E[Y], Cov(X,Y) = 0</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="distributions">
+      <h2 class="sh">9.2 &nbsp; Standard Distributions <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Distribution</th><th>PMF/PDF</th><th>E[X]</th><th>Var(X)</th><th>Use case</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Bernoulli(p)</strong></td><td>P(X=1)=p, P(X=0)=1−p</td><td>p</td><td>p(1−p)</td><td>Single trial (success/fail)</td></tr>
+            <tr><td><strong>Binomial(n,p)</strong></td><td>C(n,k)pᵏ(1−p)ⁿ⁻ᵏ</td><td>np</td><td>np(1−p)</td><td>n independent Bernoulli trials</td></tr>
+            <tr><td><strong>Geometric(p)</strong></td><td>p(1−p)^(k−1), k=1,2,...</td><td>1/p</td><td>(1−p)/p²</td><td>Trials until first success</td></tr>
+            <tr><td><strong>Poisson(λ)</strong></td><td>e^(−λ)λᵏ/k!</td><td>λ</td><td>λ</td><td>Rare events in fixed interval</td></tr>
+            <tr><td><strong>Uniform(a,b)</strong></td><td>1/(b−a), x∈[a,b]</td><td>(a+b)/2</td><td>(b−a)²/12</td><td>Equal likelihood in interval</td></tr>
+            <tr><td><strong>Exponential(λ)</strong></td><td>λe^(−λx), x≥0</td><td>1/λ</td><td>1/λ²</td><td>Time between Poisson events</td></tr>
+            <tr><td><strong>Normal(μ,σ²)</strong></td><td>(1/σ√2π)exp(−(x−μ)²/2σ²)</td><td>μ</td><td>σ²</td><td>Central limit theorem, errors</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Poisson — Approximation to Binomial</span>
+        <p>When n is large and p is small with np = λ moderate, Binomial(n,p) ≈ Poisson(λ). Rule of thumb: n≥20 and p≤0.05. The Poisson PMF is simpler to compute than Binomial for large n. Both have mean λ = np, but Poisson has variance = mean = λ (while Binomial has variance = np(1−p) ≈ np = λ for small p).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Memoryless Property</span>
+        <p>The <strong>Geometric distribution</strong> (discrete) and the <strong>Exponential distribution</strong> (continuous) are the ONLY distributions with the memoryless property:<br>
+        P(X > s+t | X > s) = P(X > t)<br>
+        "Given that the event hasn't happened in the first s units, the probability of waiting t more units is the same as starting fresh." Used in: queuing theory, reliability analysis, network packet arrivals.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Central Limit Theorem (CLT)</span>
+        <p>If X₁, X₂, ..., Xₙ are i.i.d. random variables with mean μ and variance σ², then as n → ∞:<br>
+        (X̄ − μ) / (σ/√n) → Normal(0, 1)<br>
+        The sample mean X̄ = (X₁+...+Xₙ)/n is approximately Normal regardless of the distribution of individual Xᵢ. The approximation is good for n ≥ 30 in practice.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 10 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">10.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>L'Hôpital applies to 0·∞</td><td>L'Hôpital only applies to 0/0 or ∞/∞. For 0·∞, rewrite: f·g = f/(1/g) or g/(1/f) to get 0/0 or ∞/∞, then apply. Never apply L'Hôpital to 1^∞, 0^0, ∞−∞ directly.</td></tr>
+            <tr><td>2</td><td>Continuity implies differentiability</td><td>Differentiability implies continuity (the stronger implies the weaker). Continuity does NOT imply differentiability. |x| is continuous everywhere but not differentiable at 0. Corners and cusps are continuous but not differentiable.</td></tr>
+            <tr><td>3</td><td>det(cA) = c·det(A)</td><td>det(cA) = cⁿ·det(A) for an n×n matrix (scalar multiplies EVERY row, each row multiplication multiplies det by c, so n rows give cⁿ). For c=2, n=3: det(2A) = 8·det(A), not 2·det(A).</td></tr>
+            <tr><td>4</td><td>trace(AB) = trace(A)·trace(B)</td><td>trace(AB) = trace(BA) — cyclic property. But trace(AB) ≠ trace(A)·trace(B) in general. Also: det(AB) = det(A)·det(B) — but the same does NOT hold for trace.</td></tr>
+            <tr><td>5</td><td>A square system always has a unique solution</td><td>A square system Ax=b has: unique solution if det(A)≠0, no solution if det(A)=0 and rank([A|b])>rank(A), infinitely many if det(A)=0 and rank([A|b])=rank(A). Square doesn't guarantee unique.</td></tr>
+            <tr><td>6</td><td>Sum of eigenvalues = determinant</td><td>Sum of eigenvalues = TRACE. Product of eigenvalues = DETERMINANT. These are the two fundamental eigenvalue identities. Mixing them up causes wrong answers in eigenvalue problems.</td></tr>
+            <tr><td>7</td><td>Independent events means mutually exclusive</td><td>Independent: P(A∩B) = P(A)P(B). Mutually exclusive: P(A∩B) = 0. If P(A)>0 and P(B)>0 and they are mutually exclusive, they CANNOT be independent (since P(A∩B)=0 ≠ P(A)P(B)>0). Independence and mutual exclusivity are nearly opposite concepts for non-trivial events.</td></tr>
+            <tr><td>8</td><td>E[X²] = (E[X])²</td><td>E[X²] = Var(X) + (E[X])². The equality E[X²] = (E[X])² holds only when Var(X)=0 (constant random variable). For any non-trivial X, E[X²] > (E[X])². Var(X) = E[X²]−(E[X])² ≥ 0 always.</td></tr>
+            <tr><td>9</td><td>Poisson mean ≠ variance</td><td>Poisson is the unique discrete distribution where mean = variance = λ. This is a characteristic property, not a coincidence. GATE tests: "For Poisson(λ), what is the variance?" → λ.</td></tr>
+            <tr><td>10</td><td>Geometric distribution counts failures</td><td>Two versions exist: X = number of trials until first success (support 1,2,..., mean=1/p), or X = number of failures before first success (support 0,1,..., mean=(1−p)/p). GATE specifies which — read carefully. Both have the memoryless property.</td></tr>
+            <tr><td>11</td><td>∫_{−∞}^∞ x f(x)dx always converges</td><td>The expectation E[X] = ∫x f(x)dx may not exist if the integral doesn't converge absolutely. Classic example: Cauchy distribution has no defined mean. GATE won't use such pathological cases but it's important conceptually.</td></tr>
+            <tr><td>12</td><td>Rank-Nullity: rank + nullity = number of rows</td><td>Rank + Nullity = number of COLUMNS, not rows. For m×n matrix: rank(A) + nullity(A) = n. Nullity = dimension of null space = number of free variables = n − rank.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">10.2 &nbsp; Complete Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Area</th></tr></thead>
+          <tbody>
+            <tr><td>lim_{x→0} sin(x)/x = 1</td><td>Calculus — standard limit</td></tr>
+            <tr><td>lim_{x→∞} (1+1/x)^x = e</td><td>Calculus — definition of e</td></tr>
+            <tr><td>Taylor: eˣ = Σ xⁿ/n!</td><td>Calculus — Maclaurin</td></tr>
+            <tr><td>∫ u dv = uv − ∫ v du (LIATE)</td><td>Calculus — integration by parts</td></tr>
+            <tr><td>det(cA) = cⁿ det(A) for n×n</td><td>Linear algebra — determinant</td></tr>
+            <tr><td>det(AB) = det(A)·det(B)</td><td>Linear algebra — determinant</td></tr>
+            <tr><td>trace(A) = Σλᵢ, det(A) = Πλᵢ</td><td>Linear algebra — eigenvalues</td></tr>
+            <tr><td>rank(A) + nullity(A) = n (columns)</td><td>Linear algebra — rank-nullity</td></tr>
+            <tr><td>Unique sol: rank(A)=rank([A|b])=n</td><td>Linear algebra — consistency</td></tr>
+            <tr><td>P(A∪B) = P(A)+P(B)−P(A∩B)</td><td>Probability — inclusion-exclusion</td></tr>
+            <tr><td>P(A|B) = P(A∩B)/P(B)</td><td>Probability — conditional</td></tr>
+            <tr><td>P(Bᵢ|A) = P(A|Bᵢ)P(Bᵢ)/ΣP(A|Bⱼ)P(Bⱼ)</td><td>Probability — Bayes</td></tr>
+            <tr><td>Var(X) = E[X²] − (E[X])²</td><td>Probability — variance</td></tr>
+            <tr><td>Binomial: E=np, Var=np(1−p)</td><td>Distributions</td></tr>
+            <tr><td>Poisson: E=Var=λ</td><td>Distributions</td></tr>
+            <tr><td>Exponential: E=1/λ, Var=1/λ²</td><td>Distributions</td></tr>
+            <tr><td>Geometric: E=1/p, Var=(1−p)/p²</td><td>Distributions</td></tr>
+            <tr><td>Uniform(a,b): E=(a+b)/2, Var=(b−a)²/12</td><td>Distributions</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">10.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Limit NAT:</strong> "Find lim_{x→0} (1−cos x)/x²." Use Taylor: (1−(1−x²/2+...))/x² = (x²/2−...)/x² = 1/2. 1-mark.</li>
+        <li><strong>Determinant NAT:</strong> "If det(A) = 4 for a 3×3 matrix, find det(2A)." 2³×4 = 32. 1-mark trap.</li>
+        <li><strong>Eigenvalue NAT:</strong> "Matrix has eigenvalues 2, 3, 5. Find det(A) and trace(A)." det=30, trace=10. 1-mark each.</li>
+        <li><strong>Consistency MCQ:</strong> "For Ax=b with rank(A)=2, rank([A|b])=2, n=4. How many solutions?" Infinitely many (4−2=2 free variables). 1-mark.</li>
+        <li><strong>Bayes NAT:</strong> Standard disease/test Bayes calculation. Apply formula P(D|+) = P(+|D)P(D)/P(+). 2-mark calculation.</li>
+        <li><strong>Expectation NAT:</strong> "X is Binomial(10, 0.3). Find E[2X+1]." E[X]=10×0.3=3. E[2X+1]=2×3+1=7. 1-mark.</li>
+        <li><strong>Variance NAT:</strong> "X is Poisson(4). Find Var(3X−2)." Var(X)=4. Var(3X−2)=9×4=36. 1-mark.</li>
+        <li><strong>Integration NAT:</strong> "∫_0^1 x·eˣ dx." Integration by parts: [xeˣ]_0^1 − ∫_0^1 eˣdx = e − [eˣ]_0^1 = e−(e−1) = 1. 2-mark.</li>
+        <li><strong>Conditional probability NAT:</strong> Two dice thrown. Given sum is odd, probability both are odd? Find P(both odd ∩ sum odd) / P(sum odd). Both odd → sum even. So P=0. "Can two odd numbers sum to odd?" 1-mark concept trap.</li>
+        <li><strong>Taylor series application:</strong> "Expand f(x)=eˣsin x up to x³ terms." Multiply series: (1+x+x²/2+x³/6+...)(x−x³/6+...) = x+x²+x³/2−x³/6+... = x+x²+x³/3. 2-mark.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<!-- ═══════ CH 11 — STATISTICS ═══════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11</div>
+    <div class="ch-title">Statistics — <em>Descriptive, Correlation &amp; Regression</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="descriptive-stats">
+      <h2 class="sh">11.1 &nbsp; Measures of Central Tendency &amp; Dispersion <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Central Tendency — Three Measures</span>
+        <p>
+          <strong>Mean (μ):</strong> Arithmetic average. μ = (Σxᵢ)/n. Sensitive to outliers — one extreme value pulls the mean significantly.<br>
+          <strong>Median:</strong> Middle value when data is sorted. For n values: if n is odd, median = ((n+1)/2)th value. If n is even, median = average of (n/2)th and (n/2+1)th values. Robust to outliers.<br>
+          <strong>Mode:</strong> Most frequently occurring value. A dataset may have no mode, one mode (unimodal), or multiple modes (bimodal/multimodal). Not affected by outliers.
+        </p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Dispersion — Spread of Data</span>
+        <p>
+          <strong>Range:</strong> Max − Min. Simple but very sensitive to outliers.<br>
+          <strong>Variance (σ²):</strong> σ² = (Σ(xᵢ − μ)²)/n (population) or Σ(xᵢ − x̄)²/(n−1) (sample, Bessel's correction).<br>
+          <strong>Standard Deviation (σ):</strong> √Variance. In the same units as data — directly interpretable.<br>
+          <strong>IQR (Interquartile Range):</strong> Q3 − Q1 (75th percentile − 25th percentile). Most robust dispersion measure — unaffected by outliers.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Dataset: {2, 4, 4, 4, 5, 5, 7, 9}. Compute mean, median, mode, variance, SD:</strong></p>
+        <div class="cb">n = 8 values
+Mean: (2+4+4+4+5+5+7+9)/8 = 40/8 = 5
+Median: n=8 (even) → avg of 4th and 5th = (4+5)/2 = 4.5
+Mode: 4 (appears 3 times, most frequent)
+
+Variance: Σ(xᵢ−5)²/8
+  (2−5)²=9, (4−5)²=1×3=3, (5−5)²=0×2=0, (7−5)²=4, (9−5)²=16
+  σ² = (9+3+0+4+16)/8 = 32/8 = 4
+SD: σ = √4 = 2
+
+Interpretation: data values typically differ from the mean by ±2 units.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Empirical Relationship (Unimodal Skewed Distribution)</span>
+        <p>For moderately skewed distributions: Mode ≈ 3×Median − 2×Mean. This relationship lets you find one central tendency measure from the other two. Also: if Mean > Median > Mode → positively skewed (right tail). If Mean &lt; Median &lt; Mode → negatively skewed (left tail). Symmetric → Mean = Median = Mode.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="correlation-regression">
+      <h2 class="sh">11.2 &nbsp; Correlation &amp; Linear Regression <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Pearson Correlation Coefficient (r)</span>
+        <p>Measures the strength and direction of the linear relationship between two variables X and Y.<br>
+        r = Σ(xᵢ−x̄)(yᵢ−ȳ) / √[Σ(xᵢ−x̄)² · Σ(yᵢ−ȳ)²] = Cov(X,Y) / (σₓ·σᵧ)<br>
+        <strong>Range:</strong> −1 ≤ r ≤ 1.<br>
+        r = 1: perfect positive linear correlation. r = −1: perfect negative. r = 0: no linear correlation (but may have nonlinear relationship).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>r value</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td>0.9 – 1.0</td><td>Very strong positive correlation</td></tr>
+            <tr><td>0.7 – 0.9</td><td>Strong positive correlation</td></tr>
+            <tr><td>0.5 – 0.7</td><td>Moderate positive correlation</td></tr>
+            <tr><td>0 – 0.5</td><td>Weak positive correlation</td></tr>
+            <tr><td>0</td><td>No linear correlation</td></tr>
+            <tr><td>Negative values</td><td>Mirror of above, but inverse direction</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Simple Linear Regression — Least Squares Line</span>
+        <p>Fits the line ŷ = β₀ + β₁x that minimizes Σ(yᵢ − ŷᵢ)² (sum of squared residuals).<br>
+        <strong>Slope:</strong> β₁ = Σ(xᵢ−x̄)(yᵢ−ȳ) / Σ(xᵢ−x̄)² = Cov(X,Y)/Var(X) = r·(σᵧ/σₓ)<br>
+        <strong>Intercept:</strong> β₀ = ȳ − β₁·x̄<br>
+        The regression line always passes through (x̄, ȳ) — the mean point.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Data: (1,2), (2,4), (3,5), (4,4), (5,5). Fit regression line:</strong></p>
+        <div class="cb">x̄ = 3, ȳ = 4
+Σ(xᵢ−x̄)(yᵢ−ȳ) = (1−3)(2−4)+(2−3)(4−4)+(3−3)(5−4)+(4−3)(4−4)+(5−3)(5−4)
+               = (−2)(−2)+(−1)(0)+(0)(1)+(1)(0)+(2)(1)
+               = 4+0+0+0+2 = 6
+
+Σ(xᵢ−x̄)² = 4+1+0+1+4 = 10
+
+β₁ = 6/10 = 0.6
+β₀ = 4 − 0.6×3 = 4 − 1.8 = 2.2
+
+Regression line: ŷ = 2.2 + 0.6x
+Prediction at x=6: ŷ = 2.2+3.6 = 5.8</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Correlation ≠ Causation</span>
+        <p>A high correlation (r near ±1) does not imply that X causes Y. Both may be caused by a third confounding variable. A classic example: ice cream sales and drowning deaths are positively correlated — both increase in summer (common cause: heat). GATE tests this conceptually: "What does r = 0.95 imply?" → Strong linear relationship, NOT causation.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sampling-hypothesis">
+      <h2 class="sh">11.3 &nbsp; Sampling Distributions &amp; Hypothesis Testing Basics <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Sampling Distribution of the Mean</span>
+        <p>If we take samples of size n from a population with mean μ and variance σ²:<br>
+        Mean of sampling distribution: E[X̄] = μ<br>
+        Variance of sampling distribution: Var(X̄) = σ²/n<br>
+        Standard Error (SE) = σ/√n<br>
+        By the Central Limit Theorem: X̄ ~ N(μ, σ²/n) for large n (≥ 30), regardless of population distribution.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Z-score Standardization</span>
+        <p>Z = (X − μ)/σ converts a value X to the number of standard deviations from the mean. The standard normal N(0,1) has mean 0, variance 1.<br>
+        Key z-scores: z = 1.645 → 90% of data within ±1.645σ of mean (two-tailed). z = 1.96 → 95%. z = 2.576 → 99%.<br>
+        For sample mean: Z = (X̄ − μ) / (σ/√n)</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Hypothesis Testing Framework</span>
+        <p>
+          <strong>H₀ (Null hypothesis):</strong> The default assumption (e.g., μ = μ₀, no difference).<br>
+          <strong>H₁ (Alternative hypothesis):</strong> What we're trying to show (μ ≠ μ₀, or μ > μ₀, or μ &lt; μ₀).<br>
+          <strong>p-value:</strong> Probability of observing data this extreme if H₀ is true. If p-value &lt; α (significance level, typically 0.05): reject H₀.<br>
+          <strong>Type I error (α):</strong> Reject H₀ when it's true (false positive).<br>
+          <strong>Type II error (β):</strong> Fail to reject H₀ when H₁ is true (false negative).<br>
+          Power = 1 − β: probability of correctly rejecting a false H₀.
+        </p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statistic</th><th>Formula</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td>Population mean (μ)</td><td>μ = Σxᵢ/N</td><td>All data available</td></tr>
+            <tr><td>Sample mean (x̄)</td><td>x̄ = Σxᵢ/n</td><td>Sample data</td></tr>
+            <tr><td>Population variance (σ²)</td><td>Σ(xᵢ−μ)²/N</td><td>Full population known</td></tr>
+            <tr><td>Sample variance (s²)</td><td>Σ(xᵢ−x̄)²/(n−1)</td><td>Sample (n−1 = Bessel's correction)</td></tr>
+            <tr><td>Standard Error</td><td>σ/√n or s/√n</td><td>Precision of sample mean</td></tr>
+            <tr><td>Z-statistic</td><td>(x̄−μ₀)/(σ/√n)</td><td>σ known, large n</td></tr>
+            <tr><td>t-statistic</td><td>(x̄−μ₀)/(s/√n)</td><td>σ unknown, small n</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Engineering Mathematics · Calculus, Linear Algebra &amp; Probability · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

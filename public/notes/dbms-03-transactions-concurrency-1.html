@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — Transactions & Concurrency · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+/* Gantt chart */
+.gantt{overflow-x:auto;margin:14px 0;}
+.gantt-row{display:flex;align-items:stretch;font-family:'Courier New',monospace;font-size:13px;margin:3px 0;}
+.gantt-label{min-width:80px;padding:4px 8px;font-family:var(--hand);font-size:11px;color:var(--ink3);display:flex;align-items:center;}
+.gantt-block{padding:5px 0;text-align:center;border:1px solid var(--ink);font-size:12px;font-weight:bold;}
+.gb-p1{background:var(--hl-b);}
+.gb-p2{background:var(--hl-g);}
+.gb-p3{background:var(--hl-o);}
+.gb-p4{background:var(--hl-p);}
+.gb-idle{background:var(--paper3);color:var(--ink3);}
+.gantt-tick{display:flex;margin-left:80px;font-family:'Courier New',monospace;font-size:11px;color:var(--ink3);}
+.gantt-t{text-align:center;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">DBMS</div>
+    <h1>Transactions &amp;<br><em>Concurrency Control</em></h1>
+    <p class="cover-desc">
+      ACID properties, schedule theory, conflict serializability, precedence graphs, the recoverability hierarchy, 2PL variants, timestamp ordering, and log-based recovery — with full schedule traces.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Transactions &amp; ACID</span>
+      <span class="chip">Ch 2 · Schedules &amp; Serializability</span>
+      <span class="chip">Ch 3 · Conflict Serializability &amp; Precedence Graphs</span>
+      <span class="chip">Ch 4 · Recoverability Hierarchy</span>
+      <span class="chip">Ch 5 · Concurrency Control — 2PL</span>
+      <span class="chip">Ch 6 · Timestamp Ordering</span>
+      <span class="chip">Ch 7 · Log-based Recovery</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Transactions &amp; ACID Properties</a>
+    <a href="#ch2"><span class="tn">02</span>Schedules &amp; Serializability</a>
+    <a href="#ch3"><span class="tn">03</span>Conflict Serializability &amp; Precedence Graphs</a>
+    <a href="#ch4"><span class="tn">04</span>Recoverability Hierarchy</a>
+    <a href="#ch5"><span class="tn">05</span>Concurrency Control — 2PL Variants</a>
+    <a href="#ch6"><span class="tn">06</span>Timestamp Ordering &amp; Thomas Write Rule</a>
+    <a href="#ch7"><span class="tn">07</span>Log-based Recovery — Undo &amp; Redo</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Schedule Trace Reference</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — TRANSACTIONS & ACID
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Transactions <em>&amp; ACID Properties</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="txn-def">
+      <h2 class="sh">1.1 &nbsp; What Is a Transaction? <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>transaction</strong> is a logical unit of work that accesses and possibly modifies database items. It is a sequence of database operations (reads and writes) that must be executed as a single, indivisible unit — either all operations complete successfully (commit) or none of them take effect (abort/rollback).</p>
+      </div>
+
+      <p>
+        The canonical example: transferring ₹1000 from account A to account B. This involves two operations — debit A and credit B. If the system crashes after debiting A but before crediting B, money has vanished. A transaction ensures both happen or neither happens.
+      </p>
+
+      <p>A transaction transitions through these states:</p>
+      <div class="ds-visual">
+        <span class="dv-label">Transaction State Diagram</span>
+Active → Partially Committed → Committed (success)
+  ↓              ↓
+Failed      ←   Failed
+  ↓
+Aborted (rolled back)
+
+Active:               Executing operations
+Partially Committed:  Last operation executed, awaiting final commit
+Committed:            All changes permanently saved
+Failed:               Normal execution cannot proceed
+Aborted:              Rolled back, database restored to state before transaction
+      </div>
+    </div>
+
+    <div class="sec" data-m="acid">
+      <h2 class="sh">1.2 &nbsp; ACID Properties <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Atomicity</div>
+          <p>"All or nothing." Either every operation in the transaction executes, or none do. Ensured by the <strong>recovery manager</strong> using undo logs.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Consistency</div>
+          <p>A transaction takes the database from one <em>consistent state</em> to another. Consistency is the programmer's responsibility — the DBMS enforces integrity constraints.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">Isolation</div>
+          <p>Concurrent transactions execute as if they were serial — no partial results of one transaction are visible to another. Ensured by the <strong>concurrency control manager</strong>.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Durability</div>
+          <p>Once a transaction commits, its changes persist permanently — even if the system crashes immediately after. Ensured by the <strong>recovery manager</strong> using redo logs.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">ACID → Recovery &amp; Concurrency Connection</span>
+        <p><strong>Atomicity + Durability</strong> are handled by the recovery system (undo/redo logs, checkpoints). <strong>Isolation</strong> is handled by concurrency control (2PL, timestamps). <strong>Consistency</strong> is a user/programmer contract enforced through integrity constraints. This mapping appears in GATE as "which ACID property is violated by schedule X?"</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — SCHEDULES & SERIALIZABILITY
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Schedules <em>&amp; Serializability</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="schedules">
+      <h2 class="sh">2.1 &nbsp; Schedules — Definition &amp; Types <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>schedule</strong> is an ordering of operations from multiple concurrent transactions. It specifies the chronological order in which operations (read/write) from all transactions are interleaved. A schedule must preserve the relative order of operations within each individual transaction.</p>
+      </div>
+
+      <p>Notation: <code>R₁(X)</code> = Transaction 1 reads X. <code>W₂(X)</code> = Transaction 2 writes X. <code>C₁</code> = Transaction 1 commits. <code>A₂</code> = Transaction 2 aborts.</p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Serial Schedule</div>
+          <p>Transactions execute one after another with no interleaving. Always correct (consistent). But wastes CPU while one transaction waits for I/O.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Concurrent Schedule</div>
+          <p>Operations from multiple transactions are interleaved. Better throughput and resource utilization. May or may not be correct — correctness must be verified.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Serializable Schedule</div>
+          <p>A concurrent schedule that produces the same result as <em>some</em> serial schedule. This is the gold standard for correctness in concurrent execution.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Why Not Just Run Serially?</span>
+        <p>If T1 takes 10 seconds and T2 takes 10 seconds, serial execution takes 20 seconds. If T1 waits 8 seconds for disk I/O during which T2 can run, concurrent execution takes ~12 seconds. Concurrency gives throughput — but requires careful control to remain correct.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="problems">
+      <h2 class="sh">2.2 &nbsp; Concurrency Problems <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">1. Dirty Read (Uncommitted Dependency)</h3>
+      <p>T2 reads a value written by T1 before T1 commits. If T1 then aborts, T2 has read a value that never officially existed.</p>
+      <div class="sched">
+        <table>
+          <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="t1c">W1(X=50)</td><td></td></tr>
+            <tr><td>2</td><td></td><td class="t2c conf">R2(X) ← reads 50 (dirty!)</td></tr>
+            <tr><td>3</td><td class="t1c">ABORT</td><td></td></tr>
+            <tr><td>4</td><td></td><td class="t2c">Uses X=50 (which never existed)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">2. Lost Update</h3>
+      <p>Two transactions read the same value, both modify it, and one update overwrites the other.</p>
+      <div class="sched">
+        <table>
+          <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="t1c">R1(X=100)</td><td></td></tr>
+            <tr><td>2</td><td></td><td class="t2c">R2(X=100)</td></tr>
+            <tr><td>3</td><td class="t1c">W1(X=150)</td><td></td></tr>
+            <tr><td>4</td><td></td><td class="t2c conf">W2(X=120) ← overwrites T1's update!</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>T1's update (100→150) is lost. Final value 120 ignores T1's work.</p>
+
+      <h3 class="ssh">3. Unrepeatable Read (Non-repeatable Read)</h3>
+      <p>T1 reads X, T2 modifies and commits X, T1 reads X again — gets a different value.</p>
+
+      <h3 class="ssh">4. Phantom Read</h3>
+      <p>T1 executes a query (e.g., count of records satisfying a condition), T2 inserts a new record satisfying that condition, T1 repeats the query — gets a different count. The "phantom" record appeared between the two reads.</p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — CONFLICT SERIALIZABILITY
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Conflict Serializability <em>&amp; Precedence Graphs</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="conflict-def">
+      <h2 class="sh">3.1 &nbsp; Conflicting Operations <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition — Conflict</span>
+        <p>Two operations conflict if and only if ALL three conditions hold: (1) they belong to <strong>different transactions</strong>, (2) they access the <strong>same data item</strong>, and (3) <strong>at least one is a Write</strong>.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operation Pair</th><th>Same Transaction?</th><th>Same Item?</th><th>At least one Write?</th><th>Conflict?</th></tr></thead>
+          <tbody>
+            <tr><td>R₁(X), R₂(X)</td><td>No</td><td>Yes</td><td>No (both reads)</td><td class="good">No conflict</td></tr>
+            <tr><td>R₁(X), W₂(X)</td><td>No</td><td>Yes</td><td>Yes</td><td class="bad">Conflict ✓</td></tr>
+            <tr><td>W₁(X), R₂(X)</td><td>No</td><td>Yes</td><td>Yes</td><td class="bad">Conflict ✓</td></tr>
+            <tr><td>W₁(X), W₂(X)</td><td>No</td><td>Yes</td><td>Yes (both writes)</td><td class="bad">Conflict ✓</td></tr>
+            <tr><td>W₁(X), W₁(Y)</td><td>Yes (same T1)</td><td>Different</td><td>Yes</td><td class="good">No conflict</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box" style="background:#f0fff4; border-color:var(--green)">
+        <span class="lbl" style="color:var(--green)">Conflict Equivalent Schedules</span>
+        <p>Two schedules are <strong>conflict equivalent</strong> if one can be transformed into the other by swapping the order of <em>non-conflicting</em> operations. Swapping conflicting operations changes the result and is not allowed.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Conflict Serializable</span>
+        <p>A schedule is <strong>conflict serializable</strong> if it is conflict equivalent to some serial schedule. This is the standard test for correctness used in GATE.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="precedence-graph">
+      <h2 class="sh">3.2 &nbsp; Precedence Graph Algorithm <span class="tag tg">Most Tested</span></h2>
+
+      <p>
+        The precedence graph (also called the serialization graph) gives a mechanical test for conflict serializability. You don't need to try all serial schedules — just build the graph and check for cycles.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Algorithm — Step by Step</span>
+        <p>
+          <strong>Step 1:</strong> Create one node per transaction (T1, T2, T3, ...).<br>
+          <strong>Step 2:</strong> For each pair of conflicting operations, draw a directed edge from the transaction whose operation comes <em>first in the schedule</em> to the transaction whose operation comes <em>second</em>.<br>
+          <strong>Step 3:</strong> Draw an edge T<sub>i</sub> → T<sub>j</sub> if any of these hold (and Tᵢ's operation appears before Tⱼ's):<br>
+          &nbsp;&nbsp;· R<sub>i</sub>(X) then W<sub>j</sub>(X) &nbsp;&nbsp;[read-write conflict]<br>
+          &nbsp;&nbsp;· W<sub>i</sub>(X) then R<sub>j</sub>(X) &nbsp;&nbsp;[write-read conflict]<br>
+          &nbsp;&nbsp;· W<sub>i</sub>(X) then W<sub>j</sub>(X) &nbsp;&nbsp;[write-write conflict]<br>
+          <strong>Step 4:</strong> If the graph has <strong>no cycle</strong> → schedule is conflict serializable. If it has a cycle → NOT conflict serializable.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Schedule S: R1(A), W2(A), R1(B), W2(B), C1, C2</strong></p>
+        <div class="sched">
+          <table>
+            <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="t1c">R1(A)</td><td></td></tr>
+              <tr><td>2</td><td></td><td class="t2c">W2(A)</td></tr>
+              <tr><td>3</td><td class="t1c">R1(B)</td><td></td></tr>
+              <tr><td>4</td><td></td><td class="t2c">W2(B)</td></tr>
+              <tr><td>5</td><td class="t1c">C1</td><td></td></tr>
+              <tr><td>6</td><td></td><td class="t2c">C2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Find conflicts:</strong></p>
+        <ul class="pl arr">
+          <li>R1(A) then W2(A): T1→T2 (write-read on A)</li>
+          <li>R1(B) then W2(B): T1→T2 (write-read on B)</li>
+        </ul>
+        <p><strong>Precedence graph:</strong> T1 → T2 (two edges, same direction). <strong>No cycle.</strong></p>
+        <p><strong>Result:</strong> Conflict Serializable ✓. Equivalent serial order: T1 then T2.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Schedule S: R1(A), W2(A), W2(B), R1(B), C1, C2</strong></p>
+        <div class="sched">
+          <table>
+            <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="t1c">R1(A)</td><td></td></tr>
+              <tr><td>2</td><td></td><td class="t2c">W2(A)</td></tr>
+              <tr><td>3</td><td></td><td class="t2c">W2(B)</td></tr>
+              <tr><td>4</td><td class="t1c">R1(B)</td><td></td></tr>
+              <tr><td>5</td><td class="t1c">C1</td><td></td></tr>
+              <tr><td>6</td><td></td><td class="t2c">C2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Find conflicts:</strong></p>
+        <ul class="pl arr">
+          <li>R1(A) then W2(A): T1→T2 (read-write on A)</li>
+          <li>W2(B) then R1(B): T2→T1 (write-read on B)</li>
+        </ul>
+        <p><strong>Precedence graph:</strong> T1→T2 AND T2→T1. <strong>CYCLE detected.</strong></p>
+        <p><strong>Result:</strong> NOT Conflict Serializable ✗. Cannot be equivalent to any serial schedule.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Conflict Serializable ≠ View Serializable (but close)</span>
+        <p>Every conflict serializable schedule is view serializable, but not vice versa. View serializability is a broader class but NP-hard to test. GATE always tests conflict serializability using the precedence graph. Unless explicitly told otherwise, assume conflict serializability when the question asks about serializability.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — RECOVERABILITY HIERARCHY
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Recoverability <em>Hierarchy</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="hierarchy">
+      <h2 class="sh">4.1 &nbsp; The Four Levels — From Weakest to Strongest <span class="tag tg">GATE Critical</span></h2>
+
+      <p>
+        Serializability tells us about correctness. Recoverability tells us whether the database can be returned to a consistent state after a failure. These are <em>orthogonal</em> properties — a schedule can be serializable but not recoverable, or recoverable but not serializable.
+      </p>
+
+      <div class="hierarchy">
+        <div class="hier-box hier-all">
+          <span class="hb-label">Broadest — contains all others</span>
+          <div class="hb-name">All Schedules</div>
+          <div class="hb-desc">Any interleaving, including non-recoverable ones</div>
+        </div>
+        <div class="hier-arrow">⊃</div>
+        <div class="hier-box hier-rec">
+          <span class="hb-label">Level 1</span>
+          <div class="hb-name">Recoverable Schedules</div>
+          <div class="hb-desc">Tj commits only after Ti commits, if Tj read X written by Ti</div>
+        </div>
+        <div class="hier-arrow">⊃</div>
+        <div class="hier-box hier-casc">
+          <span class="hb-label">Level 2</span>
+          <div class="hb-name">Cascadeless (ACA) Schedules</div>
+          <div class="hb-desc">Tj reads X only after Ti (who wrote X) commits. No dirty reads → no cascading rollbacks</div>
+        </div>
+        <div class="hier-arrow">⊃</div>
+        <div class="hier-box hier-ser">
+          <span class="hb-label">Strictest</span>
+          <div class="hb-name">Strict Schedules</div>
+          <div class="hb-desc">Tj neither reads nor writes X until Ti (who wrote X) commits or aborts</div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Strict ⊂ Cascadeless ⊂ Recoverable ⊂ All Schedules</span>
+        <p>Every strict schedule is cascadeless. Every cascadeless schedule is recoverable. Not vice versa. GATE asks: "Is this schedule recoverable? Cascadeless? Strict?" — check from the bottom up (strictest first). If it's strict, it's automatically cascadeless and recoverable.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="recoverability-detail">
+      <h2 class="sh">4.2 &nbsp; Each Level — Precise Definitions &amp; State Traces <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Recoverable Schedule</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A schedule is <strong>recoverable</strong> if: for every pair of transactions Tᵢ and Tⱼ, if Tⱼ reads a data item written by Tᵢ, then Tᵢ must commit <em>before</em> Tⱼ commits.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Non-recoverable (BAD):</strong></p>
+        <div class="sched"><table>
+          <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="t1c">W1(X)</td><td></td></tr>
+            <tr><td>2</td><td></td><td class="t2c">R2(X) ← reads T1's write</td></tr>
+            <tr><td>3</td><td></td><td class="t2c conf">C2 ← T2 commits BEFORE T1!</td></tr>
+            <tr><td>4</td><td class="t1c">ABORT</td><td></td></tr>
+          </tbody>
+        </table></div>
+        <p>T2 committed based on T1's write, but T1 aborted. T2 used a value that never existed. We CANNOT undo T2 because it already committed. The database is permanently inconsistent. This is a non-recoverable schedule.</p>
+      </div>
+
+      <h3 class="ssh">Cascadeless Schedule (ACA — Avoids Cascading Aborts)</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A schedule is <strong>cascadeless</strong> if every transaction reads only items written by <em>already-committed</em> transactions. No dirty reads are allowed.</p>
+      </div>
+      <p>
+        Without this, aborting one transaction can force a chain of other transactions to abort — this is a <strong>cascading rollback</strong>. T1 writes X, T2 reads X, T3 reads X, T4 reads X — abort T1 requires aborting T2, T3, T4. This cascading effect is expensive and avoided by the cascadeless property.
+      </p>
+
+      <div class="eg">
+        <p><strong>Recoverable but NOT Cascadeless:</strong></p>
+        <div class="sched"><table>
+          <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="t1c">W1(X)</td><td></td></tr>
+            <tr><td>2</td><td></td><td class="t2c conf">R2(X) ← dirty read (T1 not committed)</td></tr>
+            <tr><td>3</td><td class="t1c">C1</td><td></td></tr>
+            <tr><td>4</td><td></td><td class="t2c">C2</td></tr>
+          </tbody>
+        </table></div>
+        <p>T2 commits AFTER T1 → recoverable ✓. But T2 read X before T1 committed → dirty read → NOT cascadeless ✗. If T1 had aborted at step 3, T2 would need to be rolled back too (cascading rollback).</p>
+      </div>
+
+      <h3 class="ssh">Strict Schedule</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A schedule is <strong>strict</strong> if no transaction reads OR writes a data item X until the last transaction that wrote X has committed or aborted. Both reads and writes are restricted, not just reads.</p>
+      </div>
+      <p>Strict schedules are the easiest to recover from — to undo a transaction, simply restore the before-image of all items it wrote. No need to worry about what other transactions did with those items.</p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — 2PL CONCURRENCY CONTROL
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Concurrency Control — <em>Two-Phase Locking</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="locking">
+      <h2 class="sh">5.1 &nbsp; Lock Types &amp; Compatibility <span class="tag tc">Core</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Shared Lock (S-Lock / Read Lock)</div>
+          <p>Acquired before a read. Multiple transactions can hold S-locks on the same item simultaneously. Any transaction with an S-lock can read, but no one can write.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Exclusive Lock (X-Lock / Write Lock)</div>
+          <p>Acquired before a write. Only one transaction can hold an X-lock at a time. No other transaction can read or write while X-lock is held.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Requested →</th><th>S-Lock</th><th>X-Lock</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Currently held: S-Lock</strong></td><td class="good">Compatible ✓</td><td class="bad">Incompatible ✗ (wait)</td></tr>
+            <tr><td><strong>Currently held: X-Lock</strong></td><td class="bad">Incompatible ✗ (wait)</td><td class="bad">Incompatible ✗ (wait)</td></tr>
+            <tr><td><strong>No lock held</strong></td><td class="good">Compatible ✓</td><td class="good">Compatible ✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="2pl">
+      <h2 class="sh">5.2 &nbsp; Two-Phase Locking — Three Variants <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">2PL Rule</span>
+        <p>A transaction follows <strong>Two-Phase Locking</strong> if all lock acquisitions precede all lock releases. It has two phases: (1) <strong>Growing Phase</strong> — only acquire locks, never release. (2) <strong>Shrinking Phase</strong> — only release locks, never acquire new ones. The point of transition is called the <strong>lock point</strong>.</p>
+      </div>
+
+      <p><strong>Key theorem:</strong> Any schedule produced by 2PL transactions is conflict serializable. The serial order is determined by the order of lock points.</p>
+
+      <div class="tpl-grid">
+        <div class="tpl-card tpl-basic">
+          <div class="tpl-head">Basic 2PL</div>
+          <div class="tpl-body">
+            <p>Follow growing and shrinking phases. Locks can be released before commit.</p>
+            <p><strong>Guarantees:</strong> Conflict serializability.</p>
+            <p><strong>Does NOT prevent:</strong> Deadlocks, cascading rollbacks (dirty reads possible).</p>
+          </div>
+        </div>
+        <div class="tpl-card tpl-strict">
+          <div class="tpl-head">Strict 2PL</div>
+          <div class="tpl-body">
+            <p>Hold all <strong>exclusive (write) locks</strong> until transaction commits or aborts.</p>
+            <p><strong>Guarantees:</strong> Conflict serializability + no cascading rollbacks (strict schedule).</p>
+            <p><strong>Does NOT prevent:</strong> Deadlocks.</p>
+          </div>
+        </div>
+        <div class="tpl-card tpl-rig">
+          <div class="tpl-head">Rigorous 2PL</div>
+          <div class="tpl-body">
+            <p>Hold ALL locks (shared and exclusive) until commit or abort.</p>
+            <p><strong>Guarantees:</strong> Conflict serializability + strictest schedules + no cascading rollbacks.</p>
+            <p><strong>Does NOT prevent:</strong> Deadlocks (still possible).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Serializable?</th><th>No Cascading Rollbacks?</th><th>No Deadlocks?</th><th>Lock Release</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Basic 2PL</strong></td><td class="good">Yes</td><td class="bad">No</td><td class="bad">No</td><td>Anytime in shrinking phase</td></tr>
+            <tr><td><strong>Strict 2PL</strong></td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">No</td><td>X-locks held until commit/abort</td></tr>
+            <tr><td><strong>Rigorous 2PL</strong></td><td class="good">Yes</td><td class="good">Yes</td><td class="bad">No</td><td>All locks held until commit/abort</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">2PL Never Prevents Deadlocks</span>
+        <p>All 2PL variants can produce deadlocks. T1 holds lock on A, waits for B. T2 holds lock on B, waits for A. Neither can proceed. Deadlock detection (wait-for graph, cycle detection) or prevention (ordering, preemption) must be handled separately from 2PL.</p>
+      </div>
+
+      <h3 class="ssh">Deadlock Detection — Wait-for Graph</h3>
+      <p>Build a directed graph where Tᵢ → Tⱼ means Tᵢ is waiting for a lock held by Tⱼ. If the wait-for graph has a cycle, a deadlock exists. Break it by aborting one transaction in the cycle (the "victim").</p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — TIMESTAMP ORDERING
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Timestamp Ordering <em>&amp; Thomas Write Rule</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="timestamps">
+      <h2 class="sh">6.1 &nbsp; Timestamp-Based Concurrency Control <span class="tag tc">Core</span></h2>
+
+      <p>
+        Timestamp ordering (TSO) is a lock-free concurrency protocol. Instead of locks, each transaction gets a unique timestamp when it starts: <code>TS(T)</code>. The DBMS maintains for each data item X:
+      </p>
+      <ul class="pl arr">
+        <li><strong>R-TS(X)</strong> — the timestamp of the most recent transaction that <em>read</em> X.</li>
+        <li><strong>W-TS(X)</strong> — the timestamp of the most recent transaction that <em>wrote</em> X.</li>
+      </ul>
+
+      <div class="def-box">
+        <span class="lbl">Basic Timestamp Ordering Rules</span>
+        <p>
+          <strong>When T reads X:</strong><br>
+          If TS(T) &lt; W-TS(X): T is trying to read a value written by a younger transaction. T is "too old" → <strong>ABORT and restart T</strong>.<br>
+          Else: Allow read. Update R-TS(X) = max(R-TS(X), TS(T)).<br><br>
+          <strong>When T writes X:</strong><br>
+          If TS(T) &lt; R-TS(X): A younger transaction already read X expecting T hadn't written it yet → <strong>ABORT and restart T</strong>.<br>
+          If TS(T) &lt; W-TS(X): A younger transaction already wrote X → <strong>ABORT and restart T</strong> (basic protocol).<br>
+          Else: Allow write. Update W-TS(X) = TS(T).
+        </p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Advantages over 2PL</div>
+          <p>No deadlocks (aborts instead of waiting). No locks needed. High concurrency for read-heavy workloads.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Disadvantages</div>
+          <p>Starvation possible (a transaction keeps getting aborted and restarted). Long transactions get repeatedly killed by short ones.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="thomas-write">
+      <h2 class="sh">6.2 &nbsp; Thomas Write Rule <span class="tag tp">Advanced Distinction</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Thomas Write Rule</span>
+        <p>A modification to the basic timestamp protocol: when T tries to write X and TS(T) &lt; W-TS(X) (a younger transaction already wrote X), instead of aborting T — <strong>simply ignore (skip) T's write</strong>. The younger transaction's value is more recent and should be kept.</p>
+      </div>
+
+      <p>
+        <strong>Why this works:</strong> If a younger transaction already wrote X and a later read will see that younger value anyway, the older transaction's write is <em>obsolete</em> — it will be immediately overwritten. Ignoring it is semantically equivalent to T writing it and then the younger transaction overwriting it. No harm is done.
+      </p>
+      <p>
+        <strong>Why it matters:</strong> The Thomas Write Rule allows schedules that are <em>not conflict serializable</em> but are still correct (view serializable). It increases concurrency by avoiding unnecessary aborts. This is the key distinction GATE tests: TSO with Thomas Write Rule generates a superset of the schedules generated by basic TSO.
+      </p>
+
+      <div class="eg">
+        <p><strong>Without Thomas Write Rule:</strong> T1 (TS=1) tries to write X, but T2 (TS=2) already wrote X (W-TS(X)=2). Since TS(T1)=1 &lt; W-TS(X)=2 → ABORT T1.</p>
+        <p><strong>With Thomas Write Rule:</strong> Same situation → <em>ignore</em> T1's write (it would be obsolete anyway). T1 continues executing without abort. More concurrency, same correctness.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — LOG-BASED RECOVERY
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Log-Based Recovery — <em>Undo, Redo &amp; Checkpoints</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="log-intro">
+      <h2 class="sh">7.1 &nbsp; The Write-Ahead Log (WAL) <span class="tag tc">Core</span></h2>
+
+      <p>
+        The log is a sequence of records written to stable storage (disk) that records every action taken by every transaction. It is the DBMS's source of truth for recovery. The fundamental rule that governs it:
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Write-Ahead Logging (WAL) Protocol</span>
+        <p>Before a data item X is modified on disk, the log record for that modification must be written to stable storage first. Before a transaction commits, all its log records (including the commit record) must be written to stable storage.</p>
+      </div>
+
+      <p>WAL ensures that on recovery, the log always contains enough information to undo incomplete transactions and redo committed ones — even if the system crashed mid-operation.</p>
+
+      <h3 class="ssh">Log Record Types</h3>
+      <div class="log-entry"><div class="log-type log-start">&lt;T, START&gt;</div><div class="log-val">Transaction T has begun execution</div></div>
+      <div class="log-entry"><div class="log-type log-write">&lt;T, X, V_old, V_new&gt;</div><div class="log-val">T wrote data item X, changing value from V_old to V_new (both needed for undo and redo)</div></div>
+      <div class="log-entry"><div class="log-type log-commit">&lt;T, COMMIT&gt;</div><div class="log-val">T has completed successfully and its changes are permanent</div></div>
+      <div class="log-entry"><div class="log-type log-abort">&lt;T, ABORT&gt;</div><div class="log-val">T has been rolled back and all its changes undone</div></div>
+      <div class="log-entry"><div class="log-type log-ckpt">&lt;CHECKPOINT [T1,T2,...]&gt;</div><div class="log-val">Checkpoint taken while transactions T1, T2, ... were active</div></div>
+    </div>
+
+    <div class="sec" data-m="undo-redo">
+      <h2 class="sh">7.2 &nbsp; Undo and Redo Logic <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">UNDO — Atomicity</div>
+          <p>Applied to transactions that were <strong>active at crash time</strong> (started but did not commit). Use V_old values from log records to reverse all their writes. Restores database to state before these transactions began.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">REDO — Durability</div>
+          <p>Applied to transactions that <strong>committed</strong> but whose changes may not have reached disk (they were in memory buffer). Use V_new values to reapply all their writes. Ensures committed work is not lost.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Recovery Algorithm — After a Crash</span>
+        <p>
+          <strong>Step 1 — Analysis:</strong> Scan log from last checkpoint to crash point. Identify which transactions committed and which were active at crash.<br>
+          <strong>Step 2 — REDO:</strong> Redo all operations of committed transactions in forward order (oldest first). Apply V_new values.<br>
+          <strong>Step 3 — UNDO:</strong> Undo all operations of active (uncommitted) transactions in reverse order (newest first). Apply V_old values. Write &lt;T, ABORT&gt; for each undone transaction.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Log at crash time (system crashed after record 6):</strong></p>
+        <div class="cb">&lt;T1, START&gt;
+&lt;T2, START&gt;
+&lt;T1, X, 10, 50&gt;        ← T1 changed X from 10 to 50
+&lt;T2, Y, 20, 80&gt;        ← T2 changed Y from 20 to 80
+&lt;T1, COMMIT&gt;           ← T1 committed
+&lt;T2, Z, 30, 90&gt;        ← T2 changed Z from 30 to 90
+CRASH HERE — no commit record for T2</div>
+        <p><strong>Recovery:</strong></p>
+        <ul class="pl arr">
+          <li><strong>Committed:</strong> T1 (has COMMIT record) → <strong>REDO</strong> T1's writes: set X = 50 (V_new).</li>
+          <li><strong>Active at crash:</strong> T2 (no COMMIT record) → <strong>UNDO</strong> T2's writes in reverse: set Z = 30 (V_old), then set Y = 20 (V_old). Write &lt;T2, ABORT&gt;.</li>
+        </ul>
+        <p><strong>Final state:</strong> X=50 (T1's committed change preserved), Y=20, Z=30 (T2's changes reversed).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="checkpoints">
+      <h2 class="sh">7.3 &nbsp; Checkpoints — Reducing Recovery Time <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Checkpoint</span>
+        <p>A <strong>checkpoint</strong> is a periodic synchronization point where: (1) all log records currently in memory are written to disk, (2) all modified database pages in memory (buffer) are written to disk, (3) a &lt;CHECKPOINT&gt; record is written to the log. After a checkpoint, recovery only needs to process the log from the checkpoint onwards — not from the beginning of time.</p>
+      </div>
+
+      <p>
+        Without checkpoints, after a crash you'd need to replay the entire log history. With checkpoints every 5 minutes, you only need to recover the last 5 minutes of log records. This makes recovery dramatically faster at the cost of a small periodic overhead.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Checkpoint recovery boundary</span>
+───────────────[CHECKPOINT]──────────────────[CRASH]
+               T1 started                 T2 started
+               T1 committed               T2 active (no commit)
+
+Recovery needs only the log from [CHECKPOINT] to [CRASH]:
+  → REDO T1 (committed after checkpoint, may not be on disk)
+  → UNDO T2 (active at crash, never committed)
+  → Ignore everything before [CHECKPOINT] (already on disk)
+      </div>
+
+      <div class="note-box">
+        <span class="lbl">Fuzzy Checkpoints</span>
+        <p>Traditional checkpoints pause all transactions during the checkpoint operation (expensive). <strong>Fuzzy checkpoints</strong> allow transactions to continue during the checkpoint — the &lt;CHECKPOINT&gt; record lists which transactions were active at checkpoint start. Recovery must handle transactions that may have begun before or during the checkpoint.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 8 — GATE TRAPS & REFERENCE
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Schedule Trace Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Serializability ≠ Recoverability</td>
+              <td>These are independent properties. A schedule can be serializable but not recoverable (T2 commits based on T1's write before T1 commits). A schedule can be recoverable but not serializable. Always check both.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Conflict Serializable ≠ View Serializable</td>
+              <td>Conflict serializable ⊂ View serializable. Every CS schedule is VS, but not vice versa. GATE tests conflict serializability via precedence graphs.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Read-Read is not a conflict</td>
+              <td>Two reads on the same item from different transactions do NOT conflict. Only pairs involving at least one write on the same item from different transactions are conflicts.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>2PL guarantees serializability, not deadlock-freedom</td>
+              <td>All 2PL variants guarantee conflict serializability. None prevent deadlocks. Deadlock handling is separate (detection + victim selection, or prevention via ordering).</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Basic 2PL allows dirty reads</td>
+              <td>Basic 2PL releases locks during shrinking phase — before commit. Another transaction may read those released items (dirty read). Only Strict and Rigorous 2PL prevent this by holding write locks until commit.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Strict ≠ Strict 2PL</td>
+              <td>"Strict schedule" and "Strict 2PL protocol" are different concepts. Strict schedule = no transaction reads/writes X until previous writer commits. Strict 2PL = hold X-locks until commit. Strict 2PL produces strict schedules, but this relationship must be stated, not assumed.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Thomas Write Rule allows non-CS schedules</td>
+              <td>TSO with Thomas Write Rule produces view serializable schedules that may NOT be conflict serializable. This is its distinguishing feature. The precedence graph test won't work for schedules using the Thomas Write Rule — they may fail the graph test but still be correct.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>UNDO uses V_old, REDO uses V_new</td>
+              <td>The log record &lt;T, X, V_old, V_new&gt; contains both values. UNDO: restore X = V_old (reverse the change). REDO: restore X = V_new (reapply the change). Getting this backwards is a common exam mistake.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Checkpoint eliminates log before it, not after</td>
+              <td>After a checkpoint, transactions that committed BEFORE the checkpoint don't need to be redone (their changes are on disk). Transactions active DURING or AFTER the checkpoint still need analysis. The checkpoint record lists active transactions at that point.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Cascadeless ≠ No dirty reads in all cases</td>
+              <td>Cascadeless (ACA) means you only read committed values. This eliminates dirty reads entirely. But it's stricter than just "recoverable" — recoverable only requires commit ordering, not restricting reads to committed data.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="quick-trace">
+      <h2 class="sh">8.2 &nbsp; Schedule Classification — Quick Decision Algorithm</h2>
+
+      <div class="def-box">
+        <span class="lbl">Step-by-step classification for any schedule</span>
+        <p>
+          <strong>Step 1 — Recoverable?</strong> For every pair where Tj reads what Ti wrote: does Ti commit before Tj commits? If any Tj commits before Ti → NOT recoverable. Stop.<br><br>
+          <strong>Step 2 — Cascadeless?</strong> For every read operation Rj(X): has the last writer of X already committed before this read? If any dirty read exists → NOT cascadeless (but may be recoverable).<br><br>
+          <strong>Step 3 — Strict?</strong> For every operation on X by Tj: has every prior writer of X (Ti) already committed or aborted? If not → NOT strict.<br><br>
+          <strong>Step 4 — Conflict Serializable?</strong> Build precedence graph. Cycle → NOT CS. No cycle → CS. Find equivalent serial order by topological sort.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classify: R1(A), W2(A), C2, R1(B), W1(B), C1</strong></p>
+        <div class="sched"><table>
+          <thead><tr><th>Time</th><th>T1</th><th>T2</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td class="t1c">R1(A)</td><td></td></tr>
+            <tr><td>2</td><td></td><td class="t2c">W2(A)</td></tr>
+            <tr><td>3</td><td></td><td class="t2c">C2</td></tr>
+            <tr><td>4</td><td class="t1c">R1(B)</td><td></td></tr>
+            <tr><td>5</td><td class="t1c">W1(B)</td><td></td></tr>
+            <tr><td>6</td><td class="t1c">C1</td><td></td></tr>
+          </tbody>
+        </table></div>
+        <ul class="pl arr">
+          <li><strong>Recoverable?</strong> T1 reads A (written by nobody yet — original value). T2 writes A and commits at time 3. T1 never reads T2's write. T1 commits at time 6. No dependency issue. ✓ Recoverable.</li>
+          <li><strong>Cascadeless?</strong> R1(A) at time 1: no transaction has written A yet (original). R1(B) at time 4: nobody wrote B before this read. No dirty reads. ✓ Cascadeless.</li>
+          <li><strong>Strict?</strong> T2 writes A at time 2 and commits at time 3. T1 doesn't read or write A after T2's write (T1 read A at time 1, before T2 wrote it). ✓ Strict.</li>
+          <li><strong>Conflict Serializable?</strong> Conflicts: R1(A) then W2(A) → T1→T2. No other conflicts on same items between different transactions. Graph: T1→T2. No cycle. ✓ CS. Equivalent serial order: T1, T2.</li>
+        </ul>
+        <p><strong>Final classification:</strong> Strict, Cascadeless, Recoverable, AND Conflict Serializable. ✓</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="2pl-vs-ts">
+      <h2 class="sh">8.3 &nbsp; 2PL vs Timestamp Ordering — Comparison</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Basic 2PL</th><th>Strict 2PL</th><th>Rigorous 2PL</th><th>Timestamp Ordering</th><th>TSO + Thomas Write</th></tr></thead>
+          <tbody>
+            <tr><td>Serializable</td><td class="good">Yes (CS)</td><td class="good">Yes (CS)</td><td class="good">Yes (CS)</td><td class="good">Yes (CS)</td><td class="ok">Yes (VS, not always CS)</td></tr>
+            <tr><td>Deadlock free</td><td class="bad">No</td><td class="bad">No</td><td class="bad">No</td><td class="good">Yes (aborts instead)</td><td class="good">Yes</td></tr>
+            <tr><td>Cascading rollbacks</td><td class="bad">Possible</td><td class="good">No</td><td class="good">No</td><td class="bad">Possible</td><td class="bad">Possible</td></tr>
+            <tr><td>Starvation</td><td class="bad">Possible</td><td class="bad">Possible</td><td class="bad">Possible</td><td class="bad">Possible (repeated aborts)</td><td class="bad">Possible</td></tr>
+            <tr><td>Lock overhead</td><td class="bad">High</td><td class="bad">High</td><td class="bad">Highest</td><td class="good">None</td><td class="good">None</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  DBMS · Transactions &amp; Concurrency Control · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

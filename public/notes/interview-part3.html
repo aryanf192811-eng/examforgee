@@ -1,0 +1,3240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interview Problem Setbook — Part 3 · Q071–Q105</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;--prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;--mono:'Courier New',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);--fs-sm:clamp(11px,2.4vw,12.5px);
+  --fs-base:clamp(14px,3.2vw,16.5px);--fs-md:clamp(13.5px,3.2vw,15.5px);
+  --fs-lg:clamp(15px,3.6vw,18.5px);--fs-xl:clamp(20px,5vw,36px);
+  --fs-ch:clamp(15px,4vw,19px);--fs-code:clamp(10.5px,2.3vw,12.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);}
+.book{max-width:880px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;}
+.cover h1{font-family:var(--body);font-size:var(--fs-xl);font-weight:700;line-height:1.12;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);margin-top:14px;line-height:1.8;max-width:530px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,24px);}
+.chip{font-family:var(--hand);font-size:var(--fs-xs);border:1.5px solid #b0a080;border-radius:2px;padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px clamp(6px,2vw,12px);border-radius:2px;max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:clamp(14px,3vw,28px);box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:var(--fs-ch);font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:clamp(16px,3.5vw,26px) clamp(14px,3.5vw,30px) clamp(14px,3vw,22px) clamp(32px,6.5vw,58px);border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:30px;font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+h3.ssh{font-family:var(--body);font-size:clamp(13px,3vw,15px);font-weight:600;font-style:italic;color:var(--blue);margin:16px 0 7px;}
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.9;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+/* QUESTION CARD */
+.qcard{background:var(--paper2);border:1.5px solid #b0a088;border-radius:5px;margin:0 0 clamp(18px,3.5vw,32px);overflow:hidden;box-shadow:3px 4px 0 #9a8a6e;}
+.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:clamp(10px,2vw,14px) clamp(12px,3vw,20px);background:var(--paper3);border-bottom:1.5px solid #c8b898;}
+.qnum{font-family:var(--hand);font-size:clamp(10px,2vw,11.5px);background:var(--ink);color:var(--paper);border-radius:3px;padding:3px 9px;letter-spacing:1px;flex-shrink:0;}
+.qnum.easy{background:var(--green);}.qnum.med{background:var(--orange);}.qnum.hard{background:var(--red);}.qnum.expert{background:var(--purple);}
+.qtitle{font-family:var(--body);font-size:clamp(13.5px,3.2vw,16px);font-weight:700;color:var(--ink);flex:1;min-width:0;}
+.qsrc{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:2px 8px;border:1px solid #c0a880;border-radius:2px;background:rgba(255,255,255,0.5);flex-shrink:0;white-space:nowrap;}
+.qtags{display:flex;gap:5px;flex-wrap:wrap;}
+.qt{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid currentColor;}
+.qt-a{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.qt-t{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.qt-b{color:var(--teal);border-color:var(--teal);}
+.qt-h{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.qt-dp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-g{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.qt-d{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.qt-m{color:var(--ink3);border-color:var(--ink3);}
+.qt-r{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.hints{display:flex;gap:6px;flex-wrap:wrap;padding:8px clamp(12px,3vw,20px);background:rgba(255,255,255,0.3);border-bottom:1px dashed #c8b898;}
+.hint{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:2px;border:1.5px solid currentColor;}
+.hm{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.hf{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ht{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.hc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.hd{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.qbody{padding:clamp(12px,2.5vw,18px) clamp(12px,3vw,20px);}
+.qprob{background:var(--paper);border:1.5px solid var(--ink);border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:12px;position:relative;}
+.qprob::before{content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink);position:absolute;top:-9px;left:12px;background:var(--paper);padding:0 6px;border:1px solid var(--ink);border-radius:2px;}
+.qprob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0 0 6px;line-height:1.82;}
+.qprob p:last-child{margin:0;}
+.io-row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+.io-box{flex:1;min-width:110px;background:var(--paper3);border:1px dashed #a09070;border-radius:3px;padding:8px 12px;}
+.io-lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;display:block;}
+.io-box code{font-family:var(--mono);font-size:var(--fs-code);color:var(--ink);background:none;border:none;padding:0;display:block;line-height:1.6;white-space:pre-wrap;word-break:break-word;}
+.constraint{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink3);margin-top:8px;line-height:1.7;display:block;}
+.qdec{background:#fff8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qdec .dlbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:6px;display:block;}
+.qdec p{font-size:var(--fs-md);line-height:1.82;margin:0 0 5px;color:var(--ink2);}
+.qdec p:last-child{margin:0;}
+.qdec strong{color:var(--orange);}
+.qapp{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin-bottom:12px;}
+.qapp .albl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px;display:block;}
+.qapp p{font-size:var(--fs-md);line-height:1.85;margin:0 0 5px;color:var(--ink2);}
+.qapp p:last-child{margin:0;}
+.qapp strong{color:var(--blue);}
+.ap-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px;margin-bottom:12px;}
+.ap-c{background:var(--paper);border:1.5px solid #c0a880;border-radius:4px;padding:clamp(9px,2vw,12px);}
+.ap-b{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;border:1.5px solid currentColor;display:inline-block;margin-bottom:7px;}
+.ap-brute{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.ap-ok{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.ap-best{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+.ap-c h4{font-family:var(--body);font-size:clamp(12.5px,2.8vw,14px);font-weight:700;color:var(--ink);margin-bottom:5px;}
+.ap-c p{font-family:var(--prose);font-size:clamp(12px,2.6vw,13.5px);color:var(--ink2);margin:0 0 5px;line-height:1.7;}
+.ap-c .cx{font-family:var(--mono);font-size:10px;color:var(--ink3);border-top:1px dashed #c8b898;padding-top:5px;margin-top:5px;}
+.qtrace{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,17px);margin-bottom:12px;font-family:var(--mono);font-size:clamp(9.5px,2.1vw,12px);line-height:2;color:var(--ink);white-space: pre;
+        overflow-x: auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qtrace::-webkit-scrollbar{height:4px;}.qtrace::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.trl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:7px;display:block;}
+.tr-hi{background:var(--hl-y);border-radius:2px;padding:0 2px;}
+.tr-ok{color:var(--green);font-weight:700;}
+.tr-no{color:var(--red);font-weight:700;}
+.tr-cur{color:var(--blue);font-weight:700;}
+.tr-dim{color:var(--ink3);}
+.qcode{font-family:var(--mono);font-size:var(--fs-code);background:#f5f0e8;border:1.5px solid #c8b898;border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin-bottom:10px;color:var(--ink);line-height:1.88;white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;}
+.qcode::-webkit-scrollbar{height:4px;}.qcode::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.qcode .kw{color:var(--blue);font-weight:700;}
+.qcode .cm{color:#8a7a5a;font-style:italic;}
+.qcode .st{color:var(--green);}
+.qcode .num{color:var(--orange);}
+.qcode .fn{color:var(--teal);}
+.qcode .pp{color:var(--red);}
+.clbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:6px;padding-bottom:5px;border-bottom:1px dashed #c8b898;}
+.qfoot{display:flex;gap:8px;flex-wrap:wrap;padding:clamp(8px,2vw,12px) clamp(12px,3vw,18px);background:var(--paper3);border-top:1px dashed #c8b898;}
+.qf{font-family:var(--mono);font-size:var(--fs-xs);background:var(--paper2);border:1px solid #c0a880;border-radius:3px;padding:3px 10px;color:var(--ink3);display:flex;align-items:center;gap:5px;}
+.qf .fl{font-style:italic;}.qf .fv{font-weight:700;}
+.qf.t .fv{color:var(--green);}.qf.s .fv{color:var(--purple);}.qf.x .fv{color:var(--blue);}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:12px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:12px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+.pl{list-style:none;margin:6px 0 10px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.85;color:var(--ink2);padding:2px 0 2px 20px;position:relative;}
+.pl li::before{content:'→';position:absolute;left:0;color:var(--blue);}
+code{font-family:var(--mono);font-size:var(--fs-code);background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+.toc-grid a{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);}
+.tn{font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:8px clamp(12px,3vw,28px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+@media(max-width:640px){
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .sec{padding-left:clamp(26px,5.5vw,40px);}
+  h2.sh{font-size:clamp(14px,3.8vw,17px);}
+  .qhead{gap:6px;}.qtitle{font-size:14px;}.qsrc{display:none;}
+  .ap-row{grid-template-columns:1fr;}.io-row{flex-direction:column;}
+  .qfoot{flex-direction:column;gap:5px;}.toc-grid{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{padding:18px 14px 16px;box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);}
+  .cover::after{display:none;}.cover-inner{padding-left:0;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;}
+  .chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:16px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(13px,4vw,16px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:5px;}
+  .qcode,.qtrace{font-size:9.5px;padding:9px 10px;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;}
+  .qcard{break-inside:avoid;box-shadow:none;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .qcode,.qtrace{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">IV · Part 3 · Q071–Q105</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Interview Setbook · Part 3 of 6 · Q071–Q105</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Mastery Series · Interview Prep</div>
+    <h1>The Interview<br><em>Problem Setbook</em></h1>
+    <p class="cover-desc">Part 3 of 6. Trees, BST and Heaps — the data structures that separate good programmers from great ones. Tree recursion is the single most testable skill in FAANG interviews. Master this part and your interview pass rate doubles.</p>
+    <div class="cover-chips">
+      <span class="chip">Part 3 · Q071–Q105</span>
+      <span class="chip">Binary Trees</span>
+      <span class="chip">Binary Search Trees</span>
+      <span class="chip">Tree DP</span>
+      <span class="chip">Heaps &amp; Priority Queues</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Part 3 Contents</div>
+  <div class="toc-grid">
+    <a href="#ch7"><span class="tn">Ch7</span>Binary Trees — Q071–Q088</a>
+    <a href="#ch8"><span class="tn">Ch8</span>Binary Search Trees — Q089–Q097</a>
+    <a href="#ch9"><span class="tn">Ch9</span>Heaps &amp; Priority Queues — Q098–Q105</a>
+    <a href="#top"><span class="tn">↑</span>Back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 7 — BINARY TREES (Q071–Q088)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07 · Q071–Q088 · Binary Trees</div>
+    <div class="ch-title">Binary Trees — <em>Recursion Mastery, Traversals &amp; Tree DP</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="trees">
+
+    <div class="def-box">
+      <span class="lbl">The Tree Recursion Mental Model — One Thought Unlocks All</span>
+      <p><strong>Assume your function already works for the left and right subtrees. Given those results, what do you do at the current node?</strong> That's tree recursion in one sentence. Every tree problem follows: base case (null = 0 or false or empty) → recurse left → recurse right → combine at current node. The art is knowing what to return upward and what to track globally.</p>
+    </div>
+
+<!-- ─────────── Q071 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q071 · EASY</span>
+    <span class="qtitle">Maximum Depth of Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #104</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Recursion Foundation</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the maximum depth (number of nodes along longest root-to-leaf path) of a binary tree.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Tree</span><code>    3
+   / \
+  9  20
+    /  \
+   15   7</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>3</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Depth at Node = 1 + Max(Depth Left, Depth Right)</span>
+      <p>Trust the recursion: assume maxDepth(left) and maxDepth(right) return correct depths. The current node adds 1 level. Base case: null node = depth 0.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Tree: 3 → [9, 20→[15,7]]</span>
+maxDepth(null) = 0
+
+maxDepth(9):   1 + max(0,0) = <span class="tr-hi">1</span>
+maxDepth(15):  1 + max(0,0) = <span class="tr-hi">1</span>
+maxDepth(7):   1 + max(0,0) = <span class="tr-hi">1</span>
+maxDepth(20):  1 + max(1,1) = <span class="tr-hi">2</span>
+maxDepth(3):   1 + max(1,2) = <span class="tr-ok">3</span></div>
+    <div class="qcode"><span class="clbl">C++ — Recursive and BFS (both shown)</span>
+<span class="cm">// Recursive DFS — clean, natural</span>
+<span class="kw">int</span> <span class="fn">maxDepth</span>(TreeNode* root) {
+    <span class="kw">if</span>(!root) <span class="kw">return</span> 0;
+    <span class="kw">return</span> 1 + max(maxDepth(root-&gt;left), maxDepth(root-&gt;right));
+}
+
+<span class="cm">// BFS — counts levels (useful when recursion depth is a concern)</span>
+<span class="kw">int</span> <span class="fn">maxDepthBFS</span>(TreeNode* root) {
+    <span class="kw">if</span>(!root) <span class="kw">return</span> 0;
+    queue&lt;TreeNode*&gt; q; q.push(root); <span class="kw">int</span> depth=0;
+    <span class="kw">while</span>(!q.empty()){
+        depth++;
+        <span class="kw">for</span>(<span class="kw">int</span> i=q.size(); i&gt;0; i--){
+            TreeNode* n=q.front(); q.pop();
+            <span class="kw">if</span>(n-&gt;left)  q.push(n-&gt;left);
+            <span class="kw">if</span>(n-&gt;right) q.push(n-&gt;right);
+        }
+    }
+    <span class="kw">return</span> depth;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h) DFS · O(w) BFS</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q072 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q072 · EASY</span>
+    <span class="qtitle">Invert Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #226</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Recursion Intuition Builder</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Invert (mirror) a binary tree. Return the root of the inverted tree.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>  4
+ / \
+2   7
+/\ /\
+1 3 6 9</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>  4
+ / \
+7   2
+/\ /\
+9 6 3 1</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Swap Children, Then Recursively Invert Each</span>
+      <p>At each node: swap its left and right children. Then recursively invert the left subtree and the right subtree. Base case: null node → return null. This is three lines of code — any more and you're overthinking it.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(h) space</span>
+TreeNode* <span class="fn">invertTree</span>(TreeNode* root) {
+    <span class="kw">if</span>(!root) <span class="kw">return nullptr</span>;
+    swap(root-&gt;left, root-&gt;right);     <span class="cm">// Swap children at current node</span>
+    invertTree(root-&gt;left);            <span class="cm">// Invert left subtree</span>
+    invertTree(root-&gt;right);           <span class="cm">// Invert right subtree</span>
+    <span class="kw">return</span> root;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q073 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q073 · EASY</span>
+    <span class="qtitle">Same Tree / Symmetric Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #100 &amp; #101</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Structural Comparison Pattern</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p><strong>Same Tree:</strong> Are two trees structurally identical with same node values?<br>
+      <strong>Symmetric Tree:</strong> Is a single tree a mirror of itself around its centre?</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Key Insight — Symmetric = Left's Left Matches Right's Right</span>
+      <p>For Same Tree: both null → true. One null → false. Values differ → false. Else recurse both children.<br>
+      For Symmetric: helper isMirror(left, right). Both null → true. One null → false. Values equal AND isMirror(left.left, right.right) AND isMirror(left.right, right.left).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Both Problems</span>
+<span class="cm">// Same Tree</span>
+<span class="kw">bool</span> <span class="fn">isSameTree</span>(TreeNode* p, TreeNode* q){
+    <span class="kw">if</span>(!p &amp;&amp; !q) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!p || !q || p-&gt;val!=q-&gt;val) <span class="kw">return false</span>;
+    <span class="kw">return</span> isSameTree(p-&gt;left,q-&gt;left) &amp;&amp; isSameTree(p-&gt;right,q-&gt;right);
+}
+
+<span class="cm">// Symmetric Tree</span>
+<span class="kw">bool</span> <span class="fn">isMirror</span>(TreeNode* L, TreeNode* R){
+    <span class="kw">if</span>(!L &amp;&amp; !R) <span class="kw">return true</span>;
+    <span class="kw">if</span>(!L || !R || L-&gt;val!=R-&gt;val) <span class="kw">return false</span>;
+    <span class="kw">return</span> isMirror(L-&gt;left,R-&gt;right) &amp;&amp; isMirror(L-&gt;right,R-&gt;left);
+}
+<span class="kw">bool</span> <span class="fn">isSymmetric</span>(TreeNode* root){
+    <span class="kw">return</span> !root || isMirror(root-&gt;left, root-&gt;right);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q074 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q074 · EASY</span>
+    <span class="qtitle">Binary Tree Level Order Traversal</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-b">BFS</span></div>
+    <span class="qsrc">LeetCode #102</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">BFS Level-by-Level Template</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return all node values level by level (left to right) as a vector of vectors.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — BFS with Level-Size Snapshot</span>
+      <p>Use a queue. At the start of each level, snapshot the queue size. Process exactly that many nodes (one full level). Push their children. Repeat. The size snapshot prevents mixing levels.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Tree: 3 / [9, 20 / [15,7]]</span>
+Level 0: queue=[3], size=1 → process 3 → push 9,20
+         output: [<span class="tr-hi">3</span>]
+Level 1: queue=[9,20], size=2 → process 9(no children), 20(push 15,7)
+         output: [<span class="tr-hi">9,20</span>]
+Level 2: queue=[15,7], size=2 → process both
+         output: [<span class="tr-hi">15,7</span>]
+
+Result: [[<span class="tr-ok">3</span>],[<span class="tr-ok">9,20</span>],[<span class="tr-ok">15,7</span>]]</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(w) space</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">levelOrder</span>(TreeNode* root) {
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">if</span>(!root) <span class="kw">return</span> res;
+    queue&lt;TreeNode*&gt; q; q.push(root);
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> sz = q.size();                    <span class="cm">// Snapshot current level size</span>
+        res.emplace_back();
+        <span class="kw">while</span>(sz--){
+            TreeNode* n = q.front(); q.pop();
+            res.back().push_back(n-&gt;val);
+            <span class="kw">if</span>(n-&gt;left)  q.push(n-&gt;left);
+            <span class="kw">if</span>(n-&gt;right) q.push(n-&gt;right);
+        }
+    }
+    <span class="kw">return</span> res;
+}
+<span class="cm">// Variants: Zigzag (LC#103) — alternate push direction per level</span>
+<span class="cm">// Right side view (LC#199) — take last element of each level</span></div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(w) max width</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q075 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q075 · EASY</span>
+    <span class="qtitle">Path Sum</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #112</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Subtract as You Go Down</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return true if the tree has a root-to-leaf path whose node values sum to targetSum.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>target=22
+5→[4→[11→[7,2]],
+   8→[13,4→[,1]]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>true</code> (5+4+11+2)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Subtract Node Value, Check if Leaf with Remaining = 0</span>
+      <p>At each node: subtract its value from the target. At a leaf: check if remaining == 0. Pass the reduced target down. This is cleaner than accumulating a sum because you don't need to check if you're at a leaf separately when summing.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">bool</span> <span class="fn">hasPathSum</span>(TreeNode* root, <span class="kw">int</span> target) {
+    <span class="kw">if</span>(!root) <span class="kw">return false</span>;
+    target -= root-&gt;val;
+    <span class="kw">if</span>(!root-&gt;left &amp;&amp; !root-&gt;right) <span class="kw">return</span> target == 0; <span class="cm">// Leaf check</span>
+    <span class="kw">return</span> hasPathSum(root-&gt;left, target) || hasPathSum(root-&gt;right, target);
+}
+
+<span class="cm">// Path Sum II — return all root-to-leaf paths with sum == target</span>
+<span class="kw">void</span> <span class="fn">dfs</span>(TreeNode* n, <span class="kw">int</span> rem, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; path,
+          <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; res){
+    <span class="kw">if</span>(!n) <span class="kw">return</span>;
+    path.push_back(n-&gt;val); rem-=n-&gt;val;
+    <span class="kw">if</span>(!n-&gt;left&amp;&amp;!n-&gt;right&amp;&amp;rem==0) res.push_back(path);
+    dfs(n-&gt;left,rem,path,res); dfs(n-&gt;right,rem,path,res);
+    path.pop_back();  <span class="cm">// Backtrack</span>
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q076 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q076 · MEDIUM</span>
+    <span class="qtitle">Diameter of Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Tree DP</span></div>
+    <span class="qsrc">LeetCode #543</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Diameter ≠ Just Depth — Track Both</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the diameter of a binary tree — the longest path between any two nodes (may not pass through root). Return the number of edges.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Tree</span><code>  1
+ / \
+2   3
+/\
+4  5</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>3</code></div>
+        <div class="io-box"><span class="io-lbl">Path</span><code>[4,2,1,3]
+or [5,2,1,3]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — At Each Node: Diameter Through It = Left Height + Right Height</span>
+      <p>The longest path through any node uses the tallest path in its left subtree PLUS the tallest path in its right subtree. DFS returns height upward while updating a global maximum with (left_height + right_height) at each node. These are two different things — the return value (height) and the side-effect (update max diameter).</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Tree: 1/[2/[4,5], 3]</span>
+height(4) = 0  → update diameter: 0+0=0
+height(5) = 0  → update diameter: 0+0=0
+height(2) = 1  → update diameter: <span class="tr-hi">1+1=2</span>  (paths through 2)
+height(3) = 0  → update diameter: 0+0=0
+height(1) = 2  → update diameter: <span class="tr-hi">2+1=3</span>  (paths through 1: 4→2→1→3)
+
+Global max = <span class="tr-ok">3</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) single DFS pass</span>
+<span class="kw">int</span> <span class="fn">diameterOfBinaryTree</span>(TreeNode* root) {
+    <span class="kw">int</span> diameter = 0;
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(TreeNode*)&gt; height = [&amp;](TreeNode* node) -&gt; <span class="kw">int</span> {
+        <span class="kw">if</span>(!node) <span class="kw">return</span> 0;
+        <span class="kw">int</span> L = height(node-&gt;left);
+        <span class="kw">int</span> R = height(node-&gt;right);
+        diameter = max(diameter, L + R);  <span class="cm">// Update global max</span>
+        <span class="kw">return</span> 1 + max(L, R);             <span class="cm">// Return height upward</span>
+    };
+    height(root);
+    <span class="kw">return</span> diameter;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Same "return height, update global" in: Max Path Sum, Balanced Check</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q077 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q077 · HARD</span>
+    <span class="qtitle">Binary Tree Maximum Path Sum</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Tree DP</span></div>
+    <span class="qsrc">LeetCode #124</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">FAANG Favourite</span><span class="hint ht">Path Through Node vs Path Returned Up</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the maximum path sum in a binary tree. A path is any sequence of nodes where each pair of adjacent nodes has an edge. The path does not need to pass through the root. Nodes can be negative.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[-10,9,20,null,null,15,7]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>42</code> (15+20+7)</div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Two Different Computations at Each Node</span>
+      <p><strong>What to update globally:</strong> node.val + max(0, leftGain) + max(0, rightGain). This is the max path that passes through this node as the "peak".<br>
+      <strong>What to return upward:</strong> node.val + max(0, max(leftGain, rightGain)). You can only continue the path through ONE branch going upward — you can't split.<br>
+      Clamp negative gains to 0: a negative subtree only hurts, so don't include it.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[-10, 9, 20/[15,7]]</span>
+gain(9):  L=0,R=0. update=9+0+0=9.   return 9+max(0,0)=<span class="tr-hi">9</span>
+gain(15): L=0,R=0. update=15.         return <span class="tr-hi">15</span>
+gain(7):  L=0,R=0. update=7.          return <span class="tr-hi">7</span>
+gain(20): L=15,R=7.
+  update = 20+15+7 = <span class="tr-hi">42</span>  ← global max
+  return  = 20+max(15,7) = 35
+gain(-10):L=9,R=35.
+  update = -10+9+35=34    (< 42, no update)
+  return = -10+max(9,35)=25
+
+Answer: <span class="tr-ok">42</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) single DFS pass</span>
+<span class="kw">int</span> <span class="fn">maxPathSum</span>(TreeNode* root) {
+    <span class="kw">int</span> best = INT_MIN;
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(TreeNode*)&gt; gain = [&amp;](TreeNode* n) -&gt; <span class="kw">int</span> {
+        <span class="kw">if</span>(!n) <span class="kw">return</span> 0;
+        <span class="kw">int</span> L = max(0, gain(n-&gt;left));   <span class="cm">// Clamp: negative branch = skip</span>
+        <span class="kw">int</span> R = max(0, gain(n-&gt;right));
+        best = max(best, n-&gt;val + L + R); <span class="cm">// Path through this node as peak</span>
+        <span class="kw">return</span> n-&gt;val + max(L, R);        <span class="cm">// Best single branch going up</span>
+    };
+    gain(root);
+    <span class="kw">return</span> best;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Identical structure to Diameter — "return up one branch, update globally"</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q078 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q078 · MEDIUM</span>
+    <span class="qtitle">Lowest Common Ancestor of Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #236</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">Asked 5,000+</span><span class="hint hc">Post-Order Search</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the Lowest Common Ancestor (LCA) of two nodes p and q in a binary tree (not necessarily a BST).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>root=[3,5,1,6,2,0,8]
+p=5, q=1</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>3</code></div>
+        <div class="io-box"><span class="io-lbl">Input 2</span><code>p=5, q=4</code></div>
+        <div class="io-box"><span class="io-lbl">Output 2</span><code>5</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — If Both Left and Right Return Non-Null, Current Node is LCA</span>
+      <p>If the current node is p or q, return it. Recurse left and right. If both return non-null → p and q are in different subtrees → current node is the LCA. If only one returns non-null → both are in that subtree → propagate the found node upward.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">p=5, q=4. Tree: 3/[5/[6,2/[7,4]], 1/[0,8]]</span>
+lca(6,5,4): 6≠p,q. lca(L=null)=null, lca(R=null)=null → return null
+lca(7,5,4): null→null
+lca(4,5,4): 4==q → return <span class="tr-hi">4</span>
+lca(2,5,4): L=null(7 side), R=4 → return <span class="tr-hi">4</span> (propagate up)
+lca(5,5,4): 5==p → return <span class="tr-hi">5</span> (don't recurse further)
+lca(3,5,4): L=5, R=null(1 side has no p or q)
+  Both non-null? NO. Only L is non-null → return <span class="tr-ok">5</span>
+
+LCA(5,4) = 5 (5 is ancestor of 4) ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) time · O(h) space</span>
+TreeNode* <span class="fn">lowestCommonAncestor</span>(TreeNode* root, TreeNode* p, TreeNode* q) {
+    <span class="kw">if</span>(!root || root==p || root==q) <span class="kw">return</span> root; <span class="cm">// Found p or q (or null)</span>
+    TreeNode* L = lowestCommonAncestor(root-&gt;left,  p, q);
+    TreeNode* R = lowestCommonAncestor(root-&gt;right, p, q);
+    <span class="kw">if</span>(L &amp;&amp; R) <span class="kw">return</span> root;  <span class="cm">// p and q in different subtrees → current is LCA</span>
+    <span class="kw">return</span> L ? L : R;         <span class="cm">// Both in one subtree → propagate that side</span>
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q079 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q079 · MEDIUM</span>
+    <span class="qtitle">Binary Tree Right Side View</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-b">BFS</span></div>
+    <span class="qsrc">LeetCode #199</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Last Node of Each BFS Level</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the values of the nodes visible when standing to the right of the tree (rightmost node of each level).</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Tree</span><code>  1
+ / \
+2   3
+ \   \
+  5   4</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[1,3,4]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — BFS Level Order, Take Last Element Each Level</span>
+      <p>Level-order BFS (see Q074). At the end of processing each level, the last node processed is the rightmost visible node. Push it to result. Can also do DFS: visit right child first, and include only the first node encountered at each depth.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — BFS and DFS approaches</span>
+<span class="cm">// BFS — take last element of each level</span>
+<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; <span class="fn">rightSideView</span>(TreeNode* root){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">if</span>(!root) <span class="kw">return</span> res;
+    queue&lt;TreeNode*&gt; q; q.push(root);
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> sz=q.size();
+        <span class="kw">while</span>(sz--){
+            TreeNode* n=q.front(); q.pop();
+            <span class="kw">if</span>(sz==0) res.push_back(n-&gt;val);  <span class="cm">// Last of level → visible</span>
+            <span class="kw">if</span>(n-&gt;left)  q.push(n-&gt;left);
+            <span class="kw">if</span>(n-&gt;right) q.push(n-&gt;right);
+        }
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// DFS — visit right first, record first node at each depth</span>
+<span class="kw">void</span> <span class="fn">dfs</span>(TreeNode* n, <span class="kw">int</span> depth, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; res){
+    <span class="kw">if</span>(!n) <span class="kw">return</span>;
+    <span class="kw">if</span>(depth==(<span class="kw">int</span>)res.size()) res.push_back(n-&gt;val);
+    dfs(n-&gt;right, depth+1, res);
+    dfs(n-&gt;left,  depth+1, res);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(w) BFS · O(h) DFS</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q080 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q080 · MEDIUM</span>
+    <span class="qtitle">Count Good Nodes in Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">DFS</span></div>
+    <span class="qsrc">LeetCode #1448</span>
+  </div>
+  <div class="hints"><span class="hint hc">Pass Max-So-Far Down the Path</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>A "good node" is a node where no ancestor has a value greater than it. Count all good nodes.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Pass the Maximum Seen So Far as a Parameter</span>
+      <p>DFS with an extra parameter: <code>maxSoFar</code> = the maximum value on the path from root to current node. A node is "good" if node.val >= maxSoFar. Update maxSoFar = max(maxSoFar, node.val) before recursing.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> <span class="fn">goodNodes</span>(TreeNode* root){
+    <span class="kw">int</span> count=0;
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(TreeNode*,<span class="kw">int</span>)&gt; dfs=[&amp;](TreeNode* n, <span class="kw">int</span> mx){
+        <span class="kw">if</span>(!n) <span class="kw">return</span>;
+        <span class="kw">if</span>(n-&gt;val &gt;= mx) count++;             <span class="cm">// Good node</span>
+        dfs(n-&gt;left,  max(mx, n-&gt;val));
+        dfs(n-&gt;right, max(mx, n-&gt;val));
+    };
+    dfs(root, INT_MIN);
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q081 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q081 · MEDIUM</span>
+    <span class="qtitle">Balanced Binary Tree Check</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Tree DP</span></div>
+    <span class="qsrc">LeetCode #110</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Return -1 to Propagate Imbalance</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Check if a binary tree is height-balanced. A tree is balanced if for every node, the heights of left and right subtrees differ by at most 1.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Return Height or -1 (Sentinel for Imbalanced)</span>
+      <p>The naive approach calls height() for every node — O(n²). Better: DFS returns height, but returns -1 if ANY subtree is unbalanced. Once -1 propagates up, all ancestors short-circuit. Total: O(n).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) one-pass</span>
+<span class="kw">int</span> <span class="fn">checkHeight</span>(TreeNode* n){
+    <span class="kw">if</span>(!n) <span class="kw">return</span> 0;
+    <span class="kw">int</span> L = checkHeight(n-&gt;left);
+    <span class="kw">if</span>(L==-1) <span class="kw">return</span> -1;           <span class="cm">// Propagate imbalance upward</span>
+    <span class="kw">int</span> R = checkHeight(n-&gt;right);
+    <span class="kw">if</span>(R==-1) <span class="kw">return</span> -1;
+    <span class="kw">if</span>(abs(L-R)&gt;1) <span class="kw">return</span> -1;      <span class="cm">// Current node is unbalanced</span>
+    <span class="kw">return</span> 1+max(L,R);
+}
+<span class="kw">bool</span> <span class="fn">isBalanced</span>(TreeNode* root){ <span class="kw">return</span> checkHeight(root) != -1; }</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q082 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q082 · MEDIUM</span>
+    <span class="qtitle">Construct Binary Tree from Preorder and Inorder</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-h">Hash</span></div>
+    <span class="qsrc">LeetCode #105</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Preorder[0] = Root Always</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Construct a binary tree from its preorder and inorder traversal arrays.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Preorder</span><code>[3,9,20,15,7]</code></div>
+        <div class="io-box"><span class="io-lbl">Inorder</span><code>[9,3,15,20,7]</code></div>
+        <div class="io-box"><span class="io-lbl">Tree</span><code>  3
+ / \
+9  20
+   /\
+  15  7</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Preorder Gives Root; Inorder Splits Left and Right Subtrees</span>
+      <p><strong>Preorder's first element</strong> is always the root. <strong>Find it in inorder</strong> — everything to its left is the left subtree, everything to its right is the right subtree. Count tells you how many preorder elements belong to each subtree. Recurse. Use a hash map for O(1) inorder lookups.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">pre=[3,9,20,15,7]  in=[9,3,15,20,7]</span>
+root=pre[0]=3, pos=inorder[3]=1
+left subtree:  inorder[0..0]=[9]   preorder[1..1]=[9]
+right subtree: inorder[2..4]=[15,20,7] preorder[2..4]=[20,15,7]
+
+Build(left):  root=9,  pos=0 → leaf
+Build(right): root=20, pos=in[20]=3
+  left:  in[2..2]=[15], pre[3..3]=[15] → leaf
+  right: in[4..4]=[7],  pre[4..4]=[7]  → leaf
+
+Result: <span class="tr-ok">correct tree ✓</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) with hash map</span>
+TreeNode* <span class="fn">buildTree</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; pre, <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; in){
+    unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; pos;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;(<span class="kw">int</span>)in.size();i++) pos[in[i]]=i;
+    <span class="kw">int</span> idx=0;
+    <span class="kw">function</span>&lt;TreeNode*(<span class="kw">int</span>,<span class="kw">int</span>)&gt; build=[&amp;](<span class="kw">int</span> l, <span class="kw">int</span> r) -&gt; TreeNode*{
+        <span class="kw">if</span>(l&gt;r) <span class="kw">return nullptr</span>;
+        <span class="kw">int</span> rootVal = pre[idx++];
+        TreeNode* node = <span class="kw">new</span> TreeNode(rootVal);
+        <span class="kw">int</span> mid = pos[rootVal];
+        node-&gt;left  = build(l, mid-1);   <span class="cm">// Build left BEFORE right (preorder idx)</span>
+        node-&gt;right = build(mid+1, r);
+        <span class="kw">return</span> node;
+    };
+    <span class="kw">return</span> build(0, in.size()-1);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Similar</span><span class="fv">LC#106 Inorder+Postorder — same idea, postorder reads from right</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q083 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q083 · MEDIUM</span>
+    <span class="qtitle">Serialize and Deserialize Binary Tree</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-d">Design</span></div>
+    <span class="qsrc">LeetCode #297</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Preorder with Null Markers</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Design an algorithm to serialize a binary tree to a string and deserialize it back. The encoded string must be decodable to the original tree structure.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Preorder DFS with Null Markers Uniquely Encodes Any Tree</span>
+      <p>Preorder DFS: write node values with a separator. Write "N" for nulls. This uniquely determines the structure because the null markers tell us exactly where subtrees end. Deserialize by reading tokens in preorder and recursively building.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) encode and decode</span>
+<span class="kw">string</span> <span class="fn">serialize</span>(TreeNode* root){
+    <span class="kw">if</span>(!root) <span class="kw">return</span> <span class="st">"N,"</span>;
+    <span class="kw">return</span> to_string(root-&gt;val)+<span class="st">","</span>+serialize(root-&gt;left)+serialize(root-&gt;right);
+}
+
+TreeNode* <span class="fn">deserialize</span>(<span class="kw">string</span> data){
+    queue&lt;<span class="kw">string</span>&gt; q;
+    <span class="kw">string</span> tok;
+    <span class="kw">for</span>(<span class="kw">char</span> c : data){
+        <span class="kw">if</span>(c==','){q.push(tok); tok=<span class="st">""</span>;}
+        <span class="kw">else</span> tok+=c;
+    }
+    <span class="kw">function</span>&lt;TreeNode*()&gt; build=[&amp;]() -&gt; TreeNode*{
+        <span class="kw">string</span> v=q.front(); q.pop();
+        <span class="kw">if</span>(v==<span class="st">"N"</span>) <span class="kw">return nullptr</span>;
+        TreeNode* node=<span class="kw">new</span> TreeNode(stoi(v));
+        node-&gt;left  = build();
+        node-&gt;right = build();
+        <span class="kw">return</span> node;
+    };
+    <span class="kw">return</span> build();
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q084 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q084 · MEDIUM</span>
+    <span class="qtitle">Sum Root to Leaf Numbers</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">DFS</span></div>
+    <span class="qsrc">LeetCode #129</span>
+  </div>
+  <div class="hints"><span class="hint ht">Pass Running Number Down (×10 + digit)</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Each root-to-leaf path forms a number (e.g. path 1→2→3 = 123). Sum all such numbers.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Tree</span><code>  4
+ / \
+9   0
+/\
+5  1</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>1026</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>495+491+40=1026</code></div>
+      </div>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> <span class="fn">sumNumbers</span>(TreeNode* root){
+    <span class="kw">function</span>&lt;<span class="kw">int</span>(TreeNode*,<span class="kw">int</span>)&gt; dfs=[&amp;](TreeNode* n, <span class="kw">int</span> num)-&gt;<span class="kw">int</span>{
+        <span class="kw">if</span>(!n) <span class="kw">return</span> 0;
+        num = num*10 + n-&gt;val;                   <span class="cm">// Extend the number</span>
+        <span class="kw">if</span>(!n-&gt;left &amp;&amp; !n-&gt;right) <span class="kw">return</span> num;  <span class="cm">// Leaf: contribute this number</span>
+        <span class="kw">return</span> dfs(n-&gt;left,num) + dfs(n-&gt;right,num);
+    };
+    <span class="kw">return</span> dfs(root,0);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q085 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q085 · MEDIUM</span>
+    <span class="qtitle">Binary Tree Zigzag Level Order</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-b">BFS</span></div>
+    <span class="qsrc">LeetCode #103</span>
+  </div>
+  <div class="hints"><span class="hint ht">Toggle Direction Per Level</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Level-order traversal but alternate left-to-right and right-to-left per level.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — BFS with direction toggle</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">zigzagLevelOrder</span>(TreeNode* root){
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">if</span>(!root) <span class="kw">return</span> res;
+    queue&lt;TreeNode*&gt; q; q.push(root);
+    <span class="kw">bool</span> leftToRight=<span class="kw">true</span>;
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">int</span> sz=q.size();
+        <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; level(sz);
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;sz;i++){
+            TreeNode* n=q.front();q.pop();
+            <span class="kw">int</span> pos=leftToRight ? i : sz-1-i; <span class="cm">// Fill from correct direction</span>
+            level[pos]=n-&gt;val;
+            <span class="kw">if</span>(n-&gt;left)  q.push(n-&gt;left);
+            <span class="kw">if</span>(n-&gt;right) q.push(n-&gt;right);
+        }
+        res.push_back(level);
+        leftToRight=!leftToRight;
+    }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(w)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q086 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q086 · MEDIUM</span>
+    <span class="qtitle">Flatten Binary Tree to Linked List</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #114</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Morris-like: Connect in Preorder</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Flatten a binary tree in-place to a linked list in preorder. Use right pointers, set all left pointers to null.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>1/[2/[3,4],5/[,6]]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>1→2→3→4→5→6 (right ptrs)</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — For Each Node: Move Right Subtree After Rightmost of Left Subtree</span>
+      <p>For each node with a left child: find the rightmost node of the left subtree (it's the predecessor in preorder). Connect the right subtree to that node's right. Move the left subtree to be the right child. Set left to null. Advance to right child and repeat.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — O(n) O(1) iterative</span>
+<span class="kw">void</span> <span class="fn">flatten</span>(TreeNode* root){
+    TreeNode* cur=root;
+    <span class="kw">while</span>(cur){
+        <span class="kw">if</span>(cur-&gt;left){
+            <span class="cm">// Find rightmost of left subtree</span>
+            TreeNode* pre=cur-&gt;left;
+            <span class="kw">while</span>(pre-&gt;right) pre=pre-&gt;right;
+            pre-&gt;right = cur-&gt;right;   <span class="cm">// Attach right subtree</span>
+            cur-&gt;right = cur-&gt;left;    <span class="cm">// Move left subtree to right</span>
+            cur-&gt;left  = <span class="kw">nullptr</span>;
+        }
+        cur=cur-&gt;right;
+    }
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q087 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q087 · MEDIUM</span>
+    <span class="qtitle">Path Sum III (Any Path, Any Node)</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-h">Prefix Sum</span></div>
+    <span class="qsrc">LeetCode #437</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Prefix Sum on Tree Paths</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Count paths in a binary tree that sum to a target. The path must go downward but doesn't need to start or end at root/leaf.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Prefix Sum HashMap on Root-to-Node Paths</span>
+      <p>Same as subarray sum equals k (Q021) but on a tree path. DFS with a hash map storing prefix sums. At each node: check if (currentSum - target) exists in the map → that many paths end here. Add currentSum to map, recurse, then remove it (backtrack). O(n) instead of O(n²).</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> <span class="fn">pathSum</span>(TreeNode* root, <span class="kw">long long</span> target){
+    unordered_map&lt;<span class="kw">long long</span>,<span class="kw">int</span>&gt; freq;
+    freq[0]=1;  <span class="cm">// Empty prefix</span>
+    <span class="kw">int</span> count=0;
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(TreeNode*,<span class="kw">long long</span>)&gt; dfs=[&amp;](TreeNode* n, <span class="kw">long long</span> psum){
+        <span class="kw">if</span>(!n) <span class="kw">return</span>;
+        psum += n-&gt;val;
+        count += freq[psum-target];   <span class="cm">// Paths ending here with sum=target</span>
+        freq[psum]++;
+        dfs(n-&gt;left,  psum);
+        dfs(n-&gt;right, psum);
+        freq[psum]--;                 <span class="cm">// Backtrack — remove this path</span>
+    };
+    dfs(root,0);
+    <span class="kw">return</span> count;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q088 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q088 · HARD</span>
+    <span class="qtitle">Binary Tree Cameras</span>
+    <div class="qtags"><span class="qt qt-t">Tree</span><span class="qt qt-g">Greedy</span></div>
+    <span class="qsrc">LeetCode #968</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Greedy: Place Cameras at Leaves' Parents</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Place the minimum number of cameras on tree nodes. Each camera monitors its node, parent, and immediate children. Return the minimum cameras needed to monitor all nodes.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Greedy: Never Place Camera at Leaf; Place at Its Parent</span>
+      <p>Bottom-up DFS with three states: 0 = uncovered (needs a camera from parent), 1 = has camera, 2 = covered (by child camera). Leaves return 0. A node places a camera if any child is uncovered (state 0). If any child has a camera, this node is covered (state 2). Otherwise state 0. Root: if root is state 0, add one more camera.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">int</span> cameras=0;
+<span class="kw">int</span> <span class="fn">dfs</span>(TreeNode* n){
+    <span class="cm">// Returns: 0=uncovered, 1=has camera, 2=covered by child</span>
+    <span class="kw">if</span>(!n) <span class="kw">return</span> 2;          <span class="cm">// Null is "covered" (no need to monitor null)</span>
+    <span class="kw">int</span> L=dfs(n-&gt;left), R=dfs(n-&gt;right);
+    <span class="kw">if</span>(L==0||R==0){            <span class="cm">// A child is uncovered → place camera here</span>
+        cameras++; <span class="kw">return</span> 1;
+    }
+    <span class="kw">if</span>(L==1||R==1) <span class="kw">return</span> 2;  <span class="cm">// A child has camera → this node is covered</span>
+    <span class="kw">return</span> 0;                  <span class="cm">// Neither child → this node is uncovered</span>
+}
+<span class="kw">int</span> <span class="fn">minCameraCover</span>(TreeNode* root){
+    cameras=0;
+    <span class="kw">if</span>(dfs(root)==0) cameras++; <span class="cm">// Root uncovered → add camera</span>
+    <span class="kw">return</span> cameras;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 8 — BINARY SEARCH TREES (Q089–Q097)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08 · Q089–Q097 · Binary Search Trees</div>
+    <div class="ch-title">Binary Search Trees — <em>BST Property, Inorder = Sorted, Range Queries</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="bst">
+
+    <div class="def-box">
+      <span class="lbl">BST Key Properties — Memorise These</span>
+      <p><strong>Property:</strong> left &lt; node &lt; right at every node. This is a global constraint, not just parent-child.<br>
+      <strong>Inorder traversal of BST = sorted array.</strong> This is the single most useful BST fact. Any problem asking "k-th smallest", "sorted output", or "predecessor/successor" uses inorder.<br>
+      <strong>Search, insert, delete:</strong> O(h) = O(log n) balanced, O(n) skewed. Always ask if the tree is balanced.<br>
+      <strong>BST vs Binary Tree:</strong> In BST problems, USE the BST property to prune. If you're traversing every node, you're ignoring the BST structure.</p>
+    </div>
+
+<!-- ─────────── Q089 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q089 · EASY</span>
+    <span class="qtitle">Search in a BST</span>
+    <div class="qtags"><span class="qt qt-b">BST</span></div>
+    <span class="qsrc">LeetCode #700</span>
+  </div>
+  <div class="hints"><span class="hint hm">Foundation</span><span class="hint hc">Use BST Property to Prune</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Find and return the subtree rooted at the node with value equal to the target. Return null if not found.</p></div>
+    <div class="qcode"><span class="clbl">C++ — Recursive and Iterative</span>
+<span class="cm">// Recursive</span>
+TreeNode* <span class="fn">searchBST</span>(TreeNode* root, <span class="kw">int</span> val){
+    <span class="kw">if</span>(!root || root-&gt;val==val) <span class="kw">return</span> root;
+    <span class="kw">return</span> val &lt; root-&gt;val ? searchBST(root-&gt;left,val) : searchBST(root-&gt;right,val);
+}
+<span class="cm">// Iterative — O(h) O(1)</span>
+TreeNode* <span class="fn">searchBSTIter</span>(TreeNode* root, <span class="kw">int</span> val){
+    <span class="kw">while</span>(root &amp;&amp; root-&gt;val!=val)
+        root = val &lt; root-&gt;val ? root-&gt;left : root-&gt;right;
+    <span class="kw">return</span> root;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(h)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1) iterative</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q090 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q090 · MEDIUM</span>
+    <span class="qtitle">Validate Binary Search Tree</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #98</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Pass Valid Range — Not Just Compare with Parent</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Given a binary tree, determine if it is a valid BST.</p></div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Each Node Has an Inherited Valid Range [lo, hi]</span>
+      <p>The value at each node must satisfy the constraints of ALL its ancestors, not just its direct parent. Pass a (lo, hi) range down the tree. Going left: hi = parent's value. Going right: lo = parent's value. A node is valid only if lo &lt; node.val &lt; hi.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Tree: 5/[1, 4/[3,6]]  (invalid — 4&lt;5 but 3&lt;4 yet 3 is in right subtree of 5)</span>
+validate(5, -INF, +INF): 5 in range ✓
+  validate(1, -INF, 5):  1 in range ✓ → leaf ✓
+  validate(4, 5, +INF):  4 &lt; lo=5 → <span class="tr-no">INVALID ✗</span>
+
+Result: false ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+<span class="kw">bool</span> <span class="fn">isValid</span>(TreeNode* n, <span class="kw">long</span> lo, <span class="kw">long</span> hi){
+    <span class="kw">if</span>(!n) <span class="kw">return true</span>;
+    <span class="kw">if</span>(n-&gt;val &lt;= lo || n-&gt;val &gt;= hi) <span class="kw">return false</span>; <span class="cm">// Out of valid range</span>
+    <span class="kw">return</span> isValid(n-&gt;left,  lo, n-&gt;val) &amp;&amp;
+           isValid(n-&gt;right, n-&gt;val, hi);
+}
+<span class="kw">bool</span> <span class="fn">isValidBST</span>(TreeNode* root){
+    <span class="kw">return</span> isValid(root, LONG_MIN, LONG_MAX);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q091 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum easy">Q091 · EASY</span>
+    <span class="qtitle">Kth Smallest Element in BST</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-m">Inorder</span></div>
+    <span class="qsrc">LeetCode #230</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Inorder BST = Sorted Array</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Find the kth smallest element in a BST in O(h+k) time.</p></div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Inorder Traversal Gives Sorted Order — Count to k</span>
+      <p>Inorder traversal of a BST visits nodes in ascending order. The kth node visited in inorder is the kth smallest. Use iterative inorder with an explicit stack to stop early at exactly k nodes — no need to traverse the whole tree.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Iterative Inorder (stops at k)</span>
+<span class="kw">int</span> <span class="fn">kthSmallest</span>(TreeNode* root, <span class="kw">int</span> k){
+    stack&lt;TreeNode*&gt; st;
+    TreeNode* cur=root;
+    <span class="kw">while</span>(cur || !st.empty()){
+        <span class="kw">while</span>(cur){ st.push(cur); cur=cur-&gt;left; } <span class="cm">// Go all the way left</span>
+        cur=st.top(); st.pop();
+        <span class="kw">if</span>(--k==0) <span class="kw">return</span> cur-&gt;val;               <span class="cm">// kth node in inorder</span>
+        cur=cur-&gt;right;
+    }
+    <span class="kw">return</span> -1;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(h+k)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q092 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q092 · MEDIUM</span>
+    <span class="qtitle">Lowest Common Ancestor of BST</span>
+    <div class="qtags"><span class="qt qt-b">BST</span></div>
+    <span class="qsrc">LeetCode #235</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Use BST Property — No Full Traversal Needed</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Find LCA of p and q in a BST. Unlike a general binary tree, use the BST property to guide the search.</p></div>
+    <div class="qdec">
+      <span class="dlbl">Decode — If Both p,q &lt; Node → Go Left. Both &gt; → Go Right. Else → Here.</span>
+      <p>If both p and q are smaller than the current node, the LCA must be in the left subtree. If both are larger, the LCA is in the right subtree. Otherwise, the current node is where they diverge — it IS the LCA. O(h) — no need to explore both subtrees.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Iterative O(h) O(1)</span>
+TreeNode* <span class="fn">lowestCommonAncestorBST</span>(TreeNode* root, TreeNode* p, TreeNode* q){
+    <span class="kw">while</span>(root){
+        <span class="kw">if</span>(p-&gt;val &lt; root-&gt;val &amp;&amp; q-&gt;val &lt; root-&gt;val)
+            root=root-&gt;left;                     <span class="cm">// Both left</span>
+        <span class="kw">else if</span>(p-&gt;val &gt; root-&gt;val &amp;&amp; q-&gt;val &gt; root-&gt;val)
+            root=root-&gt;right;                    <span class="cm">// Both right</span>
+        <span class="kw">else</span>
+            <span class="kw">return</span> root;                         <span class="cm">// Split here — LCA found</span>
+    }
+    <span class="kw">return nullptr</span>;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(h)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q093 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q093 · MEDIUM</span>
+    <span class="qtitle">Insert and Delete in BST</span>
+    <div class="qtags"><span class="qt qt-b">BST</span></div>
+    <span class="qsrc">LeetCode #701 &amp; #450</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Delete: Successor/Predecessor Replacement</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p><strong>Insert:</strong> Insert a value into a BST, return the new root.<br>
+      <strong>Delete:</strong> Delete a node with given key from a BST. Three cases to handle.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Delete Has 3 Cases — Master All Three</span>
+      <p><strong>Case 1: Leaf node</strong> → just delete (return null).<br>
+      <strong>Case 2: One child</strong> → replace with that child.<br>
+      <strong>Case 3: Two children</strong> → replace value with inorder successor (smallest in right subtree), then delete the successor from right subtree.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Insert and Delete</span>
+<span class="cm">// Insert — BST search to find position, then create node</span>
+TreeNode* <span class="fn">insertIntoBST</span>(TreeNode* root, <span class="kw">int</span> val){
+    <span class="kw">if</span>(!root) <span class="kw">return new</span> TreeNode(val);
+    <span class="kw">if</span>(val &lt; root-&gt;val) root-&gt;left  = insertIntoBST(root-&gt;left,  val);
+    <span class="kw">else</span>               root-&gt;right = insertIntoBST(root-&gt;right, val);
+    <span class="kw">return</span> root;
+}
+
+<span class="cm">// Delete — handle 3 cases</span>
+TreeNode* <span class="fn">deleteNode</span>(TreeNode* root, <span class="kw">int</span> key){
+    <span class="kw">if</span>(!root) <span class="kw">return nullptr</span>;
+    <span class="kw">if</span>(key &lt; root-&gt;val)
+        root-&gt;left  = deleteNode(root-&gt;left,  key);
+    <span class="kw">else if</span>(key &gt; root-&gt;val)
+        root-&gt;right = deleteNode(root-&gt;right, key);
+    <span class="kw">else</span> {
+        <span class="cm">// Found node to delete</span>
+        <span class="kw">if</span>(!root-&gt;left)  <span class="kw">return</span> root-&gt;right; <span class="cm">// Case 1&2: no left child</span>
+        <span class="kw">if</span>(!root-&gt;right) <span class="kw">return</span> root-&gt;left;  <span class="cm">// Case 1&2: no right child</span>
+        <span class="cm">// Case 3: find inorder successor (min of right subtree)</span>
+        TreeNode* succ=root-&gt;right;
+        <span class="kw">while</span>(succ-&gt;left) succ=succ-&gt;left;
+        root-&gt;val   = succ-&gt;val;              <span class="cm">// Replace value with successor</span>
+        root-&gt;right = deleteNode(root-&gt;right, succ-&gt;val); <span class="cm">// Delete successor</span>
+    }
+    <span class="kw">return</span> root;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(h)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q094 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q094 · MEDIUM</span>
+    <span class="qtitle">Convert Sorted Array to BST</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-dp">Recursion</span></div>
+    <span class="qsrc">LeetCode #108</span>
+  </div>
+  <div class="hints"><span class="hint hc">Always Pick Middle as Root for Height Balance</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Convert a sorted array to a height-balanced BST.</p></div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n)</span>
+TreeNode* <span class="fn">sortedArrayToBST</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums){
+    <span class="kw">function</span>&lt;TreeNode*(<span class="kw">int</span>,<span class="kw">int</span>)&gt; build=[&amp;](<span class="kw">int</span> l,<span class="kw">int</span> r)-&gt;TreeNode*{
+        <span class="kw">if</span>(l&gt;r) <span class="kw">return nullptr</span>;
+        <span class="kw">int</span> mid=l+(r-l)/2;
+        TreeNode* n=<span class="kw">new</span> TreeNode(nums[mid]);
+        n-&gt;left =build(l,mid-1);
+        n-&gt;right=build(mid+1,r);
+        <span class="kw">return</span> n;
+    };
+    <span class="kw">return</span> build(0,nums.size()-1);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(log n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q095 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q095 · MEDIUM</span>
+    <span class="qtitle">BST Iterator</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-d">Design</span></div>
+    <span class="qsrc">LeetCode #173</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Controlled Inorder — Push Left Path on Demand</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Implement a BST iterator with <code>next()</code> returning next smallest and <code>hasNext()</code>. Both must run in O(1) average with O(h) space.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Lazy Inorder: Only Process What You Need</span>
+      <p>Maintain an explicit stack. Constructor: push all leftmost nodes from root. <code>next()</code>: pop the top (that's the next smallest), then push all leftmost nodes of its right subtree. This is "paused inorder" — we only push nodes we'll visit next.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(1) avg per op · O(h) space</span>
+<span class="kw">class</span> BSTIterator {
+    stack&lt;TreeNode*&gt; st;
+    <span class="kw">void</span> pushLeft(TreeNode* n){ <span class="kw">while</span>(n){st.push(n);n=n-&gt;left;} }
+<span class="kw">public</span>:
+    BSTIterator(TreeNode* root){ pushLeft(root); }
+    <span class="kw">int</span>  next(){
+        TreeNode* top=st.top(); st.pop();
+        pushLeft(top-&gt;right);  <span class="cm">// Push left path of right subtree</span>
+        <span class="kw">return</span> top-&gt;val;
+    }
+    <span class="kw">bool</span> hasNext(){ <span class="kw">return</span> !st.empty(); }
+};</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">next/hasNext</span><span class="fv">O(1) amortised</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q096 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q096 · MEDIUM</span>
+    <span class="qtitle">Recover Binary Search Tree (Two Swapped Nodes)</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-m">Inorder</span></div>
+    <span class="qsrc">LeetCode #99</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Find Inorder Violation — Two Misplaced Nodes</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Exactly two nodes in a BST are swapped by mistake. Recover the tree by fixing the two nodes without changing structure.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Inorder Should Be Sorted — Find the Two Violations</span>
+      <p>In inorder traversal of a valid BST, values are strictly increasing. The two swapped nodes create descents (where prev &gt; current). There are either one or two descents. The first node to swap = first.prev at the first descent. The second = second.current at the last descent. Swap their values.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n) inorder with O(1) extra space (Morris traversal possible)</span>
+TreeNode *first=<span class="kw">nullptr</span>, *second=<span class="kw">nullptr</span>, *prev=<span class="kw">nullptr</span>;
+<span class="kw">void</span> <span class="fn">inorder</span>(TreeNode* n){
+    <span class="kw">if</span>(!n) <span class="kw">return</span>;
+    inorder(n-&gt;left);
+    <span class="kw">if</span>(prev &amp;&amp; prev-&gt;val &gt; n-&gt;val){  <span class="cm">// Violation found</span>
+        <span class="kw">if</span>(!first) first=prev;        <span class="cm">// First violation: prev is the bad node</span>
+        second=n;                     <span class="cm">// Always update second</span>
+    }
+    prev=n;
+    inorder(n-&gt;right);
+}
+<span class="kw">void</span> <span class="fn">recoverTree</span>(TreeNode* root){
+    first=second=prev=<span class="kw">nullptr</span>;
+    inorder(root);
+    swap(first-&gt;val, second-&gt;val);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(h) stack · O(1) with Morris</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q097 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q097 · MEDIUM</span>
+    <span class="qtitle">Unique BSTs (Catalan Numbers)</span>
+    <div class="qtags"><span class="qt qt-b">BST</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #96</span>
+  </div>
+  <div class="hints"><span class="hint ht">DP: Root i → (i-1) left choices × (n-i) right choices</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Count the number of structurally unique BSTs that can store values 1 to n.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">n=3</span><code>Output: 5</code></div>
+        <div class="io-box"><span class="io-lbl">n=1</span><code>Output: 1</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — G(n) = Sum of G(i-1) × G(n-i) for i = 1 to n</span>
+      <p>If we pick i as the root, the left subtree has (i-1) nodes and the right has (n-i) nodes. The number of combinations = G(i-1) × G(n-i). Sum over all root choices. This is the Catalan number recurrence: G(0)=G(1)=1.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — DP Tabulation O(n²) · O(n)</span>
+<span class="kw">int</span> <span class="fn">numTrees</span>(<span class="kw">int</span> n){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; G(n+1,0);
+    G[0]=G[1]=1;
+    <span class="kw">for</span>(<span class="kw">int</span> i=2;i&lt;=n;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;=i;j++)
+            G[i]+=G[j-1]*G[i-j];  <span class="cm">// j is the root</span>
+    <span class="kw">return</span> G[n];
+}
+<span class="cm">// Formula: C(n) = C(2n,n) / (n+1)  (nth Catalan number)</span></div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n²)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CHAPTER 9 — HEAPS & PRIORITY QUEUES (Q098–Q105)
+════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09 · Q098–Q105 · Heaps &amp; Priority Queues</div>
+    <div class="ch-title">Heaps &amp; Priority Queues — <em>Always Get the Extreme in O(log n)</em></div>
+  </div>
+  <div class="ch-body">
+  <div class="sec" data-m="heaps">
+
+    <div class="def-box">
+      <span class="lbl">Heap Pattern Recognition — When to Think "Heap"</span>
+      <p><strong>Signal 1 — "Kth largest/smallest":</strong> Min-heap of size k. If new element &gt; top: pop, push. Final top = kth largest.<br>
+      <strong>Signal 2 — "Stream of numbers":</strong> Two heaps (max + min) for running median. Min-heap for running minimum.<br>
+      <strong>Signal 3 — "Merge k sorted":</strong> Push head of each list. Pop min, push next from same list. O(n log k).<br>
+      <strong>Signal 4 — "Scheduling/Tasks":</strong> Priority queue ordered by deadline, frequency, or cost.<br>
+      <strong>Signal 5 — Greedy + Ordering:</strong> Always processing the most/least extreme element? Heap is your structure.</p>
+    </div>
+
+<!-- ─────────── Q098 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q098 · MEDIUM</span>
+    <span class="qtitle">Kth Largest Element in an Array</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Heap</span></div>
+    <span class="qsrc">LeetCode #215</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">Asked 7,000+</span><span class="hint ht">Min-Heap of Size k</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the kth largest element in an unsorted array. Not the kth distinct element.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[3,2,1,5,6,4], k=2</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>5</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Maintain a Min-Heap of Exactly k Largest Seen So Far</span>
+      <p>A min-heap of size k tracks the k largest elements. The heap top is the kth largest (the minimum of the k largest). For each new element: push it. If heap size exceeds k, pop the minimum. At the end, heap.top() = kth largest.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">[3,2,1,5,6,4], k=2</span>
+push 3: heap=[<span class="tr-hi">3</span>]    size=1 ≤ 2 → ok
+push 2: heap=[<span class="tr-hi">2,3</span>]  size=2 → ok
+push 1: heap=[2,3,1] size=3 &gt; 2 → pop min=1. heap=[<span class="tr-hi">2,3</span>]
+push 5: heap=[2,3,5] size=3 &gt; 2 → pop min=2. heap=[<span class="tr-hi">3,5</span>]
+push 6: heap=[3,5,6] size=3 &gt; 2 → pop min=3. heap=[<span class="tr-hi">5,6</span>]
+push 4: heap=[5,6,4] size=3 &gt; 2 → pop min=4. heap=[<span class="tr-hi">5,6</span>]
+
+heap.top() = <span class="tr-ok">5</span>  (2nd largest ✓)</div>
+    <div class="qcode"><span class="clbl">C++ — Min-Heap O(n log k) and QuickSelect O(n) avg</span>
+<span class="cm">// Min-Heap — O(n log k)</span>
+<span class="kw">int</span> <span class="fn">findKthLargest</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k){
+    priority_queue&lt;<span class="kw">int</span>,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;,greater&lt;<span class="kw">int</span>&gt;&gt; minH; <span class="cm">// Min-heap</span>
+    <span class="kw">for</span>(<span class="kw">int</span> x : nums){
+        minH.push(x);
+        <span class="kw">if</span>((<span class="kw">int</span>)minH.size() &gt; k) minH.pop();
+    }
+    <span class="kw">return</span> minH.top();
+}
+
+<span class="cm">// QuickSelect — O(n) average (randomized pivot for worst-case safety)</span>
+<span class="kw">int</span> <span class="fn">quickSelect</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> k){
+    <span class="kw">int</span> pivot=a[hi], i=lo-1;
+    <span class="kw">for</span>(<span class="kw">int</span> j=lo;j&lt;hi;j++) <span class="kw">if</span>(a[j]&gt;=pivot) swap(a[++i],a[j]);
+    swap(a[++i],a[hi]);
+    <span class="kw">if</span>(i==k-1) <span class="kw">return</span> a[i];
+    <span class="kw">return</span> i &gt; k-1 ? quickSelect(a,lo,i-1,k) : quickSelect(a,i+1,hi,k);
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Heap</span><span class="fv">O(n log k)</span></div>
+    <div class="qf s"><span class="fl">QuickSelect</span><span class="fv">O(n) avg</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q099 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q099 · HARD</span>
+    <span class="qtitle">Find Median From Data Stream</span>
+    <div class="qtags"><span class="qt qt-h">Two Heaps</span><span class="qt qt-d">Design</span></div>
+    <span class="qsrc">LeetCode #295</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Two-Heap Design — Classic</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Design a structure supporting <code>addNum(int)</code> and <code>findMedian()</code>. <code>addNum</code> runs in O(log n), <code>findMedian</code> in O(1).</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Max-Heap Holds Lower Half, Min-Heap Holds Upper Half</span>
+      <p>Two heaps partition the sorted array. <strong>maxH (lower half)</strong>: max-heap, top = largest of the smaller half. <strong>minH (upper half)</strong>: min-heap, top = smallest of the larger half. Keep them balanced: |size difference| ≤ 1. Median = top of larger heap (odd) or average of both tops (even).</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">Add: 1, 2, 3</span>
+addNum(1): maxH=[],minH=[]. Push to maxH → [1]. Rebalance: minH gets maxH.top()=1 → maxH=[], minH=[1]
+  Whoops let's use the clean approach:
+  Always push to maxH first. Then balance.
+
+addNum(1): maxH.push(1)=[1]. size diff: |0-1|=1 ok. median=minH empty→maxH.top()=<span class="tr-hi">1</span>
+
+Actually cleaner strategy:
+Push to maxH. Push maxH.top() to minH, pop from maxH. If minH larger: push minH.top to maxH, pop minH.
+
+addNum(1): maxH.push(1). push 1→minH, pop maxH. maxH=[],minH=[1]. minH bigger→push 1→maxH,pop minH. maxH=[1],minH=[]
+addNum(2): push 2→maxH=[2,1]. push 2→minH=[2],pop maxH=[1]. minH not bigger. maxH=[1],minH=[2]
+addNum(3): push 3→maxH=[3,1]. push 3→minH=[2,3],pop maxH=[1]. minH bigger→push 2→maxH=[2,1],pop minH=[3]
+
+maxH=[2,1], minH=[3]
+findMedian(): equal sizes → (maxH.top()+minH.top())/2 = (2+3)/2 = <span class="tr-ok">2.5</span></div>
+    <div class="qcode"><span class="clbl">C++ Solution — addNum O(log n) · findMedian O(1)</span>
+<span class="kw">class</span> MedianFinder {
+    priority_queue&lt;<span class="kw">int</span>&gt; maxH;                           <span class="cm">// Lower half</span>
+    priority_queue&lt;<span class="kw">int</span>,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;,greater&lt;<span class="kw">int</span>&gt;&gt; minH; <span class="cm">// Upper half</span>
+<span class="kw">public</span>:
+    <span class="kw">void</span> addNum(<span class="kw">int</span> n){
+        maxH.push(n);
+        minH.push(maxH.top()); maxH.pop(); <span class="cm">// Always push top of lower to upper</span>
+        <span class="kw">if</span>(minH.size() &gt; maxH.size()+1)    <span class="cm">// Rebalance if upper gets too big</span>
+            { maxH.push(minH.top()); minH.pop(); }
+    }
+    <span class="kw">double</span> findMedian(){
+        <span class="kw">return</span> minH.size() &gt; maxH.size()
+               ? minH.top()
+               : (maxH.top() + minH.top()) / 2.0;
+    }
+};</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">addNum</span><span class="fv">O(log n)</span></div>
+    <div class="qf s"><span class="fl">findMedian</span><span class="fv">O(1)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q100 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q100 · HARD</span>
+    <span class="qtitle">Merge K Sorted Lists (Heap)</span>
+    <div class="qtags"><span class="qt qt-h">Heap</span><span class="qt qt-t">Linked List</span></div>
+    <span class="qsrc">LeetCode #23</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hf">FAANG Favourite</span></div>
+  <div class="qbody">
+    <div class="qprob"><p>Merge k sorted linked lists into one sorted list. (Revisited here from heap perspective.)</p></div>
+    <div class="qapp">
+      <span class="albl">Heap Approach Complexity Analysis</span>
+      <p>n total nodes, k lists. Each node enters the heap once (O(log k)) and exits once (O(log k)). Total: O(n log k). Space: O(k) for the heap. Compare with naive pairwise merge: O(n log k) same time but O(1) space if done carefully.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Already shown in Q065. Revisit the complexity.</span>
+<span class="cm">// Reminder: min-heap stores (value, node*) pairs</span>
+<span class="kw">using</span> P = pair&lt;<span class="kw">int</span>,ListNode*&gt;;
+priority_queue&lt;P,<span class="kw">vector</span>&lt;P&gt;,greater&lt;P&gt;&gt; pq;
+<span class="kw">for</span>(<span class="kw">auto</span>* l:lists) <span class="kw">if</span>(l) pq.push({l-&gt;val,l});
+<span class="cm">// ... (full solution in Q065)</span>
+
+<span class="cm">// ALTERNATIVE: Divide and Conquer pairwise merge</span>
+<span class="cm">// Time: O(n log k), Space: O(log k) recursion</span>
+ListNode* <span class="fn">mergeTwo</span>(ListNode* a, ListNode* b){
+    ListNode d(0); ListNode* t=&amp;d;
+    <span class="kw">while</span>(a&amp;&amp;b){
+        <span class="kw">if</span>(a-&gt;val&lt;=b-&gt;val){t-&gt;next=a;a=a-&gt;next;}
+        <span class="kw">else</span>{t-&gt;next=b;b=b-&gt;next;}
+        t=t-&gt;next;
+    }
+    t-&gt;next=a?a:b; <span class="kw">return</span> d.next;
+}
+ListNode* <span class="fn">mergeKD</span>(<span class="kw">vector</span>&lt;ListNode*&gt;&amp; lists, <span class="kw">int</span> lo, <span class="kw">int</span> hi){
+    <span class="kw">if</span>(lo==hi) <span class="kw">return</span> lists[lo];
+    <span class="kw">if</span>(lo+1==hi) <span class="kw">return</span> mergeTwo(lists[lo],lists[hi]);
+    <span class="kw">int</span> mid=lo+(hi-lo)/2;
+    <span class="kw">return</span> mergeTwo(mergeKD(lists,lo,mid), mergeKD(lists,mid+1,hi));
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n log k)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(k)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q101 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q101 · HARD</span>
+    <span class="qtitle">K Closest Points to Origin</span>
+    <div class="qtags"><span class="qt qt-a">Array</span><span class="qt qt-h">Heap</span></div>
+    <span class="qsrc">LeetCode #973</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Max-Heap of Size k — Opposite of Kth Largest</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the k closest points to the origin (0,0). Distance = sqrt(x²+y²) — but compare x²+y² to avoid sqrt.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>pts=[[1,3],[-2,2]]
+k=1</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>[[-2,2]]</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Max-Heap of k Closest; Evict Farthest When Oversized</span>
+      <p>Use a max-heap by distance. Keep at most k elements. When a new point has distance less than the farthest in the heap (the max-heap top), pop the farthest and push the new point. Final heap contains the k closest.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n log k)</span>
+<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">kClosest</span>(<span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt;&amp; pts, <span class="kw">int</span> k){
+    <span class="cm">// Max-heap by distance squared (farthest at top, evict when > k)</span>
+    <span class="kw">using</span> T=pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;; <span class="cm">// {dist_sq, index}</span>
+    priority_queue&lt;T&gt; pq;   <span class="cm">// Max-heap</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;(<span class="kw">int</span>)pts.size();i++){
+        <span class="kw">int</span> d=pts[i][0]*pts[i][0]+pts[i][1]*pts[i][1];
+        pq.push({d,i});
+        <span class="kw">if</span>((<span class="kw">int</span>)pq.size()&gt;k) pq.pop(); <span class="cm">// Evict farthest</span>
+    }
+    <span class="kw">vector</span>&lt;<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">while</span>(!pq.empty()){ res.push_back(pts[pq.top().second]); pq.pop(); }
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n log k)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(k)</span></div>
+    <div class="qf x"><span class="fl">Alt</span><span class="fv">QuickSelect: O(n) avg · Sort: O(n log n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q102 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum med">Q102 · MEDIUM</span>
+    <span class="qtitle">Top K Frequent Words</span>
+    <div class="qtags"><span class="qt qt-h">Heap</span><span class="qt qt-a">Hash</span></div>
+    <span class="qsrc">LeetCode #692</span>
+  </div>
+  <div class="hints"><span class="hint ht">Custom Comparator: Freq Desc, Lex Asc on Tie</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Return the k most frequent words from a list. If tie in frequency, sort alphabetically.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>["i","love","leetcode","i",
+"love","coding"], k=2</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>["i","love"]</code></div>
+      </div>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — Custom Comparator Heap</span>
+<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; <span class="fn">topKFrequent</span>(<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;&amp; words, <span class="kw">int</span> k){
+    unordered_map&lt;<span class="kw">string</span>,<span class="kw">int</span>&gt; freq;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; w:words) freq[w]++;
+    <span class="cm">// Min-heap: evict lowest-priority (least freq, lex largest)</span>
+    <span class="kw">auto</span> cmp=[&amp;](<span class="kw">const</span> <span class="kw">string</span>&amp; a, <span class="kw">const</span> <span class="kw">string</span>&amp; b){
+        <span class="kw">return</span> freq[a]!=freq[b] ? freq[a]&gt;freq[b] : a&lt;b; <span class="cm">// Min: lower freq or lex larger</span>
+    };
+    priority_queue&lt;<span class="kw">string</span>,<span class="kw">vector</span>&lt;<span class="kw">string</span>&gt;,<span class="kw">decltype</span>(cmp)&gt; pq(cmp);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; [w,f]:freq){
+        pq.push(w);
+        <span class="kw">if</span>((<span class="kw">int</span>)pq.size()&gt;k) pq.pop();
+    }
+    <span class="kw">vector</span>&lt;<span class="kw">string</span>&gt; res;
+    <span class="kw">while</span>(!pq.empty()){ res.push_back(pq.top()); pq.pop(); }
+    reverse(res.begin(),res.end());
+    <span class="kw">return</span> res;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n log k)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n+k)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q103 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q103 · HARD</span>
+    <span class="qtitle">Ugly Number II (Smallest Primes = 2, 3, 5 Only)</span>
+    <div class="qtags"><span class="qt qt-h">Heap</span><span class="qt qt-dp">DP</span></div>
+    <span class="qsrc">LeetCode #264</span>
+  </div>
+  <div class="hints"><span class="hint ht">Min-Heap: Generate Multiples On Demand</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Find the nth ugly number. Ugly numbers have only prime factors 2, 3, 5. Sequence: 1,2,3,4,5,6,8,9,10,12...</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Heap Generates the Sequence in Order</span>
+      <p>Start with 1 in a min-heap. Each time you pop a number x, push x×2, x×3, x×5. Use a set to avoid duplicates. The nth pop is the nth ugly number.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ — Heap O(n log n) and DP O(n) approach</span>
+<span class="cm">// DP approach (optimal)</span>
+<span class="kw">int</span> <span class="fn">nthUglyNumber</span>(<span class="kw">int</span> n){
+    <span class="kw">vector</span>&lt;<span class="kw">int</span>&gt; dp(n); dp[0]=1;
+    <span class="kw">int</span> i2=0,i3=0,i5=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;n;i++){
+        <span class="kw">int</span> m=min({dp[i2]*2, dp[i3]*3, dp[i5]*5});
+        dp[i]=m;
+        <span class="kw">if</span>(m==dp[i2]*2) i2++;
+        <span class="kw">if</span>(m==dp[i3]*3) i3++;   <span class="cm">// Use if (not else if) — multiple pointers may advance</span>
+        <span class="kw">if</span>(m==dp[i5]*5) i5++;
+    }
+    <span class="kw">return</span> dp[n-1];
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">DP</span><span class="fv">O(n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q104 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q104 · HARD</span>
+    <span class="qtitle">IPO (Maximize Capital)</span>
+    <div class="qtags"><span class="qt qt-h">Two Heaps</span><span class="qt qt-g">Greedy</span></div>
+    <span class="qsrc">LeetCode #502</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint ht">Unlock Projects by Capital, Greedily Pick Max Profit</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>You have initial capital W and can complete k projects. Project i needs capital[i] to start and gives profit[i]. Maximize final capital.</p>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Min-Heap of Costs to Unlock, Max-Heap of Profits to Pick</span>
+      <p>Sort projects by capital. Use a min-heap of (capital, profit). Use a max-heap of profit. Greedy: For each of k rounds, add all affordable projects (capital ≤ W) to max-heap. Pick the most profitable (max-heap top). Add its profit to W. If no project is affordable and max-heap is empty, stop.</p>
+    </div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n log n)</span>
+<span class="kw">int</span> <span class="fn">findMaximizedCapital</span>(<span class="kw">int</span> k,<span class="kw">int</span> W,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; profits,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; capital){
+    <span class="kw">int</span> n=profits.size();
+    <span class="kw">vector</span>&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; projects(n);
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) projects[i]={capital[i],profits[i]};
+    sort(projects.begin(),projects.end()); <span class="cm">// Sort by capital</span>
+
+    priority_queue&lt;<span class="kw">int</span>&gt; maxP;  <span class="cm">// Max-heap of profits</span>
+    <span class="kw">int</span> idx=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;k;i++){
+        <span class="cm">// Unlock all affordable projects</span>
+        <span class="kw">while</span>(idx&lt;n &amp;&amp; projects[idx].first&lt;=W)
+            maxP.push(projects[idx++].second);
+        <span class="kw">if</span>(maxP.empty()) <span class="kw">break</span>;   <span class="cm">// No affordable project</span>
+        W+=maxP.top(); maxP.pop(); <span class="cm">// Pick most profitable</span>
+    }
+    <span class="kw">return</span> W;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n log n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+  </div>
+</div>
+
+<!-- ─────────── Q105 ─────────── -->
+<div class="qcard">
+  <div class="qhead">
+    <span class="qnum hard">Q105 · HARD</span>
+    <span class="qtitle">Minimum Cost to Connect Sticks (Huffman)</span>
+    <div class="qtags"><span class="qt qt-h">Heap</span><span class="qt qt-g">Greedy</span></div>
+    <span class="qsrc">LeetCode #1167</span>
+  </div>
+  <div class="hints"><span class="hint hm">Must Know</span><span class="hint hc">Huffman Coding Pattern</span></div>
+  <div class="qbody">
+    <div class="qprob">
+      <p>Connect sticks with minimum total cost. Each connection costs the sum of two sticks' lengths. Find the minimum total cost to connect all sticks into one.</p>
+      <div class="io-row">
+        <div class="io-box"><span class="io-lbl">Input</span><code>[2,4,3]</code></div>
+        <div class="io-box"><span class="io-lbl">Output</span><code>14</code></div>
+        <div class="io-box"><span class="io-lbl">Why</span><code>2+3=5(cost5)
+5+4=9(cost9)
+total=14</code></div>
+      </div>
+    </div>
+    <div class="qdec">
+      <span class="dlbl">Decode — Always Merge the Two Smallest First (Greedy)</span>
+      <p>This is exactly Huffman coding. If you merge large sticks early, that cost propagates into all future merges. Merging the two smallest first minimizes total accumulated cost. Min-heap: repeatedly pop two smallest, push their sum, add sum to total cost.</p>
+    </div>
+    <div class="qtrace">
+      <span class="trl">sticks=[2,4,3]</span>
+Heap (min): [<span class="tr-hi">2,3,4</span>]
+
+Round 1: pop 2,3 → merge=5, cost+=5.  heap=[<span class="tr-hi">4,5</span>]
+Round 2: pop 4,5 → merge=9, cost+=9.  heap=[<span class="tr-hi">9</span>]
+
+Total cost = <span class="tr-ok">14</span> ✓</div>
+    <div class="qcode"><span class="clbl">C++ Solution — O(n log n)</span>
+<span class="kw">int</span> <span class="fn">connectSticks</span>(<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;&amp; sticks){
+    priority_queue&lt;<span class="kw">int</span>,<span class="kw">vector</span>&lt;<span class="kw">int</span>&gt;,greater&lt;<span class="kw">int</span>&gt;&gt; pq(sticks.begin(),sticks.end());
+    <span class="kw">int</span> cost=0;
+    <span class="kw">while</span>(pq.size()&gt;1){
+        <span class="kw">int</span> a=pq.top();pq.pop();
+        <span class="kw">int</span> b=pq.top();pq.pop();
+        cost+=a+b;
+        pq.push(a+b);
+    }
+    <span class="kw">return</span> cost;
+}</div>
+  </div>
+  <div class="qfoot">
+    <div class="qf t"><span class="fl">Time</span><span class="fv">O(n log n)</span></div>
+    <div class="qf s"><span class="fl">Space</span><span class="fv">O(n)</span></div>
+    <div class="qf x"><span class="fl">Pattern</span><span class="fv">Huffman coding · Optimal Merge Pattern</span></div>
+  </div>
+</div>
+
+<a class="bt" href="#top">↑ back to top</a>
+  </div></div>
+</div>
+
+<div class="footer">Interview Problem Setbook · Part 3 of 6 · Q071–Q105 · Binary Trees · BST · Heaps</div>
+</div>
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'iv-03';
+  var FILE_DISP = 'IV · Part 3 · Q071–Q105';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

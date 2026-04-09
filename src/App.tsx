@@ -68,7 +68,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/notes/:subjectSlug" element={<Notes />} />
-          <Route path="/notes/:subjectSlug/:chapterId" element={<Notes />} />
+          <Route path="/notes/:subjectSlug/:chapterSlug" element={<Notes />} />
           <Route path="/practice" element={<Practice />} />
           <Route path="/practice/:subjectSlug" element={<Practice />} />
           <Route path="/skills" element={<Skills />} />

@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures — Linear DS · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:       #faf7f2;
+  --paper2:      #f3ede3;
+  --paper3:      #ece5d8;
+  --paper4:      #e4ddd0;
+  --ink:         #1c1510;
+  --ink2:        #3a2e22;
+  --ink3:        #6b5a47;
+  --rule:        rgba(100,130,180,0.14);
+  --mline:       rgba(210,100,80,0.28);
+  --red:         #b83030;
+  --blue:        #1a4a8c;
+  --green:       #1a6b40;
+  --orange:      #b85a10;
+  --purple:      #5a1a8a;
+  --teal:        #0d7a6a;
+
+  --hl-y:   rgba(255,236,60,0.42);
+  --hl-b:   rgba(100,160,255,0.17);
+  --hl-g:   rgba(60,180,100,0.17);
+  --hl-r:   rgba(220,60,60,0.12);
+  --hl-o:   rgba(220,130,30,0.14);
+  --hl-p:   rgba(120,40,180,0.11);
+
+  --body:   'Lora', Georgia, serif;
+  --prose:  'Crimson Pro', Georgia, serif;
+  --hand:   'Architects Daughter', cursive;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: #bfb49a;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #b0a48c 0%, transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #ccc0a6 0%, transparent 55%);
+  font-family: var(--body);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 24px 16px 64px;
+}
+
+.book { max-width: 840px; margin: 0 auto; }
+
+/* ── COVER ── warm notebook front page, not a dark slab */
+.cover {
+  background: var(--paper2);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 44px 48px 36px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 5px 6px 0 #8a7a60, 9px 10px 0 #6a5a40, 12px 14px 28px rgba(0,0,0,0.28);
+}
+/* ruled lines on cover */
+.cover::before {
+  content:'';
+  position:absolute; inset:0;
+  background: repeating-linear-gradient(
+    transparent, transparent 31px,
+    rgba(100,130,180,0.12) 31px, rgba(100,130,180,0.12) 32px
+  );
+  background-size: 100% 32px;
+  background-position: 0 48px;
+  pointer-events:none;
+}
+/* red margin line on cover */
+.cover::after {
+  content:'';
+  position:absolute;
+  top:0; bottom:0; left:52px;
+  width:1.5px;
+  background: rgba(210,100,80,0.32);
+  pointer-events:none;
+}
+.cover-inner { position:relative; padding-left:20px; }
+.cover-subject {
+  font-family: var(--hand);
+  font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.cover-subject::before {
+  content:'';
+  display:inline-block;
+  width:28px; height:1.5px;
+  background: var(--orange);
+}
+.cover h1 {
+  font-family: var(--body);
+  font-size: 42px; font-weight: 700;
+  line-height: 1.15;
+  color: var(--ink);
+}
+.cover h1 em { font-style:italic; color: var(--blue); }
+.cover-desc {
+  font-family: var(--prose);
+  font-size: 17px;
+  color: var(--ink3);
+  margin-top: 14px;
+  line-height: 1.8;
+  max-width: 520px;
+  border-left: 3px solid var(--orange);
+  padding-left: 14px;
+}
+.cover-chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-top: 28px;
+}
+.chip {
+  font-family: var(--hand);
+  font-size: 10px; letter-spacing: 0.5px;
+  border: 1.5px solid #b0a080;
+  border-radius: 2px;
+  padding: 4px 12px;
+  color: var(--ink3);
+  background: rgba(255,255,255,0.5);
+}
+.cover-gate-tag {
+  position: absolute; top: 20px; right: 24px;
+  font-family: var(--hand);
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+/* ── TOC ── */
+.toc {
+  background: var(--paper);
+  border: 1.5px solid #b0a080;
+  border-radius: 3px;
+  padding: 20px 28px;
+  margin-bottom: 28px;
+  box-shadow: 3px 4px 0 #9a8a6e;
+}
+.toc-lbl {
+  font-family: var(--hand);
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 12px;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 24px;
+}
+@media(max-width:560px){ .toc-grid { grid-template-columns: 1fr; } }
+.toc-grid a {
+  font-family: var(--prose);
+  font-size: 15.5px;
+  color: var(--ink2); text-decoration: none;
+  display: flex; align-items: baseline; gap: 7px;
+  padding: 4px 0;
+  border-bottom: 1px dashed transparent;
+  transition: all 0.2s;
+}
+.toc-grid a:hover { color: var(--blue); border-color: var(--ink3); }
+.tn { font-family: var(--hand); font-size: 11px; color: var(--ink3); min-width: 24px; }
+
+/* ── CHAPTER ── */
+.chapter {
+  background: var(--paper);
+  border: 1.5px solid #b0a088;
+  border-radius: 3px;
+  margin-bottom: 28px;
+  box-shadow: 4px 5px 0 #9a8a6e, 7px 8px 0 #7a6a50;
+  overflow: hidden;
+}
+.ch-head {
+  background: var(--ink);
+  padding: 16px 32px;
+}
+.ch-ey {
+  font-family: var(--hand);
+  font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(245,240,230,0.38); margin-bottom: 3px;
+}
+.ch-title {
+  font-family: var(--body);
+  font-size: 21px; font-weight: 600;
+  color: var(--paper); line-height: 1.25;
+}
+.ch-title em { font-style:italic; color: #e8c870; }
+
+.ch-body {
+  background-image:
+    linear-gradient(var(--mline) 1px, transparent 1px),
+    repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size: 54px 100%, 100% 32px;
+  background-position: 0 0, 0 16px;
+}
+
+/* ── SECTION ── */
+.sec {
+  padding: 28px 32px 26px 62px;
+  border-bottom: 1px dashed #c8b898;
+  position: relative;
+}
+.sec:last-child { border-bottom: none; }
+.sec::before {
+  content: attr(data-m);
+  position: absolute; left: 10px; top: 34px;
+  font-family: var(--hand); font-size: 10px;
+  color: rgba(200,100,80,0.26);
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+  letter-spacing: 1px; text-transform: uppercase;
+}
+
+/* ── HEADINGS ── */
+h2.sh {
+  font-family: var(--body);
+  font-size: 19px; font-weight: 700;
+  color: var(--ink); margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--ink);
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.tag {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  border: 1.5px solid currentColor;
+  margin-left: auto; flex-shrink: 0;
+}
+.tg { color:var(--red);    border-color:var(--red);    background:var(--hl-r); }
+.tc { color:var(--blue);   border-color:var(--blue);   background:var(--hl-b); }
+.tt { color:var(--orange); border-color:var(--orange); background:var(--hl-o); }
+.ta { color:var(--teal);   border-color:var(--teal);   background:rgba(13,122,106,0.09); }
+.tp { color:var(--purple); border-color:var(--purple); background:var(--hl-p); }
+
+h3.ssh {
+  font-family: var(--body);
+  font-size: 15.5px; font-weight: 600; font-style: italic;
+  color: var(--blue); margin: 20px 0 8px;
+}
+
+/* ── BODY TEXT ── */
+p {
+  font-family: var(--prose);
+  font-size: 17px; line-height: 1.92;
+  color: var(--ink2); margin-bottom: 10px;
+}
+strong { color: var(--ink); font-weight: 600; }
+
+/* ── BOXES ── */
+.def-box {
+  background: #eef3ff; border-left: 4px solid var(--blue);
+  border-radius: 0 4px 4px 0; padding: 13px 18px; margin: 14px 0;
+}
+.def-box .lbl {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 5px; display: block;
+}
+.def-box p { font-size: 16.5px; line-height: 1.82; margin: 0; color: var(--ink); }
+
+.warn-box {
+  background: #fff1f1; border-left: 4px solid var(--red);
+  border-radius: 0 4px 4px 0; padding: 12px 18px; margin: 14px 0;
+}
+.warn-box .lbl {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--red); margin-bottom: 4px; display: block;
+}
+.warn-box p { font-size: 16px; color: var(--red); margin: 0; line-height: 1.78; }
+
+.tip-box {
+  background: #f0fff4; border-left: 4px solid var(--green);
+  border-radius: 0 4px 4px 0; padding: 12px 18px; margin: 14px 0;
+}
+.tip-box .lbl {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--green); margin-bottom: 4px; display: block;
+}
+.tip-box p { font-size: 16px; color: var(--green); margin: 0; line-height: 1.78; }
+
+.note-box {
+  background: #fdf8ee; border-left: 4px solid var(--orange);
+  border-radius: 0 4px 4px 0; padding: 12px 18px; margin: 14px 0;
+}
+.note-box .lbl {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 4px; display: block;
+}
+.note-box p { font-size: 16px; color: var(--orange); margin: 0; line-height: 1.78; }
+
+/* ── EXAMPLE ── */
+.eg {
+  background: var(--paper2);
+  border: 1.5px solid #b8a882; border-radius: 4px;
+  padding: 18px 20px; margin: 16px 0; position: relative;
+}
+.eg::before {
+  content: 'Example';
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink3);
+  position: absolute; top: -9px; left: 14px;
+  background: var(--paper2); padding: 0 6px;
+}
+.eg p { font-family: var(--prose); font-size: 16px; color: var(--ink2); margin: 0 0 6px; line-height: 1.82; }
+.eg p:last-child { margin: 0; }
+
+/* ── CODE ── */
+.cb {
+  font-family: 'Courier New', monospace;
+  font-size: 13.5px; background: var(--paper3);
+  border: 1.5px dashed #a09070; border-radius: 4px;
+  padding: 14px 18px; margin: 12px 0;
+  color: var(--ink); line-height: 1.9;
+  white-space: pre; overflow-x: auto;
+}
+.cb .kw  { color: var(--blue);   font-weight: bold; }
+.cb .cm  { color: var(--ink3);   font-style: italic; }
+.cb .num { color: var(--orange); }
+.cb .fn  { color: var(--purple); }
+.cb .op  { color: var(--red);    }
+code {
+  font-family: 'Courier New', monospace; font-size: 13.5px;
+  background: var(--paper3); border: 1px solid #c0a880;
+  border-radius: 3px; padding: 1px 5px; color: var(--blue);
+}
+
+/* ── HIGHLIGHT ── */
+mark      { background: var(--hl-y); padding: 0 2px; border-radius: 2px; color: var(--ink); }
+.hi-b     { background: var(--hl-b); padding: 0 3px; border-radius: 2px; }
+.hi-g     { background: var(--hl-g); padding: 0 3px; border-radius: 2px; }
+.hi-r     { background: var(--hl-r); padding: 0 3px; border-radius: 2px; }
+.hi-o     { background: var(--hl-o); padding: 0 3px; border-radius: 2px; }
+.c-r  { color: var(--red);    font-weight: 600; }
+.c-b  { color: var(--blue);   font-weight: 600; }
+.c-g  { color: var(--green);  font-weight: 600; }
+.c-o  { color: var(--orange); font-weight: 600; }
+.c-p  { color: var(--purple); font-weight: 600; }
+
+/* ── LISTS ── */
+.pl { list-style: none; margin: 8px 0 12px; padding: 0; }
+.pl li {
+  font-family: var(--prose); font-size: 16.5px;
+  line-height: 1.88; color: var(--ink2);
+  padding: 3px 0 3px 22px; position: relative;
+}
+.pl li::before         { content:'—'; position:absolute; left:0; color:var(--orange); font-weight:600; }
+.pl.arr li::before     { content:'→'; color:var(--blue);  }
+.pl.chk li::before     { content:'✓'; color:var(--green); }
+.pl.crs li::before     { content:'✗'; color:var(--red);   }
+.pl.dot li::before     { content:'·'; color:var(--ink3); font-size:20px; top:-1px; }
+
+/* ── TABLE ── */
+.tbl { overflow-x: auto; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; font-family: var(--prose); font-size: 15.5px; }
+thead tr { background: var(--ink); }
+th { padding: 9px 14px; text-align: left; color: var(--paper); font-weight: 400; font-size: 13px; font-family: var(--hand); letter-spacing: 0.5px; }
+td { padding: 8px 14px; border-bottom: 1px dashed #c0a880; line-height: 1.65; vertical-align: top; color: var(--ink2); }
+tr:nth-child(even) td { background: rgba(0,0,0,0.024); }
+tr:hover td { background: rgba(255,240,150,0.22); }
+
+/* ── CALLOUT GRID ── */
+.cg { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 13px; margin: 14px 0; }
+.cg-card { background: var(--paper2); border: 1.5px solid #b0a080; border-radius: 4px; padding: 13px 15px; }
+.cg-card .ct {
+  font-family: var(--hand); font-size: 11px;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 6px;
+  padding-bottom: 4px; border-bottom: 1px solid #c0a880;
+}
+.cg-card p { font-family: var(--prose); font-size: 15px; line-height: 1.75; color: var(--ink2); margin: 0; }
+
+/* ── COMPLEXITY TABLE ── */
+.cx-table { overflow-x: auto; margin: 16px 0; }
+.cx-table table { font-size: 14.5px; }
+.cx-table th { font-size: 12px; }
+.cx-table td { text-align: center; padding: 7px 12px; }
+.cx-table td:first-child { text-align: left; font-weight: 600; font-family: var(--body); font-size: 14.5px; }
+.good  { color: var(--green); font-weight: 600; }
+.ok    { color: var(--orange); font-weight: 600; }
+.bad   { color: var(--red); font-weight: 600; }
+
+/* ── DS VISUAL (ASCII-style diagram boxes) ── */
+.ds-visual {
+  background: var(--paper3);
+  border: 1.5px dashed #a09070;
+  border-radius: 4px;
+  padding: 16px 18px; margin: 14px 0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px; line-height: 1.8;
+  color: var(--ink); overflow-x: auto;
+}
+.ds-visual .dv-label {
+  font-family: var(--hand); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 8px; display: block;
+}
+
+/* ── STEP LIST ── */
+.steps { list-style: none; margin: 10px 0; padding: 0; }
+.steps li {
+  display: flex; gap: 13px; align-items: flex-start;
+  margin-bottom: 10px;
+  font-family: var(--prose); font-size: 16.5px;
+  line-height: 1.82; color: var(--ink2);
+}
+.sn {
+  font-family: var(--hand); font-size: 11px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 50%; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 3px;
+}
+
+/* ── OPERATION CARD ── */
+.op-card {
+  border: 2px solid var(--ink); border-radius: 5px;
+  overflow: hidden; margin: 20px 0;
+}
+.op-head {
+  display: flex; align-items: center; gap: 16px;
+  padding: 13px 20px; border-bottom: 2px solid var(--ink);
+  background: var(--paper2);
+}
+.op-sym {
+  font-family: var(--body); font-size: 22px; font-weight: 700;
+  min-width: 44px; text-align: center; flex-shrink: 0;
+  color: var(--ink);
+}
+.op-name { font-family: var(--body); font-size: 16px; font-weight: 600; color: var(--ink); }
+.op-sub  { font-family: var(--prose); font-style: italic; font-size: 14px; color: var(--ink3); margin-top: 2px; }
+.op-body { padding: 16px 20px; }
+.op-body p { font-family: var(--prose); font-size: 16px; line-height: 1.85; color: var(--ink2); }
+
+hr.dv { border: none; border-top: 1.5px dashed #c0a880; margin: 22px 0; }
+.mn { font-family: var(--hand); font-size: 12px; color: var(--red); opacity: 0.8; border-left: 2px solid var(--red); padding-left: 8px; margin: 8px 0; line-height: 1.7; }
+.bt { display: block; text-align: right; font-family: var(--hand); font-size: 10px; color: var(--ink3); text-decoration: none; padding: 10px 32px 0; letter-spacing: 1px; }
+.bt:hover { color: var(--blue); }
+.footer { text-align: center; font-family: var(--hand); font-size: 10px; color: #7a6a50; letter-spacing: 2px; padding: 20px 0; }
+
+@media(max-width:600px){
+  .cover { padding: 28px 22px; }
+  .cover h1 { font-size: 28px; }
+  .ch-head { padding: 14px 20px; }
+  .sec { padding: 22px 18px 22px 44px; }
+}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- ══════════ COVER ══════════ -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Data Structures</div>
+    <h1>Linear Data<br><em>Structures</em></h1>
+    <p class="cover-desc">
+      Arrays, Linked Lists, Stacks, Queues, and Hashing —
+      built from first principles with full complexity analysis,
+      implementation reasoning, and every GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Arrays, 2D Formulae &amp; Sparse Matrix</span>
+      <span class="chip">Ch 2 · Linked Lists &amp; Structure Simulation</span>
+      <span class="chip">Ch 3 · Stacks, Applications &amp; Auxiliary Space</span>
+      <span class="chip">Ch 4 · Queues &amp; All Variants</span>
+      <span class="chip">Ch 5 · Hashing &amp; Probe Formulae</span>
+      <span class="chip">Ch 6 · Collision Resolution</span>
+      <span class="chip">Ch 7 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOC ══════════ -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Arrays — Memory, Access, 2D, Sparse Matrix</a>
+    <a href="#ch2"><span class="tn">02</span>Linked Lists — All Variants &amp; Simulation</a>
+    <a href="#ch3"><span class="tn">03</span>Stacks — Theory, Applications, Aux Space</a>
+    <a href="#ch4"><span class="tn">04</span>Queues — All Variants</a>
+    <a href="#ch5"><span class="tn">05</span>Hashing — Functions &amp; Probe Formulae</a>
+    <a href="#ch6"><span class="tn">06</span>Collision Resolution Techniques</a>
+    <a href="#ch7"><span class="tn">07</span>GATE Traps &amp; Complexity Reference</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — ARRAYS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Arrays — <em>Memory, 2D Formulae &amp; Sparse Representation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="array-def">
+      <h2 class="sh">1.1 &nbsp; What Is an Array? <span class="tag tc">Core</span></h2>
+      <p>
+        An array is the most fundamental data structure — a <strong>contiguous block of memory</strong> holding elements of the <em>same data type</em>. The word "contiguous" is the entire story of why arrays behave the way they do. Because elements are adjacent in memory, the location of any element can be computed directly from the base address and the index. This is what gives arrays their O(1) random access.
+      </p>
+      <p>
+        Every other property of arrays — their strength (fast access), their weakness (fixed size, expensive insertion), their address formulae — flows directly from this one fact: <mark>elements are stored one after another in memory with no gaps.</mark>
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">1D Array: int A[5], base address = 1000, each int = 4 bytes</span>
+Index:    [  0  ] [  1  ] [  2  ] [  3  ] [  4  ]
+Value:    [  10  ] [  20  ] [  30  ] [  40  ] [  50 ]
+Address:   1000    1004    1008    1012    1016
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Address Formula — 1D Array</span>
+        <p>Address of A[i] = Base + (i − Lower_Bound) × Size_of_element</p>
+      </div>
+      <p>
+        If the array is 0-indexed: <code>Address(A[i]) = Base + i × w</code> where <em>w</em> is the element size in bytes. If it is 1-indexed: <code>Address(A[i]) = Base + (i−1) × w</code>.
+      </p>
+
+      <div class="eg">
+        <p><strong>Given:</strong> int A[10], Base = 2000, size of int = 2 bytes. Find address of A[6].</p>
+        <p><strong>Solution:</strong> Address = 2000 + 6 × 2 = <strong>2012</strong>. (0-indexed)</p>
+        <p><strong>If 1-indexed:</strong> Address = 2000 + (6−1) × 2 = 2000 + 10 = <strong>2010</strong>.</p>
+        <p>Always check: is the array 0-indexed or 1-indexed? GATE specifies this — read carefully.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="2d-array">
+      <h2 class="sh">1.2 &nbsp; 2D Arrays — Row Major vs Column Major <span class="tag tg">Frequently Tested</span></h2>
+      <p>
+        A 2D array A[m][n] has <em>m</em> rows and <em>n</em> columns. In memory, it must be linearized — stored as a sequence of 1D elements. There are two conventions for how to do this:
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Row Major Order</div>
+          <p>Entire first row stored, then entire second row, and so on. Used by C, C++, Java (for arrays). Elements in the same row are adjacent in memory.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Column Major Order</div>
+          <p>Entire first column stored, then entire second column, and so on. Used by Fortran, MATLAB. Elements in the same column are adjacent in memory.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Address Formula — 2D Array, 0-indexed</span>
+        <p>
+          <strong>Row Major:</strong> &nbsp; Address(A[i][j]) = Base + (i × n + j) × w<br>
+          <strong>Column Major:</strong> Address(A[i][j]) = Base + (j × m + i) × w<br>
+          where n = number of columns, m = number of rows, w = element size
+        </p>
+      </div>
+
+      <div class="def-box" style="background:#f0fff4; border-color:var(--green);">
+        <span class="lbl" style="color:var(--green)">Address Formula — 2D Array, 1-indexed [L1..U1][L2..U2]</span>
+        <p>
+          <strong>Row Major:</strong> &nbsp; Base + [(i−L1)(U2−L2+1) + (j−L2)] × w<br>
+          <strong>Column Major:</strong> Base + [(j−L2)(U1−L1+1) + (i−L1)] × w
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Given:</strong> A[1..4][1..5], Row Major, Base = 100, w = 2 bytes. Find address of A[3][4].</p>
+        <p>Number of columns = 5−1+1 = 5. Number of rows = 4.</p>
+        <p>Address = 100 + [(3−1)×5 + (4−1)] × 2 = 100 + [10+3] × 2 = 100 + 26 = <strong>126</strong></p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — Row vs Column Major</span>
+        <p>GATE questions will give you a storage order and ask for the address, or give you an address and ask which element it belongs to. Memorize both formulas. The most common mistake is using m (rows) where n (columns) belongs in the row-major formula. Write it out — never do it in your head.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="array-ops">
+      <h2 class="sh">1.3 &nbsp; Operations &amp; Complexity</h2>
+      <div class="cx-table">
+        <table>
+          <thead><tr><th>Operation</th><th>Best</th><th>Average</th><th>Worst</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Access A[i]</td><td class="good">O(1)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>Direct address computation</td></tr>
+            <tr><td>Search (unsorted)</td><td class="good">O(1)</td><td class="ok">O(n)</td><td class="bad">O(n)</td><td>Linear scan, element may be at end</td></tr>
+            <tr><td>Search (sorted)</td><td class="good">O(1)</td><td class="good">O(log n)</td><td class="good">O(log n)</td><td>Binary search</td></tr>
+            <tr><td>Insert at end</td><td class="good">O(1)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>Direct if space available</td></tr>
+            <tr><td>Insert at position i</td><td class="good">O(1)</td><td class="ok">O(n)</td><td class="bad">O(n)</td><td>Must shift n−i elements right</td></tr>
+            <tr><td>Delete at position i</td><td class="good">O(1)</td><td class="ok">O(n)</td><td class="bad">O(n)</td><td>Must shift n−i elements left</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">Why Insertion is Expensive</span>
+        <p>To insert at position <em>i</em> in an array of <em>n</em> elements, all elements from position <em>i</em> to <em>n−1</em> must shift one position to the right to make room. In the worst case (insert at beginning), every element moves. This is the fundamental limitation arrays share versus linked lists.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="sparse">
+      <h2 class="sh">1.4 &nbsp; What Is a Sparse Matrix? <span class="tag tc">Core</span></h2>
+      <p>
+        A <strong>sparse matrix</strong> is a 2D matrix in which the majority of elements are zero. There is no strict threshold, but in practice a matrix is considered sparse when the number of non-zero elements is significantly smaller than m × n — often less than 10% of the total entries.
+      </p>
+      <p>
+        Storing a sparse matrix as a full 2D array is enormously wasteful. A 1000×1000 matrix with only 500 non-zero entries would occupy 1,000,000 memory locations just to store 500 meaningful values. The solution is to store <em>only the non-zero elements</em> along with their positions.
+      </p>
+      <div class="ds-visual">
+        <span class="dv-label">Example Sparse Matrix (4×5) — only 4 non-zero values out of 20</span>
+  0  0  3  0  0
+  0  0  0  0  0
+  0  2  0  0  0
+  0  0  0  7  0
+        ↑ Storing this as a full array wastes 16 slots for zeros.
+      </div>
+    </div>
+
+    <div class="sec" data-m="triplet">
+      <h2 class="sh">1.5 &nbsp; Triplet (Coordinate) Representation <span class="tag tg">GATE Tested</span></h2>
+      <p>
+        The simplest compact representation. Store only the non-zero elements as a list of <strong>(row, column, value)</strong> triplets — plus the matrix dimensions (total rows, total columns, total non-zero count) in a header row.
+      </p>
+
+      <div class="eg">
+        <p><strong>Sparse matrix above → Triplet representation:</strong></p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Row</th><th>Col</th><th>Value</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>4</strong></td><td><strong>5</strong></td><td><strong>4</strong></td><td>Header: 4 rows, 5 cols, 4 non-zeros</td></tr>
+              <tr><td>0</td><td>2</td><td>3</td><td>A[0][2] = 3</td></tr>
+              <tr><td>2</td><td>1</td><td>2</td><td>A[2][1] = 2</td></tr>
+              <tr><td>3</td><td>3</td><td>7</td><td>A[3][3] = 7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Space used: 3 × (non-zero count + 1) integers = 3 × 4 = 12 values instead of 4 × 5 = 20. As the matrix gets sparser, the saving grows dramatically.</p>
+      </div>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Advantages</div>
+          <p>Simple to implement. Space = O(k) where k = non-zero count. Easy to add or remove non-zero elements.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Disadvantages</div>
+          <p>Random access to A[i][j] requires searching the triplet list — O(k). Not cache-friendly for row-wise traversal. Triplets must be kept sorted for efficient operations.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="csr">
+      <h2 class="sh">1.6 &nbsp; Compressed Sparse Row (CSR) <span class="tag tp">Advanced</span></h2>
+      <p>
+        CSR is the industry-standard format for sparse matrices in high-performance computing, machine learning libraries (SciPy, TensorFlow), and graph algorithms. It optimizes for <strong>row-wise traversal</strong> — iterating over all non-zero elements in a given row becomes O(non-zeros in that row), not O(total non-zeros).
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">CSR — Three Arrays</span>
+        <p>
+          <strong>values[]</strong> — All non-zero values, stored row by row, left to right.<br>
+          <strong>col_idx[]</strong> — Column index for each corresponding value in values[].<br>
+          <strong>row_ptr[]</strong> — For each row i, row_ptr[i] = index in values[] where row i begins. row_ptr[num_rows] = total non-zeros.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Build CSR for the sparse matrix above:</strong></p>
+        <div class="cb">Matrix:
+  Row 0: A[0][2]=3
+  Row 1: (empty)
+  Row 2: A[2][1]=2
+  Row 3: A[3][3]=7
+
+values  = [ 3,  2,  7 ]          ← all non-zeros, row by row
+col_idx = [ 2,  1,  3 ]          ← their column positions
+row_ptr = [ 0,  1,  1,  2,  3 ]  ← row 0 starts at index 0
+                                     row 1 starts at index 1 (no entries → same as row 2)
+                                     row 2 starts at index 1
+                                     row 3 starts at index 2
+                                     sentinel: total non-zeros = 3
+
+To find all non-zeros in row i:
+  → iterate values[row_ptr[i]] to values[row_ptr[i+1] − 1]</div>
+        <p>Row 2's non-zeros: values[row_ptr[2]] to values[row_ptr[3]−1] = values[1] to values[1] = {2}. Correct.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Format</th><th>Space</th><th>Row Traversal</th><th>Random Access A[i][j]</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>Full 2D Array</td><td>O(m×n)</td><td>O(n)</td><td>O(1)</td><td>Dense matrices</td></tr>
+            <tr><td>Triplet (COO)</td><td>O(k)</td><td>O(k)</td><td>O(k) search</td><td>Matrix construction</td></tr>
+            <tr><td>CSR</td><td>O(k + m)</td><td>O(k/m) avg</td><td>O(k/m) binary search</td><td>Row-wise ops, SpMV</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:var(--hand); font-size:11px; color:var(--ink3);">k = number of non-zero elements &nbsp;·&nbsp; SpMV = Sparse Matrix-Vector multiplication</p>
+
+      <div class="tip-box">
+        <span class="lbl">Why CSR Matters Beyond GATE</span>
+        <p>PageRank, graph neural networks, finite element methods, recommendation systems — all operate on matrices that are 99%+ sparse. CSR (and its column-wise cousin CSC) is why these computations are feasible at scale. Knowing the data structure is knowing why Google's algorithm can run on a billion-node graph.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — LINKED LISTS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Linked Lists — <em>All Variants</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ll-intro">
+      <h2 class="sh">2.1 &nbsp; What Is a Linked List? <span class="tag tc">Core</span></h2>
+      <p>
+        A linked list is a linear data structure where elements are stored in <strong>non-contiguous memory locations</strong>. Each element (called a <em>node</em>) stores two things: the data itself, and a pointer to the next node. The pointer is what links the nodes together into a sequence, even though they may be scattered across memory.
+      </p>
+      <p>
+        This is the opposite of an array. An array's power comes from contiguity. A linked list's power comes from the absence of contiguity — nodes can be allocated and freed independently, making insertion and deletion cheap.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Singly Linked List: 10 → 20 → 30 → NULL</span>
+ HEAD
+  ↓
+[10 | *]──→[20 | *]──→[30 | NULL]
+  ↑              ↑              ↑
+ data  next    data  next    data  next
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Node Structure</span>
+        <p>Each node contains: (1) <strong>Data field</strong> — the actual value stored. (2) <strong>Pointer field</strong> — the memory address of the next node. In a singly linked list, each node has one pointer. In a doubly linked list, each node has two pointers (prev and next).</p>
+      </div>
+
+      <p>
+        The <strong>HEAD</strong> pointer holds the address of the first node. It is the entry point to the entire list. If HEAD is NULL, the list is empty. The last node's next pointer is NULL — this is how you detect the end of the list.
+      </p>
+    </div>
+
+    <div class="sec" data-m="ll-types">
+      <h2 class="sh">2.2 &nbsp; Types of Linked Lists</h2>
+
+      <h3 class="ssh">Singly Linked List (SLL)</h3>
+      <p>
+        Each node has one pointer — pointing to the next node. Traversal is one-directional: you can only move forward. To find the previous node, you must start from HEAD and traverse. This is the simplest form and most memory-efficient.
+      </p>
+
+      <hr class="dv">
+      <h3 class="ssh">Doubly Linked List (DLL)</h3>
+      <p>
+        Each node has two pointers — one pointing to the next node, one pointing to the previous node. Traversal is bidirectional. Deletion of a node is easier than SLL (no need to find the previous node separately) but each node uses more memory.
+      </p>
+      <div class="ds-visual">
+        <span class="dv-label">Doubly Linked List</span>
+NULL←[10|*|*]↔[20|*|*]↔[30|*|*]→NULL
+     prev next  prev next  prev next
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Circular Linked List</h3>
+      <p>
+        The last node's next pointer points back to the HEAD (first node) instead of NULL. This creates a circular structure with no "end." Useful for round-robin scheduling, circular buffers. Can be singly or doubly circular.
+      </p>
+      <div class="ds-visual">
+        <span class="dv-label">Circular Singly Linked List</span>
+  ┌─────────────────────────┐
+  ↓                          |
+[10|*]──→[20|*]──→[30|*]──→┘
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Detecting End of Circular List</span>
+        <p>In a circular linked list, you cannot check for NULL to detect the end — because the last pointer doesn't point to NULL. Instead, stop traversal when you return to the starting node (HEAD). GATE has directly tested this: "how do you know when traversal is complete?"</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ll-ops">
+      <h2 class="sh">2.3 &nbsp; Operations on Linked Lists <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Insertion</h3>
+      <p>Insertion requires updating pointer(s) only — no shifting. The key is doing the pointer updates in the correct order.</p>
+
+      <div class="eg">
+        <p><strong>Insert node NEW after node P in a singly linked list:</strong></p>
+        <div class="cb"><span class="kw">Step 1:</span> NEW.next = P.next   <span class="cm">// NEW points to what P used to point to</span>
+<span class="kw">Step 2:</span> P.next = NEW       <span class="cm">// P now points to NEW</span></div>
+        <p><strong>Order matters critically.</strong> If you do Step 2 first, you lose the reference to the rest of the list — it becomes unreachable and effectively deleted.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Insert at beginning (new HEAD):</strong></p>
+        <div class="cb"><span class="kw">Step 1:</span> NEW.next = HEAD    <span class="cm">// NEW points to current first node</span>
+<span class="kw">Step 2:</span> HEAD = NEW         <span class="cm">// HEAD now points to NEW</span></div>
+      </div>
+
+      <h3 class="ssh">Deletion</h3>
+      <div class="eg">
+        <p><strong>Delete node Q where P is Q's predecessor:</strong></p>
+        <div class="cb">P.next = Q.next    <span class="cm">// Bypass Q entirely</span>
+free(Q)            <span class="cm">// Release Q's memory</span></div>
+        <p>In a singly linked list, to delete a node you need its predecessor's pointer. This is why SLL deletion requires either knowing the previous node, or traversing from HEAD to find it — O(n) in the worst case.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">DLL Advantage in Deletion</span>
+        <p>In a doubly linked list, every node has a prev pointer. To delete node Q, you do: <code>Q.prev.next = Q.next</code> and <code>Q.next.prev = Q.prev</code>. No need to find the predecessor separately. This makes deletion O(1) if you have the node's address — a key advantage over SLL.</p>
+      </div>
+
+      <h3 class="ssh">Complexity Summary</h3>
+      <div class="cx-table">
+        <table>
+          <thead><tr><th>Operation</th><th>SLL</th><th>DLL</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Access element i</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>Must traverse from HEAD — no random access</td></tr>
+            <tr><td>Search</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>Linear scan only</td></tr>
+            <tr><td>Insert at beginning</td><td class="good">O(1)</td><td class="good">O(1)</td><td>Update HEAD pointer only</td></tr>
+            <tr><td>Insert at end</td><td class="ok">O(n)</td><td class="ok">O(n)</td><td>Must traverse to last node (unless tail pointer maintained)</td></tr>
+            <tr><td>Insert after given node</td><td class="good">O(1)</td><td class="good">O(1)</td><td>Given the node reference — just pointer updates</td></tr>
+            <tr><td>Delete given node</td><td class="ok">O(n)</td><td class="good">O(1)</td><td>SLL needs predecessor; DLL has prev pointer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">The O(1) vs O(n) Insertion Distinction</span>
+        <p>Linked list insertion is O(1) <em>only if you already have a reference to the insertion point</em>. If you must first search for the position (e.g., "insert after the node with value 30"), the search itself is O(n). GATE questions will distinguish between "given a pointer to node P" (O(1) insertion) and "insert at position k" (O(n) traversal + O(1) insert).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ll-gate">
+      <h2 class="sh">2.4 &nbsp; Classic Linked List Problems <span class="tag tg">GATE Algorithms</span></h2>
+
+      <h3 class="ssh">Detecting a Cycle — Floyd's Algorithm</h3>
+      <p>
+        Floyd's Cycle Detection (also called the tortoise and hare algorithm) uses two pointers: <strong>slow</strong> moves one step at a time, <strong>fast</strong> moves two steps at a time. If a cycle exists, fast will eventually lap slow and they will meet inside the cycle. If no cycle, fast reaches NULL.
+      </p>
+      <div class="cb"><span class="kw">slow</span> = HEAD, <span class="kw">fast</span> = HEAD
+<span class="kw">while</span> fast ≠ NULL and fast.next ≠ NULL:
+    slow = slow.next        <span class="cm">// one step</span>
+    fast = fast.next.next   <span class="cm">// two steps</span>
+    <span class="kw">if</span> slow == fast: CYCLE DETECTED</div>
+      <p>Time: O(n). Space: O(1). This is the canonical O(1) space cycle detection. Any approach using a visited set uses O(n) space and is suboptimal.</p>
+
+      <hr class="dv">
+      <h3 class="ssh">Reversing a Singly Linked List</h3>
+      <p>Three pointers: <code>prev</code>, <code>curr</code>, <code>next</code>. Iterate through the list, reversing each next pointer.</p>
+      <div class="cb">prev = NULL, curr = HEAD
+<span class="kw">while</span> curr ≠ NULL:
+    next = curr.next      <span class="cm">// save next</span>
+    curr.next = prev      <span class="cm">// reverse the pointer</span>
+    prev = curr           <span class="cm">// advance prev</span>
+    curr = next           <span class="cm">// advance curr</span>
+HEAD = prev               <span class="cm">// new head is the old tail</span></div>
+      <p>Time: O(n). Space: O(1). GATE may ask for number of pointer operations required, or trace the algorithm on a given list.</p>
+
+      <hr class="dv">
+      <h3 class="ssh">Finding the Middle Node</h3>
+      <p>Same two-pointer idea: slow moves one step, fast moves two. When fast reaches the end, slow is at the middle. For a list of n nodes, slow stops at node ⌈n/2⌉.</p>
+    </div>
+
+    <div class="sec" data-m="simulate">
+      <h2 class="sh">2.5 &nbsp; Simulating Data Structures <span class="tag tg">2-Mark Brain Teasers</span></h2>
+      <p>
+        GATE regularly tests whether you understand the <em>behavioural contract</em> of data structures deeply enough to implement one using another. These are not trick questions — they test whether you understand LIFO vs FIFO at a mechanical level, and whether you can reason about amortized cost.
+      </p>
+
+      <hr class="dv">
+      <h3 class="ssh">Queue Using Two Stacks — Amortized O(1)</h3>
+      <p>
+        Maintain two stacks: <strong>S1 (inbox)</strong> for enqueue operations, <strong>S2 (outbox)</strong> for dequeue operations.
+      </p>
+      <ul class="pl arr">
+        <li><strong>Enqueue(x):</strong> Simply push x onto S1. Always O(1).</li>
+        <li><strong>Dequeue():</strong> If S2 is non-empty, pop from S2 directly. If S2 is empty, move all elements from S1 to S2 (pop from S1, push to S2 one by one), then pop from S2.</li>
+      </ul>
+
+      <div class="eg">
+        <p><strong>Trace: Enqueue 1, 2, 3. Dequeue twice.</strong></p>
+        <div class="cb">Enqueue(1): S1=[1],      S2=[]
+Enqueue(2): S1=[1,2],    S2=[]
+Enqueue(3): S1=[1,2,3],  S2=[]
+
+Dequeue():  S2 is empty → pour S1 into S2:
+            S1=[],        S2=[3,2,1]   ← 1 is now on top of S2
+            Pop S2 top → return 1  ✓  (FIFO behaviour preserved)
+
+Dequeue():  S2 is non-empty → pop directly
+            S2=[3,2]
+            return 2  ✓</div>
+        <p>Notice: elements are poured from S1 to S2 only when S2 is empty. Each element crosses from S1 to S2 <strong>exactly once</strong> in its lifetime.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Amortized Analysis — Why It's O(1)</span>
+        <p>
+          Consider n enqueue operations followed by n dequeue operations. Each element is pushed onto S1 once (cost 1), transferred to S2 once (cost 1), and popped from S2 once (cost 1). Total cost for n elements = 3n operations. Amortized cost per operation = 3n / n = <strong>O(1) per operation</strong>.
+          <br><br>
+          The expensive pour happens rarely (only when S2 runs empty), and its cost is distributed across all the cheap dequeues that follow it. A single pour of k elements pays for k future dequeues — each dequeue is "pre-paid" by its own enqueue.
+        </p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Worst Case vs Amortized</span>
+        <p>A single dequeue call can be O(n) in the worst case (when S2 is empty and S1 has n elements). But amortized over all operations, each dequeue costs O(1). GATE questions on this always ask for amortized cost — answer O(1), not O(n).</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Stack Using Two Queues — O(n) Unavoidable</h3>
+      <p>
+        Simulating a stack (LIFO) with queues (FIFO) is fundamentally more expensive because a queue gives you no way to directly access its last element — you must dequeue everything to reach it.
+      </p>
+      <p>There are two approaches, both with one O(n) operation:</p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Expensive Push — O(n)</div>
+          <p>On push(x): enqueue x to Q2. Pour all of Q1 into Q2. Swap Q1 and Q2. Q1 always has newest element at front. Pop = dequeue from Q1. O(1) pop, O(n) push.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Expensive Pop — O(n)</div>
+          <p>Push = enqueue to Q1. O(1). Pop = dequeue all but last element from Q1 into Q2, dequeue the last (= stack top), swap Q1 and Q2. O(n) pop.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Why the Asymmetry?</span>
+        <p>A queue only exposes its front. The "top" of a stack is the <em>most recently added</em> element — which is at the <em>back</em> of a queue. There is no O(1) way to access the back of a queue. This forces at least one O(n) traversal, making the simulation inherently more expensive than the Queue-using-Stacks case where amortized O(1) is achievable.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Min-Stack — O(1) Minimum Retrieval</h3>
+      <p>
+        Design a stack that supports push, pop, and <strong>getMin()</strong> — all in O(1) time. The naive approach of scanning the stack for the minimum is O(n). The trick: maintain an <strong>auxiliary stack</strong> that tracks the minimum at every level.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Algorithm</span>
+        <p>
+          Maintain two stacks: <strong>main</strong> (normal stack) and <strong>minStack</strong> (tracks current minimum).<br><br>
+          <strong>push(x):</strong> Push x onto main. If minStack is empty or x ≤ minStack.top(), push x onto minStack.<br>
+          <strong>pop():</strong> Pop from main. If popped value == minStack.top(), also pop from minStack.<br>
+          <strong>getMin():</strong> Return minStack.top(). Always O(1).
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Trace: push(5), push(3), push(7), push(2), pop(), getMin()</strong></p>
+        <div class="cb">Operation    Main Stack    Min Stack     Explanation
+push(5)      [5]           [5]           5 ≤ nothing → push to minStack
+push(3)      [5,3]         [5,3]         3 ≤ 5 → push to minStack
+push(7)      [5,3,7]       [5,3]         7 > 3 → do NOT push to minStack
+push(2)      [5,3,7,2]     [5,3,2]       2 ≤ 3 → push to minStack
+
+pop()        [5,3,7]       [5,3]         popped 2 == minStack.top() → pop minStack too
+getMin()     [5,3,7]       [5,3]         return minStack.top() = 3  ✓</div>
+        <p>After popping 2, the minimum correctly reverts to 3 — the minimum of what remains. minStack always holds the running minimum for the current stack depth.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Duplicate Handling</span>
+        <p>When pushing a value equal to the current minimum (x == minStack.top()), push it onto minStack too (using ≤, not &lt;). If you use strict &lt;, then when you pop a duplicate minimum, you'd incorrectly remove the minimum from minStack even though another copy remains in main. Always use ≤ in the push condition.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — STACKS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Stacks — <em>Theory, Implementation &amp; Applications</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="stack-def">
+      <h2 class="sh">3.1 &nbsp; The Stack — LIFO Principle <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>stack</strong> is a linear data structure that follows the <strong>Last In, First Out (LIFO)</strong> principle. The element inserted most recently is the first one to be removed. Access is restricted to one end — the <em>top</em>.</p>
+      </div>
+
+      <p>
+        Think of a stack of plates. You can only add a plate to the top, and you can only take a plate from the top. You cannot access the bottom plate without removing everything above it. This restriction — while seeming like a limitation — is exactly what makes stacks powerful for certain problem classes.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Stack state after: push(10), push(20), push(30)</span>
+  TOP → [ 30 ]  ← most recently pushed, first to be popped
+        [ 20 ]
+        [ 10 ]  ← pushed first, will be popped last
+      </div>
+
+      <p>Three fundamental operations, all O(1):</p>
+      <ul class="pl arr">
+        <li><strong>Push(x)</strong> — Add element x to the top of the stack. Error if stack is full (overflow).</li>
+        <li><strong>Pop()</strong> — Remove and return the top element. Error if stack is empty (underflow).</li>
+        <li><strong>Peek() / Top()</strong> — Return the top element without removing it.</li>
+      </ul>
+
+      <div class="warn-box">
+        <span class="lbl">Stack Overflow vs Underflow</span>
+        <p><strong>Overflow:</strong> Attempting to push onto a full stack (array implementation with fixed size). <strong>Underflow:</strong> Attempting to pop from an empty stack. Both are error conditions. GATE has presented code snippets and asked "under what condition does this fail?" — recognize these two conditions immediately.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="stack-impl">
+      <h2 class="sh">3.2 &nbsp; Implementation — Array vs Linked List</h2>
+
+      <h3 class="ssh">Array Implementation</h3>
+      <p>Maintain a variable <code>top</code> that holds the index of the current top element. Initialize <code>top = −1</code> for empty stack.</p>
+      <div class="cb">Push(x):
+    if top == MAX−1: OVERFLOW
+    top = top + 1
+    A[top] = x
+
+Pop():
+    if top == −1: UNDERFLOW
+    x = A[top]
+    top = top − 1
+    return x</div>
+      <p>
+        Array implementation is cache-friendly (contiguous memory), has O(1) operations, but has a fixed maximum size determined at creation time.
+      </p>
+
+      <h3 class="ssh">Linked List Implementation</h3>
+      <p>The HEAD of the linked list acts as the top of the stack. Push = insert at HEAD. Pop = delete from HEAD. Both O(1). Size is dynamic — no overflow (until memory is exhausted).</p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Array Stack</div>
+          <p>Fixed size. Cache friendly. Overflow possible. O(1) all ops. Good when max size is known.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">LL Stack</div>
+          <p>Dynamic size. No overflow. Each node has pointer overhead. O(1) all ops. Good when size is unknown.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="stack-apps">
+      <h2 class="sh">3.3 &nbsp; Applications of Stacks <span class="tag tg">GATE Favourite</span></h2>
+
+      <h3 class="ssh">1. Expression Evaluation &amp; Conversion</h3>
+      <p>
+        Mathematical expressions are written in <strong>infix notation</strong> (operator between operands: A+B). Computers evaluate them more efficiently in <strong>postfix notation</strong> (operator after operands: AB+) or prefix (operator before: +AB). Stacks drive both the conversion and the evaluation.
+      </p>
+
+      <div class="eg">
+        <p><strong>Infix to Postfix conversion algorithm (Shunting-yard):</strong></p>
+        <div class="cb">Initialize empty stack (for operators), empty output queue
+For each token in infix expression:
+  If token is an OPERAND:
+      → append directly to output
+  If token is an OPERATOR:
+      → while stack top has higher or equal precedence AND is not '(':
+              pop from stack → append to output
+      → push current operator onto stack
+  If token is '(':
+      → push onto stack
+  If token is ')':
+      → pop from stack → append to output, until '(' is found
+      → discard the '('
+After all tokens:
+  → pop remaining operators to output</div>
+        <p><strong>Precedence:</strong> ^(exponent) &gt; *, / &gt; +, − &nbsp; | &nbsp; Left-to-right associativity for +,−,*,/ &nbsp; | &nbsp; Right-to-left for ^</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Convert A + B * C − D to postfix. Trace the stack:</strong></p>
+        <div class="cb">Token   Stack       Output
+A       []          A
++       [+]         A
+B       [+]         AB
+*       [+,*]       AB       (* has higher precedence than +, push)
+C       [+,*]       ABC
+−       [−]         ABC*+    (pop * and + because − ≤ precedence of both)
+D       [−]         ABC*+D
+END     []          ABC*+D−
+
+Result: ABC*+D−</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Postfix Evaluation — evaluate ABC*+D− where A=2,B=3,C=4,D=5:</strong></p>
+        <div class="cb">Postfix: 2 3 4 * + 5 −
+Token  Stack
+2      [2]
+3      [2, 3]
+4      [2, 3, 4]
+*      [2, 12]       (3*4=12)
++      [14]          (2+12=14)
+5      [14, 5]
+−      [9]           (14−5=9)
+Result: 9</div>
+        <p>Rule: when you see an operator in postfix, pop two operands, apply the operator, push the result.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">2. Balanced Parentheses / Bracket Matching</h3>
+      <p>Scan the expression. Push every opening bracket. When a closing bracket is seen, pop the stack and check if it matches. If stack is empty when you need to pop, or stack is non-empty at the end → unbalanced.</p>
+
+      <hr class="dv">
+      <h3 class="ssh">3. Function Call Stack</h3>
+      <p>
+        Every programming language uses a call stack to manage function calls. When a function is called, a <em>stack frame</em> is pushed containing: return address, local variables, parameters. When the function returns, its frame is popped and execution resumes at the return address. Recursion depth = stack depth.
+      </p>
+      <div class="warn-box">
+        <span class="lbl">Stack Overflow in Recursion</span>
+        <p>Infinite recursion (or recursion too deep) fills the call stack until no more frames can be pushed → stack overflow. This is the runtime error, not a logic error in your algorithm. GATE has asked about maximum recursion depth given a fixed stack size and frame size.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">4. Undo/Redo Operations</h3>
+      <p>Every action is pushed onto an "undo stack." Undo = pop from undo stack and push to "redo stack." Redo = pop from redo stack.</p>
+
+      <hr class="dv">
+      <h3 class="ssh">5. DFS — Depth First Search</h3>
+      <p>Graph DFS uses a stack (explicitly or via recursion's call stack) to track nodes to visit next. Every time you visit a node, push its unvisited neighbors. This is covered in detail in the Algorithms notes.</p>
+    </div>
+
+    <div class="sec" data-m="auxspace">
+      <h2 class="sh">3.4 &nbsp; Auxiliary Space &amp; Recursion Depth <span class="tag tp">Advanced — Bridges DS &amp; Algorithms</span></h2>
+
+      <p>
+        When analyzing algorithms, we distinguish between two measures of memory usage. Understanding this distinction is essential for correctly computing space complexity — a recurring GATE question type.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Total Space</div>
+          <p>All memory used by the algorithm, including memory occupied by the input itself. For a function processing an array of n elements, total space includes that array.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--purple)">
+          <div class="ct">Auxiliary Space</div>
+          <p>Extra memory used by the algorithm <em>beyond</em> the input. This is the memory the algorithm allocates as it runs — temporary variables, recursion stack frames, helper data structures.</p>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Always Asks for Auxiliary Space</span>
+        <p>When GATE asks "what is the space complexity of algorithm X?", it almost always means <strong>auxiliary space</strong>. An in-place sorting algorithm (like Heapsort) has O(1) auxiliary space even though the array itself is O(n) — because the algorithm doesn't allocate extra memory proportional to input size.</p>
+      </div>
+
+      <h3 class="ssh">How Recursion Depth Determines Auxiliary Space</h3>
+      <p>
+        Every recursive function call creates a <strong>stack frame</strong> on the call stack. A stack frame contains the function's local variables, parameters, and the return address. If a function recurses to depth <em>d</em> before hitting the base case, then <em>d</em> stack frames exist simultaneously — consuming O(d) auxiliary space.
+      </p>
+      <p>
+        This is the hidden space cost of recursion that beginners miss. An algorithm that looks like it uses no extra memory may actually use O(n) auxiliary space if it recurses n levels deep.
+      </p>
+
+      <div class="eg">
+        <p><strong>Case Study: Linked List Reversal — Recursive vs Iterative</strong></p>
+        <div class="cb"><span class="cm">// RECURSIVE reversal</span>
+<span class="kw">Node</span>* reverse(Node* head) {
+    if (head == NULL || head->next == NULL)
+        return head;                    <span class="cm">// base case</span>
+    Node* rest = reverse(head->next);  <span class="cm">// recurse on rest of list</span>
+    head->next->next = head;
+    head->next = NULL;
+    return rest;
+}
+<span class="cm">// For a list of n nodes: recursion goes n levels deep.</span>
+<span class="cm">// n stack frames exist simultaneously at deepest point.</span>
+<span class="cm">// Auxiliary space: O(n)</span></div>
+
+        <div class="cb"><span class="cm">// ITERATIVE reversal (same result)</span>
+prev = NULL; curr = head;
+<span class="kw">while</span> (curr != NULL) {
+    next = curr->next;
+    curr->next = prev;
+    prev = curr;
+    curr = next;
+}
+<span class="cm">// Only 3 pointer variables regardless of list length.</span>
+<span class="cm">// Auxiliary space: O(1)</span></div>
+
+        <p>Same result. Same O(n) time. But the recursive version uses O(n) auxiliary space (call stack) while the iterative version uses O(1). For n = 10,000 nodes, the recursive version creates 10,000 stack frames — a potential stack overflow for large lists.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Recursion Depth</th><th>Auxiliary Space</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>Iterative LL Reversal</td><td>0</td><td class="good">O(1)</td><td>3 pointer variables only</td></tr>
+            <tr><td>Recursive LL Reversal</td><td>n</td><td class="bad">O(n)</td><td>n stack frames</td></tr>
+            <tr><td>Binary Search (iterative)</td><td>0</td><td class="good">O(1)</td><td>No recursion</td></tr>
+            <tr><td>Binary Search (recursive)</td><td>log n</td><td class="ok">O(log n)</td><td>log n stack frames</td></tr>
+            <tr><td>Merge Sort</td><td>log n</td><td class="ok">O(n)</td><td>Merge step needs O(n) temp array + O(log n) stack</td></tr>
+            <tr><td>Quicksort (avg)</td><td>log n</td><td class="ok">O(log n)</td><td>In-place partition + O(log n) call stack</td></tr>
+            <tr><td>Quicksort (worst)</td><td>n</td><td class="bad">O(n)</td><td>Skewed partition → n levels of recursion</td></tr>
+            <tr><td>DFS on graph (n nodes)</td><td>n</td><td class="bad">O(n)</td><td>Deepest path can be n nodes long</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">The Recursion–Stack Connection</span>
+        <p>The call stack IS a stack data structure, managed by the OS/runtime. When you recurse, you're implicitly doing push operations. When the base case returns and unwinds, you're doing pops. Any recursive algorithm can be rewritten iteratively by making the call stack explicit — managing your own stack data structure. This is exactly how iterative DFS works: you push/pop nodes on an explicit stack instead of relying on recursive call frames.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — QUEUES
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Queues — <em>All Variants</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="queue-def">
+      <h2 class="sh">4.1 &nbsp; The Queue — FIFO Principle <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>queue</strong> is a linear data structure following the <strong>First In, First Out (FIFO)</strong> principle. Elements are inserted at one end (the <em>rear</em>) and removed from the other end (the <em>front</em>).</p>
+      </div>
+
+      <p>Think of a line at a ticket counter. The first person to join the line is the first to be served. No cutting ahead. This fairness is exactly what FIFO provides.</p>
+
+      <div class="ds-visual">
+        <span class="dv-label">Queue: enqueue(10), enqueue(20), enqueue(30) → dequeue returns 10</span>
+FRONT                             REAR
+  ↓                                ↓
+[ 10 ] ← dequeue from here     [ 30 ] ← enqueue here
+[ 20 ]
+[ 30 ]
+      </div>
+
+      <ul class="pl arr">
+        <li><strong>Enqueue(x)</strong> — Insert x at the rear. O(1).</li>
+        <li><strong>Dequeue()</strong> — Remove and return from the front. O(1).</li>
+        <li><strong>Front()</strong> — Peek at front element without removing. O(1).</li>
+        <li><strong>IsEmpty()</strong> — Check if queue has no elements. O(1).</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="queue-impl">
+      <h2 class="sh">4.2 &nbsp; Array Implementation — The Circular Queue Problem <span class="tag tg">GATE Critical</span></h2>
+
+      <p>
+        A naive array implementation with <code>front</code> and <code>rear</code> indices has a fatal problem: after repeated enqueue/dequeue operations, <code>rear</code> reaches the end of the array even though <code>front</code> has advanced, leaving empty slots at the beginning that can't be used. This is called <strong>false overflow</strong>.
+      </p>
+
+      <div class="ds-visual">
+        <span class="dv-label">False Overflow: array of size 5, after dequeue(10), dequeue(20)</span>
+Index:  [ 0  ] [ 1  ] [ 2  ] [ 3  ] [ 4  ]
+State:  [ --- ] [ --- ] [ 30  ] [ 40  ] [ 50  ]
+                             ↑                    ↑
+                           front                 rear
+Slots 0 and 1 are empty but rear can't go further → False overflow!
+      </div>
+
+      <h3 class="ssh">Solution: Circular Queue</h3>
+      <p>
+        Use modular arithmetic to wrap the indices around. After reaching the end of the array, the next index wraps back to 0.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Circular Queue Index Update</span>
+        <p>Rear = (Rear + 1) % MAX &nbsp;&nbsp; | &nbsp;&nbsp; Front = (Front + 1) % MAX</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Full vs Empty Condition — The Ambiguity</span>
+        <p>In a circular queue of size MAX, both empty and full conditions can look like <code>front == (rear+1) % MAX</code>, creating ambiguity. Two solutions: (1) Keep one slot always empty — queue is full when <code>(rear+1)%MAX == front</code>, usable capacity = MAX−1. (2) Maintain a separate <code>count</code> variable. GATE specifies which approach to use — always check. The "one slot wasted" approach is the most commonly tested.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Circular queue of size 5 (usable = 4), initial front = rear = 0:</strong></p>
+        <div class="cb">Enqueue(A): rear=(0+1)%5=1, A[1]=A
+Enqueue(B): rear=(1+1)%5=2, A[2]=B
+Enqueue(C): rear=(2+1)%5=3, A[3]=C
+Enqueue(D): rear=(3+1)%5=4, A[4]=D
+Is full? (4+1)%5 == 0 == front → YES. Queue is full (4 elements, one slot wasted)
+Dequeue(): returns A[front+1]=A[1]=A, front=(0+1)%5=1
+Enqueue(E): rear=(4+1)%5=0, A[0]=E → wraps around correctly</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="queue-variants">
+      <h2 class="sh">4.3 &nbsp; Queue Variants <span class="tag tc">Core</span></h2>
+
+      <h3 class="ssh">Deque — Double-Ended Queue</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>deque</strong> (pronounced "deck") allows insertion and deletion at <em>both</em> ends. It generalizes both stacks and queues. Can function as either a stack (use one end only) or a queue (insert one end, delete other).</p>
+      </div>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Input-Restricted Deque</div>
+          <p>Insertion at one end only. Deletion at both ends. Enqueue from rear; dequeue from either front or rear.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Output-Restricted Deque</div>
+          <p>Deletion at one end only. Insertion at both ends. Enqueue from either end; dequeue from front only.</p>
+        </div>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Priority Queue</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>priority queue</strong> is an abstract data type where each element has a priority. Elements are dequeued in order of their priority, not their insertion order. Highest priority element is served first regardless of when it was inserted.</p>
+      </div>
+      <p>
+        A priority queue is most efficiently implemented using a <strong>heap</strong> data structure (covered in the Non-Linear DS notes). The heap property ensures the highest-priority element is always at the root, giving O(log n) insertion and O(log n) extraction.
+      </p>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Implementation</th><th>Enqueue</th><th>Dequeue (max/min)</th><th>Peek</th></tr></thead>
+          <tbody>
+            <tr><td>Unsorted Array</td><td class="good">O(1)</td><td class="bad">O(n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Sorted Array</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td></tr>
+            <tr><td>Unsorted LL</td><td class="good">O(1)</td><td class="bad">O(n)</td><td class="bad">O(n)</td></tr>
+            <tr><td>Sorted LL</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td></tr>
+            <tr><td><strong>Binary Heap</strong></td><td class="ok"><strong>O(log n)</strong></td><td class="ok"><strong>O(log n)</strong></td><td class="good"><strong>O(1)</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Queue Applications</h3>
+      <ul class="pl arr">
+        <li><strong>BFS (Breadth First Search)</strong> — The canonical queue application. Processes nodes level by level. A queue ensures you always explore the closest nodes first.</li>
+        <li><strong>CPU Scheduling</strong> — Ready queue, round-robin scheduling.</li>
+        <li><strong>Printer spooling</strong> — Print jobs processed in order of arrival.</li>
+        <li><strong>Buffering</strong> — Network packet buffers, I/O buffers.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — HASHING
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Hashing — <em>Hash Functions &amp; Tables</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="hash-intro">
+      <h2 class="sh">5.1 &nbsp; The Core Idea <span class="tag tc">Core</span></h2>
+      <p>
+        The goal of hashing is to achieve O(1) average-case search, insertion, and deletion — faster than the O(log n) offered by balanced BSTs and far better than the O(n) of unsorted arrays. The key insight: <strong>compute the storage location directly from the key</strong>, rather than searching for it.
+      </p>
+      <p>
+        A <strong>hash function</strong> h(k) maps a key k to an index in a hash table of size m. If h(k) = i, key k is stored at index i. To retrieve key k, compute h(k) and look at that index directly — O(1).
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Hash Table</span>
+        <p>An array of size m (called the <em>hash table</em>) where element with key k is stored at index h(k). The hash function h : U → {0, 1, ..., m−1} maps the universe of keys U to table indices.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">The Problem: Collisions</span>
+        <p>A collision occurs when two different keys hash to the same index: k1 ≠ k2 but h(k1) = h(k2). Since the key universe U is usually much larger than m, collisions are inevitable (pigeonhole principle). The hash function design and collision resolution strategy determine hashing performance in practice.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="hash-fns">
+      <h2 class="sh">5.2 &nbsp; Hash Functions <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Division Method</h3>
+      <div class="def-box">
+        <span class="lbl">Formula</span>
+        <p>h(k) = k mod m &nbsp; — map key k to index k mod m.</p>
+      </div>
+      <p>
+        Simple and fast. The choice of m matters significantly. <strong>m should be a prime number not close to a power of 2</strong>. A prime m avoids systematic clustering. If m is a power of 2, h(k) depends only on the lowest-order bits of k, ignoring the rest — poor distribution.
+      </p>
+      <div class="eg">
+        <p>m = 7 (prime). Keys: 15, 22, 29, 36.</p>
+        <p>h(15) = 15 mod 7 = 1 &nbsp; | &nbsp; h(22) = 22 mod 7 = 1 &nbsp; ← collision! &nbsp; | &nbsp; h(29) = 1 &nbsp; ← collision! &nbsp; | &nbsp; h(36) = 1</p>
+        <p>All four keys hash to 1. This illustrates that even a prime m doesn't prevent clusters when keys form an arithmetic sequence with a common factor related to m.</p>
+      </div>
+
+      <h3 class="ssh">Multiplication Method</h3>
+      <div class="def-box">
+        <span class="lbl">Formula</span>
+        <p>h(k) = ⌊m × (k × A mod 1)⌋ &nbsp; where A is a constant 0 &lt; A &lt; 1. Knuth suggests A ≈ (√5 − 1)/2 ≈ 0.618.</p>
+      </div>
+      <p>
+        The advantage is that m does not need to be prime — any value works. The multiplication distributes keys more uniformly than division when keys have patterns. Less sensitive to the choice of m.
+      </p>
+
+      <h3 class="ssh">Universal Hashing</h3>
+      <p>
+        Choose a hash function randomly from a family of hash functions. This guarantees that for any fixed set of keys, the expected number of collisions is low, regardless of adversarial key patterns. Used in high-security or theoretical contexts.
+      </p>
+
+      <h3 class="ssh">Properties of a Good Hash Function</h3>
+      <ul class="pl chk">
+        <li><strong>Uniform distribution:</strong> Each index is equally likely. Minimizes clustering.</li>
+        <li><strong>Deterministic:</strong> Same key always maps to same index.</li>
+        <li><strong>Fast to compute:</strong> O(1) computation, not O(k) where k is key length.</li>
+        <li><strong>Minimizes collisions:</strong> Different keys should map to different indices as often as possible.</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="load-factor">
+      <h2 class="sh">5.3 &nbsp; Load Factor <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>Load Factor α = n / m, where n = number of keys stored in the table, m = size of the hash table.</p>
+      </div>
+
+      <p>
+        The load factor directly controls the expected performance of hashing. It tells you how "full" the table is on average. Its impact differs depending on the collision resolution technique:
+      </p>
+      <ul class="pl arr">
+        <li>For <strong>chaining</strong>, α can exceed 1 (chains can grow). Average search time = O(1 + α).</li>
+        <li>For <strong>open addressing</strong>, α must be &lt; 1 (table cannot be overfull). Performance degrades sharply as α → 1.</li>
+      </ul>
+
+      <div class="tip-box">
+        <span class="lbl">Expected Number of Probes</span>
+        <p>For open addressing with uniform hashing, the expected number of probes for a <strong>successful search</strong> is approximately <strong>(1/α) × ln(1/(1−α))</strong>, and for an <strong>unsuccessful search</strong> is <strong>1/(1−α)</strong>. As α → 1, unsuccessful search probes → ∞. This is the mathematical reason you never fill an open-addressing hash table completely.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="probe-ref">
+      <h2 class="sh">5.4 &nbsp; Expected Probes — Quick Reference Table <span class="tag tg">GATE Numerical</span></h2>
+
+      <p>
+        These are the formulas GATE uses to generate numerical questions. You will be given α and asked for the expected number of probes — or given the expected probes and asked for α. Know both forms. Derivations come from the assumption of <strong>uniform hashing</strong> (every key equally likely to hash to any slot independently).
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead>
+            <tr><th>Technique</th><th>Successful Search</th><th>Unsuccessful Search</th><th>Condition</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Chaining</strong></td>
+              <td>1 + α/2</td>
+              <td>α (just check the chain)</td>
+              <td>α can be &gt; 1</td>
+            </tr>
+            <tr>
+              <td><strong>Linear Probing</strong></td>
+              <td>½ × (1 + 1/(1−α))</td>
+              <td>½ × (1 + 1/(1−α)²)</td>
+              <td>α &lt; 1</td>
+            </tr>
+            <tr>
+              <td><strong>Quadratic Probing</strong></td>
+              <td>Between linear &amp; double</td>
+              <td>Between linear &amp; double</td>
+              <td>α &lt; 0.5 for guarantee ⚠</td>
+            </tr>
+            <tr>
+              <td><strong>Double Hashing</strong></td>
+              <td>(1/α) × ln(1/(1−α))</td>
+              <td>1/(1−α)</td>
+              <td>α &lt; 1, best distribution</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>Worked Example:</strong> Hash table with m=10, n=7 (α = 0.7). Find expected probes for unsuccessful search under linear probing and double hashing.</p>
+        <div class="cb">α = n/m = 7/10 = 0.7
+
+Linear Probing (unsuccessful):
+  = ½ × (1 + 1/(1−0.7)²)
+  = ½ × (1 + 1/0.09)
+  = ½ × (1 + 11.11)
+  = ½ × 12.11
+  ≈ 6.06 probes
+
+Double Hashing (unsuccessful):
+  = 1/(1−α) = 1/(1−0.7) = 1/0.3 ≈ 3.33 probes
+
+Double hashing needs ~3.3 probes vs linear probing's ~6 probes at the same load.
+The difference widens dramatically as α → 1.</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Numerical values at common load factors — Unsuccessful Search:</strong></p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>α</th><th>Linear Probing ½(1+1/(1−α)²)</th><th>Double Hashing 1/(1−α)</th><th>Ratio (Lin/DH)</th></tr></thead>
+            <tbody>
+              <tr><td>0.5</td><td>2.5</td><td class="good">2.0</td><td>1.25×</td></tr>
+              <tr><td>0.7</td><td>6.06</td><td class="ok">3.33</td><td>1.8×</td></tr>
+              <tr><td>0.9</td><td>50.5</td><td class="bad">10.0</td><td>5×</td></tr>
+              <tr><td>0.99</td><td>5000.5</td><td class="bad">100.0</td><td>50×</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>At α = 0.9, linear probing needs 50 probes per unsuccessful search. Double hashing needs 10. This is why choosing the right probing strategy is not academic — it is the difference between a functional and a broken hash table in production.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Quadratic Probing — The α &lt; 0.5 Hard Constraint</span>
+        <p>
+          For quadratic probing to <strong>guarantee</strong> finding an empty slot when one exists, two conditions must hold simultaneously: (1) the table size m must be prime, and (2) the load factor α must be strictly less than 0.5. If α ≥ 0.5 with prime m, some insertions may fail even though the table is less than half full — the probe sequence cycles back to already-visited slots without covering all positions. This is a known mathematical property, not an implementation bug. If your problem uses quadratic probing and α ≥ 0.5, the algorithm is not guaranteed to work.
+        </p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Chaining Formula — Why It Looks Different</span>
+        <p>Chaining's expected successful search cost is <strong>1 + α/2</strong>, not (1/α)ln(...). This is because with chaining you always find the right chain in O(1) (one hash computation + one table lookup), then scan on average α/2 elements to find your key (half the chain length). The formula reflects the structure of the algorithm, not just the load.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — COLLISION RESOLUTION
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Collision Resolution <em>Techniques</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="chaining">
+      <h2 class="sh">6.1 &nbsp; Separate Chaining <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>In <strong>separate chaining</strong>, each slot in the hash table is a pointer to a linked list. All keys that hash to the same index are stored in that slot's linked list. Colliding keys coexist in the chain.</p>
+      </div>
+
+      <div class="ds-visual">
+        <span class="dv-label">Separate Chaining: m=5, insert 7,2,12,17,22 using h(k)=k mod 5</span>
+Index 0: []
+Index 1: []
+Index 2: [2]→[12]→[22]→NULL    ← h(2)=h(12)=h(22)=2
+Index 3: []
+Index 4: []
+Index 7%5=2: chained. Index 17%5=2: chained.
+Corrected: h(7)=2, h(17)=2 → all go to index 2
+      </div>
+
+      <ul class="pl arr">
+        <li><strong>Search:</strong> Compute h(k), traverse the chain at that index. Expected O(1 + α).</li>
+        <li><strong>Insert:</strong> Compute h(k), insert at head of chain. O(1) (ignoring hash computation).</li>
+        <li><strong>Delete:</strong> Compute h(k), traverse chain, delete node. O(1 + α) expected.</li>
+      </ul>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Advantages</div>
+          <p>Simple. α can be &gt; 1. Never full. Deletion is straightforward. Performance degrades gracefully.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">Disadvantages</div>
+          <p>Pointer overhead for each node. Poor cache performance (linked list nodes scattered in memory). Extra memory for pointers even in empty slots.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="open-addr">
+      <h2 class="sh">6.2 &nbsp; Open Addressing <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>In <strong>open addressing</strong>, all keys are stored within the hash table itself — no external chains. When a collision occurs, an alternate slot is found by <em>probing</em> — examining a sequence of slots until an empty one is found. α must be strictly &lt; 1.</p>
+      </div>
+
+      <p>The probe sequence for key k is: h(k, 0), h(k, 1), h(k, 2), ... where the i-th probe is h(k, i).</p>
+
+      <hr class="dv">
+      <h3 class="ssh">Linear Probing</h3>
+      <div class="def-box">
+        <span class="lbl">Formula</span>
+        <p>h(k, i) = (h'(k) + i) mod m &nbsp; where h'(k) is the primary hash function and i = 0, 1, 2, ...</p>
+      </div>
+      <p>
+        On collision, try the next slot, then the next, and so on linearly. Simple and cache-friendly (sequential memory access).
+      </p>
+      <p>
+        <strong>Primary Clustering:</strong> The major problem with linear probing. Contiguous sequences of occupied slots grow longer over time. Any key that hashes into the middle of a cluster must probe through the entire cluster to find an empty slot, making the cluster grow even larger. Performance degrades significantly as α increases.
+      </p>
+
+      <div class="eg">
+        <p><strong>Insert 7, 14, 21 into hash table of size 7, h'(k) = k mod 7:</strong></p>
+        <div class="cb">h(7)  = 0 → insert at 0. Table: [7, _, _, _, _, _, _]
+h(14) = 0 → collision! probe i=1: slot 1 empty → insert at 1.
+h(21) = 0 → collision! probe i=1: slot 1 occupied. probe i=2: slot 2 empty → insert at 2.
+Table: [7, 14, 21, _, _, _, _]
+A cluster of length 3 has formed at indices 0,1,2.</div>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Quadratic Probing</h3>
+      <div class="def-box">
+        <span class="lbl">Formula</span>
+        <p>h(k, i) = (h'(k) + c₁i + c₂i²) mod m &nbsp; where c₁, c₂ are constants (often c₁=0, c₂=1 giving h'(k) + i²).</p>
+      </div>
+      <p>
+        Instead of probing linearly (i, i+1, i+2...), probe quadratically (i, i+1, i+4, i+9...). This breaks up primary clusters. However, it introduces <strong>secondary clustering</strong>: two keys with the same initial hash value h'(k) will follow the exact same probe sequence — they still cluster, just less densely than linear probing.
+      </p>
+      <div class="warn-box">
+        <span class="lbl">Quadratic Probing May Not Find All Slots</span>
+        <p>Unlike linear probing which always finds an empty slot (if one exists), quadratic probing is not guaranteed to probe all slots. For quadratic probing to guarantee finding an empty slot when one exists, m must be prime AND α &lt; 0.5. GATE has directly tested this constraint.</p>
+      </div>
+
+      <hr class="dv">
+      <h3 class="ssh">Double Hashing</h3>
+      <div class="def-box">
+        <span class="lbl">Formula</span>
+        <p>h(k, i) = (h₁(k) + i × h₂(k)) mod m &nbsp; where h₁ and h₂ are two independent hash functions.</p>
+      </div>
+      <p>
+        The step size for probing is itself determined by a second hash function — so different keys with the same primary hash get different probe sequences. This eliminates both primary and secondary clustering. Double hashing produces the closest approximation to truly random probing in practice.
+      </p>
+      <p>
+        <strong>Constraint:</strong> h₂(k) must never evaluate to 0 (otherwise we'd probe the same slot forever) and must be coprime to m. A common choice: h₁(k) = k mod m, h₂(k) = 1 + (k mod (m−1)).
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Technique</th><th>Clustering</th><th>Cache Performance</th><th>Complexity (avg, α&lt;1)</th></tr></thead>
+          <tbody>
+            <tr><td>Separate Chaining</td><td>None</td><td>Poor (LL traversal)</td><td>O(1 + α)</td></tr>
+            <tr><td>Linear Probing</td><td>Primary (severe)</td><td>Excellent (sequential)</td><td>≈ 1/(1−α) worsens fast</td></tr>
+            <tr><td>Quadratic Probing</td><td>Secondary (mild)</td><td>Good</td><td>Better than linear</td></tr>
+            <tr><td>Double Hashing</td><td>Minimal</td><td>Moderate</td><td>≈ −(1/α)ln(1−α) best</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="deletion">
+      <h2 class="sh">6.3 &nbsp; Deletion in Open Addressing <span class="tag tg">GATE Trap</span></h2>
+
+      <p>
+        Deletion in open addressing requires special care. You cannot simply mark a slot as empty after deletion. Consider the following scenario:
+      </p>
+      <div class="eg">
+        <p>Keys A, B, C all hash to index 3. Due to linear probing, A is at 3, B at 4, C at 5.</p>
+        <p>Now delete B: mark slot 4 as empty.</p>
+        <p>Now search for C: h(C) = 3, slot 3 has A (not C), probe slot 4 → empty! Search stops. Concludes C is absent. <span class="c-r">WRONG.</span> C is at slot 5 but we stopped early.</p>
+      </div>
+      <p>
+        <strong>Solution: Lazy Deletion.</strong> Instead of marking deleted slots as "empty", mark them as <strong>"deleted" (tombstone)</strong>. During search, probe past tombstones (don't stop). During insert, reuse tombstone slots. This preserves the probe sequence integrity while allowing slot reuse.
+      </p>
+      <div class="warn-box">
+        <span class="lbl">Tombstone Accumulation</span>
+        <p>Over time, many deletions fill the table with tombstones. This degrades search performance because you probe past tombstones unnecessarily. Solution: periodically rehash the entire table — rebuild it fresh without tombstones. This is an O(n) operation but amortized over many operations.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — GATE TRAPS & REFERENCE
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complexity Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">7.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Topic</th><th>The Trap</th><th>The Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>1</td><td>Array Address</td>
+              <td>Forgetting whether the array is 0-indexed or 1-indexed.</td>
+              <td>Always check. The formula changes by exactly one offset. 0-indexed: Base + i×w. 1-indexed: Base + (i−1)×w.</td>
+            </tr>
+            <tr>
+              <td>2</td><td>2D Row vs Col Major</td>
+              <td>Using n (columns) where m (rows) should appear in the column-major formula.</td>
+              <td>Row major: offset = i×n + j. Column major: offset = j×m + i. Write it out — don't memorize, derive it.</td>
+            </tr>
+            <tr>
+              <td>3</td><td>LL Insertion Order</td>
+              <td>Reversing the pointer update order and losing the rest of the list.</td>
+              <td>Always save the next pointer before overwriting it. NEW.next = P.next; then P.next = NEW. Order is critical.</td>
+            </tr>
+            <tr>
+              <td>4</td><td>LL Access Time</td>
+              <td>Assuming O(1) access for linked lists because "insertion is O(1)".</td>
+              <td>O(1) insertion is only when given the node reference. Finding an element by value or by index is O(n). No random access.</td>
+            </tr>
+            <tr>
+              <td>5</td><td>Circular LL Traversal</td>
+              <td>Using NULL check to detect end of circular list.</td>
+              <td>Circular lists have no NULL — the last node points back to HEAD. Stop when you return to the start node.</td>
+            </tr>
+            <tr>
+              <td>6</td><td>Stack Overflow</td>
+              <td>Confusing stack overflow (push to full stack) with underflow (pop from empty).</td>
+              <td>Overflow = push on full. Underflow = pop on empty. Both are separate error conditions.</td>
+            </tr>
+            <tr>
+              <td>7</td><td>Postfix Evaluation</td>
+              <td>Applying operator to wrong operand order (A op B vs B op A).</td>
+              <td>Pop second operand first (call it B), then first operand (call it A). Compute A op B. For subtraction/division, order matters critically.</td>
+            </tr>
+            <tr>
+              <td>8</td><td>Circular Queue Full</td>
+              <td>Treating (front == rear) as both the full AND empty condition.</td>
+              <td>With one wasted slot: empty = (front == rear), full = ((rear+1)%m == front). Usable capacity = m−1, not m.</td>
+            </tr>
+            <tr>
+              <td>9</td><td>Load Factor Limits</td>
+              <td>Allowing α ≥ 1 in open addressing.</td>
+              <td>Open addressing requires α &lt; 1. Chaining has no such restriction. Quadratic probing additionally requires α &lt; 0.5 for guaranteed probe coverage with prime m.</td>
+            </tr>
+            <tr>
+              <td>10</td><td>Hash Deletion</td>
+              <td>Marking an open-addressing slot as empty after deletion.</td>
+              <td>This breaks future searches by terminating probe sequences early. Use tombstones (mark as "deleted", not "empty") so probing continues past the deleted slot.</td>
+            </tr>
+            <tr>
+              <td>11</td><td>Primary Clustering</td>
+              <td>Thinking quadratic probing eliminates all clustering.</td>
+              <td>Quadratic probing eliminates primary clustering but introduces secondary clustering (same h'(k) → same probe sequence). Double hashing eliminates both.</td>
+            </tr>
+            <tr>
+              <td>12</td><td>Division method m</td>
+              <td>Choosing m as a power of 2 (e.g., 32, 64).</td>
+              <td>Powers of 2 make h(k) depend only on low-order bits — poor distribution. m should be prime and not close to a power of 2.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="complexity-ref">
+      <h2 class="sh">7.2 &nbsp; Master Complexity Reference</h2>
+      <div class="cx-table">
+        <table>
+          <thead><tr><th>Data Structure</th><th>Access</th><th>Search</th><th>Insert</th><th>Delete</th><th>Space</th></tr></thead>
+          <tbody>
+            <tr><td>Array (unsorted)</td><td class="good">O(1)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td>Array (sorted)</td><td class="good">O(1)</td><td class="ok">O(log n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+            <tr><td>Singly Linked List</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)*</td><td class="ok">O(n)**</td><td>O(n)</td></tr>
+            <tr><td>Doubly Linked List</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)*</td><td class="good">O(1)*</td><td>O(n)</td></tr>
+            <tr><td>Stack</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td>Queue</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td>Hash Table (avg)</td><td>N/A</td><td class="good">O(1)</td><td class="good">O(1)</td><td class="good">O(1)</td><td>O(n)</td></tr>
+            <tr><td>Hash Table (worst)</td><td>N/A</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td class="bad">O(n)</td><td>O(n)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-family:var(--hand); font-size:11px; color:var(--ink3); margin-top:4px;">
+        * Given node reference &nbsp;&nbsp; ** SLL needs predecessor; must traverse to find it
+      </p>
+
+      <div class="tip-box">
+        <span class="lbl">Hash Table Worst Case</span>
+        <p>Hash table worst case O(n) occurs when all keys hash to the same slot — all keys form one long chain or require probing through the entire table. This happens with a bad hash function or adversarial input. In practice with a good hash function, O(1) average is reliable.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pyq">
+      <h2 class="sh">7.3 &nbsp; GATE Question Patterns for This Topic</h2>
+      <ul class="pl arr">
+        <li><strong>Address computation:</strong> Given array, base, size, index — compute address using row or column major formula. Very frequently tested, usually 1 mark.</li>
+        <li><strong>Pointer manipulation tracing:</strong> Given a sequence of LL operations, trace the final list state. Tests order-of-operations understanding.</li>
+        <li><strong>Stack expression questions:</strong> Convert infix to postfix, or evaluate a postfix expression. 2 mark questions, trace required.</li>
+        <li><strong>Circular queue capacity:</strong> "How many elements can a circular queue of size n hold?" — answer is n−1 (one slot wasted), not n.</li>
+        <li><strong>Collision counting:</strong> Given m, h(k), and a set of keys — how many collisions occur? Insert one by one and count.</li>
+        <li><strong>Probing sequence:</strong> Given h(k), linear/quadratic/double probing, trace where a key is inserted or found.</li>
+        <li><strong>Load factor and performance:</strong> Given n and m, compute α. Given α, compute expected number of probes using the formulae.</li>
+        <li><strong>Floyd's algorithm:</strong> Trace slow/fast pointers on a given linked list to detect cycle meeting point.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Data Structures · Linear DS · Arrays, Linked Lists, Stacks, Queues, Hashing · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

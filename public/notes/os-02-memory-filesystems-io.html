@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operating Systems — Memory, File Systems & I/O · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Operating Systems</div>
+    <h1>Memory, File Systems<br><em>&amp; I/O</em></h1>
+    <p class="cover-desc">
+      Contiguous and non-contiguous memory allocation, paging with complete address translation, segmentation, virtual memory, page replacement algorithms, file system structures, disk scheduling, and I/O management — every formula derived, every trace worked.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Memory Allocation &amp; Fragmentation</span>
+      <span class="chip">Ch 2 · Paging &amp; Address Translation</span>
+      <span class="chip">Ch 3 · Segmentation &amp; Segmentation + Paging</span>
+      <span class="chip">Ch 4 · Virtual Memory &amp; Demand Paging</span>
+      <span class="chip">Ch 5 · Page Replacement Algorithms</span>
+      <span class="chip">Ch 6 · File Systems</span>
+      <span class="chip">Ch 7 · Disk Scheduling</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Memory Allocation &amp; Fragmentation</a>
+    <a href="#ch2"><span class="tn">02</span>Paging &amp; Address Translation</a>
+    <a href="#ch3"><span class="tn">03</span>Segmentation</a>
+    <a href="#ch4"><span class="tn">04</span>Virtual Memory &amp; Demand Paging</a>
+    <a href="#ch5"><span class="tn">05</span>Page Replacement Algorithms</a>
+    <a href="#ch6"><span class="tn">06</span>File Systems</a>
+    <a href="#ch7"><span class="tn">07</span>Disk Scheduling</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Complete Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — MEMORY ALLOCATION ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Memory Allocation <em>&amp; Fragmentation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="contiguous">
+      <h2 class="sh">1.1 &nbsp; Contiguous Memory Allocation <span class="tag tc">Core</span></h2>
+      <p>
+        Each process occupies a single contiguous region of physical memory. The OS maintains a list of free and allocated memory partitions (holes).
+      </p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">First Fit</div>
+          <p>Allocate first hole that is large enough. Fast. Leaves small unusable fragments at the beginning of memory.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Best Fit</div>
+          <p>Allocate smallest hole that is sufficient. Leaves smallest leftover fragment. Requires searching the entire list. Creates many tiny fragments.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Worst Fit</div>
+          <p>Allocate largest hole. Leaves largest leftover fragment — may be useful for future large allocations. Performs worst in practice.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Next Fit</div>
+          <p>Like First Fit but resumes search from where it left off. More uniform distribution across memory. Similar performance to First Fit.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Fragmentation — Two Types</span>
+        <p>
+          <strong>External Fragmentation:</strong> Total free memory is sufficient but scattered in non-contiguous pieces — no single hole is large enough for a waiting process. Compaction (moving processes to consolidate holes) can solve this but is expensive.<br><br>
+          <strong>Internal Fragmentation:</strong> Allocated memory is slightly larger than requested — the extra space inside the allocated region is wasted. Occurs in fixed-size partitioning and paging.
+        </p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Scheme</th><th>External Fragmentation</th><th>Internal Fragmentation</th></tr></thead>
+          <tbody>
+            <tr><td>Contiguous (variable partition)</td><td class="bad">Yes</td><td class="good">No</td></tr>
+            <tr><td>Fixed partition</td><td class="good">No</td><td class="bad">Yes</td></tr>
+            <tr><td>Paging</td><td class="good">No</td><td class="bad">Yes (in last page only)</td></tr>
+            <tr><td>Segmentation</td><td class="bad">Yes</td><td class="good">No</td></tr>
+            <tr><td>Segmentation + Paging</td><td class="good">No</td><td class="bad">Yes (in last page of each segment)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — PAGING ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Paging <em>&amp; Address Translation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="paging-def">
+      <h2 class="sh">2.1 &nbsp; Paging — Concept &amp; Address Structure <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Paging</span>
+        <p>Physical memory is divided into fixed-size blocks called <strong>frames</strong>. Logical (virtual) address space is divided into same-size blocks called <strong>pages</strong>. The OS maps pages to frames using a <strong>page table</strong>. Pages are non-contiguous in physical memory — eliminates external fragmentation.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Address Translation — The Core Formula</span>
+        <p>
+          Given page size = 2ⁿ bytes:<br>
+          Logical address → (page number p, page offset d)<br>
+          <strong>p = logical address / page size = upper bits</strong><br>
+          <strong>d = logical address mod page size = lower n bits</strong><br>
+          Physical address = (frame number f) × page size + d<br>
+          f is found by looking up page table at index p: f = PageTable[p]
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Page size = 4KB = 4096 = 2¹² bytes. Logical address = 0x3A7F (15,999 in decimal).</strong></p>
+        <div class="cb">Page size = 2¹² bytes → lower 12 bits = offset, upper bits = page number
+
+0x3A7F in binary: 0011 1010 0111 1111
+Lower 12 bits (offset d): 1010 0111 1111 = 0xA7F = 2687
+Upper bits (page number p): 0011 = 3
+
+Look up PageTable[3] → say frame 7
+
+Physical address = 7 × 4096 + 2687 = 28672 + 2687 = 31359 = 0x7A7F</div>
+        <p>Note: the offset d is always the same in both logical and physical address — only the page/frame number changes.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Address Bits Breakdown</span>
+        <p>If logical address space = 2ᵐ bytes and page size = 2ⁿ bytes: <strong>page number uses m−n bits</strong>, <strong>offset uses n bits</strong>. Number of pages = 2^(m−n). Size of page table = 2^(m−n) entries. Each entry contains a frame number (plus valid/dirty/reference bits).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="page-table-structures">
+      <h2 class="sh">2.2 &nbsp; Page Table Structures <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Single-Level Page Table</h3>
+      <p>One page table per process. Size = number of pages × entry size. For a 32-bit address space with 4KB pages: 2²⁰ entries × 4 bytes = 4MB per process — too large for many processes.</p>
+
+      <h3 class="ssh">Multi-Level Page Table</h3>
+      <div class="def-box">
+        <span class="lbl">Two-Level Paging</span>
+        <p>Split the page number into two parts: outer page index (p₁) and inner page index (p₂). Logical address: [p₁ | p₂ | d]. Outer page table is always in memory. Inner page tables are loaded on demand. Most inner page tables for sparse address spaces never need to be created.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>32-bit address, 4KB pages, 2-level page table:</strong></p>
+        <div class="cb">Page offset d: 12 bits  (log₂ 4096 = 12)
+Page number:   20 bits  (32 - 12 = 20)
+Split 20 bits: p₁ = 10 bits, p₂ = 10 bits
+
+Translation: Logical → [p₁(10 bits) | p₂(10 bits) | d(12 bits)]
+Step 1: Outer PT[p₁] → address of inner PT
+Step 2: Inner PT[p₂] → frame number f
+Step 3: Physical = f × 4096 + d
+
+Memory accesses per translation: 2 PT lookups + 1 data access = 3 total
+(vs 1+1=2 for single-level paging)</div>
+      </div>
+
+      <h3 class="ssh">TLB — Translation Lookaside Buffer</h3>
+      <div class="def-box">
+        <span class="lbl">TLB</span>
+        <p>The TLB is a small, fast associative cache for page table entries. On each memory access, the TLB is checked first (parallel with page table). <strong>TLB hit:</strong> frame number found in TLB — only one physical memory access needed. <strong>TLB miss:</strong> access page table in memory (multiple accesses for multi-level), load entry into TLB, then access data.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Effective Memory Access Time (EMAT)</span>
+        <p>Let h = TLB hit ratio, t_TLB = TLB access time, t_mem = memory access time.<br>
+        For single-level paging:<br>
+        EMAT = h × (t_TLB + t_mem) + (1−h) × (t_TLB + 2×t_mem)<br>
+        = t_TLB + t_mem + (1−h) × t_mem<br>
+        = t_TLB + (2 − h) × t_mem</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>TLB access = 20ns, memory access = 100ns, hit ratio = 90%.</strong></p>
+        <div class="cb">EMAT = 20 + (2 − 0.9) × 100
+     = 20 + 1.1 × 100
+     = 20 + 110
+     = 130ns
+
+Without TLB (single-level paging): 2 × 100 = 200ns
+With TLB: 130ns. TLB reduces EMAT by 35%.</div>
+        <p>For two-level paging with TLB miss: 3 memory accesses (outer PT + inner PT + data). EMAT = h×(t_TLB+t_mem) + (1−h)×(t_TLB+3×t_mem).</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">EMAT Formula — Count Memory Accesses Correctly</span>
+        <p>For k-level paging: TLB miss requires k page table accesses + 1 data access = k+1 memory accesses total. TLB hit requires 1 data access. EMAT = h×(t_TLB + t_mem) + (1−h)×(t_TLB + (k+1)×t_mem). Always count the levels of page table lookups on a miss. GATE NAT questions test this directly.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — SEGMENTATION ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Segmentation — <em>Logical Address Spaces</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="segmentation">
+      <h2 class="sh">3.1 &nbsp; Segmentation — Concept &amp; Translation <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Segmentation</span>
+        <p>Memory is divided based on logical program structure — code segment, data segment, stack segment, heap segment. Each segment has a <strong>base</strong> (starting physical address) and a <strong>limit</strong> (size). Logical address = (segment number s, offset d). Physical address = SegmentTable[s].base + d, provided d &lt; SegmentTable[s].limit.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Segment table: S0(base=1400, limit=1000), S1(base=6300, limit=400), S2(base=4300, limit=400).</strong></p>
+        <div class="cb">Logical address (1, 150):
+  Segment 1: base=6300, limit=400. Offset=150 < 400. ✓
+  Physical = 6300 + 150 = 6450
+
+Logical address (2, 500):
+  Segment 2: base=4300, limit=400. Offset=500 ≥ 400. ✗
+  Segmentation fault — offset exceeds segment limit</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Paging</th><th>Segmentation</th></tr></thead>
+          <tbody>
+            <tr><td>Division basis</td><td>Fixed size (hardware)</td><td>Logical structure (programmer)</td></tr>
+            <tr><td>Address structure</td><td>Page number + offset</td><td>Segment number + offset</td></tr>
+            <tr><td>External fragmentation</td><td class="good">None</td><td class="bad">Yes</td></tr>
+            <tr><td>Internal fragmentation</td><td class="bad">Last page of each process</td><td class="good">None</td></tr>
+            <tr><td>Segment sizes</td><td>All equal (page size)</td><td>Variable (programmer-defined)</td></tr>
+            <tr><td>Protection</td><td class="ok">Per-page (coarser)</td><td class="good">Per-segment (logical)</td></tr>
+            <tr><td>Sharing</td><td class="ok">Per-page</td><td class="good">Per-segment (easier)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — VIRTUAL MEMORY ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Virtual Memory <em>&amp; Demand Paging</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="vm-def">
+      <h2 class="sh">4.1 &nbsp; Virtual Memory — Concept &amp; Page Fault Handling <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Virtual Memory</span>
+        <p>Virtual memory allows processes to execute even when not entirely in physical memory. Pages are loaded on demand (<strong>demand paging</strong>). The total logical address space can exceed physical memory. The OS uses <strong>secondary storage (disk)</strong> as an extension of RAM.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Valid-Invalid Bit</span>
+        <p>Each page table entry has a valid-invalid bit. <strong>Valid (1):</strong> page is in physical memory — translation proceeds normally. <strong>Invalid (0):</strong> page is either not in memory (on disk) or doesn't belong to the process's address space. Accessing an invalid page triggers a <strong>page fault</strong>.</p>
+      </div>
+
+      <h3 class="ssh">Page Fault Handling — Step by Step</h3>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>Process references a page. MMU checks page table — valid bit is 0 → <strong>page fault trap</strong> to OS.</div></li>
+        <li><div class="pl-num">2</div><div>OS checks if the reference is valid (legal address for the process). If not → terminate process with segfault.</div></li>
+        <li><div class="pl-num">3</div><div>OS finds a free frame. If no free frame → select a victim page using a page replacement algorithm, write victim to disk if dirty.</div></li>
+        <li><div class="pl-num">4</div><div>OS reads the required page from disk into the free frame.</div></li>
+        <li><div class="pl-num">5</div><div>Update page table: set frame number, set valid bit to 1.</div></li>
+        <li><div class="pl-num">6</div><div>Restart the instruction that caused the page fault.</div></li>
+      </ol>
+
+      <div class="def-box">
+        <span class="lbl">Effective Access Time with Demand Paging</span>
+        <p>Let p = page fault rate (0 ≤ p ≤ 1), t_mem = memory access time, t_fault = page fault service time (disk I/O).<br>
+        EAT = (1−p) × t_mem + p × t_fault<br>
+        Since t_fault >> t_mem (disk is ~1ms, memory ~100ns), even a tiny p dramatically increases EAT.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Memory access = 200ns, page fault service = 8ms = 8,000,000ns, p = 0.001 (1 fault per 1000 accesses).</strong></p>
+        <div class="cb">EAT = (1 − 0.001) × 200 + 0.001 × 8,000,000
+    = 0.999 × 200 + 8000
+    = 199.8 + 8000
+    = 8199.8 ns ≈ 8.2 μs
+
+Without page faults: 200 ns
+With p=0.001: 8200 ns — 41× slower!
+
+To keep EAT < 200 × 1.1 (within 10% of ideal):
+  8,000,000p < 20 → p < 0.0000025 (less than 1 fault per 400,000 accesses)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="thrashing">
+      <h2 class="sh">4.2 &nbsp; Thrashing <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Thrashing</span>
+        <p><strong>Thrashing</strong> occurs when a process spends more time paging than executing — it constantly page-faults because it doesn't have enough frames to hold its working set. The CPU utilization drops drastically while the OS is busy swapping pages in and out.</p>
+      </div>
+
+      <p>
+        The <strong>working set model</strong> addresses thrashing: define the working set W(t, Δ) as the set of pages referenced in the last Δ time units (the working set window). Ensure each process has at least |W| frames. If total demand > total frames → reduce multiprogramming (suspend some processes) rather than thrash.
+      </p>
+
+      <div class="tip-box">
+        <span class="lbl">Thrashing — CPU Utilization Curve</span>
+        <p>As degree of multiprogramming increases: CPU utilization initially increases (more processes keep CPU busy). Then peaks. Then drops sharply — thrashing. The OS must detect this point and reduce the number of active processes. The working set model and page fault frequency (PFF) algorithms help maintain the system near the peak.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — PAGE REPLACEMENT ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Page Replacement <em>Algorithms</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="page-replacement">
+      <h2 class="sh">5.1 &nbsp; All Page Replacement Algorithms <span class="tag tg">Most Tested</span></h2>
+
+      <p>When a page fault occurs and no free frame is available, the OS must evict (replace) a page. The goal: minimize total page faults. Reference string for examples: <strong>7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1</strong>, 3 frames.</p>
+
+      <h3 class="ssh">FIFO — First In, First Out</h3>
+      <p>Replace the page that has been in memory the longest. Simple to implement with a queue. Suffers from <strong>Bélády's Anomaly</strong>.</p>
+
+      <div class="eg">
+        <p><strong>Reference string: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. FIFO with 3 frames.</strong></p>
+        <div class="cb">Ref:   1   2   3   4   1   2   5   1   2   3   4   5
+Frame1: 1   1   1   4   4   4   5   5   5   5   4   4
+Frame2: -   2   2   2   1   1   1   1   1   1   1   5
+Frame3: -   -   3   3   3   2   2   2   2   3   3   3
+Fault:  F   F   F   F   F   F   F   -   -   F   F   F
+
+Total page faults = 9</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Bélády's Anomaly — FIFO Only</span>
+        <p>With FIFO, increasing the number of frames can INCREASE the number of page faults. This counterintuitive behaviour is called Bélády's Anomaly. OPT and LRU are "stack algorithms" — they never exhibit Bélády's Anomaly. GATE tests: "Which algorithm suffers from Bélády's Anomaly?" → FIFO. "Which do not?" → OPT, LRU.</p>
+      </div>
+
+      <h3 class="ssh">OPT — Optimal (Bélády's Optimal)</h3>
+      <p>Replace the page that will not be used for the longest time in the future. Guaranteed minimum page faults. <strong>Cannot be implemented</strong> — requires future knowledge. Used as a benchmark to evaluate other algorithms.</p>
+
+      <div class="eg">
+        <p><strong>Same reference string, 3 frames, OPT:</strong></p>
+        <div class="cb">Ref:   1   2   3   4   1   2   5   1   2   3   4   5
+Frame1: 1   1   1   1   1   1   1   1   1   1   4   4
+Frame2: -   2   2   2   2   2   2   2   2   2   2   5
+Frame3: -   -   3   4   4   4   5   5   5   3   3   3
+Fault:  F   F   F   F   -   -   F   -   -   F   F   -
+
+Total page faults = 6  (minimum possible for this reference string)</div>
+      </div>
+
+      <h3 class="ssh">LRU — Least Recently Used</h3>
+      <p>Replace the page that has not been used for the longest time. Uses past behaviour as a predictor of future behaviour. Good approximation of OPT. No Bélády's Anomaly. Implementation expensive — requires timestamping every memory access or maintaining a stack.</p>
+
+      <div class="eg">
+        <p><strong>Reference string: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5. LRU with 3 frames.</strong></p>
+        <div class="cb">Ref:   1   2   3   4   1   2   5   1   2   3   4   5
+Frame1: 1   1   1   4   1   1   5   1   1   3   4   4  ← most recent
+Frame2: -   2   2   2   4   2   1   5   2   1   3   5
+Frame3: -   -   3   3   3   4   2   2   5   2   2   3  ← least recent
+Fault:  F   F   F   F   F   F   F   -   -   F   F   F
+
+Total page faults = 8 (better than FIFO's 9, but not optimal at 6)</div>
+      </div>
+
+      <h3 class="ssh">LRU Approximations</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Mechanism</th><th>Overhead</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Second Chance (Clock)</strong></td><td>FIFO with reference bit. On eviction, if reference bit=1, clear it and skip (give second chance). Evict first page with reference bit=0.</td><td class="good">Low</td></tr>
+            <tr><td><strong>Enhanced Second Chance</strong></td><td>Uses (reference, dirty) bits — 4 classes. Prefer evicting (0,0): not recently used, not modified.</td><td class="ok">Low</td></tr>
+            <tr><td><strong>Aging</strong></td><td>Shift reference bits right each interval, OR in current reference. Low value = least recently used.</td><td class="ok">Medium</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Page Faults</th><th>Implementable?</th><th>Bélády's Anomaly?</th><th>Used in Practice?</th></tr></thead>
+          <tbody>
+            <tr><td>OPT</td><td class="good">Minimum</td><td class="bad">No (needs future)</td><td class="good">No</td><td class="bad">No — benchmark only</td></tr>
+            <tr><td>LRU</td><td class="good">Near-optimal</td><td class="ok">Yes (expensive)</td><td class="good">No</td><td class="ok">Yes (approximations)</td></tr>
+            <tr><td>FIFO</td><td class="ok">More than LRU</td><td class="good">Yes (simple)</td><td class="bad">Yes</td><td class="ok">Yes (simple systems)</td></tr>
+            <tr><td>Clock</td><td class="ok">Similar to LRU</td><td class="good">Yes (efficient)</td><td class="good">No</td><td class="good">Yes (most OS)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="frame-allocation">
+      <h2 class="sh">5.2 &nbsp; Frame Allocation &amp; Thrashing Prevention <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Allocation Schemes</span>
+        <p>
+          <strong>Equal allocation:</strong> m frames divided equally among n processes — m/n frames each. Simple but ignores process needs.<br>
+          <strong>Proportional allocation:</strong> Each process i gets (sᵢ/S) × m frames where sᵢ is process size and S = Σsᵢ. Fairer — larger processes get more frames.<br>
+          <strong>Priority allocation:</strong> Higher-priority processes get more frames.
+        </p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Global vs Local Replacement</span>
+        <p>
+          <strong>Global replacement:</strong> A process can replace any page in memory — even one owned by another process. Simple, high throughput, but one process can steal frames from others.<br>
+          <strong>Local replacement:</strong> A process can only replace its own pages. More predictable per-process performance. May underutilize memory if the process has unused frames.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — FILE SYSTEMS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">File Systems — <em>Structure, Allocation &amp; Directories</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="file-allocation">
+      <h2 class="sh">6.1 &nbsp; File Allocation Methods <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Contiguous Allocation</div>
+          <p>File occupies consecutive disk blocks. Fast sequential and random access (block i = start + i). External fragmentation. File size must be known at creation.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Linked Allocation</div>
+          <p>Each block contains a pointer to the next. No external fragmentation. Sequential access only — random access requires traversal from beginning. Poor for direct access.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--orange)">
+          <div class="ct">Indexed Allocation</div>
+          <p>An index block holds pointers to all file's data blocks. Supports direct access. Index block itself takes space. Single index block limits file size.</p>
+        </div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Method</th><th>Sequential Access</th><th>Direct Access</th><th>External Fragmentation</th><th>Supports Large Files?</th></tr></thead>
+          <tbody>
+            <tr><td>Contiguous</td><td class="good">Excellent</td><td class="good">O(1)</td><td class="bad">Yes</td><td class="bad">Limited by contiguous space</td></tr>
+            <tr><td>Linked</td><td class="good">Good</td><td class="bad">O(n)</td><td class="good">No</td><td class="good">Yes</td></tr>
+            <tr><td>Indexed (single)</td><td class="good">Good</td><td class="good">O(1)</td><td class="good">No</td><td class="ok">Limited by index block size</td></tr>
+            <tr><td>Multi-level indexed</td><td class="good">Good</td><td class="good">O(1)</td><td class="good">No</td><td class="good">Very large files</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="unix-inode">
+      <h2 class="sh">6.2 &nbsp; Unix i-node Structure <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Unix i-node</span>
+        <p>Each file has an i-node containing file metadata (size, permissions, timestamps) and block pointers. A typical i-node has: <strong>12 direct pointers</strong> (point directly to data blocks), <strong>1 single-indirect pointer</strong> (points to a block of pointers), <strong>1 double-indirect pointer</strong> (points to block of pointers to blocks of pointers), <strong>1 triple-indirect pointer</strong>.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Block size = 4KB, pointer size = 4 bytes. Max file size calculation:</strong></p>
+        <div class="cb">Pointers per block = block size / pointer size = 4096 / 4 = 1024
+
+Direct blocks:        12 blocks × 4KB          = 48 KB
+Single indirect:    1024 blocks × 4KB          = 4 MB
+Double indirect: 1024 × 1024 blocks × 4KB      = 4 GB
+Triple indirect: 1024³ blocks × 4KB            = 4 TB
+
+Total max file size ≈ 4 TB (dominated by triple indirect)
+
+Number of disk accesses to read i-th data block:
+  i ∈ [0..11]:      1 access (direct)
+  i ∈ [12..1035]:   2 accesses (single indirect block + data block)
+  i ∈ [1036..1049611]: 3 accesses (double indirect + indirect + data)
+  larger:           4 accesses (triple indirect)</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">i-node Access Count — Very Common NAT</span>
+        <p>"How many disk accesses to read the k-th block of a file?" Count: 1 if direct (k≤11); 2 if single indirect (12 ≤ k ≤ 12+N−1 where N=block_size/pointer_size); 3 if double indirect; 4 if triple indirect. Do not count the i-node itself unless the question says "include i-node read." GATE questions usually specify.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="directories">
+      <h2 class="sh">6.3 &nbsp; Directory Structures &amp; Free Space Management <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Directory Structures</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Structure</th><th>Description</th><th>Problem</th></tr></thead>
+          <tbody>
+            <tr><td>Single-level</td><td>All files in one directory</td><td>Name collisions across users</td></tr>
+            <tr><td>Two-level</td><td>Separate directory per user</td><td>No grouping within user</td></tr>
+            <tr><td>Tree-structured</td><td>General hierarchical tree. Absolute and relative paths.</td><td>Cannot share files easily</td></tr>
+            <tr><td>Acyclic graph</td><td>Allows sharing via links. Hard links (same i-node) vs soft links (symbolic — separate i-node pointing to path).</td><td>Dangling pointers on deletion</td></tr>
+            <tr><td>General graph</td><td>Allows cycles. Requires garbage collection.</td><td>Risk of infinite loops</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Free Space Management</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Bit Vector (Bitmap)</div>
+          <p>One bit per disk block: 1=free, 0=allocated. Simple, fast to find contiguous free blocks. Requires bitmap itself in memory.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Linked Free List</div>
+          <p>Link all free blocks together. Simple. Cannot easily find contiguous space. Only first pointer needs to be stored.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Grouping</div>
+          <p>Store n free block addresses in the first free block. Last entry points to next group block. Efficiently stores large numbers of free blocks.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — DISK SCHEDULING ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Disk Scheduling — <em>Seek Time Minimization</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="disk-scheduling">
+      <h2 class="sh">7.1 &nbsp; Disk Scheduling Algorithms <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Disk Access Time Components</span>
+        <p>
+          <strong>Seek time:</strong> Time to move the disk arm to the target track. Dominates — typically 5-15ms. This is what scheduling algorithms minimize.<br>
+          <strong>Rotational latency:</strong> Time for the disk to rotate so the target sector is under the read head. Avg = half rotation time.<br>
+          <strong>Transfer time:</strong> Time to read/write the data. Usually small.
+        </p>
+      </div>
+
+      <p>Queue: 98, 183, 37, 122, 14, 124, 65, 67. Initial head position = 53. Disk range: 0–199.</p>
+
+      <h3 class="ssh">FCFS — First Come First Served</h3>
+      <div class="cb">Order: 53→98→183→37→122→14→124→65→67
+Movements: 45+85+146+85+108+110+59+2 = 640 cylinders</div>
+      <p>Simple but not efficient — large total head movement (wild swings across disk).</p>
+
+      <h3 class="ssh">SSTF — Shortest Seek Time First</h3>
+      <div class="cb">From 53: closest is 65(12), then 67(2), then 37(30), then 14(23), then 98(84), then 122(24), then 124(2), then 183(59)
+Order: 53→65→67→37→14→98→122→124→183
+Movements: 12+2+30+23+84+24+2+59 = 236 cylinders</div>
+      <p>Much better than FCFS. Can cause starvation of far requests if close requests keep arriving.</p>
+
+      <h3 class="ssh">SCAN (Elevator Algorithm)</h3>
+      <div class="cb">Head moves in one direction, servicing requests, then reverses.
+Starting at 53, moving toward higher cylinders:
+  53→65→67→98→122→124→183→(end/reverse)→37→14
+Movements: 12+2+31+24+2+59+146+23 = ... wait, computed as:
+  Go up: 53→65→67→98→122→124→183 (=130 movement)
+  Come down: 183→37→14 (=169 movement)
+Total: 299 cylinders</div>
+
+      <h3 class="ssh">C-SCAN — Circular SCAN</h3>
+      <div class="cb">Head moves in one direction only, servicing requests.
+When it hits the end, it jumps back to the beginning (without servicing on the way back).
+More uniform wait time than SCAN — no "starvation" of requests at far end.
+
+53→65→67→98→122→124→183→(jump to 0)→14→37
+Movement counting only actual arm movement (not the jump):
+183−53 = 130 (going up) + 37−0 = 37 (after jump)
+= 130 + 37 = 167 + cost of jump (usually counted as 0 or 199+14 depending on problem)
+
+Typically: total = (183−53) + (183−0) + (37−0) = 130+183+37 = 350
+(counting the jump as movement to 0 then to 37)</div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Total Movement</th><th>Starvation?</th><th>Fairness</th></tr></thead>
+          <tbody>
+            <tr><td>FCFS</td><td class="bad">640</td><td class="good">No</td><td class="good">Fair (order preserved)</td></tr>
+            <tr><td>SSTF</td><td class="good">236</td><td class="bad">Yes (far requests)</td><td class="bad">Unfair</td></tr>
+            <tr><td>SCAN</td><td class="ok">299</td><td class="good">No</td><td class="ok">Somewhat fair</td></tr>
+            <tr><td>C-SCAN</td><td class="ok">~350</td><td class="good">No</td><td class="good">More uniform</td></tr>
+            <tr><td>LOOK</td><td class="good">~248</td><td class="good">No</td><td class="ok">Like SCAN but stops at last request</td></tr>
+            <tr><td>C-LOOK</td><td class="good">Similar</td><td class="good">No</td><td class="good">Like C-SCAN but stops at last request</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">SSTF vs SCAN in Practice</span>
+        <p>SSTF has the lowest average seek time but risks starvation. SCAN/LOOK is the standard in real disk controllers — it balances throughput with fairness. The LOOK variant (stops at the last request in each direction, doesn't go all the way to the disk end) is preferred over pure SCAN for the same reason Shortest Job First is preferred over going all the way to the limits.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Complete Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Page offset changes during translation</td><td>The page offset d is IDENTICAL in both the logical and physical address. Only the page number (p) is replaced by the frame number (f). Physical address = frame×page_size + offset (same offset).</td></tr>
+            <tr><td>2</td><td>Internal fragmentation fills a whole page</td><td>Internal fragmentation in paging occurs ONLY in the last page of a process — the last page may not be fully used. All other pages are fully utilized. Maximum internal fragmentation per process = page_size − 1 bytes.</td></tr>
+            <tr><td>3</td><td>EMAT with TLB — wrong memory access count</td><td>On TLB hit: 1 memory access (data only). On TLB miss with k-level paging: k+1 memory accesses (k page table lookups + 1 data). Formula: EMAT = h×(t_TLB + t_mem) + (1−h)×(t_TLB + (k+1)×t_mem).</td></tr>
+            <tr><td>4</td><td>More frames always means fewer page faults</td><td>For LRU and OPT: more frames → fewer or equal page faults (monotone). For FIFO: more frames can INCREASE page faults (Bélády's Anomaly). Never assume monotonicity for FIFO.</td></tr>
+            <tr><td>5</td><td>OPT is implementable</td><td>OPT requires knowing the future reference string — impossible in practice. It is used as a lower bound benchmark only. LRU (and approximations) are the closest practical algorithms.</td></tr>
+            <tr><td>6</td><td>i-node disk accesses — forgetting the i-node itself</td><td>If the question says "starting from disk, given the i-node is already in memory": don't count i-node access. If it says "starting from a file name": add directory lookup + i-node read. Read the question carefully.</td></tr>
+            <tr><td>7</td><td>Linked file allocation supports direct access efficiently</td><td>Linked allocation requires sequential traversal from the first block to reach block i — O(i) disk accesses. It does NOT support efficient direct access. Only contiguous and indexed allocation support O(1) direct access.</td></tr>
+            <tr><td>8</td><td>Segmentation has internal fragmentation</td><td>Segmentation has NO internal fragmentation (segments are exactly the size requested). It HAS external fragmentation (segments of different sizes leave gaps). Paging has internal (last page) but no external.</td></tr>
+            <tr><td>9</td><td>SSTF is always best for disk scheduling</td><td>SSTF minimizes average seek time but causes starvation. SCAN/LOOK is preferred in practice for balancing throughput and fairness. "Best" depends on the optimization criterion.</td></tr>
+            <tr><td>10</td><td>Thrashing = too many page faults</td><td>Thrashing = the system spends more time swapping pages than executing processes. Cause: insufficient frames relative to working set size. Fix: reduce degree of multiprogramming or increase physical memory.</td></tr>
+            <tr><td>11</td><td>Max file size in Unix i-node — counting wrong</td><td>Max file size = (12 + N + N² + N³) × block_size where N = pointers_per_block = block_size/pointer_size. Most GATE problems use block_size=1KB or 4KB, pointer_size=4 bytes → N=256 or N=1024.</td></tr>
+            <tr><td>12</td><td>Valid bit 0 = page doesn't exist</td><td>Invalid (valid bit=0) means the page is either on disk (page fault → bring it in) OR is an illegal address (segfault → terminate). The OS distinguishes these by checking if the address is within the process's allocated range.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Formula Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>Page number p = ⌊logical_addr / page_size⌋</td><td>Upper bits of logical address</td></tr>
+            <tr><td>Offset d = logical_addr mod page_size</td><td>Lower n bits (page_size = 2ⁿ)</td></tr>
+            <tr><td>Physical addr = frame × page_size + d</td><td>Address translation result</td></tr>
+            <tr><td>Page table size = (logical_addr_space / page_size) × entry_size</td><td>Memory overhead of page table</td></tr>
+            <tr><td>EMAT = h(t_TLB+t_mem) + (1−h)(t_TLB+(k+1)t_mem)</td><td>k-level paging with TLB</td></tr>
+            <tr><td>EAT (demand paging) = (1−p)t_mem + p×t_fault</td><td>Effective access time with page faults</td></tr>
+            <tr><td>Pointers per block N = block_size / pointer_size</td><td>Used in i-node calculations</td></tr>
+            <tr><td>Max file size = (12 + N + N² + N³) × block_size</td><td>Unix i-node maximum</td></tr>
+            <tr><td>Internal fragmentation ≤ page_size − 1</td><td>Per process maximum waste</td></tr>
+            <tr><td>Proportional allocation = (size_i / total_size) × total_frames</td><td>Frame allocation per process</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Address translation NAT:</strong> "Logical address 0x3A7F, page size 4KB, PT: page 3→frame 7. Physical address?" Split address, look up frame, compute physical. 1−2 marks.</li>
+        <li><strong>EMAT calculation NAT:</strong> "TLB=20ns, memory=100ns, hit ratio=80%, 2-level paging. EMAT?" Apply EMAT formula with k=2. 2 marks.</li>
+        <li><strong>Page fault trace:</strong> "Reference string 1,2,3,4,1,2,5 with 3 frames, FIFO/LRU. How many page faults?" Trace the algorithm frame by frame. Very common 2-mark question.</li>
+        <li><strong>Bélády's Anomaly MCQ:</strong> "Which algorithm can exhibit Bélády's Anomaly?" FIFO only. LRU and OPT never. 1 mark.</li>
+        <li><strong>i-node disk accesses:</strong> "File has 300 data blocks, block size=512B, pointer size=4B. How many disk accesses to read the 400th block?" N=128. 12 direct. 140 single-indirect. 400th block is in double-indirect range. 3 accesses. 2-mark computation.</li>
+        <li><strong>Max file size:</strong> "Given block size and pointer size, find max file size with Unix i-node." Compute N, then 12+N+N²+N³ blocks times block size. 2 marks.</li>
+        <li><strong>Disk scheduling total movement:</strong> "Given queue and initial head position, compute total head movement for SSTF/SCAN." Trace the algorithm, sum absolute differences. 2-mark NAT.</li>
+        <li><strong>Fragmentation MCQ:</strong> "Which memory allocation scheme has external fragmentation?" Contiguous/segmentation: yes. Paging: no. 1 mark.</li>
+        <li><strong>Thrashing MCQ:</strong> "What is the primary cause of thrashing?" Insufficient frames relative to process working sets. Working set model is the solution. 1 mark.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Operating Systems · Memory Management, File Systems &amp; I/O · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

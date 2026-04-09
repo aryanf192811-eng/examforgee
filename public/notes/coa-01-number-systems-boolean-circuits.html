@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Organization — Number Systems, Boolean Algebra & Circuits · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+/* truth table */
+.tt-wrap{overflow-x:auto;margin:14px 0;}
+.tt-wrap table{font-family:'Courier New',monospace;font-size:14px;}
+.tt-wrap th{font-family:var(--hand);font-size:11px;text-align:center;padding:8px 14px;background:var(--ink);color:var(--paper);}
+.tt-wrap td{text-align:center;padding:7px 14px;border-bottom:1px solid #d0c0a0;}
+.tt-wrap .T{color:var(--green);font-weight:bold;}
+.tt-wrap .F{color:var(--red);font-weight:bold;}
+.tt-wrap .hl-col{background:rgba(26,74,140,0.08);}
+/* k-map */
+.kmap{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:2;color:var(--ink);overflow-x:auto;}
+.kmap .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Computer Organization &amp; Architecture</div>
+    <h1>Number Systems, Boolean Algebra<br><em>&amp; Digital Circuits</em></h1>
+    <p class="cover-desc">
+      Number representations and conversions, fixed-point and floating-point arithmetic, Boolean algebra, minimization with K-maps, all combinational circuits, and complete sequential circuit analysis — every formula derived, every circuit traced, every GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Number Systems &amp; Conversions</span>
+      <span class="chip">Ch 2 · Integer Representations &amp; Arithmetic</span>
+      <span class="chip">Ch 3 · Floating-Point Representation</span>
+      <span class="chip">Ch 4 · Boolean Algebra &amp; Logic Gates</span>
+      <span class="chip">Ch 5 · K-Map Minimization</span>
+      <span class="chip">Ch 6 · Combinational Circuits</span>
+      <span class="chip">Ch 7 · Sequential Circuits</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Number Systems &amp; Base Conversions</a>
+    <a href="#ch2"><span class="tn">02</span>Integer Representations &amp; Arithmetic</a>
+    <a href="#ch3"><span class="tn">03</span>Floating-Point Representation (IEEE 754)</a>
+    <a href="#ch4"><span class="tn">04</span>Boolean Algebra &amp; Logic Gates</a>
+    <a href="#ch5"><span class="tn">05</span>K-Map Minimization</a>
+    <a href="#ch6"><span class="tn">06</span>Combinational Circuits</a>
+    <a href="#ch7"><span class="tn">07</span>Sequential Circuits — Latches &amp; Flip-Flops</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — NUMBER SYSTEMS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Number Systems <em>&amp; Base Conversions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="number-systems">
+      <h2 class="sh">1.1 &nbsp; Positional Number Systems <span class="tag tc">Core</span></h2>
+      <p>
+        Every positional number system has a <strong>base (radix) r</strong>. The value of a number is the sum of each digit multiplied by the appropriate power of r.
+      </p>
+      <div class="def-box">
+        <span class="lbl">Value Formula</span>
+        <p>For a number with digits d_n d_{n-1} ... d_1 d_0 . d_{-1} d_{-2} ... in base r:<br>
+        Value = Σ dᵢ × rⁱ, summed over all digit positions i.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Base</th><th>Name</th><th>Digits used</th><th>Prefix</th></tr></thead>
+          <tbody>
+            <tr><td>2</td><td>Binary</td><td>0, 1</td><td>0b</td></tr>
+            <tr><td>8</td><td>Octal</td><td>0–7</td><td>0o</td></tr>
+            <tr><td>10</td><td>Decimal</td><td>0–9</td><td>(none)</td></tr>
+            <tr><td>16</td><td>Hexadecimal</td><td>0–9, A–F (A=10...F=15)</td><td>0x</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Decimal → Any Base: Repeated Division (Integer Part)</h3>
+      <div class="eg">
+        <p><strong>Convert 156₁₀ to binary:</strong></p>
+        <div class="cb">156 ÷ 2 = 78  remainder 0   ← LSB
+ 78 ÷ 2 = 39  remainder 0
+ 39 ÷ 2 = 19  remainder 1
+ 19 ÷ 2 =  9  remainder 1
+  9 ÷ 2 =  4  remainder 1
+  4 ÷ 2 =  2  remainder 0
+  2 ÷ 2 =  1  remainder 0
+  1 ÷ 2 =  0  remainder 1   ← MSB
+
+Read remainders bottom to top: 156₁₀ = 10011100₂
+
+Verify: 128+0+0+16+8+4+0+0 = 156 ✓</div>
+      </div>
+
+      <h3 class="ssh">Decimal → Any Base: Repeated Multiplication (Fractional Part)</h3>
+      <div class="eg">
+        <p><strong>Convert 0.625₁₀ to binary:</strong></p>
+        <div class="cb">0.625 × 2 = 1.250  → digit 1   ← MSB
+0.250 × 2 = 0.500  → digit 0
+0.500 × 2 = 1.000  → digit 1   ← (stops, fraction = 0)
+
+0.625₁₀ = 0.101₂
+
+Verify: 1×2⁻¹ + 0×2⁻² + 1×2⁻³ = 0.5 + 0 + 0.125 = 0.625 ✓
+
+Note: Some fractions don't terminate in binary (e.g., 0.1₁₀ = 0.000110011...₂)
+This is the root cause of floating-point rounding errors in computers.</div>
+      </div>
+
+      <h3 class="ssh">Binary ↔ Hex: Direct Grouping</h3>
+      <div class="eg">
+        <p><strong>Group binary digits into nibbles (groups of 4) from the radix point:</strong></p>
+        <div class="cb">Binary:  1010 1111 0011 1100₂
+Groups:  A    F    3    C
+Hex:     0xAF3C
+
+Hex → Binary: each hex digit → 4 binary digits
+0x2B7 = 0010 1011 0111₂</div>
+      </div>
+
+      <h3 class="ssh">Binary ↔ Octal: Groups of 3</h3>
+      <div class="eg">
+        <p>Group binary into groups of 3 from radix point: 101 011 110₂ = 5, 3, 6 = 536₈</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Hex/Octal Conversion Shortcut</span>
+        <p>Always go via binary. Hex↔Octal directly is error-prone — convert Hex→Binary→Octal or Octal→Binary→Hex. The binary bridge always works cleanly.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — INTEGER REPRESENTATIONS ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Integer Representations <em>&amp; Arithmetic</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="representations">
+      <h2 class="sh">2.1 &nbsp; Signed Integer Representations <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Representation</th><th>Range (n bits)</th><th>Zero</th><th>+5 (n=8)</th><th>−5 (n=8)</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Sign-Magnitude</strong></td><td>−(2ⁿ⁻¹−1) to +(2ⁿ⁻¹−1)</td><td>Two zeros: +0 and −0</td><td>0000 0101</td><td>1000 0101</td></tr>
+            <tr><td><strong>1's Complement</strong></td><td>−(2ⁿ⁻¹−1) to +(2ⁿ⁻¹−1)</td><td>Two zeros: 0000...0 and 1111...1</td><td>0000 0101</td><td>1111 1010</td></tr>
+            <tr><td><strong>2's Complement</strong></td><td>−2ⁿ⁻¹ to +(2ⁿ⁻¹−1)</td><td>Unique zero: 0000...0</td><td>0000 0101</td><td>1111 1011</td></tr>
+            <tr><td><strong>Excess-N (Biased)</strong></td><td>Depends on bias N</td><td>Represented as N</td><td>Stored as 5+N</td><td>Stored as −5+N</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">2's Complement — The Standard</h3>
+      <div class="def-box">
+        <span class="lbl">Why 2's Complement is Universal</span>
+        <p>
+          <strong>To negate:</strong> Flip all bits (1's complement), then add 1.<br>
+          <strong>Alternatively:</strong> Copy bits from LSB rightward until (and including) the first 1, then flip all remaining bits.<br>
+          <strong>Why it wins:</strong> Unique zero. Subtraction done with addition. Same adder circuit handles both signed and unsigned. MSB acts as sign bit naturally.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find 2's complement of 0101 1010₂ (=90):</strong></p>
+        <div class="cb">Method 1: Flip all bits → 1010 0101, add 1 → 1010 0110
+Method 2: From LSB, copy until first 1: ...010 → keep, flip rest:
+  0101 1010
+  Copy rightmost 0: keep 0
+  Copy next 0: keep 0
+  Copy first 1: keep 1 (stop copying)
+  Flip everything left: 1010 0 | 110
+  Result: 1010 0110  (-90 in 8-bit 2's complement) ✓
+
+Check: 1010 0110 represents -(0101 1010) = -90. 
+  128+0+32+0+0+4+2+0 = 166... 
+  Actually read as: bit 7=1 (negative), so value = -(256-166) = -(90) = -90 ✓</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Reading a 2's Complement Value</span>
+        <p>If MSB = 0: read as normal unsigned binary.<br>
+        If MSB = 1: method 1: negate the pattern to get magnitude, put a minus sign. Method 2: value = −2ⁿ⁻¹ + (value of remaining n−1 bits as unsigned).<br>
+        Example: 1101₂ (4 bits) = −2³ + (4+2+1) = −8 + 7 = −1.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="binary-arithmetic">
+      <h2 class="sh">2.2 &nbsp; Binary Arithmetic &amp; Overflow Detection <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Binary Addition</h3>
+      <div class="cb">Rules:  0+0=0  0+1=1  1+0=1  1+1=10 (sum=0, carry=1)
+        1+1+1=11 (sum=1, carry=1) ← three-input case
+
+Example: 0111 (7) + 0110 (6) = 1101 in 4-bit 2's complement:
+  0 1 1 1
++ 0 1 1 0
+─────────
+  1 1 0 1  = -3 in 4's complement... OVERFLOW!
+  
+Both operands positive, result negative → OVERFLOW.
+Carry into MSB = 1, Carry out of MSB = 0. Cin ≠ Cout → overflow.</div>
+
+      <div class="def-box">
+        <span class="lbl">Overflow Detection in 2's Complement</span>
+        <p>Overflow occurs when the result cannot be represented in n bits.<br>
+        <strong>Rule 1:</strong> Overflow iff carry into MSB ≠ carry out of MSB. V = Cᵢₙ XOR Cₒᵤₜ.<br>
+        <strong>Rule 2 (easier):</strong> Overflow iff two operands of the same sign produce a result of the opposite sign.<br>
+        Positive + Positive = Negative → overflow.<br>
+        Negative + Negative = Positive → overflow.<br>
+        Mixed signs can NEVER overflow.</p>
+      </div>
+
+      <h3 class="ssh">Subtraction using 2's Complement</h3>
+      <div class="eg">
+        <p><strong>Compute 7 − 3 using 4-bit 2's complement:</strong></p>
+        <div class="cb">7 = 0111
+3 = 0011 → 2's complement of 3: flip→1100, add 1→1101
+
+0111 + 1101 = 10100
+
+Take 4 bits (discard carry out): 0100 = 4 ✓
+The carry out (1) is discarded for signed arithmetic — it is NOT an overflow indicator here.
+(Overflow check: Cin to MSB=1, Cout from MSB=1. 1 XOR 1 = 0, no overflow ✓)</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Carry Out ≠ Overflow in Signed Arithmetic</span>
+        <p>In unsigned arithmetic, a carry out indicates overflow (result too large for n bits). In signed (2's complement) arithmetic, a carry out does NOT necessarily indicate overflow. Overflow in signed arithmetic is detected by Cᵢₙ XOR Cₒᵤₜ at the MSB position, NOT by carry out alone. These are completely separate concepts. GATE tests this distinction every year.</p>
+      </div>
+
+      <h3 class="ssh">BCD — Binary Coded Decimal</h3>
+      <div class="def-box">
+        <span class="lbl">BCD</span>
+        <p>Each decimal digit is encoded independently as a 4-bit binary number. Only values 0–9 are valid BCD digits (0000–1001). Values 1010–1111 are invalid BCD. Used in calculators, financial systems, displays where exact decimal representation is required.<br>
+        <strong>BCD addition correction:</strong> If sum of two BCD digits exceeds 9, add 6 (0110) to correct — this skips the invalid values and generates a carry.</p>
+      </div>
+      <div class="eg">
+        <p><strong>BCD add: 7 + 8 = 15:</strong></p>
+        <div class="cb">0111 (7) + 1000 (8) = 1111 (=15 binary, but 1111 is invalid BCD)
+Add correction 0110: 1111 + 0110 = 1 0101
+Result: carry=1, BCD digit=0101 (5) → represents 15 in BCD ✓</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — FLOATING POINT ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Floating-Point Representation — <em>IEEE 754</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="ieee754">
+      <h2 class="sh">3.1 &nbsp; IEEE 754 — Format &amp; Encoding <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">IEEE 754 General Format</span>
+        <p>Value = (−1)ˢ × M × 2ᴱ<br>
+        where S = sign bit, M = significand (mantissa), E = exponent.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Format</th><th>Total bits</th><th>Sign</th><th>Exponent bits</th><th>Fraction bits</th><th>Bias</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Single precision (float)</strong></td><td>32</td><td>1</td><td>8</td><td>23</td><td>127</td></tr>
+            <tr><td><strong>Double precision (double)</strong></td><td>64</td><td>1</td><td>11</td><td>52</td><td>1023</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Normalized Numbers — The Standard Case</span>
+        <p>
+          For normalized numbers (exponent field ≠ 0 and ≠ all-1s):<br>
+          <strong>Actual exponent E = stored exponent − bias</strong><br>
+          <strong>Mantissa M = 1.fraction</strong> (the leading 1 is <em>implicit</em> — not stored, always assumed)<br>
+          <strong>Value = (−1)ˢ × 1.fraction × 2^(stored_exp − bias)</strong>
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Encode −6.75 in IEEE 754 single precision:</strong></p>
+        <div class="cb">Step 1: Sign = 1 (negative)
+Step 2: |−6.75| = 6.75. Convert to binary:
+  6   = 110₂
+  0.75 = 0.11₂  (0.75×2=1.5→1, 0.5×2=1.0→1)
+  6.75 = 110.11₂
+Step 3: Normalize: 1.1011 × 2² (move point 2 places left)
+Step 4: Stored exponent = E + bias = 2 + 127 = 129 = 10000001₂
+Step 5: Fraction = 1011 followed by 19 zeros (23 bits total, leading 1 implicit)
+         = 10110000000000000000000
+
+IEEE 754 single: 1 | 10000001 | 10110000000000000000000
+Hex: 0xC0D80000</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Decode IEEE 754 single: 0 10000010 10100000000000000000000</strong></p>
+        <div class="cb">Sign bit = 0 (positive)
+Stored exponent = 10000010₂ = 130. Actual E = 130 − 127 = 3
+Fraction = .10100000... → Mantissa = 1.10100...
+Value = 1.101₂ × 2³ = 1101.0₂ = 13.0₁₀</div>
+      </div>
+
+      <h3 class="ssh">Special Values in IEEE 754</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Exponent field</th><th>Fraction field</th><th>Value</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>All 0s (00000000)</td><td>All 0s</td><td>±0</td><td>+0 or −0 depending on sign bit</td></tr>
+            <tr><td>All 0s (00000000)</td><td>Non-zero</td><td>Denormalized (subnormal)</td><td>Values near 0, mantissa = 0.fraction × 2^(1−bias)</td></tr>
+            <tr><td>All 1s (11111111)</td><td>All 0s</td><td>±∞</td><td>Division by zero result</td></tr>
+            <tr><td>All 1s (11111111)</td><td>Non-zero</td><td>NaN (Not a Number)</td><td>0/0, √(−1), ∞−∞</td></tr>
+            <tr><td>Otherwise</td><td>Any</td><td>Normalized number</td><td>Standard case</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Denormalized Numbers</span>
+        <p>When exponent field = 0 and fraction ≠ 0: the number is <strong>denormalized</strong>. The implicit leading 1 becomes a leading 0: M = 0.fraction. Actual exponent = 1 − bias (not 0 − bias). Denormals fill the gap between 0 and the smallest normalized number, preventing "underflow to zero."</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Range &amp; Precision — Common Confusion</span>
+        <p><strong>Range</strong> is determined by the number of exponent bits — more exponent bits → wider range. <strong>Precision</strong> is determined by fraction bits — more fraction bits → more significant digits. Adding exponent bits widens the range but doesn't improve precision. Adding fraction bits improves precision but doesn't widen the range. Double has more of both compared to single.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Single (32-bit)</th><th>Double (64-bit)</th></tr></thead>
+          <tbody>
+            <tr><td>Largest normalized</td><td>≈ 3.4 × 10³⁸</td><td>≈ 1.8 × 10³⁰⁸</td></tr>
+            <tr><td>Smallest normalized</td><td>≈ 1.2 × 10⁻³⁸</td><td>≈ 2.2 × 10⁻³⁰⁸</td></tr>
+            <tr><td>Decimal precision</td><td>≈ 7 significant digits</td><td>≈ 15–16 significant digits</td></tr>
+            <tr><td>Machine epsilon</td><td>≈ 1.19 × 10⁻⁷</td><td>≈ 2.22 × 10⁻¹⁶</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — BOOLEAN ALGEBRA ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Boolean Algebra <em>&amp; Logic Gates</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="boolean-laws">
+      <h2 class="sh">4.1 &nbsp; Boolean Laws &amp; Theorems <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Law</th><th>AND form</th><th>OR form</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Identity</strong></td><td>A · 1 = A</td><td>A + 0 = A</td></tr>
+            <tr><td><strong>Null (Annihilation)</strong></td><td>A · 0 = 0</td><td>A + 1 = 1</td></tr>
+            <tr><td><strong>Idempotent</strong></td><td>A · A = A</td><td>A + A = A</td></tr>
+            <tr><td><strong>Complement</strong></td><td>A · Ā = 0</td><td>A + Ā = 1</td></tr>
+            <tr><td><strong>Double Negation</strong></td><td colspan="2">Ā̄ = A</td></tr>
+            <tr><td><strong>Commutative</strong></td><td>A·B = B·A</td><td>A+B = B+A</td></tr>
+            <tr><td><strong>Associative</strong></td><td>(A·B)·C = A·(B·C)</td><td>(A+B)+C = A+(B+C)</td></tr>
+            <tr><td><strong>Distributive</strong></td><td>A·(B+C) = A·B+A·C</td><td>A+(B·C) = (A+B)·(A+C)</td></tr>
+            <tr><td><strong>De Morgan's</strong></td><td>(A·B)̄ = Ā+B̄</td><td>(A+B)̄ = Ā·B̄</td></tr>
+            <tr><td><strong>Absorption</strong></td><td>A·(A+B) = A</td><td>A+(A·B) = A</td></tr>
+            <tr><td><strong>Consensus</strong></td><td>A·B + Ā·C + B·C = A·B + Ā·C</td><td>(A+B)·(Ā+C)·(B+C) = (A+B)·(Ā+C)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Consensus Theorem — Eliminates Redundant Term</span>
+        <p>The consensus theorem: AB + ĀC + BC = AB + ĀC. The term BC is redundant (consensus of A and Ā's partner terms). Whenever you see all three terms, the middle one (sharing both variables' complements: B·C) can be dropped. This is frequently tested as "simplify this expression — which terms are redundant?"</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="logic-gates">
+      <h2 class="sh">4.2 &nbsp; Logic Gates — Complete Reference <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tt-wrap">
+        <table>
+          <thead><tr><th>A</th><th>B</th><th>NOT A</th><th>AND</th><th>OR</th><th>NAND</th><th>NOR</th><th>XOR</th><th>XNOR</th></tr></thead>
+          <tbody>
+            <tr><td class="F">0</td><td class="F">0</td><td class="T">1</td><td class="F">0</td><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td></tr>
+            <tr><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="F">0</td></tr>
+            <tr><td class="T">1</td><td class="F">0</td><td class="F">0</td><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="F">0</td></tr>
+            <tr><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="F">0</td><td class="F">0</td><td class="T">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Gate</th><th>Expression</th><th>Key Property</th><th>Universally complete?</th></tr></thead>
+          <tbody>
+            <tr><td>AND</td><td>A · B</td><td>Output 1 only when ALL inputs 1</td><td class="bad">No (with OR only)</td></tr>
+            <tr><td>OR</td><td>A + B</td><td>Output 0 only when ALL inputs 0</td><td class="bad">No (with AND only)</td></tr>
+            <tr><td>NOT</td><td>Ā</td><td>Inverts input</td><td class="bad">No (alone)</td></tr>
+            <tr><td>NAND</td><td>(A·B)̄</td><td>Universal gate — can implement any function</td><td class="good">Yes (alone)</td></tr>
+            <tr><td>NOR</td><td>(A+B)̄</td><td>Universal gate — can implement any function</td><td class="good">Yes (alone)</td></tr>
+            <tr><td>XOR</td><td>A⊕B = AB̄+ĀB</td><td>Output 1 when odd number of 1 inputs</td><td class="bad">No</td></tr>
+            <tr><td>XNOR</td><td>(A⊕B)̄ = AB+ĀB̄</td><td>Output 1 when even number of 1 inputs (=1 iff A=B)</td><td class="bad">No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">NAND/NOR Implementation of Basic Gates</h3>
+      <div class="cb">Using only NAND gates:
+NOT A   = NAND(A, A)  = (A·A)̄ = Ā
+A AND B = NAND(NAND(A,B), NAND(A,B)) = ((AB)̄)̄ = AB
+A OR B  = NAND(NAND(A,A), NAND(B,B)) = NAND(Ā, B̄) = (Ā·B̄)̄ = A+B
+
+Using only NOR gates:
+NOT A   = NOR(A, A)  = (A+A)̄ = Ā
+A OR B  = NOR(NOR(A,B), NOR(A,B)) = ((A+B)̄)̄ = A+B
+A AND B = NOR(NOR(A,A), NOR(B,B)) = NOR(Ā, B̄) = (Ā+B̄)̄ = A·B</div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — K-MAP ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">K-Map Minimization — <em>SOP, POS &amp; Don't Cares</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="kmap-def">
+      <h2 class="sh">5.1 &nbsp; Karnaugh Map — Method &amp; Rules <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">K-Map</span>
+        <p>A K-map (Karnaugh map) is a visual method for minimizing Boolean expressions. Cells representing adjacent minterms (differing in exactly one variable) are physically adjacent in the map — this makes grouping easy. Gray code ordering ensures physical adjacency = logical adjacency.</p>
+      </div>
+
+      <div class="kmap">
+        <span class="dv-label">2-variable K-map</span>
+       B=0  B=1
+A=0 | m0 | m1 |
+A=1 | m2 | m3 |
+
+        <span class="dv-label">3-variable K-map (rows=A, cols=BC in Gray code)</span>
+       BC=00 BC=01 BC=11 BC=10
+A=0 |  m0  |  m1  |  m3  |  m2  |
+A=1 |  m4  |  m5  |  m7  |  m6  |
+
+        <span class="dv-label">4-variable K-map (rows=AB, cols=CD in Gray code)</span>
+        CD=00 CD=01 CD=11 CD=10
+AB=00 | m0  | m1  | m3  | m2  |
+AB=01 | m4  | m5  | m7  | m6  |
+AB=11 | m12 | m13 | m15 | m14 |
+AB=10 | m8  | m9  | m11 | m10 |
+
+CRITICAL: Columns/rows use Gray code order: 00, 01, 11, 10
+NOT binary order: 00, 01, 10, 11
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">K-Map Grouping Rules</span>
+        <p>
+          1. Group only 1s (for SOP) or 0s (for POS).<br>
+          2. Groups must be rectangular and size must be a power of 2: 1, 2, 4, 8, 16.<br>
+          3. Groups can wrap around edges (the map is toroidal — top wraps to bottom, left to right).<br>
+          4. Make groups as large as possible (larger group = fewer variables in the term).<br>
+          5. Every 1 must be covered by at least one group.<br>
+          6. Use the minimum number of groups (fewer groups = fewer product terms).<br>
+          7. Don't-cares (X) can be treated as 0 or 1 — choose whichever makes larger groups.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Minimize f(A,B,C,D) = Σm(0,1,2,5,8,9,10) using K-map:</strong></p>
+        <div class="cb">     CD=00 CD=01 CD=11 CD=10
+AB=00|  1  |  1  |  0  |  1  |
+AB=01|  0  |  1  |  0  |  0  |
+AB=11|  0  |  0  |  0  |  0  |
+AB=10|  1  |  1  |  0  |  1  |
+
+Groupings:
+Group 1: m0,m1,m8,m9 (4 cells, wrap AB=00 and AB=10, CD=00,01)
+  → A'C' + AC' ... wait: AB=00,AB=10 means A doesn't matter if B=0.
+  B=0, CD=00 and CD=01 → B=0, D=0, C varies → B̄D̄
+  Actually: A varies (00,10=rows where B=0), C=0,D=0 and C=0,D=1
+  Common: B=0, C=0 → B̄C̄
+
+Group 2: m0,m2,m8,m10 (4 cells: AB=00,10 with CD=00,10)
+  Rows AB=00 and AB=10 (B=0). CD=00 and CD=10 (D=0).
+  Common: B=0, D=0 → B̄D̄
+
+Group 3: m1,m5 (2 cells: AB=00,01 with CD=01)
+  A=0, C=0, D=1 → ĀC̄D
+
+Minimal SOP: f = B̄C̄ + B̄D̄ + ĀC̄D
+(verify by checking all minterms are covered)</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Gray Code Column Order — The #1 K-Map Error</span>
+        <p>K-map columns must follow Gray code: 00, 01, 11, 10. Many students write 00, 01, 10, 11 — this puts m2 and m3 non-adjacent, breaking the whole point of the K-map. Memorize: the middle two columns are 01 and 11, not 01 and 10. The 11 column comes BEFORE 10.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dont-care">
+      <h2 class="sh">5.2 &nbsp; Don't-Care Conditions &amp; POS Minimization <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Don't-Care Conditions</span>
+        <p>Some input combinations may never occur (e.g., BCD digits 1010–1111 in a BCD circuit) or we don't care what the output is. These are marked X (don't care) in the truth table and K-map. Use them as 1s to enlarge groups for SOP, or as 0s to enlarge groups for POS — whichever creates larger groupings. Never use a group consisting ONLY of don't-cares — it doesn't cover any required minterm.</p>
+      </div>
+
+      <h3 class="ssh">POS Minimization — Group the 0s</h3>
+      <p>For POS (Product of Sums) minimization:</p>
+      <ul class="pl arr">
+        <li>Group the <strong>0s</strong> (not the 1s) in the K-map.</li>
+        <li>Each group of 0s gives a <strong>sum term (maxterm)</strong>.</li>
+        <li>Variables that are 0 in the group appear <strong>uncomplemented</strong> in the sum. Variables that are 1 appear <strong>complemented</strong>. (Opposite of SOP!)</li>
+        <li>The POS expression is the AND of all sum terms.</li>
+      </ul>
+
+      <div class="eg">
+        <p><strong>f(A,B) with 0s at m1 and m2:</strong></p>
+        <div class="cb">K-map:    B=0  B=1
+A=0  |  1  |  0  |  ← m1 is 0: A=0,B=1
+A=1  |  0  |  1  |  ← m2 is 0: A=1,B=0
+
+Group of 0s: m1 and m2 cannot be grouped (not adjacent diagonally in 2-var K-map)
+Two separate maxterms:
+  m1: A=0,B=1 → sum term: A+B̄ (A=0 → uncomplemented A, B=1 → complement B)
+  m2: A=1,B=0 → sum term: Ā+B
+
+POS: f = (A+B̄)(Ā+B)
+SOP equivalent: f = AB + ĀB̄  (= XNOR)  ✓</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — COMBINATIONAL CIRCUITS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Combinational Circuits — <em>Adders, MUX, Decoders &amp; Comparators</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="adders">
+      <h2 class="sh">6.1 &nbsp; Adders — Half, Full &amp; Ripple Carry <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--blue)">
+          <div class="ct">Half Adder</div>
+          <p>Adds two 1-bit inputs (A, B). Outputs: Sum S = A⊕B, Carry C = A·B. No carry input — cannot chain without modification.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">Full Adder</div>
+          <p>Adds three 1-bit inputs (A, B, Cᵢₙ). Outputs: S = A⊕B⊕Cᵢₙ, Cₒᵤₜ = A·B + A·Cᵢₙ + B·Cᵢₙ = Maj(A,B,Cᵢₙ). Can be built from 2 Half Adders + OR gate.</p>
+        </div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Full Adder truth table and expressions:</strong></p>
+        <div class="tt-wrap">
+          <table>
+            <thead><tr><th>A</th><th>B</th><th>Cᵢₙ</th><th>Sum S</th><th>Carry Cₒᵤₜ</th></tr></thead>
+            <tbody>
+              <tr><td class="F">0</td><td class="F">0</td><td class="F">0</td><td class="F">0</td><td class="F">0</td></tr>
+              <tr><td class="F">0</td><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td></tr>
+              <tr><td class="F">0</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="F">0</td></tr>
+              <tr><td class="F">0</td><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="T">1</td></tr>
+              <tr><td class="T">1</td><td class="F">0</td><td class="F">0</td><td class="T">1</td><td class="F">0</td></tr>
+              <tr><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="F">0</td><td class="T">1</td></tr>
+              <tr><td class="T">1</td><td class="T">1</td><td class="F">0</td><td class="F">0</td><td class="T">1</td></tr>
+              <tr><td class="T">1</td><td class="T">1</td><td class="T">1</td><td class="T">1</td><td class="T">1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>S = A⊕B⊕Cᵢₙ &nbsp;&nbsp;&nbsp; Cₒᵤₜ = AB + BCᵢₙ + ACᵢₙ</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Ripple Carry Adder (RCA)</span>
+        <p>Chain n Full Adders: Cₒᵤₜ of each stage feeds Cᵢₙ of the next. Simple but slow — the carry "ripples" through all n stages serially. Worst-case delay = n × (Full Adder delay). Gate: "Ripple carry adder has propagation delay proportional to n." True.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Carry Lookahead Adder (CLA)</span>
+        <p>Computes all carries in parallel using generate (G) and propagate (P) signals:<br>
+        Gᵢ = Aᵢ · Bᵢ &nbsp;&nbsp;&nbsp; Pᵢ = Aᵢ ⊕ Bᵢ<br>
+        Cᵢ₊₁ = Gᵢ + Pᵢ · Cᵢ<br>
+        Delay is O(log n) — much faster than RCA's O(n). Used in high-performance ALUs.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="mux-decoder">
+      <h2 class="sh">6.2 &nbsp; MUX, Decoder, Encoder &amp; Comparator <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Multiplexer (MUX)</h3>
+      <div class="def-box">
+        <span class="lbl">2ⁿ-to-1 MUX</span>
+        <p>A MUX selects one of 2ⁿ data inputs to route to the output based on n select lines. A 4-to-1 MUX has 4 data inputs (I₀–I₃), 2 select lines (S₁S₀), and 1 output. Output = I₀ if S₁S₀=00, I₁ if 01, I₂ if 10, I₃ if 11.<br>
+        <strong>MUX as universal function generator:</strong> A 2ⁿ-to-1 MUX can implement ANY n-variable Boolean function by connecting the data inputs to 0 or 1 according to the truth table.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Implement f(A,B,C) = Σm(1,3,5,6) using an 8-to-1 MUX (A,B,C as select lines):</strong></p>
+        <div class="cb">S₂S₁S₀ = A,B,C. Connect data inputs:
+I₀=0 (m0=0), I₁=1 (m1=1), I₂=0 (m2=0), I₃=1 (m3=1)
+I₄=0 (m4=0), I₅=1 (m5=1), I₆=1 (m6=1), I₇=0 (m7=0)</div>
+        <p>With a 4-to-1 MUX (using only A,B as selects, treating C as variable input):</p>
+        <div class="cb">When A=0,B=0: f=C (m1=1 needs C=1) → I₀=C
+When A=0,B=1: f=C (m3=1 needs C=1) → I₁=C
+When A=1,B=0: f=C (m5=1 needs C=1) → I₂=C
+When A=1,B=1: f=C̄ (m6=1 needs C=0) → I₃=C̄</div>
+      </div>
+
+      <h3 class="ssh">Decoder</h3>
+      <div class="def-box">
+        <span class="lbl">n-to-2ⁿ Decoder</span>
+        <p>A decoder with n inputs activates exactly one of 2ⁿ outputs based on the binary value of the input. Each output is a minterm of the input variables. A 2-to-4 decoder with inputs A,B has outputs: O₀=Ā·B̄, O₁=Ā·B, O₂=A·B̄, O₃=A·B.<br>
+        <strong>Decoder + OR gates = any Boolean function:</strong> OR together the outputs corresponding to the minterms of any function.</p>
+      </div>
+
+      <h3 class="ssh">Encoder &amp; Priority Encoder</h3>
+      <p>Encoder is the inverse of decoder — 2ⁿ inputs to n outputs. Exactly one input must be active. A <strong>priority encoder</strong> handles multiple active inputs by encoding the highest-priority (typically highest-numbered) active input. Used in interrupt controllers.</p>
+
+      <h3 class="ssh">Magnitude Comparator</h3>
+      <div class="def-box">
+        <span class="lbl">1-bit Comparator</span>
+        <p>For two 1-bit inputs A and B:<br>
+        A = B: (A⊕B)̄ = XNOR(A,B)<br>
+        A &gt; B: A·B̄<br>
+        A &lt; B: Ā·B<br>
+        For n-bit comparison: compare from MSB to LSB, cascade comparators.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="other-combinational">
+      <h2 class="sh">6.3 &nbsp; Tri-State Buffers, Parity Circuits &amp; ALU Overview <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Tri-State Buffer</h3>
+      <p>
+        A tri-state buffer has three output states: logic 0, logic 1, and <strong>high-impedance (Hi-Z)</strong>. When the enable signal is active, the output follows the input. When disabled, the output is electrically disconnected (Hi-Z) — allowing multiple buffers to share a bus without conflict. The foundation of all bus architectures.
+      </p>
+
+      <h3 class="ssh">Parity Generator/Checker</h3>
+      <div class="def-box">
+        <span class="lbl">XOR Tree for Parity</span>
+        <p>XOR of all data bits generates/checks parity. XOR is associative, so an n-input XOR tree takes O(log n) gate levels. Even parity bit = X₁ ⊕ X₂ ⊕ ... ⊕ Xₙ. Odd parity bit = complement of even parity. Check: XOR all received bits including parity — result should be 0 (even) or 1 (odd parity convention).</p>
+      </div>
+
+      <h3 class="ssh">ALU (Arithmetic Logic Unit)</h3>
+      <p>
+        The ALU performs arithmetic (add, subtract, multiply, compare) and logical (AND, OR, XOR, NOT, shift) operations. It is controlled by function select lines that choose the operation. A 1-bit ALU slice handles one bit and is cascaded to build an n-bit ALU. The carry out of one slice feeds the carry in of the next — identical to RCA structure. GATE tests: "How many gates are needed for an n-bit ALU?" — depends on complexity of operations supported.
+      </p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — SEQUENTIAL CIRCUITS ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Sequential Circuits — <em>Latches, Flip-Flops &amp; Registers</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="latches">
+      <h2 class="sh">7.1 &nbsp; Latches — Level-Triggered Memory <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Combinational vs Sequential</span>
+        <p>Combinational circuits: output depends only on current inputs. No memory. Sequential circuits: output depends on current inputs AND past history (state). They have memory — feedback paths store state.</p>
+      </div>
+
+      <h3 class="ssh">SR Latch (Set-Reset)</h3>
+      <div class="tt-wrap">
+        <table>
+          <thead><tr><th>S</th><th>R</th><th>Q (next)</th><th>Q̄ (next)</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td class="F">0</td><td class="F">0</td><td>Q (unchanged)</td><td>Q̄</td><td>Hold (memory)</td></tr>
+            <tr><td class="T">1</td><td class="F">0</td><td class="T">1</td><td class="F">0</td><td>Set</td></tr>
+            <tr><td class="F">0</td><td class="T">1</td><td class="F">0</td><td class="T">1</td><td>Reset</td></tr>
+            <tr><td class="T">1</td><td class="T">1</td><td>1</td><td>1</td><td class="bad">INVALID — Q=Q̄=1 undefined</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">SR=11 is the Forbidden State</span>
+        <p>When S=R=1, both Q and Q̄ are forced to 1 simultaneously — violating the invariant Q̄ = complement of Q. If inputs return to 00 simultaneously, the final state is unpredictable (depends on gate delays). This invalid state is the primary motivation for the D latch and D flip-flop, which have no invalid state.</p>
+      </div>
+
+      <h3 class="ssh">D Latch (Data / Transparent Latch)</h3>
+      <div class="tt-wrap">
+        <table>
+          <thead><tr><th>Enable (E)</th><th>D</th><th>Q (next)</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td class="F">0</td><td>X</td><td>Q (unchanged)</td><td>Latch holds — transparent disabled</td></tr>
+            <tr><td class="T">1</td><td class="F">0</td><td class="F">0</td><td>Q follows D (transparent)</td></tr>
+            <tr><td class="T">1</td><td class="T">1</td><td class="T">1</td><td>Q follows D (transparent)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>When E=1 (enabled), the latch is transparent — Q tracks D continuously. When E=0, Q holds its last value. This level-triggered behavior causes <strong>timing hazards</strong> in complex circuits — motivates edge-triggered flip-flops.</p>
+    </div>
+
+    <div class="sec" data-m="flip-flops">
+      <h2 class="sh">7.2 &nbsp; Flip-Flops — Edge-Triggered <span class="tag tg">GATE Critical</span></h2>
+
+      <p>
+        A flip-flop is an edge-triggered device — it only samples its inputs and updates its output at the <strong>clock edge</strong> (rising or falling). Between clock edges, the output is stable and the inputs don't affect it. This eliminates the transparency problem of latches.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Flip-Flop</th><th>Inputs</th><th>Next State Q⁺</th><th>Characteristic Equation</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SR FF</strong></td><td>S, R</td><td>SR=00→Q, SR=10→1, SR=01→0, SR=11→X</td><td>Q⁺ = S + R̄·Q, constraint S·R=0</td></tr>
+            <tr><td><strong>D FF</strong></td><td>D</td><td>Q⁺ = D</td><td>Q⁺ = D (simplest, most common)</td></tr>
+            <tr><td><strong>JK FF</strong></td><td>J, K</td><td>JK=00→Q, JK=10→1, JK=01→0, JK=11→Q̄</td><td>Q⁺ = J·Q̄ + K̄·Q</td></tr>
+            <tr><td><strong>T FF</strong></td><td>T</td><td>T=0→Q (hold), T=1→Q̄ (toggle)</td><td>Q⁺ = T⊕Q</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">JK Flip-Flop — No Forbidden State</span>
+        <p>JK FF improves upon SR FF by defining what happens when J=K=1: the output toggles (Q⁺=Q̄). There is no forbidden state. A T flip-flop is just a JK FF with J and K tied together (T=J=K). When T=0 (J=K=0): hold. When T=1 (J=K=1): toggle. T flip-flops are used in counters because they naturally divide frequency by 2.</p>
+      </div>
+
+      <h3 class="ssh">Flip-Flop Conversion</h3>
+      <div class="eg">
+        <p><strong>Convert D FF to T FF (implement T FF using D FF):</strong></p>
+        <div class="cb">T FF characteristic: Q⁺ = T⊕Q
+D FF characteristic: Q⁺ = D
+For D FF to behave as T FF: D = T⊕Q
+
+Implementation: Connect D = T XOR Q_current
+(route current state Q back through XOR gate with T to create D input)</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Convert D FF to JK FF:</strong></p>
+        <div class="cb">JK FF: Q⁺ = JQ̄ + K̄Q
+D FF: Q⁺ = D
+Therefore: D = JQ̄ + K̄Q
+
+Implementation: D = J·Q̄ + K̄·Q
+(two AND gates + one OR gate + one inverter, fed into D of D FF)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="registers-counters">
+      <h2 class="sh">7.3 &nbsp; Registers, Shift Registers &amp; Counters <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Registers</h3>
+      <p>An n-bit register is simply n D flip-flops sharing a common clock. On each rising clock edge, the register loads the n-bit input and holds it. Used as temporary storage in ALUs, CPUs, and pipelines.</p>
+
+      <h3 class="ssh">Shift Registers</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Serial-In Serial-Out (SISO)</div>
+          <p>Data enters one bit at a time at the input and exits one bit at a time at the output after n clock cycles (n = number of FFs). Used for delay and serial communication.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Serial-In Parallel-Out (SIPO)</div>
+          <p>Data enters serially, all n bits available in parallel after n clock cycles. Serial-to-parallel conversion. Used in UART receivers.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Parallel-In Serial-Out (PISO)</div>
+          <p>All n bits loaded in parallel, then shifted out one bit at a time. Parallel-to-serial conversion. Used in UART transmitters.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Parallel-In Parallel-Out (PIPO)</div>
+          <p>All bits loaded and read simultaneously on clock edge. Standard n-bit register. Used for temporary data storage in data paths.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">Counters</h3>
+      <div class="def-box">
+        <span class="lbl">Ripple Counter (Asynchronous)</span>
+        <p>Each FF's output clocks the next FF. Simple but slow — ripple propagation delay = n × FF delay. MSB changes only after all lower bits have settled. Glitches possible. n T flip-flops (with T=1) create a modulo-2ⁿ counter.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Synchronous Counter</span>
+        <p>All FFs share the same clock. All outputs update simultaneously. No ripple delay. Requires more complex logic for T inputs of each stage but much faster and glitch-free. Standard in modern digital design.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Modulo-n counter with fewer than 2ⁿ states:</strong></p>
+        <div class="cb">3-bit binary counter counts: 000→001→010→011→100→101→110→111→000
+To make Modulo-6 counter (count 0 to 5, reset on 6):
+  When counter reaches 110 (6), reset all FFs to 000.
+  Use NAND of Q₂ and Q₁ (detect state 6 = 110) to asynchronously clear.
+  States: 000→001→010→011→100→101→000 (skips 110 and 111)
+
+Modulo-n counter can count from 0 to n-1.
+Design: use n flip-flops where 2^(n-1) < count ≤ 2^n.</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Ring Counter vs Johnson Counter</span>
+        <p><strong>Ring counter:</strong> Single 1 bit circulates through n flip-flops. n states for n FFs. One-hot encoding — only one FF is high at any time. Sequence: 1000→0100→0010→0001→1000.<br>
+        <strong>Johnson counter (Twisted Ring):</strong> Complement of output of last FF fed back to input of first. 2n states for n FFs. Sequence for 4-FF: 0000→1000→1100→1110→1111→0111→0011→0001→0000. GATE asks: "How many states does an n-bit Johnson counter have?" → 2n.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>2's complement range is symmetric</td><td>2's complement range is ASYMMETRIC: −2ⁿ⁻¹ to +(2ⁿ⁻¹−1). There is one more negative number than positive. For 8-bit: −128 to +127. −128 has no positive counterpart — negating −128 causes overflow.</td></tr>
+            <tr><td>2</td><td>Carry out = overflow in signed arithmetic</td><td>In signed 2's complement arithmetic, carry OUT ≠ overflow. Overflow = Cᵢₙ XOR Cₒᵤₜ at the MSB. Carry out is irrelevant for signed overflow detection. In UNSIGNED arithmetic, carry out DOES indicate overflow.</td></tr>
+            <tr><td>3</td><td>IEEE 754 exponent bias is n (number of bits)</td><td>Bias for single precision (8 exponent bits) = 127 = 2⁷−1, NOT 128. For double (11 bits): bias = 1023 = 2¹⁰−1. Formula: bias = 2^(k−1) − 1 where k = exponent bits.</td></tr>
+            <tr><td>4</td><td>IEEE 754 leading bit is stored</td><td>For NORMALIZED IEEE 754 numbers, the leading 1 of the mantissa is IMPLICIT — not stored. The fraction field stores only the bits after the decimal point. So 23 fraction bits give 24 bits of precision in single. For DENORMALIZED numbers, the leading bit is 0 (and IS implicit).</td></tr>
+            <tr><td>5</td><td>K-map column order: 00,01,10,11</td><td>K-map uses GRAY CODE order: 00, 01, 11, 10. The column for 11 comes BEFORE 10. Using wrong order destroys adjacency and gives wrong minimization. This is the #1 K-map error.</td></tr>
+            <tr><td>6</td><td>Larger K-map group = more variables</td><td>LARGER groups have FEWER variables in the resulting term. A group of 4 has 2 fewer variables than a group of 1. Doubling the group size removes one variable. Bigger = simpler expression. Minimize by making groups as large as possible.</td></tr>
+            <tr><td>7</td><td>D latch and D flip-flop are the same</td><td>D latch is LEVEL-triggered — transparent when Enable=1, holds when Enable=0. D flip-flop is EDGE-triggered — only changes on clock edge. Latches cause timing hazards in synchronous designs; FFs don't. GATE distinguishes these carefully.</td></tr>
+            <tr><td>8</td><td>JK FF has forbidden state like SR</td><td>Unlike SR FF (S=R=1 is forbidden), JK FF has NO forbidden state. J=K=1 causes TOGGLE (Q⁺=Q̄) — a defined, useful behavior. This is the key advantage of JK over SR.</td></tr>
+            <tr><td>9</td><td>n-bit ring counter has 2n states</td><td>n-bit RING counter has n states (single 1 bit circulates). n-bit JOHNSON counter has 2n states. GATE asks for both — don't confuse them.</td></tr>
+            <tr><td>10</td><td>Ripple carry adder is O(log n)</td><td>Ripple CARRY adder (RCA) is O(n) — carry propagates serially. Carry LOOKAHEAD adder (CLA) is O(log n). GATE frequently asks which is faster and by how much.</td></tr>
+            <tr><td>11</td><td>BCD uses 8 bits per digit</td><td>BCD uses 4 bits per decimal digit (0-9 → 0000-1001). Patterns 1010-1111 are invalid in BCD. For the number 23: BCD = 0010 0011 (8 bits for two digits). Pure binary 23 = 00010111 (different encoding).</td></tr>
+            <tr><td>12</td><td>NAND needs NOT+AND to implement</td><td>NAND (and NOR) are UNIVERSAL — they alone can implement any Boolean function. NOT A = NAND(A,A). AND AB = NAND(NAND(A,B),NAND(A,B)). OR A+B = NAND(NAND(A,A),NAND(B,B)). No other gates needed.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Formula &amp; Quick Reference</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula / Fact</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>2's complement range: −2ⁿ⁻¹ to 2ⁿ⁻¹−1</td><td>n-bit signed integer range</td></tr>
+            <tr><td>Overflow = Cᵢₙ XOR Cₒᵤₜ (MSB position)</td><td>Signed 2's complement overflow detection</td></tr>
+            <tr><td>IEEE 754 bias = 2^(k−1)−1</td><td>k = exponent bit count; Single: 127, Double: 1023</td></tr>
+            <tr><td>Actual exponent = stored − bias</td><td>Decode IEEE 754 exponent</td></tr>
+            <tr><td>Value = (−1)ˢ × 1.fraction × 2^(stored_exp − bias)</td><td>IEEE 754 normalized value</td></tr>
+            <tr><td>K-map group of 2ᵏ → k variables eliminated</td><td>Minimization power of grouping</td></tr>
+            <tr><td>n-to-2ⁿ decoder has n inputs, 2ⁿ outputs</td><td>Each output is a minterm</td></tr>
+            <tr><td>2ⁿ-to-1 MUX: n select lines, 2ⁿ data inputs</td><td>MUX structure</td></tr>
+            <tr><td>Full adder: S = A⊕B⊕Cᵢₙ, Cₒᵤₜ = AB+BCᵢₙ+ACᵢₙ</td><td>Full adder equations</td></tr>
+            <tr><td>JK FF: Q⁺ = JQ̄+K̄Q</td><td>JK flip-flop characteristic equation</td></tr>
+            <tr><td>T FF: Q⁺ = T⊕Q</td><td>T flip-flop characteristic equation</td></tr>
+            <tr><td>Ring counter: n states for n FFs</td><td>Single 1 bit circulates</td></tr>
+            <tr><td>Johnson counter: 2n states for n FFs</td><td>Complemented feedback</td></tr>
+            <tr><td>Modulo-2ⁿ counter: n FFs (T=1 all)</td><td>Ripple counter natural modulus</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>Base conversion NAT:</strong> "Convert 0xBF4 to decimal." B=11, F=15, 4=4. 11×256 + 15×16 + 4 = 2816+240+4 = 3060. 1-mark direct.</li>
+        <li><strong>2's complement NAT:</strong> "What is −17 in 6-bit 2's complement?" 17=010001, flip=101110, +1=101111. Verify: −32+8+4+2+1=−17. ✓ 1 mark.</li>
+        <li><strong>Overflow detection MCQ:</strong> "Is there overflow when adding 0111 and 0110 in 4-bit 2's complement?" Cin to bit 3 = 1, Cout from bit 3 = 0. 1 XOR 0 = 1 → overflow. 1 mark.</li>
+        <li><strong>IEEE 754 encoding NAT:</strong> "Encode −5.5 in single precision." 5.5=101.1=1.011×2². Exp=129=10000001. Fraction=01100...0. 2 marks.</li>
+        <li><strong>K-map minimization:</strong> "Minimize f = Σm(0,2,4,5,6,7) with K-map." Draw 3-variable K-map, group 1s, extract SOP. 2 marks.</li>
+        <li><strong>Gate count MCQ:</strong> "How many 2-input NAND gates are needed to implement a full adder?" Full trace — typically 9 NAND gates. GATE occasionally asks this. 1-2 marks.</li>
+        <li><strong>MUX implementation:</strong> "Implement f(A,B,C)=Σm(1,4,6,7) using 4-to-1 MUX with A,B as selects." Find f for each AB combination, map to I₀-I₃. 2 marks.</li>
+        <li><strong>Counter states MCQ:</strong> "A 4-bit Johnson counter has how many valid states?" 2×4=8. "A 4-bit ring counter?" 4 states. 1 mark each.</li>
+        <li><strong>FF conversion:</strong> "Express D FF using JK FF." D=JQ̄+K̄Q means J=D, K=D̄ implements D FF using JK. 1-2 marks.</li>
+        <li><strong>Sequential circuit analysis:</strong> Given a circuit diagram with FFs and gates, derive the next-state equation and state table. 2-mark design question.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  Computer Organization &amp; Architecture · Number Systems, Boolean Algebra &amp; Digital Circuits · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

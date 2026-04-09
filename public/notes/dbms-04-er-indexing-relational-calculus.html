@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — ER Modeling, Indexing, B⁺-Trees &amp; Relational Calculus · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:38px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 8px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;} .cb .hi{background:var(--hl-y);}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE · DBMS File 04</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Database Management Systems</div>
+    <h1>ER Modeling, Indexing,<br><em>B⁺-Trees &amp; Relational Calculus</em></h1>
+    <p class="cover-desc">
+      The three layers GATE tests beyond SQL and normalization — the conceptual layer (ER diagrams and mapping rules), the physical layer (file organization, index structures, and B⁺-tree numericals), and the non-procedural layer (TRC and DRC expressions). Every formula derived, every mapping rule traced, every GATE trap documented.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Entity-Relationship Model</span>
+      <span class="chip">Ch 2 · ER-to-Relational Mapping</span>
+      <span class="chip">Ch 3 · File Organization</span>
+      <span class="chip">Ch 4 · Indexing — Dense, Sparse &amp; Clustering</span>
+      <span class="chip">Ch 5 · B-Trees &amp; B⁺-Trees</span>
+      <span class="chip">Ch 6 · Tuple Relational Calculus</span>
+      <span class="chip">Ch 7 · Domain Relational Calculus</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Numerical Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Entity-Relationship Model</a>
+    <a href="#ch2"><span class="tn">02</span>ER-to-Relational Mapping</a>
+    <a href="#ch3"><span class="tn">03</span>File Organization</a>
+    <a href="#ch4"><span class="tn">04</span>Indexing — Dense, Sparse &amp; Clustering</a>
+    <a href="#ch5"><span class="tn">05</span>B-Trees &amp; B⁺-Trees</a>
+    <a href="#ch6"><span class="tn">06</span>Tuple Relational Calculus</a>
+    <a href="#ch7"><span class="tn">07</span>Domain Relational Calculus</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Numerical Reference</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — ER MODEL ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Entity-Relationship Model — <em>Entities, Attributes &amp; Relationships</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="entities">
+      <h2 class="sh">1.1 &nbsp; Entities &amp; Attributes <span class="tag tc">Core</span></h2>
+
+      <p>
+        The ER model is a <strong>conceptual design tool</strong> — it describes what data exists and how it is related, before any tables are created. Think of it as the blueprint before the construction. GATE tests the ER model at two levels: recognizing correct notation in diagrams, and applying mapping rules to generate relational schemas.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Entity vs Entity Set</span>
+        <p><strong>Entity:</strong> A single real-world object that is distinguishable from others. Example: the student "Aryan" with RollNo 101.<br>
+        <strong>Entity Set:</strong> A collection of entities of the same type sharing the same properties. Example: the set of all students.<br>
+        In ER diagrams, entity sets are drawn as <mark>rectangles</mark>. Individual entities are instances, not shown in the diagram.</p>
+      </div>
+
+      <h3 class="ssh">Attribute Types</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Attribute Type</th><th>Notation</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Simple</td><td>Oval</td><td>Atomic, indivisible</td><td>RollNo, Age</td></tr>
+            <tr><td>Composite</td><td>Oval with child ovals</td><td>Can be divided into sub-parts</td><td>Name → {FirstName, LastName}</td></tr>
+            <tr><td>Multi-valued</td><td>Double oval</td><td>Can hold multiple values for one entity</td><td>PhoneNumbers, Degrees</td></tr>
+            <tr><td>Derived</td><td>Dashed oval</td><td>Computed from other attributes</td><td>Age (derived from DOB)</td></tr>
+            <tr><td>Key</td><td>Underlined oval</td><td>Uniquely identifies each entity</td><td>RollNo</td></tr>
+            <tr><td>Partial Key</td><td>Dashed underlined oval</td><td>Uniquely identifies weak entity within owner</td><td>LoanNo (within a Customer)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Derived Attributes Are NOT Stored</span>
+        <p>A derived attribute (dashed oval) is computed on demand — it is <strong>not</strong> physically stored in the database. GATE trap: "Which attribute requires a new column in the table?" — derived attributes do NOT generate a column. Composite attributes generate columns for their leaf-level parts only (not the composite attribute itself).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="strong-weak">
+      <h2 class="sh">1.2 &nbsp; Strong vs. Weak Entities <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Strong Entity</div>
+          <p>Has its own primary key. Exists independently. Drawn as a <strong>single rectangle</strong>. Example: Student, Course, Employee.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Weak Entity</div>
+          <p>No primary key on its own. Depends on an <strong>owner (strong) entity</strong> for existence. Drawn as a <strong>double rectangle</strong>. Identified by its <em>discriminator</em> + owner's key.</p>
+        </div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Identifying Relationship &amp; Discriminator</span>
+        <p>The relationship connecting a weak entity to its owner is the <strong>identifying relationship</strong> — drawn as a <strong>double diamond</strong>. The attribute that partially distinguishes weak entity instances among those with the same owner is the <strong>discriminator</strong> (also called partial key), drawn with a <strong>dashed underline</strong>.<br><br>
+        <strong>Full key of a weak entity</strong> = Owner's primary key + Discriminator.<br>
+        Example: <code>Dependent</code> is weak, owned by <code>Employee</code>. Discriminator = <code>DependentName</code>. Full identifier = (EmployeeID, DependentName).</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Identify what is strong/weak: A bank has Customers. Each Customer has multiple Loans. A Loan cannot exist without a Customer.</strong></p>
+        <p><strong>Customer</strong> → Strong entity. Has its own key (CustomerID).</p>
+        <p><strong>Loan</strong> → Weak entity. No meaning without Customer. Identifying relationship: <em>Has</em>. Discriminator: LoanNumber (unique per customer, not globally). Full key: (CustomerID, LoanNumber).</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Total Participation of Weak Entity</span>
+        <p>A weak entity <strong>always</strong> has total participation in its identifying relationship — it cannot exist without its owner. GATE frequently asks: "What is the participation of a weak entity in its identifying relationship?" Answer: <strong>always total</strong> (double line). The owner entity may have partial or total participation depending on whether all owner instances must have the weak entity.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="relationships">
+      <h2 class="sh">1.3 &nbsp; Relationships — Cardinality &amp; Participation <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Cardinality Ratios</span>
+        <p><strong>1:1</strong> — One entity in A is associated with at most one entity in B, and vice versa.<br>
+        <strong>1:N</strong> — One entity in A is associated with many in B; each entity in B is associated with at most one in A.<br>
+        <strong>M:N</strong> — Many entities in A associate with many in B.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Participation Constraints</span>
+        <p><strong>Total participation (double line):</strong> Every entity in the set MUST participate in at least one relationship instance. Equivalent to a NOT NULL foreign key constraint or mandatory participation.<br>
+        <strong>Partial participation (single line):</strong> Some entities may not participate. Optional.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Constraint</th><th>ER Notation</th><th>Relational equivalent</th></tr></thead>
+          <tbody>
+            <tr><td>Total participation</td><td>Double line on entity side</td><td>NOT NULL foreign key / mandatory FK</td></tr>
+            <tr><td>Partial participation</td><td>Single line on entity side</td><td>Nullable foreign key</td></tr>
+            <tr><td>1:N relationship</td><td>Arrow on "1" side, no arrow on "N" side</td><td>FK placed in the "N" side table</td></tr>
+            <tr><td>1:1 relationship</td><td>Arrow on both sides</td><td>FK can go in either table (prefer total-participation side)</td></tr>
+            <tr><td>M:N relationship</td><td>No arrows</td><td>Requires a new bridge/junction table</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Degree of a Relationship</h3>
+      <p>
+        <strong>Binary</strong> (degree 2): two entity sets — most common. <strong>Ternary</strong> (degree 3): three entity sets — GATE occasionally tests these. <strong>Unary</strong> (degree 1): an entity relates to itself (e.g., Employee <em>manages</em> Employee). Key distinction: a ternary relationship is <strong>not the same</strong> as three binary relationships — they can capture different semantics.
+      </p>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 2 — ER TO RELATIONAL MAPPING ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">ER-to-Relational Mapping — <em>The Seven Rules</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="mapping-rules">
+      <h2 class="sh">2.1 &nbsp; The Seven Mapping Rules <span class="tag tg">GATE Tested</span></h2>
+
+      <p>Converting an ER diagram to a relational schema is algorithmic. GATE tests both the output (which tables are created) and the reasoning (why that choice). The seven rules below cover every case.</p>
+
+      <ol class="pl-steps">
+        <li><span class="pl-num">1</span><strong>Strong Entity Set</strong> → one relation with all simple attributes. Composite attributes: use only leaf-level components. Multi-valued attributes: separate table (see Rule 7). Primary key = entity's key attribute.</li>
+        <li><span class="pl-num">2</span><strong>Weak Entity Set</strong> → one relation with its own attributes + the primary key of the identifying (owner) entity. Primary key = (owner's PK + discriminator).</li>
+        <li><span class="pl-num">3</span><strong>1:1 Relationship</strong> → add a foreign key from one side into the other. <mark>Prefer the side with total participation</mark> — place the FK there (avoids NULLs). Alternatively, merge both entity sets into one table if both have total participation.</li>
+        <li><span class="pl-num">4</span><strong>1:N Relationship</strong> → add a foreign key in the <mark>N side</mark> table referencing the 1-side primary key. Include any relationship attributes in the N-side table. Do NOT create a new table (unless the N-side has partial participation and you want to avoid NULLs — then a separate table is optional).</li>
+        <li><span class="pl-num">5</span><strong>M:N Relationship</strong> → <mark>always create a new junction table</mark>. Its primary key = composite of both entity sets' primary keys. Include any relationship attributes as additional columns in this junction table.</li>
+        <li><span class="pl-num">6</span><strong>Multi-valued Attribute</strong> → create a new table with: the entity's primary key (FK back to entity) + the multi-valued attribute. Primary key = (entity PK + attribute value).</li>
+        <li><span class="pl-num">7</span><strong>N-ary (Ternary+) Relationship</strong> → create a new table. PK = combination of all participating entity keys (may be reduced if cardinality constraints allow).</li>
+      </ol>
+    </div>
+
+    <div class="sec" data-m="mapping-examples">
+      <h2 class="sh">2.2 &nbsp; Mapping Worked Examples <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="eg">
+        <p><strong>Map: Student (RollNo, Name, PhoneNos[multi-valued]) — takes → Course (CID, Title). Cardinality: M:N. Both partial participation.</strong></p>
+        <div class="cb">Rule 1: Student(<span class="hi">RollNo</span>, Name)           ← composite ignored, PK=RollNo
+Rule 1: Course(<span class="hi">CID</span>, Title)              ← PK=CID
+Rule 6: Student_Phone(<span class="hi">RollNo, Phone</span>)    ← multi-valued; PK=(RollNo,Phone)
+                                      FK: RollNo → Student
+Rule 5: Takes(<span class="hi">RollNo, CID</span>)             ← M:N junction; PK=(RollNo,CID)
+                                      FK: RollNo → Student; CID → Course</div>
+        <p><strong>Result: 4 tables.</strong> Note: PhoneNos generates a separate table, not a column in Student.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Map: Department (DID, Name) — has → Employee (EID, Name). Cardinality: 1:N (one dept has many employees). Employee has total participation.</strong></p>
+        <div class="cb">Rule 1: Department(<span class="hi">DID</span>, Name)
+Rule 1: Employee(<span class="hi">EID</span>, Name, DID)   ← FK added to N-side (Employee)
+                                  FK: DID → Department
+                                  NOT NULL (total participation of Employee)</div>
+        <p><strong>Result: 2 tables.</strong> FK goes in Employee (the N-side). NOT NULL because Employee totally participates — every employee must belong to a department.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Map weak entity: Employee (EID, Name) — has → Dependent (DependentName, DOB). Identifying relationship. Dependent is weak.</strong></p>
+        <div class="cb">Rule 1: Employee(<span class="hi">EID</span>, Name)
+Rule 2: Dependent(<span class="hi">EID, DependentName</span>, DOB)
+                                  PK = (EID, DependentName)
+                                  FK: EID → Employee
+                                  ON DELETE CASCADE ← deleting employee removes dependents</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">1:1 with Both Partial Participation — 3 Options All Valid</span>
+        <p>When a 1:1 relationship has partial participation on both sides, you have three valid choices: (a) FK in table A referencing B, (b) FK in table B referencing A, (c) merge A and B. GATE may ask which is most efficient — the answer is usually the one that minimizes NULLs, which means put the FK on the side that participates more (or is more frequently associated).</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 3 — FILE ORGANIZATION ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">File Organization — <em>Storage, Records &amp; Structures</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="file-basics">
+      <h2 class="sh">3.1 &nbsp; Records, Blocks &amp; File Structures <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Key Terminology</span>
+        <p><strong>Block (Page):</strong> The unit of I/O transfer between disk and memory. Typical size: 512B to 16KB. A database reads/writes one block at a time — this is the cost model.<br>
+        <strong>Record:</strong> One row of a table stored on disk. Can be fixed-length or variable-length.<br>
+        <strong>Blocking Factor (bfr):</strong> Number of records that fit in one block = ⌊Block Size / Record Size⌋.<br>
+        <strong>Number of Blocks:</strong> ⌈Number of Records / bfr⌉.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Block size = 1024 bytes. Record size = 100 bytes. 500 records. How many blocks?</strong></p>
+        <div class="cb">bfr = ⌊1024 / 100⌋ = ⌊10.24⌋ = 10 records/block
+Blocks = ⌈500 / 10⌉ = ⌈50⌉ = 50 blocks</div>
+      </div>
+
+      <h3 class="ssh">Spanned vs. Unspanned Records</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Unspanned</div>
+          <p>A record must fit entirely within one block. Simple to implement. Wastes space when record size doesn't divide block size evenly. Most common in practice.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Spanned</div>
+          <p>A record can span across two consecutive blocks. Requires a pointer at the end of one block linking to the continuation in the next. Better space utilization. Used when records are large or variable-length.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">File Organization Types</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Organization</th><th>Records ordered by</th><th>Best for</th><th>Weakness</th></tr></thead>
+          <tbody>
+            <tr><td>Heap (Unordered)</td><td>Insertion order</td><td>Bulk inserts, full scans</td><td>Linear search O(n blocks)</td></tr>
+            <tr><td>Sequential (Ordered)</td><td>Key field value</td><td>Range queries, binary search</td><td>Expensive inserts (maintain order)</td></tr>
+            <tr><td>Hashed</td><td>Hash of key field → bucket</td><td>Point lookups (equality)</td><td>No range queries; overflow buckets</td></tr>
+            <tr><td>Clustered</td><td>Non-key field (clustering field)</td><td>Queries on clustering field ranges</td><td>Only one clustering per file</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 4 — INDEXING ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Indexing — <em>Dense, Sparse, Primary, Secondary &amp; Clustering</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="index-types">
+      <h2 class="sh">4.1 &nbsp; Index Classification <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        An index is a separate, smaller data structure that maps search key values to disk block addresses — allowing the database to find records without scanning the entire file. GATE tests both the classification and the numerical cost of index lookup.
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Index Type</th><th>Built on</th><th>File ordering</th><th>One entry per</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Primary Index</strong></td><td>Ordering key field</td><td>File IS ordered on this field</td><td>Block (sparse — one entry per block)</td></tr>
+            <tr><td><strong>Clustering Index</strong></td><td>Ordering non-key field</td><td>File ordered on non-key field</td><td>Distinct value of the field</td></tr>
+            <tr><td><strong>Secondary Index</strong></td><td>Non-ordering field</td><td>File is NOT ordered on this field</td><td>Record (dense — one entry per record)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Dense vs. Sparse Index</span>
+        <p><strong>Dense index:</strong> One index entry for every record in the file. Always points directly to the record. Required for secondary indexes (since file is not ordered).<br>
+        <strong>Sparse index:</strong> One index entry for every block (or every distinct key group). Smaller index, but requires extra search within a block after finding the block. Only possible when file is ordered on the search key — i.e., for primary and clustering indexes.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>File: 10,000 records, block size = 1024 B, record size = 100 B, key field = 10 B, block pointer = 6 B. How many index entries for a primary (sparse) index? How many index blocks?</strong></p>
+        <div class="cb">bfr = ⌊1024/100⌋ = 10 records/block
+Data blocks = ⌈10000/10⌉ = 1000 blocks
+
+Primary index has ONE entry per data block:
+  Index entries = 1000
+
+Index record size = key(10) + pointer(6) = 16 B
+Index bfr = ⌊1024/16⌋ = 64 entries/index block
+Index blocks = ⌈1000/64⌉ = 16 index blocks
+
+Binary search on 16 index blocks: ⌈log₂16⌉ = 4 I/Os
+Then 1 data block read = 5 I/Os total
+(vs. binary search on data directly = ⌈log₂1000⌉ = 10 I/Os)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="index-secondary">
+      <h2 class="sh">4.2 &nbsp; Secondary Index — Dense &amp; Multi-Level <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Secondary Index on Non-Key Field</span>
+        <p>When the search field has duplicate values (non-key), a secondary index needs one entry per <em>distinct value</em>, with that entry containing a pointer to a <strong>bucket of record pointers</strong> (since multiple records share the value). This two-level indirection is important: secondary index → bucket → records.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Multi-Level Index</span>
+        <p>If the first-level index is too large to fit in memory, build an index on the index. At each level, entries reduce by a factor of the index blocking factor (fan-out). Levels needed = ⌈log_bfr_i(number of first-level entries)⌉. This is the foundation of B-trees.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Secondary Index Does NOT Imply Dense</span>
+        <p>Secondary index on a <em>key</em> field is dense (one entry per record — because the file is not ordered on this field, you cannot skip any). But secondary index on a <em>non-key</em> field can have one entry per distinct value — not one per record. GATE traps you by asking "dense or sparse?" for secondary indexes on non-key fields: the answer depends on whether it's key or non-key.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 5 — B-TREES & B+ TREES ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">B-Trees <em>&amp; B⁺-Trees</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="btree-properties">
+      <h2 class="sh">5.1 &nbsp; B-Tree Properties <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">B-Tree of Order p — Node Structure</span>
+        <p>Every internal node stores at most <strong>p−1 keys</strong> and at most <strong>p pointers</strong> (tree pointers to child nodes). The keys within a node are in sorted order. Between consecutive keys kᵢ and kᵢ₊₁, a pointer leads to a subtree containing all keys k where kᵢ &lt; k &lt; kᵢ₊₁.<br><br>
+        <strong>Root:</strong> at least 2 children (if not a leaf).<br>
+        <strong>Internal nodes (non-root):</strong> at least ⌈p/2⌉ children.<br>
+        <strong>All leaves at same depth</strong> — B-tree is perfectly height-balanced.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">B-Tree Node Layout (Internal)</span>
+        <p><code>P₁ | K₁ | P₂ | K₂ | P₃ | ... | Kₙ | Pₙ₊₁</code><br>
+        where Pᵢ = tree pointer (child pointer), Kᵢ = search key value.<br>
+        Each key Kᵢ also stores a pointer to the actual data record (so B-tree internal nodes point to records for every key stored).<br>
+        Node size constraint: p×(pointer size) + (p−1)×(key size) + (p−1)×(record pointer size) ≤ Block size.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bplus-properties">
+      <h2 class="sh">5.2 &nbsp; B⁺-Tree — The Standard in Practice <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Key Difference: B⁺-Tree vs B-Tree</span>
+        <p><strong>B-tree:</strong> Every node (internal AND leaf) stores pointers to actual data records. A key can appear at most once in the tree.<br>
+        <strong>B⁺-tree:</strong> Only <strong>leaf nodes</strong> store pointers to data records. Internal nodes store only keys as routing guides (no data pointers). All keys in internal nodes are <strong>also duplicated</strong> in the leaf level. Leaf nodes are linked in a sorted doubly-linked list for efficient range scans.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">B⁺-Tree Node Types</span>
+INTERNAL NODE (order p):
+┌────┬────┬────┬────┬────┬────┬────┐
+│ P₁ │ K₁ │ P₂ │ K₂ │ P₃ │ K₃ │ P₄ │   ← Tree pointers only, NO data pointers
+└────┴────┴────┴────┴────┴────┴────┘
+     (p−1 keys, p tree pointers per node)
+
+LEAF NODE (order p_leaf):
+┌────┬────┬────┬────┬────┬────┬────┬──────┐
+│ K₁ │ R₁ │ K₂ │ R₂ │ K₃ │ R₃ │ K₄ │ Next │  ← Rᵢ = record pointer, Next = next leaf
+└────┴────┴────┴────┴────┴────┴────┴──────┘
+     (up to p_leaf−1 key+recordptr pairs + 1 next-leaf pointer)
+      </div>
+
+      <h3 class="ssh">Order Calculation — The Most Tested GATE Numerical</h3>
+      <div class="def-box">
+        <span class="lbl">Internal Node Order Formula</span>
+        <p>Each internal node stores p tree pointers and (p−1) keys. The node must fit in one disk block:<br>
+        <strong>p × P_size + (p−1) × V_size ≤ Block_size</strong><br>
+        where P_size = size of a tree pointer (block/page pointer), V_size = size of a key (search field value).<br>
+        Solve for p: p ≤ (Block_size + V_size) / (P_size + V_size). Take the floor.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Leaf Node Order Formula</span>
+        <p>Each leaf node stores up to (p_L − 1) pairs of (key, record_pointer) plus one next-leaf pointer:<br>
+        <strong>(p_L − 1) × (V_size + PR_size) + P_size ≤ Block_size</strong><br>
+        where PR_size = size of a record pointer (points to the actual record on disk), P_size = next-leaf pointer size.<br>
+        Solve: p_L ≤ (Block_size − P_size) / (V_size + PR_size) + 1. Take the floor.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Block size = 1024 B. Search key (V) = 9 B. Block pointer (P) = 6 B. Record pointer (PR) = 7 B. Find the order of internal nodes and leaf nodes of a B⁺-tree.</strong></p>
+        <div class="cb">INTERNAL NODE:
+p × 6 + (p−1) × 9 ≤ 1024
+6p + 9p − 9 ≤ 1024
+15p ≤ 1033
+p ≤ 68.87
+<span class="hi">p = 68</span>  ← internal node order
+
+Each internal node: 68 pointers, 67 keys.
+Min keys in non-root internal node: ⌈68/2⌉ − 1 = 33 keys.
+
+LEAF NODE:
+(p_L − 1) × (9 + 7) + 6 ≤ 1024
+(p_L − 1) × 16 ≤ 1018
+p_L − 1 ≤ 63.625
+p_L ≤ 64.625
+<span class="hi">p_L = 64</span>  ← leaf node order
+
+Each leaf node: up to 63 (key, record-ptr) pairs + 1 next-leaf pointer.
+Min key-record pairs in a leaf: ⌈(64−1)/2⌉ = 32 pairs.</div>
+      </div>
+
+      <h3 class="ssh">Height and Search Cost</h3>
+      <div class="def-box">
+        <span class="lbl">Maximum Records in a B⁺-Tree of Height h</span>
+        <p>Max leaf nodes at height h = p^(h−1) (root at level 1).<br>
+        Max records = p^(h−1) × (p_L − 1).<br>
+        Height for n records ≈ ⌈log_{⌈p/2⌉}(n / (p_L−1))⌉ + 1 (using minimum fill).<br>
+        Search cost = h disk I/Os (one per level) + 1 for the actual record.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>B-Tree</th><th>B⁺-Tree</th></tr></thead>
+          <tbody>
+            <tr><td>Data pointers in internal nodes?</td><td class="good">Yes (every key)</td><td class="bad">No (leaf only)</td></tr>
+            <tr><td>Range queries</td><td class="bad">Must traverse tree for each key</td><td class="good">Follow leaf linked list — efficient</td></tr>
+            <tr><td>Key duplication</td><td class="good">No duplicates</td><td class="bad">Internal keys duplicated at leaf</td></tr>
+            <tr><td>Leaf linking</td><td class="bad">Not linked</td><td class="good">Leaves form sorted linked list</td></tr>
+            <tr><td>Fan-out (order p)</td><td class="bad">Lower (data pointers take space)</td><td class="good">Higher (more keys per internal node)</td></tr>
+            <tr><td>Used in practice?</td><td class="bad">Rarely</td><td class="good">Almost universally (MySQL InnoDB, PostgreSQL)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">B-Tree Order p vs B⁺-Tree Internal Order vs Leaf Order</span>
+        <p>GATE questions sometimes give "order p of a B⁺-tree" without specifying internal vs leaf. The standard convention: <strong>order p refers to internal nodes</strong> (p tree pointers per node). Leaf nodes have a potentially different order p_L because they store record pointers instead of tree pointers. Always compute both separately when record pointer size ≠ tree pointer size.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 6 — TRC ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Tuple Relational Calculus — <em>Non-Procedural Queries</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="trc-basics">
+      <h2 class="sh">6.1 &nbsp; TRC — Syntax, Semantics &amp; Safe Expressions <span class="tag tg">GATE Tested</span></h2>
+
+      <p>
+        Relational Algebra (File 02) is <strong>procedural</strong> — you specify how to get the result step by step. Relational Calculus is <strong>non-procedural</strong> — you specify <em>what</em> you want, not how. Both are equivalent in expressive power (Codd's theorem). GATE tests TRC for expression reading and safety.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">TRC Expression Form</span>
+        <p>{ t | P(t) }<br>
+        Read: "The set of all tuples t such that predicate P(t) is true."<br>
+        <strong>t</strong> is a tuple variable that ranges over a relation.<br>
+        <strong>P(t)</strong> is a formula built from: atomic formulas, connectives (∧, ∨, ¬), quantifiers (∃, ∀).<br>
+        <strong>t.A</strong> accesses attribute A of tuple t.<br>
+        <strong>t ∈ R</strong> or <strong>R(t)</strong> means tuple t is in relation R.</p>
+      </div>
+
+      <h3 class="ssh">Atomic Formulas</h3>
+      <ul class="pl arr">
+        <li><strong>t ∈ R</strong> — tuple t is a member of relation R</li>
+        <li><strong>t.A θ s.B</strong> — comparison between attributes of two tuples (θ ∈ {=, ≠, &lt;, ≤, &gt;, ≥})</li>
+        <li><strong>t.A θ c</strong> — comparison between an attribute and a constant c</li>
+      </ul>
+
+      <div class="eg">
+        <p><strong>Find all students with CGPA &gt; 9.0:</strong></p>
+        <div class="cb">{ t | t ∈ Student ∧ t.CGPA > 9.0 }</div>
+        <p><strong>Find names of students who are enrolled in course C101:</strong></p>
+        <div class="cb">{ t.Name | t ∈ Student ∧ (∃ e)(e ∈ Enrollment ∧ e.RollNo = t.RollNo ∧ e.CID = 'C101') }</div>
+        <p><strong>Find students enrolled in ALL courses (universal quantification):</strong></p>
+        <div class="cb">{ t | t ∈ Student ∧ (∀ c)(c ∈ Course → (∃ e)(e ∈ Enrollment
+                              ∧ e.RollNo = t.RollNo ∧ e.CID = c.CID)) }</div>
+        <p>Read: "All students t such that for every course c, there exists an enrollment e linking t to c."</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Safety of TRC Expressions</span>
+        <p>A TRC expression is <strong>safe</strong> if it is guaranteed to produce a finite result. An unsafe expression might attempt to generate an infinite set (e.g., all tuples NOT in a relation — which could be infinite).<br>
+        <strong>Safe condition (domain independence):</strong> Every value in the result must appear somewhere in the database (in some relation referenced in the formula). This prevents selecting from the "infinite" universe of all possible values.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Unsafe expression example:</strong></p>
+        <div class="cb"><span class="cm">-- UNSAFE: selects all tuples NOT in Student → potentially infinite</span>
+{ t | ¬(t ∈ Student) }
+
+<span class="cm">-- SAFE equivalent: restrict domain to a known finite relation</span>
+{ t | t ∈ Person ∧ ¬(t ∈ Student) }  ← safe if Person is finite</div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 7 — DRC ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Domain Relational Calculus — <em>Variables over Attribute Domains</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="drc-basics">
+      <h2 class="sh">7.1 &nbsp; DRC — Syntax &amp; Comparison with TRC <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">DRC Expression Form</span>
+        <p>{ &lt;x₁, x₂, ..., xₙ&gt; | P(x₁, x₂, ..., xₙ) }<br>
+        Read: "The set of all tuples &lt;x₁,...,xₙ&gt; such that predicate P holds."<br>
+        <strong>Domain variables</strong> xᵢ each range over the domain of a single attribute (not over whole tuples).<br>
+        &lt;x₁,...,xₙ&gt; in the result list specifies which domain variable values to include in the output.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find names and CGPA of students with CGPA &gt; 9 — in TRC vs DRC:</strong></p>
+        <div class="cb"><span class="cm">-- TRC version:</span>
+{ t.Name, t.CGPA | t ∈ Student ∧ t.CGPA > 9 }
+
+<span class="cm">-- DRC version:</span>
+{ &lt;n, c&gt; | ∃r ∃d (Student(r, n, d, c) ∧ c > 9) }
+
+<span class="cm">-- where Student(RollNo, Name, Dept, CGPA)</span>
+<span class="cm">-- r=RollNo, n=Name, d=Dept, c=CGPA</span>
+<span class="cm">-- r and d are existentially quantified (we don't output them)</span></div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Find names of students enrolled in course 'CS101':</strong></p>
+        <div class="cb">{ &lt;n&gt; | ∃r ∃d ∃c (Student(r, n, d, c) ∧ ∃cid (Enrollment(r, cid) ∧ cid = 'CS101')) }</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>TRC</th><th>DRC</th></tr></thead>
+          <tbody>
+            <tr><td>Variable ranges over</td><td>Whole tuples (one per relation)</td><td>Single attribute domains</td></tr>
+            <tr><td>Result specification</td><td>t.A (dot notation)</td><td>&lt;x₁, x₂,...&gt; (list of domain vars)</td></tr>
+            <tr><td>Accessing multiple attrs</td><td>t.Name, t.Age from same tuple</td><td>Separate variables n, a both in Student predicate</td></tr>
+            <tr><td>Expressive power</td><td colspan="2">Equivalent to each other and to Relational Algebra (Codd's theorem)</td></tr>
+            <tr><td>Safety condition</td><td colspan="2">Same domain-independence requirement — values must come from the database</td></tr>
+            <tr><td>Basis for</td><td>SQL (conceptually)</td><td>QBE (Query By Example)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Converting RA to TRC to DRC — The Pattern</span>
+        <p>Projection (π) → list the projected attributes in the result variables. Selection (σ) → condition in the predicate. Join (⋈) → two relation memberships with an equality condition linking them. Union (∪) → OR (∨) between two membership conditions. Difference (−) → AND NOT (∧ ¬). Division (÷) → universal quantifier (∀).</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Numerical Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Derived attribute → column in table</td><td>Derived attributes (dashed oval in ER) are NOT stored as columns. They are computed on demand. Age derived from DOB: only DOB gets a column, not Age.</td></tr>
+            <tr><td>2</td><td>Composite attribute → single column</td><td>A composite attribute (Name → {First, Last}) generates columns only for its leaf components — First and Last. The composite Name itself does NOT become a column.</td></tr>
+            <tr><td>3</td><td>Weak entity can have partial participation in identifying relationship</td><td>A weak entity ALWAYS has total participation in its identifying relationship. By definition: it cannot exist without its owner. This is double line on the weak entity side — always.</td></tr>
+            <tr><td>4</td><td>1:N relationship → create new table</td><td>For 1:N, the standard mapping is to put a FK in the N-side table — no new table needed. A new table is only justified when N-side has partial participation and you want to avoid NULLs, but it's not the default.</td></tr>
+            <tr><td>5</td><td>M:N → FK in one of the existing tables</td><td>M:N relationships ALWAYS require a new junction/bridge table. You cannot represent an M:N relationship by adding a FK to either existing table — that can only represent 1:N or 1:1.</td></tr>
+            <tr><td>6</td><td>Primary index is dense</td><td>Primary index is SPARSE — one entry per data block (not per record). The file is ordered on the key, so you can binary search to the right block and then scan within it. Dense primary index is wasteful and unnecessary.</td></tr>
+            <tr><td>7</td><td>Secondary index is sparse</td><td>Secondary index on a KEY field is DENSE (one entry per record — because the file is not ordered on this field, you cannot skip records). Secondary on NON-KEY can have one entry per distinct value (with pointer to bucket of record pointers).</td></tr>
+            <tr><td>8</td><td>B-tree and B⁺-tree are the same</td><td>B-tree: every node (internal and leaf) has data record pointers. B⁺-tree: ONLY leaves have data record pointers; internal nodes have tree pointers only. B⁺-tree has higher fan-out and efficient range scans via leaf linking. They are different structures.</td></tr>
+            <tr><td>9</td><td>Internal and leaf node order are always the same in B⁺-tree</td><td>Internal and leaf nodes have different formulas because they store different pointer types. Internal: p×P + (p−1)×V ≤ B. Leaf: (p_L−1)×(V+PR) + P ≤ B. When P (tree pointer) ≠ PR (record pointer), p ≠ p_L.</td></tr>
+            <tr><td>10</td><td>TRC and DRC have different expressive power</td><td>TRC, DRC, and Relational Algebra are all equally expressive (Codd's theorem). Any query expressible in one is expressible in the others. The difference is syntactic style, not power.</td></tr>
+            <tr><td>11</td><td>Any TRC expression is safe</td><td>Unsafe expressions exist — { t | ¬(t ∈ R) } is unsafe because it denotes all tuples NOT in R, which could be infinite. An expression is safe iff every value in the result is in the active domain (appears in some relation in the formula).</td></tr>
+            <tr><td>12</td><td>Multi-valued attribute → column with multiple values</td><td>A multi-valued attribute (double oval) always generates a SEPARATE table with a composite primary key (entity PK + the attribute value). Never put multiple values in a single column — that violates 1NF.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="formula-ref">
+      <h2 class="sh">8.2 &nbsp; Formula Reference — Indexing &amp; B⁺-Trees</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Formula</th><th>What it computes</th></tr></thead>
+          <tbody>
+            <tr><td>bfr = ⌊B / R⌋</td><td>Blocking factor: records per block (B=block size, R=record size)</td></tr>
+            <tr><td>Blocks = ⌈n / bfr⌉</td><td>Number of data blocks for n records</td></tr>
+            <tr><td>Index entries (sparse/primary)</td><td>= Number of data blocks</td></tr>
+            <tr><td>Index entries (dense/secondary)</td><td>= Number of records</td></tr>
+            <tr><td>Index bfr = ⌊B / (V+P)⌋</td><td>Index entries per index block</td></tr>
+            <tr><td>Index blocks = ⌈entries / index_bfr⌉</td><td>Number of index blocks</td></tr>
+            <tr><td>Binary search cost = ⌈log₂(index blocks)⌉ + 1</td><td>I/Os to find a record using the index</td></tr>
+            <tr><td>B⁺ internal node: p ≤ ⌊(B + V) / (P + V)⌋</td><td>Maximum order of internal node</td></tr>
+            <tr><td>B⁺ leaf node: p_L ≤ ⌊(B − P) / (V + PR)⌋ + 1</td><td>Maximum order of leaf node</td></tr>
+            <tr><td>Min keys in non-root internal = ⌈p/2⌉ − 1</td><td>Minimum fill of internal node</td></tr>
+            <tr><td>Min keys in leaf = ⌈(p_L − 1)/2⌉</td><td>Minimum fill of leaf node</td></tr>
+            <tr><td>Search cost = height h I/Os + 1</td><td>Cost of point lookup in B⁺-tree</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pyq-patterns">
+      <h2 class="sh">8.3 &nbsp; GATE PYQ Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>ER mapping MCQ (1 mark):</strong> "Which of the following correctly maps a M:N relationship?" → requires new table with both PKs as composite PK. Option traps: FK in one table (wrong), no new table (wrong).</li>
+        <li><strong>Weak entity identification (1 mark):</strong> "Which entity is weak in this ER diagram?" → look for: double rectangle, double diamond identifying relationship, discriminator (dashed underline). Always has total participation.</li>
+        <li><strong>B⁺-tree order NAT (2 marks):</strong> Given block size, key size, pointer sizes — compute internal order p using p×P + (p−1)×V ≤ B. Then leaf order p_L using (p_L−1)×(V+PR) + P ≤ B. Common mistake: using same formula for both.</li>
+        <li><strong>Index blocks NAT (2 marks):</strong> Given file stats — compute bfr, data blocks, index entries, index block size, index blocks. Then binary search cost = ⌈log₂(index_blocks)⌉ + 1 I/Os.</li>
+        <li><strong>TRC expression reading MCQ (1 mark):</strong> "What does { t | t ∈ Employee ∧ t.Salary &gt; 50000 } return?" → set of all employee tuples with salary &gt; 50000. Identify what the free variable t ranges over and what the predicate filters.</li>
+        <li><strong>Safety MCQ (1 mark):</strong> "Which expression is safe?" → check: does the result set come from values already in the database? Expressions with bare negation (¬ without prior membership constraint) are typically unsafe.</li>
+        <li><strong>Primary vs secondary index MCQ (1 mark):</strong> File ordered on field X. Index built on field X = primary (sparse). Index built on field Y (not ordering field) = secondary (dense for key Y, bucket-based for non-key Y).</li>
+        <li><strong>Mapping 1:1 with participation (2 marks):</strong> Given a 1:1 relationship with one entity having total participation — FK should go in the total-participation entity's table. Reason: avoids NULL values (every instance on total side has a partner).</li>
+      </ul>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">
+  DBMS · ER Modeling, Indexing, B⁺-Trees &amp; Relational Calculus · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

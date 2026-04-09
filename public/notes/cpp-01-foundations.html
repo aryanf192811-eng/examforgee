@@ -1,0 +1,3591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — File 01: Foundations</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────────── */
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;
+  --prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;
+  /* fluid type scale — clamp(min, preferred, max) */
+  --fs-xs:   clamp(9px,  1.8vw, 10px);
+  --fs-sm:   clamp(11px, 2.4vw, 13px);
+  --fs-base: clamp(14px, 3.2vw, 17px);
+  --fs-md:   clamp(14px, 3.4vw, 16.5px);
+  --fs-lg:   clamp(16px, 3.8vw, 19px);
+  --fs-xl:   clamp(22px, 5.5vw, 40px);
+  --fs-ch:   clamp(16px, 4.2vw, 21px);
+  --fs-code: clamp(11px, 2.6vw, 13.5px);
+}
+
+/* ── RESET ──────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+/* ── BODY & OUTER SHELL ─────────────────────────────────── */
+body {
+  background:#bfb49a;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);
+  color:var(--ink);
+  min-height:100vh;
+  padding: clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);
+}
+.book { max-width:840px; margin:0 auto; }
+
+/* ── COVER ──────────────────────────────────────────────── */
+.cover {
+  background:var(--paper2);
+  border:2px solid var(--ink);
+  border-radius:4px;
+  padding: clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);
+  margin-bottom:clamp(14px,3vw,28px);
+  position:relative;
+  overflow:hidden;
+  box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);
+}
+.cover::before {
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);
+  background-size:100% 32px;background-position:0 48px;pointer-events:none;
+}
+.cover::after {
+  content:'';position:absolute;top:0;bottom:0;left:52px;
+  width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;
+}
+.cover-inner { position:relative; padding-left: clamp(8px,2vw,20px); }
+.cover-subject {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.cover-subject::before {
+  content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);flex-shrink:0;
+}
+.cover h1 {
+  font-family:var(--body);font-size:var(--fs-xl);font-weight:700;
+  line-height:1.15;color:var(--ink);
+}
+.cover h1 em { font-style:italic; color:var(--blue); }
+.cover-desc {
+  font-family:var(--prose);font-size:var(--fs-base);
+  color:var(--ink3);margin-top:14px;line-height:1.8;
+  max-width:520px;border-left:3px solid var(--orange);padding-left:14px;
+}
+.cover-chips { display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px); }
+.chip {
+  font-family:var(--hand);font-size:var(--fs-xs);
+  border:1.5px solid #b0a080;border-radius:2px;
+  padding:4px clamp(6px,2vw,12px);color:var(--ink3);background:rgba(255,255,255,0.5);
+}
+.cover-gate-tag {
+  position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--paper);background:var(--ink);
+  padding:5px clamp(6px,2vw,12px);border-radius:2px;
+  max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ── TABLE OF CONTENTS ──────────────────────────────────── */
+.toc {
+  background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;
+  padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);
+  margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;
+}
+.toc-lbl {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:12px;
+}
+.toc-grid { display:grid;grid-template-columns:1fr 1fr;gap:3px 24px; }
+.toc-grid a {
+  font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);
+  text-decoration:none;display:flex;align-items:baseline;gap:7px;
+  padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;
+}
+.toc-grid a:hover { color:var(--blue);border-color:var(--ink3); }
+.tn { font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px; }
+
+/* ── CHAPTER ────────────────────────────────────────────── */
+.chapter {
+  background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;
+  margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;
+}
+.ch-head {
+  background:var(--ink);
+  padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);
+}
+.ch-ey {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;
+}
+.ch-title {
+  font-family:var(--body);font-size:var(--fs-ch);font-weight:600;
+  color:var(--paper);line-height:1.25;
+}
+.ch-title em { font-style:italic; color:#e8c870; }
+
+/* ── CHAPTER BODY — ruled notebook lines ─────────────────── */
+.ch-body {
+  background-image:
+    linear-gradient(var(--mline) 1px,transparent 1px),
+    repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size:54px 100%,100% 32px;
+  background-position:0 0,0 16px;
+}
+
+/* ── SECTION ────────────────────────────────────────────── */
+.sec {
+  padding: clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);
+  border-bottom:1px dashed #c8b898;position:relative;
+}
+.sec:last-child { border-bottom:none; }
+.sec::before {
+  content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;
+  font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);
+  writing-mode:vertical-lr;transform:rotate(180deg);
+  letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ── HEADINGS ───────────────────────────────────────────── */
+h2.sh {
+  font-family:var(--body);font-size:var(--fs-lg);font-weight:700;color:var(--ink);
+  margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);
+  display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;
+}
+.tag {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 7px;border-radius:2px;
+  border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;
+}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh {
+  font-family:var(--body);font-size:clamp(13.5px,3.2vw,15.5px);
+  font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;
+}
+
+/* ── BODY TEXT ──────────────────────────────────────────── */
+p {
+  font-family:var(--prose);font-size:var(--fs-base);
+  line-height:1.92;color:var(--ink2);margin-bottom:10px;
+}
+strong { color:var(--ink);font-weight:600; }
+
+/* ── CALLOUT BOXES ──────────────────────────────────────── */
+.def-box  { background:#eef3ff;border-left:4px solid var(--blue);  border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0; }
+.warn-box { background:#fff1f1;border-left:4px solid var(--red);   border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.tip-box  { background:#f0fff4;border-left:4px solid var(--green); border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.note-box { background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0; }
+.def-box  .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);  margin-bottom:5px;display:block; }
+.warn-box .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);   margin-bottom:4px;display:block; }
+.tip-box  .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green); margin-bottom:4px;display:block; }
+.note-box .lbl { font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block; }
+.def-box  p { font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink); }
+.warn-box p { font-size:var(--fs-md);color:var(--red);   margin:0;line-height:1.78; }
+.tip-box  p { font-size:var(--fs-md);color:var(--green); margin:0;line-height:1.78; }
+.note-box p { font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78; }
+
+/* ── EXAMPLE BOX ────────────────────────────────────────── */
+.eg {
+  background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;
+  padding:clamp(14px,3vw,18px) clamp(12px,3vw,20px);margin:16px 0;position:relative;
+}
+.eg::before {
+  content:'Example';font-family:var(--hand);font-size:var(--fs-xs);
+  letter-spacing:2px;text-transform:uppercase;color:var(--ink3);
+  position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;
+}
+.eg p { font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);margin:0 0 6px;line-height:1.82; }
+.eg p:last-child { margin:0; }
+
+/* ── CODE BLOCKS ────────────────────────────────────────── */
+.cb {
+  font-family:'Courier New',monospace;
+  font-size:var(--fs-code);
+  background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;
+  padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);
+  margin:12px 0;color:var(--ink);line-height:1.85;
+  white-space:pre;overflow-x:auto;
+  /* smooth scrollbar on mobile */
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:#b0a080 transparent;
+}
+.cb::-webkit-scrollbar { height:4px; }
+.cb::-webkit-scrollbar-track { background:transparent; }
+.cb::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+.cb .kw { color:var(--blue);font-weight:bold; }
+.cb .cm { color:var(--ink3);font-style:italic; }
+
+/* inline code */
+code {
+  font-family:'Courier New',monospace;font-size:var(--fs-code);
+  background:var(--paper3);border:1px solid #c0a880;border-radius:3px;
+  padding:1px 5px;color:var(--blue);word-break:break-word;
+}
+
+/* ── ASCII DIAGRAM BLOCK ────────────────────────────────── */
+.gv {
+  background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;
+  padding:clamp(10px,2.5vw,16px) clamp(10px,3vw,18px);margin:14px 0;
+  font-family:'Courier New',monospace;font-size:clamp(10px,2.2vw,13px);
+  line-height:1.9;color:var(--ink);
+  white-space:pre;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:#b0a080 transparent;
+}
+.gv::-webkit-scrollbar { height:4px; }
+.gv::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+.gv .dv-label {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;
+}
+
+/* ── HIGHLIGHTS & COLOR UTILS ───────────────────────────── */
+mark  { background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink); }
+.hi-b { background:var(--hl-b);padding:0 3px;border-radius:2px; }
+.hi-g { background:var(--hl-g);padding:0 3px;border-radius:2px; }
+.hi-r { background:var(--hl-r);padding:0 3px;border-radius:2px; }
+.c-r  { color:var(--red);font-weight:600; }
+.c-b  { color:var(--blue);font-weight:600; }
+.c-g  { color:var(--green);font-weight:600; }
+.c-o  { color:var(--orange);font-weight:600; }
+
+/* ── LISTS ──────────────────────────────────────────────── */
+.pl { list-style:none;margin:8px 0 12px;padding:0; }
+.pl li {
+  font-family:var(--prose);font-size:var(--fs-md);
+  line-height:1.88;color:var(--ink2);
+  padding:3px 0 3px 22px;position:relative;
+}
+.pl li::before  { content:'—';position:absolute;left:0;color:var(--orange);font-weight:600; }
+.pl.arr li::before { content:'→';color:var(--blue); }
+.pl.chk li::before { content:'✓';color:var(--green); }
+.pl.crs li::before { content:'✗';color:var(--red); }
+
+/* numbered steps */
+.pl-steps { list-style:none;margin:10px 0;padding:0; }
+.pl-steps li {
+  display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;
+  font-family:var(--prose);font-size:var(--fs-md);line-height:1.82;color:var(--ink2);
+}
+.pl-num {
+  font-family:var(--hand);font-size:var(--fs-xs);background:var(--ink);color:var(--paper);
+  border-radius:50%;width:24px;height:24px;min-width:24px;
+  display:flex;align-items:center;justify-content:center;margin-top:3px;
+}
+
+/* ── TABLES ─────────────────────────────────────────────── */
+.tbl { overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:3px; }
+.tbl::-webkit-scrollbar { height:4px; }
+.tbl::-webkit-scrollbar-thumb { background:#b0a080;border-radius:2px; }
+table { width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12.5px,2.8vw,15.5px); }
+thead tr { background:var(--ink); }
+th {
+  padding:clamp(7px,2vw,9px) clamp(8px,2.5vw,14px);
+  text-align:left;color:var(--paper);font-weight:400;
+  font-size:clamp(10px,2.2vw,13px);font-family:var(--hand);letter-spacing:0.5px;
+  white-space:nowrap;
+}
+td {
+  padding:clamp(6px,1.8vw,8px) clamp(8px,2.5vw,14px);
+  border-bottom:1px dashed #c0a880;line-height:1.65;
+  vertical-align:top;color:var(--ink2);
+}
+tr:nth-child(even) td { background:rgba(0,0,0,0.024); }
+tr:hover td { background:rgba(255,240,150,0.22); }
+.good { color:var(--green);font-weight:600; }
+.ok   { color:var(--orange);font-weight:600; }
+.bad  { color:var(--red);font-weight:600; }
+
+/* ── CARD GRID ──────────────────────────────────────────── */
+.cg { display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:13px;margin:14px 0; }
+.cg-card { background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,15px); }
+.cg-card .ct {
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:6px;
+  padding-bottom:4px;border-bottom:1px solid #c0a880;
+}
+.cg-card p { font-family:var(--prose);font-size:clamp(13px,2.8vw,15px);line-height:1.75;color:var(--ink2);margin:0; }
+
+/* ── MISC ───────────────────────────────────────────────── */
+hr.dv { border:none;border-top:1.5px dashed #c0a880;margin:22px 0; }
+.bt {
+  display:block;text-align:right;font-family:var(--hand);
+  font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;
+  padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;
+}
+.bt:hover { color:var(--blue); }
+.footer {
+  text-align:center;font-family:var(--hand);font-size:var(--fs-xs);
+  color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════════════════════════ */
+
+/* ── ≤ 640px : TABLET / LARGE PHONE ──────────────────────── */
+@media (max-width:640px) {
+  /* toc: single column */
+  .toc-grid { grid-template-columns:1fr; }
+
+  /* cover: hide the red margin line (left:52px) — too close to text */
+  .cover::after { left:36px; }
+  .cover-inner  { padding-left:12px; }
+
+  /* cover tag: shorten on small screens */
+  .cover-gate-tag { font-size:8px; letter-spacing:1px; }
+
+  /* section: reduce left padding — margin watermark still visible but tighter */
+  .sec { padding-left: clamp(28px,6vw,44px); }
+  .sec::before { font-size:8px; }
+
+  /* h2 tags: push to new line on small */
+  h2.sh { font-size:clamp(15px,3.8vw,18px); }
+  .tag  { margin-left:0; margin-top:4px; }
+
+  /* code blocks: tighter padding, smaller but readable font */
+  .cb { font-size:clamp(10.5px,2.4vw,12.5px); padding:10px 12px; tab-size:2; }
+  .gv { font-size:clamp(9.5px,2.1vw,11.5px); }
+
+  /* table: allow horizontal scroll with visual cue */
+  .tbl { border-left:3px solid var(--blue); }
+
+  /* card grid: force single column on narrow */
+  .cg { grid-template-columns:1fr; }
+}
+
+/* ── ≤ 420px : SMALL PHONE ────────────────────────────────── */
+@media (max-width:420px) {
+  body { padding:8px 6px 40px; }
+
+  /* book: let it breathe edge-to-edge */
+  .book { max-width:100%; }
+
+  /* cover: reduce shadow depth (shadows get clipped on tiny screens) */
+  .cover {
+    box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);
+    padding:18px 14px 16px;
+  }
+  .cover::after { display:none; } /* hide margin line — too tight */
+
+  /* gate tag: absolute → relative, put it inline below subject */
+  .cover-gate-tag {
+    position:static;display:inline-block;
+    margin-bottom:10px;font-size:8px;letter-spacing:1px;
+  }
+  .cover-inner { padding-left:0; }
+
+  /* tighten chips */
+  .chip { font-size:9px; padding:3px 8px; }
+
+  /* section: minimal left offset — watermark hidden (writing-mode text still renders) */
+  .sec { padding-left:20px; padding-right:12px; }
+  .sec::before { display:none; } /* watermark too cramped at this width */
+
+  /* chapter head */
+  .ch-head { padding:12px 14px; }
+  .ch-title { font-size:clamp(14px,4vw,17px); }
+
+  /* headings */
+  h2.sh { font-size:clamp(14px,4vw,16px); flex-direction:column; align-items:flex-start; gap:6px; }
+  .tag  { margin-left:0; }
+
+  /* TOC entries */
+  .toc-grid a { font-size:14px; }
+
+  /* callout boxes */
+  .def-box, .warn-box, .tip-box, .note-box { padding:10px 12px; }
+
+  /* code: smallest comfortable size */
+  .cb { font-size:10.5px; padding:9px 10px; letter-spacing:-0.1px; }
+  .gv { font-size:9.5px; padding:10px; }
+
+  /* table: even smaller font */
+  table { font-size:12px; }
+  th    { font-size:9.5px; padding:6px 8px; }
+  td    { padding:5px 8px; }
+
+  /* card grid */
+  .cg-card p { font-size:13px; }
+
+  /* back-to-top */
+  .bt { padding:8px 12px 0; }
+}
+
+/* ── PRINT ────────────────────────────────────────────────── */
+@media print {
+  body { background:white; padding:0; }
+  .book { max-width:100%; }
+  .cover { box-shadow:none;border:2px solid #333; }
+  .chapter { box-shadow:none;break-inside:avoid; }
+  .ch-head { -webkit-print-color-adjust:exact;print-color-adjust:exact; }
+  .cb,.gv  { white-space:pre-wrap;word-break:break-all; }
+  .bt      { display:none; }
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+
+/* $$VIZ_CSS_INJECTED$$ — Compilation Pipeline box */
+.viz {
+  background: var(--paper3);
+  border: 1.5px dashed #a09070;
+  border-radius: 4px;
+  padding: clamp(12px, 2.5vw, 18px) clamp(12px, 3vw, 20px);
+  margin: 16px 0;
+  font-family: 'Courier New', monospace;
+  font-size: clamp(10px, 2.2vw, 12.5px);
+  line-height: 1.9;
+  color: var(--ink);
+  white-space: pre;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #b0a080 transparent;
+  display: block;
+}
+.viz::-webkit-scrollbar { height: 6px; }
+.viz::-webkit-scrollbar-track { background: transparent; }
+.viz::-webkit-scrollbar-thumb { background: #b0a080; border-radius: 2px; }
+.viz-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: var(--fs-xs);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 10px;
+  display: block;
+  white-space: normal;
+}
+html[data-hub-dark] .viz {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .viz-label { color: #565f89 !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">01 · Foundations</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Mastery Series · File 01 of 04</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Programming</div>
+    <h1>Foundations<br><em>From Zero to Confident</em></h1>
+    <p class="cover-desc">Everything you need to go from absolute zero to writing real C++ programs. Environment setup, syntax, data types, operators, control flow, functions, arrays, pointers, and references — with full code at every step.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Setup & First Program</span>
+      <span class="chip">Ch 2 · Variables & Data Types</span>
+      <span class="chip">Ch 3 · Operators & Expressions</span>
+      <span class="chip">Ch 4 · Control Flow</span>
+      <span class="chip">Ch 5 · Functions</span>
+      <span class="chip">Ch 6 · Arrays & Strings</span>
+      <span class="chip">Ch 7 · Pointers</span>
+      <span class="chip">Ch 8 · References & Memory</span>
+      <span class="chip">Ch 9 · Traps & Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Setup &amp; First Program</a>
+    <a href="#ch2"><span class="tn">02</span>Variables &amp; Data Types</a>
+    <a href="#ch3"><span class="tn">03</span>Operators &amp; Expressions</a>
+    <a href="#ch4"><span class="tn">04</span>Control Flow</a>
+    <a href="#ch5"><span class="tn">05</span>Functions</a>
+    <a href="#ch6"><span class="tn">06</span>Arrays &amp; Strings</a>
+    <a href="#ch7"><span class="tn">07</span>Pointers</a>
+    <a href="#ch8"><span class="tn">08</span>References &amp; Memory</a>
+    <a href="#ch9"><span class="tn">09</span>Traps &amp; Master Reference</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 1 — SETUP & FIRST PROGRAM
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Setup &amp; First Program — <em>Your C++ Environment</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="history">
+      <h2 class="sh">1.1 &nbsp; What is C++ and Why Learn It <span class="tag tc">Core</span></h2>
+      <p>C++ is a <strong>compiled, statically-typed, general-purpose language</strong> created by Bjarne Stroustrup at Bell Labs in 1979 as "C with Classes." It gives you the raw performance of C combined with high-level abstractions like OOP, templates, and the STL. It remains the language of choice for <mark>systems programming, game engines, competitive programming, embedded systems, and high-frequency trading</mark>.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Bridge</span>
+        <p>Think of C++ as a bridge. On one side, you have high-level human logic (classes, objects, complex algorithms). On the other, you have the raw hardware (registers, memory addresses, CPU cycles). C++ is unique because it lets you stand on both sides at once. You can write code that reads like a story, while simultaneously keeping precise control over every byte of memory.</p>
+      </div>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Why C++ is fast</div>
+          <p>Compiles directly to machine code. No virtual machine, no garbage collector. You control memory allocation and deallocation explicitly.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Where C++ is used</div>
+          <p>Chrome, Firefox, VS Code, Unreal Engine, MySQL, Linux kernel drivers, NASA spacecraft software, every major game engine.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">C vs C++</div>
+          <p>C++ is a superset of C. Valid C code is (nearly) valid C++. C++ adds OOP, templates, references, and the entire Standard Library.</p>
+        </div>
+      </div>
+      <div class="note-box">
+        <span class="lbl">C++ Standards</span>
+        <p>C++98 → C++03 → C++11 (big leap) → C++14 → C++17 → C++20 → C++23. We write <strong>modern C++ (C++17)</strong> throughout this series. Always compile with <code>-std=c++17</code>.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="setup">
+      <h2 class="sh">1.2 &nbsp; Setting Up Your Environment <span class="tag tc">Core</span></h2>
+      <p>You need two things: a <strong>compiler</strong> (turns your code into machine instructions) and an <strong>editor/IDE</strong> (where you write code). The compiler is the essential part.</p>
+      <div class="viz">
+        <span class="viz-label">The Compilation Pipeline</span>
+[ Source Code (.cpp) ] ──▶ [ Preprocessor ] ──▶ [ Compiler ] ──▶ [ Assembler ] ──▶ [ Linker ] ──▶ [ Binary (.exe/out) ]
+       │                         │                │                 │               │
+  Human text              Header pasting    Code to ASM       ASM to Machine     Joining     Raw CPU
+  (hello.cpp)             (#include)        (hello.s)         (hello.o)          Libraries   instructions
+      </div>
+      <h3 class="ssh">Installing a Compiler</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Windows</div>
+          <p>Install <strong>MinGW-w64</strong> (GCC for Windows) or use <strong>Visual Studio Community</strong> (has MSVC compiler built in). Recommended: VS Code + MinGW.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">macOS</div>
+          <p>Run <code>xcode-select --install</code> in Terminal. This installs Clang. Alternatively install GCC via Homebrew: <code>brew install gcc</code>.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Linux</div>
+          <p>GCC is usually pre-installed. If not: <code>sudo apt install g++</code> on Ubuntu/Debian. Verify with <code>g++ --version</code>.</p>
+        </div>
+      </div>
+      <h3 class="ssh">Compiling from the Terminal</h3>
+      <p>Once GCC/G++ is installed, the compile-run cycle is:</p>
+      <div class="cb"><span class="cm"># Compile a single file</span>
+g++ hello.cpp -o hello
+
+<span class="cm"># Compile with C++17 standard (always do this)</span>
+g++ -std=c++17 hello.cpp -o hello
+
+<span class="cm"># Compile with warnings enabled (strongly recommended)</span>
+g++ -std=c++17 -Wall -Wextra hello.cpp -o hello
+
+<span class="cm"># Run the output</span>
+./hello          <span class="cm"># Linux/Mac</span>
+hello.exe        <span class="cm"># Windows</span></div>
+      <div class="tip-box">
+        <span class="lbl">Use -Wall Always</span>
+        <p>The <code>-Wall -Wextra</code> flags enable all compiler warnings. Treat every warning as an error. Warnings are the compiler catching bugs you haven't noticed yet. Senior programmers never ignore warnings.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="hello">
+      <h2 class="sh">1.3 &nbsp; Your First C++ Program — Anatomy <span class="tag tc">Core</span></h2>
+      <p>Every C++ program has the same fundamental skeleton. Learn this structure cold — you will type it thousands of times.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Envelope and the Letter</span>
+        <p>Think of writing a C++ program like sending a formal letter. The <code>#include</code> statements at the top are like checking your reference books before you write. The <code>int main() { ... }</code> block is the letter itself—the exact instructions you want the computer to follow. When the computer executes your program, it doesn't just read randomly; it always looks for the "Dear Computer" line, which in C++ is exactly <code>int main()</code>.</p>
+      </div>
+      <div class="cb"><span class="cm">// hello.cpp — The anatomy of every C++ program</span>
+
+<span class="kw">#include</span> &lt;iostream&gt;    <span class="cm">// 1. Preprocessor: include the I/O library</span>
+
+<span class="kw">using namespace</span> std;   <span class="cm">// 2. Use the std namespace (discussed in ch5)</span>
+
+<span class="kw">int</span> main() {            <span class="cm">// 3. main() — program execution starts here</span>
+    cout &lt;&lt; "Hello, World!" &lt;&lt; endl;  <span class="cm">// 4. Output to console</span>
+    <span class="kw">return</span> 0;            <span class="cm">// 5. Signal success to the OS (0 = success)</span>
+}</div>
+      <div class="def-box">
+        <span class="lbl">Anatomy of main()</span>
+        <p><code>int main()</code> is the entry point of every C++ program. It returns an <code>int</code> — <strong>0 means success</strong>, any non-zero value signals an error to the operating system. The OS uses this return value; always return 0 on success.</p>
+      </div>
+      <h3 class="ssh">Breaking Down Each Line</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Element</th><th>What it is</th><th>Required?</th></tr></thead>
+          <tbody>
+            <tr><td><code>#include &lt;iostream&gt;</code></td><td>Preprocessor directive. Pastes the iostream header into your file before compilation.</td><td class="good">Yes for I/O</td></tr>
+            <tr><td><code>using namespace std;</code></td><td>Allows writing <code>cout</code> instead of <code>std::cout</code>. Convenient but has trade-offs (see ch5).</td><td class="ok">Optional</td></tr>
+            <tr><td><code>int main()</code></td><td>The mandatory entry point. Every program must have exactly one.</td><td class="good">Always</td></tr>
+            <tr><td><code>cout &lt;&lt; ... &lt;&lt; endl;</code></td><td><code>cout</code> = character output stream. <code>&lt;&lt;</code> = insertion operator. <code>endl</code> = newline + flush.</td><td class="ok">For output</td></tr>
+            <tr><td><code>return 0;</code></td><td>Return success code to OS. In <code>main()</code> only, this can be omitted (compiler adds it), but always include it explicitly.</td><td class="good">Best practice</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">endl vs "\n" — Performance Trap</span>
+        <p><code>endl</code> outputs a newline AND flushes the output buffer. <code>"\n"</code> only outputs a newline. In loops or heavy output code, using <code>endl</code> can be <strong>10-100x slower</strong>. Always prefer <code>"\n"</code> unless you explicitly need a flush. This is a classic competitive programming trap.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Write a program that prints your name and age on separate lines.</strong></p>
+        <div class="cb"><span class="kw">#include</span> &lt;iostream&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> main() {
+    cout &lt;&lt; "Name: Arjun\n";
+    cout &lt;&lt; "Age: 20\n";
+    <span class="cm">// Or combine with multiple << operators:</span>
+    cout &lt;&lt; "Name: " &lt;&lt; "Arjun" &lt;&lt; "\n" &lt;&lt; "Age: " &lt;&lt; 20 &lt;&lt; "\n";
+    <span class="kw">return</span> 0;
+}</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="input">
+      <h2 class="sh">1.4 &nbsp; Basic Input with cin <span class="tag tc">Core</span></h2>
+      <p><code>cin</code> (character input) reads from the keyboard. The <strong>extraction operator</strong> <code>&gt;&gt;</code> pulls data from the input stream into a variable.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Conveyor Belt</span>
+        <p>Imagine your keyboard is connected to a conveyor belt called the "input stream". Every time you type a character and press Enter, those characters drop onto the belt. The command <code>cin &gt;&gt; age;</code> is like a robot arm that grabs characters off the conveyor belt, interprets them as a number, and drops that number into the <code>age</code> variable box. The arrows <code>&gt;&gt;</code> point from the conveyor (<code>cin</code>) right into your variable.</p>
+      </div>
+      <div class="cb"><span class="kw">#include</span> &lt;iostream&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> main() {
+    <span class="kw">int</span> age;
+    <span class="kw">double</span> height;
+    
+    cout &lt;&lt; "Enter your age: ";
+    cin &gt;&gt; age;                  <span class="cm">// Read one integer</span>
+    
+    cout &lt;&lt; "Enter your height (m): ";
+    cin &gt;&gt; height;               <span class="cm">// Read one double</span>
+    
+    cout &lt;&lt; "Age: " &lt;&lt; age &lt;&lt; ", Height: " &lt;&lt; height &lt;&lt; "\n";
+    <span class="kw">return</span> 0;
+}
+
+<span class="cm">// Chain reads: cin >> a >> b reads two values separated by whitespace</span>
+<span class="cm">// int a, b;  cin >> a >> b;</span></div>
+      <div class="warn-box">
+        <span class="lbl">cin Leaves the Newline in the Buffer</span>
+        <p>When you <code>cin &gt;&gt; someInt</code>, the newline character from pressing Enter stays in the buffer. If you then call <code>getline()</code>, it reads that leftover newline as an empty string. Fix: call <code>cin.ignore()</code> between them, or use <code>cin.ignore(numeric_limits&lt;streamsize&gt;::max(), '\n')</code>.</p>
+      </div>
+    </div>
+
+      <div class="sec" data-m="traps">
+      <h2 class="sh">1.5 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>As a beginner, you will encounter these points repeatedly. Understanding the "why" behind these rules will save you hours of debugging.</p>
+      
+      <h3 class="ssh">1. The Silent Failure of Defaults</h3>
+      <p>Many beginners compile with just <code>g++ file.cpp</code>. This is a trap. By default, the compiler uses an older C++ standard and hides many useful warnings. Always include <code>-std=c++17</code> and <code>-Wall</code>. Think of <code>-Wall</code> (Warnings: All) as a code reviewer sitting next to you; it points out logical flaws before they become runtime crashes.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: endl vs "\n" Performance</span>
+        <p>You will see <code>endl</code> used everywhere in beginner tutorials. <strong>Ignore them.</strong> In C++, <code>endl</code> does two things: it adds a newline AND it forces the program to pause and "flush" everything to the screen. Flushing is slow. In a loop printing 100,000 lines, <code>endl</code> can make your program 100x slower. Always use <code>"\n"</code> unless you are writing a debugger or have a specific reason to flush.</p>
+      </div>
+
+      <h3 class="ssh">2. Case Sensitivity and Syntax</h3>
+      <p>C++ is <strong>completely case-sensitive</strong>. <code>Main</code> is not <code>main</code>, and <code>Cout</code> is not <code>cout</code>. To the compiler, these are entirely different names. Similarly, the semicolon <code>;</code> is the "period" at the end of a C++ sentence. Forgetting it is like leaving a sentence hanging; the compiler won't know where one thought ends and the next begins.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: Return 0</span>
+        <p>In Unix-like systems (and internally in Windows), a program communicates its success status to the operating system using an integer. Zero is the universal signal for "All good, I finished successfully." Any other number is a "cry for help" or an error code. Always return 0 unless your program actually failed.</p>
+      </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 2 — VARIABLES & DATA TYPES
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Variables &amp; Data Types — <em>Memory, Values &amp; Storage</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="variables">
+      <h2 class="sh">2.1 &nbsp; Variables — Named Memory Locations <span class="tag tc">Core</span></h2>
+      <p>A <strong>variable</strong> is a named location in memory that holds a value. In C++, every variable has a <strong>type</strong> (what kind of data it stores), a <strong>name</strong> (how you refer to it), and a <strong>value</strong> (what's currently stored there).</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Memory Locker</span>
+        <p>Imagine a long hallway of lockers. Each locker has an <strong>address</strong> (a number painted on the door). A <strong>variable</strong> is like puting a name-tag on one of those lockers. Instead of remembering "Address 0x7ffd5a," you just remember "score." The <strong>type</strong> determines the size of the locker — an <code>int</code> locker is smaller than a <code>long long</code> locker.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Variable Declaration vs Initialization</span>
+        <p><strong>Declaration</strong> creates the variable: <code>int age;</code> — memory is allocated but the value is <span class="c-r">garbage</span> (whatever was in that memory).<br>
+        <strong>Initialization</strong> sets the first value: <code>int age = 20;</code> — always prefer this.<br>
+        <strong>Assignment</strong> changes the value later: <code>age = 21;</code></p>
+      </div>
+      <div class="cb"><span class="cm">// Three ways to initialize in modern C++</span>
+<span class="kw">int</span> a = 10;        <span class="cm">// Copy initialization (C-style, fine)</span>
+<span class="kw">int</span> b(10);         <span class="cm">// Direct initialization</span>
+<span class="kw">int</span> c{10};         <span class="cm">// Uniform (brace) initialization — PREFERRED in modern C++</span>
+
+<span class="cm">// Brace init prevents narrowing conversions:</span>
+<span class="kw">int</span> x = 3.7;       <span class="cm">// Compiles: silently truncates to 3 (BUG!)</span>
+<span class="kw">int</span> y{3.7};        <span class="cm">// COMPILE ERROR — brace init catches this. Safer!</span></div>
+      <div class="tip-box">
+        <span class="lbl">Always Use Brace Initialization</span>
+        <p>Prefer <code>int x{10};</code> over <code>int x = 10;</code> in modern C++. Brace initialization is the most uniform syntax, works for all types including containers, and prevents silent narrowing conversions. It's a hallmark of clean modern C++.</p>
+      </div>
+      <h3 class="ssh">Naming Rules</h3>
+      <ul class="pl">
+        <li>Can contain letters, digits, underscores. Must start with a letter or underscore.</li>
+        <li>Case-sensitive: <code>myVar</code>, <code>MyVar</code>, and <code>MYVAR</code> are three different variables.</li>
+        <li>Cannot be a C++ keyword: <code>int</code>, <code>class</code>, <code>return</code>, etc.</li>
+        <li>Convention: use <code>camelCase</code> for variables, <code>UPPER_SNAKE</code> for constants, <code>PascalCase</code> for types.</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="types">
+      <h2 class="sh">2.2 &nbsp; Fundamental Data Types <span class="tag tg">Most Tested</span></h2>
+      <p>C++ has several <strong>built-in (fundamental) types</strong>. These map directly to how the CPU and memory work. Knowing their sizes and ranges is critical for avoiding overflow bugs.</p>
+      <div class="def-box">
+        <span class="lbl">Motivation: Why So Many Types?</span>
+        <p>In languages like Python or JavaScript, a "number" is just a number. So why does C++ have <code>int</code>, <code>short</code>, <code>long long</code>, <code>float</code>, and <code>double</code>? <strong>Performance and Memory.</strong> If you need to store the age of a person (0-120), giving it 8 bytes of memory (a <code>long long</code>) is incredibly wasteful if you have an array of a billion people. C++ forces you to choose the right box size for your data so the CPU can pack it efficiently and process it instantly.</p>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Size</th><th>Range / Notes</th><th>Typical Use</th></tr></thead>
+          <tbody>
+            <tr><td><code>bool</code></td><td>1 byte</td><td>true (1) or false (0)</td><td>Flags, conditions</td></tr>
+            <tr><td><code>char</code></td><td>1 byte</td><td>-128 to 127 (signed) or 0–255 (unsigned)</td><td>Single characters, ASCII</td></tr>
+            <tr><td><code>int</code></td><td>4 bytes</td><td class="ok">-2,147,483,648 to 2,147,483,647 (~±2.1 billion)</td><td>General integers</td></tr>
+            <tr><td><code>long long</code></td><td>8 bytes</td><td class="good">-9.2×10¹⁸ to 9.2×10¹⁸</td><td>Large numbers, CP problems</td></tr>
+            <tr><td><code>float</code></td><td>4 bytes</td><td>~7 decimal digits precision</td><td>Graphics (not finance)</td></tr>
+            <tr><td><code>double</code></td><td>8 bytes</td><td>~15 decimal digits precision</td><td>Scientific, financial calc</td></tr>
+            <tr><td><code>unsigned int</code></td><td>4 bytes</td><td>0 to 4,294,967,295</td><td>Sizes, indices (non-negative)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">Trap: Integer Overflow</span>
+        <p>If you have an <code>int</code> and you keep adding to it, eventually it hits the limit (around 2.1 billion). When it goes one step further, it doesn't stop — it "wraps around" to a large negative number. This is like an odometer in a car hitting 999,999 and rolling back to 000,000. In competitive programming, this is the #1 cause of "Wrong Answer." Always use <code>long long</code> if your result could exceed 1 billion.</p>
+      </div>
+      <div class="cb"><span class="cm">// Size check at compile time</span>
+<span class="kw">#include</span> &lt;iostream&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">int</span> main() {
+    cout &lt;&lt; "int:       " &lt;&lt; <span class="kw">sizeof</span>(<span class="kw">int</span>)       &lt;&lt; " bytes\n";
+    cout &lt;&lt; "long long: " &lt;&lt; <span class="kw">sizeof</span>(<span class="kw">long long</span>) &lt;&lt; " bytes\n";
+    cout &lt;&lt; "double:    " &lt;&lt; <span class="kw">sizeof</span>(<span class="kw">double</span>)    &lt;&lt; " bytes\n";
+    cout &lt;&lt; "char:      " &lt;&lt; <span class="kw">sizeof</span>(<span class="kw">char</span>)      &lt;&lt; " bytes\n";
+    <span class="kw">return</span> 0;
+}
+<span class="cm">// sizeof() returns the size in bytes. It's evaluated at compile time.</span></div>
+    </div>
+
+    <div class="sec" data-m="auto">
+      <h2 class="sh">2.3 &nbsp; auto, const, and Type Aliases <span class="tag tc">Core</span></h2>
+      <h3 class="ssh">auto — Let the Compiler Deduce the Type</h3>
+      <div class="def-box">
+        <span class="lbl">Motivation: Don't Repeat Yourself</span>
+        <p>If you write <code>std::vector&lt;std::string&gt;::iterator it = myVec.begin();</code>, you're explicitly telling the compiler what type you are making. But the compiler already knows <code>myVec.begin()</code> returns that exact type! The <code>auto</code> keyword was introduced to save you from writing redundant, massive type names.</p>
+      </div>
+      <p>The <code>auto</code> keyword tells the compiler to deduce the variable's type from its initializer. It's not "dynamic typing" — the type is still fixed at compile time. It just saves you from writing long type names.</p>
+      <div class="cb"><span class="kw">auto</span> x = 42;          <span class="cm">// x is int</span>
+<span class="kw">auto</span> pi = 3.14159;    <span class="cm">// pi is double</span>
+<span class="kw">auto</span> name = "Alice";  <span class="cm">// name is const char* (NOT std::string)</span>
+<span class="kw">auto</span> flag = <span class="kw">true</span>;     <span class="cm">// flag is bool</span>
+
+<span class="cm">// Critically useful with iterators (covered in STL chapter):</span>
+<span class="cm">// auto it = myVector.begin();  -- saves writing std::vector&lt;int&gt;::iterator</span></div>
+      <h3 class="ssh">const — Values That Never Change</h3>
+      <div class="cb"><span class="kw">const int</span> MAX_SIZE = 1000;   <span class="cm">// Cannot be modified after initialization</span>
+<span class="kw">const double</span> PI = 3.14159265358979;
+
+<span class="cm">// constexpr — evaluated at COMPILE TIME (faster, use for true constants)</span>
+<span class="kw">constexpr int</span> ARRAY_SIZE = 100;
+<span class="kw">constexpr double</span> GRAVITY = 9.81;
+
+<span class="cm">// Rule: anything that should never change should be const or constexpr</span>
+<span class="cm">// This prevents accidental modification and enables compiler optimizations</span></div>
+      <div class="warn-box">
+        <span class="lbl">const vs constexpr</span>
+        <p><code>const</code> means "don't change this at runtime." <code>constexpr</code> means "evaluate this at compile time." Use <code>constexpr</code> for true compile-time constants (array sizes, math constants). Use <code>const</code> for runtime values that shouldn't change (like a function parameter you promise not to modify).</p>
+      </div>
+      <h3 class="ssh">typedef and using — Type Aliases</h3>
+      <div class="cb"><span class="cm">// Old way (typedef) — still common in legacy code</span>
+<span class="kw">typedef long long</span> ll;
+<span class="kw">typedef unsigned int</span> uint;
+
+<span class="cm">// Modern way (using) — preferred in C++11+</span>
+<span class="kw">using</span> ll = <span class="kw">long long</span>;
+<span class="kw">using</span> ull = <span class="kw">unsigned long long</span>;
+<span class="kw">using</span> pii = std::pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;;
+
+<span class="cm">// In competitive programming you'll often see:</span>
+<span class="kw">using</span> ll = <span class="kw">long long</span>;
+<span class="kw">#define</span> int long long    <span class="cm">// Hacky but common in CP — replaces ALL int with long long</span></div>
+    </div>
+
+    <div class="sec" data-m="scope">
+      <h2 class="sh">2.4 &nbsp; Scope, Lifetime &amp; Storage Duration <span class="tag tg">Important</span></h2>
+      <p><strong>Scope</strong> is where in your code a variable can be accessed. <strong>Lifetime</strong> is how long it exists in memory. These are different concepts and confusing them causes bugs.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: One-Way MIRRORS and Lifespans</span>
+        <p>Think of your code's curly braces <code>{ ... }</code> as a room with one-way mirrors. If you are inside a room, you can see out into the larger house (the global scope) or the outer room (the parent block). But people in the outer room cannot see <em>in</em>. When you exit a room (reach the closing brace <code>}</code>), everything that was created inside that room is instantly deleted. That is exactly how <strong>scope</strong> (who can see what) and <strong>lifetime</strong> (when things are deleted) operate in C++.</p>
+      </div>
+      <div class="cb"><span class="kw">int</span> globalVar = 100;     <span class="cm">// Global scope: accessible anywhere, lives for program lifetime</span>
+
+<span class="kw">int</span> main() {
+    <span class="kw">int</span> localVar = 5;        <span class="cm">// Local scope: only visible inside main()</span>
+    
+    {                         <span class="cm">// Anonymous block — creates a new scope</span>
+        <span class="kw">int</span> blockVar = 10;
+        cout &lt;&lt; localVar;    <span class="cm">// OK: can see outer scope</span>
+        cout &lt;&lt; blockVar;    <span class="cm">// OK: in scope</span>
+    }                         <span class="cm">// blockVar is DESTROYED here</span>
+    
+    <span class="cm">// cout &lt;&lt; blockVar;     ERROR: blockVar out of scope</span>
+    
+    <span class="kw">static int</span> count = 0;   <span class="cm">// Static local: persists between function calls</span>
+    count++;
+    cout &lt;&lt; count;           <span class="cm">// Increments every time this code runs</span>
+    
+    <span class="kw">return</span> 0;
+}</div>
+      <div class="def-box">
+        <span class="lbl">Storage Classes</span>
+        <p><strong>auto</strong> (default local) — lives on the stack, destroyed when scope ends.<br>
+        <strong>static</strong> — lives in static memory for the entire program duration; for local statics, retains value between calls.<br>
+        <strong>extern</strong> — declares that a variable is defined in another translation unit.<br>
+        <strong>register</strong> — hint to store in CPU register (ignored by modern compilers).</p>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">Global Variables — Use Sparingly</span>
+        <p>Global variables are accessible and modifiable from anywhere. This makes code hard to reason about, test, and debug. In professional code, avoid globals. In competitive programming, globals are acceptable for performance (avoid stack overflow with large arrays) — but understand the trade-off.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">2.5 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>Variables are the building blocks of your program, but they come with hidden traps that even experienced programmers occasionally fall into.</p>
+      
+      <h3 class="ssh">1. The "Garbage" Value Trap</h3>
+      <p>In C++, if you declare a variable like <code>int x;</code> and don't give it a value, it doesn't start at zero. It starts with whatever "garbage" was left in that memory location by the last program that used it. <strong>Always initialize your variables</strong> at the moment of creation using the brace syntax: <code>int x{0};</code>. Modern C++ makes this easy and safe.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: Floating Point Precision</span>
+        <p>Computers cannot represent numbers like 0.1 perfectly in binary. If you add 0.1 ten times, you might get 0.999999999 instead of 1.0. <strong>Never use <code>==</code> to compare two floating-point numbers.</strong> Instead, check if the difference between them is very small: <code>if (abs(a - b) < 1e-9)</code>.</p>
+      </div>
+
+      <h3 class="ssh">2. Char is Actually a Number</h3>
+      <p>A <code>char</code> like 'A' is stored in memory as the number 65 (its ASCII code). This is a feature, not a bug! It means you can do math with characters. For example, <code>'5' - '0'</code> gives you the integer <code>5</code>. Use this to your advantage in problems involving digits and letters.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: LL Literals</span>
+        <p>When using <code>long long</code>, get into the habit of adding <code>LL</code> to your numbers, e.g., <code>long long large = 2000000000LL;</code>. Without the <code>LL</code>, the compiler might treat the number as a regular <code>int</code> first, potentially causing an overflow <em>before</em> the value is even assigned to the <code>long long</code> variable.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 3 — OPERATORS & EXPRESSIONS
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Operators &amp; Expressions — <em>Math, Logic &amp; Bit Manipulation</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="arithmetic">
+      <h2 class="sh">3.1 &nbsp; Arithmetic Operators <span class="tag tc">Core</span></h2>
+      <p>Computers are, at their heart, massive calculators. <strong>Arithmetic operators</strong> are the basic instructions you give to the CPU to manipulate data. Whether you're calculating a player's health or the trajectory of a spacecraft, these are the tools you'll use.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Assembly Line</span>
+        <p>Imagine an assembly line where data items (operands) move through machines (operators). An <code>+</code> machine takes two numbers and produces their sum. A <code>/</code> machine takes two numbers and produces their quotient. The output of one machine can become the input for the next, forming an <strong>expression</strong>.</p>
+      </div>
+      <div class="cb"><span class="kw">int</span> a = 17, b = 5;
+
+cout &lt;&lt; a + b  &lt;&lt; "\n";   <span class="cm">// 22  — addition</span>
+cout &lt;&lt; a - b  &lt;&lt; "\n";   <span class="cm">// 12  — subtraction</span>
+cout &lt;&lt; a * b  &lt;&lt; "\n";   <span class="cm">// 85  — multiplication</span>
+cout &lt;&lt; a / b  &lt;&lt; "\n";   <span class="cm">// 3   — INTEGER division (truncates!)</span>
+cout &lt;&lt; a % b  &lt;&lt; "\n";   <span class="cm">// 2   — modulo (remainder)</span>
+
+<span class="cm">// For true division, cast to double first:</span>
+cout &lt;&lt; (<span class="kw">double</span>)a / b &lt;&lt; "\n";   <span class="cm">// 3.4</span>
+cout &lt;&lt; <span class="kw">static_cast</span>&lt;<span class="kw">double</span>&gt;(a) / b &lt;&lt; "\n";  <span class="cm">// 3.4 (preferred modern cast)</span></div>
+      <div class="warn-box">
+        <span class="lbl">Integer Division Silently Truncates</span>
+        <p><code>7 / 2</code> gives <code>3</code>, not <code>3.5</code>. The decimal is silently dropped. This is correct for integer division, but if you expect a floating-point result, you must cast: <code>(double)7 / 2</code> gives <code>3.5</code>. Forgetting this causes wrong answers in geometry and percentage problems.</p>
+      </div>
+      <h3 class="ssh">Compound Assignment Operators</h3>
+      <div class="cb">a += 5;    <span class="cm">// a = a + 5</span>
+a -= 3;    <span class="cm">// a = a - 3</span>
+a *= 2;    <span class="cm">// a = a * 2</span>
+a /= 4;    <span class="cm">// a = a / 4</span>
+a %= 3;    <span class="cm">// a = a % 3</span>
+
+<span class="cm">// Increment / Decrement</span>
+a++;       <span class="cm">// Post-increment: use a, THEN increment</span>
+++a;       <span class="cm">// Pre-increment: increment FIRST, then use</span>
+a--;       <span class="cm">// Post-decrement</span>
+--a;       <span class="cm">// Pre-decrement</span>
+
+<span class="cm">// The difference matters in expressions:</span>
+<span class="kw">int</span> x = 5;
+<span class="kw">int</span> y = x++;   <span class="cm">// y = 5, x = 6 (y gets old value)</span>
+<span class="kw">int</span> z = ++x;   <span class="cm">// z = 7, x = 7 (z gets new value)</span></div>
+    </div>
+
+    <div class="sec" data-m="comparison">
+      <h2 class="sh">3.2 &nbsp; Comparison &amp; Logical Operators <span class="tag tc">Core</span></h2>
+      <p>Comparison operators return <code>bool</code> (<code>true</code> or <code>false</code>). They are the foundation of all conditions and loops.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Bouncer at the Door</span>
+        <p>Think of comparison operators like a bouncer at a club checking IDs. The bouncer only returns one of two answers: "Yes" (<code>true</code>) or "No" (<code>false</code>). Similarly, logical operators (<code>&amp;&amp;</code>, <code>||</code>) are like multiple bouncers talking to each other. "Is this person over 18 AND do they have a ticket?" Both must agree for the final answer to be True.</p>
+      </div>
+      <div class="cb"><span class="cm">// Comparison operators — all return bool</span>
+<span class="kw">int</span> a = 5, b = 10;
+a == b    <span class="cm">// false — equal to</span>
+a != b    <span class="cm">// true  — not equal</span>
+a &lt; b     <span class="cm">// true  — less than</span>
+a &gt; b     <span class="cm">// false — greater than</span>
+a &lt;= b    <span class="cm">// true  — less than or equal</span>
+a &gt;= b    <span class="cm">// false — greater than or equal</span>
+
+<span class="cm">// Logical operators</span>
+(a &lt; b) &amp;&amp; (a &gt; 0)   <span class="cm">// AND: true if BOTH sides are true</span>
+(a &lt; b) || (a &gt; 100)  <span class="cm">// OR:  true if EITHER side is true</span>
+!(a == b)              <span class="cm">// NOT: flips true/false</span></div>
+      <div class="def-box">
+        <span class="lbl">Short-Circuit Evaluation</span>
+        <p>In <code>A &amp;&amp; B</code>, if A is <code>false</code>, B is <strong>never evaluated</strong>. In <code>A || B</code>, if A is <code>true</code>, B is never evaluated. This is called short-circuit evaluation. It's a performance feature AND a safety feature — you can write <code>ptr != nullptr &amp;&amp; ptr->value &gt; 0</code> safely: if ptr is null, the second part is never reached.</p>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">= vs == — The Most Classic C++ Bug</span>
+        <p><code>if (x = 5)</code> assigns 5 to x and then evaluates as true (since 5 is non-zero). It doesn't compare x to 5. <code>if (x == 5)</code> compares. To protect against this: some programmers write <code>if (5 == x)</code> — the compiler will error if you accidentally write <code>if (5 = x)</code> since you can't assign to a literal. Compiler warnings (-Wall) will also catch this.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="bitwise">
+      <h2 class="sh">3.3 &nbsp; Bitwise Operators — Power Tools <span class="tag tg">CP Essential</span></h2>
+      <p>Bitwise operators work directly on the binary representation of integers. They are extremely fast (single CPU instruction) and are used heavily in competitive programming, systems programming, and optimization.</p>
+      <div class="def-box">
+        <span class="lbl">Motivation: The Surgeon's Scalpel</span>
+        <p>Normal operators (<code>+</code>, <code>*</code>) treat a number like <code>5</code> as a single, indivisible concept. Bitwise operators treat that <code>5</code> as what it actually is in memory: a row of switches (<code>00000101</code>). Using bitwise operators is like taking a scalpel and flipping individual genetic switches inside the number. It's the most direct, lowest-level way to talk to the CPU.</p>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Operator</th><th>Name</th><th>Example (a=5=0101, b=3=0011)</th><th>Result</th></tr></thead>
+          <tbody>
+            <tr><td><code>a &amp; b</code></td><td>AND</td><td>0101 &amp; 0011</td><td class="good">0001 = 1</td></tr>
+            <tr><td><code>a | b</code></td><td>OR</td><td>0101 | 0011</td><td class="good">0111 = 7</td></tr>
+            <tr><td><code>a ^ b</code></td><td>XOR</td><td>0101 ^ 0011</td><td class="good">0110 = 6</td></tr>
+            <tr><td><code>~a</code></td><td>NOT (flip all bits)</td><td>~0101</td><td class="ok">...11111010 = -6</td></tr>
+            <tr><td><code>a &lt;&lt; 1</code></td><td>Left shift</td><td>0101 &lt;&lt; 1</td><td class="good">1010 = 10 (×2)</td></tr>
+            <tr><td><code>a &gt;&gt; 1</code></td><td>Right shift</td><td>0101 &gt;&gt; 1</td><td class="good">0010 = 2 (÷2)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cb"><span class="cm">// Bitwise tricks every CP programmer must know</span>
+
+<span class="cm">// 1. Check if number is even or odd</span>
+<span class="kw">if</span> (n &amp; 1) cout &lt;&lt; "odd";   <span class="cm">// Faster than n % 2 == 1</span>
+<span class="kw">if</span> (!(n &amp; 1)) cout &lt;&lt; "even";
+
+<span class="cm">// 2. Multiply/divide by powers of 2</span>
+n &lt;&lt; 3;   <span class="cm">// n * 8   (multiply by 2^3)</span>
+n &gt;&gt; 2;   <span class="cm">// n / 4   (divide by 2^2, integer division)</span>
+
+<span class="cm">// 3. Swap two integers without temp variable</span>
+a ^= b; b ^= a; a ^= b;   <span class="cm">// XOR swap trick</span>
+
+<span class="cm">// 4. Check if bit i is set</span>
+<span class="kw">bool</span> isSet = (n &gt;&gt; i) &amp; 1;
+
+<span class="cm">// 5. Set bit i</span>
+n |= (1 &lt;&lt; i);
+
+<span class="cm">// 6. Clear bit i</span>
+n &amp;= ~(1 &lt;&lt; i);
+
+<span class="cm">// 7. Toggle bit i</span>
+n ^= (1 &lt;&lt; i);
+
+<span class="cm">// 8. Check if power of 2 (very common in CP)</span>
+<span class="kw">bool</span> isPow2 = n &amp;&amp; !(n &amp; (n-1));</div>
+      <h3 class="ssh">Operator Precedence (Most Important)</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Precedence (High→Low)</th><th>Operators</th></tr></thead>
+          <tbody>
+            <tr><td>1 (highest)</td><td><code>++ --</code> (postfix), <code>()</code>, <code>[]</code>, <code>.</code>, <code>-></code></td></tr>
+            <tr><td>2</td><td><code>++ --</code> (prefix), <code>!</code>, <code>~</code>, unary <code>-</code>, <code>*</code> (deref), <code>&amp;</code> (addr)</td></tr>
+            <tr><td>3</td><td><code>*</code> <code>/</code> <code>%</code></td></tr>
+            <tr><td>4</td><td><code>+</code> <code>-</code></td></tr>
+            <tr><td>5</td><td><code>&lt;&lt;</code> <code>&gt;&gt;</code></td></tr>
+            <tr><td>6</td><td><code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td></tr>
+            <tr><td>7</td><td><code>==</code> <code>!=</code></td></tr>
+            <tr><td>8–10</td><td><code>&amp;</code> then <code>^</code> then <code>|</code></td></tr>
+            <tr><td>11</td><td><code>&amp;&amp;</code></td></tr>
+            <tr><td>12</td><td><code>||</code></td></tr>
+            <tr><td>13 (lowest)</td><td><code>?:</code> (ternary), <code>=</code> <code>+=</code> etc.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">When in Doubt, Parenthesize</span>
+        <p>Never rely on remembering precedence for complex expressions. Use parentheses to make intent explicit: <code>(a &amp; b) == 0</code> not <code>a &amp; b == 0</code> (the latter checks <code>a &amp; (b == 0)</code> which is wrong!). Readability beats cleverness every time.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">3.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>Expressions are the logic of your program, but C++ has specific rules about how those expressions are evaluated. If you don't know the rules, your math will be wrong.</p>
+      
+      <h3 class="ssh">1. The Integer Division Trap</h3>
+      <p>In C++, <code>7 / 2</code> is <code>3</code>, not <code>3.5</code>. When you divide two integers, the result <strong>must</strong> be an integer, so the decimal part is simply cut off. This is a common source of bugs in geometry and physics code. To get a decimal result, at least one of the numbers must be a double: <code>7.0 / 2</code> or <code>static_cast&lt;double&gt;(7) / 2</code>.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: Assignment vs. Comparison</span>
+        <p>The single <code>=</code> is for <strong>assignment</strong> (setting a value). The double <code>==</code> is for <strong>comparison</strong> (checking equality). Writing <code>if (x = 5)</code> will set x to 5 and then evaluate as "true" because 5 is not zero. This is one of the most famous bugs in C history. Always use <code>==</code> for checks.</p>
+      </div>
+
+      <h3 class="ssh">2. Short-Circuit Logic</h3>
+      <p>In an <code>&amp;&amp;</code> (AND) expression, if the first part is false, C++ doesn't even look at the second part. This is a safety feature! You can write <code>if (ptr != nullptr &amp;&amp; *ptr &gt; 10)</code> without crashing, because if <code>ptr</code> is null, the second part (which would cause a crash) is never executed.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: Parentheses are Free</span>
+        <p>Don't try to memorize the entire operator precedence table. It's complex and error-prone. Instead, use parentheses to make your intent explicit: <code>(a &amp; b) == 0</code> is much clearer than <code>a &amp; b == 0</code>. Clear code is better than "clever" code.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 4 — CONTROL FLOW
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Control Flow — <em>Decisions, Loops &amp; Branching</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="if-else">
+      <h2 class="sh">4.1 &nbsp; if / else if / else <span class="tag tc">Core</span></h2>
+      <p>Programs rarely run in a straight line. <strong>Control flow</strong> structures allow your code to make decisions and repeat actions based on data.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Fork in the Road</span>
+        <p>Think of an <code>if</code> statement as a fork in a road. At the fork, there is a sign (the condition). If the sign is true, you take the left path. If it's false, you take the right path (the <code>else</code>). <code>else if</code> is like having multiple signs at the same fork, directing you to different paths based on which sign matches your situation.</p>
+      </div>
+      <div class="cb"><span class="cm">// Basic if-else</span>
+<span class="kw">int</span> score = 75;
+
+<span class="kw">if</span> (score &gt;= 90) {
+    cout &lt;&lt; "Grade: A\n";
+} <span class="kw">else if</span> (score &gt;= 80) {
+    cout &lt;&lt; "Grade: B\n";
+} <span class="kw">else if</span> (score &gt;= 70) {
+    cout &lt;&lt; "Grade: C\n";
+} <span class="kw">else</span> {
+    cout &lt;&lt; "Grade: F\n";
+}
+
+<span class="cm">// Ternary operator — compact if-else for single expressions</span>
+<span class="kw">int</span> max = (a &gt; b) ? a : b;        <span class="cm">// max = a if a>b, else b</span>
+<span class="kw">string</span> sign = (n &gt;= 0) ? "non-negative" : "negative";</span>
+
+<span class="cm">// C++17: if with initializer — scopes the init variable to the if block</span>
+<span class="kw">if</span> (<span class="kw">int</span> n = getValue(); n &gt; 0) {
+    cout &lt;&lt; "Positive: " &lt;&lt; n &lt;&lt; "\n";
+} <span class="cm">// n is not accessible here</span></div>
+      <div class="warn-box">
+        <span class="lbl">Always Use Braces — The Dangling Else Trap</span>
+        <p>Never write brace-less if/else for multi-statement blocks: <code>if (x) doA(); doB();</code> — <code>doB()</code> always runs regardless of <code>x</code>. Always use <code>{ }</code> even for single statements. The famous Apple SSL bug (goto fail) happened because of missing braces.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="switch">
+      <h2 class="sh">4.2 &nbsp; switch Statement <span class="tag tc">Core</span></h2>
+      <p>Use <code>switch</code> when comparing one value against multiple <strong>constant integer or char</strong> values. It compiles to a jump table — faster than a long if-else chain for many cases.</p>
+      <div class="def-box">
+        <span class="lbl">Motivation: The Train Switchyard</span>
+        <p>Imagine a long chain of <code>if-else if-else</code> as searching for a matching door in a long hallway: you have to check door 1, then door 2, then door 3, all the way down. A <code>switch</code> statement is like a train switchyard. The compiler looks at the incoming value and instantly flips the tracks to send execution directly to the correct case, without checking the others. It's cleaner to read and faster to execute when you have many exact-match options.</p>
+      </div>
+      <div class="cb"><span class="kw">int</span> day = 3;
+
+<span class="kw">switch</span> (day) {
+    <span class="kw">case</span> 1:
+        cout &lt;&lt; "Monday\n";
+        <span class="kw">break</span>;              <span class="cm">// MUST break or execution falls through!</span>
+    <span class="kw">case</span> 2:
+        cout &lt;&lt; "Tuesday\n";
+        <span class="kw">break</span>;
+    <span class="kw">case</span> 3:
+    <span class="kw">case</span> 4:
+    <span class="kw">case</span> 5:
+        cout &lt;&lt; "Weekday\n"; <span class="cm">// Cases 3, 4, 5 all fall through to here</span>
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:
+        cout &lt;&lt; "Weekend\n";
+        <span class="kw">break</span>;
+}</div>
+      <div class="warn-box">
+        <span class="lbl">Forgetting break — Fallthrough Bug</span>
+        <p>Without <code>break</code>, execution continues into the next case. This is called <strong>fallthrough</strong>. It's rarely intentional. Always add <code>break</code> or the C++17 attribute <code>[[fallthrough]];</code> (to document intentional fallthrough). Missing <code>break</code> is one of the most common C++ bugs.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="loops">
+      <h2 class="sh">4.3 &nbsp; Loops — for, while, do-while <span class="tag tg">Most Used</span></h2>
+      <p>Computers excel at doing the same thing millions of times without getting tired. <strong>Loops</strong> are how you instruct the CPU to repeat a block of code.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Running Track</span>
+        <p>A loop is like a lap around a running track. You start at a certain point (initialization), you check if you have more laps to go (condition), and every time you finish a lap, you record it (update/increment). You keep running until the condition is no longer met. A <code>break</code> is like jumping over the fence to stop early, and a <code>continue</code> is like skipping the rest of the current lap and starting the next one immediately.</p>
+      </div>
+      <h3 class="ssh">for Loop — When You Know the Count</h3>
+      <div class="cb"><span class="cm">// Classic for loop — 3 parts: init; condition; update</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 5; i++) {
+    cout &lt;&lt; i &lt;&lt; " ";         <span class="cm">// Prints: 0 1 2 3 4</span>
+}
+
+<span class="cm">// Count down</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 10; i &gt;= 0; i--) cout &lt;&lt; i &lt;&lt; " ";
+
+<span class="cm">// Multiple variables</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0, j = 10; i &lt; j; i++, j--) {
+    cout &lt;&lt; i &lt;&lt; " " &lt;&lt; j &lt;&lt; "\n";
+}
+
+<span class="cm">// Range-based for loop (C++11) — iterate over collections</span>
+<span class="kw">int</span> arr[] = {1, 2, 3, 4, 5};
+<span class="kw">for</span> (<span class="kw">int</span> x : arr) {
+    cout &lt;&lt; x &lt;&lt; " ";           <span class="cm">// Prints each element</span>
+}
+
+<span class="cm">// Use auto& to avoid copying large objects</span>
+<span class="kw">for</span> (<span class="kw">auto</span>&amp; element : collection) {   <span class="cm">// & = reference, avoids copy</span>
+    element *= 2;                     <span class="cm">// Can modify element</span>
+}</div>
+      <h3 class="ssh">while Loop — When Count is Unknown</h3>
+      <div class="cb"><span class="cm">// while: checks condition BEFORE each iteration</span>
+<span class="kw">int</span> n;
+cin &gt;&gt; n;
+<span class="kw">while</span> (n &gt; 0) {
+    cout &lt;&lt; n % 10;   <span class="cm">// Print last digit</span>
+    n /= 10;           <span class="cm">// Remove last digit</span>
+}
+
+<span class="cm">// do-while: checks condition AFTER — guarantees at least one execution</span>
+<span class="kw">int</span> input;
+<span class="kw">do</span> {
+    cout &lt;&lt; "Enter positive number: ";
+    cin &gt;&gt; input;
+} <span class="kw">while</span> (input &lt;= 0);   <span class="cm">// Repeat until valid input</span></div>
+      <h3 class="ssh">break, continue, goto</h3>
+      <div class="cb"><span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 10; i++) {
+    <span class="kw">if</span> (i == 5) <span class="kw">break</span>;      <span class="cm">// Exit loop entirely when i==5</span>
+    <span class="kw">if</span> (i % 2 == 0) <span class="kw">continue</span>; <span class="cm">// Skip even numbers, go to next iteration</span>
+    cout &lt;&lt; i &lt;&lt; " ";        <span class="cm">// Prints: 1 3</span>
+}
+
+<span class="cm">// Breaking out of nested loops — one pattern using goto (rare but valid):</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; n; j++) {
+        <span class="kw">if</span> (found(i, j)) <span class="kw">goto</span> done;
+    }
+}
+done:
+cout &lt;&lt; "Exited nested loop\n";
+
+<span class="cm">// Cleaner alternative: use a flag variable or factor into a function</span></div>
+      <div class="eg">
+        <p><strong>Print all prime numbers from 1 to 100.</strong></p>
+        <div class="cb"><span class="kw">for</span> (<span class="kw">int</span> n = 2; n &lt;= 100; n++) {
+    <span class="kw">bool</span> isPrime = <span class="kw">true</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> d = 2; d * d &lt;= n; d++) {   <span class="cm">// Only check up to sqrt(n)</span>
+        <span class="kw">if</span> (n % d == 0) {
+            isPrime = <span class="kw">false</span>;
+            <span class="kw">break</span>;
+        }
+    }
+    <span class="kw">if</span> (isPrime) cout &lt;&lt; n &lt;&lt; " ";
+}
+<span class="cm">// Output: 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97</span></div>
+        <p><strong>Key insight:</strong> checking divisors only up to √n reduces checks from O(n) to O(√n) per number.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">4.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>Control flow is where logically complex bugs live. Most errors here come from misunderstanding exactly when a condition is checked or when a loop ends.</p>
+      
+      <h3 class="ssh">1. The Off-By-One Error</h3>
+      <p>This is the most common loop bug. Should the loop go <code>i < n</code> or <code>i <= n</code>? If you're counting 10 items starting from 0, you go up to 9 (<code>i < 10</code>). If you go up to 10, you've tried to access an 11th item. Always trace the first and last iteration of your loops mentally to be sure.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: The Dangling Else</span>
+        <p>If you have nested <code>if</code> statements without braces, an <code>else</code> will always attach to the <em>nearest</em> <code>if</code>. This can lead to logic that looks right but executes wrong. <strong>Rule: Always use braces <code>{ }</code></strong>, even for single-line statements. It makes your code future-proof and readable.</p>
+      </div>
+
+      <h3 class="ssh">2. Switch Fallthrough</h3>
+      <p>In a <code>switch</code>, if you forget a <code>break</code>, the program doesn't stop. It "falls through" into the next case. This is almost always a bug. C++17 added the <code>[[fallthrough]]</code> attribute to let you tell the compiler "I meant to do this," but 99% of the time, you just need a <code>break</code>.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: Loop Early Exit</span>
+        <p>If you're searching for something in a loop, use <code>break</code> as soon as you find it. There's no reason to keep running a loop 10,000 more times if you already have the answer. This is a simple but powerful performance optimization.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 5 — FUNCTIONS
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Functions — <em>Reusable Logic, Recursion &amp; Scope</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="basics">
+      <h2 class="sh">5.1 &nbsp; Function Anatomy &amp; Declarations <span class="tag tc">Core</span></h2>
+      <p>In programming, as in life, we don't do everything in one giant step. We break complex tasks into smaller, reusable pieces. <strong>Functions</strong> are the primary tool for this decomposition.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Recipe / Contract</span>
+        <p>Think of a function as a recipe. It has <strong>ingredients</strong> (parameters), a <strong>process</strong> (the body), and a <strong>result</strong> (the return value). When you call a function, you are making a contract: "I will give you these specific inputs, and you promise to perform this action and give me back this result." Once the recipe is written, you can use it as many times as you want without knowing <em>how</em> it works inside.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">Function Syntax</span>
+        <p><code>returnType functionName(paramType paramName, ...) { body; return value; }</code><br>
+        A function takes zero or more inputs (<strong>parameters</strong>), executes some logic, and optionally returns one value. Functions with return type <code>void</code> return nothing.</p>
+      </div>
+      <div class="cb"><span class="cm">// Function declaration (prototype) — tells compiler the function exists</span>
+<span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b);       <span class="cm">// Declaration (forward declaration)</span>
+
+<span class="cm">// Function definition — the actual implementation</span>
+<span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cm">// void function — no return value</span>
+<span class="kw">void</span> greet(<span class="kw">string</span> name) {
+    cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!\n";
+}
+
+<span class="cm">// Function with default parameters</span>
+<span class="kw">double</span> power(<span class="kw">double</span> base, <span class="kw">int</span> exp = 2) {   <span class="cm">// exp defaults to 2</span>
+    <span class="kw">double</span> result = 1.0;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; exp; i++) result *= base;
+    <span class="kw">return</span> result;
+}
+<span class="cm">// power(3.0) = 9.0  (uses default exp=2)</span>
+<span class="cm">// power(3.0, 3) = 27.0</span>
+
+<span class="kw">int</span> main() {
+    cout &lt;&lt; add(3, 4) &lt;&lt; "\n";    <span class="cm">// 7</span>
+    greet("Alice");                <span class="cm">// Hello, Alice!</span>
+    <span class="kw">return</span> 0;
+}</div>
+    </div>
+
+    <div class="sec" data-m="pass">
+      <h2 class="sh">5.2 &nbsp; Pass by Value, Reference &amp; Pointer <span class="tag tg">Critical</span></h2>
+      <p>This is one of the most important concepts in C++. <strong>How</strong> you pass a variable to a function determines whether the function can modify the original.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Photocopy vs. The Original Document</span>
+        <p><strong>Pass by Value</strong> is like handing someone a photocopy of your document. They can scribble all over their copy, but your original stays perfect. (Safe, but making copies of books is slow).<br>
+        <strong>Pass by Reference</strong> is like sliding the original document across the table. They can read it, but if they cross out a word and write a new one, your original document is permanently changed. (Fast, but requires trust).</p>
+      </div>
+      <div class="cb"><span class="cm">// 1. PASS BY VALUE — function gets a COPY. Original unchanged.</span>
+<span class="kw">void</span> doubleVal(<span class="kw">int</span> x) {
+    x *= 2;   <span class="cm">// modifies the copy, NOT the original</span>
+}
+<span class="kw">int</span> a = 5;
+doubleVal(a);
+cout &lt;&lt; a;   <span class="cm">// Still 5!</span>
+
+<span class="cm">// 2. PASS BY REFERENCE — function gets the actual variable</span>
+<span class="kw">void</span> doubleRef(<span class="kw">int</span>&amp; x) {   <span class="cm">// & makes it a reference parameter</span>
+    x *= 2;   <span class="cm">// modifies the ORIGINAL</span>
+}
+<span class="kw">int</span> b = 5;
+doubleRef(b);
+cout &lt;&lt; b;   <span class="cm">// 10! Original modified.</span>
+
+<span class="cm">// 3. PASS BY CONST REFERENCE — efficient read-only access (best for large objects)</span>
+<span class="kw">void</span> printName(<span class="kw">const</span> std::string&amp; name) {   <span class="cm">// No copy, but can't modify</span>
+    cout &lt;&lt; name;
+}
+
+<span class="cm">// 4. PASS BY POINTER — like reference but can be null</span>
+<span class="kw">void</span> doublePtr(<span class="kw">int</span>* x) {
+    <span class="kw">if</span> (x != <span class="kw">nullptr</span>) *x *= 2;
+}
+<span class="kw">int</span> c = 5;
+doublePtr(&amp;c);   <span class="cm">// Pass address of c</span>
+cout &lt;&lt; c;       <span class="cm">// 10</span></div>
+      <div class="def-box">
+        <span class="lbl">When to Use Each Passing Mode</span>
+        <p>
+        <strong>Pass by value</strong> — small types (int, double, char, bool). Cheap to copy.<br>
+        <strong>Pass by const&amp;</strong> — large objects (string, vector, struct) that you only READ. Zero copy cost.<br>
+        <strong>Pass by &amp;</strong> — when you need to MODIFY the caller's variable.<br>
+        <strong>Pass by pointer</strong> — when the argument might be <code>nullptr</code>, or for C-style APIs.</p>
+      </div>
+      <div class="eg">
+        <p><strong>Write a swap function that actually swaps two integers.</strong></p>
+        <div class="cb"><span class="kw">void</span> swap(<span class="kw">int</span>&amp; a, <span class="kw">int</span>&amp; b) {   <span class="cm">// Must pass by reference!</span>
+    <span class="kw">int</span> temp = a;
+    a = b;
+    b = temp;
+}
+
+<span class="kw">int</span> x = 10, y = 20;
+swap(x, y);
+cout &lt;&lt; x &lt;&lt; " " &lt;&lt; y;   <span class="cm">// 20 10 — swapped!</span>
+
+<span class="cm">// Note: std::swap() in &lt;algorithm&gt; already does this.</span></div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="overload">
+      <h2 class="sh">5.3 &nbsp; Function Overloading &amp; Inline Functions <span class="tag tc">Core</span></h2>
+      <p><strong>Function overloading</strong> lets you have multiple functions with the same name but different parameter types or counts. The compiler picks the right version based on the arguments.</p>
+      <div class="def-box">
+        <span class="lbl">Motivation: One Concept, One Name</span>
+        <p>In the old C language, you couldn't reuse names. You had to write <code>add_int()</code>, <code>add_float()</code>, <code>add_double()</code>, and remember which to call. C++ fixed this. "Adding" is a single human concept, so C++ lets you just use the name <code>add()</code>. The compiler looks at the "shape" of the arguments you pass (e.g., two ints vs two floats) to figure out which exact function you meant.</p>
+      </div>
+      <div class="cb"><span class="cm">// Overloaded functions — same name, different signatures</span>
+<span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> a + b; }
+<span class="kw">double</span> add(<span class="kw">double</span> a, <span class="kw">double</span> b) { <span class="kw">return</span> a + b; }
+<span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b, <span class="kw">int</span> c) { <span class="kw">return</span> a + b + c; }
+
+cout &lt;&lt; add(1, 2);         <span class="cm">// Calls int version:    3</span>
+cout &lt;&lt; add(1.5, 2.5);     <span class="cm">// Calls double version: 4.0</span>
+cout &lt;&lt; add(1, 2, 3);      <span class="cm">// Calls 3-arg version:  6</span>
+
+<span class="cm">// inline — hint to compiler to paste function body at call site (no function call overhead)</span>
+<span class="kw">inline int</span> square(<span class="kw">int</span> x) { <span class="kw">return</span> x * x; }
+<span class="cm">// Modern compilers inline automatically when appropriate. The keyword is mostly a suggestion.</span></div>
+    </div>
+
+    <div class="sec" data-m="recursion">
+      <h2 class="sh">5.4 &nbsp; Recursion — Functions That Call Themselves <span class="tag tg">CP Critical</span></h2>
+      <p>Recursion is often considered a "threshold" topic—once you understand it, your perspective on problem-solving changes forever. A <strong>recursive function</strong> is simply a function that calls itself to solve a smaller version of the same problem.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Stack of Plates</span>
+        <p>Imagine you're washing a stack of plates. You can't wash the bottom plate until you've washed all the ones above it. When a function calls itself, it puts the current task on pause and starts a "new copy" of the task on top of the old one. We call this the <strong>Call Stack</strong>. You keep adding plates to the stack until you reach the <strong>Base Case</strong> (the last plate). Then, you start finishing them one by one, working your way back down.</p>
+      </div>
+      <p>A <strong>recursive function</strong> calls itself to solve smaller versions of the same problem. Every recursion must have a <strong>base case</strong> (stopping condition) and a <strong>recursive case</strong> that moves toward the base case.</p>
+      <div class="def-box">
+        <span class="lbl">Anatomy of Recursion</span>
+        <p>1. <strong>Base case</strong>: The simplest input where the answer is known directly. Return immediately.<br>
+        2. <strong>Recursive case</strong>: Break the problem into a smaller version of itself and recurse.<br>
+        3. <strong>Progress</strong>: Each recursive call must get closer to the base case or you get infinite recursion (stack overflow).</p>
+      </div>
+      <div class="cb"><span class="cm">// Classic: Factorial — n! = n × (n-1)!</span>
+<span class="kw">long long</span> factorial(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= 1) <span class="kw">return</span> 1;       <span class="cm">// Base case</span>
+    <span class="kw">return</span> n * factorial(n - 1);  <span class="cm">// Recursive case</span>
+}</div>
+      <div class="trace">
+        <span class="t-label">Call Stack Trace: factorial(4)</span>
+<span class="lo">Step 1 (Call)</span>: factorial(4) sees 4 > 1. Computes 4 * <span class="hi">factorial(3)</span>. PAUSE.
+<span class="lo">Step 2 (Call)</span>: factorial(3) sees 3 > 1. Computes 3 * <span class="hi">factorial(2)</span>. PAUSE.
+<span class="lo">Step 3 (Call)</span>: factorial(2) sees 2 > 1. Computes 2 * <span class="hi">factorial(1)</span>. PAUSE.
+<span class="lo">Step 4 (Base)</span>: factorial(1) hits the base case. Returns <span class="ok">1</span> immediately.
+
+<span class="cm">Now the stack "unwinds", resolving the paused calculations from top down:</span>
+<span class="lo">Step 3 (Return)</span>: factorial(2) resumes: 2 * 1. Returns <span class="ok">2</span>.
+<span class="lo">Step 2 (Return)</span>: factorial(3) resumes: 3 * 2. Returns <span class="ok">6</span>.
+<span class="lo">Step 1 (Return)</span>: factorial(4) resumes: 4 * 6. Returns <span class="ok">24</span>.
+Result: <span class="ok">24</span>
+      </div>
+      <div class="cb"><span class="cm">// Fibonacci — fib(n) = fib(n-1) + fib(n-2)</span>
+<span class="kw">int</span> fib(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= 1) <span class="kw">return</span> n;          <span class="cm">// Base: fib(0)=0, fib(1)=1</span>
+    <span class="kw">return</span> fib(n-1) + fib(n-2);    <span class="cm">// SLOW! O(2^n) — see memoization in File 04</span>
+}
+
+<span class="cm">// GCD using Euclid's algorithm — clean recursive solution</span>
+<span class="kw">int</span> gcd(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">if</span> (b == 0) <span class="kw">return</span> a;
+    <span class="kw">return</span> gcd(b, a % b);
+}
+<span class="cm">// gcd(48, 18) = gcd(18, 12) = gcd(12, 6) = gcd(6, 0) = 6</span>
+
+<span class="cm">// Binary search — recursive version</span>
+<span class="kw">int</span> bsearch(<span class="kw">int</span> arr[], <span class="kw">int</span> lo, <span class="kw">int</span> hi, <span class="kw">int</span> target) {
+    <span class="kw">if</span> (lo &gt; hi) <span class="kw">return</span> -1;                        <span class="cm">// Base: not found</span>
+    <span class="kw">int</span> mid = lo + (hi - lo) / 2;                    <span class="cm">// Avoid overflow vs (lo+hi)/2</span>
+    <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+    <span class="kw">if</span> (arr[mid] &lt; target) <span class="kw">return</span> bsearch(arr, mid+1, hi, target);
+    <span class="kw">return</span> bsearch(arr, lo, mid-1, target);
+}</div>
+      <div class="warn-box">
+        <span class="lbl">Stack Overflow from Deep Recursion</span>
+        <p>Each recursive call uses stack memory. If recursion goes too deep (~10,000–100,000 levels on most systems), you get a stack overflow and the program crashes. For deep recursion, convert to an iterative solution with an explicit stack, or use tail-call optimization. Never use naive recursive Fibonacci for large n.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="namespace">
+      <h2 class="sh">5.5 &nbsp; Namespaces &amp; using namespace std <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Mental Model: Last Names (Surnames)</span>
+        <p>Imagine working in an office with three people named "John." To avoid confusion, you call them "John Smith," "John Doe," and "John Clark." The last name isolates them. In C++, libraries are written by thousands of different programmers. If two libraries both create a function called <code>sort()</code>, your program won't compile because it doesn't know which one to use. <strong>Namespaces are like last names for code.</strong> The standard library's last name is <code>std</code>. So the official name of the output stream is <code>std::cout</code>.</p>
+      </div>
+      <div class="cb"><span class="cm">// std is the namespace of the C++ standard library</span>
+<span class="cm">// Everything in the STL lives in std::</span>
+std::cout &lt;&lt; "Hello\n";    <span class="cm">// Fully qualified name</span>
+std::string s = "world";
+std::vector&lt;<span class="kw">int</span>&gt; v;
+
+<span class="cm">// using namespace std; — imports all std names into current scope</span>
+<span class="kw">using namespace</span> std;
+cout &lt;&lt; "Hello\n";         <span class="cm">// Now works without std::</span>
+
+<span class="cm">// Better: selective using — import only what you need</span>
+<span class="kw">using</span> std::cout;
+<span class="kw">using</span> std::string;
+
+<span class="cm">// Define your own namespace</span>
+<span class="kw">namespace</span> MyApp {
+    <span class="kw">int</span> version = 1;
+    <span class="kw">void</span> init() { cout &lt;&lt; "Initializing v" &lt;&lt; version &lt;&lt; "\n"; }
+}
+MyApp::init();    <span class="cm">// Access with ::</span></div>
+      <div class="warn-box">
+        <span class="lbl">using namespace std in Headers — Never Do This</span>
+        <p>In a .cpp file, <code>using namespace std;</code> is fine (personal choice). But <strong>never</strong> put it in a header file (.h/.hpp). Headers are included in many .cpp files, so you'd force that namespace import on every file that includes yours — causing naming conflicts that are nearly impossible to debug.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">5.6 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>Functions are where you define the architecture of your program. Mistakes here often lead to "silent bugs" where the code runs but gives the wrong answer.</p>
+      
+      <h3 class="ssh">1. The "Pass-by-Value" Misconception</h3>
+      <p>By default, C++ copies everything you send to a function. If you pass a 1GB file to a function, C++ will try to make a 1GB copy of it. This is slow! <strong>Rule: Pass small things (int, bool) by value, and large things (string, vector) by <code>const reference</code>.</strong> If you need the function to modify the original variable, pass it by <code>reference</code> (<code>int&amp;</code>).</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: Returning Local References</span>
+        <p>Never return a reference to a variable created inside a function. Once the function ends, that variable is destroyed. Returning a reference to it is like giving someone the address of a house that has been demolished. It's called a <strong>Dangling Reference</strong> and it will crash your program unpredictably.</p>
+      </div>
+
+      <h3 class="ssh">2. Recursion without an Exit</h3>
+      <p>Every recursive function must have a Base Case. Without it, the function will call itself forever—or until it runs out of "stack space." When the stack fills up, your program crashes with a "Stack Overflow." This is the programming equivalent of an infinite loop, but it's more dangerous because it consumes memory until the crash.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: Inline for Speed</span>
+        <p>For very small functions that are called millions of times inside loops, use the <code>inline</code> keyword. This tells the compiler to copy the function's code directly into the location where it's called, skipping the tiny "cost" of a function call. Modern compilers are smart and do this automatically, but <code>inline</code> is still a useful hint.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 6 — ARRAYS & STRINGS
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Arrays &amp; Strings — <em>Collections, C-Strings &amp; std::string</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="arrays">
+      <h2 class="sh">6.1 &nbsp; Arrays — Fixed-Size Collections <span class="tag tc">Core</span></h2>
+      <p>An <strong>array</strong> is a contiguous block of memory holding a fixed number of elements of the same type. Arrays in C++ are <mark>zero-indexed</mark> — the first element is at index 0.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Apartment Building</span>
+        <p>Think of an array as an apartment building. The whole building is built at once (fixed size) and all apartments are identical (same type). If you know the address of the building, and you know you want apartment #4, you can walk directly there instantly because they are packed perfectly next to each other in memory. In C++, we start counting apartments from 0 instead of 1.</p>
+      </div>
+      <div class="cb"><span class="cm">// Declaration and initialization</span>
+<span class="kw">int</span> arr[5];                          <span class="cm">// Uninitialized — contains garbage!</span>
+<span class="kw">int</span> arr2[5] = {1, 2, 3, 4, 5};       <span class="cm">// Fully initialized</span>
+<span class="kw">int</span> arr3[5] = {1, 2};                 <span class="cm">// Partially: {1, 2, 0, 0, 0} — rest zeroed</span>
+<span class="kw">int</span> arr4[5] = {};                     <span class="cm">// All zeros</span>
+<span class="kw">int</span> arr5[] = {10, 20, 30};            <span class="cm">// Size deduced: 3 elements</span>
+
+<span class="cm">// Access and modification</span>
+arr2[0] = 10;                         <span class="cm">// Set first element</span>
+cout &lt;&lt; arr2[4];                      <span class="cm">// Access last element (index 4 for size 5)</span>
+
+<span class="cm">// Iterate</span>
+<span class="kw">int</span> n = 5;
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) cout &lt;&lt; arr2[i] &lt;&lt; " ";
+
+<span class="cm">// Size of array</span>
+<span class="kw">int</span> size = <span class="kw">sizeof</span>(arr2) / <span class="kw">sizeof</span>(arr2[0]);  <span class="cm">// = 20 / 4 = 5</span></div>
+      <div class="warn-box">
+        <span class="lbl">Array Out of Bounds — Undefined Behavior</span>
+        <p>Accessing <code>arr[-1]</code> or <code>arr[5]</code> on a size-5 array is <strong>undefined behavior</strong> — the program might crash, corrupt memory, or silently produce wrong results. C++ does NOT check array bounds at runtime (for performance). Always validate indices. Use <code>std::vector</code> with <code>.at(i)</code> if you want bounds checking.</p>
+      </div>
+      <h3 class="ssh">2D Arrays</h3>
+      <div class="cb"><span class="cm">// 2D array: rows × columns</span>
+<span class="kw">int</span> matrix[3][4];                      <span class="cm">// 3 rows, 4 columns — uninitialized</span>
+<span class="kw">int</span> grid[3][3] = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+<span class="cm">// Access: row then column</span>
+cout &lt;&lt; grid[1][2];   <span class="cm">// row 1, col 2 = 6</span>
+
+<span class="cm">// Traverse 2D array</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 3; i++) {
+    <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt; 3; j++) {
+        cout &lt;&lt; grid[i][j] &lt;&lt; " ";
+    }
+    cout &lt;&lt; "\n";
+}</div>
+      <div class="tip-box">
+        <span class="lbl">Prefer std::vector Over Raw Arrays</span>
+        <p>In modern C++, prefer <code>std::vector&lt;int&gt;</code> over raw arrays. Vectors are dynamic (can resize), know their own size, can be returned from functions, and work with all STL algorithms. Use raw arrays only when you need stack allocation for performance, or are interfacing with C code.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="strings">
+      <h2 class="sh">6.2 &nbsp; std::string — The Right Way to Handle Text <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: Safety and Convenience</span>
+        <p>Historically in C, text was handled as raw character arrays. If you tried to add "World" to "Hello", you had to manually allocate new memory, ensure there was enough space, and copy the bytes. <code>std::string</code> is a modern "smart" class that handles all that memory management for you. It grows automatically when you add to it, cleans up after itself, and provides tools to search and slice.</p>
+      </div>
+      <p><code>std::string</code> (from <code>&lt;string&gt;</code>) is a dynamic, safe, feature-rich string class. Always prefer it over C-style <code>char[]</code> strings.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;string&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="cm">// Construction</span>
+string s1 = "Hello";
+string s2("World");
+string s3(5, 'x');         <span class="cm">// "xxxxx" — 5 copies of 'x'</span>
+string s4 = s1;            <span class="cm">// Copy</span>
+
+<span class="cm">// Common operations</span>
+s1 + " " + s2              <span class="cm">// Concatenation: "Hello World"</span>
+s1 += "!";                  <span class="cm">// Append: s1 = "Hello!"</span>
+s1.size()                   <span class="cm">// Length: 6 (also .length())</span>
+s1.empty()                  <span class="cm">// Is it empty? false</span>
+s1[0]                       <span class="cm">// Character access: 'H'</span>
+s1.at(0)                    <span class="cm">// Same but bounds-checked (throws exception)</span>
+s1.substr(1, 3)             <span class="cm">// Substring from index 1, length 3: "ell"</span>
+s1.find("ll")               <span class="cm">// Find position of "ll": returns 2</span>
+s1.find("xyz")              <span class="cm">// Not found: returns string::npos</span>
+s1.replace(0, 1, "J")       <span class="cm">// Replace 1 char at index 0: "Jello!"</span>
+
+<span class="cm">// Comparison (lexicographic)</span>
+s1 == s2    <span class="cm">// false</span>
+s1 &lt; s2     <span class="cm">// true (H &lt; W in ASCII)</span>
+
+<span class="cm">// Convert between string and number</span>
+string num = to_string(42);          <span class="cm">// int → string</span>
+<span class="kw">int</span> n = stoi("42");                  <span class="cm">// string → int</span>
+<span class="kw">double</span> d = stod("3.14");             <span class="cm">// string → double</span>
+
+<span class="cm">// Reading full line (including spaces)</span>
+string line;
+getline(cin, line);                  <span class="cm">// Reads until newline</span></div>
+      <h3 class="ssh">String Iteration and Character Operations</h3>
+      <div class="cb"><span class="kw">#include</span> &lt;cctype&gt;   <span class="cm">// For character functions</span>
+
+string s = "Hello World 123";
+
+<span class="cm">// Iterate over characters</span>
+<span class="kw">for</span> (<span class="kw">char</span> c : s) cout &lt;&lt; c;       <span class="cm">// Print each char</span>
+<span class="kw">for</span> (<span class="kw">auto</span>&amp; c : s) c = tolower(c); <span class="cm">// Convert to lowercase in-place</span>
+
+<span class="cm">// Character classification</span>
+isalpha('A')   <span class="cm">// true  — is letter?</span>
+isdigit('5')   <span class="cm">// true  — is digit?</span>
+isalnum('a')   <span class="cm">// true  — is letter or digit?</span>
+isspace(' ')   <span class="cm">// true  — is whitespace?</span>
+isupper('A')   <span class="cm">// true  — is uppercase?</span>
+islower('a')   <span class="cm">// true  — is lowercase?</span>
+toupper('a')   <span class="cm">// 'A'  — convert to uppercase</span>
+tolower('A')   <span class="cm">// 'a'  — convert to lowercase</span></div>
+      <div class="eg">
+        <p><strong>Count vowels and reverse a string.</strong></p>
+        <div class="cb"><span class="kw">string</span> s = "Hello World";
+
+<span class="cm">// Count vowels</span>
+<span class="kw">int</span> vowels = 0;
+<span class="kw">string</span> v = "aeiouAEIOU";
+<span class="kw">for</span> (<span class="kw">char</span> c : s) {
+    <span class="kw">if</span> (v.find(c) != string::npos) vowels++;
+}
+cout &lt;&lt; "Vowels: " &lt;&lt; vowels &lt;&lt; "\n";   <span class="cm">// 3</span>
+
+<span class="cm">// Reverse using STL (include &lt;algorithm&gt;)</span>
+reverse(s.begin(), s.end());
+cout &lt;&lt; s &lt;&lt; "\n";   <span class="cm">// "dlroW olleH"</span>
+
+<span class="cm">// Manual reverse</span>
+<span class="kw">int</span> lo = 0, hi = s.size() - 1;
+<span class="kw">while</span> (lo &lt; hi) {
+    swap(s[lo++], s[hi--]);
+}</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cstring">
+      <h2 class="sh">6.3 &nbsp; C-Style Strings (char arrays) <span class="tag tt">Know It, Avoid It</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: The Legacy of C</span>
+        <p>Why do we still learn C-style strings if <code>std::string</code> is better? Because C++ is built on top of C. Every time you write <code>"Hello"</code> in quotes, the compiler actually creates a C-style string, not a <code>std::string</code>. Furthermore, almost all operating system APIs (Windows, Linux) and older libraries expect string data in this raw format.</p>
+      </div>
+      <p>C-style strings are null-terminated char arrays: <code>char str[] = "hello"</code> stores <code>{'h','e','l','l','o','\0'}</code>. The null terminator <code>'\0'</code> marks the end. You'll encounter these in legacy code and C APIs.</p>
+      <div class="cb"><span class="kw">#include</span> &lt;cstring&gt;
+
+<span class="kw">char</span> s1[] = "Hello";          <span class="cm">// Size 6: 5 chars + '\0'</span>
+<span class="kw">char</span> s2[20] = "World";        <span class="cm">// Fixed buffer of 20</span>
+<span class="kw">char</span> s3[20];
+<span class="kw">const char</span>* s4 = "literal";   <span class="cm">// Pointer to string literal (immutable!)</span>
+
+strlen(s1)           <span class="cm">// Length: 5 (not counting '\0')</span>
+strcpy(s3, s1)       <span class="cm">// Copy s1 into s3 — DANGER: no bounds check!</span>
+strncpy(s3, s1, 19)  <span class="cm">// Safer: copy at most 19 chars</span>
+strcat(s2, s1)       <span class="cm">// Concatenate — DANGER: buffer overflow!</span>
+strcmp(s1, s2)       <span class="cm">// Compare: 0 if equal, &lt;0 if s1&lt;s2, &gt;0 if s1&gt;s2</span></div>
+      <div class="warn-box">
+        <span class="lbl">Buffer Overflow — Security Vulnerability</span>
+        <p>C-string functions like <code>strcpy</code>, <code>strcat</code>, <code>gets</code> don't check buffer sizes. Writing past the end of a char array corrupts memory. This is the basis of buffer overflow attacks. In modern C++, use <code>std::string</code>. If you must use C-strings, use bounded versions: <code>strncpy</code>, <code>strncat</code>, <code>fgets</code>.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">6.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Trap</th><th>Wrong</th><th>Correct</th></tr></thead>
+          <tbody>
+            <tr><td>Array out of bounds</td><td class="bad">arr[5] on a size-5 array</td><td class="good">Valid indices: 0 to size-1. Use vector.at() for bounds check.</td></tr>
+            <tr><td>String comparison</td><td class="bad">char* s1 == char* s2 (compares pointers!)</td><td class="good">Use strcmp() for C-strings, == for std::string</td></tr>
+            <tr><td>string::npos</td><td class="bad">if (s.find("x") == -1) — wrong type</td><td class="good">if (s.find("x") == string::npos) — correct</td></tr>
+            <tr><td>getline after cin</td><td class="bad">cin >> n; getline(cin, line); — reads empty</td><td class="good">cin >> n; cin.ignore(); getline(cin, line);</td></tr>
+            <tr><td>Modifying string literal</td><td class="bad">char* s = "hello"; s[0] = 'H'; — crash!</td><td class="good">char s[] = "hello"; (array copy) or std::string</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 7 — POINTERS
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Pointers — <em>The Heart of C++</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pointers">
+      <h2 class="sh">7.1 &nbsp; What is a Pointer? <span class="tag tc">Core</span></h2>
+      <p>A <strong>pointer</strong> is a variable that stores the <mark>memory address</mark> of another variable. Every variable in your program occupies memory at a specific address. A pointer holds that address as its value.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The House vs. The Address</span>
+        <p>Imagine a variable is a <strong>house</strong>. The house contains data (like furniture). Every house has a unique <strong>address</strong> (like "123 Main St"). A pointer is a piece of paper with that address written on it. It isn't the house itself, but it tells you exactly where the house is. If you have the address, you can go to the house and change the furniture (the data) even if you're standing on the other side of town.</p>
+      </div>
+      <div class="gv">
+        <span class="dv-label">Visualizing Variable x and Pointer p</span>
+ [ Variable x ]       [ Pointer p ]        [ Pointer pp ]
+ Value: 10     ◀────  Value: 0x100  ◀────  Value: 0x200
+ addr: 0x100          addr: 0x200          addr: 0x300
+      </div>
+      <div class="cb"><span class="cm">// Pointer syntax</span>
+<span class="kw">int</span> x = 42;
+<span class="kw">int</span>* p = &amp;x;    <span class="cm">// p is a pointer to int; & gets the address of x</span>
+
+cout &lt;&lt; x;      <span class="cm">// 42     — the value of x</span>
+cout &lt;&lt; &amp;x;     <span class="cm">// 0x...  — the address of x</span>
+cout &lt;&lt; p;      <span class="cm">// 0x...  — same address (that's what p stores)</span>
+cout &lt;&lt; *p;     <span class="cm">// 42     — dereference: go to address p, read value</span>
+
+<h3 class="ssh">Trace: Step-by-Step Dereferencing (*p = 100)</h3>
+<div class="pl-steps">
+  <li><span class="pl-num">1</span> <strong>Look up p</strong>: The CPU finds the variable <code>p</code> in memory.</li>
+  <li><span class="pl-num">2</span> <strong>Read address</strong>: It reads the address stored inside <code>p</code> (e.g., <code>0x7ffe...</code>).</li>
+  <li><span class="pl-num">3</span> <strong>Go to address</strong>: It jumps to that address and writes the value <code>100</code> into that location.</li>
+</div>
+
+<span class="cm">// Pointer to pointer</span>
+<span class="kw">int</span>** pp = &amp;p;   <span class="cm">// pp stores the address of p (double pointer)</span>
+cout &lt;&lt; **pp;    <span class="cm">// 100 — double dereference</span></div>
+
+    </div>
+
+    <div class="sec" data-m="motivation">
+      <h2 class="sh">7.2 &nbsp; Why Does This Exist? <span class="tag tc">Motivation</span></h2>
+      <p>You might wonder: "Why not just use the variable name?" Pointers exist for three critical reasons:</p>
+      
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">1. Dynamic Memory</div>
+          <p>Pointers are the only way to manage memory that you "request" at runtime (using <code>new</code>). This allows for flexible data structures like linked lists.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">2. Efficiency</div>
+          <p>Instead of copying a 1GB object into a function (slow), you can just pass its 8-byte address. This is near-instant.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">3. Shared Access</div>
+          <p>Pointers allow multiple parts of your program to work on the <em>same</em> data without making multiple copies.</p>
+        </div>
+      </div>
+      <div class="def-box">
+        <span class="lbl">The Two Key Operators</span>
+        <p><code>&amp;</code> (address-of): applied to a variable, gives its memory address. <code>&amp;x</code> = "the address where x lives."<br>
+        <code>*</code> (dereference): applied to a pointer, gives the value at that address. <code>*p</code> = "go to address p, read the value."</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="null">
+      <h2 class="sh">7.3 &nbsp; Null Pointer &amp; Pointer Safety <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: The Blank Piece of Paper</span>
+        <p>If a pointer is a piece of paper with an address written on it, what happens when you create the pointer but don't give it an address yet? In C++, it contains "garbage" — an old, random address from a previous program. If you try to go there (dereference), your program crashes. <code>nullptr</code> is essentially writing "NO ADDRESS YET" explicitly on that piece of paper so you can test it safely.</p>
+      </div>
+      <div class="cb"><span class="cm">// nullptr — the safe null pointer (C++11)</span>
+<span class="kw">int</span>* p = <span class="kw">nullptr</span>;   <span class="cm">// p points to nothing — safe initial value</span>
+
+<span class="cm">// ALWAYS check before dereferencing</span>
+<span class="kw">if</span> (p != <span class="kw">nullptr</span>) {
+    cout &lt;&lt; *p;       <span class="cm">// Safe</span>
+}
+<span class="cm">// or equivalently:</span>
+<span class="kw">if</span> (p) cout &lt;&lt; *p;   <span class="cm">// nullptr is falsy</span>
+
+<span class="cm">// Dangling pointer — points to freed/out-of-scope memory</span>
+<span class="kw">int</span>* dangling;
+{
+    <span class="kw">int</span> x = 10;
+    dangling = &amp;x;   <span class="cm">// x is valid here</span>
+}                     <span class="cm">// x is destroyed here</span>
+<span class="cm">// *dangling now is UNDEFINED BEHAVIOR — x no longer exists!</span>
+
+<span class="cm">// After freeing heap memory, set pointer to nullptr</span>
+<span class="kw">delete</span> p;
+p = <span class="kw">nullptr</span>;         <span class="cm">// Prevents use-after-free</span></div>
+      <div class="warn-box">
+        <span class="lbl">Dereferencing Null/Dangling Pointer = Crash</span>
+        <p>Dereferencing a null pointer or a dangling pointer causes <strong>undefined behavior</strong> — usually a segmentation fault crash. This is one of the most common C++ bugs. Rule: <strong>never dereference a pointer without verifying it's non-null and still valid</strong>. Use smart pointers (File 03) to automate this.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pointer-arith">
+      <h2 class="sh">7.4 &nbsp; Pointer Arithmetic &amp; Arrays <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Mental Model: Walking Down the Street</span>
+        <p>If you stand in front of House #100 on a street and take "one step" to the next house, you don't end up at House #101. If the houses are 50 feet wide, you end up at House #150. Pointer arithmetic works the exact same way. If you add <code>1</code> to an <code>int*</code>, the compiler actually adds `4` (the size of an int) to the memory address. It automatically scales your "steps" to the size of the objects you are jumping over.</p>
+      </div>
+      <p>Arrays and pointers are intimately connected. An array name decays to a pointer to its first element.</p>
+      <div class="cb"><span class="kw">int</span> arr[] = {10, 20, 30, 40, 50};
+<span class="kw">int</span>* p = arr;   <span class="cm">// p points to arr[0] (array decays to pointer)</span>
+
+cout &lt;&lt; *p;       <span class="cm">// 10 — arr[0]</span>
+cout &lt;&lt; *(p+1);   <span class="cm">// 20 — arr[1] (pointer arithmetic: +1 moves by sizeof(int) bytes)</span>
+cout &lt;&lt; *(p+2);   <span class="cm">// 30 — arr[2]</span>
+
+p++;              <span class="cm">// Move pointer to next element</span>
+cout &lt;&lt; *p;       <span class="cm">// 20</span>
+
+<span class="cm">// p[i] is EXACTLY the same as *(p+i)</span>
+p[2] == *(p + 2)  <span class="cm">// Always true — these are identical</span>
+
+<span class="cm">// Pointer difference = number of elements between</span>
+<span class="kw">int</span>* start = arr;
+<span class="kw">int</span>* end = arr + 5;
+cout &lt;&lt; end - start;   <span class="cm">// 5 — not 20 bytes, but 5 elements</span>
+
+<span class="cm">// Iterate using pointers (same as using indices)</span>
+<span class="kw">for</span> (<span class="kw">int</span>* p = arr; p &lt; arr + 5; p++) {
+    cout &lt;&lt; *p &lt;&lt; " ";
+}</div>
+    </div>
+
+    <div class="sec" data-m="dynamic">
+      <h2 class="sh">7.5 &nbsp; Dynamic Memory — new &amp; delete <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Local vs Heap Pointers</span>
+        <p>A pointer to a <strong>local variable</strong> (e.g. <code>int* p = &amp;x;</code>) points to something on the stack. The memory is managed automatically. When the function ends, <code>x</code> disappears. The pointer still has the address, but pointing to it is now an error.<br>
+        A pointer to a <strong>heap-allocated variable</strong> (e.g. <code>int* p = new int;</code>) points to memory you manually requested. This memory NEVER disappears automatically. It will live forever—even after the function ends—until you explicitly destroy it with <code>delete p;</code>.</p>
+      </div>
+      <p>Stack memory is fast but limited and automatically managed. <strong>Heap memory</strong> (dynamic allocation) lets you allocate large amounts and control lifetime explicitly using <code>new</code> and <code>delete</code>.</p>
+      <div class="cb"><span class="cm">// Allocate a single value on the heap</span>
+<span class="kw">int</span>* p = <span class="kw">new int</span>;         <span class="cm">// Allocate uninitialized int on heap</span>
+<span class="kw">int</span>* q = <span class="kw">new int</span>(42);    <span class="cm">// Allocate and initialize to 42</span>
+<span class="kw">int</span>* r = <span class="kw">new int</span>{42};    <span class="cm">// Same (brace init, preferred)</span>
+
+*p = 10;
+cout &lt;&lt; *p;   <span class="cm">// 10</span>
+
+<span class="kw">delete</span> p;     <span class="cm">// MUST free heap memory when done</span>
+p = <span class="kw">nullptr</span>;  <span class="cm">// Best practice: null the pointer after delete</span>
+
+<span class="cm">// Allocate an array on the heap</span>
+<span class="kw">int</span> n = 100;
+<span class="kw">int</span>* arr = <span class="kw">new int</span>[n];    <span class="cm">// Dynamic array of n ints</span>
+arr[0] = 1;                <span class="cm">// Use like a regular array</span>
+<span class="kw">delete</span>[] arr;              <span class="cm">// NOTE: delete[] for arrays, not delete</span>
+arr = <span class="kw">nullptr</span>;
+
+<span class="cm">// 2D dynamic array</span>
+<span class="kw">int</span> rows = 3, cols = 4;
+<span class="kw">int</span>** matrix = <span class="kw">new int</span>*[rows];
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; rows; i++)
+    matrix[i] = <span class="kw">new int</span>[cols];
+<span class="cm">// ... use matrix[i][j] ...</span>
+<span class="cm">// Free in reverse order:</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; rows; i++) <span class="kw">delete</span>[] matrix[i];
+<span class="kw">delete</span>[] matrix;</div>
+      <div class="warn-box">
+        <span class="lbl">Memory Leak — Heap Memory Never Freed</span>
+        <p>If you <code>new</code> something and never <code>delete</code> it, that memory is never returned to the OS — called a <strong>memory leak</strong>. In long-running programs, leaks accumulate and eventually crash the program. Rule: every <code>new</code> must have a matching <code>delete</code>. In modern C++, avoid raw <code>new/delete</code> entirely — use <code>std::unique_ptr</code> and <code>std::vector</code> (see File 03).</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">7.6 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>Pointers are where the most dangerous C++ bugs live. A mistake here won't just give you the wrong math—it will crash your computer or create a security hole.</p>
+      
+      <h3 class="ssh">1. The Dangling Pointer</h3>
+      <p>A <strong>dangling pointer</strong> is a pointer that stores the address of a variable that no longer exists. For example, if you have a pointer to a local variable in a function, and that function ends, the pointer still points to that memory—but that memory is now being used for something else. Using a dangling pointer leads to <strong>Undefined Behavior</strong>: your program might work today and crash tomorrow.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: Dereferencing nullptr</span>
+        <p>A <code>nullptr</code> is a pointer that points to "nothing." Attempting to read or write to <code>*ptr</code> when <code>ptr</code> is null is like trying to enter a house that doesn't exist. It will cause an immediate "Segmentation Fault" or "Access Violation." <strong>Always check:</strong> <code>if (ptr != nullptr)</code> before using a pointer.</p>
+      </div>
+
+      <h3 class="ssh">2. Memory Leaks</h3>
+      <p>When you allocate memory using <code>new</code>, it stays allocated until you manually call <code>delete</code>. If you lose the pointer (the address) without deleting the memory, that memory is "leaked"—it stays used but you can't access it. Always null your pointers after deletion to prevent "Double Free" bugs.</p>
+
+      <div class="tip-box">
+        <span class="lbl">Pro Tip: Modern Smart Pointers</span>
+        <p>In modern C++, we almost never use <code>new</code> and <code>delete</code> directly. Instead, we use <strong>Smart Pointers</strong> (<code>unique_ptr</code>, <code>shared_ptr</code>). They work just like regular pointers but "clean up after themselves" automatically. We'll cover these in File 04.</p>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 8 — REFERENCES & MEMORY MODEL
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">References &amp; Memory — <em>Stack, Heap &amp; Aliases</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="references">
+      <h2 class="sh">8.1 &nbsp; References — Aliases for Variables <span class="tag tc">Core</span></h2>
+      <p>A <strong>reference</strong> is an alias — an alternative name for an existing variable. Unlike a pointer, a reference <mark>cannot be null</mark>, cannot be reseated (made to refer to something else after initialization), and doesn't need dereferencing syntax.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Nickname</span>
+        <p>Think of a reference as a <strong>nickname</strong>. If your name is Robert but everyone calls you "Bob," you are still the same person. Anything that happens to Bob happens to Robert. In memory, <code>Robert</code> and <code>Bob</code> are the same physical location. This makes references safer and cleaner than pointers for simple task like passing data to functions.</p>
+      </div>
+      <div class="cb"><span class="kw">int</span> x = 10;
+<span class="kw">int</span>&amp; ref = x;    <span class="cm">// ref is an alias for x — they're THE SAME VARIABLE</span>
+
+cout &lt;&lt; ref;     <span class="cm">// 10 — reads x through ref</span>
+ref = 20;        <span class="cm">// Changes x! ref and x are the same</span>
+cout &lt;&lt; x;       <span class="cm">// 20</span>
+
+<span class="cm">// References MUST be initialized at declaration</span>
+<span class="kw">int</span>&amp; r;          <span class="cm">// COMPILE ERROR: reference must be initialized</span>
+
+<span class="cm">// References cannot be reseated</span>
+<span class="kw">int</span> a = 1, b = 2;
+<span class="kw">int</span>&amp; r2 = a;
+r2 = b;          <span class="cm">// This ASSIGNS b's value (2) to a, does NOT make r2 refer to b</span>
+
+<span class="cm">// const reference — can bind to temporaries and literals</span>
+<span class="kw">const int</span>&amp; cr = 42;    <span class="cm">// OK: const ref extends the lifetime of the temporary</span>
+<span class="kw">const int</span>&amp; cr2 = x + 1; <span class="cm">// OK: binds to result of expression</span></div>
+      <h3 class="ssh">Pointer vs Reference — When to Use Which</h3>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Use Reference when</div>
+          <p>The alias must always be valid (never null). You don't need to change what it refers to. Cleaner syntax with no * or &amp;. Function parameters that modify the caller's variable.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Use Pointer when</div>
+          <p>The value might be null (optional parameter). You need to point to different things over time. Dynamic memory allocation. Arrays of variable size. Interfacing with C APIs.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="memory">
+      <h2 class="sh">8.2 &nbsp; The Memory Model — Stack vs Heap <span class="tag tg">Critical Concept</span></h2>
+      <p>Understanding where your variables live in memory is essential for writing correct, performant C++ programs. There are two main memory regions a typical C++ program uses.</p>
+      <div class="def-box">
+        <span class="lbl">Mental Model: The Desk vs. The Warehouse</span>
+        <p>Think of the <strong>Stack</strong> like your literal study desk. It's very fast, everything is right in front of you, and things get stacked precisely in order. But if you try to put a car on it, the desk will break (Stack Overflow). Think of the <strong>Heap</strong> like a giant warehouse. You can put massive things there, but you have to specifically request a spot, get a receipt (a pointer) to know where you put it, and explicitly throw the item away when you're done.</p>
+      </div>
+      <div class="gv">
+        <span class="dv-label">C++ Memory Layout</span>
+High Address
+┌─────────────────────────────────┐
+│           STACK                 │ ← Local variables, function call frames
+│    (grows downward ↓)           │   Fast. Fixed size (~1-8 MB). Auto-managed.
+├─────────────────────────────────┤
+│          (free space)           │
+├─────────────────────────────────┤
+│            HEAP                 │ ← new/delete (dynamic allocation)
+│    (grows upward ↑)             │   Slow. Large. Manual management.
+├─────────────────────────────────┤
+│       Static / Global           │ ← Global vars, static locals
+├─────────────────────────────────┤
+│     Code / Text Segment         │ ← Your compiled instructions
+└─────────────────────────────────┘
+Low Address
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>Stack</th><th>Heap</th></tr></thead>
+          <tbody>
+            <tr><td>Allocation speed</td><td class="good">Very fast (just move stack pointer)</td><td class="ok">Slower (OS call, fragmentation)</td></tr>
+            <tr><td>Size</td><td class="bad">Limited (~1–8 MB typically)</td><td class="good">Limited by RAM</td></tr>
+            <tr><td>Lifetime</td><td>Automatic (freed at scope exit)</td><td>Manual (new/delete) or smart pointers</td></tr>
+            <tr><td>Safety</td><td class="good">No leaks</td><td class="ok">Leaks if not deleted</td></tr>
+            <tr><td>Use for</td><td>Local vars, function params</td><td>Large data, variable-size, needs to outlive function</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="warn-box">
+        <span class="lbl">Stack Overflow from Large Arrays</span>
+        <p>Declaring <code>int arr[1000000];</code> as a local variable (on the stack) uses 4 MB and often causes a stack overflow at runtime. For large arrays, either declare them globally (in static memory) or use <code>new int[1000000]</code> / <code>std::vector&lt;int&gt;(1000000)</code> to put them on the heap.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="structures">
+      <h2 class="sh">8.3 &nbsp; Structures — Custom Data Types <span class="tag tc">Core</span></h2>
+      <div class="def-box">
+        <span class="lbl">Motivation: Bundling Related Data</span>
+        <p>Imagine writing a game. A player has an X coordinate, a Y coordinate, a health score, and a name. You could have four separate variables passed around into every function: <code>movePlayer(string name, int x, int y, int health)</code>. But this is messy and error-prone. A <code>struct</code> lets you stitch these variables together into a single, cohesive unit called a "Player". It allows you to think and code in terms of whole entities rather than loose parts.</p>
+      </div>
+      <p>A <strong>struct</strong> groups related variables of different types into a single named type. It's the foundation of OOP (classes are just structs with private members and methods).</p>
+      <div class="cb"><span class="kw">struct</span> Student {
+    <span class="kw">string</span> name;
+    <span class="kw">int</span> age;
+    <span class="kw">double</span> gpa;
+};   <span class="cm">// Note the semicolon after the closing brace!</span>
+
+<span class="cm">// Create and use a struct</span>
+Student s1;
+s1.name = "Alice";
+s1.age = 20;
+s1.gpa = 3.8;
+
+Student s2 = {"Bob", 21, 3.5};      <span class="cm">// Aggregate initialization</span>
+Student s3 {"Carol", 22, 3.9};       <span class="cm">// Modern brace init</span>
+
+<span class="cm">// Access members with . (dot) operator</span>
+cout &lt;&lt; s2.name &lt;&lt; " " &lt;&lt; s2.gpa &lt;&lt; "\n";
+
+<span class="cm">// Pointer to struct: use -> operator</span>
+Student* ptr = &amp;s1;
+cout &lt;&lt; ptr-&gt;name;    <span class="cm">// ptr->name == (*ptr).name</span>
+
+<span class="cm">// Pass struct to function</span>
+<span class="kw">void</span> printStudent(<span class="kw">const</span> Student&amp; s) {   <span class="cm">// const& to avoid copy</span>
+    cout &lt;&lt; s.name &lt;&lt; " GPA: " &lt;&lt; s.gpa &lt;&lt; "\n";
+}
+
+<span class="cm">// struct with methods (this is essentially a class)</span>
+<span class="kw">struct</span> Point {
+    <span class="kw">double</span> x, y;
+    <span class="kw">double</span> distanceTo(<span class="kw">const</span> Point&amp; other) <span class="kw">const</span> {
+        <span class="kw">double</span> dx = x - other.x, dy = y - other.y;
+        <span class="kw">return</span> sqrt(dx*dx + dy*dy);
+    }
+};</div>
+    </div>
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.4 &nbsp; Chapter Traps &amp; Key Points</h2>
+      <p>References are powerful because they are virtually "free" and safe, but they have strict rules about their lifetime.</p>
+      
+      <h3 class="ssh">1. The "Return Local Reference" Disaster</h3>
+      <p>As we saw in Chapter 5, never return a reference to a variable created inside the function. That variable dies the moment the function returns. Your reference now points to dead memory. This is the #1 cause of "Garbage Output" in C++.</p>
+
+      <div class="warn-box">
+        <span class="lbl">Trap: Reference vs Copy in Loops</span>
+        <p>When you write <code>for (auto x : myLargeVector)</code>, C++ makes a <strong>copy</strong> of every element. If the elements are large structs, your loop will be 10x slower. Always use <code>for (const auto&amp; x : myLargeVector)</code> to access them by reference instead. Safe, fast, and professional.</p>
+      </div>
+
+      <h3 class="ssh">2. Reference Initialization</h3>
+      <p>A reference MUST be initialized when it is created. You can't have an "empty" reference like you can have a null pointer. Once a reference is tied to a variable, it is tied to that variable for life. You cannot "reseat" it later.</p>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 9 — TRAPS & MASTER REFERENCE
+════════════════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Traps &amp; Master Reference — <em>The Complete Foundations Cheatsheet</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="quick-ref">
+      <h2 class="sh">9.1 &nbsp; Essential Header Reference <span class="tag tc">Cheatsheet</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Header</th><th>What It Provides</th><th>Key Contents</th></tr></thead>
+          <tbody>
+            <tr><td><code>&lt;iostream&gt;</code></td><td>I/O streams</td><td>cout, cin, cerr, endl</td></tr>
+            <tr><td><code>&lt;string&gt;</code></td><td>std::string class</td><td>string, to_string, stoi, stod</td></tr>
+            <tr><td><code>&lt;cmath&gt;</code></td><td>Math functions</td><td>sqrt, pow, abs, floor, ceil, sin, cos, log</td></tr>
+            <tr><td><code>&lt;algorithm&gt;</code></td><td>STL algorithms</td><td>sort, reverse, min, max, find, binary_search</td></tr>
+            <tr><td><code>&lt;vector&gt;</code></td><td>Dynamic array</td><td>vector&lt;T&gt;, push_back, size, at, begin, end</td></tr>
+            <tr><td><code>&lt;climits&gt;</code></td><td>Integer limits</td><td>INT_MAX, INT_MIN, LLONG_MAX, LLONG_MIN</td></tr>
+            <tr><td><code>&lt;cstring&gt;</code></td><td>C-string functions</td><td>strlen, strcpy, strcmp, memset, memcpy</td></tr>
+            <tr><td><code>&lt;cctype&gt;</code></td><td>Character functions</td><td>isalpha, isdigit, toupper, tolower</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="top-bugs">
+      <h2 class="sh">9.2 &nbsp; The "Foundational 15": Professional Debugging Guide <span class="tag tg">Must Know</span></h2>
+      <p>As a senior developer, I see these 15 bugs more than any others. Mastering these is the difference between a "beginner" and someone who can write production-ready code.</p>
+
+      <h3 class="ssh">Group A: The "Logic and Syntax" Bugs</h3>
+      <ul class="pl">
+        <li><strong>1. Uninitialized Variables</strong>: C++ doesn't zero out your memory. Using <code>int x;</code> results in random "garbage" data. Always use <code>int x{0};</code>.</li>
+        <li><strong>2. The `=` vs `==` Slip</strong>: <code>if(x = 5)</code> sets x to 5 and is always true. <code>if(x == 5)</code> is the check. Enable <code>-Wall</code> to let the compiler catch this for you.</li>
+        <li><strong>3. Integer Overflow</strong>: If you add 1 to a max-value <code>int</code>, it wraps to a negative number. Always use <code>long long</code> in competitive programming when numbers exceed 10⁹.</li>
+        <li><strong>4. Integer Division</strong>: <code>(double)7 / 2</code> is 3.5, but <code>7 / 2</code> is 3. The compiler follows the type of the inputs, not your expectations.</li>
+        <li><strong>5. Switch Fallthrough</strong>: Forgetting a <code>break</code> in a <code>switch</code> means every case below it runs too. It's a "silent logic" bug.</li>
+      </ul>
+
+      <h3 class="ssh">Group B: The "Memory and Pointer" Bugs</h3>
+      <ul class="pl">
+        <li><strong>6. Array Out-of-Bounds</strong>: Accessing <code>arr[10]</code> on an array of size 10. This corrupts adjacent memory or causes a Segfault. C++ doesn't stop you—it's your responsibility.</li>
+        <li><strong>7. Null Dereference</strong>: Using <code>*ptr</code> when <code>ptr</code> is <code>nullptr</code>. This is an immediate, hard crash. Always check <code>if (ptr)</code>.</li>
+        <li><strong>8. Memory Leaks</strong>: Every <code>new</code> needs a <code>delete</code>. If you lose the pointer before deleting, that RAM is "gone" until the program ends.</li>
+        <li><strong>9. `delete` vs `delete[]`</strong>: Use the square-bracket version for anything allocated with <code>new T[n]</code>. Using the wrong one causes partial memory corruption.</li>
+        <li><strong>10. Dangling References</strong>: Returning a reference to a temporary variable inside a function. It's like giving someone a key to a house that was just demolished.</li>
+      </ul>
+
+      <h3 class="ssh">Group C: The "Modern and Performance" Bugs</h3>
+      <ul class="pl">
+        <li><strong>11. `endl` in Tight Loops</strong>: Using <code>endl</code> flushes the I/O buffer to the hardware. It's 100x slower than <code>"\n"</code>. This is the #1 reason C++ solutions fail Time Limits in CP.</li>
+        <li><strong>12. Unnecessary Copies</strong>: Passing a <code>std::string</code> or <code>std::vector</code> to a function by value. This makes a deep copy of the whole object. Pass by <code>const&</code> instead.</li>
+        <li><strong>13. `getline` after `cin >>`</strong>: The <code>>></code> operator leaves a newline in the buffer. <code>getline</code> will read that newline and return an empty string. Use <code>cin.ignore()</code> between them.</li>
+        <li><strong>14. Negative Modulo</strong>: In C++, <code>-7 % 3</code> is <code>-1</code>. If you need a mathematically positive result (for indices), use <code>((n % m) + m) % m</code>.</li>
+        <li><strong>15. Naive Recursion</strong>: Using simple recursion for problems like Fibonacci. Without memoization, it grows exponentially (2ⁿ) and crashes your program for even small inputs.</li>
+      </ul>
+    </div>
+
+    <div class="sec" data-m="quick-io">
+      <h2 class="sh">9.3 &nbsp; Fast I/O Template for Competitive Programming <span class="tag tg">CP Essential</span></h2>
+      <div class="cb"><span class="cm">// Paste this at the top of every CP solution</span>
+<span class="kw">#include</span> &lt;bits/stdc++.h&gt;    <span class="cm">// GCC-only: includes EVERYTHING</span>
+<span class="kw">using namespace</span> std;
+<span class="kw">using</span> ll = <span class="kw">long long</span>;
+<span class="kw">using</span> pii = pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;;
+<span class="kw">using</span> vi = vector&lt;<span class="kw">int</span>&gt;;
+<span class="kw">#define</span> pb push_back
+<span class="kw">#define</span> all(x) (x).begin(),(x).end()
+<span class="kw">#define</span> sz(x) (<span class="kw">int</span>)(x).size()
+
+<span class="kw">int</span> main() {
+    <span class="cm">// Fast I/O — makes cin/cout as fast as printf/scanf</span>
+    ios_base::sync_with_stdio(<span class="kw">false</span>);
+    cin.tie(<span class="kw">NULL</span>);
+    
+    <span class="cm">// Your solution here</span>
+    
+    <span class="kw">return</span> 0;
+}</div>
+      <div class="note-box">
+        <span class="lbl">Why ios_base::sync_with_stdio(false)?</span>
+        <p>By default, cin/cout synchronize with C's printf/scanf (so you can mix them). This sync is slow. Calling <code>sync_with_stdio(false)</code> removes that sync, making cin/cout nearly as fast as scanf/printf. <code>cin.tie(NULL)</code> stops cout from being flushed before every cin read. Together, they make I/O roughly 5-10x faster — critical for large inputs.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="cheatsheet">
+      <h2 class="sh">9.4 &nbsp; Foundations Quick-Reference Card <span class="tag tc">Reference</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Integer Limits</div>
+          <p><code>int</code>: ±2.1×10⁹<br>
+          <code>long long</code>: ±9.2×10¹⁸<br>
+          <code>INT_MAX</code> = 2147483647<br>
+          <code>LLONG_MAX</code> = 9.2×10¹⁸</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Type Sizes (typical)</div>
+          <p><code>char</code> = 1 byte<br>
+          <code>int</code> = 4 bytes<br>
+          <code>long long</code> = 8 bytes<br>
+          <code>double</code> = 8 bytes<br>
+          <code>pointer</code> = 8 bytes (64-bit)</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Useful Math</div>
+          <p><code>abs(x)</code> — absolute value<br>
+          <code>sqrt(x)</code> — square root<br>
+          <code>pow(x,n)</code> — x^n<br>
+          <code>min(a,b)</code>, <code>max(a,b)</code><br>
+          <code>__gcd(a,b)</code> — GCD (GCC)</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">String Quick Ops</div>
+          <p><code>s.size()</code> — length<br>
+          <code>s.substr(i,n)</code> — substring<br>
+          <code>s.find(t)</code> — find t in s<br>
+          <code>stoi(s)</code>, <code>to_string(n)</code><br>
+          <code>sort(s.begin(),s.end())</code></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Pointer Quick Ref</div>
+          <p><code>int* p = &amp;x</code> — pointer to x<br>
+          <code>*p</code> — dereference (get value)<br>
+          <code>p-&gt;member</code> — member via ptr<br>
+          <code>nullptr</code> — null pointer<br>
+          <code>delete p; p=nullptr;</code></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Loop Patterns</div>
+          <p>Forward: <code>for(int i=0;i&lt;n;i++)</code><br>
+          Reverse: <code>for(int i=n-1;i>=0;i--)</code><br>
+          Range: <code>for(auto&amp; x : vec)</code><br>
+          Until: <code>while(condition)</code><br>
+          At-least-once: <code>do{}while(cond)</code></p>
+        </div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · File 01 of 04 · Foundations · From Zero to Confident</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-01-foundations';
+  var FILE_DISP = '01 · Foundations';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

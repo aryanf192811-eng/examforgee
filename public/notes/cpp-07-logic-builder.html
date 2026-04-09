@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C++ Mastery — File 07: The Logic Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════
+   FILE 07 — THE LOGIC BUILDER
+   Warm notebook theme — matches Files 01–05
+══════════════════════════════════════════════════ */
+:root{
+  --paper:#faf7f2;--paper2:#f3ede3;--paper3:#ece5d8;
+  --ink:#1c1510;--ink2:#3a2e22;--ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14);--mline:rgba(210,100,80,0.28);
+  --red:#b83030;--blue:#1a4a8c;--green:#1a6b40;
+  --orange:#b85a10;--purple:#5a1a8a;--teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42);--hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17);--hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14);--hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif;
+  --prose:'Crimson Pro',Georgia,serif;
+  --hand:'Architects Daughter',cursive;
+  --mono:'Courier New','Menlo',monospace;
+  --fs-xs:clamp(9px,1.8vw,10px);
+  --fs-sm:clamp(11px,2.4vw,13px);
+  --fs-base:clamp(14px,3.2vw,17px);
+  --fs-md:clamp(14px,3.4vw,16.5px);
+  --fs-lg:clamp(16px,3.8vw,19px);
+  --fs-xl:clamp(22px,5.5vw,40px);
+  --fs-ch:clamp(16px,4.2vw,21px);
+  --fs-code:clamp(11px,2.6vw,13.5px);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  background:#bfb49a;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),
+    radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);
+  font-family:var(--body);color:var(--ink);
+  min-height:100vh;
+  padding:clamp(10px,3vw,24px) clamp(8px,3vw,16px) clamp(32px,6vw,64px);
+}
+.book{max-width:860px;margin:0 auto;}
+
+/* ── COVER ── */
+.cover{
+  background:var(--paper2);border:2px solid var(--ink);
+  border-radius:4px;
+  padding:clamp(20px,5vw,44px) clamp(16px,5vw,48px) clamp(18px,4vw,36px);
+  margin-bottom:clamp(14px,3vw,28px);position:relative;overflow:hidden;
+  box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);
+}
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);
+  background-size:100% 32px;background-position:0 48px;pointer-events:none;
+}
+.cover::after{
+  content:'';position:absolute;top:0;bottom:0;left:52px;
+  width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;
+}
+.cover-inner{position:relative;padding-left:clamp(8px,2vw,20px);}
+.cover-subject{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.cover-subject::before{
+  content:'';display:inline-block;width:28px;height:1.5px;
+  background:var(--orange);flex-shrink:0;
+}
+.cover h1{
+  font-family:var(--body);font-size:var(--fs-xl);font-weight:700;
+  line-height:1.15;color:var(--ink);
+}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{
+  font-family:var(--prose);font-size:var(--fs-base);color:var(--ink3);
+  margin-top:14px;line-height:1.8;max-width:530px;
+  border-left:3px solid var(--orange);padding-left:14px;
+}
+.cover-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:clamp(14px,3vw,28px);}
+.chip{
+  font-family:var(--hand);font-size:var(--fs-xs);
+  border:1.5px solid #b0a080;border-radius:2px;
+  padding:4px clamp(6px,2vw,12px);color:var(--ink3);
+  background:rgba(255,255,255,0.5);
+}
+.cover-gate-tag{
+  position:absolute;top:clamp(10px,2vw,20px);right:clamp(10px,2vw,24px);
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--paper);background:var(--ink);
+  padding:5px clamp(6px,2vw,12px);border-radius:2px;
+  max-width:calc(100% - 100px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ── TABLE OF CONTENTS ── */
+.toc{
+  background:var(--paper);border:1.5px solid #b0a080;
+  border-radius:3px;padding:clamp(12px,3vw,20px) clamp(14px,4vw,28px);
+  margin-bottom:clamp(14px,3vw,28px);box-shadow:3px 4px 0 #9a8a6e;
+}
+.toc-lbl{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:3px;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:12px;
+}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+.toc-grid a{
+  font-family:var(--prose);font-size:var(--fs-md);color:var(--ink2);
+  text-decoration:none;display:flex;align-items:baseline;gap:7px;
+  padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;
+}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:var(--fs-sm);color:var(--ink3);min-width:24px;}
+
+/* ── CHAPTER ── */
+.chapter{
+  background:var(--paper);border:1.5px solid #b0a088;
+  border-radius:3px;margin-bottom:clamp(14px,3vw,28px);
+  box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;
+}
+.ch-head{background:var(--ink);padding:clamp(12px,2.5vw,16px) clamp(16px,4vw,32px);}
+.ch-ey{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;
+}
+.ch-title{
+  font-family:var(--body);font-size:var(--fs-ch);font-weight:600;
+  color:var(--paper);line-height:1.25;
+}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{
+  background-image:
+    linear-gradient(var(--mline) 1px,transparent 1px),
+    repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-size:54px 100%,100% 32px;
+  background-position:0 0,0 16px;
+}
+.sec{
+  padding:clamp(18px,3.5vw,28px) clamp(14px,3.5vw,32px) clamp(16px,3vw,26px) clamp(34px,7vw,62px);
+  border-bottom:1px dashed #c8b898;position:relative;
+}
+.sec:last-child{border-bottom:none;}
+.sec::before{
+  content:attr(data-m);position:absolute;left:clamp(4px,1vw,10px);top:34px;
+  font-family:var(--hand);font-size:var(--fs-xs);color:rgba(200,100,80,0.26);
+  writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;
+}
+
+/* ── HEADINGS & TAGS ── */
+h2.sh{
+  font-family:var(--body);font-size:var(--fs-lg);font-weight:700;
+  color:var(--ink);margin-bottom:14px;padding-bottom:6px;
+  border-bottom:2px solid var(--ink);display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;
+}
+.tag{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1.5px;
+  text-transform:uppercase;padding:3px 7px;border-radius:2px;
+  border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;
+}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+.tg2{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+h3.ssh{
+  font-family:var(--body);font-size:clamp(13.5px,3.2vw,15.5px);
+  font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;
+}
+
+/* ── TEXT ── */
+p{font-family:var(--prose);font-size:var(--fs-base);line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+
+/* ── LOGIC BLOCK — unique to this file ── */
+/* Problem Statement */
+.prob{
+  background:var(--paper2);border:1.5px solid var(--ink);
+  border-radius:4px;padding:clamp(14px,3vw,18px) clamp(14px,3vw,20px);
+  margin:16px 0;position:relative;
+}
+.prob::before{
+  content:'Problem';font-family:var(--hand);font-size:var(--fs-xs);
+  letter-spacing:2px;text-transform:uppercase;color:var(--ink);
+  position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;
+  border:1px solid var(--ink);border-radius:2px;
+}
+.prob p{font-family:var(--prose);font-size:var(--fs-md);color:var(--ink);margin:0;line-height:1.82;font-weight:400;}
+.prob p strong{color:var(--blue);}
+
+/* Logic / Thinking Section */
+.logic{
+  background:#f0f4ff;border-left:4px solid var(--blue);
+  border-radius:0 4px 4px 0;padding:clamp(12px,2.5vw,16px) clamp(14px,3vw,20px);margin:14px 0;
+}
+.logic .lbl{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block;
+}
+.logic p{font-size:var(--fs-md);line-height:1.85;margin:0 0 6px;color:var(--ink2);}
+.logic p:last-child{margin:0;}
+.logic strong{color:var(--blue);}
+
+/* Visual / Trace Box */
+.viz{
+  background:var(--paper3);border:1.5px dashed #a09070;
+  border-radius:4px;padding:clamp(12px,2.5vw,16px) clamp(12px,3vw,18px);margin:14px 0;
+  font-family:var(--mono);font-size:clamp(10px,2.2vw,13px);line-height:2;
+  color:var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:#b0a080 transparent;
+}
+.viz::-webkit-scrollbar{height:4px;}
+.viz::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.viz .viz-label{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;
+  text-transform:uppercase;color:var(--orange);margin-bottom:8px;display:block;
+}
+.viz .hi{background:var(--hl-y);padding:0 3px;border-radius:2px;}
+.viz .lo{color:var(--ink3);}
+.viz .match{color:var(--green);font-weight:700;}
+.viz .cur{color:var(--blue);font-weight:700;}
+.viz .arrow{color:var(--orange);}
+
+/* Approach Cards */
+.approaches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin:14px 0;}
+.approach{
+  background:var(--paper2);border:1.5px solid #b0a080;
+  border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,16px);
+  position:relative;
+}
+.approach .ap-level{
+  font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;
+  text-transform:uppercase;padding:2px 8px;border-radius:2px;
+  display:inline-block;margin-bottom:8px;
+}
+.ap-brute{color:var(--red);background:var(--hl-r);border:1px solid var(--red);}
+.ap-better{color:var(--orange);background:var(--hl-o);border:1px solid var(--orange);}
+.ap-optimal{color:var(--green);background:var(--hl-g);border:1px solid var(--green);}
+.approach h4{
+  font-family:var(--body);font-size:clamp(13px,3vw,14.5px);
+  font-weight:700;color:var(--ink);margin-bottom:6px;
+}
+.approach p{
+  font-family:var(--prose);font-size:clamp(12.5px,2.7vw,14.5px);
+  color:var(--ink2);margin:0 0 6px;line-height:1.72;
+}
+.approach .complexity{
+  font-family:var(--mono);font-size:10px;color:var(--ink3);
+  border-top:1px dashed #c0a880;padding-top:6px;margin-top:6px;
+}
+
+/* Step-by-step logic */
+.steps{list-style:none;margin:12px 0;padding:0;counter-reset:step-counter;}
+.steps li{
+  display:flex;gap:14px;align-items:flex-start;
+  margin-bottom:14px;font-family:var(--prose);font-size:var(--fs-md);
+  line-height:1.82;color:var(--ink2);
+}
+.steps li::before{
+  counter-increment:step-counter;
+  content:counter(step-counter);
+  font-family:var(--hand);font-size:var(--fs-xs);
+  background:var(--ink);color:var(--paper);
+  border-radius:50%;width:24px;height:24px;min-width:24px;
+  display:flex;align-items:center;justify-content:center;
+  margin-top:3px;flex-shrink:0;
+}
+
+/* ── CALLOUT BOXES ── */
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,13px) clamp(12px,3vw,18px);margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:var(--fs-md);line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:var(--fs-md);color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:var(--fs-md);color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:clamp(10px,2.5vw,12px) clamp(12px,3vw,18px);margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:var(--fs-md);color:var(--orange);margin:0;line-height:1.78;}
+
+/* ── CODE BLOCK ── */
+.cb{
+  font-family:var(--mono);font-size:var(--fs-code);
+  background:var(--paper3);border:1.5px dashed #a09070;
+  border-radius:4px;padding:clamp(10px,2.5vw,14px) clamp(10px,3vw,18px);
+  margin:12px 0;color:var(--ink);line-height:1.85;
+  white-space:pre;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#b0a080 transparent;
+}
+.cb::-webkit-scrollbar{height:4px;}.cb::-webkit-scrollbar-thumb{background:#b0a080;border-radius:2px;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .st{color:var(--green);}
+.cb .num{color:var(--orange);}
+.cb .fn{color:var(--teal);}
+.cb .pp{color:var(--red);}
+code{
+  font-family:var(--mono);font-size:var(--fs-code);
+  background:var(--paper3);border:1px solid #c0a880;
+  border-radius:3px;padding:1px 5px;color:var(--blue);word-break:break-word;
+}
+
+/* ── LISTS ── */
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:var(--fs-md);line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+
+/* ── TABLES ── */
+.tbl{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border-radius:3px;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:clamp(12.5px,2.8vw,15.5px);}
+thead tr{background:var(--ink);}
+th{padding:clamp(7px,2vw,9px) clamp(8px,2.5vw,14px);text-align:left;color:var(--paper);font-weight:400;font-size:clamp(10px,2.2vw,13px);font-family:var(--hand);letter-spacing:0.5px;white-space:nowrap;}
+td{padding:clamp(6px,1.8vw,8px) clamp(8px,2.5vw,14px);border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;}.ok{color:var(--orange);font-weight:600;}.bad{color:var(--red);font-weight:600;}
+
+/* ── CARD GRID ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:clamp(10px,2.5vw,13px) clamp(10px,3vw,15px);}
+.cg-card .ct{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:clamp(13px,2.8vw,15px);line-height:1.75;color:var(--ink2);margin:0;}
+
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;}.c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;}.c-o{color:var(--orange);font-weight:600;}
+
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:var(--fs-xs);color:var(--ink3);text-decoration:none;padding:10px clamp(14px,3vw,32px) 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:var(--fs-xs);color:#7a6a50;letter-spacing:2px;padding:clamp(12px,3vw,20px) 0;}
+
+/* Inline highlight utils */
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:clamp(10px,2.5vw,16px) clamp(10px,3vw,18px);margin:14px 0;font-family:var(--mono);font-size:clamp(10px,2.2vw,13px);line-height:1.9;color:var(--ink);white-space:pre;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.gv .dv-label{font-family:var(--hand);font-size:var(--fs-xs);letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .toc-grid{grid-template-columns:1fr;}
+  .cover::after{left:36px;}.cover-inner{padding-left:12px;}
+  .cover-gate-tag{font-size:8px;letter-spacing:1px;}
+  .sec{padding-left:clamp(28px,6vw,44px);}.sec::before{font-size:8px;}
+  h2.sh{font-size:clamp(15px,3.8vw,18px);}.tag{margin-left:0;margin-top:4px;}
+  .cb{font-size:clamp(10.5px,2.4vw,12.5px);padding:10px 12px;}
+  .gv,.viz{font-size:clamp(9.5px,2.1vw,11.5px);}
+  .approaches{grid-template-columns:1fr;}
+  .cg{grid-template-columns:1fr;}
+}
+@media(max-width:420px){
+  body{padding:8px 6px 40px;}.book{max-width:100%;}
+  .cover{box-shadow:3px 4px 0 #8a7a60,5px 6px 0 #6a5a40,8px 10px 16px rgba(0,0,0,0.22);padding:18px 14px 16px;}
+  .cover::after{display:none;}
+  .cover-gate-tag{position:static;display:inline-block;margin-bottom:10px;font-size:8px;}
+  .cover-inner{padding-left:0;}.chip{font-size:9px;padding:3px 8px;}
+  .sec{padding-left:18px;padding-right:10px;}.sec::before{display:none;}
+  .ch-head{padding:12px 14px;}.ch-title{font-size:clamp(14px,4vw,17px);}
+  h2.sh{flex-direction:column;align-items:flex-start;gap:6px;}.tag{margin-left:0;}
+  .def-box,.warn-box,.tip-box,.note-box,.logic,.prob{padding:10px 12px;}
+  .cb{font-size:10.5px;padding:9px 10px;}.viz{font-size:9.5px;}
+  table{font-size:12px;}th{font-size:9.5px;padding:6px 8px;}td{padding:5px 8px;}
+  .bt{padding:8px 12px 0;}
+}
+@media print{
+  body{background:white;padding:0;}.book{max-width:100%;}
+  .cover{box-shadow:none;border:2px solid #333;}.chapter{box-shadow:none;break-inside:avoid;}
+  .ch-head{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cb,.gv,.viz{white-space:pre-wrap;word-break:break-all;}.bt{display:none;}
+}
+
+/* ── CODE BLOCK COPY BUTTON POSITIONING ── */
+.cb, .qcode, .trace { position: relative; }
+.cb { padding-top: 36px !important; }
+.qcode { padding-top: 36px !important; }
+
+</style>
+
+<!-- ══ THEME INIT — synchronous, before first paint, prevents FOUC ══ -->
+<script>
+(function(){
+  var d = localStorage.getItem('cpp_dark');
+  var isDark = d !== null ? (JSON.parse(d) === '1') : false;
+  if(isDark) document.documentElement.setAttribute('data-hub-dark','true');
+  else document.documentElement.removeAttribute('data-hub-dark');
+})();
+</script>
+<style id="hub-dark-css">
+/* ══ TOKYO NIGHT DARK MODE — C++ Mastery Hub ══ */
+
+/* ── BODY & SHELL ── */
+html[data-hub-dark] body {
+  background: #1a1b2e !important;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 15% 25%, #1f2335 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 85% 75%, #24283b 0%, transparent 55%) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── COVER — banner, white glow border ── */
+html[data-hub-dark] .cover,
+html[data-hub-dark] .toc {
+  background: #24283b !important;
+  border-color: rgba(122, 162, 247, 0.45) !important;
+  box-shadow:
+    5px 6px 0 #1f2335,
+    9px 10px 0 #16172a,
+    12px 14px 28px rgba(0,0,0,0.55),
+    inset 0 0 0 1.5px rgba(255,255,255,0.10) !important;
+  color: #c0caf5 !important;
+}
+
+/* ── CHAPTERS ── */
+html[data-hub-dark] .chapter {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.22) !important;
+  box-shadow:
+    4px 5px 0 #1f2335,
+    7px 8px 0 #16172a !important;
+}
+
+/* ── CHAPTER HEADER — deep navy instead of black ── */
+html[data-hub-dark] .ch-head {
+  background: #16172a !important;
+  border-bottom: 2px solid rgba(122,162,247,0.3) !important;
+}
+html[data-hub-dark] .ch-ey {
+  color: rgba(169,177,214,0.5) !important;
+}
+html[data-hub-dark] .ch-title {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .ch-title em {
+  color: #e0af68 !important;
+}
+
+/* ── MAIN HEADINGS ── */
+html[data-hub-dark] h2.sh {
+  color: #7aa2f7 !important;
+  border-bottom-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] h3.ssh {
+  color: #7dcfff !important;
+}
+html[data-hub-dark] .cover h1 {
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .cover h1 em {
+  color: #7aa2f7 !important;
+}
+
+/* ── BODY TEXT ── */
+html[data-hub-dark] p {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] li {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .cover-desc {
+  color: #a9b1d6 !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] strong {
+  color: #c0caf5 !important;
+}
+
+/* ── COVER ELEMENTS ── */
+html[data-hub-dark] .cover-subject {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .cover-gate-tag {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .chip {
+  border-color: rgba(122,162,247,0.35) !important;
+  color: #a9b1d6 !important;
+  background: rgba(122,162,247,0.08) !important;
+}
+
+/* ── TOC ── */
+html[data-hub-dark] .toc-lbl {
+  color: #565f89 !important;
+}
+html[data-hub-dark] .toc a,
+html[data-hub-dark] .toc-grid a {
+  color: #a9b1d6 !important;
+}
+html[data-hub-dark] .toc-grid a:hover {
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .tn {
+  color: #565f89 !important;
+}
+
+/* ── SECTIONS ── */
+html[data-hub-dark] .sec {
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .sec::before {
+  color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .ch-body {
+  background-image:
+    linear-gradient(rgba(122,162,247,0.08) 1px, transparent 1px),
+    repeating-linear-gradient(transparent, transparent 31px, rgba(86,95,137,0.12) 31px, rgba(86,95,137,0.12) 32px) !important;
+}
+
+/* ── CODE BLOCKS (.cb, .gv, .trace, .qcode, .qtrace) ── */
+html[data-hub-dark] .cb,
+html[data-hub-dark] .gv,
+html[data-hub-dark] .trace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  scrollbar-color: #565f89 transparent !important;
+}
+html[data-hub-dark] .qcode,
+html[data-hub-dark] .qtrace {
+  background: #1f2335 !important;
+  color: #c0caf5 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+
+/* syntax highlighting preserved in dark */
+html[data-hub-dark] .cb .kw,
+html[data-hub-dark] .qcode .kw { color: #bb9af7 !important; }
+html[data-hub-dark] .cb .cm,
+html[data-hub-dark] .qcode .cm { color: #565f89 !important; font-style: italic; }
+html[data-hub-dark] .cb .st,
+html[data-hub-dark] .qcode .st { color: #9ece6a !important; }
+html[data-hub-dark] .cb .num,
+html[data-hub-dark] .qcode .num { color: #ff9e64 !important; }
+html[data-hub-dark] .cb .fn,
+html[data-hub-dark] .qcode .fn  { color: #7dcfff !important; }
+html[data-hub-dark] .cb .pp,
+html[data-hub-dark] .qcode .pp  { color: #f7768e !important; }
+
+/* trace helpers */
+html[data-hub-dark] .trace .hi,
+html[data-hub-dark] .qtrace .tr-hi { background: rgba(224,175,104,0.25) !important; }
+html[data-hub-dark] .trace .ok,
+html[data-hub-dark] .qtrace .tr-ok { color: #9ece6a !important; }
+html[data-hub-dark] .trace .no,
+html[data-hub-dark] .qtrace .tr-no { color: #f7768e !important; }
+html[data-hub-dark] .trace .cur,
+html[data-hub-dark] .qtrace .tr-cur { color: #7aa2f7 !important; }
+html[data-hub-dark] .trace .dim,
+html[data-hub-dark] .qtrace .tr-dim { color: #565f89 !important; }
+html[data-hub-dark] .trace .t-label { color: #e0af68 !important; }
+html[data-hub-dark] .qtrace .trl    { color: #e0af68 !important; }
+
+/* ── INLINE CODE ── */
+html[data-hub-dark] code {
+  background: #1f2335 !important;
+  color: #7dcfff !important;
+  border-color: rgba(122,162,247,0.3) !important;
+}
+
+/* ── CALLOUT BOXES ── */
+html[data-hub-dark] .def-box {
+  background: rgba(122,162,247,0.08) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .def-box .lbl { color: #7aa2f7 !important; }
+html[data-hub-dark] .def-box p    { color: #a9b1d6 !important; }
+
+html[data-hub-dark] .warn-box {
+  background: rgba(247,118,142,0.08) !important;
+  border-left-color: #f7768e !important;
+}
+html[data-hub-dark] .warn-box .lbl { color: #f7768e !important; }
+html[data-hub-dark] .warn-box p    { color: #f7768e !important; }
+
+html[data-hub-dark] .tip-box {
+  background: rgba(158,206,106,0.10) !important;
+  border-left-color: #9ece6a !important;
+}
+html[data-hub-dark] .tip-box .lbl { color: #9ece6a !important; }
+html[data-hub-dark] .tip-box p    { color: #9ece6a !important; }
+
+html[data-hub-dark] .note-box {
+  background: rgba(255,158,100,0.08) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .note-box .lbl { color: #ff9e64 !important; }
+html[data-hub-dark] .note-box p    { color: #ff9e64 !important; }
+
+/* ── EXAMPLE BOX ── */
+html[data-hub-dark] .eg {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+}
+html[data-hub-dark] .eg::before {
+  background: #1f2335 !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .eg p { color: #a9b1d6 !important; }
+
+/* ── TABLES ── */
+html[data-hub-dark] table th {
+  background: #16172a !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] table td {
+  color: #a9b1d6 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] tr:nth-child(even) td {
+  background: rgba(122,162,247,0.04) !important;
+}
+html[data-hub-dark] tr:hover td {
+  background: rgba(122,162,247,0.10) !important;
+}
+html[data-hub-dark] .good { color: #9ece6a !important; }
+html[data-hub-dark] .bad  { color: #f7768e !important; }
+html[data-hub-dark] .ok   { color: #e0af68 !important; }
+
+/* ── CARD GRID ── */
+html[data-hub-dark] .cg-card {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.22) !important;
+}
+html[data-hub-dark] .cg-card .ct {
+  color: #565f89 !important;
+  border-bottom-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .cg-card p { color: #a9b1d6 !important; }
+
+/* ── PROBLEM CARD & IO ── */
+html[data-hub-dark] .prob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.35) !important;
+}
+html[data-hub-dark] .prob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .prob p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .prob strong { color: #7dcfff !important; }
+html[data-hub-dark] .io-box {
+  background: #16172a !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .io-box .io-lbl { color: #565f89 !important; }
+html[data-hub-dark] .io-box code   { color: #9ece6a !important; }
+
+/* ── APPROACH BOX ── */
+html[data-hub-dark] .approach,
+html[data-hub-dark] .qapp {
+  background: rgba(122,162,247,0.07) !important;
+  border-left-color: #7aa2f7 !important;
+}
+html[data-hub-dark] .approach .lbl,
+html[data-hub-dark] .qapp .albl  { color: #7aa2f7 !important; }
+html[data-hub-dark] .approach p,
+html[data-hub-dark] .qapp p      { color: #a9b1d6 !important; }
+html[data-hub-dark] .approach strong,
+html[data-hub-dark] .qapp strong { color: #7dcfff !important; }
+
+/* ── DECODE BOX ── */
+html[data-hub-dark] .qdec {
+  background: rgba(255,158,100,0.07) !important;
+  border-left-color: #ff9e64 !important;
+}
+html[data-hub-dark] .qdec .dlbl { color: #ff9e64 !important; }
+html[data-hub-dark] .qdec p     { color: #a9b1d6 !important; }
+html[data-hub-dark] .qdec strong { color: #ff9e64 !important; }
+
+/* ── QUESTION CARDS (interview files) ── */
+html[data-hub-dark] .qcard {
+  background: #24283b !important;
+  border-color: rgba(122,162,247,0.2) !important;
+}
+html[data-hub-dark] .qhead,
+html[data-hub-dark] .qfoot {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .qbody  { background: #24283b !important; }
+html[data-hub-dark] .qprob {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.4) !important;
+}
+html[data-hub-dark] .qprob::before {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.5) !important;
+  color: #7aa2f7 !important;
+}
+html[data-hub-dark] .qprob p { color: #a9b1d6 !important; }
+html[data-hub-dark] .qtitle  { color: #c0caf5 !important; }
+html[data-hub-dark] .qnum    { color: #c0caf5 !important; }
+html[data-hub-dark] .qsrc    {
+  color: #565f89 !important;
+  border-color: rgba(86,95,137,0.4) !important;
+}
+html[data-hub-dark] .ap-c {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+html[data-hub-dark] .ap-c h4 { color: #c0caf5 !important; }
+html[data-hub-dark] .ap-c p  { color: #a9b1d6 !important; }
+html[data-hub-dark] .ap-c .cx { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+html[data-hub-dark] .io-row .io-box { background: #16172a !important; }
+html[data-hub-dark] .hints {
+  background: rgba(122,162,247,0.05) !important;
+  border-color: rgba(86,95,137,0.3) !important;
+}
+
+/* ── COMPLEXITY FOOTER TAGS ── */
+html[data-hub-dark] .qf {
+  background: #1f2335 !important;
+  border-color: rgba(86,95,137,0.3) !important;
+  color: #565f89 !important;
+}
+html[data-hub-dark] .qf.t .fv { color: #9ece6a !important; }
+html[data-hub-dark] .qf.s .fv { color: #bb9af7 !important; }
+html[data-hub-dark] .qf.x .fv { color: #7aa2f7 !important; }
+
+/* ── COLOR UTILITIES ── */
+html[data-hub-dark] .c-b { color: #7aa2f7 !important; }
+html[data-hub-dark] .c-r { color: #f7768e !important; }
+html[data-hub-dark] .c-g { color: #9ece6a !important; }
+html[data-hub-dark] .c-o { color: #e0af68 !important; }
+html[data-hub-dark] mark  {
+  background: rgba(224,175,104,0.28) !important;
+  color: #e0af68 !important;
+}
+html[data-hub-dark] .hi-b { background: rgba(122,162,247,0.2) !important; color: #7aa2f7 !important; }
+html[data-hub-dark] .hi-g { background: rgba(158,206,106,0.2) !important; color: #9ece6a !important; }
+html[data-hub-dark] .hi-r { background: rgba(247,118,142,0.18) !important; color: #f7768e !important; }
+
+/* ── PROBLEM SOLVE CONTENT: .pnum, .pl ── */
+html[data-hub-dark] .pnum { background: #565f89 !important; color: #c0caf5 !important; }
+html[data-hub-dark] .pnum.easy { background: #9ece6a !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.med  { background: #e0af68 !important; color: #1a1b2e !important; }
+html[data-hub-dark] .pnum.hard { background: #f7768e !important; color: #1a1b2e !important; }
+
+html[data-hub-dark] .pl li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl li::before    { color: #7aa2f7 !important; }
+html[data-hub-dark] .pl.arr li::before { color: #7dcfff !important; }
+html[data-hub-dark] .pl.chk li::before { color: #9ece6a !important; }
+html[data-hub-dark] .pl.crs li::before { color: #f7768e !important; }
+
+/* ── NUMBERED STEP LIST ── */
+html[data-hub-dark] .pl-steps li { color: #a9b1d6 !important; }
+html[data-hub-dark] .pl-num {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+
+/* ── SECTION TAG BADGES ── */
+html[data-hub-dark] .tg  { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.12) !important; }
+html[data-hub-dark] .tc  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.12) !important; }
+html[data-hub-dark] .tt  { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.12) !important; }
+html[data-hub-dark] .tp  { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.12) !important; }
+html[data-hub-dark] .tg2 { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.12) !important; }
+
+/* ── QUESTION CARD TAGS ── */
+html[data-hub-dark] .qt-a  { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-tp { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+html[data-hub-dark] .qt-s,
+html[data-hub-dark] .qt-sw { color: #2ac3de !important; border-color: #2ac3de !important; }
+html[data-hub-dark] .qt-h,
+html[data-hub-dark] .qt-st { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .qt-bs,
+html[data-hub-dark] .qt-dp { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .qt-gr { color: #e0af68 !important; border-color: #e0af68 !important; background: rgba(224,175,104,0.10) !important; }
+html[data-hub-dark] .qt-g  { color: #9ece6a !important; border-color: #9ece6a !important; background: rgba(158,206,106,0.10) !important; }
+html[data-hub-dark] .qt-m  { color: #565f89 !important; border-color: #565f89 !important; }
+
+/* ── HINT BADGES ── */
+html[data-hub-dark] .hm { background: #565f89 !important; color: #c0caf5 !important; border-color: #565f89 !important; }
+html[data-hub-dark] .hf { color: #f7768e !important; border-color: #f7768e !important; background: rgba(247,118,142,0.10) !important; }
+html[data-hub-dark] .ht { color: #bb9af7 !important; border-color: #bb9af7 !important; background: rgba(187,154,247,0.10) !important; }
+html[data-hub-dark] .hc { color: #7aa2f7 !important; border-color: #7aa2f7 !important; background: rgba(122,162,247,0.10) !important; }
+
+/* ── FOOTER, BACK-TO-TOP ── */
+html[data-hub-dark] .footer { color: #565f89 !important; }
+html[data-hub-dark] .bt { color: #565f89 !important; }
+html[data-hub-dark] .bt:hover { color: #7aa2f7 !important; }
+html[data-hub-dark] .sep { color: #565f89 !important; border-color: rgba(86,95,137,0.3) !important; }
+
+/* ── COPY BUTTON IN DARK ── */
+html[data-hub-dark] .copy-btn {
+  background: #7aa2f7 !important;
+  color: #1a1b2e !important;
+}
+html[data-hub-dark] .copy-btn:hover { background: #bb9af7 !important; }
+html[data-hub-dark] .copy-btn.copied { background: #9ece6a !important; color: #1a1b2e !important; }
+
+/* ── COMPILATION PIPELINE / .gv ── */
+html[data-hub-dark] .gv {
+  background: #1f2335 !important;
+  border-color: rgba(122,162,247,0.25) !important;
+  color: #c0caf5 !important;
+}
+html[data-hub-dark] .gv .dv-label { color: #565f89 !important; }
+
+</style>
+<!-- ══════════════ C++ MASTERY HUB LAYER ══════════════ -->
+<style id="hub-styles">
+/* ─── SCOPED RESET ─── */
+.hub-nav *, .hub-panel *, .hub-fab-group *, .hub-toast { box-sizing: border-box; }
+
+/* ─── NAV BAR ─── */
+.hub-nav {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(14px, 3vw, 32px);
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(180, 160, 130, 0.28);
+  margin-bottom: 0;
+}
+.hub-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  text-decoration: none;
+  padding: 6px 0;
+  border-bottom: 1.5px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hub-nav-back:hover { color: #1c1510; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-nav-back { color: #9a8e78; }
+html[data-hub-dark] .hub-nav-back:hover { color: #f0ece0; }
+
+.hub-nav-label {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #9a8878;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+html[data-hub-dark] .hub-nav-label { color: #6a6050; }
+
+.hub-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hub-contents-btn {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #6b5a47;
+  background: transparent;
+  border: 1px dashed rgba(180, 160, 130, 0.5);
+  border-radius: 3px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.hub-contents-btn:hover { background: rgba(250,247,242,0.8); color: #1c1510; }
+html[data-hub-dark] .hub-contents-btn { color: #9a8e78; border-color: rgba(100,80,50,0.4); }
+html[data-hub-dark] .hub-contents-btn:hover { background: rgba(40,32,20,0.7); color: #f0ece0; }
+
+/* ─── DARK TOGGLE SWITCH ─── */
+.hub-theme-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.hub-theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.hub-theme-track {
+  position: absolute;
+  inset: 0;
+  background: rgba(180,160,130,0.35);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.hub-theme-track::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s, background 0.3s;
+}
+html[data-hub-dark] .hub-theme-track { background: #3a6bc8; }
+html[data-hub-dark] .hub-theme-track::after { transform: translateX(20px); background: #f0ece0; }
+
+/* ─── NAVBAR DARK OVERRIDE ─── */
+html[data-hub-dark] .hub-nav {
+  background: rgba(16, 12, 7, 0.94);
+  border-bottom-color: rgba(80, 60, 35, 0.4);
+}
+
+/* ─── FLOATING ACTION BUTTONS ─── */
+.hub-fab-group {
+  position: fixed;
+  bottom: clamp(20px, 4vw, 32px);
+  right: clamp(16px, 3vw, 28px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  z-index: 850;
+}
+.hub-fab-notes {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(180, 160, 130, 0.45);
+  box-shadow: 0 6px 24px rgba(100, 80, 50, 0.18), 0 2px 6px rgba(100,80,50,0.12);
+  cursor: pointer;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease, background 0.2s;
+}
+.hub-fab-notes:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 32px rgba(100, 80, 50, 0.28);
+  background: rgba(252, 249, 244, 1);
+}
+html[data-hub-dark] .hub-fab-notes {
+  background: rgba(28, 22, 12, 0.92);
+  border-color: rgba(100, 80, 50, 0.45);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+html[data-hub-dark] .hub-fab-notes:hover { background: rgba(40, 32, 18, 0.98); }
+
+.hub-fab-run {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: clamp(11px, 2vw, 14px) clamp(20px, 4vw, 28px);
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 50px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 22px rgba(28, 58, 107, 0.45), 0 2px 6px rgba(28,58,107,0.3);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  white-space: nowrap;
+}
+.hub-fab-run:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 14px 36px rgba(28, 58, 107, 0.55);
+}
+html[data-hub-dark] .hub-fab-run { background: #2a5ab0; }
+
+/* ─── BOOKMARK BUTTON ─── */
+.hub-bm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(180,160,130,0.4);
+  background: transparent;
+  cursor: pointer;
+  font-size: 15px;
+  color: #b0a080;
+  margin-left: 8px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s, border-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+.hub-bm-btn::after { content: '☆'; }
+.hub-bm-btn.hub-saved { color: #c8960c; border-color: #c8960c; background: rgba(200,150,12,0.10); }
+.hub-bm-btn.hub-saved::after { content: '★'; }
+.hub-bm-btn:hover { transform: scale(1.18); border-color: #c8960c; color: #c8960c; }
+html[data-hub-dark] .hub-bm-btn { border-color: rgba(100,80,50,0.45); color: #6a6050; }
+html[data-hub-dark] .hub-bm-btn.hub-saved { color: #ffd060; border-color: #ffd060; background: rgba(255,208,96,0.12); }
+
+/* ─── NOTES SIDE PANEL ─── */
+.hub-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  bottom: 0;
+  width: clamp(290px, 32vw, 380px);
+  background: rgba(252, 249, 244, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(180, 160, 130, 0.35);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.10);
+  z-index: 880;
+  transform: translateX(102%);
+  transition: transform 0.36s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Lora', Georgia, serif;
+  overflow: hidden;
+}
+.hub-panel.hub-open { transform: translateX(0); }
+html[data-hub-dark] .hub-panel {
+  background: rgba(16, 12, 7, 0.98);
+  border-left-color: rgba(80, 60, 35, 0.4);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.5);
+}
+
+.hub-panel-head {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.hub-panel-title {
+  font-size: clamp(13px, 2.8vw, 15px);
+  font-weight: 700;
+  color: #1c1510;
+}
+html[data-hub-dark] .hub-panel-title { color: #f0ece0; }
+
+.hub-panel-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #9a8878;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  line-height: 1;
+}
+.hub-panel-close:hover { color: #b83030; background: rgba(184,48,48,0.08); }
+
+.hub-panel-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(180,160,130,0.2);
+  flex-shrink: 0;
+}
+.hub-ptab {
+  flex: 1;
+  padding: 10px 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  text-align: center;
+}
+.hub-ptab.hub-ptab-active { color: #b85a10; border-bottom-color: #b85a10; }
+html[data-hub-dark] .hub-ptab { color: #6a6050; }
+html[data-hub-dark] .hub-ptab.hub-ptab-active { color: #ffaa55; border-bottom-color: #ffaa55; }
+
+.hub-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150,130,100,0.4) transparent;
+}
+.hub-tab-pane { display: none; }
+.hub-tab-pane.hub-tab-active { display: block; }
+
+.hub-textarea {
+  width: 100%;
+  min-height: 160px;
+  resize: vertical;
+  padding: 11px 12px;
+  background: rgba(240,235,228,0.55);
+  border: 1px solid rgba(180,160,130,0.4);
+  border-radius: 6px;
+  color: #1c1510;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  line-height: 1.75;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.hub-textarea:focus {
+  border-color: #b85a10;
+  box-shadow: 0 0 0 3px rgba(184,90,16,0.10);
+}
+html[data-hub-dark] .hub-textarea {
+  background: rgba(30,24,14,0.6);
+  border-color: rgba(100,80,50,0.4);
+  color: #f0ece0;
+}
+
+.hub-save-btn {
+  width: 100%;
+  margin-top: 9px;
+  padding: 10px;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.hub-save-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.hub-list-label {
+  display: block;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #9a8878;
+  margin: 14px 0 8px;
+}
+html[data-hub-dark] .hub-list-label { color: #6a6050; }
+
+.hub-note-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-note-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+}
+.hub-note-meta {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 4px;
+}
+.hub-note-text {
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 13.5px;
+  color: #3a2e22;
+  line-height: 1.65;
+}
+html[data-hub-dark] .hub-note-text { color: #d8d0bc; }
+.hub-card-del {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: none;
+  border: none;
+  color: #9a8878;
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0.5;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  padding: 2px;
+}
+.hub-card-del:hover { opacity: 1; color: #b83030; }
+
+.hub-bm-card {
+  background: rgba(240,235,228,0.5);
+  border: 1px solid rgba(180,160,130,0.3);
+  border-left: 3px solid #b85a10;
+  border-radius: 7px;
+  padding: 11px 12px;
+  margin-bottom: 9px;
+  position: relative;
+}
+html[data-hub-dark] .hub-bm-card {
+  background: rgba(28,22,12,0.6);
+  border-color: rgba(100,80,50,0.3);
+  border-left-color: #ffaa55;
+}
+.hub-bm-file-tag {
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9a8878;
+  display: block;
+  margin-bottom: 3px;
+}
+.hub-bm-title {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1c1510;
+  line-height: 1.4;
+}
+html[data-hub-dark] .hub-bm-title { color: #f0ece0; }
+
+.hub-empty {
+  text-align: center;
+  padding: 32px 16px;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 14px;
+  color: #9a8878;
+  line-height: 1.75;
+}
+.hub-empty-icon { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.5; }
+
+.hub-toast {
+  position: fixed;
+  bottom: clamp(80px, 15vw, 100px);
+  right: clamp(16px, 3vw, 28px);
+  z-index: 1000;
+  background: #1c3a6b;
+  color: #f5f0e8;
+  font-family: 'Architects Daughter', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(28,58,107,0.45);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.28s, transform 0.28s;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.hub-toast.hub-show { opacity: 1; transform: translateY(0); }
+
+/* ─── HUB BODY RESET ─── */
+body { padding-top: 0 !important; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .hub-panel { width: 100%; top: 50px; }
+  .hub-nav-label { display: none; }
+  .hub-contents-btn { display: none; }
+  .hub-fab-run-label { display: none; }
+  .hub-fab-run { width: 52px; height: 52px; border-radius: 50%; padding: 0; justify-content: center; gap: 0; }
+  .hub-fab-run-icon { font-size: 22px; }
+}
+
+/* ══ MOBILE RESPONSIVENESS — additive, no breakage ══ */
+@media (max-width: 600px) {
+  /* body never overflows horizontally */
+  body { overflow-x: hidden !important; }
+
+  /* code blocks: readable scroll on narrow screens */
+  .cb, .gv, .trace, .qcode, .qtrace, .viz {
+    font-size: 11.5px !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    word-break: normal !important;
+    white-space: pre !important;
+    max-width: 100% !important;
+  }
+
+  /* copy button: smaller on mobile */
+  .copy-btn {
+    font-size: 8px !important;
+    padding: 2px 7px !important;
+    top: 5px !important;
+    right: 5px !important;
+  }
+
+  /* io-row in interview: stack vertically */
+  .io-row { flex-direction: column !important; }
+
+  /* approach comparisons: single column */
+  .ap-row { grid-template-columns: 1fr !important; }
+
+  /* chapter padding reduced */
+  .sec {
+    padding-left: clamp(20px, 5vw, 40px) !important;
+    padding-right: clamp(8px, 3vw, 16px) !important;
+  }
+
+  /* hero stats: 2 cols on mobile */
+  .hero-stats { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* toc grid: single column */
+  .toc-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 400px) {
+  /* very small phones */
+  .cb, .gv, .trace, .qcode, .qtrace {
+    font-size: 10.5px !important;
+  }
+  .ap-c { padding: 8px !important; }
+}
+
+/* reduce motion for battery/performance on mobile */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+<!-- ══ ANTI-THEFT SECURITY LAYER ══ -->
+<script>
+(function() {
+  'use strict';
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey &&
+        ['i','j','c','u','k','s'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+    if ((e.ctrlKey || e.metaKey) && ['u','s','p','a'].indexOf(e.key.toLowerCase()) > -1) {
+      e.preventDefault(); return false;
+    }
+  }, true);
+  document.addEventListener('selectstart', function(e) {
+    if (e.target && (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT')) return true;
+    e.preventDefault(); return false;
+  }, true);
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  }, true);
+  window.addEventListener('beforeprint', function(e) {
+    e.preventDefault();
+    document.body.style.display = 'none';
+    setTimeout(function() { document.body.style.display = ''; }, 100);
+  });
+  var _d = false;
+  setInterval(function() {
+    var wd = window.outerWidth - window.innerWidth;
+    var hd = window.outerHeight - window.innerHeight;
+    if (wd > 160 || hd > 160) {
+      if (!_d) {
+        _d = true;
+        document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:monospace;font-size:18px;color:#333;background:#f5f5f5;flex-direction:column;gap:16px;"><span style="font-size:48px">🔒</span><strong>Access Restricted</strong><span style="font-size:14px;color:#888">Developer tools are not permitted on this page.</span></div>';
+      }
+    } else { _d = false; }
+  }, 800);
+  var ss = document.createElement('style');
+  ss.textContent = 'body{-webkit-user-select:none!important;user-select:none!important;}textarea,input{-webkit-user-select:text!important;user-select:text!important;}';
+  document.head.appendChild(ss);
+})();
+</script>
+
+<style id="aryan-copyright-css">
+#aryan-cr{
+  position:fixed;bottom:0;left:0;right:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;
+  padding:5px 12px;
+  font-family:'Courier New',monospace;font-size:10px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(10,10,15,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-top:1px solid rgba(122,162,247,0.25);
+  color:rgba(169,177,214,0.7);
+  pointer-events:none;user-select:none;
+  transition:opacity 0.3s;
+}
+#aryan-cr span{color:#7aa2f7;}
+html:not([data-hub-dark]) #aryan-cr{
+  background:rgba(240,235,225,0.92);
+  border-top:1px solid rgba(100,130,180,0.2);
+  color:rgba(107,90,71,0.75);
+}
+html:not([data-hub-dark]) #aryan-cr span{color:#1a4a8c;}
+</style>
+
+</head>
+<body>
+<!-- ══ HUB NAV ══ -->
+<nav class="hub-nav" id="hubNav" aria-label="C++ Mastery Hub navigation">
+  <button class="hub-nav-back" onclick="hubGoHome()" aria-label="Back to dashboard">
+    ← HOME
+  </button>
+  <span class="hub-nav-label" aria-hidden="true">07 · Logic Builder</span>
+  <div class="hub-nav-right">
+    <button class="hub-contents-btn" onclick="hubScrollTOC()" aria-label="Scroll to contents">
+      CONTENTS ▾
+    </button>
+    <label class="hub-theme-switch" title="Toggle dark mode" aria-label="Toggle dark mode">
+      <input type="checkbox" id="hubThemeCheckbox" onchange="hubToggleTheme(this.checked)">
+      <span class="hub-theme-track"></span>
+    </label>
+  </div>
+</nav>
+<div class="hub-content-wrap" style="padding-top:clamp(10px,3vw,24px);">
+
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">Complete Reference · File 07 of 07</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C++ Programming</div>
+    <h1>The Logic Builder<br><em>How to Think Before You Code</em></h1>
+    <p class="cover-desc">Every programmer — beginner or senior — has been stuck staring at a blank editor, knowing what the answer should be but not knowing how to get there. This file fixes that. Not by giving you code to copy, but by teaching you how to <strong>see</strong> every problem: the pattern, the constraint, the trick. Problem → Think → Visualize → Code. Every time.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · How to Think About Problems</span>
+      <span class="chip">Ch 2 · Number Logic</span>
+      <span class="chip">Ch 3 · Pattern Printing</span>
+      <span class="chip">Ch 4 · Array Logic</span>
+      <span class="chip">Ch 5 · String Logic</span>
+      <span class="chip">Ch 6 · Recursion Thinking</span>
+      <span class="chip">Ch 7 · Searching &amp; Sorting Logic</span>
+      <span class="chip">Ch 8 · Mathematical Logic</span>
+      <span class="chip">Ch 9 · Two Pointer &amp; Sliding Window</span>
+      <span class="chip">Ch 10 · Bit Logic</span>
+      <span class="chip">Ch 11 · Advanced Logic Patterns</span>
+      <span class="chip">Ch 12 · Logic Master Reference</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>How to Think About Any Problem</a>
+    <a href="#ch2"><span class="tn">02</span>Number Logic — Primes, Armstrong &amp; More</a>
+    <a href="#ch3"><span class="tn">03</span>Pattern Printing — The Logic Behind Shapes</a>
+    <a href="#ch4"><span class="tn">04</span>Array Logic — Rotations, Subarrays &amp; More</a>
+    <a href="#ch5"><span class="tn">05</span>String Logic — Palindromes, Anagrams &amp; More</a>
+    <a href="#ch6"><span class="tn">06</span>Recursion Thinking — See It, Don't Fear It</a>
+    <a href="#ch7"><span class="tn">07</span>Searching &amp; Sorting Logic</a>
+    <a href="#ch8"><span class="tn">08</span>Mathematical Logic — GCD, Power, Sequences</a>
+    <a href="#ch9"><span class="tn">09</span>Two Pointer &amp; Sliding Window Logic</a>
+    <a href="#ch10"><span class="tn">10</span>Bit Manipulation Logic</a>
+    <a href="#ch11"><span class="tn">11</span>Advanced Logic Patterns</a>
+    <a href="#ch12"><span class="tn">12</span>Logic Master Reference</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 1 — HOW TO THINK
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01 · The Foundation</div>
+    <div class="ch-title">How to Think About <em>Any Problem</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="framework">
+      <h2 class="sh">1.1 &nbsp; The 5-Step Problem Framework <span class="tag tc">Read This First</span></h2>
+      <p>The difference between a programmer who gets stuck and one who doesn't isn't intelligence — it's <strong>process</strong>. Every problem, no matter how hard, yields to the same five questions asked in the same order.</p>
+      <ol class="steps">
+        <li><strong>What am I given?</strong> List all inputs. Their type, their range, their constraints. Never skip this. "n ≤ 10⁵" tells you everything about what algorithm is even possible.</li>
+        <li><strong>What do I need to produce?</strong> State the output in one sentence. If you can't, you don't understand the problem yet.</li>
+        <li><strong>What's the simplest case?</strong> Try with n=1, n=2, n=0. Draw it out by hand. The pattern is always visible in small cases.</li>
+        <li><strong>Is there a mathematical relationship?</strong> Can I express the answer as a formula? Can I see it as: "for each X, I need to find Y"? What changes with each step?</li>
+        <li><strong>What data structure/algorithm fits?</strong> Match the problem shape to what you know. Sorted data → binary search. Extremes → heap. Connectivity → graph. Subproblems → DP.</li>
+      </ol>
+      <div class="logic">
+        <span class="lbl">Applying the 5 Steps: "Find the Missing Number"</span>
+        <p><strong>Problem:</strong> Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array. Constraints: n ≤ 10⁴.</p>
+        <p><strong>1. Given:</strong> Array of size n, distinct elements ranging [0, n].</p>
+        <p><strong>2. Produce:</strong> A single integer missing from the sequence.</p>
+        <p><strong>3. Simplest Case:</strong> `arr = [0, 1]` (n=2, should have 0,1,2). Missing is 2. `arr = [3, 0, 1]` (n=3). Missing is 2.</p>
+        <p><strong>4. Math Relationship:</strong> The array *should* contain every number from 0 to n. If I sum the ideal range [0..n] and subtract the sum of the actual array, the difference mathematically must be the missing number.</p>
+        <p><strong>5. Algorithm:</strong> Math formula for sum `n*(n+1)/2`, minus loop sum. O(n) time, O(1) space.</p>
+      </div>
+      <div class="def-box">
+        <span class="lbl">The Golden Rule of Logic Building</span>
+        <p><strong>Solve by hand on paper first. Always.</strong> Pick 3–4 small examples. Trace what you do with your hands and eyes. Your code is just translating that manual process into instructions. If you can't solve it manually, you can't code it. If you can, coding it is mechanical.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="constraints">
+      <h2 class="sh">1.2 &nbsp; Reading Constraints — They Tell You the Answer <span class="tag tg">Critical Insight</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Constraint on n</th><th>What it means for your algorithm</th><th>Typical Pattern</th></tr></thead>
+          <tbody>
+            <tr><td><code>n ≤ 10</code></td><td class="good">Brute force everything</td><td>Try all permutations, all subsets</td></tr>
+            <tr><td><code>n ≤ 20</code></td><td class="good">Bitmask or meet-in-middle</td><td>2ⁿ is around 10⁶ — barely ok</td></tr>
+            <tr><td><code>n ≤ 10²</code></td><td class="good">O(n²) or O(n³) fine</td><td>Nested loops, all pairs</td></tr>
+            <tr><td><code>n ≤ 10³</code></td><td class="ok">O(n²) ok, O(n³) risky</td><td>Bubble/insertion sort, simple DP</td></tr>
+            <tr><td><code>n ≤ 10⁵</code></td><td class="ok">O(n log n) required</td><td>Sort, binary search, segment tree</td></tr>
+            <tr><td><code>n ≤ 10⁶</code></td><td class="bad">O(n) only</td><td>Single pass, hash map, sieve</td></tr>
+            <tr><td><code>n ≤ 10¹⁸</code></td><td class="bad">O(log n) or O(1)</td><td>Math formula, binary search on answer</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip-box">
+        <span class="lbl">If you're stuck — go brute force first</span>
+        <p>Write the O(n²) or O(2ⁿ) brute force first. <strong>Always.</strong> It gives you correct answers to verify against, it helps you understand the structure of the problem, and sometimes — especially in interviews — it's all you need. Optimize after you have correctness.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pattern-recognition">
+      <h2 class="sh">1.3 &nbsp; Pattern Recognition — What Kind of Problem Is This? <span class="tag tt">Before Every Problem</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Count Something</div>
+          <p>Look for: math formula, combinatorics, prefix sums, DP. Ask: can I compute it without enumerating all cases?</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Find Min / Max</div>
+          <p>Look for: binary search on answer, greedy, DP. Ask: is there a monotone property? If I fix one thing, can I minimize the other?</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Yes / No (Exists?)</div>
+          <p>Look for: DFS/BFS for reachability, two pointers, hash set membership. Often easier than finding the actual answer.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Construct / Build</div>
+          <p>Look for: greedy construction, sort then assign, modular building. Start with what's forced, then fill in the rest.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Optimize a Value</div>
+          <p>Look for: DP with state, greedy with proof, binary search on the answer. The key: define the state precisely first.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Transform / Convert</div>
+          <p>Look for: model as graph, reduce to known problem. Ask: is this secretly a shortest path? A matching? A flow problem?</p>
+        </div>
+      </div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 2 — NUMBER LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02 · Number Logic</div>
+    <div class="ch-title">Number Logic — <em>Primes, Armstrong, Strong, Perfect &amp; Friends</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="prime">
+      <h2 class="sh">2.1 &nbsp; Prime Number Check <span class="tag tc">Classic</span></h2>
+      <div class="prob"><p>Given a number <strong>n</strong>, determine if it is prime. A prime has exactly two divisors: 1 and itself.</p></div>
+      <div class="logic">
+        <span class="lbl">The 5-Step Logic</span>
+        <p><strong>1. Given:</strong> An integer n. <strong>2. Produce:</strong> True if prime, False otherwise.</p>
+        <p><strong>3. Simplest Case:</strong> n=2 (True), n=4 (False: 2x2), n=9 (False: 3x3).</p>
+        <p><strong>4. Math Relationship:</strong> A number n is prime if no integer from 2 to √n divides it evenly. <strong>Why √n?</strong> Because if n = a × b and a ≤ b, then a must be ≤ √n. If no factor exists up to √n, none exist beyond it either.</p>
+        <p><strong>5. Algorithm:</strong> Iterate i from 2 to √n. If n % i == 0, return false. Skip evens early to optimize.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Trace: Is 29 prime?</span>
+√29 ≈ 5.38  →  check divisors: 2, 3, 4, 5
+
+29 ÷ 2 = 14.5  <span class="lo">→ not divisible</span>
+29 ÷ 3 = 9.67  <span class="lo">→ not divisible</span>
+29 ÷ 4 = 7.25  <span class="lo">→ not divisible</span>
+29 ÷ 5 = 5.8   <span class="lo">→ not divisible</span>
+                <span class="match">→ No divisor found → 29 IS PRIME ✓</span>
+
+Trace: Is 36 prime?
+√36 = 6  →  check: 2
+
+36 ÷ 2 = 18    <span class="match">→ divisible! → 36 is NOT prime ✗</span> (stop immediately)</div>
+      <div class="cb"><span class="pp">#include</span>&lt;bits/stdc++.h&gt;
+<span class="kw">using namespace</span> std;
+
+<span class="kw">bool</span> <span class="fn">isPrime</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt; 2) <span class="kw">return false</span>;            <span class="cm">// 0, 1 → not prime</span>
+    <span class="kw">if</span> (n == 2) <span class="kw">return true</span>;            <span class="cm">// 2 → prime</span>
+    <span class="kw">if</span> (n % 2 == 0) <span class="kw">return false</span>;       <span class="cm">// Even > 2 → not prime</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 3; i * i &lt;= n; i += 2) <span class="cm">// Check odd divisors up to √n</span>
+        <span class="kw">if</span> (n % i == 0) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}
+
+<span class="kw">int</span> <span class="fn">main</span>() {
+    <span class="kw">int</span> n; cin &gt;&gt; n;
+    cout &lt;&lt; (isPrime(n) ? <span class="st">"Prime"</span> : <span class="st">"Not Prime"</span>) &lt;&lt; <span class="st">"\n"</span>;
+}</div>
+      <div class="tip-box">
+        <span class="lbl">Extension: Print all primes up to n (Sieve of Eratosthenes)</span>
+        <p>Mark all multiples of each prime as composite, starting from 2. What remains unmarked is prime. Time: O(n log log n). For n = 10⁶, this runs in milliseconds. See File 06 Ch17 for the full linear sieve.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="armstrong">
+      <h2 class="sh">2.2 &nbsp; Armstrong Number <span class="tag tc">Classic</span></h2>
+      <div class="prob"><p>A number is <strong>Armstrong</strong> (narcissistic) if the sum of its digits each raised to the power of the number of digits equals the number itself. Example: 153 = 1³ + 5³ + 3³.</p></div>
+      <div class="logic">
+        <span class="lbl">The 5-Step Logic</span>
+        <p><strong>1. Given:</strong> An integer n. <strong>2. Produce:</strong> True if Armstrong, False otherwise.</p>
+        <p><strong>3. Simplest Case:</strong> n=153. Digits are 1,5,3. 1³ + 5³ + 3³ = 1 + 125 + 27 = 153. True.</p>
+        <p><strong>4. Math Relationship:</strong> The answer requires distinct mathematical operations: counting total digits, extracting individual digits sequentially, and summing their digit-wise powers.</p>
+        <p><strong>5. Algorithm:</strong> Convert to string to count digits. Use a `while(n > 0)` loop with `% 10` (extract) and `/ 10` (remove) to compute sum. Compare sum to original.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Trace: Is 1634 Armstrong?</span>
+n = 1634,  digits = 4
+
+Extract digits and compute:
+  1634 % 10 = <span class="cur">4</span>  →  4⁴ = 256   |  1634 / 10 = 163
+   163 % 10 = <span class="cur">3</span>  →  3⁴ = 81    |   163 / 10 = 16
+    16 % 10 = <span class="cur">6</span>  →  6⁴ = 1296  |    16 / 10 = 1
+     1 % 10 = <span class="cur">1</span>  →  1⁴ = 1     |     1 / 10 = 0
+
+Sum = 256 + 81 + 1296 + 1 = <span class="hi">1634</span>
+<span class="match">Sum == n  →  1634 IS Armstrong ✓</span></div>
+      <div class="cb"><span class="kw">bool</span> <span class="fn">isArmstrong</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> original = n, sum = 0;
+    <span class="kw">int</span> digits = to_string(n).length();    <span class="cm">// Count digits</span>
+    <span class="kw">while</span> (n > 0) {
+        <span class="kw">int</span> d = n % 10;                    <span class="cm">// Extract last digit</span>
+        sum += pow(d, digits);             <span class="cm">// Add d^(num_digits)</span>
+        n /= 10;                           <span class="cm">// Remove last digit</span>
+    }
+    <span class="kw">return</span> sum == original;
+}
+<span class="cm">// Armstrong numbers: 1, 2, 3, ..., 9, 153, 370, 371, 407, 1634, 8208, 9474</span></div>
+    </div>
+
+    <div class="sec" data-m="perfect-strong">
+      <h2 class="sh">2.3 &nbsp; Perfect Number &amp; Strong Number <span class="tag tc">Classic</span></h2>
+      <h3 class="ssh">Perfect Number — Sum of proper divisors equals itself</h3>
+      <div class="prob"><p>A number is <strong>perfect</strong> if the sum of all its proper divisors (divisors excluding itself) equals the number. Example: 28 = 1 + 2 + 4 + 7 + 14.</p></div>
+      <div class="logic">
+        <span class="lbl">The Logic</span>
+        <p>Find all divisors of n from 1 to √n. For each divisor d, both d and n/d are divisors (add both, but don't double-count when d == n/d). Sum them all. Compare with n.</p>
+      </div>
+      <div class="cb"><span class="kw">bool</span> <span class="fn">isPerfect</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= 1) <span class="kw">return false</span>;
+    <span class="kw">int</span> sum = 1;                            <span class="cm">// 1 is always a proper divisor</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 2; i * i &lt;= n; i++) {
+        <span class="kw">if</span> (n % i == 0) {
+            sum += i;
+            <span class="kw">if</span> (i != n / i) sum += n / i;  <span class="cm">// Don't add twice if i == sqrt(n)</span>
+        }
+    }
+    <span class="kw">return</span> sum == n;
+}
+<span class="cm">// Perfect numbers: 6, 28, 496, 8128, 33550336...</span></div>
+
+      <h3 class="ssh">Strong Number — Sum of factorial of digits equals itself</h3>
+      <div class="prob"><p>A number is <strong>strong</strong> if the sum of factorials of its digits equals the number itself. Example: 145 = 1! + 4! + 5! = 1 + 24 + 120.</p></div>
+      <div class="viz">
+        <span class="viz-label">Trace: Is 145 a Strong Number?</span>
+Precompute factorials: 0!=1, 1!=1, 2!=2, 3!=6, 4!=24, 5!=120, 6!=720, 7!=5040, 8!=40320, 9!=362880
+
+145 → digits: 1, 4, 5
+  1! = 1
+  4! = 24
+  5! = 120
+      ───
+Sum = <span class="hi">145</span>   <span class="match">== original → Strong Number ✓</span></div>
+      <div class="cb"><span class="kw">bool</span> <span class="fn">isStrong</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> fact[10] = {1,1,2,6,24,120,720,5040,40320,362880}; <span class="cm">// Precomputed factorials 0..9</span>
+    <span class="kw">int</span> sum = 0, tmp = n;
+    <span class="kw">while</span> (tmp > 0) {
+        sum += fact[tmp % 10];             <span class="cm">// Add factorial of last digit</span>
+        tmp /= 10;
+    }
+    <span class="kw">return</span> sum == n;
+}
+<span class="cm">// Strong numbers: 1, 2, 145, 40585</span></div>
+    </div>
+
+    <div class="sec" data-m="special-numbers">
+      <h2 class="sh">2.4 &nbsp; Palindrome, Automorphic, Spy &amp; Harshad Numbers <span class="tag tt">More Classics</span></h2>
+      <div class="cb"><span class="cm">// Palindrome Number — reads same forwards and backwards</span>
+<span class="kw">bool</span> <span class="fn">isPalindromeNum</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> original = n, rev = 0;
+    <span class="kw">while</span> (n > 0) { rev = rev * 10 + n % 10; n /= 10; }
+    <span class="kw">return</span> rev == original;
+}
+<span class="cm">// 121, 1331, 12321 are palindromes</span>
+
+<span class="cm">// Automorphic Number — square ends with the number itself</span>
+<span class="kw">bool</span> <span class="fn">isAutomorphic</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> sq = (<span class="kw">long long</span>)n * n;
+    <span class="kw">int</span> digits = to_string(n).length();
+    <span class="kw">int</span> mod = 1;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; digits; i++) mod *= 10;
+    <span class="kw">return</span> sq % mod == n;
+}
+<span class="cm">// 5² = 25 (ends in 5) ✓   25² = 625 (ends in 25) ✓   76² = 5776 (ends in 76) ✓</span>
+
+<span class="cm">// Spy Number — sum of digits equals product of digits</span>
+<span class="kw">bool</span> <span class="fn">isSpy</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> sum = 0, prod = 1;
+    <span class="kw">while</span> (n > 0) {
+        <span class="kw">int</span> d = n % 10;
+        sum += d; prod *= d; n /= 10;
+    }
+    <span class="kw">return</span> sum == prod;
+}
+<span class="cm">// 123: sum=6, prod=6 ✓   1124: sum=8, prod=8 ✓</span>
+
+<span class="cm">// Harshad (Niven) Number — divisible by sum of its digits</span>
+<span class="kw">bool</span> <span class="fn">isHarshad</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> sum = 0, tmp = n;
+    <span class="kw">while</span> (tmp > 0) { sum += tmp % 10; tmp /= 10; }
+    <span class="kw">return</span> n % sum == 0;
+}
+<span class="cm">// 18: digitSum=9, 18%9=0 ✓   21: digitSum=3, 21%3=0 ✓</span></div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 3 — PATTERN PRINTING
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03 · Patterns</div>
+    <div class="ch-title">Pattern Printing — <em>The Formula Hidden in Every Shape</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pattern-formula">
+      <h2 class="sh">3.1 &nbsp; The Universal Pattern Formula <span class="tag tg">Master Key</span></h2>
+      <div class="def-box">
+        <span class="lbl">How to Solve ANY Pattern Problem</span>
+        <p>Draw the pattern. Label each row with i (1 to n). For each row i, ask: <strong>How many spaces? How many stars/numbers? What changes?</strong> The answer is always a formula in i and n. Once you have those three formulas, the code writes itself with two nested loops.</p>
+      </div>
+      <div class="logic">
+        <span class="lbl">The 3-Question Method</span>
+        <p><strong>For any pattern, look at row i (1-indexed, n rows total):</strong></p>
+        <p>Q1: Leading spaces? — Often <code>n-i</code> or <code>i-1</code> or 0.</p>
+        <p>Q2: Characters printed? — Often <code>i</code>, <code>2i-1</code>, <code>n-i+1</code>, or something in between.</p>
+        <p>Q3: What is each character? — Star, digit (i or j), cumulative count?</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Analysis: Right-angle Triangle (n=5)</span>
+Row 1:  *            → 0 spaces, 1 star   (i=1)
+Row 2:  * *          → 0 spaces, 2 stars  (i=2)
+Row 3:  * * *        → 0 spaces, 3 stars  (i=3)
+Row 4:  * * * *      → 0 spaces, 4 stars  (i=4)
+Row 5:  * * * * *    → 0 spaces, 5 stars  (i=5)
+
+Pattern → spaces=0, stars=i  → nested loop: j from 1 to i</div>
+      <div class="viz">
+        <span class="viz-label">Analysis: Pyramid (n=5)</span>
+Row 1:     *          → 4 spaces, 1 star   (n-i=4, 2i-1=1)
+Row 2:    * * *       → 3 spaces, 3 stars  (n-i=3, 2i-1=3)
+Row 3:   * * * * *    → 2 spaces, 5 stars  (n-i=2, 2i-1=5)
+Row 4:  * * * * * * * → 1 space,  7 stars  (n-i=1, 2i-1=7)
+Row 5: * * * * * * * *→ 0 spaces, 9 stars  (n-i=0, 2i-1=9)
+
+Pattern → spaces=n-i, stars=2i-1</div>
+      <div class="cb"><span class="cm">// Right-angle triangle</span>
+<span class="kw">void</span> <span class="fn">rightTriangle</span>(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++) cout &lt;&lt; <span class="st">"* "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}
+
+<span class="cm">// Pyramid</span>
+<span class="kw">void</span> <span class="fn">pyramid</span>(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> sp = 1; sp &lt;= n-i; sp++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= 2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}
+
+<span class="cm">// Diamond = Pyramid + Inverted Pyramid</span>
+<span class="kw">void</span> <span class="fn">diamond</span>(<span class="kw">int</span> n) {
+    <span class="cm">// Upper half (including middle)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> sp = 1; sp &lt;= n-i; sp++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= 2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+    <span class="cm">// Lower half</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = n-1; i &gt;= 1; i--) {
+        <span class="kw">for</span> (<span class="kw">int</span> sp = 1; sp &lt;= n-i; sp++) cout &lt;&lt; <span class="st">" "</span>;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= 2*i-1; j++) cout &lt;&lt; <span class="st">"*"</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}</div>
+    </div>
+
+    <div class="sec" data-m="number-patterns">
+      <h2 class="sh">3.2 &nbsp; Number Patterns — Floyd's, Pascal's &amp; More <span class="tag tt">Intermediate</span></h2>
+      <div class="viz">
+        <span class="viz-label">Floyd's Triangle Pattern</span>
+ 1
+ 2  3
+ 4  5  6
+ 7  8  9  10
+11 12 13 14 15
+
+Logic: keep a running counter, print it j times in row i</div>
+      <div class="viz">
+        <span class="viz-label">Pascal's Triangle (n=5)</span>
+      1
+     1 1
+    1 2 1
+   1 3 3 1
+  1 4 6 4 1
+
+Each element = C(row, col) = prev row's adjacent sum
+Row i (0-indexed): element j = C(i,j) = i! / (j! * (i-j)!)</div>
+      <div class="cb"><span class="cm">// Floyd's Triangle</span>
+<span class="kw">void</span> <span class="fn">floyds</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> num = 1;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt;= n; i++) {
+        <span class="kw">for</span> (<span class="kw">int</span> j = 1; j &lt;= i; j++) cout &lt;&lt; num++ &lt;&lt; <span class="st">" "</span>;
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}
+
+<span class="cm">// Pascal's Triangle</span>
+<span class="kw">void</span> <span class="fn">pascals</span>(<span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; n; i++) {
+        <span class="kw">long long</span> val = 1;
+        <span class="kw">for</span> (<span class="kw">int</span> j = 0; j &lt;= i; j++) {
+            cout &lt;&lt; val &lt;&lt; <span class="st">" "</span>;
+            val = val * (i - j) / (j + 1);  <span class="cm">// Compute next C(i,j+1) from C(i,j)</span>
+        }
+        cout &lt;&lt; <span class="st">"\n"</span>;
+    }
+}
+
+<span class="cm">// Butterfly Pattern (n=4)</span>
+<span class="cm">// *      *     Row 1: i stars, (2n-2i) spaces, i stars</span>
+<span class="cm">// **    **     Row 2: ...</span>
+<span class="cm">// ***  ***</span>
+<span class="cm">// ********</span>
+<span class="kw">void</span> <span class="fn">butterfly</span>(<span class="kw">int</span> n) {
+    <span class="kw">auto</span> row = [&amp;](<span class="kw">int</span> i) {
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;i;j++) cout&lt;&lt;<span class="st">"*"</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;2*(n-i);j++) cout&lt;&lt;<span class="st">" "</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;i;j++) cout&lt;&lt;<span class="st">"*"</span>;
+        cout&lt;&lt;<span class="st">"\n"</span>;
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=n;i++) row(i);
+    <span class="kw">for</span>(<span class="kw">int</span> i=n;i&gt;=1;i--) row(i);
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 4 — ARRAY LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04 · Arrays</div>
+    <div class="ch-title">Array Logic — <em>The Thinking Behind Every Array Problem</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="array-basics">
+      <h2 class="sh">4.1 &nbsp; Rotate, Reverse &amp; Shift — The Three Fundamentals <span class="tag tc">Core Logic</span></h2>
+      <div class="logic">
+        <span class="lbl">Reverse = the most powerful array tool</span>
+        <p>You can solve <strong>rotation</strong> with three reverses. This is a technique worth memorizing because it works in O(n) time and O(1) space — no extra array needed.</p>
+        <p><strong>Rotate left by k:</strong> Reverse [0..k-1], reverse [k..n-1], reverse entire array.</p>
+        <p><strong>Rotate right by k:</strong> Reverse entire array, reverse [0..k-1], reverse [k..n-1].</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Left Rotate by 2: [1,2,3,4,5] → [3,4,5,1,2]</span>
+Original:    [<span class="hi"> 1  2</span> | 3  4  5]
+
+Step 1 — Reverse first k=2 elements:
+             [<span class="hi"> 2  1</span> | 3  4  5]
+
+Step 2 — Reverse remaining n-k=3 elements:
+             [2  1 | <span class="hi"> 5  4  3</span>]
+
+Step 3 — Reverse entire array:
+             [<span class="match"> 3  4  5  1  2</span>]  ✓</div>
+      <div class="cb"><span class="cm">// Rotate array left by k positions — O(n) time, O(1) space</span>
+<span class="kw">void</span> <span class="fn">rotateLeft</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> k) {
+    <span class="kw">int</span> n = a.size();
+    k %= n;                                      <span class="cm">// Handle k > n</span>
+    reverse(a.begin(), a.begin() + k);           <span class="cm">// Reverse [0..k-1]</span>
+    reverse(a.begin() + k, a.end());             <span class="cm">// Reverse [k..n-1]</span>
+    reverse(a.begin(), a.end());                 <span class="cm">// Reverse entire array</span>
+}
+
+<span class="cm">// Find second largest — O(n), single pass</span>
+<span class="kw">int</span> <span class="fn">secondLargest</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> first = INT_MIN, second = INT_MIN;
+    <span class="kw">for</span> (<span class="kw">int</span> x : a) {
+        <span class="kw">if</span> (x > first) { second = first; first = x; }
+        <span class="kw">else if</span> (x > second &amp;&amp; x != first) second = x;
+    }
+    <span class="kw">return</span> second;
+}
+
+<span class="cm">// Move all zeros to end — order of non-zeros preserved</span>
+<span class="kw">void</span> <span class="fn">moveZerosToEnd</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> insertPos = 0;
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; a.size(); i++)
+        <span class="kw">if</span> (a[i] != 0) a[insertPos++] = a[i];   <span class="cm">// Write non-zeros to front</span>
+    <span class="kw">while</span> (insertPos &lt; a.size()) a[insertPos++] = 0;
+}
+
+<span class="cm">// Separate even and odd — evens before odds</span>
+<span class="kw">void</span> <span class="fn">evenOdd</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> lo = 0, hi = a.size() - 1;
+    <span class="kw">while</span> (lo &lt; hi) {
+        <span class="kw">while</span> (lo &lt; hi &amp;&amp; a[lo] % 2 == 0) lo++;  <span class="cm">// Skip evens at front</span>
+        <span class="kw">while</span> (lo &lt; hi &amp;&amp; a[hi] % 2 != 0) hi--;  <span class="cm">// Skip odds at end</span>
+        <span class="kw">if</span> (lo &lt; hi) swap(a[lo], a[hi]);
+    }
+}</div>
+    </div>
+
+    <div class="sec" data-m="subarray-logic">
+      <h2 class="sh">4.2 &nbsp; Subarray Problems — The Classic Patterns <span class="tag tg">Must Master</span></h2>
+      <div class="prob"><p>Given array, find the <strong>maximum sum contiguous subarray</strong> (Kadane's algorithm). This is the most famous array problem and the logic behind it teaches you half of all array problems.</p></div>
+      <div class="logic">
+        <span class="lbl">Kadane's Key Insight</span>
+        <p>At each position, you have exactly two choices: <strong>extend</strong> the existing subarray (add current element to running sum), or <strong>start fresh</strong> at the current element.</p>
+        <p>Start fresh when? When the running sum becomes negative — because a negative prefix only drags you down. Any subarray starting after the negative part will be better.</p>
+        <p>Track the maximum sum seen at any point. That's your answer.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Kadane's Trace: [-2, 1, -3, 4, -1, 2, 1, -5, 4]</span>
+idx:    0   1   2   3   4   5   6   7   8
+arr:   -2   1  -3   4  -1   2   1  -5   4
+
+curSum: -2  →  start fresh? yes (neg) → 0
+        -2+1= -1 → start fresh? yes (neg) → 0
+        ...
+        
+Actually:
+i=0: curSum = max(-2,  0+-2) = -2  → reset to 0 if neg: so start fresh
+     Better: curSum = max(arr[i], curSum+arr[i])
+i=0: max(-2,    -2) = -2    maxSum=-2
+i=1: max( 1, -2+1 ) =  1    maxSum= 1
+i=2: max(-3,  1-3 ) = -2    maxSum= 1
+i=3: max( 4, -2+4 ) =  4    maxSum= 4
+i=4: max(-1,  4-1 ) =  3    maxSum= 4
+i=5: max( 2,  3+2 ) =  5    maxSum= 5
+i=6: max( 1,  5+1 ) =  6    <span class="match">maxSum= 6</span>
+i=7: max(-5,  6-5 ) =  1    maxSum= 6
+i=8: max( 4,  1+4 ) =  5    maxSum= 6
+
+Answer: <span class="match">6</span>  (subarray [4,-1,2,1])</div>
+      <div class="cb"><span class="cm">// Kadane's Algorithm — O(n) time, O(1) space</span>
+<span class="kw">int</span> <span class="fn">maxSubarraySum</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> maxSum = a[0], curSum = a[0];
+    <span class="kw">for</span> (<span class="kw">int</span> i = 1; i &lt; a.size(); i++) {
+        curSum = max(a[i], curSum + a[i]);   <span class="cm">// Extend or start fresh</span>
+        maxSum = max(maxSum, curSum);
+    }
+    <span class="kw">return</span> maxSum;
+}
+
+<span class="cm">// Track start and end indices too</span>
+<span class="kw">tuple</span>&lt;<span class="kw">int</span>,<span class="kw">int</span>,<span class="kw">int</span>&gt; <span class="fn">maxSubarrayWithIndices</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> maxSum=a[0], curSum=a[0], start=0, end=0, tempStart=0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;a.size();i++){
+        <span class="kw">if</span>(a[i] > curSum+a[i]){ curSum=a[i]; tempStart=i; }
+        <span class="kw">else</span> curSum+=a[i];
+        <span class="kw">if</span>(curSum>maxSum){ maxSum=curSum; start=tempStart; end=i; }
+    }
+    <span class="kw">return</span> {maxSum, start, end};
+}
+
+<span class="cm">// Maximum product subarray — track both max and min (min*negative = new max)</span>
+<span class="kw">int</span> <span class="fn">maxProductSubarray</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> maxP=a[0], minP=a[0], result=a[0];
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;a.size();i++){
+        <span class="kw">if</span>(a[i]&lt;0) swap(maxP,minP);         <span class="cm">// Negative flips max and min</span>
+        maxP = max(a[i], maxP*a[i]);
+        minP = min(a[i], minP*a[i]);
+        result = max(result, maxP);
+    }
+    <span class="kw">return</span> result;
+}
+
+<span class="cm">// Dutch National Flag — sort array of 0s, 1s, 2s in O(n) one pass</span>
+<span class="kw">void</span> <span class="fn">sort012</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> lo=0, mid=0, hi=a.size()-1;
+    <span class="kw">while</span>(mid &lt;= hi) {
+        <span class="kw">if</span>     (a[mid]==0){ swap(a[lo++],a[mid++]); }
+        <span class="kw">else if</span>(a[mid]==1){ mid++; }
+        <span class="kw">else</span>              { swap(a[mid],a[hi--]); }
+    }
+}</div>
+    </div>
+
+    <div class="sec" data-m="matrix-logic">
+      <h2 class="sh">4.3 &nbsp; Matrix Logic — Spiral, Transpose &amp; Rotate <span class="tag tt">Intermediate</span></h2>
+      <div class="logic">
+        <span class="lbl">Matrix Rotation Logic</span>
+        <p><strong>Rotate 90° clockwise:</strong> First transpose (swap a[i][j] with a[j][i]), then reverse each row. This is a two-step O(n²) in-place operation. No extra matrix needed.</p>
+        <p><strong>Transpose rule:</strong> element at (i,j) goes to (j,i). Only swap upper triangle to avoid double-swapping.</p>
+      </div>
+      <div class="cb"><span class="cm">// Matrix Transpose (in-place)</span>
+<span class="kw">void</span> <span class="fn">transpose</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; m) {
+    <span class="kw">int</span> n = m.size();
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=i+1;j&lt;n;j++)    <span class="cm">// Only upper triangle</span>
+            swap(m[i][j], m[j][i]);
+}
+
+<span class="cm">// Rotate matrix 90° clockwise = Transpose + Reverse each row</span>
+<span class="kw">void</span> <span class="fn">rotate90</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; m) {
+    transpose(m);
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; row : m) reverse(row.begin(), row.end());
+}
+
+<span class="cm">// Print matrix in spiral order</span>
+vector&lt;<span class="kw">int</span>&gt; <span class="fn">spiralOrder</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; m) {
+    vector&lt;<span class="kw">int</span>&gt; res;
+    <span class="kw">int</span> top=0, bottom=m.size()-1, left=0, right=m[0].size()-1;
+    <span class="kw">while</span>(top&lt;=bottom &amp;&amp; left&lt;=right) {
+        <span class="kw">for</span>(<span class="kw">int</span> i=left;i&lt;=right;i++)   res.push_back(m[top][i]);   top++;
+        <span class="kw">for</span>(<span class="kw">int</span> i=top;i&lt;=bottom;i++)   res.push_back(m[i][right]); right--;
+        <span class="kw">if</span>(top&lt;=bottom)
+            <span class="kw">for</span>(<span class="kw">int</span> i=right;i&gt;=left;i--)  res.push_back(m[bottom][i]);bottom--;
+        <span class="kw">if</span>(left&lt;=right)
+            <span class="kw">for</span>(<span class="kw">int</span> i=bottom;i&gt;=top;i--)  res.push_back(m[i][left]);  left++;
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Set matrix zeros — if m[i][j]==0, set entire row and column to 0</span>
+<span class="kw">void</span> <span class="fn">setZeroes</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; m) {
+    <span class="kw">bool</span> row0=<span class="kw">false</span>, col0=<span class="kw">false</span>;
+    <span class="kw">int</span> R=m.size(), C=m[0].size();
+    <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++) <span class="kw">if</span>(!m[0][j]) row0=<span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">if</span>(!m[i][0]) col0=<span class="kw">true</span>;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;C;j++)
+        <span class="kw">if</span>(!m[i][j]){ m[i][0]=0; m[0][j]=0; }    <span class="cm">// Use first row/col as markers</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;C;j++)
+        <span class="kw">if</span>(!m[i][0]||!m[0][j]) m[i][j]=0;
+    <span class="kw">if</span>(row0) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++) m[0][j]=0;
+    <span class="kw">if</span>(col0) <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) m[i][0]=0;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 5 — STRING LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05 · Strings</div>
+    <div class="ch-title">String Logic — <em>Palindromes, Anagrams &amp; Classic Problems</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="palindrome-string">
+      <h2 class="sh">5.1 &nbsp; Palindrome — Three Ways to Check <span class="tag tc">Core</span></h2>
+      <div class="prob"><p>Determine if a string reads the same forwards and backwards. Ignore case and non-alphanumeric characters for the "clean" version.</p></div>
+      <div class="approaches">
+        <div class="approach">
+          <span class="ap-level ap-brute">Approach 1</span>
+          <h4>Reverse &amp; Compare</h4>
+          <p>Create reversed copy. Compare with original. Simple, clear.</p>
+          <div class="complexity">Time: O(n) · Space: O(n)</div>
+        </div>
+        <div class="approach">
+          <span class="ap-level ap-better">Approach 2</span>
+          <h4>Two Pointers</h4>
+          <p>Left pointer at start, right at end. Move inward. Compare characters. Stop when mismatch or pointers cross.</p>
+          <div class="complexity">Time: O(n) · Space: O(1) ✓</div>
+        </div>
+        <div class="approach">
+          <span class="ap-level ap-optimal">Best Practice</span>
+          <h4>Two Pointers + Filters</h4>
+          <p>Skip non-alphanumeric. Lowercase before comparing. Works for "A man, a plan, a canal: Panama".</p>
+          <div class="complexity">Time: O(n) · Space: O(1) ✓</div>
+        </div>
+      </div>
+      <div class="cb"><span class="cm">// Two-pointer palindrome check — O(n) time, O(1) space</span>
+<span class="kw">bool</span> <span class="fn">isPalindrome</span>(string s) {
+    <span class="kw">int</span> l = 0, r = s.size() - 1;
+    <span class="kw">while</span> (l &lt; r) {
+        <span class="kw">if</span> (s[l] != s[r]) <span class="kw">return false</span>;
+        l++; r--;
+    }
+    <span class="kw">return true</span>;
+}
+
+<span class="cm">// Ignore non-alphanumeric, case-insensitive version</span>
+<span class="kw">bool</span> <span class="fn">isPalindromeClean</span>(string s) {
+    <span class="kw">int</span> l=0, r=s.size()-1;
+    <span class="kw">while</span>(l &lt; r) {
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isalnum(s[l])) l++;
+        <span class="kw">while</span>(l&lt;r &amp;&amp; !isalnum(s[r])) r--;
+        <span class="kw">if</span>(tolower(s[l++]) != tolower(s[r--])) <span class="kw">return false</span>;
+    }
+    <span class="kw">return true</span>;
+}</div>
+    </div>
+
+    <div class="sec" data-m="anagram-logic">
+      <h2 class="sh">5.2 &nbsp; Anagram &amp; Frequency Map Logic <span class="tag tc">Core</span></h2>
+      <div class="prob"><p>Two strings are anagrams if one is a rearrangement of the other. "listen" and "silent" are anagrams. The fundamental tool here is the <strong>frequency map</strong>.</p></div>
+      <div class="logic">
+        <span class="lbl">The Frequency Map — Your String Swiss Army Knife</span>
+        <p>Any time a string problem involves <strong>counting characters</strong>, <strong>comparing character sets</strong>, or <strong>finding missing/extra characters</strong>, a frequency map (array[26] for lowercase letters, or unordered_map for general) is your first instinct. Build it in O(n), query it in O(1).</p>
+      </div>
+      <div class="cb"><span class="cm">// Anagram check — O(n) time, O(1) space</span>
+<span class="kw">bool</span> <span class="fn">isAnagram</span>(string a, string b) {
+    <span class="kw">if</span>(a.size() != b.size()) <span class="kw">return false</span>;
+    <span class="kw">int</span> freq[26] = {0};
+    <span class="kw">for</span>(<span class="kw">char</span> c : a) freq[c-'a']++;
+    <span class="kw">for</span>(<span class="kw">char</span> c : b) freq[c-'a']--;
+    <span class="kw">for</span>(<span class="kw">int</span> x : freq) <span class="kw">if</span>(x != 0) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}
+
+<span class="cm">// First non-repeating character</span>
+<span class="kw">char</span> <span class="fn">firstUnique</span>(string s) {
+    <span class="kw">int</span> freq[26] = {0};
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) freq[c-'a']++;
+    <span class="kw">for</span>(<span class="kw">char</span> c : s) <span class="kw">if</span>(freq[c-'a']==1) <span class="kw">return</span> c;
+    <span class="kw">return</span> '#';  <span class="cm">// Sentinel: none found</span>
+}
+
+<span class="cm">// Check if string is isomorphic to another</span>
+<span class="cm">// "egg" and "add" → e→a, g→d ✓   "foo" and "bar" → f→b, o→a, o→r ✗</span>
+<span class="kw">bool</span> <span class="fn">isIsomorphic</span>(string s, string t) {
+    <span class="kw">int</span> mapS[256]={0}, mapT[256]={0};
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;s.size();i++){
+        <span class="kw">if</span>(mapS[s[i]] != mapT[t[i]]) <span class="kw">return false</span>;
+        mapS[s[i]] = mapT[t[i]] = i+1;  <span class="cm">// Record last seen position</span>
+    }
+    <span class="kw">return true</span>;
+}
+
+<span class="cm">// Roman to Integer — table + one logic rule</span>
+<span class="cm">// If current value < next value → subtract (IV=4, IX=9)</span>
+<span class="cm">// Otherwise add</span>
+<span class="kw">int</span> <span class="fn">romanToInt</span>(string s) {
+    map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; v = {{'I',1},{'V',5},{'X',10},{'L',50},
+                         {'C',100},{'D',500},{'M',1000}};
+    <span class="kw">int</span> res = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;s.size();i++) {
+        <span class="kw">if</span>(i+1&lt;s.size() &amp;&amp; v[s[i]]&lt;v[s[i+1]]) res -= v[s[i]];
+        <span class="kw">else</span> res += v[s[i]];
+    }
+    <span class="kw">return</span> res;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 6 — RECURSION
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06 · Recursion</div>
+    <div class="ch-title">Recursion Thinking — <em>See It, Trust It, Don't Fear It</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="recursion-mind">
+      <h2 class="sh">6.1 &nbsp; The Recursion Mental Model — How to Think About It <span class="tag tg">Fundamental</span></h2>
+      <div class="def-box">
+        <span class="lbl">The One Thought That Unlocks Recursion (Base vs. State)</span>
+        <p><strong>1. The Base Case (The Anchor):</strong> This is the simplest un-splittable unit. When n=0 or the array is empty, what's the answer? Stop here. DO NOT overthink it.</p>
+        <p><strong>2. The Recursive State (The Leap of Faith):</strong> Assume your function already works flawlessly for <code>n-1</code>. <strong>Do not trace it down!</strong> Just take the imaginary result of <code>f(n-1)</code> and figure out the math to turn it into <code>f(n)</code>. You trust the smaller version works, and just write one extra step.</p>
+      </div>
+      <div class="logic">
+        <span class="lbl">Three Questions for Every Recursive Problem</span>
+        <p><strong>Q1: Base case</strong> — When do I stop? (n=0, n=1, empty, single element)</p>
+        <p><strong>Q2: Recursive case</strong> — How does the answer for n depend on the answer for n-1 (or smaller)?</p>
+        <p><strong>Q3: Combine</strong> — What do I do with the recursive result to get the full answer?</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Tower of Hanoi — Mental Model (3 disks)</span>
+Problem: Move 3 disks from A to C using B as helper.
+
+Think recursively:
+  1. "Assume I can move 2 disks from A to B" (trust the recursion)
+  2. Move disk 3 (largest) from A to C
+  3. "Assume I can move 2 disks from B to C" (trust again)
+
+That's it. The recursion handles the 2-disk problem:
+  Move 2 disks = Move 1 disk → Move disk 2 → Move 1 disk back
+
+Execution trace (3 disks A→C via B):
+  Move 2 disks A→B (via C):
+    Move 1 disk A→C
+    Move disk 2: A→B
+    Move disk 1: C→B
+  Move disk 3: <span class="match">A→C</span>
+  Move 2 disks B→C (via A):
+    Move disk 1: B→A
+    Move disk 2: B→C
+    Move disk 1: <span class="match">A→C</span>
+
+Total moves for n disks = 2ⁿ - 1</div>
+      <div class="cb"><span class="cm">// Tower of Hanoi</span>
+<span class="kw">void</span> <span class="fn">hanoi</span>(<span class="kw">int</span> n, <span class="kw">char</span> from, <span class="kw">char</span> to, <span class="kw">char</span> via) {
+    <span class="kw">if</span> (n == 0) <span class="kw">return</span>;                          <span class="cm">// Base case: nothing to move</span>
+    hanoi(n-1, from, via, to);                   <span class="cm">// Step 1: move n-1 disks to helper</span>
+    cout &lt;&lt; <span class="st">"Move disk "</span> &lt;&lt; n &lt;&lt; <span class="st">": "</span> &lt;&lt; from &lt;&lt; <span class="st">" → "</span> &lt;&lt; to &lt;&lt; <span class="st">"\n"</span>;
+    hanoi(n-1, via, to, from);                   <span class="cm">// Step 3: move n-1 from helper to dest</span>
+}
+<span class="cm">// Call: hanoi(3, 'A', 'C', 'B')</span>
+<span class="cm">// Time: O(2ⁿ),  Moves: 2ⁿ - 1</span>
+
+<span class="cm">// Fibonacci — Recursion made efficient with memoization</span>
+<span class="kw">int</span> memo[100] = {};
+<span class="kw">int</span> <span class="fn">fib</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= 1) <span class="kw">return</span> n;
+    <span class="kw">if</span> (memo[n]) <span class="kw">return</span> memo[n];               <span class="cm">// Already computed!</span>
+    <span class="kw">return</span> memo[n] = fib(n-1) + fib(n-2);     <span class="cm">// Store before returning</span>
+}
+<span class="cm">// Without memo: O(2ⁿ)  |  With memo: O(n) — that's the power of memoization</span>
+
+<span class="cm">// Power function — recursive fast exponentiation</span>
+<span class="kw">long long</span> <span class="fn">power</span>(<span class="kw">long long</span> base, <span class="kw">int</span> exp) {
+    <span class="kw">if</span> (exp == 0) <span class="kw">return</span> 1;
+    <span class="kw">if</span> (exp % 2 == 0) {
+        <span class="kw">long long</span> half = power(base, exp/2);
+        <span class="kw">return</span> half * half;                    <span class="cm">// b^(2k) = (b^k)²</span>
+    }
+    <span class="kw">return</span> base * power(base, exp-1);          <span class="cm">// b^n = b * b^(n-1)</span>
+}
+<span class="cm">// O(log n) — each call halves the exponent</span>
+
+<span class="cm">// Count ways to climb n stairs (1 or 2 steps at a time)</span>
+<span class="kw">int</span> <span class="fn">climbStairs</span>(<span class="kw">int</span> n) {
+    <span class="kw">if</span>(n&lt;=1) <span class="kw">return</span> 1;                         <span class="cm">// Base: 0 or 1 step → 1 way</span>
+    <span class="kw">return</span> climbStairs(n-1) + climbStairs(n-2); <span class="cm">// Last step was 1 or 2</span>
+}
+<span class="cm">// Pattern: same as Fibonacci! f(n) = f(n-1) + f(n-2)</span></div>
+    </div>
+
+    <div class="sec" data-m="recursion-tree">
+      <h2 class="sh">6.2 &nbsp; Recursive Tree Logic — Generate All Possibilities <span class="tag tp">Advanced</span></h2>
+      <div class="logic">
+        <span class="lbl">Recursion Tree = Decision Tree</span>
+        <p>At each recursive call, you branch based on choices. For "generate all subsets", at each element you branch: include it OR exclude it. For "generate all permutations", you branch by which element you place next. The recursion tree has <code>choices^depth</code> leaves — understand this to predict time complexity.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Subset Generation Tree for [1,2,3]</span>
+                     []
+              /              \
+           [1]               []
+         /     \           /     \
+      [1,2]   [1]       [2]      []
+      /   \   / \      /  \     /  \
+  [1,2,3][1,2][1,3][1] [2,3][2] [3] []
+
+<span class="match">8 leaves = 2³ subsets</span>
+At each level, left = include element, right = exclude element</div>
+      <div class="cb"><span class="cm">// Generate all subsets — include/exclude decision at each index</span>
+<span class="kw">void</span> <span class="fn">subsets</span>(vector&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> idx, vector&lt;<span class="kw">int</span>&gt;&amp; curr, vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; res) {
+    <span class="kw">if</span>(idx == nums.size()) { res.push_back(curr); <span class="kw">return</span>; }
+    curr.push_back(nums[idx]);           <span class="cm">// Include nums[idx]</span>
+    subsets(nums, idx+1, curr, res);
+    curr.pop_back();                     <span class="cm">// Backtrack (undo include)</span>
+    subsets(nums, idx+1, curr, res);     <span class="cm">// Exclude nums[idx]</span>
+}
+
+<span class="cm">// Generate all permutations</span>
+<span class="kw">void</span> <span class="fn">permutations</span>(string s, <span class="kw">int</span> start, vector&lt;string&gt;&amp; res) {
+    <span class="kw">if</span>(start == s.size()) { res.push_back(s); <span class="kw">return</span>; }
+    <span class="kw">for</span>(<span class="kw">int</span> i=start; i&lt;s.size(); i++) {
+        swap(s[start], s[i]);            <span class="cm">// Place character i at position start</span>
+        permutations(s, start+1, res);
+        swap(s[start], s[i]);            <span class="cm">// Backtrack</span>
+    }
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 7 — SEARCHING & SORTING LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07 · Search &amp; Sort</div>
+    <div class="ch-title">Searching &amp; Sorting Logic — <em>When to Use What, and Why</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="search-logic">
+      <h2 class="sh">7.1 &nbsp; Binary Search — Not Just for Finding Elements <span class="tag tg">Expand Your View</span></h2>
+      <div class="def-box">
+        <span class="lbl">The Real Power of Binary Search</span>
+        <p>Binary search isn't just "is X in this array?". It's a technique for <strong>any monotone decision problem</strong>: if answer works for value x, it also works for all values ≤ x (or ≥ x). Whenever you see "find the minimum/maximum value such that some condition holds" — binary search on the answer. This reduces O(n²) or worse to O(n log n).</p>
+      </div>
+      <div class="prob"><p>Find the <strong>minimum capacity</strong> of a ship that can ship all packages within D days, where packages[i] is the weight of package i and must be shipped in order.</p></div>
+      <div class="logic">
+        <span class="lbl">Binary Search on Answer Logic</span>
+        <p><strong>Key Insight:</strong> If capacity C works (all packages shipped in D days), then any capacity > C also works. This monotone property means we can binary search on C.</p>
+        <p><strong>Search space:</strong> Minimum possible C = max(packages) (must fit heaviest package). Maximum possible C = sum(packages) (ship everything in one day).</p>
+        <p><strong>Check function:</strong> Given capacity C, greedily fill each day until adding next package would exceed C. Count days needed. If days ≤ D → C works.</p>
+      </div>
+      <div class="cb"><span class="cm">// Minimum ship capacity to deliver in D days</span>
+<span class="kw">bool</span> <span class="fn">canShip</span>(vector&lt;<span class="kw">int</span>&gt;&amp; p, <span class="kw">int</span> D, <span class="kw">int</span> cap) {
+    <span class="kw">int</span> days=1, load=0;
+    <span class="kw">for</span>(<span class="kw">int</span> w : p) {
+        <span class="kw">if</span>(load + w > cap) { days++; load = 0; }  <span class="cm">// New day</span>
+        load += w;
+    }
+    <span class="kw">return</span> days &lt;= D;
+}
+<span class="kw">int</span> <span class="fn">minCapacity</span>(vector&lt;<span class="kw">int</span>&gt;&amp; p, <span class="kw">int</span> D) {
+    <span class="kw">int</span> lo = *max_element(p.begin(),p.end());  <span class="cm">// Min possible capacity</span>
+    <span class="kw">int</span> hi = accumulate(p.begin(),p.end(),0);  <span class="cm">// Max possible capacity</span>
+    <span class="kw">while</span>(lo &lt; hi) {
+        <span class="kw">int</span> mid = lo + (hi-lo)/2;
+        canShip(p,D,mid) ? hi=mid : lo=mid+1;  <span class="cm">// mid works → try smaller</span>
+    }
+    <span class="kw">return</span> lo;
+}</div>
+
+      <h3 class="ssh">Sorting — Choosing the Right Sort for the Problem</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Situation</th><th>Best Sort</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr><td>General purpose</td><td class="good">std::sort (introsort)</td><td>O(n log n) guaranteed, fastest in practice</td></tr>
+            <tr><td>Need stable sort</td><td class="good">std::stable_sort</td><td>Preserves relative order of equal elements</td></tr>
+            <tr><td>Nearly sorted array</td><td class="good">Insertion sort</td><td>O(n) best case on nearly sorted input</td></tr>
+            <tr><td>Integer values in range [0,k]</td><td class="good">Counting sort</td><td>O(n+k) — linear!</td></tr>
+            <tr><td>Sort by custom rule</td><td class="good">sort with comparator</td><td>sort(v.begin(),v.end(),[](a,b){ return a.x &lt; b.x; })</td></tr>
+            <tr><td>Partial sort (need top k)</td><td class="good">nth_element / partial_sort</td><td>O(n) average for nth_element</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cb"><span class="cm">// Custom sort — sort by frequency, then by value</span>
+sort(v.begin(), v.end(), [&amp;](<span class="kw">int</span> a, <span class="kw">int</span> b){
+    <span class="kw">if</span>(freq[a] != freq[b]) <span class="kw">return</span> freq[a] &gt; freq[b];  <span class="cm">// Higher freq first</span>
+    <span class="kw">return</span> a &lt; b;                                         <span class="cm">// Tie: smaller value first</span>
+});
+
+<span class="cm">// Sort pair of vectors together (sort by first, carry second along)</span>
+vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; combined;
+<span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++) combined.push_back({a[i], b[i]});
+sort(combined.begin(), combined.end());  <span class="cm">// Sorts by first element by default</span>
+
+<span class="cm">// Count inversions using merge sort — O(n log n)</span>
+<span class="kw">long long</span> <span class="fn">mergeCount</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> lo, <span class="kw">int</span> hi) {
+    <span class="kw">if</span>(lo&gt;=hi) <span class="kw">return</span> 0;
+    <span class="kw">int</span> mid=(lo+hi)/2;
+    <span class="kw">long long</span> cnt = mergeCount(a,lo,mid) + mergeCount(a,mid+1,hi);
+    vector&lt;<span class="kw">int</span>&gt; tmp;
+    <span class="kw">int</span> i=lo,j=mid+1;
+    <span class="kw">while</span>(i&lt;=mid &amp;&amp; j&lt;=hi){
+        <span class="kw">if</span>(a[i]&lt;=a[j]) tmp.push_back(a[i++]);
+        <span class="kw">else</span>{ cnt += mid-i+1; tmp.push_back(a[j++]); }  <span class="cm">// All remaining in left half form inversions</span>
+    }
+    <span class="kw">while</span>(i&lt;=mid) tmp.push_back(a[i++]);
+    <span class="kw">while</span>(j&lt;=hi)  tmp.push_back(a[j++]);
+    <span class="kw">for</span>(<span class="kw">int</span> k=lo;k&lt;=hi;k++) a[k]=tmp[k-lo];
+    <span class="kw">return</span> cnt;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 8 — MATHEMATICAL LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08 · Math Logic</div>
+    <div class="ch-title">Mathematical Logic — <em>GCD, Sequences, Combinatorics &amp; the Tricks</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="gcd-logic">
+      <h2 class="sh">8.1 &nbsp; GCD / LCM — Euclid's Algorithm &amp; Extensions <span class="tag tc">Core</span></h2>
+      <div class="logic">
+        <span class="lbl">Why Euclid's Algorithm Works</span>
+        <p>GCD(a, b) = GCD(b, a mod b). The key insight: the GCD of a and b is the same as the GCD of b and the remainder when a is divided by b. Why? Because any common divisor of a and b also divides a - k*b (for any integer k), which includes a mod b. Each step shrinks the numbers, converging to GCD in O(log min(a,b)) steps.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Euclidean GCD Trace: GCD(48, 18)</span>
+GCD(48, 18) = GCD(18, 48 mod 18) = GCD(18, 12)
+GCD(18, 12) = GCD(12, 18 mod 12) = GCD(12,  6)
+GCD(12,  6) = GCD( 6, 12 mod  6) = GCD( 6,  0)
+GCD( 6,  0) = <span class="match">6</span>  (base case: GCD(x,0) = x)</div>
+      <div class="cb"><span class="cm">// GCD — O(log min(a,b))</span>
+<span class="kw">int</span> <span class="fn">gcd</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> b == 0 ? a : gcd(b, a % b); }
+<span class="kw">int</span> <span class="fn">lcm</span>(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> a / gcd(a,b) * b; }   <span class="cm">// Divide first: avoid overflow</span>
+
+<span class="cm">// GCD of entire array</span>
+<span class="kw">int</span> <span class="fn">gcdArray</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> g = a[0];
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) g = gcd(g, x);
+    <span class="kw">return</span> g;
+}
+
+<span class="cm">// How many integers in [1,n] are coprime to n? — Euler's Totient</span>
+<span class="kw">int</span> <span class="fn">eulerTotient</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> result = n;
+    <span class="kw">for</span>(<span class="kw">int</span> p=2; p*p&lt;=n; p++) {
+        <span class="kw">if</span>(n % p == 0) {
+            <span class="kw">while</span>(n % p == 0) n /= p;
+            result -= result/p;            <span class="cm">// φ(n) = n * ∏(1 - 1/p)</span>
+        }
+    }
+    <span class="kw">if</span>(n > 1) result -= result/n;
+    <span class="kw">return</span> result;
+}</div>
+    </div>
+
+    <div class="sec" data-m="series-logic">
+      <h2 class="sh">8.2 &nbsp; Series &amp; Sequence Formulas — The Cheatsheet <span class="tag tt">Reference</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Series</th><th>Formula</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Sum 1 to n</td><td class="good"><code>n*(n+1)/2</code></td><td>1+2+…+100 = 5050</td></tr>
+            <tr><td>Sum of squares</td><td class="good"><code>n*(n+1)*(2n+1)/6</code></td><td>1²+2²+…+n²</td></tr>
+            <tr><td>Sum of cubes</td><td class="good"><code>[n*(n+1)/2]²</code></td><td>(1+2+…+n)²</td></tr>
+            <tr><td>Geometric series (r≠1)</td><td class="good"><code>a*(rⁿ-1)/(r-1)</code></td><td>1+2+4+8+…+2^(n-1) = 2ⁿ-1</td></tr>
+            <tr><td>Count divisors of n</td><td class="ok">Loop to √n, add pairs</td><td>12 → {1,2,3,4,6,12} → 6 divisors</td></tr>
+            <tr><td>Sum of divisors</td><td class="ok">Loop to √n, sum d and n/d</td><td>12 → 1+2+3+4+6+12 = 28</td></tr>
+            <tr><td>Number of digits in n</td><td class="good"><code>floor(log10(n))+1</code></td><td>digits(1000) = 4</td></tr>
+            <tr><td>Triangular numbers</td><td class="good"><code>n*(n+1)/2</code></td><td>1,3,6,10,15,21...</td></tr>
+            <tr><td>Catalan numbers</td><td class="good"><code>C(2n,n)/(n+1)</code></td><td>1,1,2,5,14,42... (balanced parens)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cb"><span class="cm">// Sum of divisors of n — O(√n)</span>
+<span class="kw">long long</span> <span class="fn">sumDivisors</span>(<span class="kw">int</span> n) {
+    <span class="kw">long long</span> sum = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=1; i*i&lt;=n; i++) {
+        <span class="kw">if</span>(n%i==0) {
+            sum += i;
+            <span class="kw">if</span>(i != n/i) sum += n/i;  <span class="cm">// Don't double-count perfect squares</span>
+        }
+    }
+    <span class="kw">return</span> sum;
+}
+
+<span class="cm">// Count trailing zeros in n! — how many times does 5 divide n!</span>
+<span class="cm">// Each factor of 5 with a factor of 2 makes a trailing zero</span>
+<span class="cm">// There are always more 2s than 5s in n!, so count 5s</span>
+<span class="kw">int</span> <span class="fn">trailingZeros</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> count = 0;
+    <span class="kw">while</span>(n &gt;= 5) { n /= 5; count += n; }
+    <span class="kw">return</span> count;
+}
+<span class="cm">// 25! → floor(25/5) + floor(25/25) = 5+1 = 6 trailing zeros</span>
+
+<span class="cm">// Next permutation — find next lexicographically larger arrangement</span>
+<span class="cm">// Algorithm: find rightmost element smaller than its successor,</span>
+<span class="cm">// swap with rightmost element greater than it, then reverse suffix</span>
+<span class="kw">bool</span> <span class="fn">nextPermutation</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> i = a.size()-2;
+    <span class="kw">while</span>(i&gt;=0 &amp;&amp; a[i]&gt;=a[i+1]) i--;          <span class="cm">// Find descent point</span>
+    <span class="kw">if</span>(i&lt;0) <span class="kw">return false</span>;                       <span class="cm">// Already largest permutation</span>
+    <span class="kw">int</span> j = a.size()-1;
+    <span class="kw">while</span>(a[j]&lt;=a[i]) j--;                     <span class="cm">// Find smallest element > a[i]</span>
+    swap(a[i],a[j]);
+    reverse(a.begin()+i+1, a.end());            <span class="cm">// Reverse suffix</span>
+    <span class="kw">return true</span>;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 9 — TWO POINTER & SLIDING WINDOW
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09 · Pointer Techniques</div>
+    <div class="ch-title">Two Pointer &amp; Sliding Window — <em>Converting O(n²) to O(n)</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="two-pointer-logic">
+      <h2 class="sh">9.1 &nbsp; Two Pointer — When and Why It Works <span class="tag tg">Key Pattern</span></h2>
+      <div class="def-box">
+        <span class="lbl">Two Pointer &amp; Sliding Window Signals</span>
+        <p><strong>Signal 1: Contiguous Segments.</strong> "Find the longest/shortest <em>subarray</em> or <em>substring</em>." A sliding window natively represents a contiguous segment.</p>
+        <p><strong>Signal 2: Monotonicity.</strong> Adding an element strictly increases the condition (e.g., sum of positive numbers). Removing an element strictly decreases it. This guarantees we don't have to test every window.</p>
+        <p><strong>Signal 3: O(n²) is too slow.</strong> You see constraints like <code>N = 10⁵</code> and a brute-force nested loop is timing out.</p>
+      </div>
+      <div class="prob"><p>Given array of positive integers and a target sum S, find if there exists a contiguous subarray with sum equal to S.</p></div>
+      <div class="logic">
+        <span class="lbl">Why Two Pointers Work Here</span>
+        <p><strong>Observation:</strong> All elements are positive. This means: expanding the window (moving right) always increases the sum. Shrinking the window (moving left forward) always decreases the sum.</p>
+        <p><strong>Therefore:</strong> If sum &lt; S → expand (move right pointer). If sum &gt; S → shrink (move left pointer). If sum == S → found it. Each pointer moves at most n steps → O(n) total.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Sliding Window: Target=9, Array=[1,2,3,4,5]</span>
+l=0 r=0: sum=1 &lt; 9 → expand right
+l=0 r=1: sum=3 &lt; 9 → expand right
+l=0 r=2: sum=6 &lt; 9 → expand right
+l=0 r=3: sum=10 &gt; 9 → shrink left
+l=1 r=3: sum=9 = 9 → <span class="match">FOUND [2,3,4] ✓</span></div>
+      <div class="cb"><span class="cm">// Subarray with given sum — positive integers only, O(n)</span>
+pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; <span class="fn">subarraySum</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a, <span class="kw">int</span> S) {
+    <span class="kw">int</span> l=0, sum=0;
+    <span class="kw">for</span>(<span class="kw">int</span> r=0; r&lt;a.size(); r++) {
+        sum += a[r];
+        <span class="kw">while</span>(sum &gt; S &amp;&amp; l &lt;= r) sum -= a[l++];  <span class="cm">// Shrink from left</span>
+        <span class="kw">if</span>(sum == S) <span class="kw">return</span> {l, r};               <span class="cm">// Found!</span>
+    }
+    <span class="kw">return</span> {-1, -1};
+}
+
+<span class="cm">// 3Sum — find triplet summing to 0 — O(n²)</span>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; <span class="fn">threeSum</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    sort(a.begin(), a.end());
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; res;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0; i&lt;<span class="kw">int</span>(a.size())-2; i++) {
+        <span class="kw">if</span>(i&gt;0 &amp;&amp; a[i]==a[i-1]) <span class="kw">continue</span>;       <span class="cm">// Skip duplicates</span>
+        <span class="kw">int</span> l=i+1, r=a.size()-1;
+        <span class="kw">while</span>(l&lt;r) {
+            <span class="kw">int</span> s=a[i]+a[l]+a[r];
+            <span class="kw">if</span>(s==0){ res.push_back({a[i],a[l++],a[r--]}); }
+            <span class="kw">else if</span>(s&lt;0) l++;
+            <span class="kw">else</span>          r--;
+        }
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Minimum window with at least k distinct characters — sliding window</span>
+<span class="kw">int</span> <span class="fn">minWindowDistinct</span>(string s, <span class="kw">int</span> k) {
+    unordered_map&lt;<span class="kw">char</span>,<span class="kw">int</span>&gt; freq;
+    <span class="kw">int</span> l=0, distinct=0, minLen=INT_MAX;
+    <span class="kw">for</span>(<span class="kw">int</span> r=0;r&lt;s.size();r++){
+        <span class="kw">if</span>(freq[s[r]]++==0) distinct++;
+        <span class="kw">while</span>(distinct&gt;=k){
+            minLen = min(minLen, r-l+1);
+            <span class="kw">if</span>(--freq[s[l++]]==0) distinct--;
+        }
+    }
+    <span class="kw">return</span> minLen==INT_MAX?0:minLen;
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 10 — BIT LOGIC
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10 · Bit Logic</div>
+    <div class="ch-title">Bit Manipulation Logic — <em>See Numbers as Binary, Think Differently</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="bit-logic">
+      <h2 class="sh">10.1 &nbsp; The Bit Mindset — Common Problems &amp; Their Bit Logic <span class="tag tc">Think in Binary</span></h2>
+      <div class="logic">
+        <span class="lbl">When to Think in Bits</span>
+        <p>Bit manipulation is your go-to when: the problem involves sets (subsets, membership), powers of 2, toggling states (on/off), the constraints are very tight (O(1) space needed), or you spot that XOR cancels pairs. The key is learning to <strong>see problems as operations on binary representations</strong>.</p>
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Bit Operation</th><th>What it does</th><th>When to use</th></tr></thead>
+          <tbody>
+            <tr><td><code>n &amp; 1</code></td><td>Check if odd (last bit)</td><td>Parity check, odd/even</td></tr>
+            <tr><td><code>n &amp; (n-1)</code></td><td>Turn off rightmost set bit</td><td>Check power of 2, count bits</td></tr>
+            <tr><td><code>n | (1&lt;&lt;i)</code></td><td>Set bit i</td><td>Turn on position i</td></tr>
+            <tr><td><code>n &amp; ~(1&lt;&lt;i)</code></td><td>Clear bit i</td><td>Turn off position i</td></tr>
+            <tr><td><code>n ^ (1&lt;&lt;i)</code></td><td>Toggle bit i</td><td>Flip position i</td></tr>
+            <tr><td><code>a ^ a = 0</code></td><td>XOR self = zero</td><td>Find unpaired element</td></tr>
+            <tr><td><code>a ^ 0 = a</code></td><td>XOR with 0 = identity</td><td>XOR trick for missing numbers</td></tr>
+            <tr><td><code>n &lt;&lt; k</code></td><td>Multiply by 2^k</td><td>Fast multiply/divide by powers of 2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cb"><span class="cm">// Power of 2 check — O(1)</span>
+<span class="cm">// If n is power of 2, binary is 1000...0. n-1 is 0111...1. AND = 0.</span>
+<span class="kw">bool</span> <span class="fn">isPowerOf2</span>(<span class="kw">int</span> n) { <span class="kw">return</span> n &gt; 0 &amp;&amp; (n &amp; (n-1)) == 0; }
+
+<span class="cm">// Count set bits (Brian Kernighan's Algorithm) — O(number of set bits)</span>
+<span class="kw">int</span> <span class="fn">countBits</span>(<span class="kw">int</span> n) {
+    <span class="kw">int</span> count = 0;
+    <span class="kw">while</span>(n) { n &amp;= (n-1); count++; }   <span class="cm">// Each step removes one set bit</span>
+    <span class="kw">return</span> count;
+}
+
+<span class="cm">// Find the one element that appears once (all others appear twice)</span>
+<span class="cm">// XOR trick: a^a=0, 0^b=b → pairs cancel, lone element remains</span>
+<span class="kw">int</span> <span class="fn">singleNumber</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> xorSum = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> x : a) xorSum ^= x;
+    <span class="kw">return</span> xorSum;
+}
+
+<span class="cm">// Find two missing numbers using XOR</span>
+<span class="cm">// XOR all [1..n] with all array elements → get XOR of two missing numbers</span>
+<span class="cm">// Find a set bit in that XOR → use it to split into two groups</span>
+
+<span class="cm">// Reverse bits of a 32-bit number</span>
+<span class="kw">uint32_t</span> <span class="fn">reverseBits</span>(<span class="kw">uint32_t</span> n) {
+    <span class="kw">uint32_t</span> res = 0;
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;32;i++) {
+        res = (res &lt;&lt; 1) | (n &amp; 1);     <span class="cm">// Shift res left, bring in LSB of n</span>
+        n &gt;&gt;= 1;
+    }
+    <span class="kw">return</span> res;
+}
+
+<span class="cm">// Swap two numbers without temp variable — XOR swap</span>
+<span class="cm">// a^=b; b^=a; a^=b;</span>
+<span class="cm">// WARNING: fails if a and b are the same variable (a^=a = 0!)</span>
+
+<span class="cm">// Generate all subsets using bitmask — each bit = include/exclude element</span>
+<span class="kw">void</span> <span class="fn">allSubsets</span>(vector&lt;<span class="kw">int</span>&gt;&amp; a) {
+    <span class="kw">int</span> n = a.size();
+    <span class="kw">for</span>(<span class="kw">int</span> mask=0; mask&lt;(1&lt;&lt;n); mask++) {
+        cout &lt;&lt; <span class="st">"{ "</span>;
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;n;i++)
+            <span class="kw">if</span>(mask &amp; (1&lt;&lt;i)) cout &lt;&lt; a[i] &lt;&lt; <span class="st">" "</span>;  <span class="cm">// Bit i set → include a[i]</span>
+        cout &lt;&lt; <span class="st">"}\n"</span>;
+    }
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 11 — ADVANCED LOGIC PATTERNS
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11 · Advanced Patterns</div>
+    <div class="ch-title">Advanced Logic Patterns — <em>Greedy Thinking, DP Intuition &amp; Graph Logic</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="greedy-logic">
+      <h2 class="sh">11.1 &nbsp; Greedy Logic — When Taking the Best Now Is Always Best <span class="tag tg">Critical</span></h2>
+      <div class="def-box">
+        <span class="lbl">Greedy Works When You Can Prove This</span>
+        <p>A greedy algorithm is correct when making the locally optimal choice at each step never prevents a globally optimal solution. The classic proof technique: <strong>"exchange argument"</strong> — if you swap a greedy choice with any other choice, the result doesn't improve. If you can prove this, greedy is correct AND fast.</p>
+      </div>
+      <div class="prob"><p>You have n intervals [start, end]. Find the <strong>minimum number of intervals</strong> to remove to make all remaining intervals non-overlapping.</p></div>
+      <div class="logic">
+        <span class="lbl">Greedy Insight — Sort by End Time</span>
+        <p><strong>Why end time?</strong> At each step, among all intervals that start after our last kept interval ends, we should keep the one that <strong>ends earliest</strong>. This leaves the maximum room for future intervals. Keeping the one that ends latest would "waste" more future space.</p>
+        <p><strong>Algorithm:</strong> Sort by end time. Keep a "last end" pointer. Greedily include each interval if it starts at or after last end. Count excluded intervals.</p>
+      </div>
+      <div class="viz">
+        <span class="viz-label">Non-Overlapping Intervals: [[1,2],[2,3],[3,4],[1,3]]</span>
+Sort by end time: [1,2] [2,3] [1,3] [3,4]
+
+Greedy pass:
+  [1,2]: include, lastEnd=2
+  [2,3]: starts at 2 >= lastEnd=2 → include, lastEnd=3
+  [1,3]: starts at 1 &lt; lastEnd=3  → <span class="match">REMOVE (overlap)</span>
+  [3,4]: starts at 3 >= lastEnd=3 → include, lastEnd=4
+
+Removed: 1 interval. Answer: <span class="match">1</span></div>
+      <div class="cb"><span class="cm">// Minimum intervals to remove (non-overlapping)</span>
+<span class="kw">int</span> <span class="fn">eraseOverlapIntervals</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; intervals) {
+    sort(intervals.begin(), intervals.end(),
+         [](<span class="kw">auto</span>&amp; a, <span class="kw">auto</span>&amp; b){ <span class="kw">return</span> a[1] &lt; b[1]; });   <span class="cm">// Sort by END time</span>
+    <span class="kw">int</span> removed = 0, lastEnd = INT_MIN;
+    <span class="kw">for</span>(<span class="kw">auto</span>&amp; iv : intervals) {
+        <span class="kw">if</span>(iv[0] &lt; lastEnd) removed++;      <span class="cm">// Overlap → remove this interval</span>
+        <span class="kw">else</span> lastEnd = iv[1];               <span class="cm">// No overlap → keep, update lastEnd</span>
+    }
+    <span class="kw">return</span> removed;
+}
+
+<span class="cm">// Meeting rooms — can a person attend all meetings?</span>
+<span class="kw">bool</span> <span class="fn">canAttendAll</span>(vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;&amp; meetings) {
+    sort(meetings.begin(), meetings.end());  <span class="cm">// Sort by start time</span>
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;meetings.size();i++)
+        <span class="kw">if</span>(meetings[i].first &lt; meetings[i-1].second) <span class="kw">return false</span>;
+    <span class="kw">return true</span>;
+}</div>
+    </div>
+
+    <div class="sec" data-m="dp-intuition">
+      <h2 class="sh">11.2 &nbsp; DP Intuition — From Recursion to Bottom-Up <span class="tag tp">Advanced</span></h2>
+      <div class="logic">
+        <span class="lbl">The DP Thought Process — in Order</span>
+        <p><strong>Step 1:</strong> Solve with recursion first. Don't think about DP yet. Just write the recursive solution that expresses the answer in terms of smaller subproblems.</p>
+        <p><strong>Step 2:</strong> Add memoization. Notice which recursive calls repeat. Cache their results. This is "top-down DP" and it's usually enough.</p>
+        <p><strong>Step 3:</strong> Convert to bottom-up (tabulation). Fill the table from smaller to larger subproblems. Usually gives better constant factors and avoids stack overflow.</p>
+        <p><strong>Step 4:</strong> Optimize space. If you only ever look at the previous row/state, you can compress the 2D table to 1D.</p>
+      </div>
+      <div class="prob"><p>Longest Common Subsequence (LCS) of two strings. This is the classic 2D DP problem.</p></div>
+      <div class="viz">
+        <span class="viz-label">LCS DP Table: "ABCBDAB" vs "BDCAB"</span>
+dp[i][j] = LCS of s1[0..i-1] and s2[0..j-1]
+
+     ""  B  D  C  A  B
+  ""  0  0  0  0  0  0
+  A   0  0  0  0  1  1
+  B   0  1  1  1  1  2
+  C   0  1  1  2  2  2
+  B   0  1  1  2  2  3
+  D   0  1  2  2  2  3
+  A   0  1  2  2  3  3
+  B   0  1  2  2  3  <span class="match">4</span>
+
+If s1[i]==s2[j]: dp[i][j] = dp[i-1][j-1] + 1
+Else:            dp[i][j] = max(dp[i-1][j], dp[i][j-1])</div>
+      <div class="cb"><span class="cm">// LCS — Classic 2D DP, O(m*n) time and space</span>
+<span class="kw">int</span> <span class="fn">lcs</span>(string a, string b) {
+    <span class="kw">int</span> m=a.size(), n=b.size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(m+1, vector&lt;<span class="kw">int</span>&gt;(n+1, 0));
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=m;i++)
+        <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;=n;j++)
+            dp[i][j] = (a[i-1]==b[j-1]) ? dp[i-1][j-1]+1
+                                         : max(dp[i-1][j], dp[i][j-1]);
+    <span class="kw">return</span> dp[m][n];
+}
+
+<span class="cm">// Space-optimized to O(n): only need previous row</span>
+<span class="kw">int</span> <span class="fn">lcsOpt</span>(string a, string b) {
+    <span class="kw">int</span> m=a.size(), n=b.size();
+    vector&lt;<span class="kw">int</span>&gt; prev(n+1,0), curr(n+1,0);
+    <span class="kw">for</span>(<span class="kw">int</span> i=1;i&lt;=m;i++){
+        <span class="kw">for</span>(<span class="kw">int</span> j=1;j&lt;=n;j++)
+            curr[j]=(a[i-1]==b[j-1])?prev[j-1]+1:max(prev[j],curr[j-1]);
+        swap(prev,curr);
+    }
+    <span class="kw">return</span> prev[n];
+}
+
+<span class="cm">// Longest Palindromic Subsequence = LCS(s, reverse(s))</span>
+<span class="kw">int</span> <span class="fn">longestPalSubseq</span>(string s) {
+    string rev = s;
+    reverse(rev.begin(), rev.end());
+    <span class="kw">return</span> lcs(s, rev);
+}
+
+<span class="cm">// Unbounded Knapsack — items can be used multiple times</span>
+<span class="kw">int</span> <span class="fn">unboundedKnapsack</span>(vector&lt;<span class="kw">int</span>&gt;&amp; wt, vector&lt;<span class="kw">int</span>&gt;&amp; val, <span class="kw">int</span> W) {
+    vector&lt;<span class="kw">int</span>&gt; dp(W+1, 0);
+    <span class="kw">for</span>(<span class="kw">int</span> w=1;w&lt;=W;w++)
+        <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;wt.size();i++)
+            <span class="kw">if</span>(wt[i]&lt;=w) dp[w]=max(dp[w], dp[w-wt[i]]+val[i]);
+    <span class="kw">return</span> dp[W];
+}
+<span class="cm">// Key difference from 0/1 knapsack: iterate capacity FORWARD (reuse items)</span>
+<span class="cm">// 0/1 knapsack: iterate capacity BACKWARD (each item used at most once)</span></div>
+    </div>
+
+    <div class="sec" data-m="graph-logic">
+      <h2 class="sh">11.3 &nbsp; Graph Logic — Recognizing Graph Problems in Disguise <span class="tag tc">Pattern Shift</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Grid = Graph</div>
+          <p>Any grid problem where you move between cells (up/down/left/right) is a graph. Cells are nodes, valid moves are edges. BFS finds shortest path. DFS finds connected regions (islands).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Dependencies = DAG</div>
+          <p>"Task A must complete before B" → directed edge A→B. Finding valid order = topological sort. Detecting impossible (circular dependency) = cycle detection.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">States = Nodes</div>
+          <p>BFS/DFS doesn't need a literal graph. States (board positions, configurations) are nodes, transitions are edges. Shortest path = fewest transitions to reach goal state.</p>
+        </div>
+      </div>
+      <div class="cb"><span class="cm">// Number of Islands — count connected regions of '1' in grid</span>
+<span class="cm">// Classic DFS on grid — "flood fill" pattern</span>
+<span class="kw">int</span> <span class="fn">numIslands</span>(vector&lt;vector&lt;<span class="kw">char</span>&gt;&gt;&amp; grid) {
+    <span class="kw">int</span> R=grid.size(), C=grid[0].size(), count=0;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+
+    <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>,<span class="kw">int</span>)&gt; dfs = [&amp;](<span class="kw">int</span> r, <span class="kw">int</span> c){
+        <span class="kw">if</span>(r&lt;0||r&gt;=R||c&lt;0||c&gt;=C||grid[r][c]!='1') <span class="kw">return</span>;
+        grid[r][c] = '0';                            <span class="cm">// Mark as visited</span>
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++) dfs(r+dx[d], c+dy[d]); <span class="cm">// Visit all 4 neighbors</span>
+    };
+    <span class="kw">for</span>(<span class="kw">int</span> i=0;i&lt;R;i++) <span class="kw">for</span>(<span class="kw">int</span> j=0;j&lt;C;j++)
+        <span class="kw">if</span>(grid[i][j]=='1'){ dfs(i,j); count++; }   <span class="cm">// Each new DFS = new island</span>
+    <span class="kw">return</span> count;
+}
+
+<span class="cm">// Shortest path in unweighted grid — BFS</span>
+<span class="kw">int</span> <span class="fn">shortestPath</span>(vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; grid, pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; src, pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; dst) {
+    <span class="kw">int</span> R=grid.size(), C=grid[0].size();
+    vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dist(R, vector&lt;<span class="kw">int</span>&gt;(C,-1));
+    queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q;
+    q.push(src); dist[src.first][src.second]=0;
+    <span class="kw">int</span> dx[]={0,0,1,-1}, dy[]={1,-1,0,0};
+    <span class="kw">while</span>(!q.empty()){
+        <span class="kw">auto</span> [r,c]=q.front(); q.pop();
+        <span class="kw">if</span>(make_pair(r,c)==dst) <span class="kw">return</span> dist[r][c];
+        <span class="kw">for</span>(<span class="kw">int</span> d=0;d&lt;4;d++){
+            <span class="kw">int</span> nr=r+dx[d], nc=c+dy[d];
+            <span class="kw">if</span>(nr&gt;=0&amp;&amp;nr&lt;R&amp;&amp;nc&gt;=0&amp;&amp;nc&lt;C&amp;&amp;grid[nr][nc]==0&amp;&amp;dist[nr][nc]==-1){
+                dist[nr][nc]=dist[r][c]+1; q.push({nr,nc});
+            }
+        }
+    }
+    <span class="kw">return</span> -1;  <span class="cm">// Unreachable</span>
+}</div>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     CHAPTER 12 — LOGIC MASTER REFERENCE
+═══════════════════════════════════════ -->
+<div class="chapter" id="ch12">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 12 · The Reference</div>
+    <div class="ch-title">Logic Master Reference — <em>The Cheatsheet You'll Use Every Session</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="problem-signal">
+      <h2 class="sh">12.1 &nbsp; Problem Signal → Logic Map <span class="tag tg">Pin This</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>You Read / Notice</th><th>Think About</th><th>Start With</th><th>Concrete Example</th></tr></thead>
+          <tbody>
+            <tr><td>"Find if exists / is possible"</td><td class="good">Boolean logic, BFS/DFS, two pointers</td><td>Can you reduce to yes/no sub-question?</td><td>"Is there a path from A to B?"</td></tr>
+            <tr><td>"Minimum / maximum value"</td><td class="good">Binary search on answer, greedy, DP</td><td>Is there a monotone property?</td><td>"Minimum days to ship all cargo."</td></tr>
+            <tr><td>"Count ways / number of X"</td><td class="good">DP, combinatorics, inclusion-exclusion</td><td>Can I define dp[i] = count up to i?</td><td>"Ways to climb N stairs."</td></tr>
+            <tr><td>"All / every / enumerate"</td><td class="good">Backtracking, bitmask</td><td>Decision tree: what choices exist at each step?</td><td>"Generate all valid parentheses."</td></tr>
+            <tr><td>"Contiguous subarray"</td><td class="good">Sliding window, prefix sum, Kadane's</td><td>Try prefix sum first: sum[r]-sum[l]</td><td>"Max sum subarray of size K."</td></tr>
+            <tr><td>"Pair / triplet summing to X"</td><td class="good">Sort + two pointers, hash map</td><td>Fix one element, find rest with two pointer</td><td>"3Sum problem."</td></tr>
+            <tr><td>"Sorted array / binary search"</td><td class="good">Binary search variants</td><td>Lower bound? Upper bound? On answer?</td><td>"Find first occurrence of X."</td></tr>
+            <tr><td>"Grid / 2D movement"</td><td class="good">BFS (shortest), DFS (reachability/area)</td><td>BFS if shortest path, DFS if just connectivity</td><td>"Number of Islands."</td></tr>
+            <tr><td>"Dependencies / ordering"</td><td class="good">Topological sort, DAG DP</td><td>Build adjacency list, run Kahn's algorithm</td><td>"Course Schedule (prerequisites)."</td></tr>
+            <tr><td>"Overlapping subproblems"</td><td class="good">Memoization → DP table</td><td>Define the state first: what uniquely identifies a subproblem?</td><td>"Longest Common Subsequence."</td></tr>
+            <tr><td>"Remove/add elements dynamically"</td><td class="good">Heap, segment tree, BIT</td><td>Heap if only need max/min. SegTree for range ops.</td><td>"Running median of a data stream."</td></tr>
+            <tr><td>"Digits of a number"</td><td class="good">Modular arithmetic, digit DP</td><td>Extract digits: while(n) { d=n%10; n/=10; }</td><td>"Sum of digits until single digit."</td></tr>
+            <tr><td>"Strings, character frequency"</td><td class="good">Frequency array[26], sliding window</td><td>Build freq map in O(n), query O(1)</td><td>"Longest substring without repeats."</td></tr>
+            <tr><td>"Intervals / schedules"</td><td class="good">Sort by start or end, greedy, sweep line</td><td>Sort by end for max non-overlapping. Sort by start for merge.</td><td>"Merge Overlapping Intervals."</td></tr>
+            <tr><td>"XOR, bit toggling, subset"</td><td class="good">Bit manipulation</td><td>Draw small examples in binary. XOR for pairing/cancellation.</td><td>"Find the single non-repeating number."</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="complexity-guide">
+      <h2 class="sh">12.2 &nbsp; Common Logic Patterns with Complexities <span class="tag tc">Reference</span></h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Digit Extraction</div>
+          <p>Get digits: <code>while(n) { d=n%10; n/=10; }</code><br>
+          Reverse digits: <code>while(n) { rev=rev*10+n%10; n/=10; }</code><br>
+          Digit count: <code>to_string(n).length()</code></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Array Tricks</div>
+          <p>Prefix sum for range queries.<br>
+          Sort + binary search for pair finding.<br>
+          Two pointers on sorted arrays.<br>
+          Hash map for O(1) membership check.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">String Tricks</div>
+          <p>Frequency array for anagram/permutation.<br>
+          Two pointers for palindrome.<br>
+          Concatenate + Z-function for pattern matching.<br>
+          Sort chars for canonical anagram key.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">DP State Ideas</div>
+          <p>dp[i] = answer for first i elements.<br>
+          dp[i][j] = answer for range [i,j].<br>
+          dp[i][j] = answer using i items with j capacity.<br>
+          dp[mask] = answer for subset mask.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Recursion Base Cases</div>
+          <p>n=0 → return 0 or empty.<br>
+          n=1 → return the element itself.<br>
+          l > r → return 0 (empty range).<br>
+          visited → return (avoid infinite loop).</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Greedy Signals</div>
+          <p>Problem has optimal substructure AND greedy choice property.<br>
+          Often: sort first, then process linearly.<br>
+          Exchange argument proves correctness.<br>
+          No "undo" is needed.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="logic-wisdom">
+      <h2 class="sh">12.3 &nbsp; The Logic Builder's Wisdom — 20 Rules for Life <span class="tag tg">Keep These</span></h2>
+      <ul class="pl arr">
+        <li><strong>Always solve by hand first.</strong> 3 small examples. The pattern appears. Code follows.</li>
+        <li><strong>Read constraints before thinking.</strong> They narrow the universe of valid solutions to a handful.</li>
+        <li><strong>Brute force is your friend.</strong> It gives you correct answers to test against. It reveals structure.</li>
+        <li><strong>If you need O(n²), ask: is there a sorted structure or hash map that gives O(n log n) or O(n)?</strong></li>
+        <li><strong>Stuck? Simplify.</strong> What if n = 2? What if all elements are equal? Edge cases reveal the core logic.</li>
+        <li><strong>Every subarray problem has a prefix sum version.</strong> sum(l,r) = prefix[r+1] - prefix[l].</li>
+        <li><strong>Every sorted array problem has a binary search version.</strong> Even if the answer is binary searched, not the array.</li>
+        <li><strong>Sliding window when:</strong> contiguous elements, fixed or variable window, positive elements (for sum target).</li>
+        <li><strong>Two pointers when:</strong> sorted array, pairs/triplets, move each pointer exactly once total.</li>
+        <li><strong>DFS when:</strong> you need to explore all paths, connectivity, or enumerate all solutions.</li>
+        <li><strong>BFS when:</strong> shortest path, minimum steps, level-order traversal.</li>
+        <li><strong>Greedy when:</strong> sorting + one pass solves it, and you can prove no swap improves the answer.</li>
+        <li><strong>DP when:</strong> overlapping subproblems, optimal substructure, recursion with memoization feels natural.</li>
+        <li><strong>The state definition is the hardest part of DP.</strong> Once you have dp[i] = X correctly, the transition is usually obvious.</li>
+        <li><strong>Don't optimize too early.</strong> Correct first. Fast second. O(n²) that's correct beats O(n log n) that's wrong.</li>
+        <li><strong>Integer overflow kills.</strong> Use long long whenever multiplication is involved, or values exceed 10⁴.</li>
+        <li><strong>Off-by-one errors live in loops and binary search.</strong> Think carefully about loop bounds: < vs <=, 0-indexed vs 1-indexed.</li>
+        <li><strong>XOR cancels pairs.</strong> Find the singleton in O(n) time, O(1) space. Remember this forever.</li>
+        <li><strong>Frequency maps are underused.</strong> Any character/element counting → build freq in O(n), use O(1).</li>
+        <li><strong>The best programmer isn't the one who codes fastest — it's the one who makes fewest wrong assumptions.</strong></li>
+      </ul>
+    </div>
+
+    <a class="bt" href="#top">↑ back to top</a>
+  </div>
+</div>
+
+<div class="footer">C++ Mastery Series · Complete Reference · File 07 of 07 · The Logic Builder · Problem → Think → Visualize → Code</div>
+
+</div><!-- .book -->
+
+</div><!-- /hub-content-wrap -->
+<!-- ══ HUB FABs ══ -->
+<div class="hub-fab-group" role="group" aria-label="Quick actions">
+  <button class="hub-fab-notes" onclick="hubTogglePanel()"
+          aria-label="Open notes and bookmarks" title="Notes &amp; Bookmarks">
+    📝
+  </button>
+  <button class="hub-fab-run" onclick="hubRunCode()" aria-label="Run code in online compiler">
+    <span class="hub-fab-run-icon">🚀</span>
+    <span class="hub-fab-run-label">Run Code</span>
+  </button>
+</div>
+
+<!-- ══ HUB NOTES PANEL ══ -->
+<aside class="hub-panel" id="hubPanel" role="complementary" aria-label="Study workspace">
+  <div class="hub-panel-head">
+    <span class="hub-panel-title">Study Workspace</span>
+    <button class="hub-panel-close" onclick="hubTogglePanel()" aria-label="Close panel">✕</button>
+  </div>
+  <div class="hub-panel-tabs" role="tablist">
+    <button class="hub-ptab hub-ptab-active" role="tab" aria-selected="true"
+            data-htab="notes" onclick="hubSwitchTab('notes')">📝 Notes</button>
+    <button class="hub-ptab" role="tab" aria-selected="false"
+            data-htab="bookmarks" onclick="hubSwitchTab('bookmarks')">🔖 Bookmarks</button>
+  </div>
+  <div class="hub-panel-body">
+    <div class="hub-tab-pane hub-tab-active" id="hub-pane-notes" role="tabpanel">
+      <textarea class="hub-textarea" id="hubNoteInput"
+        placeholder="Write your notes, observations, traces...&#10;&#10;Saved globally across all modules."
+        aria-label="Note input"></textarea>
+      <button class="hub-save-btn" onclick="hubSaveNote()">+ Save Note</button>
+      <span class="hub-list-label">Saved Notes</span>
+      <div id="hubNotesList" aria-live="polite"></div>
+    </div>
+    <div class="hub-tab-pane" id="hub-pane-bookmarks" role="tabpanel">
+      <div id="hubBmList" aria-live="polite"></div>
+    </div>
+  </div>
+</aside>
+
+<div class="hub-toast" id="hubToast" role="status" aria-live="polite"></div>
+
+<!-- ══ HUB SCRIPT ══ -->
+<script>
+(function() {
+  'use strict';
+  var FILE_ID   = 'cpp-07-logic';
+  var FILE_DISP = '07 · Logic Builder';
+  var KEY_DARK      = 'cpp_dark';
+  var KEY_NOTES     = 'cpp_notes';
+  var KEY_BOOKMARKS = 'cpp_bookmarks';
+
+  function store(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+  }
+  function load(key, fallback) {
+    try {
+      var raw = localStorage.getItem(key);
+      return raw !== null ? JSON.parse(raw) : fallback;
+    } catch(e) { return fallback; }
+  }
+  function el(id) { return document.getElementById(id); }
+
+  function applyTheme(dark) {
+    if (dark) document.documentElement.setAttribute('data-hub-dark', 'true');
+    else document.documentElement.removeAttribute('data-hub-dark');
+    var cb = el('hubThemeCheckbox');
+    if (cb) cb.checked = !!dark;
+  }
+
+  window.hubToggleTheme = function(checked) {
+    store(KEY_DARK, checked ? '1' : '0');
+    applyTheme(checked);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.postMessage({ dark: checked });
+      bc.close();
+    } catch(e) {}
+  };
+
+  window.hubGoHome = function() {
+    window.location.href = 'cpp-dashboard.html';
+  };
+
+  window.hubScrollTOC = function() {
+    var toc = document.querySelector('.toc, .toc-grid, #top');
+    if (toc) toc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  var panelOpen = false;
+  window.hubTogglePanel = function() {
+    panelOpen = !panelOpen;
+    var p = el('hubPanel');
+    if (p) p.classList.toggle('hub-open', panelOpen);
+    if (panelOpen) { hubRenderNotes(); hubRenderBms(); }
+  };
+
+  window.hubSwitchTab = function(tab) {
+    document.querySelectorAll('.hub-ptab').forEach(function(t) {
+      t.classList.toggle('hub-ptab-active', t.dataset.htab === tab);
+      t.setAttribute('aria-selected', t.dataset.htab === tab ? 'true' : 'false');
+    });
+    document.querySelectorAll('.hub-tab-pane').forEach(function(p) {
+      p.classList.toggle('hub-tab-active', p.id === 'hub-pane-' + tab);
+    });
+  };
+
+  var toastTimer;
+  function toast(msg) {
+    var t = el('hubToast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.add('hub-show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() { t.classList.remove('hub-show'); }, 2200);
+  }
+
+  window.hubRunCode = function() {
+    window.open('https://onecompiler.com/cpp', '_blank', 'noopener,noreferrer');
+  };
+
+  window.hubSaveNote = function() {
+    var input = el('hubNoteInput');
+    var text = input ? input.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    var notes = load(KEY_NOTES, []);
+    notes.unshift({
+      id: Date.now(),
+      file: FILE_DISP,
+      text: text,
+      time: new Date().toLocaleString()
+    });
+    store(KEY_NOTES, notes);
+    if (input) input.value = '';
+    hubRenderNotes();
+    toast('Note saved ✓');
+  };
+
+  window.hubDeleteNote = function(id) {
+    var notes = load(KEY_NOTES, []).filter(function(n) { return n.id !== id; });
+    store(KEY_NOTES, notes);
+    hubRenderNotes();
+    toast('Note deleted');
+  };
+
+  function hubRenderNotes() {
+    var list = el('hubNotesList');
+    if (!list) return;
+    var notes = load(KEY_NOTES, []);
+    if (!notes.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">📝</span>No notes yet.<br>Write something and hit Save.</div>';
+      return;
+    }
+    list.innerHTML = notes.map(function(n) {
+      return '<div class="hub-note-card">' +
+        '<span class="hub-note-meta">' + escHtml(n.file || '') + ' · ' + escHtml(n.time || '') + '</span>' +
+        '<div class="hub-note-text">' + escHtml(n.text).replace(/\n/g, '<br>') + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteNote(' + n.id + ')" aria-label="Delete note">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function getBms() { return load(KEY_BOOKMARKS, []); }
+
+  function hubToggleBm(sectionId, sectionText, btn) {
+    var bms = getBms();
+    var idx = bms.findIndex(function(b) { return b.sectionId === sectionId; });
+    if (idx > -1) {
+      bms.splice(idx, 1);
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.remove('hub-saved');
+      toast('Bookmark removed');
+    } else {
+      bms.unshift({ id: Date.now(), sectionId: sectionId, file: FILE_DISP, section: sectionText });
+      store(KEY_BOOKMARKS, bms);
+      if (btn) btn.classList.add('hub-saved');
+      toast('Bookmarked ✓');
+    }
+    hubRenderBms();
+  }
+
+  window.hubDeleteBm = function(id) {
+    var bms = getBms().filter(function(b) { return b.id !== id; });
+    store(KEY_BOOKMARKS, bms);
+    document.querySelectorAll('.hub-bm-btn').forEach(function(btn) {
+      if (btn.dataset.secId) {
+        var found = bms.find(function(b) { return b.sectionId === btn.dataset.secId; });
+        btn.classList.toggle('hub-saved', !!found);
+      }
+    });
+    hubRenderBms();
+    toast('Bookmark removed');
+  };
+
+  function hubRenderBms() {
+    var list = el('hubBmList');
+    if (!list) return;
+    var bms = getBms();
+    if (!bms.length) {
+      list.innerHTML = '<div class="hub-empty"><span class="hub-empty-icon">🔖</span>No bookmarks yet.<br><br>Click the ☆ on any section heading.</div>';
+      return;
+    }
+    list.innerHTML = bms.map(function(b) {
+      return '<div class="hub-bm-card">' +
+        '<span class="hub-bm-file-tag">' + escHtml(b.file) + '</span>' +
+        '<div class="hub-bm-title">' + escHtml(b.section) + '</div>' +
+        '<button class="hub-card-del" onclick="hubDeleteBm(' + b.id + ')" aria-label="Remove bookmark">✕</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function injectBmBtns() {
+    var savedBms = getBms();
+    var savedIds = savedBms.filter(function(b) { return b.file === FILE_DISP; })
+                           .map(function(b) { return b.sectionId; });
+    var headings = document.querySelectorAll('h2.sh, h2.qnum, h2[class*="sh"]');
+    headings.forEach(function(h, i) {
+      if (h.querySelector('.hub-bm-btn')) return;
+      var secId = FILE_ID + '-s' + i;
+      var text = h.textContent.replace(/[★☆✕\+]/g, '').trim().substring(0, 80);
+      var btn = document.createElement('button');
+      btn.className = 'hub-bm-btn' + (savedIds.indexOf(secId) > -1 ? ' hub-saved' : '');
+      btn.dataset.secId = secId;
+      btn.setAttribute('aria-label', 'Bookmark: ' + text);
+      btn.setAttribute('title', 'Bookmark this section');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        hubToggleBm(secId, text, btn);
+      });
+      h.appendChild(btn);
+    });
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (panelOpen) hubTogglePanel();
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'n') {
+      e.preventDefault();
+      hubTogglePanel();
+    }
+  });
+
+  (function init() {
+    var dark = load(KEY_DARK, '0') === '1';
+    applyTheme(dark);
+    try {
+      var bc = new BroadcastChannel('cpp_hub_theme');
+      bc.addEventListener('message', function(ev) {
+        applyTheme(ev.data.dark);
+        store(KEY_DARK, ev.data.dark ? '1' : '0');
+      });
+    } catch(e) {}
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', injectBmBtns);
+    } else {
+      injectBmBtns();
+    }
+  })();
+})();
+</script>
+
+
+
+
+
+<!-- COPY-BTN-ENGINE -->
+<script>
+(function() {
+  var CLEAN_RE = /^(?:Copy|Copied)[\s\S]{0,2}/;
+  function initCopyBtns() {
+    var blocks = document.querySelectorAll('.cb, .gv, .trace, .qcode, .qtrace');
+    blocks.forEach(function(block) {
+      if (block.querySelector('.copy-btn')) return;
+      if (window.getComputedStyle(block).position === 'static') block.style.position = 'relative';
+      if (!block.style.paddingTop || parseInt(block.style.paddingTop) < 36) block.style.paddingTop = '36px';
+      var btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.setAttribute('aria-label', 'Copy code to clipboard');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var raw = block.innerText || block.textContent || '';
+        var text = raw.replace(CLEAN_RE, '').trim();
+        function done() { btn.textContent = 'Copied!'; btn.classList.add('copied'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function() { fb(text); });
+        } else { fb(text); }
+        function fb(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;'; document.body.appendChild(ta); ta.focus(); ta.select(); try { document.execCommand('copy'); done(); } catch(ex) {} document.body.removeChild(ta); }
+      });
+      block.insertBefore(btn, block.firstChild);
+    });
+  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initCopyBtns); } else { initCopyBtns(); }
+})();
+</script>
+
+<script id="aryan-copyright-js">
+(function(){
+  'use strict';
+  var CR_ID='aryan-cr';
+  var CR_HTML='<span>\u00a9 2025 Aryan</span>&nbsp;&nbsp;\u00b7&nbsp;&nbsp;All rights reserved. Unauthorized reproduction prohibited.';
+
+  function ensureCR(){
+    var el=document.getElementById(CR_ID);
+    if(!el){
+      el=document.createElement('div');
+      el.id=CR_ID;
+      document.body.appendChild(el);
+    }
+    if(el.innerHTML!==CR_HTML) el.innerHTML=CR_HTML;
+    if(el.parentNode!==document.body) document.body.appendChild(el);
+  }
+
+  function init(){
+    ensureCR();
+    var obs=new MutationObserver(ensureCR);
+    obs.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
+})();
+</script>
+
+</body>
+</html>

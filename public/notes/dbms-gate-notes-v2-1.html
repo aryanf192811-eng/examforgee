@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS — Relational Model, Keys, FDs &amp; Normal Forms · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+/* COVER */
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+/* TOC */
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+/* CHAPTER */
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+/* SECTION */
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.hi-g{background:var(--hl-g);padding:0 3px;border-radius:2px;}
+.hi-r{background:var(--hl-r);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;}
+.c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+/* Gantt chart */
+.gantt{overflow-x:auto;margin:14px 0;}
+.gantt-row{display:flex;align-items:stretch;font-family:'Courier New',monospace;font-size:13px;margin:3px 0;}
+.gantt-label{min-width:80px;padding:4px 8px;font-family:var(--hand);font-size:11px;color:var(--ink3);display:flex;align-items:center;}
+.gantt-block{padding:5px 0;text-align:center;border:1px solid var(--ink);font-size:12px;font-weight:bold;}
+.gb-p1{background:var(--hl-b);}
+.gb-p2{background:var(--hl-g);}
+.gb-p3{background:var(--hl-o);}
+.gb-p4{background:var(--hl-p);}
+.gb-idle{background:var(--paper3);color:var(--ink3);}
+.gantt-tick{display:flex;margin-left:80px;font-family:'Courier New',monospace;font-size:11px;color:var(--ink3);}
+.gantt-t{text-align:center;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Database Management Systems</div>
+    <h1>Database Management<br><em>Systems</em></h1>
+    <p class="cover-desc">A complete theory and revision guide covering the Relational Model, Functional Dependencies, and Normal Forms — from first principles to advanced GATE-level reasoning.</p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Why DBMS?</span>
+      <span class="chip">Ch 2 · Relational Model</span>
+      <span class="chip">Ch 3 · Keys</span>
+      <span class="chip">Ch 4 · Functional Dependencies</span>
+      <span class="chip">Ch 5 · Armstrong's Axioms &amp; Closure</span>
+      <span class="chip">Ch 6 · Normal Forms</span>
+      <span class="chip">Ch 7 · Decomposition</span>
+      <span class="chip">Ch 8 · GATE Traps</span>
+    </div>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Why DBMS Exists — The Problem Statement</a>
+    <a href="#ch2"><span class="tn">02</span>The Relational Model</a>
+    <a href="#ch3"><span class="tn">03</span>Keys — Types and Properties</a>
+    <a href="#ch4"><span class="tn">04</span>Functional Dependencies</a>
+    <a href="#ch5"><span class="tn">05</span>Armstrong's Axioms & Closure</a>
+    <a href="#ch6"><span class="tn">06</span>Normal Forms — 1NF to BCNF</a>
+    <a href="#ch7"><span class="tn">07</span>Decomposition</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps & Quick Revision</a>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 1 — WHY DBMS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Why DBMS Exists — <em>The Problem Statement</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">1.1 &nbsp; The Core Problem</h2>
+      <p>
+        Before diving into any definition, you need to understand <strong>why this whole subject exists</strong>. You have real-world information — students, courses, employees, transactions — and you need to store it digitally in a way that avoids three fundamental problems.
+      </p>
+      <p>
+        Imagine storing all your data in a single flat file or a poorly designed spreadsheet. What goes wrong?
+      </p>
+
+      <div class="tbl">
+        <div class="ct">Insert Anomaly</div>
+        <p>You cannot record a new department unless at least one student is enrolled in it. The fact "CSE department exists" is trapped inside the student record.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct">Delete Anomaly</div>
+        <p>Deleting the last student from CSE accidentally erases the fact that Dr. Rao heads CSE. One delete destroys two independent pieces of information.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct">Update Anomaly</div>
+        <p>Dr. Rao's name changes. You must now update every single row that belongs to CSE. Miss one row and your database becomes inconsistent — two different names for the same person.</p>
+      </div>
+
+      <p style="margin-top:16px;">
+        All three anomalies arise from the same root cause: <mark>storing two independent facts in the same row</mark>. The relational model, functional dependencies, and normal forms are a systematic framework to detect and eliminate this problem.
+      </p>
+
+      <div class="tip-box">
+        <span class="lbl">The Golden Rule</span>
+        <p>Every concept in normalization exists to enforce one principle: <strong>each fact should be stored exactly once, in exactly one place.</strong> Keep returning to this when you feel lost.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">1.2 &nbsp; Three Properties a Good Database Must Have</h2>
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Consistency</div>
+          <p>No contradictions anywhere in the data. The same fact cannot have two different values in two places.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Non-Redundancy</div>
+          <p>No unnecessary repetition of facts. A fact stored in <em>n</em> places must be updated in <em>n</em> places — that's <em>n</em> chances for inconsistency.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Queryability</div>
+          <p>You can ask any question about the data and get a correct, consistent answer through a well-defined algebra.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 2 — RELATIONAL MODEL
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">The <em>Relational Model</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">2.1 &nbsp; What Is a Relation? <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>relation</strong> is a named, two-dimensional structure consisting of a set of attributes (columns) and a set of tuples (rows), where each tuple assigns exactly one atomic value from each attribute's domain.</p>
+      </div>
+
+      <p>
+        The word "set" here is precise and important. A set has no duplicates and no ordering. This means two things about a relation that most beginners miss:
+      </p>
+      <ul class="pl arr">
+        <li>There are <strong>no duplicate rows</strong> in a true relation. Two identical tuples cannot coexist.</li>
+        <li>The <strong>order of rows does not matter</strong>. There is no "first row" or "last row" in the mathematical sense.</li>
+        <li>The <strong>order of columns does not matter</strong> either. Each value is accessed by attribute name, not by position.</li>
+      </ul>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap</span>
+        <p>A question may present a table with duplicate rows and ask "is this a valid relation?" The answer is <strong>no</strong> — a relation is a set of tuples and sets cannot have duplicates. SQL tables (called <em>bags</em> or <em>multisets</em>) do allow duplicates, but the mathematical relational model does not.</p>
+      </div>
+
+      <h3 class="ssh">Running Example Used Throughout These Notes</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>RollNo</th><th>Name</th><th>Dept</th><th>DeptHead</th></tr></thead>
+          <tbody>
+            <tr><td>101</td><td>Aryan</td><td>CSE</td><td>Dr. Rao</td></tr>
+            <tr><td>102</td><td>Meera</td><td>ECE</td><td>Dr. Sen</td></tr>
+            <tr><td>103</td><td>Karan</td><td>CSE</td><td>Dr. Rao</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:14px; font-family: var(--hand-font); color:var(--ink3); margin-top:-8px;">
+        Relation: <code>Student</code> &nbsp;|&nbsp; 4 attributes &nbsp;|&nbsp; 3 tuples
+      </p>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">2.2 &nbsp; Attribute, Tuple, Domain</h2>
+
+      <h3 class="ssh">Attribute</h3>
+      <p>
+        An attribute is a named column. In our example: <code>RollNo</code>, <code>Name</code>, <code>Dept</code>, <code>DeptHead</code>. The number of attributes in a relation is called its <strong>degree</strong>. Our <code>Student</code> relation has degree 4.
+      </p>
+
+      <h3 class="ssh">Domain</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>The <strong>domain</strong> of an attribute is the complete set of valid values that attribute is permitted to hold. It defines the type and constraint on that column.</p>
+      </div>
+      <div class="eg">
+        <p><code>Dept</code> has domain <code>{CSE, ECE, ME, CE, EE, ...}</code> — a finite enumerated set.</p>
+        <p><code>RollNo</code> has domain <code>positive integers</code>.</p>
+        <p><code>CGPA</code> has domain <code>[0.0, 10.0]</code> — a bounded real range.</p>
+      </div>
+
+      <h3 class="ssh">Tuple</h3>
+      <p>
+        A tuple is one row — a single assignment of values across all attributes. For a relation of degree <em>n</em>, each tuple is an ordered <em>n</em>-tuple. The number of tuples in a relation at a given time is its <strong>cardinality</strong>.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Degree</div>
+          <p>Number of <strong>columns</strong> (attributes). Rarely changes — it's part of the schema.</p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Cardinality</div>
+          <p>Number of <strong>rows</strong> (tuples). Changes constantly as data is inserted and deleted.</p>
+        </div>
+      </div>
+
+      <h3 class="ssh">NULL — A Special Non-Value</h3>
+      <div class="warn-box">
+        <span class="lbl">Critical Distinction</span>
+        <p><strong>NULL is not a value.</strong> NULL means "unknown" or "not applicable." It is emphatically not the same as 0, not the same as an empty string, and not the same as false. This distinction affects key constraints (primary keys cannot be NULL), join results, and aggregate functions. GATE has tested this directly.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">2.3 &nbsp; Schema vs. Instance <span class="tag tt">Common Trap</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Schema</span>
+        <p>The <strong>schema</strong> of a relation is its structure: the relation name, the set of attribute names, and the domain of each attribute. The schema is the <em>blueprint</em>. It rarely changes.</p>
+      </div>
+
+      <div class="def-box" style="background:#f0fff4; border-color: var(--green);">
+        <span class="lbl" style="color:var(--green)">Instance</span>
+        <p>An <strong>instance</strong> of a relation is the actual set of tuples stored at a particular moment in time. The instance is the <em>current data</em>. It changes every time you insert, update, or delete a row.</p>
+      </div>
+
+      <p>
+        Schema: <code>Student(RollNo: int, Name: varchar, Dept: varchar, DeptHead: varchar)</code> — this never changes unless you ALTER the table.
+      </p>
+      <p>
+        Instance: the three rows shown in the table above — this is a snapshot of today. Tomorrow it might have 500 rows.
+      </p>
+
+      <div class="warn-box">
+        <span class="lbl">The Most Important Implication for GATE</span>
+        <p>
+          When a GATE question asks you to find candidate keys or determine functional dependencies, it is asking about <strong>all possible instances</strong> of that relation — not just the specific instance shown. A key must work for every possible snapshot the relation could ever have, not just the one you're looking at right now.
+        </p>
+      </div>
+
+      <div class="note-box">
+        "If you determine keys by looking at current data, you will get the wrong answer on GATE every single time."
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">2.4 &nbsp; Prime vs. Non-Prime Attributes <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Prime Attribute</span>
+        <p>An attribute that is part of <strong>at least one candidate key</strong> is called a <em>prime attribute</em>.</p>
+      </div>
+      <div class="def-box" style="background:#fff6f0; border-color:var(--orange);">
+        <span class="lbl" style="color:var(--orange)">Non-Prime Attribute</span>
+        <p>An attribute that does <strong>not</strong> appear in any candidate key is called a <em>non-prime attribute</em> (also called a <em>non-key attribute</em>).</p>
+      </div>
+
+      <p>This distinction is the entire foundation of 2NF and 3NF. Get it wrong and normalization becomes arbitrary guesswork.</p>
+
+      <div class="eg">
+        <p><strong>Relation:</strong> <code>Enrollment(RollNo, CourseID, CourseName, Grade)</code></p>
+        <p><strong>Only candidate key:</strong> <code>{RollNo, CourseID}</code></p>
+        <p><strong>Prime attributes:</strong> <span class="hl-blue">RollNo</span>, <span class="hl-blue">CourseID</span> — both are part of the candidate key.</p>
+        <p><strong>Non-prime attributes:</strong> <span class="hl-orange">CourseName</span>, <span class="hl-orange">Grade</span> — neither appears in any candidate key.</p>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">What to do first in any GATE normalization problem</span>
+        <p>Always find all candidate keys first. Then classify every attribute as prime or non-prime. Only then proceed to check normal forms. Skipping this step is the single most common reason for wrong answers.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 3 — KEYS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Keys — <em>Types and Properties</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">3.1 &nbsp; The Four Key Types</h2>
+
+      <p>
+        A key is an attribute or set of attributes that <strong>uniquely identifies</strong> tuples within a relation. The word "uniquely" means: no two distinct tuples in the relation can have the same value for that attribute set. There are four related types, each more specific than the last.
+      </p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">Superkey</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>superkey</strong> is any set of one or more attributes that <em>uniquely identifies</em> every tuple in every possible instance of a relation.</p>
+      </div>
+      <p>
+        Superkeys can be large and contain "extra" attributes beyond what is strictly necessary. For the <code>Student</code> relation, all of the following are superkeys:
+      </p>
+      <ul class="pl arr">
+        <li><code>{RollNo}</code> — because roll numbers are unique by design.</li>
+        <li><code>{RollNo, Name}</code> — still unique; adding Name doesn't break uniqueness.</li>
+        <li><code>{RollNo, Name, Dept}</code> — still unique, even more attributes added.</li>
+        <li><code>{RollNo, Name, Dept, DeptHead}</code> — all attributes; always a superkey.</li>
+      </ul>
+
+      <hr class="dv">
+
+      <h3 class="ssh">Candidate Key</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>candidate key</strong> is a <em>minimal superkey</em>. It is a superkey from which no attribute can be removed while still maintaining the uniqueness property.</p>
+      </div>
+      <p>
+        Minimality is the only thing that distinguishes a candidate key from a superkey. <code>{RollNo, Name}</code> is a superkey but not a candidate key because removing <code>Name</code> still leaves <code>{RollNo}</code> which is unique. <code>{RollNo}</code> itself cannot be reduced further — it is a candidate key.
+      </p>
+      <p>
+        A relation can have <strong>multiple candidate keys</strong>. If a relation stores both <code>RollNo</code> and <code>Email</code> and both are guaranteed unique, then <code>{RollNo}</code> and <code>{Email}</code> are both candidate keys.
+      </p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">Primary Key</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>The <strong>primary key</strong> is one candidate key chosen by the database designer as the official, enforced identifier for the relation. It is unique and <em>cannot be NULL</em> in any tuple.</p>
+      </div>
+      <p>
+        Every relation has exactly one primary key. The remaining candidate keys (not chosen as PK) are called <strong>alternate keys</strong>. The choice of which candidate key to use as the PK is a design decision, not a mathematical one.
+      </p>
+
+      <hr class="dv">
+
+      <h3 class="ssh">Foreign Key</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>foreign key</strong> is an attribute (or set of attributes) in relation R whose values must either match a primary key value in some relation S, or be NULL. This constraint is called <em>referential integrity</em>.</p>
+      </div>
+      <div class="eg">
+        <p>If <code>Enrollment</code> has a column <code>RollNo</code> that references <code>Student(RollNo)</code>, then you cannot insert an enrollment for RollNo 999 unless there exists a student with RollNo 999. Attempting to do so violates referential integrity.</p>
+        <p>Foreign keys <em>can</em> be NULL — a NULL FK simply means "this relationship does not exist for this row."</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">3.2 &nbsp; Key Facts to Internalize</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Statement</th><th>Why It Matters</th></tr></thead>
+          <tbody>
+            <tr><td>Every candidate key is a superkey</td><td>Superset of a CK = superkey but not a CK (not minimal)</td></tr>
+            <tr><td>Every relation has at least one candidate key</td><td>Worst case: the set of all attributes is the only CK</td></tr>
+            <tr><td>A relation can have multiple candidate keys</td><td>Important for prime attribute classification and BCNF analysis</td></tr>
+            <tr><td>PK attributes cannot be NULL</td><td>Other candidate key attributes can be NULL if not chosen as PK</td></tr>
+            <tr><td>FK can be NULL</td><td>NULL FK means "no relationship", not a violation</td></tr>
+            <tr><td>If CK is single-attribute → relation is automatically in 2NF</td><td>Partial dependency cannot exist without a composite key</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 4 — FUNCTIONAL DEPENDENCIES
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title"><em>Functional Dependencies</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">4.1 &nbsp; Definition and Intuition <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>functional dependency</strong> X → Y (read: "X functionally determines Y") holds on a relation R if, in every valid instance of R, whenever two tuples agree on the values of attributes X, they must also agree on the values of attributes Y.</p>
+      </div>
+
+      <p>
+        The intuition is simple: knowing the value of X tells you <em>exactly</em> what value Y must be. X → Y means Y is a function of X — there is one Y for every X.
+      </p>
+      <p>
+        Think of it like a lookup table. <code>Dept → DeptHead</code> means: if you tell me the department name, I can tell you the department head with certainty. Each department has exactly one head. The <em>converse</em> is not necessarily true — knowing the department head doesn't tell you which department they run (they could run multiple, in theory).
+      </p>
+
+      <div class="eg">
+        <p><strong>FDs that hold on the Student relation:</strong></p>
+        <ul class="pl chk">
+          <li><code>RollNo → Name</code> — every roll number maps to exactly one student name.</li>
+          <li><code>RollNo → Dept</code> — a student belongs to exactly one department.</li>
+          <li><code>Dept → DeptHead</code> — each department has exactly one head.</li>
+          <li><code>RollNo → DeptHead</code> — holds <em>transitively</em> through Dept (see Chapter 5).</li>
+        </ul>
+        <p style="margin-top:10px;"><strong>FDs that do NOT hold:</strong></p>
+        <ul class="pl crs">
+          <li><code>Name → RollNo</code> — two students can share the same name.</li>
+          <li><code>DeptHead → Dept</code> — may hold currently, but not guaranteed by design.</li>
+          <li><code>Name → Dept</code> — no design rule enforces this.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">4.2 &nbsp; FDs Are Semantic, Not Observational <span class="tag tt">Critical Trap</span></h2>
+
+      <p>
+        This is the most misunderstood point about functional dependencies. An FD is a <strong>constraint on the meaning</strong> of the data — it comes from the real-world rules your system models. It is <strong>not</strong> something you determine by looking at the current data.
+      </p>
+      <p>
+        Consider: currently, every student in CSE has Dr. Rao as their department head. Does this mean <code>Name → Dept</code> holds? Absolutely not. Two students could happen to have the same name. The current data doesn't violate it, but future data might. An FD holds only if you know — through the problem description or real-world logic — that it <em>must always be true</em>.
+      </p>
+
+      <div class="warn-box">
+        <span class="lbl">Rule</span>
+        <p>Never infer an FD by pattern-matching on a specific instance. FDs come from the semantics of the domain. In GATE problems, the FD set is always given explicitly, or derivable from the described domain rules.</p>
+      </div>
+
+      <h3 class="ssh">Trivial vs. Non-Trivial FDs</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>An FD X → Y is <strong>trivial</strong> if Y ⊆ X — that is, Y is already part of X. Example: <code>{RollNo, Name} → Name</code>. This always holds and carries no information. An FD is <strong>non-trivial</strong> if Y ⊄ X.</p>
+      </div>
+      <p>
+        In normalization, we only care about non-trivial FDs. Trivial dependencies are universal and meaningless for analysis.
+      </p>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">4.3 &nbsp; Types of Functional Dependencies in Normalization</h2>
+
+      <p>
+        The following three types are the direct inputs to deciding which normal form a relation satisfies:
+      </p>
+
+      <h3 class="ssh">Full Functional Dependency</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>X → Y is a <strong>full functional dependency</strong> if Y is functionally dependent on X, but <em>not</em> on any proper subset of X. Removing any attribute from X breaks the dependency.</p>
+      </div>
+      <div class="eg">
+        <p>In <code>Enrollment(RollNo, CourseID, Grade)</code>, the dependency <code>{RollNo, CourseID} → Grade</code> is full. If you remove RollNo, <code>CourseID → Grade</code> doesn't hold. If you remove CourseID, <code>RollNo → Grade</code> doesn't hold either. Both attributes are necessary.</p>
+      </div>
+
+      <h3 class="ssh">Partial Functional Dependency</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>X → Y is a <strong>partial functional dependency</strong> if Y is functionally dependent on a <em>proper subset</em> of X. Some attribute in X is unnecessary for the dependency.</p>
+      </div>
+      <div class="eg">
+        <p>In <code>Enrollment(RollNo, CourseID, CourseName, Grade)</code>, the dependency <code>{RollNo, CourseID} → CourseName</code> is partial because <code>CourseID → CourseName</code> alone already holds. RollNo is unnecessary — CourseName depends only on CourseID, which is a proper subset of the candidate key.</p>
+        <p>Partial dependencies on <strong>non-prime attributes</strong> are exactly what 2NF forbids.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Important Boundary Condition</span>
+        <p>Partial dependencies only make sense when the candidate key is <strong>composite</strong> (has two or more attributes). If the only candidate key is a single attribute, partial dependency is impossible by definition — you can't have a proper subset of a single-element set. This means any relation with a single-attribute CK is automatically in 2NF.</p>
+      </div>
+
+      <h3 class="ssh">Transitive Functional Dependency</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A non-prime attribute Z is <strong>transitively dependent</strong> on the primary key X if there exists a non-prime attribute Y such that X → Y and Y → Z, and Y does not functionally determine X (i.e., Y → X does not hold).</p>
+      </div>
+      <div class="eg">
+        <p>In <code>Student(RollNo, Name, Dept, DeptHead)</code>:</p>
+        <p><code>RollNo → Dept</code> (direct), and <code>Dept → DeptHead</code> (direct)</p>
+        <p>Therefore: <code>RollNo → DeptHead</code> (transitive)</p>
+        <p>Here, <code>DeptHead</code> is non-prime, and it reaches the key transitively through <code>Dept</code>, which is also non-prime. This transitive path through non-prime attributes is exactly what 3NF forbids.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 5 — ARMSTRONG'S AXIOMS & CLOSURE
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Armstrong's Axioms <em>&amp; Attribute Closure</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">5.1 &nbsp; Armstrong's Axioms <span class="tag tc">Sound &amp; Complete</span></h2>
+
+      <p>
+        Given a set of functional dependencies F, you need a systematic way to derive <em>all</em> dependencies that logically follow — this larger set is called F⁺, the closure of F. Armstrong's axioms are three rules that are <strong>sound</strong> (they never produce false FDs) and <strong>complete</strong> (together they can derive every valid FD in F⁺).
+      </p>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Axiom</th><th>Formal Statement</th><th>Example</th><th>Intuition</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Reflexivity</strong></td>
+              <td>If Y ⊆ X, then X → Y</td>
+              <td><code>{A,B} → A</code></td>
+              <td>Knowing more always lets you know less. Trivial FD.</td>
+            </tr>
+            <tr>
+              <td><strong>Augmentation</strong></td>
+              <td>If X → Y, then XZ → YZ</td>
+              <td><code>A→B</code> implies <code>AC→BC</code></td>
+              <td>Adding the same attribute to both sides of an FD preserves it.</td>
+            </tr>
+            <tr>
+              <td><strong>Transitivity</strong></td>
+              <td>If X→Y and Y→Z, then X→Z</td>
+              <td><code>A→B, B→C</code> implies <code>A→C</code></td>
+              <td>If X determines Y, and Y determines Z, X can chain through to Z.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>
+        Three additional rules are derived from the axioms (not independent, but useful shortcuts):
+      </p>
+
+      <div class="cg">
+        <div class="cg-card">
+          <div class="ct">Union</div>
+          <p>If X→Y and X→Z, then X→YZ.<br><em>Combine multiple RHS into one.</em></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Decomposition</div>
+          <p>If X→YZ, then X→Y and X→Z.<br><em>Split a combined RHS.</em></p>
+        </div>
+        <div class="cg-card">
+          <div class="ct">Pseudotransitivity</div>
+          <p>If X→Y and WY→Z, then WX→Z.<br><em>Substitute X for Y in a larger FD.</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">5.2 &nbsp; Attribute Closure Algorithm <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>The <strong>attribute closure</strong> of a set X under a set of FDs F, written <strong>X⁺</strong>, is the set of all attributes that X can functionally determine using the FDs in F. It is the largest set Y such that X → Y can be derived using Armstrong's axioms.</p>
+      </div>
+
+      <p>The closure algorithm is iterative and straightforward:</p>
+
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div>Initialize: X⁺ = X (X always determines itself, by reflexivity).</div></li>
+        <li><div class="pl-num">2</div><div>Scan all FDs in F. For each FD A → B: if A ⊆ X⁺ (all attributes of A are already in X⁺), then add B to X⁺.</div></li>
+        <li><div class="pl-num">3</div><div>Repeat step 2 until X⁺ does not change in a full scan (fixpoint reached).</div></li>
+        <li><div class="pl-num">4</div><div>The final X⁺ is the answer.</div></li>
+      </ol>
+
+      <div class="eg">
+        <p><strong>Relation:</strong> R(A, B, C, D, E) &nbsp; <strong>FDs:</strong> AB→C, &nbsp;C→D, &nbsp;D→E, &nbsp;E→B</p>
+        <p style="margin-top:8px;"><strong>Find {A,B}⁺:</strong></p>
+        <div class="cb">Start:    {AB}⁺ = { A, B }
+
+Round 1 scan:
+  AB→C:  AB ⊆ {A,B} ✓  → add C  → {A, B, C}
+  C→D:   C  ⊆ {A,B,C} ✓ → add D  → {A, B, C, D}
+  D→E:   D  ⊆ {A,B,C,D} ✓ → add E → {A, B, C, D, E}
+  E→B:   E  ⊆ {A,B,C,D,E} ✓ → B already present, no change
+
+Round 2 scan: No new additions. STOP.
+
+{AB}⁺ = {A, B, C, D, E}  =  all attributes ✓
+
+→ AB is a superkey.
+→ Is AB minimal?  {A}⁺ = {A} ≠ all.  {B}⁺ = {B} ≠ all.
+→ Neither A nor B alone is a superkey. So AB is MINIMAL.
+→ AB is a candidate key. ✓</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Why Closure Matters — It Solves Everything</span>
+        <p><strong>Is X a superkey?</strong> Compute X⁺. If it equals all attributes, yes. <br>
+        <strong>Does FD X→Y hold in F⁺?</strong> Compute X⁺. If Y ⊆ X⁺, yes. <br>
+        <strong>Find all candidate keys.</strong> Compute closures of subsets, test minimality. <br>
+        <strong>Verify lossless decomposition.</strong> Use closure to check the intersection condition.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">5.3 &nbsp; Canonical Cover <span class="tag tg">3NF Synthesis</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A <strong>canonical cover</strong> F<sub>c</sub> of a set of FDs F is a minimal equivalent set — it produces the same closure (F<sub>c</sub>⁺ = F⁺) but contains no redundant FDs and no extraneous attributes. Every FD in F<sub>c</sub> has a single attribute on its RHS.</p>
+      </div>
+
+      <p>An attribute A is <strong>extraneous</strong> in X → Y if removing A from X (or Y) still produces an equivalent set of FDs.</p>
+
+      <p><strong>Steps to compute canonical cover:</strong></p>
+      <ol class="pl-steps">
+        <li><div class="pl-num">1</div><div><strong>Decompose RHS:</strong> Split every FD so each has exactly one attribute on the right side. <code>AB→CD</code> becomes <code>AB→C</code> and <code>AB→D</code>.</div></li>
+        <li><div class="pl-num">2</div><div><strong>Remove extraneous LHS attributes:</strong> For each FD <code>XA→Y</code>, check if <code>X→Y</code> already holds (compute X⁺ without A). If yes, A is extraneous — remove it.</div></li>
+        <li><div class="pl-num">3</div><div><strong>Remove redundant FDs:</strong> For each FD <code>X→Y</code>, check if Y is derivable from the remaining FDs in F<sub>c</sub> without using this FD. If yes, it is redundant — remove it.</div></li>
+      </ol>
+
+      <div class="warn-box">
+        <span class="lbl">Key Property</span>
+        <p>The canonical cover is <strong>not unique</strong>. Multiple valid canonical covers may exist for the same F. If a GATE question asks "which of the following is a canonical cover," any option that produces the same F⁺ and satisfies minimality conditions is correct.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 6 — NORMAL FORMS
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Normal Forms — <em>1NF through BCNF</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">6.0 &nbsp; The Hierarchy and Its Purpose</h2>
+      <p>
+        Normal forms are a sequence of increasingly strict constraints on a relation's design. Each normal form eliminates a specific type of redundancy or anomaly. The containment relationship is:
+      </p>
+      <div class="def-box" style="text-align:center; font-size:20px; letter-spacing:2px;">
+        <span class="lbl">Hierarchy</span>
+        <p style="font-family: var(--body-font); font-size:20px; font-weight:600; letter-spacing:3px; color:var(--ink);">
+          BCNF &nbsp;⊂&nbsp; 3NF &nbsp;⊂&nbsp; 2NF &nbsp;⊂&nbsp; 1NF
+        </p>
+      </div>
+      <p>
+        Every relation in BCNF is necessarily in 3NF, 2NF, and 1NF. A relation in 3NF is in 2NF and 1NF, but not necessarily in BCNF. The converse of each containment does not hold.
+      </p>
+      <p>
+        When you're asked "what is the highest normal form this relation satisfies?" — test from the top down. Start with BCNF. If it fails, try 3NF. And so on.
+      </p>
+    </div>
+
+    <div class="sec" data-m="section">
+
+      <div class="def-box">
+        <span class="lbl">1NF</span>
+        <h3>First Normal Form</h3>
+            <div class="def-box">Every attribute must contain only atomic (indivisible) values.</div>
+          </div>
+        </div>
+        <div style="margin:0">
+          <p>
+            A relation is in 1NF if every cell contains a single, atomic value. No attribute may hold a set, list, array, or composite value. This is the baseline — without 1NF, the relational model cannot function at all.
+          </p>
+
+          <h3 class="ssh" style="margin-top:16px;">What violates 1NF?</h3>
+          <ul class="pl arr">
+            <li><strong>Multi-valued attribute:</strong> A column <code>Courses</code> containing <code>{DBMS, OS, CN}</code> in a single cell.</li>
+            <li><strong>Composite attribute:</strong> A column <code>Address</code> containing <code>(Street, City, State)</code> as a nested structure.</li>
+            <li><strong>Repeating groups:</strong> Columns <code>Course1, Course2, Course3</code> to represent multiple courses.</li>
+          </ul>
+
+          <div class="eg">
+            <p><strong>Violates 1NF:</strong></p>
+            <div class="tbl">
+              <table>
+                <thead><tr><th>RollNo</th><th>Courses (VIOLATION)</th></tr></thead>
+                <tbody><tr><td>101</td><td style="color:var(--red);">{DBMS, OS, CN}</td></tr></tbody>
+              </table>
+            </div>
+            <p style="margin-top:12px;"><strong>Fixed (1NF):</strong> One row per course value.</p>
+            <div class="tbl">
+              <table>
+                <thead><tr><th>RollNo</th><th>Course</th></tr></thead>
+                <tbody>
+                  <tr><td>101</td><td>DBMS</td></tr>
+                  <tr><td>101</td><td>OS</td></tr>
+                  <tr><td>101</td><td>CN</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="tip-box">
+            <span class="lbl">GATE Note</span>
+            <p>Every relation in the formal relational model is assumed to be in 1NF by definition. GATE uses 1NF questions to test understanding of atomicity and to set up context for 2NF/3NF questions on the expanded table.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+
+      <div class="def-box">
+        <span class="lbl">2NF</span>
+        <h3>Second Normal Form</h3>
+            <div class="def-box">1NF + No non-prime attribute is partially dependent on any candidate key.</div>
+          </div>
+        </div>
+        <div style="margin:0">
+          <p>
+            A relation is in 2NF if it is in 1NF and every non-prime attribute is <strong>fully functionally dependent</strong> on every candidate key. Equivalently: no non-prime attribute should depend on only part of a candidate key.
+          </p>
+
+          <h3 class="ssh">When can a partial dependency exist?</h3>
+          <p>
+            Only when a candidate key is composite (has two or more attributes). If an attribute depends on just one part of that composite key — but not the whole key — that is a partial dependency. A relation with a single-attribute candidate key <strong>cannot</strong> have partial dependencies and is therefore automatically in 2NF.
+          </p>
+
+          <div class="eg">
+            <p><strong>Relation:</strong> <code>Enrollment(RollNo, CourseID, CourseName, Grade)</code></p>
+            <p><strong>Candidate key:</strong> <code>{RollNo, CourseID}</code></p>
+            <p><strong>FDs:</strong></p>
+            <div class="cb">{RollNo, CourseID} → Grade      ← Full dependency on entire CK ✓
+CourseID           → CourseName  ← Partial dep: non-prime CourseName
+                                     depends only on CourseID (part of CK) ✗</div>
+            <p>The partial dependency <code>CourseID → CourseName</code> violates 2NF because <code>CourseName</code> is non-prime.</p>
+            <p style="margin-top:12px;"><strong>Fix — decompose into:</strong></p>
+            <ul class="pl arr">
+              <li><code>Enrollment(RollNo, CourseID, Grade)</code> — the grade genuinely depends on both.</li>
+              <li><code>Course(CourseID, CourseName)</code> — course name is a property of the course, not the enrollment.</li>
+            </ul>
+          </div>
+
+          <div class="warn-box">
+            <span class="lbl">Common Mistake</span>
+            <p>Students often check partial dependencies for prime attributes. <strong>2NF only concerns non-prime attributes.</strong> A prime attribute can "partially depend" on a key — that does not violate 2NF. Only non-prime attributes participating in a partial dependency cause a 2NF violation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+
+      <div class="def-box">
+        <span class="lbl">3NF</span>
+        <h3>Third Normal Form</h3>
+            <div class="def-box">2NF + No non-prime attribute is transitively dependent on any candidate key.</div>
+          </div>
+        </div>
+        <div style="margin:0">
+
+          <p>
+            A relation is in 3NF if, for every non-trivial functional dependency X → Y in F⁺, at least one of the following conditions holds:
+          </p>
+          <ul class="pl arr">
+            <li><strong>X is a superkey</strong> of the relation, OR</li>
+            <li><strong>Y is a prime attribute</strong> (part of some candidate key).</li>
+          </ul>
+
+          <p style="margin-top:10px;">
+            The second condition — "Y is a prime attribute" — is sometimes called the "escape clause." It is the key difference between 3NF and BCNF. 3NF permits an FD where the LHS is not a superkey, as long as the RHS is a prime attribute.
+          </p>
+
+          <div class="eg">
+            <p><strong>Relation:</strong> <code>Student(RollNo, Name, Dept, DeptHead)</code></p>
+            <p><strong>CK:</strong> <code>{RollNo}</code> &nbsp; | &nbsp; <strong>Prime:</strong> RollNo &nbsp; | &nbsp; <strong>Non-prime:</strong> Name, Dept, DeptHead</p>
+            <p><strong>Problem FD:</strong> <code>Dept → DeptHead</code></p>
+            <div class="cb">Check: Is Dept a superkey? No — multiple students share a dept.
+Check: Is DeptHead a prime attribute? No — it's not in any CK.
+→ Both conditions fail. 3NF is VIOLATED.</div>
+            <p style="margin-top:12px;"><strong>The transitive chain:</strong> <code>RollNo → Dept → DeptHead</code></p>
+            <p>DeptHead is a fact about the department, not about the student. It's been placed in the wrong relation.</p>
+            <p style="margin-top:12px;"><strong>Fix:</strong></p>
+            <ul class="pl arr">
+              <li><code>Student(RollNo, Name, Dept)</code></li>
+              <li><code>Department(Dept, DeptHead)</code></li>
+            </ul>
+          </div>
+
+          <div class="tip-box">
+            <span class="lbl">Informal Test for 3NF</span>
+            <p>For every non-trivial FD X → Y, ask: "Is X something that uniquely identifies a row?" If yes, X is a superkey and you're fine. If no, ask: "Is Y part of a key?" If yes, fine. If no to both — you have a 3NF violation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+
+      <div class="def-box">
+        <span class="lbl">BCNF</span>
+        <h3>Boyce-Codd Normal Form</h3>
+            <div class="def-box">For every non-trivial FD X → Y, X must be a superkey. No exceptions.</div>
+          </div>
+        </div>
+        <div style="margin:0">
+          <p>
+            BCNF is a stricter version of 3NF. It removes the "escape clause" entirely. In BCNF, the only permissible non-trivial FDs are those where the LHS is a superkey. There is no exception for prime attributes on the RHS.
+          </p>
+          <p>
+            Every relation in BCNF is in 3NF, but not every relation in 3NF is in BCNF. The difference arises when a relation has <strong>multiple candidate keys that overlap</strong> (share attributes).
+          </p>
+
+          <div class="eg">
+            <p><strong>The classic BCNF-violating, 3NF-satisfying relation:</strong></p>
+            <p><code>Teaching(Student, Course, Teacher)</code></p>
+            <p><strong>Semantics:</strong> A teacher teaches exactly one course. A student-course pair has exactly one assigned teacher.</p>
+            <div class="cb">FDs: {Student, Course} → Teacher
+     Teacher → Course
+
+Candidate Keys:
+  {Student, Course}⁺ = {Student, Course, Teacher} ✓
+  {Student, Teacher}⁺ = {Student, Teacher, Course} ✓
+→ Two CKs: {Student, Course} and {Student, Teacher}
+
+All three attributes are PRIME (each appears in some CK).
+
+Check 3NF for Teacher → Course:
+  Is Teacher a superkey? No.
+  Is Course a prime attribute? YES (it's in CK {Student, Course}).
+→ 3NF: SATISFIED (escape clause used).
+
+Check BCNF for Teacher → Course:
+  Is Teacher a superkey? No.
+→ BCNF: VIOLATED. No escape clause in BCNF.</div>
+            <p style="margin-top:12px;">
+              This is the canonical example that every GATE student must memorize. <strong>A relation can be in 3NF but not in BCNF</strong> when all attributes are prime and a non-superkey FD exists.
+            </p>
+          </div>
+
+          <div class="warn-box">
+            <span class="lbl">The Critical Trade-off</span>
+            <p>Decomposing <code>Teaching</code> into BCNF-compliant relations may <strong>lose the functional dependency</strong> <code>{Student, Course} → Teacher</code> — it cannot be checked without a join. BCNF removes all redundancy but may sacrifice dependency preservation. This trade-off is a direct GATE question pattern.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">6.5 &nbsp; 3NF vs. BCNF — Side-by-Side <span class="tag tg">GATE Favourite</span></h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Property</th><th>3NF</th><th>BCNF</th></tr></thead>
+          <tbody>
+            <tr><td>Condition on FD X→Y</td><td>X is superkey <em>OR</em> Y is prime</td><td>X <strong>must</strong> be superkey. No exceptions.</td></tr>
+            <tr><td>Lossless join decomposition</td><td>Always possible</td><td>Always possible</td></tr>
+            <tr><td>Dependency-preserving decomposition</td><td>Always possible</td><td><strong>Not always</strong> possible</td></tr>
+            <tr><td>Redundancy elimination</td><td>Partial — some redundancy may remain</td><td>Complete (among FD-based NFs)</td></tr>
+            <tr><td>When do they coincide?</td><td colspan="2">When every candidate key is a single attribute (no composite CKs that overlap)</td></tr>
+            <tr><td>Typical GATE question</td><td colspan="2">"Given R with FDs F, is R in 3NF? In BCNF? If not BCNF, can it be decomposed to BCNF preserving all FDs?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 7 — DECOMPOSITION
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title"><em>Decomposition</em> — Lossless &amp; Dependency Preserving</div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">7.1 &nbsp; What Is Decomposition?</h2>
+      <p>
+        Normalization works by <strong>decomposing</strong> a relation R into two or more smaller relations R₁, R₂, ... such that R can be reconstructed from them (lossless) and the FDs are still enforceable (dependency-preserving). A decomposition that violates either property is useless or harmful.
+      </p>
+
+      <h3 class="ssh">Lossless Join Decomposition</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A decomposition of R into R₁ and R₂ is <strong>lossless</strong> if R₁ ⋈ R₂ = R for every valid instance of R. No spurious tuples are generated when you join the decomposed relations back together.</p>
+      </div>
+
+      <p><strong>Test for lossless decomposition (binary):</strong></p>
+      <p>A decomposition R → {R₁, R₂} is lossless if and only if at least one of the following FDs holds:</p>
+      <div class="cb">(R₁ ∩ R₂) → (R₁ − R₂)    — the common attributes determine R₁'s unique attributes
+      OR
+(R₁ ∩ R₂) → (R₂ − R₁)    — the common attributes determine R₂'s unique attributes</div>
+
+      <p>
+        In other words, the attributes shared between R₁ and R₂ must form a superkey for at least one of them. If the intersection can "identify" rows in one of the relations, then joining them back will never produce spurious tuples.
+      </p>
+
+      <div class="warn-box">
+        <span class="lbl">Lossless ≠ No Data Loss</span>
+        <p>"Lossless" does not mean no data is lost. It means no <em>information</em> is lost — you can perfectly reconstruct the original relation. A "lossy" decomposition generates spurious (fake) tuples on natural join, meaning the join result has more rows than the original and contains wrong data.</p>
+      </div>
+
+      <h3 class="ssh">Dependency-Preserving Decomposition</h3>
+      <div class="def-box">
+        <span class="lbl">Definition</span>
+        <p>A decomposition is <strong>dependency-preserving</strong> if every functional dependency in F can be checked using only the data within a single decomposed relation — without needing to join relations back together.</p>
+      </div>
+      <p>
+        Formally: let Fᵢ be the projection of F onto Rᵢ (only FDs whose attributes all appear in Rᵢ). The decomposition preserves dependencies if (F₁ ∪ F₂ ∪ ...)⁺ = F⁺.
+      </p>
+
+      <div class="cg">
+        <div class="cg-card" style="border-color:var(--green)">
+          <div class="ct">3NF Synthesis Algorithm</div>
+          <p>Always produces a decomposition that is both lossless AND dependency-preserving. This is its primary advantage over BCNF.</p>
+        </div>
+        <div class="cg-card" style="border-color:var(--red)">
+          <div class="ct">BCNF Decomposition Algorithm</div>
+          <p>Always produces a lossless decomposition, but may <strong>not</strong> preserve all dependencies. Sometimes no BCNF decomposition exists that is also dependency-preserving.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHAPTER 8 — GATE TRAPS & QUICK REVISION
+══════════════════════════════════════════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps &amp; <em>Quick Revision</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">8.1 &nbsp; The Ten Traps That Kill GATE Marks</h2>
+
+      <div class="tbl" style="margin:10px 0;">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 1</div>
+        <p><strong>Inferring keys from current data.</strong> You see that every row has a unique Name in the current instance, and conclude Name is a candidate key. Wrong — future instances may have duplicate names. Keys are determined by the <em>semantics</em> of the problem, not the current data.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 2</div>
+        <p><strong>Forgetting the single-attribute shortcut.</strong> If every candidate key is a single attribute, the relation is automatically in 2NF. Many GATE questions have single-attribute CKs — skip 2NF analysis entirely and go straight to 3NF.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 3</div>
+        <p><strong>Applying 2NF rules to prime attributes.</strong> 2NF only concerns non-prime attributes. A prime attribute that partially depends on a key does <em>not</em> violate 2NF. Many students flag this incorrectly.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 4</div>
+        <p><strong>Confusing 3NF and BCNF on all-prime relations.</strong> When all attributes are prime, 3NF is automatically satisfied (the escape clause covers everything). But BCNF may still be violated if a non-superkey FD exists. The Teaching relation is the canonical trap here.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 5</div>
+        <p><strong>Assuming BCNF is always achievable with dependency preservation.</strong> It is not. Some relations cannot be decomposed to BCNF while preserving all FDs. When asked whether a BCNF decomposition exists that is also dependency-preserving, the answer may be no.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 6</div>
+        <p><strong>Treating canonical cover as unique.</strong> It is not. Multiple valid canonical covers may exist. Don't rule out an option just because it looks different from the one you derived.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 7</div>
+        <p><strong>NULL in FD computations.</strong> Attributes with NULL values behave differently in joins and aggregates. A key attribute cannot be NULL. Don't confuse "attribute can take value 0" with "attribute can be NULL."</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 8</div>
+        <p><strong>Not finding ALL candidate keys before normalizing.</strong> If you miss a candidate key, you'll misclassify prime attributes, and your entire normalization analysis will be wrong. Always be exhaustive when finding CKs.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 9</div>
+        <p><strong>Confusing lossless with dependency-preserving.</strong> They are independent properties. A decomposition can be lossless but not dependency-preserving (BCNF case), or dependency-preserving but lossy (rare but possible). Both properties must be checked independently.</p>
+      </div>
+      <div class="tbl">
+        <div class="ct" style="color:var(--red); font-size:13px;">Trap 10</div>
+        <p><strong>Forgetting that degree determines if a relation is in 1NF.</strong> A relation is not "more in 1NF" because it has more rows. 1NF is about atomicity of attribute values, not the number of tuples.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">8.2 &nbsp; Master Concept Reference Table</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Concept</th><th>Precise Definition</th><th>Key Condition / Test</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Relation</strong></td><td>Set of tuples over fixed attributes</td><td>No duplicates, no ordering</td></tr>
+            <tr><td><strong>Schema</strong></td><td>Structure: names + domains</td><td>Doesn't change with data</td></tr>
+            <tr><td><strong>Instance</strong></td><td>Actual data at one point in time</td><td>Changes with every DML operation</td></tr>
+            <tr><td><strong>Superkey</strong></td><td>Any set that uniquely identifies tuples</td><td>X⁺ = all attributes</td></tr>
+            <tr><td><strong>Candidate Key</strong></td><td>Minimal superkey</td><td>X⁺ = all, no proper subset qualifies</td></tr>
+            <tr><td><strong>Primary Key</strong></td><td>Chosen CK, enforced, no NULLs</td><td>Exactly one per relation</td></tr>
+            <tr><td><strong>Prime Attr.</strong></td><td>Part of at least one CK</td><td>Classify after finding all CKs</td></tr>
+            <tr><td><strong>Non-prime Attr.</strong></td><td>Not part of any CK</td><td>Target of 2NF and 3NF rules</td></tr>
+            <tr><td><strong>FD X→Y</strong></td><td>Same X values ⟹ same Y values, always</td><td>Semantic constraint, not observational</td></tr>
+            <tr><td><strong>Partial Dep.</strong></td><td>Non-prime depends on proper subset of CK</td><td>Only when CK is composite</td></tr>
+            <tr><td><strong>Transitive Dep.</strong></td><td>Non-prime depends on non-prime chain</td><td>Key → nonprime → nonprime</td></tr>
+            <tr><td><strong>Closure X⁺</strong></td><td>All attrs determined by X under F</td><td>Iterative algorithm; test superkey, FD membership</td></tr>
+            <tr><td><strong>Canonical Cover</strong></td><td>Minimal equivalent FD set</td><td>No redundant FDs, no extraneous attrs</td></tr>
+            <tr><td><strong>1NF</strong></td><td>All attributes atomic</td><td>No sets, composites, or repeating groups in cells</td></tr>
+            <tr><td><strong>2NF</strong></td><td>1NF + no partial dependency</td><td>Every non-prime attr fully depends on every CK</td></tr>
+            <tr><td><strong>3NF</strong></td><td>2NF + no transitive dependency</td><td>FD X→Y: X is superkey OR Y is prime</td></tr>
+            <tr><td><strong>BCNF</strong></td><td>Stricter 3NF, no escape clause</td><td>FD X→Y: X must be superkey, period</td></tr>
+            <tr><td><strong>Lossless Join</strong></td><td>R₁ ⋈ R₂ = R always</td><td>R₁∩R₂ → R₁−R₂ OR R₁∩R₂ → R₂−R₁ holds in F</td></tr>
+            <tr><td><strong>Dep. Preserving</strong></td><td>All FDs checkable without join</td><td>(F₁∪F₂...)⁺ = F⁺</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="section">
+      <h2 class="sh">8.3 &nbsp; GATE PYQ Question Patterns</h2>
+      <p>These are the question patterns that repeat in GATE DBMS year after year:</p>
+      <ul class="pl arr">
+        <li><strong>Find all candidate keys</strong> — given a relation schema and a set of FDs, compute closures and enumerate all CKs. Medium frequency, often 2 marks.</li>
+        <li><strong>Determine highest NF</strong> — given a relation and FDs, state whether it's in 1NF/2NF/3NF/BCNF and justify. Very high frequency.</li>
+        <li><strong>Is a decomposition lossless?</strong> — apply the intersection test. Test appears regularly, often combined with normalization.</li>
+        <li><strong>Is a decomposition dependency-preserving?</strong> — check if the union of projected FD sets equals original F⁺. Often paired with BCNF decomposition.</li>
+        <li><strong>Find canonical cover</strong> — compute Fc from a given F. Appears in questions about 3NF synthesis. Medium frequency.</li>
+        <li><strong>3NF vs BCNF trade-off</strong> — "Can this relation be decomposed to BCNF while preserving all dependencies?" The answer is sometimes explicitly no. Know the Teaching relation cold.</li>
+        <li><strong>Count candidate keys</strong> — given n attributes and certain FDs, how many candidate keys exist? Combinatorial reasoning over closures.</li>
+        <li><strong>Minimum number of relations in decomposition</strong> — given a relation in violation of some NF, what is the minimum decomposition that achieves the target NF?</li>
+      </ul>
+
+      <div class="tip-box">
+        <span class="lbl">Your GATE strategy for normalization questions</span>
+        <p>
+          Step 1: Find all candidate keys (compute closures). <br>
+          Step 2: Classify all attributes as prime or non-prime. <br>
+          Step 3: Check each NF from the bottom up. <br>
+          Step 4: For decomposition questions, verify lossless + dependency-preserving separately. <br>
+          Closure algorithm fluency is the single skill that unlocks 80% of DBMS normalization marks.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  DBMS · Complete Theory Notes · GATE CSE · Relational Model &amp; Normalization
+</div>
+
+</div><!-- end .book -->
+</div>
+</body>
+</html>

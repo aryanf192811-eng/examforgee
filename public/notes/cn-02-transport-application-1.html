@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Networks — Transport & Application Layer · GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tp{color:var(--purple);border-color:var(--purple);background:var(--hl-p);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;} .cb .cm{color:var(--ink3);font-style:italic;}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.hi-b{background:var(--hl-b);padding:0 3px;border-radius:2px;}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+.pl-steps{list-style:none;margin:10px 0;padding:0;}
+.pl-steps li{display:flex;gap:13px;align-items:flex-start;margin-bottom:12px;font-family:var(--prose);font-size:16.5px;line-height:1.82;color:var(--ink2);}
+.pl-num{font-family:var(--hand);font-size:11px;background:var(--ink);color:var(--paper);border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">Computer Networks</div>
+    <h1>Transport &amp;<br><em>Application Layer</em></h1>
+    <p class="cover-desc">
+      UDP, TCP from connection setup to congestion control, flow control mechanics, TCP timers, and the complete application layer — DNS resolution, HTTP, HTTPS, SMTP, FTP, DHCP, and socket programming essentials — with every formula, every state machine, every GATE trap.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · UDP — Connectionless Transport</span>
+      <span class="chip">Ch 2 · TCP — Connection &amp; Segment Structure</span>
+      <span class="chip">Ch 3 · TCP Flow Control</span>
+      <span class="chip">Ch 4 · TCP Congestion Control</span>
+      <span class="chip">Ch 5 · DNS</span>
+      <span class="chip">Ch 6 · HTTP &amp; HTTPS</span>
+      <span class="chip">Ch 7 · Email, FTP &amp; DHCP</span>
+      <span class="chip">Ch 8 · GATE Traps &amp; Reference</span>
+      <span class="chip">Ch 9 · Network Security — Cryptography &amp; Firewalls</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>UDP — Connectionless Transport</a>
+    <a href="#ch2"><span class="tn">02</span>TCP — Connection &amp; Segment Structure</a>
+    <a href="#ch3"><span class="tn">03</span>TCP Flow Control — Sliding Window</a>
+    <a href="#ch4"><span class="tn">04</span>TCP Congestion Control</a>
+    <a href="#ch5"><span class="tn">05</span>DNS — Domain Name System</a>
+    <a href="#ch6"><span class="tn">06</span>HTTP &amp; HTTPS</a>
+    <a href="#ch7"><span class="tn">07</span>Email (SMTP/POP3/IMAP), FTP &amp; DHCP</a>
+    <a href="#ch8"><span class="tn">08</span>GATE Traps &amp; Master Reference</a>
+    <a href="#ch9"><span class="tn">09</span>Network Security — Cryptography &amp; Firewalls</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — UDP ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">UDP — <em>Connectionless Transport</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="udp-def">
+      <h2 class="sh">1.1 &nbsp; UDP — Definition, Header &amp; Use Cases <span class="tag tc">Core</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">UDP — User Datagram Protocol</span>
+        <p>UDP provides a minimal, best-effort, connectionless transport service. No handshake, no state maintained between sender and receiver, no guaranteed delivery, no ordering, no congestion control. Just send datagrams — fast and simple.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">UDP Header (8 bytes fixed)</span>
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+┌───────────────────────────┬───────────────────────────────────┐
+│      Source Port (16)     │       Destination Port (16)       │
+├───────────────────────────┼───────────────────────────────────┤
+│         Length (16)       │          Checksum (16)            │
+└───────────────────────────┴───────────────────────────────────┘
+│                        Data ...                               │
+
+Header = 8 bytes. Maximum UDP payload = 65535 − 8 = 65527 bytes.
+Checksum covers header + data + pseudo-header (src IP, dst IP, protocol, UDP length).
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>UDP</th><th>TCP</th></tr></thead>
+          <tbody>
+            <tr><td>Connection</td><td class="bad">Connectionless</td><td class="good">Connection-oriented (3-way handshake)</td></tr>
+            <tr><td>Reliability</td><td class="bad">No (best effort)</td><td class="good">Yes (ACKs, retransmission)</td></tr>
+            <tr><td>Ordering</td><td class="bad">No</td><td class="good">Yes (sequence numbers)</td></tr>
+            <tr><td>Flow control</td><td class="bad">No</td><td class="good">Yes (receiver window)</td></tr>
+            <tr><td>Congestion control</td><td class="bad">No</td><td class="good">Yes (slow start, AIMD)</td></tr>
+            <tr><td>Header size</td><td class="good">8 bytes (fixed)</td><td class="bad">20–60 bytes (variable)</td></tr>
+            <tr><td>Speed</td><td class="good">Faster (no overhead)</td><td class="ok">Slower (more overhead)</td></tr>
+            <tr><td>Use cases</td><td>DNS, DHCP, streaming, gaming, VoIP</td><td>HTTP, FTP, SMTP, SSH, file transfer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Why Applications Choose UDP</span>
+        <p>Applications that need speed over reliability (DNS — a lost query is just re-sent quickly), or that have their own reliability mechanism (HTTP/3 over QUIC), or that cannot tolerate retransmission delay (real-time audio/video — old data is useless), or that use multicast/broadcast (DHCP discovers the network by broadcasting). GATE frequently asks: "Which protocol uses UDP?" — know: DNS, DHCP, SNMP, RIP, TFTP, NTP, VoIP use UDP.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — TCP ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">TCP — <em>Connection, Segment Structure &amp; Handshake</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="tcp-header">
+      <h2 class="sh">2.1 &nbsp; TCP Segment Structure <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="gv">
+        <span class="dv-label">TCP Header (20 bytes minimum)</span>
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+┌─────────────────────────────┬─────────────────────────────────┐
+│      Source Port (16)       │      Destination Port (16)      │
+├─────────────────────────────┴─────────────────────────────────┤
+│                    Sequence Number (32)                        │
+├───────────────────────────────────────────────────────────────┤
+│                 Acknowledgment Number (32)                     │
+├──────────┬─────────────────┬─────────────────────────────────┤
+│ Data Off │ Flags (6 bits): │          Window Size (16)        │
+│ (4 bits) │URG ACK PSH RST │                                   │
+│          │SYN FIN          │                                   │
+├──────────┴─────────────────┼─────────────────────────────────┤
+│         Checksum (16)       │      Urgent Pointer (16)        │
+├─────────────────────────────┴─────────────────────────────────┤
+│                    Options (0–40 bytes)                        │
+└───────────────────────────────────────────────────────────────┘
+
+Key fields:
+  Sequence number:  byte position of first data byte in this segment
+  ACK number:       next byte the receiver expects (cumulative ACK)
+  Window:           receiver's available buffer space (flow control)
+  Flags: SYN (connection setup), FIN (connection teardown),
+         ACK (acknowledgment valid), RST (reset), PSH (push),
+         URG (urgent data)
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Sequence and Acknowledgment Numbers</span>
+        <p>TCP sequence numbers count <strong>bytes</strong>, not segments. If segment has SEQ=1000 and carries 500 bytes, the next segment starts at SEQ=1500. The ACK number = SEQ of the next expected byte. If receiver has received bytes 0–999, it sends ACK=1000 ("I want byte 1000 next").</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="tcp-handshake">
+      <h2 class="sh">2.2 &nbsp; Three-Way Handshake &amp; Connection Teardown <span class="tag tg">GATE Critical</span></h2>
+
+      <h3 class="ssh">Connection Establishment — 3-Way Handshake</h3>
+      <div class="cb">Client                              Server
+  │                                    │
+  │──── SYN (SEQ=x) ──────────────────→│  Step 1: Client sends SYN
+  │                                    │  (x = Initial Sequence Number, ISN)
+  │←─── SYN+ACK (SEQ=y, ACK=x+1) ─────│  Step 2: Server acknowledges client ISN
+  │                                    │  and sends its own ISN y
+  │──── ACK (SEQ=x+1, ACK=y+1) ───────→│  Step 3: Client acknowledges server ISN
+  │                                    │
+  │══════ Connection Established ══════│
+
+Why 3 steps (not 2)?
+  2-way handshake cannot guarantee both sides have acknowledged
+  each other's ISNs. The third ACK confirms the server's SYN
+  was received — making it truly bidirectional.
+
+SYN consumes 1 sequence number despite carrying no data.
+FIN also consumes 1 sequence number.</div>
+
+      <h3 class="ssh">Connection Teardown — 4-Way Handshake (FIN)</h3>
+      <div class="cb">Client                              Server
+  │──── FIN (SEQ=u) ──────────────────→│  Client done sending
+  │←─── ACK (ACK=u+1) ─────────────────│  Server acknowledges
+  │           (Server may still send)  │
+  │←─── FIN (SEQ=v) ───────────────────│  Server done sending
+  │──── ACK (ACK=v+1) ────────────────→│  Client acknowledges
+  │                                    │
+  Client waits 2×MSL (Maximum Segment Lifetime) in TIME_WAIT
+  before fully closing. Ensures delayed packets don't interfere
+  with a new connection on the same port pair.</div>
+
+      <div class="warn-box">
+        <span class="lbl">TIME_WAIT State — Why It Exists</span>
+        <p>After the client sends its final ACK, it enters TIME_WAIT for 2×MSL (typically 60s–240s). This ensures: (1) the final ACK reaches the server — if it's lost, the server retransmits FIN and the client can re-send ACK; (2) old duplicate segments from this connection can't appear in a new connection on the same port pair and confuse the new TCP session.</p>
+      </div>
+
+      <h3 class="ssh">TCP Connection State Machine — Key States</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>State</th><th>Who enters it</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>CLOSED</td><td>Both</td><td>No connection</td></tr>
+            <tr><td>LISTEN</td><td>Server</td><td>Waiting for connection requests</td></tr>
+            <tr><td>SYN_SENT</td><td>Client</td><td>SYN sent, waiting for SYN+ACK</td></tr>
+            <tr><td>SYN_RCVD</td><td>Server</td><td>SYN received, SYN+ACK sent</td></tr>
+            <tr><td>ESTABLISHED</td><td>Both</td><td>Connection open, data transfer</td></tr>
+            <tr><td>FIN_WAIT_1</td><td>Active closer</td><td>FIN sent, waiting for ACK</td></tr>
+            <tr><td>FIN_WAIT_2</td><td>Active closer</td><td>FIN ACKed, waiting for server FIN</td></tr>
+            <tr><td>CLOSE_WAIT</td><td>Passive closer</td><td>FIN received, not yet sent own FIN</td></tr>
+            <tr><td>LAST_ACK</td><td>Passive closer</td><td>FIN sent, waiting for final ACK</td></tr>
+            <tr><td>TIME_WAIT</td><td>Active closer</td><td>Waiting 2×MSL before CLOSED</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — FLOW CONTROL ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">TCP Flow Control — <em>Receiver Window &amp; Sliding Window</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="flow-control">
+      <h2 class="sh">3.1 &nbsp; TCP Flow Control — Receiver Window <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Flow Control — What and Why</span>
+        <p>Flow control prevents a fast sender from overwhelming a slow receiver's buffer. TCP uses a <strong>receive window (rwnd)</strong> advertised in every ACK — it tells the sender how much buffer space is available at the receiver. The sender can have at most rwnd bytes of unacknowledged data in flight at any time.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Sender's Constraint</span>
+        <p>LastByteSent − LastByteAcked ≤ rwnd<br>
+        The sender keeps track of the last byte sent and the last byte acknowledged. The difference (unacknowledged bytes in flight) must not exceed the receiver's window.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>TCP flow control scenario:</strong></p>
+        <div class="cb">Receiver buffer = 4096 bytes (rwnd initially = 4096)
+
+Step 1: Sender sends 1000 bytes. In-flight = 1000. Receiver has 3096 bytes free.
+  ACK arrives: ACK=1001, rwnd=3096.
+
+Step 2: Sender sends 2000 more bytes. In-flight = 2000. Receiver has 1096 free.
+  ACK arrives for 1000 bytes (bytes 1-1000 consumed by app). 
+  Now buffer has: 1096 + 1000 = 2096 bytes free.
+  ACK=3001, rwnd=2096.
+
+If rwnd=0: Sender must STOP sending data.
+  Sender sends 1-byte "window probe" periodically to check if window opened.
+  When receiver opens window, it sends ACK with new rwnd > 0.</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Silly Window Syndrome</span>
+        <p>If the receiver advertises a tiny window (e.g., rwnd=1) and the sender immediately fills it, many tiny segments waste bandwidth. Solutions: <strong>Nagle's algorithm</strong> (sender accumulates data until a full segment or ACK arrives before sending) and <strong>Clark's solution</strong> (receiver waits until it has enough buffer to advertise a useful window). GATE tests: "What is Nagle's algorithm?" — don't send tiny segments if there are unacknowledged bytes in flight.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="tcp-timers">
+      <h2 class="sh">3.2 &nbsp; TCP Timers <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Timer</th><th>Purpose</th><th>Action on expiry</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Retransmission (RTO)</strong></td><td>Detects lost segments. RTO is estimated from RTT.</td><td>Retransmit the oldest unACKed segment. Double RTO (exponential backoff).</td></tr>
+            <tr><td><strong>Persist</strong></td><td>Prevents deadlock when rwnd=0 — receiver may not re-advertise window if its ACK is lost.</td><td>Send 1-byte window probe to get current rwnd.</td></tr>
+            <tr><td><strong>Keepalive</strong></td><td>Detect if remote host has crashed or become unreachable (for idle connections).</td><td>Send probe. If no response after N probes → close connection.</td></tr>
+            <tr><td><strong>TIME_WAIT (2MSL)</strong></td><td>Ensure delayed segments from old connection expire before new connection on same port pair.</td><td>Transition from TIME_WAIT to CLOSED.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">RTT Estimation — Karn's Algorithm</span>
+        <p>
+          Estimated RTT: ERTT = (1−α)×ERTT + α×SampleRTT (exponential weighted moving average, typically α=0.125).<br>
+          DevRTT = (1−β)×DevRTT + β×|SampleRTT − ERTT| (deviation, β=0.25).<br>
+          RTO = ERTT + 4×DevRTT.<br>
+          <strong>Karn's algorithm:</strong> Don't update ERTT using retransmitted segments — you can't tell if an ACK is for the original or the retransmission.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — CONGESTION CONTROL ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">TCP Congestion Control — <em>Slow Start, AIMD &amp; CUBIC</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="congestion-def">
+      <h2 class="sh">4.1 &nbsp; Congestion Control — Core Concepts <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Congestion vs Flow Control</span>
+        <p><strong>Flow control:</strong> Prevents sender from overwhelming the receiver's buffer. Controlled by rwnd (receiver-set).<br>
+        <strong>Congestion control:</strong> Prevents sender from overwhelming the network. Controlled by cwnd (congestion window — sender-maintained). The actual sending rate is limited by min(rwnd, cwnd).</p>
+      </div>
+
+      <p>
+        TCP infers congestion from two signals: <strong>timeout</strong> (severe — packet lost, network badly congested) and <strong>3 duplicate ACKs</strong> (mild — one packet lost but network still delivering others).
+      </p>
+    </div>
+
+    <div class="sec" data-m="tcp-cc-phases">
+      <h2 class="sh">4.2 &nbsp; Slow Start, Congestion Avoidance &amp; Fast Retransmit <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">TCP Reno Congestion Control Phases</span>
+        <p>
+          <strong>Slow Start (SS):</strong> cwnd starts at 1 MSS. Doubles every RTT (cwnd += 1 for each ACK received). Exponential growth. Continues until cwnd ≥ ssthresh or congestion detected.<br><br>
+          <strong>Congestion Avoidance (CA):</strong> cwnd increases by 1 MSS per RTT (linear growth). cwnd += MSS×MSS/cwnd for each ACK (≈ +1 MSS per RTT).<br><br>
+          <strong>Fast Retransmit:</strong> On 3 duplicate ACKs, immediately retransmit the missing segment (don't wait for timeout).<br><br>
+          <strong>Fast Recovery:</strong> After fast retransmit, set ssthresh = cwnd/2, cwnd = ssthresh + 3 (inflate window), enter CA — NOT slow start. This is the key difference between TCP Reno and TCP Tahoe.
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>TCP Reno congestion control trace:</strong></p>
+        <div class="cb">Initial: cwnd=1 MSS, ssthresh=8 MSS
+
+RTT 1: Slow Start. cwnd=1. Send 1 segment. ACK received. cwnd=2.
+RTT 2: cwnd=2. Send 2. ACK×2. cwnd=4.
+RTT 3: cwnd=4. cwnd=8. (Hit ssthresh=8) → switch to CA.
+RTT 4: CA. cwnd=9.
+RTT 5: cwnd=10.
+RTT 6: cwnd=11.
+RTT 7: cwnd=12. LOSS DETECTED (timeout):
+  ssthresh = cwnd/2 = 6
+  cwnd = 1  → back to Slow Start (TCP Reno/Tahoe both do this on timeout)
+
+RTT 8: SS. cwnd=2. RTT 9: cwnd=4. RTT 10: cwnd=6 (=ssthresh) → switch to CA.
+RTT 11: cwnd=7. RTT 12: cwnd=8. LOSS (3 dup ACKs, TCP Reno):
+  ssthresh = cwnd/2 = 4
+  cwnd = ssthresh + 3 = 7  → Fast Recovery (NOT SS) ← Reno advantage
+
+Tahoe (older): always sets cwnd=1 on any loss → always goes to SS.
+Reno: timeout → cwnd=1 (SS). 3 dup ACKs → cwnd=ssthresh+3 (Fast Recovery).</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Event</th><th>TCP Tahoe</th><th>TCP Reno</th></tr></thead>
+          <tbody>
+            <tr><td>Timeout</td><td>ssthresh=cwnd/2, cwnd=1, → SS</td><td>ssthresh=cwnd/2, cwnd=1, → SS</td></tr>
+            <tr><td>3 Duplicate ACKs</td><td>ssthresh=cwnd/2, cwnd=1, → SS</td><td class="good">ssthresh=cwnd/2, cwnd=ssthresh+3, → Fast Recovery (CA)</td></tr>
+            <tr><td>New ACK in Fast Recovery</td><td>N/A (already in SS)</td><td>cwnd++ until ssthresh, then CA</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">AIMD — Additive Increase Multiplicative Decrease</span>
+        <p>TCP's congestion avoidance follows the AIMD principle: <strong>add</strong> 1 MSS per RTT when no congestion (additive increase), <strong>multiply</strong> by 0.5 when congestion detected (multiplicative decrease). AIMD is provably optimal for fairness — multiple TCP flows sharing a bottleneck link will converge to equal shares. This is the mathematical backbone of TCP's fairness property.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Classic GATE NAT: TCP window size after k RTTs in slow start.</strong></p>
+        <div class="cb">cwnd after k RTTs in Slow Start (starting from cwnd=1, no ssthresh hit):
+  cwnd = 2ᵏ MSS
+
+After k RTTs from ssthresh crossing (in CA):
+  cwnd = ssthresh + k MSS
+
+"TCP connection uses MSS=1KB. ssthresh=8KB. After how many RTTs does
+ cwnd reach 16KB starting from cwnd=1KB?"
+
+Slow Start: cwnd = 1,2,4,8 → 3 RTTs to reach ssthresh=8KB.
+CA from RTT 4: cwnd = 9,10,11,...,16 → 8 more RTTs.
+Total: 3 + 8 = 11 RTTs.</div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — DNS ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">DNS — <em>Domain Name System</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dns-def">
+      <h2 class="sh">5.1 &nbsp; DNS — Hierarchy, Resolution &amp; Record Types <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">DNS</span>
+        <p>DNS is a distributed, hierarchical database that maps domain names (human-readable) to IP addresses (machine-readable). It is the internet's phone book. DNS uses UDP port 53 for queries (fast), TCP port 53 for zone transfers (large data, reliability needed).</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">DNS Hierarchy</span>
+                          Root DNS Servers (13 clusters, e.g., a.root-servers.net)
+                          /         |           \
+                        .com      .org          .edu
+                        /
+                   amazon.com   google.com   ...
+                   /
+               www.amazon.com   mail.amazon.com   ...
+
+Resolution order:
+  1. Check browser cache
+  2. Check OS cache (/etc/hosts, OS DNS cache)
+  3. Query local DNS resolver (usually ISP's or 8.8.8.8)
+  4. Local resolver queries root → TLD → authoritative server
+      </div>
+
+      <h3 class="ssh">Iterative vs Recursive Resolution</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Who does the work?</th><th>How it works</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Recursive</strong></td><td>DNS resolver does all work</td><td>Client asks resolver "what is IP of X?" Resolver asks root → TLD → authoritative, collects answer, returns final IP to client.</td></tr>
+            <tr><td><strong>Iterative</strong></td><td>Client does the work</td><td>Client asks root: gets referral to TLD. Client asks TLD: gets referral to authoritative. Client asks authoritative: gets IP. Client assembles answer.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>In practice: client→local resolver is recursive; local resolver→root/TLD/authoritative is iterative.</p>
+
+      <h3 class="ssh">DNS Record Types</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Record Type</th><th>Meaning</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td><strong>A</strong></td><td>Maps hostname → IPv4 address</td><td>www.example.com → 93.184.216.34</td></tr>
+            <tr><td><strong>AAAA</strong></td><td>Maps hostname → IPv6 address</td><td>www.example.com → 2606:2800::1</td></tr>
+            <tr><td><strong>MX</strong></td><td>Mail exchanger — where to deliver email for domain</td><td>example.com → mail.example.com (priority 10)</td></tr>
+            <tr><td><strong>CNAME</strong></td><td>Canonical name — alias to another hostname</td><td>www.example.com → example.com</td></tr>
+            <tr><td><strong>NS</strong></td><td>Name server — authoritative DNS for domain</td><td>example.com → ns1.example.com</td></tr>
+            <tr><td><strong>PTR</strong></td><td>Reverse DNS — IP → hostname</td><td>34.216.184.93.in-addr.arpa → www.example.com</td></tr>
+            <tr><td><strong>SOA</strong></td><td>Start of Authority — zone metadata</td><td>Primary NS, admin email, serial, refresh, retry</td></tr>
+            <tr><td><strong>TXT</strong></td><td>Text — used for SPF, DKIM, verification</td><td>v=spf1 include:gmail.com ~all</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">DNS Caching &amp; TTL</span>
+        <p>Every DNS response includes a TTL (Time to Live) specifying how long the record can be cached. A short TTL (e.g., 60s) means every request hits the DNS server — flexible for changing IPs but high load. A long TTL (e.g., 86400s = 1 day) reduces DNS load but makes IP changes slow to propagate. GATE: "What field controls how long a DNS record is cached?" → TTL.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — HTTP & HTTPS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">HTTP <em>&amp; HTTPS</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="http-def">
+      <h2 class="sh">6.1 &nbsp; HTTP — Versions &amp; Persistent Connections <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">HTTP — HyperText Transfer Protocol</span>
+        <p>HTTP is a stateless, request-response application layer protocol. Client sends request; server sends response. Uses TCP (port 80 for HTTP, 443 for HTTPS). HTTP itself is stateless — cookies are used to maintain state across requests.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Version</th><th>Connection</th><th>Requests</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td><strong>HTTP/1.0</strong></td><td>Non-persistent (new TCP per request)</td><td>Sequential</td><td>Simple, high overhead (new handshake per object)</td></tr>
+            <tr><td><strong>HTTP/1.1</strong></td><td>Persistent (reuse TCP connection)</td><td>Pipelined (optional)</td><td>Keep-Alive header, pipelining (requests sent without waiting for prior response)</td></tr>
+            <tr><td><strong>HTTP/2</strong></td><td>Persistent + multiplexed</td><td>Concurrent (multiplexed)</td><td>Binary framing, header compression, server push, no HOL blocking at app layer</td></tr>
+            <tr><td><strong>HTTP/3</strong></td><td>QUIC (over UDP)</td><td>Concurrent</td><td>No TCP HOL blocking, 0-RTT connections, built-in TLS 1.3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="eg">
+        <p><strong>RTT analysis — fetching a web page with 10 objects using HTTP/1.0 vs HTTP/1.1:</strong></p>
+        <div class="cb">Assume each TCP setup = 1 RTT, each HTTP request = 1 RTT.
+Objects: 1 base HTML + 10 embedded images.
+
+HTTP/1.0 (non-persistent):
+  For each of 11 objects: 1 RTT (TCP SYN+SYN-ACK) + 1 RTT (request+response)
+  Total = 11 × 2 RTT = 22 RTT
+  (Can be parallelized with multiple connections)
+
+HTTP/1.1 (persistent, no pipelining):
+  1 RTT for TCP handshake (reused for all)
+  11 RTT for 11 sequential requests
+  Total = 1 + 11 = 12 RTT
+
+HTTP/1.1 (persistent, pipelining):
+  1 RTT for TCP handshake
+  1 RTT for base HTML
+  1 RTT for all 10 images (pipelined)
+  Total = 1 + 1 + 1 = 3 RTT  (ignoring transmission time)</div>
+      </div>
+
+      <h3 class="ssh">HTTP Methods</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Method</th><th>Purpose</th><th>Has Body?</th><th>Idempotent?</th></tr></thead>
+          <tbody>
+            <tr><td>GET</td><td>Retrieve resource</td><td class="bad">No</td><td class="good">Yes</td></tr>
+            <tr><td>POST</td><td>Submit data (create resource)</td><td class="good">Yes</td><td class="bad">No</td></tr>
+            <tr><td>PUT</td><td>Replace resource completely</td><td class="good">Yes</td><td class="good">Yes</td></tr>
+            <tr><td>PATCH</td><td>Partial update of resource</td><td class="good">Yes</td><td class="bad">No</td></tr>
+            <tr><td>DELETE</td><td>Remove resource</td><td class="bad">No</td><td class="good">Yes</td></tr>
+            <tr><td>HEAD</td><td>GET without response body</td><td class="bad">No</td><td class="good">Yes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">HTTP Status Codes</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Range</th><th>Category</th><th>Key Codes</th></tr></thead>
+          <tbody>
+            <tr><td>1xx</td><td>Informational</td><td>100 Continue</td></tr>
+            <tr><td>2xx</td><td>Success</td><td>200 OK, 201 Created, 204 No Content</td></tr>
+            <tr><td>3xx</td><td>Redirection</td><td>301 Moved Permanently, 302 Found, 304 Not Modified</td></tr>
+            <tr><td>4xx</td><td>Client Error</td><td>400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found</td></tr>
+            <tr><td>5xx</td><td>Server Error</td><td>500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="https-tls">
+      <h2 class="sh">6.2 &nbsp; HTTPS &amp; TLS <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">TLS Handshake (simplified)</span>
+        <p>
+          <strong>1. ClientHello:</strong> Client sends supported TLS versions, cipher suites, random nonce.<br>
+          <strong>2. ServerHello:</strong> Server selects cipher suite, sends its certificate (public key).<br>
+          <strong>3. Key Exchange:</strong> Client generates pre-master secret, encrypts with server's public key, sends.<br>
+          <strong>4. Session Keys:</strong> Both derive symmetric session keys from pre-master secret + nonces.<br>
+          <strong>5. Finished:</strong> Both send encrypted "Finished" messages. Secure channel established.
+        </p>
+      </div>
+
+      <p>
+        TLS provides: <strong>Confidentiality</strong> (symmetric encryption with session keys), <strong>Integrity</strong> (MAC — Message Authentication Code), <strong>Authentication</strong> (server certificate verified against trusted CA). TLS runs above TCP (port 443) but below HTTP.
+      </p>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — EMAIL, FTP, DHCP ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Email, FTP <em>&amp; DHCP</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="email">
+      <h2 class="sh">7.1 &nbsp; Email Protocols — SMTP, POP3 &amp; IMAP <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Port</th><th>Transport</th><th>Direction</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SMTP</strong></td><td>25 (587 for submission)</td><td>TCP</td><td>Push (sender → server)</td><td>Send mail from client to mail server, and between mail servers</td></tr>
+            <tr><td><strong>POP3</strong></td><td>110 (995 TLS)</td><td>TCP</td><td>Pull (client ← server)</td><td>Download and delete mail from server. Mail stored locally. Simple.</td></tr>
+            <tr><td><strong>IMAP</strong></td><td>143 (993 TLS)</td><td>TCP</td><td>Pull + sync</td><td>Manage mail on server. Mail stays on server. Supports folders, sync across devices. Modern standard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">Email flow: Alice → Bob</span>
+Alice's client                 Bob's client
+     │                              │
+     │ SMTP (push)                  │ POP3/IMAP (pull)
+     ↓                              ↓
+Alice's mail server ─SMTP→ Bob's mail server
+(smtp.alice.com)           (mail.bob.com)
+
+SMTP is used for ALL server-to-server mail delivery.
+POP3/IMAP are for the final mile (server to user's client).
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">SMTP Only Pushes — It Cannot Pull</span>
+        <p>SMTP is a push protocol — the sender initiates the connection and pushes mail to the recipient's server. It cannot be used by a client to retrieve mail (that's POP3/IMAP). When GATE asks "which protocol does a mail client use to READ email?" — the answer is POP3 or IMAP, never SMTP.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="ftp">
+      <h2 class="sh">7.2 &nbsp; FTP — Two Connections, Active vs Passive <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">FTP — File Transfer Protocol</span>
+        <p>FTP uses <strong>two separate TCP connections</strong>: a <strong>control connection</strong> (port 21, persistent, sends commands) and a <strong>data connection</strong> (port 20 for active mode, dynamic for passive mode, established per file transfer). FTP is stateful — the server maintains state about the user's current directory and transfer mode.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Active FTP</th><th>Passive FTP</th></tr></thead>
+          <tbody>
+            <tr><td>Who initiates data connection?</td><td>Server (from port 20) connects TO client</td><td>Client connects TO server (server-specified port)</td></tr>
+            <tr><td>Firewall issue</td><td class="bad">Server-initiated connection blocked by client firewall</td><td class="good">Client-initiated — works through NAT and firewalls</td></tr>
+            <tr><td>Modern usage</td><td class="bad">Rarely used</td><td class="good">Standard for internet FTP</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="dhcp">
+      <h2 class="sh">7.3 &nbsp; DHCP — Dynamic Host Configuration Protocol <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">DHCP</span>
+        <p>DHCP automatically assigns IP addresses, subnet mask, default gateway, and DNS server addresses to hosts when they join a network. Uses UDP (port 67 server, 68 client). DHCP messages are broadcast — DHCP server must be on the same broadcast domain or accessible via DHCP relay agent.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">DHCP DORA Process</span>
+Client                                    DHCP Server
+  │                                            │
+  │── DHCP Discover (broadcast) ─────────────→│ "Anyone have an IP for me?"
+  │                                            │
+  │←─ DHCP Offer (broadcast/unicast) ─────────│ "I can give you 192.168.1.10"
+  │                                            │
+  │── DHCP Request (broadcast) ──────────────→│ "I'll take 192.168.1.10, please"
+  │                                            │
+  │←─ DHCP ACK (broadcast/unicast) ───────────│ "Confirmed. Lease = 24 hours."
+  │                                            │
+  Assigned: IP, subnet mask, gateway, DNS, lease time
+
+DORA = Discover, Offer, Request, ACK
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">DHCP Relay Agent</span>
+        <p>DHCP clients send broadcasts, but routers don't forward broadcasts. A DHCP relay agent (running on the router) receives the local broadcast, unicasts it to the DHCP server, and relays the response back. This allows one DHCP server to serve multiple subnets. GATE tests: "If client and DHCP server are on different subnets, what is needed?" → DHCP relay agent.</p>
+      </div>
+
+      <h3 class="ssh">Complete Application Layer Port Reference</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Port</th><th>Transport</th><th>Function</th></tr></thead>
+          <tbody>
+            <tr><td>FTP (data)</td><td>20</td><td>TCP</td><td>File transfer data</td></tr>
+            <tr><td>FTP (control)</td><td>21</td><td>TCP</td><td>File transfer commands</td></tr>
+            <tr><td>SSH</td><td>22</td><td>TCP</td><td>Secure shell remote login</td></tr>
+            <tr><td>Telnet</td><td>23</td><td>TCP</td><td>Remote login (insecure, cleartext)</td></tr>
+            <tr><td>SMTP</td><td>25</td><td>TCP</td><td>Mail transfer between servers</td></tr>
+            <tr><td>DNS</td><td>53</td><td>UDP (TCP for zone transfers)</td><td>Name resolution</td></tr>
+            <tr><td>DHCP server</td><td>67</td><td>UDP</td><td>Dynamic IP assignment</td></tr>
+            <tr><td>DHCP client</td><td>68</td><td>UDP</td><td>Dynamic IP assignment</td></tr>
+            <tr><td>HTTP</td><td>80</td><td>TCP</td><td>Web browsing</td></tr>
+            <tr><td>POP3</td><td>110</td><td>TCP</td><td>Receive email (download)</td></tr>
+            <tr><td>IMAP</td><td>143</td><td>TCP</td><td>Receive email (server-side)</td></tr>
+            <tr><td>HTTPS</td><td>443</td><td>TCP</td><td>Secure web browsing</td></tr>
+            <tr><td>SMTP (TLS)</td><td>587</td><td>TCP</td><td>Mail submission</td></tr>
+            <tr><td>RIP</td><td>520</td><td>UDP</td><td>Routing protocol</td></tr>
+            <tr><td>SNMP</td><td>161/162</td><td>UDP</td><td>Network management</td></tr>
+            <tr><td>NTP</td><td>123</td><td>UDP</td><td>Time synchronization</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">GATE Traps <em>&amp; Master Reference</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="traps">
+      <h2 class="sh">8.1 &nbsp; All the Traps in One Place</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>TCP SYN consumes a sequence number</td><td>SYN (and FIN) each consume one sequence number even though they carry no data. After SYN with SEQ=x, next byte is x+1. This is why the handshake ACKs are x+1 and y+1, not x and y.</td></tr>
+            <tr><td>2</td><td>ACK number = last byte received</td><td>ACK number = last byte received + 1 = NEXT byte expected. If receiver got bytes 0-999, it sends ACK=1000 (not 999). TCP ACKs are cumulative and specify the next expected byte.</td></tr>
+            <tr><td>3</td><td>Flow control = congestion control</td><td>Flow control is receiver-to-sender: "don't overflow my buffer" (rwnd). Congestion control is network-to-sender: "don't overflow the network" (cwnd). Both limit sending rate; min(rwnd, cwnd) is the effective window.</td></tr>
+            <tr><td>4</td><td>Slow Start is slow</td><td>"Slow Start" is slow only in name — it actually grows EXPONENTIALLY (doubling each RTT). It's called "slow" because it starts at 1 MSS instead of the full bandwidth. Congestion Avoidance is the linear (slow) phase.</td></tr>
+            <tr><td>5</td><td>TCP Reno always resets to SS on any loss</td><td>TCP Reno ONLY resets to Slow Start (cwnd=1) on TIMEOUT. On 3 duplicate ACKs, Reno uses Fast Recovery: ssthresh=cwnd/2, cwnd=ssthresh+3, then CA. Tahoe always resets to SS regardless of loss type.</td></tr>
+            <tr><td>6</td><td>DNS uses TCP only</td><td>DNS primarily uses UDP port 53 (fast queries). TCP port 53 is used for zone transfers between DNS servers (large data requiring reliability). Most GATE questions about DNS port → UDP 53.</td></tr>
+            <tr><td>7</td><td>HTTP is stateful</td><td>HTTP itself is STATELESS — each request is independent, server has no memory of prior requests. Cookies, sessions, and tokens are used at the application level to implement statefulness on top of stateless HTTP.</td></tr>
+            <tr><td>8</td><td>SMTP retrieves email</td><td>SMTP only SENDS mail (push). Email retrieval uses POP3 (download and delete) or IMAP (server-side management, sync). GATE: "Which protocol does a client use to download email from a server?" → POP3 or IMAP.</td></tr>
+            <tr><td>9</td><td>FTP uses one connection</td><td>FTP uses TWO TCP connections: one control connection (port 21, persistent) and one data connection (port 20 active / dynamic passive) per file transfer. HTTP/SMTP/POP3 each use one connection.</td></tr>
+            <tr><td>10</td><td>DHCP uses TCP</td><td>DHCP uses UDP (ports 67/68) because it broadcasts — and broadcasting is inherently unreliable. TCP requires a pre-established connection, which is impossible when the client doesn't yet have an IP address.</td></tr>
+            <tr><td>11</td><td>cwnd in slow start grows by 1 each RTT</td><td>cwnd doubles each RTT in Slow Start (exponential). cwnd grows by 1 MSS per RTT in Congestion Avoidance (linear). After k RTTs in Slow Start from cwnd=1: cwnd = 2ᵏ MSS.</td></tr>
+            <tr><td>12</td><td>TIME_WAIT is on the passive closer</td><td>TIME_WAIT is entered by the ACTIVE closer — the side that sent the first FIN. It waits 2×MSL to ensure all old segments expire. The passive closer (server side if client closes) goes through CLOSE_WAIT → LAST_ACK → CLOSED.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="tcp-udp-comparison">
+      <h2 class="sh">8.2 &nbsp; Complete Protocol Reference</h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>Layer</th><th>Transport</th><th>Port</th><th>Key Characteristic</th></tr></thead>
+          <tbody>
+            <tr><td>HTTP</td><td>Application</td><td>TCP</td><td>80</td><td>Stateless web, non-persistent (1.0) / persistent (1.1+)</td></tr>
+            <tr><td>HTTPS</td><td>Application</td><td>TCP</td><td>443</td><td>HTTP + TLS encryption</td></tr>
+            <tr><td>DNS</td><td>Application</td><td>UDP (mostly)</td><td>53</td><td>Name resolution, hierarchical, distributed</td></tr>
+            <tr><td>DHCP</td><td>Application</td><td>UDP</td><td>67/68</td><td>Dynamic IP assignment, DORA process</td></tr>
+            <tr><td>SMTP</td><td>Application</td><td>TCP</td><td>25/587</td><td>Mail pushing only</td></tr>
+            <tr><td>POP3</td><td>Application</td><td>TCP</td><td>110</td><td>Download mail, delete from server</td></tr>
+            <tr><td>IMAP</td><td>Application</td><td>TCP</td><td>143</td><td>Server-side mail management</td></tr>
+            <tr><td>FTP</td><td>Application</td><td>TCP</td><td>20/21</td><td>Two connections (control + data)</td></tr>
+            <tr><td>SSH</td><td>Application</td><td>TCP</td><td>22</td><td>Secure remote login, tunneling</td></tr>
+            <tr><td>Telnet</td><td>Application</td><td>TCP</td><td>23</td><td>Remote login (insecure)</td></tr>
+            <tr><td>RIP</td><td>Network</td><td>UDP</td><td>520</td><td>Distance Vector routing, max 15 hops</td></tr>
+            <tr><td>OSPF</td><td>Network</td><td>IP directly</td><td>—</td><td>Link State routing, Dijkstra</td></tr>
+            <tr><td>BGP</td><td>Application</td><td>TCP</td><td>179</td><td>Path Vector inter-AS routing</td></tr>
+            <tr><td>ICMP</td><td>Network</td><td>IP directly</td><td>—</td><td>Error reporting (ping, traceroute)</td></tr>
+            <tr><td>ARP</td><td>Network/Link</td><td>Ethernet direct</td><td>—</td><td>IP → MAC resolution, LAN only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="gate-pyq">
+      <h2 class="sh">8.3 &nbsp; GATE Question Patterns</h2>
+      <ul class="pl arr">
+        <li><strong>TCP window NAT:</strong> "cwnd starts at 1 MSS, ssthresh=16. After 6 RTTs, what is cwnd?" SS: 1→2→4→8→16 (4 RTTs, hit ssthresh). CA: 17→18 (2 more RTTs). Answer: 18 MSS. 2-mark computation.</li>
+        <li><strong>Timeout vs dup ACK MCQ:</strong> "On receiving 3 duplicate ACKs, TCP Reno sets cwnd to..." ssthresh+3 (not 1). 1-mark trap question.</li>
+        <li><strong>TCP handshake trace:</strong> "What is the ACK number in the third message of TCP handshake?" If server sent SYN with SEQ=y, client ACKs with ACK=y+1. 1 mark.</li>
+        <li><strong>HTTP RTT NAT:</strong> "Fetching 5 objects over HTTP/1.0 (non-persistent). Total RTTs?" 5 × 2 = 10 RTT (1 TCP handshake + 1 HTTP per object). 2 marks.</li>
+        <li><strong>DNS record MCQ:</strong> "Which DNS record type maps a domain to an IPv6 address?" AAAA. "Which record is used for reverse DNS lookup?" PTR. 1-mark direct.</li>
+        <li><strong>DHCP sequence MCQ:</strong> "What is the correct order of DHCP messages?" Discover → Offer → Request → ACK. 1 mark.</li>
+        <li><strong>Port number MCQ:</strong> "Which port does HTTPS use?" 443. "Which protocol uses port 53 with UDP?" DNS. "Which protocol uses TWO ports (20 and 21)?" FTP. 1-mark direct questions.</li>
+        <li><strong>FTP connections MCQ:</strong> "How many TCP connections does FTP use?" Two — one control (port 21) + one data (port 20 or dynamic). "For N files transferred, how many data connections?" N. 1-2 marks.</li>
+        <li><strong>Protocol selection MCQ:</strong> "A video streaming application needs low latency and can tolerate some packet loss. Which transport protocol is preferred?" UDP. "An email client downloading mail from server uses..." POP3 or IMAP. 1-mark application questions.</li>
+      </ul>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 9 — NETWORK SECURITY ═══════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Network Security — <em>Cryptography, Signatures &amp; Firewalls</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="crypto-basics">
+      <h2 class="sh">9.1 &nbsp; Foundations of Cryptography <span class="tag tc">Core</span></h2>
+      <p>
+        Cryptography is the science of securing communication in the presence of adversaries. It provides four security properties: <strong>Confidentiality</strong> (only intended recipient can read), <strong>Integrity</strong> (message was not altered), <strong>Authentication</strong> (sender is who they claim to be), and <strong>Non-repudiation</strong> (sender cannot deny sending). Different mechanisms address different subsets of these properties.
+      </p>
+
+      <div class="def-box">
+        <span class="lbl">Symmetric Key Cryptography (Secret Key / Private Key)</span>
+        <p>The same secret key K is used for both encryption and decryption. Sender computes C = E(K, M). Receiver computes M = D(K, C). Both parties must share K beforehand through a secure channel.<br><br>
+        <strong>Key algorithms:</strong><br>
+        DES (Data Encryption Standard) — 56-bit key, 64-bit block. Considered broken today (brute-forceable in hours).<br>
+        3DES (Triple DES) — Applies DES three times with different keys. 112–168 bit effective security. Slower.<br>
+        AES (Advanced Encryption Standard) — 128/192/256-bit keys, 128-bit block. Current standard. Fast in hardware and software.<br>
+        RC4 — Stream cipher (byte by byte), used in WEP/WPA (now deprecated).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Asymmetric Key Cryptography (Public Key Cryptography)</span>
+        <p>Each entity has a key pair: a <strong>public key</strong> (shared openly) and a <strong>private key</strong> (kept secret). What one key encrypts, only the other can decrypt. This eliminates the key distribution problem of symmetric cryptography.<br><br>
+        <strong>Key property:</strong> Given a public key, it is computationally infeasible to derive the private key (one-way function with trapdoor).<br>
+        <strong>Key algorithm:</strong> RSA, Diffie-Hellman, ElGamal, ECC (Elliptic Curve Cryptography).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Feature</th><th>Symmetric</th><th>Asymmetric</th></tr></thead>
+          <tbody>
+            <tr><td>Keys used</td><td>Same key for encrypt/decrypt</td><td>Different keys (public/private pair)</td></tr>
+            <tr><td>Key distribution</td><td class="bad">Hard — must share secret securely</td><td class="good">Easy — public key shared openly</td></tr>
+            <tr><td>Speed</td><td class="good">Very fast (1000× faster than RSA)</td><td class="bad">Slow (expensive modular exponentiation)</td></tr>
+            <tr><td>Scalability</td><td class="bad">n parties need n(n−1)/2 key pairs</td><td class="good">n parties need n key pairs</td></tr>
+            <tr><td>Use case</td><td>Bulk data encryption (AES)</td><td>Key exchange, digital signatures</td></tr>
+            <tr><td>Examples</td><td>DES, 3DES, AES, RC4, ChaCha20</td><td>RSA, Diffie-Hellman, ECC, ElGamal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Hybrid Cryptography — Best of Both Worlds</span>
+        <p>Real systems (TLS, PGP, SSH) use <strong>hybrid encryption</strong>: asymmetric cryptography to securely exchange a randomly generated symmetric session key, then symmetric cryptography to encrypt the actual data. Asymmetric = key transport. Symmetric = data transport. This gives security of public key + speed of symmetric. TLS does exactly this — RSA or ECDH for key exchange, AES for data.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="rsa">
+      <h2 class="sh">9.2 &nbsp; The RSA Algorithm — Full Derivation <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">RSA — Mathematical Foundation</span>
+        <p>RSA security rests on the <strong>integer factorization problem</strong>: multiplying two large primes is easy, but factoring the product is computationally infeasible for large enough primes. Given n = p×q (public), deriving p and q individually is intractable.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">RSA Key Generation — 5 Steps</span>
+        <p>
+          <strong>Step 1:</strong> Choose two large distinct primes p and q.<br>
+          <strong>Step 2:</strong> Compute n = p × q. (n is the modulus — public.)<br>
+          <strong>Step 3:</strong> Compute φ(n) = (p−1)(q−1). (Euler's totient — private.)<br>
+          <strong>Step 4:</strong> Choose e such that 1 &lt; e &lt; φ(n) and gcd(e, φ(n)) = 1. (e is the public exponent.)<br>
+          <strong>Step 5:</strong> Find d = e⁻¹ mod φ(n) — the modular multiplicative inverse of e. (d is the private exponent.)<br><br>
+          <strong>Public Key:</strong> (e, n)<br>
+          <strong>Private Key:</strong> (d, n)
+        </p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">RSA Encryption &amp; Decryption</span>
+        <p>
+          <strong>Encryption:</strong> C = Mᵉ mod n &nbsp;&nbsp; (encrypt with receiver's public key)<br>
+          <strong>Decryption:</strong> M = Cᵈ mod n &nbsp;&nbsp; (decrypt with receiver's private key)
+        </p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Complete RSA worked example (small primes for illustration):</strong></p>
+        <div class="cb">Step 1: Choose p=61, q=53.
+Step 2: n = 61 × 53 = 3233.
+Step 3: φ(n) = (61−1)(53−1) = 60 × 52 = 3120.
+Step 4: Choose e=17. Check: gcd(17, 3120) = 1. ✓ (17 is prime, doesn't divide 3120)
+Step 5: Find d such that 17d ≡ 1 (mod 3120).
+        Using Extended Euclidean Algorithm:
+        3120 = 183×17 + 9
+          17 = 1×9 + 8
+           9 = 1×8 + 1
+           8 = 8×1 + 0
+
+        Back-substitute:
+        1 = 9 − 1×8
+          = 9 − 1×(17 − 9) = 2×9 − 17
+          = 2×(3120 − 183×17) − 17 = 2×3120 − 367×17
+
+        d = −367 mod 3120 = 3120 − 367 = 2753
+
+Public Key:  (e=17,  n=3233)
+Private Key: (d=2753, n=3233)
+
+Encrypt M=65 (must have M < n):
+  C = 65¹⁷ mod 3233 = 2790  (using repeated squaring)
+
+Decrypt C=2790:
+  M = 2790²⁷⁵³ mod 3233 = 65 ✓</div>
+      </div>
+
+      <div class="eg">
+        <p><strong>Repeated Squaring — computing Mᵉ mod n efficiently:</strong></p>
+        <div class="cb">To compute 65¹⁷ mod 3233:
+17 in binary = 10001
+
+65¹  mod 3233 = 65
+65²  mod 3233 = 4225 mod 3233 = 992
+65⁴  mod 3233 = 992² mod 3233 = 984064 mod 3233 = 1097
+65⁸  mod 3233 = 1097² mod 3233 = 1203409 mod 3233 = 1874
+65¹⁶ mod 3233 = 1874² mod 3233 = 3511876 mod 3233 = 2827
+
+65¹⁷ = 65¹⁶ × 65¹ = 2827 × 65 mod 3233
+     = 183755 mod 3233 = 2790 ✓
+
+This is O(log e) multiplications — essential for large exponents.</div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">GATE Trap — d is inverse mod φ(n), NOT mod n</span>
+        <p>The private exponent d satisfies: e × d ≡ 1 (mod <strong>φ(n)</strong>). The modulus for the inverse computation is φ(n) = (p−1)(q−1), not n. Using n instead of φ(n) gives a completely wrong d. This is the single most common calculation error in RSA NAT questions.</p>
+      </div>
+
+      <h3 class="ssh">Diffie-Hellman Key Exchange</h3>
+      <div class="def-box">
+        <span class="lbl">Diffie-Hellman — Secure Key Agreement Without Sharing a Secret</span>
+        <p>DH allows two parties to agree on a shared secret over a public channel without ever transmitting the secret itself. Security rests on the <strong>discrete logarithm problem</strong>.<br><br>
+        <strong>Setup (public):</strong> Large prime g and generator p.<br>
+        <strong>Alice:</strong> Chooses private aₐ, computes Aₚ = gᵃ mod p. Sends Aₚ.<br>
+        <strong>Bob:</strong> Chooses private bᵦ, computes Bₚ = gᵇ mod p. Sends Bₚ.<br>
+        <strong>Shared secret:</strong> Alice computes Bₚᵃ mod p. Bob computes Aₚᵇ mod p. Both = gᵃᵇ mod p.<br>
+        An eavesdropper sees g, p, gᵃ, gᵇ but cannot compute gᵃᵇ without solving discrete log.</p>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">DH is Vulnerable to Man-in-the-Middle — Authentication Needed</span>
+        <p>DH provides key agreement but NOT authentication. An attacker Mallory can intercept: perform DH with Alice (posing as Bob) and DH with Bob (posing as Alice) separately. Both Alice and Bob think they share a key with each other, but Mallory controls both sessions. DH must be combined with digital certificates (public key infrastructure) to prevent MITM attacks. TLS does this — DH for key exchange + X.509 certificate for authentication.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="hash-signatures">
+      <h2 class="sh">9.3 &nbsp; Hash Functions &amp; Digital Signatures <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">Cryptographic Hash Functions</h3>
+      <div class="def-box">
+        <span class="lbl">Hash Function Properties</span>
+        <p>A cryptographic hash function H maps arbitrary-length input to a fixed-length digest (hash). Required properties:<br>
+        <strong>1. Deterministic:</strong> Same input always gives same output.<br>
+        <strong>2. Efficient:</strong> Fast to compute H(M) for any M.<br>
+        <strong>3. One-way (Pre-image resistance):</strong> Given h, computationally infeasible to find M such that H(M) = h.<br>
+        <strong>4. Second pre-image resistance:</strong> Given M₁, infeasible to find M₂ ≠ M₁ with H(M₂) = H(M₁).<br>
+        <strong>5. Collision resistance:</strong> Infeasible to find any M₁ ≠ M₂ with H(M₁) = H(M₂).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Algorithm</th><th>Output Size</th><th>Status</th><th>Use</th></tr></thead>
+          <tbody>
+            <tr><td>MD5</td><td>128 bits</td><td class="bad">Broken — collision attacks practical</td><td>Legacy, checksums only</td></tr>
+            <tr><td>SHA-1</td><td>160 bits</td><td class="bad">Broken — collision attacks demonstrated (2017)</td><td>Deprecated</td></tr>
+            <tr><td>SHA-256</td><td>256 bits</td><td class="good">Secure — current standard</td><td>TLS, Bitcoin, code signing</td></tr>
+            <tr><td>SHA-3</td><td>224/256/384/512 bits</td><td class="good">Secure — different internal design from SHA-2</td><td>Modern systems</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Birthday Attack — Why Hash Size Matters</span>
+        <p>If a hash has n bits, a brute-force collision attack requires approximately 2^(n/2) operations (birthday paradox — not 2ⁿ). For MD5 (128 bits): 2⁶⁴ operations — feasible on modern hardware. For SHA-256 (256 bits): 2¹²⁸ operations — computationally infeasible. This is why hash output must be at least 256 bits for modern security.</p>
+      </div>
+
+      <h3 class="ssh">Message Authentication Code (MAC)</h3>
+      <div class="def-box">
+        <span class="lbl">MAC — Shared-Key Integrity</span>
+        <p>MAC = H(K || M) — a hash computed with a shared secret key K. Provides integrity and authentication (only parties knowing K can generate a valid MAC). Does NOT provide non-repudiation (either party could have generated it). Used in: TLS record layer (HMAC-SHA256), WPA2 (TKIP-MIC).</p>
+      </div>
+
+      <h3 class="ssh">Digital Signatures — Authentication + Integrity + Non-repudiation</h3>
+      <div class="def-box">
+        <span class="lbl">Digital Signature — How It Works</span>
+        <p>
+          <strong>Signing (sender uses their PRIVATE key):</strong><br>
+          1. Compute hash of message: h = H(M)<br>
+          2. Encrypt hash with private key: S = E(K_priv, h) — this is the signature<br>
+          3. Send (M, S) together<br><br>
+          <strong>Verification (receiver uses sender's PUBLIC key):</strong><br>
+          1. Compute hash of received message: h' = H(M)<br>
+          2. Decrypt signature: h = D(K_pub, S)<br>
+          3. Compare: if h == h', signature is valid<br><br>
+          Provides: <strong>Authentication</strong> (only private key holder could have signed), <strong>Integrity</strong> (any change to M changes h'), <strong>Non-repudiation</strong> (sender cannot deny — only they have the private key).
+        </p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">Digital Signature — Complete Flow</span>
+Alice wants to send M to Bob, proving it's from her and unmodified.
+
+ALICE (signing):                    BOB (verifying):
+  M = "Send $100 to Carol"            Receive (M, S)
+  h = SHA256(M)                       h' = SHA256(M)
+  S = RSA_encrypt(K_Alice_priv, h)    h = RSA_decrypt(K_Alice_pub, S)
+  Send (M, S) ──────────────────→     if h == h': VALID ✓
+                                       else: TAMPERED ✗
+
+Anyone with Alice's public key can verify.
+Only Alice (with her private key) can sign.
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Encrypt vs Sign — Direction of Key Use</span>
+        <p>
+          <strong>Encrypt for confidentiality:</strong> Use receiver's <em>PUBLIC</em> key to encrypt → only receiver's private key can decrypt.<br>
+          <strong>Sign for authentication:</strong> Use sender's <em>PRIVATE</em> key to sign → anyone with sender's public key can verify.<br>
+          These are opposite operations. GATE directly tests: "Alice wants to send a message that only Bob can read. Which key does she use?" → Bob's public key. "Alice wants to prove she sent the message. What does she use?" → Her own private key. Getting these backwards is the classic exam error.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="pki">
+      <h2 class="sh">9.4 &nbsp; Public Key Infrastructure (PKI) &amp; Certificates <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">The Key Distribution Problem in Public Key Cryptography</span>
+        <p>Public key cryptography eliminates the secret key distribution problem — but creates a new one: <strong>how do you know that a public key actually belongs to who it claims to belong to?</strong> An attacker (Mallory) could publish a key claiming to be Alice. Anyone using Mallory's key thinking it's Alice's sends secrets to Mallory.</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Digital Certificate (X.509)</span>
+        <p>A digital certificate binds a public key to an identity (name, organization, domain). It contains: subject's public key, subject's identity (CN, O, etc.), validity period, issuer's name, and the CA's digital signature over all of this. The certificate is trusted because it is signed by a trusted Certificate Authority (CA).</p>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">Certificate Authority (CA) — The Trust Anchor</span>
+        <p>A CA is a trusted third party that verifies identities and issues digital certificates. Root CAs (DigiCert, Let's Encrypt, GlobalSign) are pre-installed in browsers and OS. The chain of trust: Root CA → Intermediate CA → End-entity certificate. Browsers verify the chain up to a trusted root CA.</p>
+      </div>
+
+      <div class="gv">
+        <span class="dv-label">Certificate Verification Chain</span>
+Browser trusts: Root CA (pre-installed)
+               ↓ (Root CA signs)
+         Intermediate CA certificate
+               ↓ (Intermediate CA signs)
+         Website certificate (contains site's public key)
+               ↓ (Site uses private key for TLS)
+         Encrypted connection to user
+
+Certificate contains:
+  Subject: CN=www.example.com
+  Public Key: (e=65537, n=very_large_number)
+  Issuer: DigiCert Global Root CA
+  Valid: 2024-01-01 to 2025-01-01
+  Signature: CA's digital signature (verifiable with CA's public key)
+      </div>
+    </div>
+
+    <div class="sec" data-m="firewalls">
+      <h2 class="sh">9.5 &nbsp; Firewalls — Types &amp; Operation <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Firewall</span>
+        <p>A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predefined security rules. It creates a barrier between a trusted internal network and an untrusted external network (internet).</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Firewall Type</th><th>OSI Layer</th><th>Examines</th><th>State</th><th>Pros/Cons</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Packet Filter</strong></td><td>Network (L3) / Transport (L4)</td><td>IP src/dst, ports, protocol</td><td class="bad">Stateless</td><td>Fast, simple. Cannot detect spoofed packets or track connections.</td></tr>
+            <tr><td><strong>Stateful Inspection</strong></td><td>Transport (L4)</td><td>Packet headers + connection state</td><td class="good">Stateful</td><td>Tracks TCP connections. Detects invalid packets not part of established sessions. Modern standard.</td></tr>
+            <tr><td><strong>Application Layer Proxy</strong></td><td>Application (L7)</td><td>Full application content</td><td class="good">Stateful</td><td>Understands HTTP, FTP, DNS content. Most secure. Slowest — full content inspection.</td></tr>
+            <tr><td><strong>Next-Generation Firewall (NGFW)</strong></td><td>L3–L7</td><td>Everything above + DPI, IDS, app-id</td><td class="good">Stateful</td><td>Deep packet inspection, application identification, TLS inspection. Current enterprise standard.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Demilitarized Zone (DMZ)</h3>
+      <p>
+        A DMZ is a network segment between the external internet and the internal trusted network. Servers that must be publicly accessible (web servers, mail servers, DNS) are placed in the DMZ. Two firewalls isolate it: external firewall between internet and DMZ, internal firewall between DMZ and internal LAN. Even if a DMZ server is compromised, the internal network is still protected by the inner firewall.
+      </p>
+
+      <div class="gv">
+        <span class="dv-label">DMZ Architecture</span>
+Internet
+   │
+   ▼
+[External Firewall] ← allows HTTP/HTTPS/SMTP inbound
+   │                    blocks everything else
+   ├──→ [DMZ: Web Server, Mail Server, DNS]
+   │
+   ▼
+[Internal Firewall] ← allows only specific internal traffic
+   │
+   ▼
+[Internal Network: Databases, Workstations, File Servers]
+      </div>
+    </div>
+
+    <div class="sec" data-m="security-protocols">
+      <h2 class="sh">9.6 &nbsp; Network Security Protocols — IPsec, TLS &amp; PGP <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Protocol</th><th>OSI Layer</th><th>Purpose</th><th>Key Feature</th></tr></thead>
+          <tbody>
+            <tr><td><strong>IPsec</strong></td><td>Network (L3)</td><td>Secure IP communication, VPNs</td><td>Transparent to applications — works at IP level. Two modes: Transport (encrypts payload) and Tunnel (encrypts entire packet, adds new IP header).</td></tr>
+            <tr><td><strong>TLS/SSL</strong></td><td>Between L4 and L7</td><td>Secure web, email, any TCP app</td><td>Application must be TLS-aware. Provides confidentiality (AES), integrity (HMAC), authentication (certificates). Used by HTTPS, SMTPS, IMAPS.</td></tr>
+            <tr><td><strong>SSH</strong></td><td>Application (L7)</td><td>Secure remote login, file transfer</td><td>Replaces insecure Telnet/rsh/rcp. Public key authentication. Port forwarding (tunneling).</td></tr>
+            <tr><td><strong>PGP/GPG</strong></td><td>Application (L7)</td><td>Email encryption and signing</td><td>Web of trust (no central CA — users sign each other's keys). Used for end-to-end email encryption and code signing.</td></tr>
+            <tr><td><strong>WPA2/WPA3</strong></td><td>Data Link (L2)</td><td>Wi-Fi security</td><td>WPA2 uses AES-CCMP. WPA3 uses SAE (Simultaneous Authentication of Equals) — resists offline dictionary attacks.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">IPsec Modes — Transport vs Tunnel</h3>
+      <div class="eg">
+        <p><strong>IPsec Transport Mode:</strong> Encrypts/authenticates only the payload of the IP packet. Original IP header is preserved. Used for end-to-end communication between two hosts.</p>
+        <div class="cb">Original packet:  [ IP Header | TCP Header | Data ]
+Transport mode:   [ IP Header | IPsec Header | Encrypted(TCP Header + Data) ]
+                   ↑ unchanged   ↑ new          ↑ protected</div>
+        <p><strong>IPsec Tunnel Mode:</strong> Encrypts/authenticates the entire original IP packet, then adds a new outer IP header. Used in VPNs — gateway-to-gateway tunnels. The original source/destination IPs are hidden.</p>
+        <div class="cb">Original packet:  [ IP Header (A→B) | TCP Header | Data ]
+Tunnel mode:      [ New IP Header (GW1→GW2) | IPsec Header | Encrypted(IP Header(A→B) + TCP + Data) ]
+                   ↑ new outer                ↑ new           ↑ entire original packet encrypted</div>
+      </div>
+
+      <h3 class="ssh">Common Attacks and Defenses</h3>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Attack</th><th>Description</th><th>Defense</th></tr></thead>
+          <tbody>
+            <tr><td>Man-in-the-Middle (MITM)</td><td>Attacker intercepts and relays communication between two parties, each believing they communicate directly.</td><td>Digital certificates + PKI. TLS with certificate pinning.</td></tr>
+            <tr><td>Replay Attack</td><td>Attacker captures a valid message and re-sends it later to repeat an action (e.g., a payment).</td><td>Nonces (random numbers used once), timestamps, sequence numbers in protocols.</td></tr>
+            <tr><td>DoS / DDoS</td><td>Flood a server with requests to exhaust resources. DDoS uses multiple compromised hosts (botnet).</td><td>Rate limiting, CAPTCHAs, CDN, SYN cookies (against SYN flood).</td></tr>
+            <tr><td>SYN Flood</td><td>Send many SYN packets with fake source IPs. Server allocates state for each half-open connection, exhausting memory.</td><td>SYN cookies — server encodes state in the ISN, doesn't allocate resources until ACK arrives.</td></tr>
+            <tr><td>SQL Injection</td><td>Inject malicious SQL into user inputs to manipulate database queries.</td><td>Prepared statements, parameterized queries, input validation.</td></tr>
+            <tr><td>DNS Spoofing / Cache Poisoning</td><td>Attacker inserts false DNS records into resolver cache, redirecting users to malicious sites.</td><td>DNSSEC — signs DNS records with digital signatures.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec" data-m="security-traps">
+      <h2 class="sh">9.7 &nbsp; GATE Security Traps &amp; Reference <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Encrypt with sender's private key = confidentiality</td><td>Encrypting with sender's PRIVATE key = <strong>authentication/signing</strong> (not confidentiality — anyone with public key can decrypt). For confidentiality: encrypt with RECEIVER's PUBLIC key. Only receiver's private key can decrypt.</td></tr>
+            <tr><td>2</td><td>d = e⁻¹ mod n</td><td>d is the inverse of e modulo <strong>φ(n)</strong>, not n. e×d ≡ 1 (mod φ(n)). Using n in the modulo gives a wrong answer. This is the #1 RSA calculation error in GATE.</td></tr>
+            <tr><td>3</td><td>Symmetric key cryptography uses a public key</td><td>Symmetric = same secret key for both parties. Asymmetric = public/private key pair. DES and AES are symmetric. RSA is asymmetric. The word "symmetric" means the encryption and decryption keys are identical.</td></tr>
+            <tr><td>4</td><td>Hash provides confidentiality</td><td>Hash functions provide INTEGRITY (detect tampering) — NOT confidentiality. A hash is not encryption. You cannot decrypt a hash. For confidentiality, use encryption (AES, RSA). For integrity, use hash + digital signature or MAC.</td></tr>
+            <tr><td>5</td><td>Digital signature proves only authentication</td><td>Digital signatures provide THREE things: (1) Authentication — only private key holder could have signed. (2) Integrity — any change to M invalidates signature. (3) Non-repudiation — sender cannot deny signing. Not just authentication.</td></tr>
+            <tr><td>6</td><td>DH provides authentication</td><td>Diffie-Hellman provides KEY AGREEMENT only — not authentication. DH is vulnerable to MITM without certificates. DH must be used with digital signatures/certificates to verify the identity of the party you're doing key exchange with.</td></tr>
+            <tr><td>7</td><td>MAC and digital signature are equivalent</td><td>MAC uses a SHARED secret key — both parties can generate it, so neither can prove to a third party who sent it. No non-repudiation. Digital signature uses PRIVATE key — only signer can create it. Provides non-repudiation. MAC = fast, no PKI needed. Signature = slower, requires PKI, but non-repudiation.</td></tr>
+            <tr><td>8</td><td>Larger key = always better</td><td>Larger keys are more secure but slower to compute. RSA-4096 is more secure than RSA-2048 but ~8× slower. In practice, ECC achieves RSA-equivalent security with smaller keys (256-bit ECC ≈ 3072-bit RSA security). Key size choice is a security-vs-performance tradeoff.</td></tr>
+            <tr><td>9</td><td>MD5 is secure for passwords</td><td>MD5 is broken — collision attacks are practical. Even if MD5 were collision-resistant, storing MD5(password) is still insecure because of rainbow tables (precomputed hash→password maps). Passwords must use slow, salted hashes: bcrypt, scrypt, Argon2.</td></tr>
+            <tr><td>10</td><td>Firewall blocks all attacks</td><td>Firewalls inspect network traffic but cannot protect against: application-layer attacks (SQL injection — legitimate HTTP), encrypted malware (TLS-wrapped), insider threats (attacker already inside), or zero-day exploits. Firewalls are one layer of defense, not complete protection.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Goal</th><th>Mechanism</th><th>Key Used</th></tr></thead>
+          <tbody>
+            <tr><td>Confidentiality (only receiver reads)</td><td>Asymmetric encryption</td><td>Encrypt with <strong>receiver's public key</strong>; decrypt with receiver's private key</td></tr>
+            <tr><td>Authentication + Non-repudiation</td><td>Digital signature</td><td>Sign with <strong>sender's private key</strong>; verify with sender's public key</td></tr>
+            <tr><td>Confidentiality + Authentication</td><td>Sign then encrypt (or encrypt then sign)</td><td>Sign with sender's private key; encrypt result with receiver's public key</td></tr>
+            <tr><td>Integrity only (shared secret)</td><td>MAC (HMAC)</td><td>Shared symmetric key — both parties know it</td></tr>
+            <tr><td>Key agreement</td><td>Diffie-Hellman</td><td>Public parameters + private exponents</td></tr>
+            <tr><td>Bulk data encryption</td><td>Symmetric (AES)</td><td>Shared secret session key (exchanged via DH/RSA)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">GATE Question Patterns — Security</span>
+        <p>
+          "RSA: p=5, q=11. Find public and private keys." — Compute n=55, φ=40, choose e (e.g., 3 or 7), find d using extended Euclidean. 2-mark NAT.<br>
+          "Which key does Alice use to ensure only Bob can read the message?" — Bob's public key. 1 mark.<br>
+          "Which property does a digital signature provide that a MAC does not?" — Non-repudiation. 1 mark.<br>
+          "Which protocol operates at the network layer to secure VPN tunnels?" — IPsec. 1 mark.<br>
+          "MD5 vs SHA-256 — which should be used for digital signatures?" — SHA-256. MD5 is broken. 1 mark.
+        </p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<div class="footer">
+  Computer Networks · Transport Layer, Application Layer &amp; Network Security · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

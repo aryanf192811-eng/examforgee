@@ -1,15 +1,22 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { fetchSubjects, fetchChapters, loadNoteHtml, updateNoteProgress } from "../lib/api";
-import type { SubjectResponse, ChapterResponse } from "../types";
+import { 
+  fetchSubjects, 
+  fetchChapters, 
+  loadNoteHtml, 
+  updateUserProgress, 
+  fetchUserProgress 
+} from "../lib/api";
+import type { Subject, Chapter, UserProgress } from "../types";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Button } from "../components/ui/Button";
 
 export function Notes() {
-  const { subjectSlug, chapterId } = useParams();
+  const { subjectSlug, chapterSlug } = useParams();
   const navigate = useNavigate();
-  const [subjects, setSubjects] = useState<SubjectResponse[]>([]);
-  const [chapters, setChapters] = useState<ChapterResponse[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [noteHtml, setNoteHtml] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [noteLoading, setNoteLoading] = useState(false);
@@ -21,44 +28,47 @@ export function Notes() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
-    async function load() {
+    async function init() {
       try {
-        const data = await fetchSubjects();
-        setSubjects(data);
+        const [subs, prog] = await Promise.all([
+          fetchSubjects(),
+          fetchUserProgress()
+        ]);
+        setSubjects(subs);
+        setUserProgress(prog);
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     }
-    load();
+    init();
   }, []);
 
-  // Load chapters when subject changes
+  // Load chapters when subjectSlug changes
   useEffect(() => {
     if (subjectSlug && subjectSlug !== "intro") {
       async function loadChapters() {
         try {
-          const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
-          if (subject) {
-            const data = await fetchChapters(subject.id);
-            setChapters(Array.isArray(data) ? data : []);
-          }
+          const data = await fetchChapters(subjectSlug);
+          setChapters(data);
         } catch (err) {
           console.error(err);
+          setChapters([]);
         }
       }
       loadChapters();
     }
-  }, [subjectSlug, subjects]);
+  }, [subjectSlug]);
 
-  // Load note content when chapterId changes
+  // Load note content when chapterSlug changes
   useEffect(() => {
-    if (chapterId) {
+    const currentChapter = chapters.find(c => c.slug === chapterSlug);
+    if (currentChapter && currentChapter.notes_file) {
       async function fetchNote() {
         setNoteLoading(true);
         try {
-          const html = await loadNoteHtml(chapterId as string);
+          const html = await loadNoteHtml(currentChapter!.notes_file!);
           setNoteHtml(html);
           timeStarted.current = Date.now();
         } catch (err) {
@@ -72,9 +82,8 @@ export function Notes() {
     } else {
       setNoteHtml(null);
     }
-  }, [chapterId]);
+  }, [chapterSlug, chapters]);
 
-  // Iframe auto-resize logic
   const updateIframeHeight = () => {
     if (iframeRef.current && iframeRef.current.contentWindow) {
       const body = iframeRef.current.contentWindow.document.body;
@@ -94,11 +103,7 @@ export function Notes() {
 
   useEffect(() => {
     if (!iframeRef.current) return;
-
-    const observer = new ResizeObserver(() => {
-      updateIframeHeight();
-    });
-
+    const observer = new ResizeObserver(() => updateIframeHeight());
     const iframe = iframeRef.current;
     const handleLoad = () => {
       updateIframeHeight();
@@ -106,7 +111,6 @@ export function Notes() {
         observer.observe(iframe.contentWindow.document.body);
       }
     };
-
     iframe.addEventListener('load', handleLoad);
     return () => {
       iframe.removeEventListener('load', handleLoad);
@@ -115,19 +119,26 @@ export function Notes() {
   }, [noteHtml]);
 
   const handleMarkAsDone = async () => {
-    if (!chapterId) return;
+    const currentChapter = chapters.find(c => c.slug === chapterSlug);
+    if (!currentChapter || !subjectSlug) return;
+    
+    const subject = subjects.find(s => s.slug === subjectSlug);
+    if (!subject) return;
+
     setProgressSaving(true);
     try {
       const timeSpent = Math.floor((Date.now() - timeStarted.current) / 1000);
-      await updateNoteProgress({
-        chapter_id: chapterId,
-        status: "done",
-        time_spent_s: timeSpent
+      await updateUserProgress({
+        chapter_slug: currentChapter.slug,
+        subject_id: subject.id,
+        progress_pct: 100,
+        time_spent_s: timeSpent,
+        completed: true
       });
       
-      setChapters(prev => prev.map(c => 
-        c.id === chapterId ? { ...c, user_status: 'done' } : c
-      ));
+      // Refresh progress
+      const newProg = await fetchUserProgress(subject.id);
+      setUserProgress(newProg);
     } catch (err) {
       console.error(err);
     } finally {
@@ -135,67 +146,9 @@ export function Notes() {
     }
   };
 
-  // Generate srcDoc with KaTeX support
-  const getIframeSrcDoc = () => {
-    if (!noteHtml) return "";
-    
-    return `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-          <style>
-            :root {
-              color-scheme: light dark;
-              --primary: #6750a4;
-            }
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-              line-height: 1.8;
-              color: inherit;
-              margin: 0;
-              padding: 0;
-              font-size: 1.1rem;
-              overflow: hidden; /* Prevent double scrollbars */
-            }
-            img { max-width: 100%; height: auto; border-radius: 12px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
-            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-            code { background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px; font-family: monospace; }
-          </style>
-          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-          <script>
-            function renderMath() {
-              if (window.renderMathInElement) {
-                renderMathInElement(document.body, {
-                  delimiters: [
-                    { left: "$$", right: "$$", display: true },
-                    { left: "$", right: "$", display: false },
-                    { left: "\\(", right: "\\)", display: false },
-                    { left: "\\[", right: "\\]", display: true },
-                  ],
-                  throwOnError: false,
-                });
-              }
-            }
-            document.addEventListener("DOMContentLoaded", renderMath);
-            window.addEventListener("load", renderMath);
-          </script>
-        </head>
-        <body style="background: transparent;">
-          <div id="content-wrapper">
-            ${noteHtml}
-          </div>
-        </body>
-      </html>
-    `;
-  };
-
-  const subject = (Array.isArray(subjects) ? subjects : []).find((s) => s.slug === subjectSlug);
-  const currentChapter = chapters.find((c) => c.id === chapterId);
+  const currentSubject = subjects.find(s => s.slug === subjectSlug);
+  const currentChapter = chapters.find(c => c.slug === chapterSlug);
+  const isCompleted = userProgress.some(p => p.chapter_slug === chapterSlug && p.completed);
 
   if (loading) {
     return (
@@ -205,12 +158,11 @@ export function Notes() {
     );
   }
 
-  // Subjects List View
   if (!subjectSlug || subjectSlug === "intro") {
     return (
       <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-10 animate-fade-in">
         <header className="space-y-4 mb-12 text-center md:text-left">
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-on-surface">
+          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-on-surface text-transparent bg-clip-text academic-gradient">
             Curriculum Repository
           </h1>
           <p className="text-on-surface-variant text-lg font-notes italic">
@@ -219,39 +171,22 @@ export function Notes() {
         </header>
 
         {subjects.length === 0 ? (
-          <EmptyState
-            icon="menu_book"
-            title="No Subjects Found"
-            description="The curriculum is currently being updated. Please check back later."
-          />
+          <EmptyState icon="menu_book" title="No Subjects Found" description="The curriculum is currently being updated." />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(Array.isArray(subjects) ? subjects : []).map((sub) => (
+            {subjects.map((sub) => (
               <Link
                 key={sub.id}
                 to={`/notes/${sub.slug}`}
                 className="group relative bg-surface-container-low rounded-3xl p-8 border border-outline-variant/10 hover:border-primary/30 transition-all hover:shadow-2xl hover:-translate-y-1"
               >
                 <div className="w-14 h-14 rounded-2xl bg-primary-container text-on-primary-container flex items-center justify-center mb-6 text-2xl group-hover:scale-110 transition-transform">
-                  {sub.icon?.includes("<svg") ? (
-                    <div dangerouslySetInnerHTML={{ __html: sub.icon }} className="w-8 h-8" />
-                  ) : (
-                    <span className="material-symbols-outlined text-3xl">
-                      {sub.icon || "receipt_long"}
-                    </span>
-                  )}
+                   <span className="material-symbols-outlined text-3xl">{sub.icon || "receipt_long"}</span>
                 </div>
-                <h3 className="font-display text-xl font-bold text-on-surface mb-2">
-                  {sub.name}
-                </h3>
-                <p className="text-sm text-on-surface-variant mb-6 line-clamp-2">
-                  Comprehensive modules covering {sub.name} fundamentals and GATE patterns.
-                </p>
+                <h3 className="font-display text-xl font-bold text-on-surface mb-2">{sub.name}</h3>
+                <p className="text-sm text-on-surface-variant mb-6 line-clamp-2">{sub.description || `Comprehensive modules covering ${sub.name}.`}</p>
                 <div className="flex items-center text-primary font-bold text-sm">
-                  Explore Modules
-                  <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">
-                    arrow_forward
-                  </span>
+                  Explore Modules <span className="material-symbols-outlined ml-2 group-hover:translate-x-1 transition-transform">arrow_forward</span>
                 </div>
               </Link>
             ))}
@@ -263,78 +198,48 @@ export function Notes() {
 
   return (
     <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-surface">
-      {/* Sidebar - Chapter List */}
-      <aside 
-        className={`${
-          sidebarOpen ? 'w-80' : 'w-0'
-        } transition-all duration-300 border-r border-outline-variant bg-surface-container-lowest overflow-hidden flex flex-col relative`}
-      >
+      <aside className={`${sidebarOpen ? 'w-80' : 'w-0'} transition-all duration-300 border-r border-outline-variant bg-surface-container-lowest overflow-hidden flex flex-col relative`}>
         <div className="p-6 border-b border-outline-variant flex items-center justify-between">
-          <h2 className="font-display font-bold text-lg text-primary truncate">
-            {subject?.name}
-          </h2>
+          <h2 className="font-display font-bold text-lg text-primary truncate">{currentSubject?.name}</h2>
         </div>
-        
         <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
           {chapters.length === 0 ? (
-            <p className="text-sm text-center text-on-surface-variant py-10 italic">
-              No chapters available for this subject.
-            </p>
+            <p className="text-sm text-center text-on-surface-variant py-10 italic">No chapters available.</p>
           ) : (
-            chapters.map((ch) => (
-              <button
-                key={ch.id}
-                onClick={() => navigate(`/notes/${subjectSlug}/${ch.id}`)}
-                className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-3 border ${
-                  chapterId === ch.id
-                    ? 'bg-primary-container text-on-primary-container border-primary/20 shadow-sm'
-                    : 'hover:bg-surface-container-low border-transparent'
-                }`}
-              >
-                <span className={`material-symbols-outlined text-xl ${
-                  ch.user_status === 'done' ? 'text-primary' : 'text-on-surface-variant/40'
-                }`}>
-                  {ch.user_status === 'done' ? 'check_circle' : 'article'}
-                </span>
-                <span className="text-sm font-medium line-clamp-1">{ch.title}</span>
-              </button>
-            ))
+            chapters.map((ch) => {
+              const chDone = userProgress.some(p => p.chapter_slug === ch.slug && p.completed);
+              return (
+                <button
+                  key={ch.id}
+                  onClick={() => navigate(`/notes/${subjectSlug}/${ch.slug}`)}
+                  className={`w-full text-left p-4 rounded-2xl transition-all flex items-center gap-3 border ${
+                    chapterSlug === ch.slug ? 'bg-primary-container text-on-primary-container border-primary/20 shadow-sm' : 'hover:bg-surface-container-low border-transparent'
+                  }`}
+                >
+                  <span className={`material-symbols-outlined text-xl ${chDone ? 'text-primary' : 'text-on-surface-variant/40'}`}>
+                    {chDone ? 'check_circle' : 'article'}
+                  </span>
+                  <span className="text-sm font-medium line-clamp-1">{ch.title}</span>
+                </button>
+              );
+            })
           )}
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto relative bg-surface-container-lowest custom-scrollbar">
-        {/* Toggle Sidebar Button */}
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-20 left-6 z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
-        >
-          <span className="material-symbols-outlined">
-            {sidebarOpen ? 'menu_open' : 'menu'}
-          </span>
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="fixed top-20 left-6 z-10 w-10 h-10 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+          <span className="material-symbols-outlined">{sidebarOpen ? 'menu_open' : 'menu'}</span>
         </button>
 
         <div className="max-w-4xl mx-auto px-6 py-16 md:px-12 md:py-20 animate-fade-in">
-          {!chapterId ? (
+          {!chapterSlug ? (
             <div className="flex flex-col items-center justify-center h-full text-center space-y-6 py-20">
               <div className="w-20 h-20 rounded-3xl bg-primary-container text-on-primary-container flex items-center justify-center text-4xl shadow-lg">
-                {subject?.icon?.includes("<svg") ? (
-                  <div dangerouslySetInnerHTML={{ __html: subject.icon }} className="w-12 h-12" />
-                ) : (
-                  <span className="material-symbols-outlined text-5xl">
-                    {subject?.icon || "school"}
-                  </span>
-                )}
+                <span className="material-symbols-outlined text-5xl">{currentSubject?.icon || "school"}</span>
               </div>
-              <div>
-                <h1 className="font-display text-3xl font-bold text-on-surface mb-2">
-                  Welcome to {subject?.name}
-                </h1>
-                <p className="text-on-surface-variant max-w-md mx-auto">
-                  Select a chapter from the sidebar to begin your study session. Each module is optimized for GATE preparation.
-                </p>
-              </div>
+              <h1 className="font-display text-3xl font-bold text-on-surface mb-2">Welcome to {currentSubject?.name}</h1>
+              <p className="text-on-surface-variant max-w-md mx-auto">Select a chapter from the sidebar to begin your study session.</p>
             </div>
           ) : noteLoading ? (
             <div className="flex flex-col items-center justify-center py-40 space-y-4">
@@ -345,49 +250,61 @@ export function Notes() {
             <article>
               <header className="mb-12 space-y-4">
                 <div className="flex items-center gap-2 text-primary font-bold text-sm tracking-wider uppercase">
-                  <span>{subject?.name}</span>
+                  <span>{currentSubject?.name}</span>
                   <span className="text-on-surface-variant/30">/</span>
-                  <span className="text-on-surface-variant/70">Chapter {chapters.findIndex(c => c.id === chapterId) + 1}</span>
+                  <span className="text-on-surface-variant/70">Module</span>
                 </div>
-                <h1 className="font-display text-4xl md:text-5xl font-bold text-on-surface leading-tight">
-                  {currentChapter?.title}
-                </h1>
+                <h1 className="font-display text-4xl md:text-5xl font-bold text-on-surface leading-tight">{currentChapter?.title}</h1>
               </header>
 
-              <div className="relative w-full overflow-hidden">
-                <iframe
-                  ref={iframeRef}
-                  srcDoc={getIframeSrcDoc()}
-                  style={{ 
-                    height: iframeHeight,
-                    width: '100%',
-                    border: 'none',
-                  }}
-                  scrolling="no"
-                  sandbox="allow-same-origin allow-scripts"
-                  title="Note Content"
-                  onLoad={updateIframeHeight}
-                />
-              </div>
+              {noteHtml && (
+                <div className="relative w-full overflow-hidden">
+                  <iframe
+                    ref={iframeRef}
+                    srcDoc={`
+                      <!DOCTYPE html>
+                      <html>
+                        <head>
+                          <meta charset="utf-8">
+                          <meta name="viewport" content="width=device-width, initial-scale=1">
+                          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+                          <style>
+                            :root { color-scheme: light dark; --primary: #6750a4; }
+                            body { font-family: -apple-system, sans-serif; line-height: 1.8; color: inherit; margin: 0; padding: 2rem; font-size: 1.1rem; overflow: hidden; }
+                            img { max-width: 100%; height: auto; border-radius: 12px; }
+                            table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+                            th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+                            code { background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px; font-family: monospace; }
+                          </style>
+                        </head>
+                        <body style="background: transparent;">
+                          ${noteHtml}
+                          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+                          <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+                          <script>
+                            window.onload = () => {
+                              renderMathInElement(document.body, {
+                                delimiters: [
+                                  { left: "$$", right: "$$", display: true },
+                                  { left: "$", right: "$", display: false }
+                                ],
+                                throwOnError: false
+                              });
+                            }
+                          </script>
+                        </body>
+                      </html>
+                    `}
+                    style={{ height: iframeHeight, width: '100%', border: 'none' }}
+                    scrolling="no"
+                    sandbox="allow-same-origin allow-scripts"
+                  />
+                </div>
+              )}
 
               <footer className="mt-20 pt-10 border-t border-outline-variant flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="text-on-surface-variant text-sm italic">
-                  Take your time to synthesize the concepts. Ready for the next one?
-                </div>
-                <Button
-                  onClick={handleMarkAsDone}
-                  isLoading={progressSaving}
-                  disabled={currentChapter?.user_status === 'done'}
-                  className="rounded-full px-10 h-14 text-lg font-bold academic-gradient"
-                >
-                  {currentChapter?.user_status === 'done' ? (
-                    <span className="flex items-center gap-2">
-                      <span className="material-symbols-outlined">verified</span>
-                      Completed
-                    </span>
-                  ) : (
-                    "Mark as Completed"
-                  )}
+                <Button onClick={handleMarkAsDone} isLoading={progressSaving} disabled={isCompleted} className="rounded-full px-10 h-14 text-lg font-bold academic-gradient">
+                  {isCompleted ? "Completed" : "Mark as Completed"}
                 </Button>
               </footer>
             </article>

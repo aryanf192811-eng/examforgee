@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C Programming — Complete GATE Notes</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Architects+Daughter&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#faf7f2; --paper2:#f3ede3; --paper3:#ece5d8;
+  --ink:#1c1510; --ink2:#3a2e22; --ink3:#6b5a47;
+  --rule:rgba(100,130,180,0.14); --mline:rgba(210,100,80,0.28);
+  --red:#b83030; --blue:#1a4a8c; --green:#1a6b40;
+  --orange:#b85a10; --purple:#5a1a8a; --teal:#0d7a6a;
+  --hl-y:rgba(255,236,60,0.42); --hl-b:rgba(100,160,255,0.17);
+  --hl-g:rgba(60,180,100,0.17); --hl-r:rgba(220,60,60,0.12);
+  --hl-o:rgba(220,130,30,0.14); --hl-p:rgba(120,40,180,0.11);
+  --body:'Lora',Georgia,serif; --prose:'Crimson Pro',Georgia,serif; --hand:'Architects Daughter',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:#bfb49a;background-image:radial-gradient(ellipse 70% 50% at 15% 25%,#b0a48c 0%,transparent 65%),radial-gradient(ellipse 55% 65% at 85% 75%,#ccc0a6 0%,transparent 55%);font-family:var(--body);color:var(--ink);min-height:100vh;padding:24px 16px 64px;}
+.book{max-width:840px;margin:0 auto;}
+.cover{background:var(--paper2);border:2px solid var(--ink);border-radius:4px;padding:44px 48px 36px;margin-bottom:28px;position:relative;overflow:hidden;box-shadow:5px 6px 0 #8a7a60,9px 10px 0 #6a5a40,12px 14px 28px rgba(0,0,0,0.28);}
+.cover::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(transparent,transparent 31px,rgba(100,130,180,0.12) 31px,rgba(100,130,180,0.12) 32px);background-size:100% 32px;background-position:0 48px;pointer-events:none;}
+.cover::after{content:'';position:absolute;top:0;bottom:0;left:52px;width:1.5px;background:rgba(210,100,80,0.32);pointer-events:none;}
+.cover-inner{position:relative;padding-left:20px;}
+.cover-subject{font-family:var(--hand);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.cover-subject::before{content:'';display:inline-block;width:28px;height:1.5px;background:var(--orange);}
+.cover h1{font-family:var(--body);font-size:40px;font-weight:700;line-height:1.15;color:var(--ink);}
+.cover h1 em{font-style:italic;color:var(--blue);}
+.cover-desc{font-family:var(--prose);font-size:17px;color:var(--ink3);margin-top:14px;line-height:1.8;max-width:520px;border-left:3px solid var(--orange);padding-left:14px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;}
+.chip{font-family:var(--hand);font-size:10px;border:1.5px solid #b0a080;border-radius:2px;padding:4px 12px;color:var(--ink3);background:rgba(255,255,255,0.5);}
+.cover-gate-tag{position:absolute;top:20px;right:24px;font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:5px 12px;border-radius:2px;}
+.toc{background:var(--paper);border:1.5px solid #b0a080;border-radius:3px;padding:20px 28px;margin-bottom:28px;box-shadow:3px 4px 0 #9a8a6e;}
+.toc-lbl{font-family:var(--hand);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;}
+.toc-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
+@media(max-width:560px){.toc-grid{grid-template-columns:1fr;}}
+.toc-grid a{font-family:var(--prose);font-size:15.5px;color:var(--ink2);text-decoration:none;display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px dashed transparent;transition:all 0.2s;}
+.toc-grid a:hover{color:var(--blue);border-color:var(--ink3);}
+.tn{font-family:var(--hand);font-size:11px;color:var(--ink3);min-width:24px;}
+.chapter{background:var(--paper);border:1.5px solid #b0a088;border-radius:3px;margin-bottom:28px;box-shadow:4px 5px 0 #9a8a6e,7px 8px 0 #7a6a50;overflow:hidden;}
+.ch-head{background:var(--ink);padding:16px 32px;}
+.ch-ey{font-family:var(--hand);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,230,0.38);margin-bottom:3px;}
+.ch-title{font-family:var(--body);font-size:21px;font-weight:600;color:var(--paper);line-height:1.25;}
+.ch-title em{font-style:italic;color:#e8c870;}
+.ch-body{background-image:linear-gradient(var(--mline) 1px,transparent 1px),repeating-linear-gradient(transparent,transparent 31px,var(--rule) 31px,var(--rule) 32px);background-size:54px 100%,100% 32px;background-position:0 0,0 16px;}
+.sec{padding:28px 32px 26px 62px;border-bottom:1px dashed #c8b898;position:relative;}
+.sec:last-child{border-bottom:none;}
+.sec::before{content:attr(data-m);position:absolute;left:10px;top:34px;font-family:var(--hand);font-size:10px;color:rgba(200,100,80,0.26);writing-mode:vertical-lr;transform:rotate(180deg);letter-spacing:1px;text-transform:uppercase;}
+h2.sh{font-family:var(--body);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:6px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.tag{font-family:var(--hand);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1.5px solid currentColor;margin-left:auto;flex-shrink:0;}
+.tg{color:var(--red);border-color:var(--red);background:var(--hl-r);}
+.tc{color:var(--blue);border-color:var(--blue);background:var(--hl-b);}
+.tt{color:var(--orange);border-color:var(--orange);background:var(--hl-o);}
+.tb{color:var(--green);border-color:var(--green);background:var(--hl-g);}
+h3.ssh{font-family:var(--body);font-size:15.5px;font-weight:600;font-style:italic;color:var(--blue);margin:20px 0 8px;}
+p{font-family:var(--prose);font-size:17px;line-height:1.92;color:var(--ink2);margin-bottom:10px;}
+strong{color:var(--ink);font-weight:600;}
+.def-box{background:#eef3ff;border-left:4px solid var(--blue);border-radius:0 4px 4px 0;padding:13px 18px;margin:14px 0;}
+.def-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+.def-box p{font-size:16.5px;line-height:1.82;margin:0;color:var(--ink);}
+.warn-box{background:#fff1f1;border-left:4px solid var(--red);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.warn-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;display:block;}
+.warn-box p{font-size:16px;color:var(--red);margin:0;line-height:1.78;}
+.tip-box{background:#f0fff4;border-left:4px solid var(--green);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.tip-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:4px;display:block;}
+.tip-box p{font-size:16px;color:var(--green);margin:0;line-height:1.78;}
+.note-box{background:#fdf8ee;border-left:4px solid var(--orange);border-radius:0 4px 4px 0;padding:12px 18px;margin:14px 0;}
+.note-box .lbl{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:4px;display:block;}
+.note-box p{font-size:16px;color:var(--orange);margin:0;line-height:1.78;}
+/* Code Reference boxes — special green theme */
+.code-ref{background:#f0fff4;border:1.5px solid #2a7a50;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.code-ref::before{content:'Code Reference';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--green);position:absolute;top:-9px;left:14px;background:#f0fff4;padding:0 6px;}
+.code-ref p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.78;}
+.code-ref p:last-child{margin:0;}
+.eg{background:var(--paper2);border:1.5px solid #b8a882;border-radius:4px;padding:18px 20px;margin:16px 0;position:relative;}
+.eg::before{content:'Example';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);position:absolute;top:-9px;left:14px;background:var(--paper2);padding:0 6px;}
+.eg p{font-family:var(--prose);font-size:16px;color:var(--ink2);margin:0 0 6px;line-height:1.82;}
+.eg p:last-child{margin:0;}
+/* output-predict — special box for GATE output questions */
+.op{background:#fff8f0;border:1.5px solid var(--orange);border-radius:4px;padding:16px 18px;margin:14px 0;position:relative;}
+.op::before{content:'Output Prediction — GATE Style';font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--orange);position:absolute;top:-9px;left:14px;background:#fff8f0;padding:0 6px;}
+.op-ans{font-family:var(--hand);font-size:11px;color:var(--green);margin-top:8px;padding-top:8px;border-top:1px dashed #c0a880;}
+.cb{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:14px 18px;margin:12px 0;color:var(--ink);line-height:1.9;white-space:pre;overflow-x:auto;}
+.cb .kw{color:var(--blue);font-weight:bold;}
+.cb .cm{color:var(--ink3);font-style:italic;}
+.cb .str{color:var(--green);}
+.cb .num{color:var(--purple);}
+.cb .out{color:var(--orange);font-weight:bold;}
+.cb .hi{background:var(--hl-y);}
+code{font-family:'Courier New',monospace;font-size:13.5px;background:var(--paper3);border:1px solid #c0a880;border-radius:3px;padding:1px 5px;color:var(--blue);}
+mark{background:var(--hl-y);padding:0 2px;border-radius:2px;color:var(--ink);}
+.c-r{color:var(--red);font-weight:600;} .c-b{color:var(--blue);font-weight:600;} .c-g{color:var(--green);font-weight:600;} .c-o{color:var(--orange);font-weight:600;}
+.pl{list-style:none;margin:8px 0 12px;padding:0;}
+.pl li{font-family:var(--prose);font-size:16.5px;line-height:1.88;color:var(--ink2);padding:3px 0 3px 22px;position:relative;}
+.pl li::before{content:'—';position:absolute;left:0;color:var(--orange);font-weight:600;}
+.pl.arr li::before{content:'→';color:var(--blue);}
+.pl.chk li::before{content:'✓';color:var(--green);}
+.pl.crs li::before{content:'✗';color:var(--red);}
+.tbl{overflow-x:auto;margin:16px 0;}
+table{width:100%;border-collapse:collapse;font-family:var(--prose);font-size:15.5px;}
+thead tr{background:var(--ink);}
+th{padding:9px 14px;text-align:left;color:var(--paper);font-weight:400;font-size:13px;font-family:var(--hand);letter-spacing:0.5px;}
+td{padding:8px 14px;border-bottom:1px dashed #c0a880;line-height:1.65;vertical-align:top;color:var(--ink2);}
+tr:nth-child(even) td{background:rgba(0,0,0,0.024);}
+tr:hover td{background:rgba(255,240,150,0.22);}
+.good{color:var(--green);font-weight:600;} .ok{color:var(--orange);font-weight:600;} .bad{color:var(--red);font-weight:600;}
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin:14px 0;}
+.cg-card{background:var(--paper2);border:1.5px solid #b0a080;border-radius:4px;padding:13px 15px;}
+.cg-card .ct{font-family:var(--hand);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #c0a880;}
+.cg-card p{font-family:var(--prose);font-size:15px;line-height:1.75;color:var(--ink2);margin:0;}
+.gv{background:var(--paper3);border:1.5px dashed #a09070;border-radius:4px;padding:16px 18px;margin:14px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.9;color:var(--ink);overflow-x:auto;}
+.gv .dv-label{font-family:var(--hand);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;display:block;}
+hr.dv{border:none;border-top:1.5px dashed #c0a880;margin:22px 0;}
+.bt{display:block;text-align:right;font-family:var(--hand);font-size:10px;color:var(--ink3);text-decoration:none;padding:10px 32px 0;letter-spacing:1px;}
+.bt:hover{color:var(--blue);}
+.footer{text-align:center;font-family:var(--hand);font-size:10px;color:#7a6a50;letter-spacing:2px;padding:20px 0;}
+@media(max-width:600px){.cover{padding:28px 22px;}.cover h1{font-size:26px;}.ch-head{padding:14px 20px;}.sec{padding:22px 18px 22px 44px;}}
+</style>
+</head>
+<body>
+<div class="book">
+
+<!-- COVER -->
+<div class="cover" id="top">
+  <span class="cover-gate-tag">GATE CSE</span>
+  <div class="cover-inner">
+    <div class="cover-subject">C Programming</div>
+    <h1>Programming in C —<br><em>From Zero to GATE</em></h1>
+    <p class="cover-desc">
+      Everything C — from your first variable to pointer arithmetic, dynamic memory, recursion depth, and GATE output prediction. Built for beginners who want to understand the why, and for GATE aspirants who need to predict exact output in seconds.
+    </p>
+    <div class="cover-chips">
+      <span class="chip">Ch 1 · Basics — Variables, Types &amp; I/O</span>
+      <span class="chip">Ch 2 · Operators &amp; Expressions</span>
+      <span class="chip">Ch 3 · Control Flow</span>
+      <span class="chip">Ch 4 · Functions &amp; Recursion</span>
+      <span class="chip">Ch 5 · Arrays &amp; Strings</span>
+      <span class="chip">Ch 6 · Pointers — The Core of C</span>
+      <span class="chip">Ch 7 · Structures, Unions &amp; Enums</span>
+      <span class="chip">Ch 8 · Dynamic Memory &amp; File I/O</span>
+      <span class="chip">Ch 9 · Scope, Storage &amp; Preprocessor</span>
+      <span class="chip">Ch 10 · Code Reference — Pattern Library</span>
+      <span class="chip">Ch 11 · GATE Traps &amp; Output Predictions</span>
+    </div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-lbl">Contents</div>
+  <div class="toc-grid">
+    <a href="#ch1"><span class="tn">01</span>Basics — Variables, Types &amp; I/O</a>
+    <a href="#ch2"><span class="tn">02</span>Operators &amp; Expressions</a>
+    <a href="#ch3"><span class="tn">03</span>Control Flow</a>
+    <a href="#ch4"><span class="tn">04</span>Functions &amp; Recursion</a>
+    <a href="#ch5"><span class="tn">05</span>Arrays &amp; Strings</a>
+    <a href="#ch6"><span class="tn">06</span>Pointers — The Core of C</a>
+    <a href="#ch7"><span class="tn">07</span>Structures, Unions &amp; Enums</a>
+    <a href="#ch8"><span class="tn">08</span>Dynamic Memory &amp; File I/O</a>
+    <a href="#ch9"><span class="tn">09</span>Scope, Storage &amp; Preprocessor</a>
+    <a href="#ch10"><span class="tn">10</span>Code Reference — Pattern Library</a>
+    <a href="#ch11"><span class="tn">11</span>GATE Traps &amp; Output Predictions</a>
+  </div>
+</div>
+
+
+<!-- ═══════ CH 1 — BASICS ═══════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 01</div>
+    <div class="ch-title">Basics — <em>Variables, Data Types &amp; I/O</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="why-c">
+      <h2 class="sh">1.1 &nbsp; Why C? The Mental Model <span class="tag tb">Beginner</span></h2>
+      <p>
+        C is a thin layer above the hardware. When you write <code>int x = 5</code>, you are literally asking the CPU to reserve 4 bytes of memory and store the bit pattern for 5 there. No magic, no runtime, no garbage collector. You control memory. You control addresses. That directness is why C is hard — and why mastering it makes every other language feel easy.
+      </p>
+      <div class="def-box">
+        <span class="lbl">The C Compilation Pipeline</span>
+        <p>Source.c → <strong>Preprocessor</strong> (handles #include, #define) → Source.i → <strong>Compiler</strong> (generates assembly) → Source.s → <strong>Assembler</strong> (generates object code) → Source.o → <strong>Linker</strong> (combines with libraries) → Executable.<br>
+        Understanding this explains why #include "stdio.h" adds I/O functions, why #define is textual substitution (not a variable), and why linking errors are different from compilation errors.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="data-types">
+      <h2 class="sh">1.2 &nbsp; Data Types &amp; Memory Sizes <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Type</th><th>Size (typical 64-bit)</th><th>Range</th><th>Format Specifier</th></tr></thead>
+          <tbody>
+            <tr><td><code>char</code></td><td>1 byte</td><td>−128 to 127 (signed) or 0–255 (unsigned)</td><td>%c, %d</td></tr>
+            <tr><td><code>short</code></td><td>2 bytes</td><td>−32768 to 32767</td><td>%hd</td></tr>
+            <tr><td><code>int</code></td><td>4 bytes</td><td>−2³¹ to 2³¹−1 (≈ ±2.1 billion)</td><td>%d</td></tr>
+            <tr><td><code>long</code></td><td>8 bytes (Linux/Mac), 4 bytes (Windows)</td><td>Platform-dependent</td><td>%ld</td></tr>
+            <tr><td><code>long long</code></td><td>8 bytes</td><td>−2⁶³ to 2⁶³−1</td><td>%lld</td></tr>
+            <tr><td><code>float</code></td><td>4 bytes</td><td>~7 decimal digits precision</td><td>%f</td></tr>
+            <tr><td><code>double</code></td><td>8 bytes</td><td>~15 decimal digits precision</td><td>%lf</td></tr>
+            <tr><td><code>pointer</code></td><td>8 bytes (64-bit system)</td><td>Memory addresses</td><td>%p</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Integer Overflow — Silent and Deadly</span>
+        <p>If an <code>int</code> holds 2147483647 (INT_MAX) and you add 1, it wraps to −2147483648. This is <strong>undefined behaviour</strong> in C — the compiler may do anything. In practice on most systems it wraps, but GATE questions that ask "what is the output" when overflow occurs are testing whether you know the value wraps. Always check the range of the type against the values being stored.</p>
+      </div>
+
+      <h3 class="ssh">Variables and Initialization</h3>
+      <div class="cb"><span class="cm">// Declaration vs Definition vs Initialization</span>
+<span class="kw">int</span> x;          <span class="cm">// Declaration + definition. Value = garbage (undefined)</span>
+<span class="kw">int</span> y = <span class="num">10</span>;     <span class="cm">// Declaration + definition + initialization</span>
+<span class="kw">int</span> a, b, c;    <span class="cm">// Multiple declarations on one line</span>
+<span class="kw">const int</span> N = <span class="num">100</span>; <span class="cm">// Constant — cannot be reassigned</span>
+
+<span class="cm">// Global variables are automatically initialized to 0</span>
+<span class="kw">int</span> global;     <span class="cm">// = 0 automatically</span>
+
+<span class="kw">int</span> main() {
+    <span class="kw">int</span> local;  <span class="cm">// GARBAGE — not initialized. Reading this = UB</span>
+    printf(<span class="str">"%d\n"</span>, local); <span class="cm">// Output: unpredictable</span>
+}</code></div>
+
+      <h3 class="ssh">printf and scanf — Format Specifiers</h3>
+      <div class="cb">printf(<span class="str">"%d %f %c %s\n"</span>, 42, 3.14f, <span class="str">'A'</span>, <span class="str">"hello"</span>);
+<span class="out">// Output: 42 3.140000 A hello</span>
+
+printf(<span class="str">"%.2f\n"</span>, 3.14159); <span class="cm">// 2 decimal places</span>
+<span class="out">// Output: 3.14</span>
+
+printf(<span class="str">"%05d\n"</span>, 42);      <span class="cm">// Zero-padded, width 5</span>
+<span class="out">// Output: 00042</span>
+
+<span class="kw">int</span> n; scanf(<span class="str">"%d"</span>, &amp;n);    <span class="cm">// &amp;n = address of n (pointer)</span></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 2 — OPERATORS ═══════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 02</div>
+    <div class="ch-title">Operators <em>&amp; Expressions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="operators">
+      <h2 class="sh">2.1 &nbsp; All Operators — Precedence &amp; Associativity <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Precedence (High→Low)</th><th>Operators</th><th>Associativity</th></tr></thead>
+          <tbody>
+            <tr><td>1 (highest)</td><td>() [] → .</td><td>Left to right</td></tr>
+            <tr><td>2</td><td>++ -- (postfix)</td><td>Left to right</td></tr>
+            <tr><td>3</td><td>++ -- (prefix), + - (unary), ! ~ * &amp; sizeof (type)</td><td>Right to left</td></tr>
+            <tr><td>4</td><td>* / %</td><td>Left to right</td></tr>
+            <tr><td>5</td><td>+ -</td><td>Left to right</td></tr>
+            <tr><td>6</td><td>&lt;&lt; &gt;&gt;</td><td>Left to right</td></tr>
+            <tr><td>7</td><td>&lt; &lt;= &gt; &gt;=</td><td>Left to right</td></tr>
+            <tr><td>8</td><td>== !=</td><td>Left to right</td></tr>
+            <tr><td>9</td><td>&amp; (bitwise AND)</td><td>Left to right</td></tr>
+            <tr><td>10</td><td>^ (bitwise XOR)</td><td>Left to right</td></tr>
+            <tr><td>11</td><td>| (bitwise OR)</td><td>Left to right</td></tr>
+            <tr><td>12</td><td>&amp;&amp; (logical AND)</td><td>Left to right</td></tr>
+            <tr><td>13</td><td>|| (logical OR)</td><td>Left to right</td></tr>
+            <tr><td>14</td><td>?: (ternary)</td><td>Right to left</td></tr>
+            <tr><td>15</td><td>= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= ^= |=</td><td>Right to left</td></tr>
+            <tr><td>16 (lowest)</td><td>, (comma)</td><td>Left to right</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="ssh">Pre vs Post Increment — The Critical Distinction</h3>
+      <div class="op">
+        <div class="cb"><span class="kw">int</span> a = <span class="num">5</span>;
+printf(<span class="str">"%d\n"</span>, a++); <span class="cm">// Print THEN increment</span>
+printf(<span class="str">"%d\n"</span>, a);   <span class="cm">// Now a is 6</span>
+printf(<span class="str">"%d\n"</span>, ++a); <span class="cm">// Increment THEN print</span>
+printf(<span class="str">"%d\n"</span>, a);   <span class="cm">// a is still 7</span></div>
+        <div class="op-ans">Output: 5 / 6 / 7 / 7</div>
+      </div>
+
+      <h3 class="ssh">Bitwise Operators — Essential for GATE</h3>
+      <div class="cb"><span class="cm">// n = 13 = 1101 in binary</span>
+<span class="kw">int</span> n = <span class="num">13</span>;
+printf(<span class="str">"%d\n"</span>, n &amp; <span class="num">7</span>);   <span class="cm">// 1101 &amp; 0111 = 0101 = 5</span>
+printf(<span class="str">"%d\n"</span>, n | <span class="num">2</span>);   <span class="cm">// 1101 | 0010 = 1111 = 15</span>
+printf(<span class="str">"%d\n"</span>, n ^ <span class="num">5</span>);   <span class="cm">// 1101 ^ 0101 = 1000 = 8</span>
+printf(<span class="str">"%d\n"</span>, ~n);     <span class="cm">// ~1101 = ...10010 = -14 (2's complement)</span>
+printf(<span class="str">"%d\n"</span>, n &lt;&lt; <span class="num">2</span>); <span class="cm">// 110100 = 52 (multiply by 4)</span>
+printf(<span class="str">"%d\n"</span>, n &gt;&gt; <span class="num">1</span>); <span class="cm">// 0110  = 6  (divide by 2)</span>
+
+<span class="cm">// Useful tricks</span>
+n &amp; <span class="num">1</span>          <span class="cm">// Check if n is odd (result: 1=odd, 0=even)</span>
+n &amp; (n-<span class="num">1</span>)      <span class="cm">// Clear lowest set bit. If result=0: n is a power of 2</span>
+n | (n+<span class="num">1</span>)      <span class="cm">// Set lowest clear bit</span>
+n ^ n          <span class="cm">// = 0 (XOR with self). Used to find the single non-duplicate</span></div>
+
+      <div class="warn-box">
+        <span class="lbl">Short-Circuit Evaluation — Very Common in GATE</span>
+        <p>In <code>A &amp;&amp; B</code>: if A is false, B is NEVER evaluated. In <code>A || B</code>: if A is true, B is NEVER evaluated. This means side effects in B (like <code>i++</code>) may not happen. GATE output prediction questions exploit this: <code>if (x != 0 &amp;&amp; ++y > 0)</code> — if x is 0, y is never incremented.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 3 — CONTROL FLOW ═══════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 03</div>
+    <div class="ch-title">Control Flow — <em>if, switch, loops &amp; jumps</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="control">
+      <h2 class="sh">3.1 &nbsp; Conditionals, Loops &amp; Jump Statements <span class="tag tg">GATE Tested</span></h2>
+
+      <h3 class="ssh">if-else and switch</h3>
+      <div class="cb"><span class="cm">// switch — must have break to prevent fall-through</span>
+<span class="kw">switch</span> (x) {
+    <span class="kw">case</span> <span class="num">1</span>: printf(<span class="str">"one\n"</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">2</span>: printf(<span class="str">"two\n"</span>); <span class="kw">break</span>;
+    <span class="kw">default</span>: printf(<span class="str">"other\n"</span>);
+}</div>
+
+      <div class="op">
+        <div class="cb"><span class="cm">// Fall-through trap — no break in case 1</span>
+<span class="kw">int</span> x = <span class="num">1</span>;
+<span class="kw">switch</span>(x) {
+    <span class="kw">case</span> <span class="num">1</span>: printf(<span class="str">"A"</span>);   <span class="cm">// no break!</span>
+    <span class="kw">case</span> <span class="num">2</span>: printf(<span class="str">"B"</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">3</span>: printf(<span class="str">"C"</span>); <span class="kw">break</span>;
+}</div>
+        <div class="op-ans">Output: AB (falls through from case 1 into case 2 because no break)</div>
+      </div>
+
+      <h3 class="ssh">Loops — for, while, do-while</h3>
+      <div class="cb"><span class="cm">// for loop: init; condition; update — all optional</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) printf(<span class="str">"%d "</span>, i);  <span class="cm">// 0 1 2 3 4</span>
+
+<span class="cm">// while: condition checked BEFORE each iteration</span>
+<span class="kw">int</span> i = <span class="num">0</span>;
+<span class="kw">while</span> (i &lt; <span class="num">3</span>) { printf(<span class="str">"%d "</span>, i); i++; }  <span class="cm">// 0 1 2</span>
+
+<span class="cm">// do-while: body executes AT LEAST ONCE</span>
+i = <span class="num">10</span>;
+<span class="kw">do</span> { printf(<span class="str">"%d\n"</span>, i); i++; } <span class="kw">while</span> (i &lt; <span class="num">3</span>);
+<span class="cm">// Output: 10 (loop body runs once even though condition is false initially)</span></div>
+
+      <h3 class="ssh">break, continue, goto</h3>
+      <div class="cb"><span class="cm">// break: exit innermost loop/switch</span>
+<span class="cm">// continue: skip to next iteration</span>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) {
+    <span class="kw">if</span> (i == <span class="num">3</span>) <span class="kw">continue</span>;  <span class="cm">// skip 3</span>
+    <span class="kw">if</span> (i == <span class="num">4</span>) <span class="kw">break</span>;     <span class="cm">// stop at 4</span>
+    printf(<span class="str">"%d "</span>, i);
+}
+<span class="cm">// Output: 0 1 2</span>
+
+<span class="cm">// goto: jump to a label (avoid in practice, but GATE tests it)</span>
+    i = <span class="num">0</span>;
+start: <span class="kw">if</span> (i &lt; <span class="num">3</span>) { printf(<span class="str">"%d "</span>, i++); <span class="kw">goto</span> start; }
+<span class="cm">// Output: 0 1 2</span></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 4 — FUNCTIONS & RECURSION ═══════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 04</div>
+    <div class="ch-title">Functions <em>&amp; Recursion</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="functions">
+      <h2 class="sh">4.1 &nbsp; Function Mechanics — Call Stack &amp; Pass by Value <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Call by Value — C Only Has This</span>
+        <p>C passes ALL arguments by value — a copy of the argument is made and passed to the function. Modifying the parameter inside the function does NOT affect the original variable. To modify the original, you must pass its address (a pointer).</p>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">void</span> swap(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">int</span> t = a; a = b; b = t;
+    <span class="cm">// This swaps COPIES. Original x,y unchanged.</span>
+}
+<span class="kw">int</span> main() {
+    <span class="kw">int</span> x = <span class="num">3</span>, y = <span class="num">7</span>;
+    swap(x, y);
+    printf(<span class="str">"%d %d\n"</span>, x, y);
+}</div>
+        <div class="op-ans">Output: 3 7 (swap did nothing to x and y)</div>
+      </div>
+
+      <div class="code-ref">
+        <p><strong>Correct swap using pointers:</strong></p>
+        <div class="cb"><span class="kw">void</span> swap(<span class="kw">int</span> *a, <span class="kw">int</span> *b) {
+    <span class="kw">int</span> t = *a; *a = *b; *b = t;
+}
+swap(&amp;x, &amp;y);  <span class="cm">// Pass addresses</span></div>
+      </div>
+
+      <h3 class="ssh">Recursion — The Call Stack Model</h3>
+      <div class="def-box">
+        <span class="lbl">How Recursion Works in Memory</span>
+        <p>Each function call creates a new <strong>stack frame</strong> on the call stack — its own copy of parameters and local variables. When the function returns, its frame is destroyed. Recursive calls keep pushing frames until the base case is hit, then unwind. GATE tests: trace the call sequence, identify base case, compute the return value at each level.</p>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">int</span> fact(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span> <span class="num">1</span>;   <span class="cm">// base case</span>
+    <span class="kw">return</span> n * fact(n - <span class="num">1</span>); <span class="cm">// recursive case</span>
+}
+printf(<span class="str">"%d\n"</span>, fact(<span class="num">4</span>));</div>
+        <div class="op-ans">Trace: fact(4)=4×fact(3)=4×3×fact(2)=4×3×2×fact(1)=4×3×2×1×fact(0)=4×3×2×1×1=24. Output: 24</div>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">void</span> mystery(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span>;
+    mystery(n - <span class="num">1</span>);     <span class="cm">// recursive call BEFORE print</span>
+    printf(<span class="str">"%d "</span>, n);
+}
+mystery(<span class="num">4</span>);</div>
+        <div class="op-ans">Output: 1 2 3 4 (prints on the WAY BACK UP — after recursion returns)</div>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">void</span> mystery2(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span>;
+    printf(<span class="str">"%d "</span>, n);    <span class="cm">// print BEFORE recursive call</span>
+    mystery2(n - <span class="num">1</span>);
+}
+mystery2(<span class="num">4</span>);</div>
+        <div class="op-ans">Output: 4 3 2 1 (prints on the way DOWN)</div>
+      </div>
+
+      <div class="tip-box">
+        <span class="lbl">Recursive Output Direction — Quick Rule</span>
+        <p>Print <strong>before</strong> the recursive call → prints in <strong>forward</strong> order (top-down). Print <strong>after</strong> the recursive call → prints in <strong>reverse</strong> order (bottom-up, like a stack being unwound). This is the #1 GATE recursion output prediction pattern.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 5 — ARRAYS & STRINGS ═══════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 05</div>
+    <div class="ch-title">Arrays <em>&amp; Strings</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="arrays">
+      <h2 class="sh">5.1 &nbsp; Arrays — Memory Layout &amp; Pointer Equivalence <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Arrays Are Contiguous — This Is Everything</span>
+        <p>An array <code>int a[5]</code> stores 5 integers in <strong>consecutive memory locations</strong>. <code>a[i]</code> is just syntactic sugar for <code>*(a + i)</code>. The array name <code>a</code> decays to a pointer to <code>a[0]</code> in most contexts. This is why you can pass arrays to functions without specifying size — you're passing a pointer.</p>
+      </div>
+
+      <div class="cb"><span class="kw">int</span> a[<span class="num">5</span>] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+
+<span class="cm">// These are all equivalent:</span>
+printf(<span class="str">"%d\n"</span>, a[<span class="num">2</span>]);     <span class="cm">// 30</span>
+printf(<span class="str">"%d\n"</span>, *(a+<span class="num">2</span>));  <span class="cm">// 30</span>
+printf(<span class="str">"%d\n"</span>, <span class="num">2</span>[a]);    <span class="cm">// 30 (yes, this is valid C!)</span>
+
+<span class="cm">// 2D array — row-major storage</span>
+<span class="kw">int</span> b[<span class="num">3</span>][<span class="num">4</span>]; <span class="cm">// 3 rows, 4 columns</span>
+<span class="cm">// b[i][j] is at address: base + (i*4 + j)*sizeof(int)</span>
+<span class="cm">// All 12 integers stored consecutively in memory</span></div>
+
+      <h3 class="ssh">Strings — Null-Terminated Character Arrays</h3>
+      <div class="def-box">
+        <span class="lbl">Strings in C</span>
+        <p>A string is a <code>char</code> array terminated by a null character <code>'\0'</code> (value 0). <code>"hello"</code> occupies 6 bytes: 'h','e','l','l','o','\0'. <code>strlen()</code> returns the number of characters BEFORE the null — it does NOT count '\0'. <code>sizeof</code> on the array returns the total size INCLUDING '\0'.</p>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">char</span> s[] = <span class="str">"hello"</span>;
+printf(<span class="str">"%lu\n"</span>, sizeof(s));   <span class="cm">// 6 (includes \0)</span>
+printf(<span class="str">"%lu\n"</span>, strlen(s));   <span class="cm">// 5 (excludes \0)</span>
+printf(<span class="str">"%c\n"</span>, s[<span class="num">1</span>]);        <span class="cm">// e</span>
+printf(<span class="str">"%d\n"</span>, s[<span class="num">0</span>] - <span class="str">'a'</span>); <span class="cm">// 104-97=7 ('h'-'a')</span></div>
+        <div class="op-ans">Output: 6 / 5 / e / 7</div>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function</th><th>Header</th><th>Does</th><th>GATE trap</th></tr></thead>
+          <tbody>
+            <tr><td>strlen(s)</td><td>string.h</td><td>Length excluding '\0'</td><td>Returns size_t (unsigned)</td></tr>
+            <tr><td>strcpy(dst, src)</td><td>string.h</td><td>Copy src to dst</td><td>No bounds check — buffer overflow risk</td></tr>
+            <tr><td>strcat(dst, src)</td><td>string.h</td><td>Append src to dst</td><td>dst must have enough space</td></tr>
+            <tr><td>strcmp(s1, s2)</td><td>string.h</td><td>Lexicographic compare</td><td>Returns 0 if equal, &lt;0 if s1&lt;s2, &gt;0 if s1&gt;s2</td></tr>
+            <tr><td>sprintf(buf, fmt, ...)</td><td>stdio.h</td><td>printf into a string buffer</td><td>No bounds check — use snprintf instead</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 6 — POINTERS ═══════ -->
+<div class="chapter" id="ch6">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 06</div>
+    <div class="ch-title">Pointers — <em>The Core of C</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="pointers-basics">
+      <h2 class="sh">6.1 &nbsp; Pointer Fundamentals <span class="tag tg">Most Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Pointer Mental Model</span>
+        <p>A pointer is a variable that stores a <strong>memory address</strong>. That's it. <code>int *p</code> means: p is a variable that holds the address of an int. <code>&amp;x</code> gives the address of x. <code>*p</code> gives the value at the address p holds (dereferencing). The type of the pointer tells the compiler how many bytes to read when dereferencing.</p>
+      </div>
+
+      <div class="cb"><span class="kw">int</span> x = <span class="num">42</span>;
+<span class="kw">int</span> *p = &amp;x;   <span class="cm">// p holds the address of x</span>
+
+printf(<span class="str">"%d\n"</span>, x);   <span class="cm">// 42   — value of x</span>
+printf(<span class="str">"%p\n"</span>, p);   <span class="cm">// 0x... — address of x (some hex address)</span>
+printf(<span class="str">"%d\n"</span>, *p);  <span class="cm">// 42   — value AT the address p holds</span>
+
+*p = <span class="num">100</span>;             <span class="cm">// modify x through pointer</span>
+printf(<span class="str">"%d\n"</span>, x);   <span class="cm">// 100  — x is now 100!</span></div>
+
+      <h3 class="ssh">Pointer Arithmetic</h3>
+      <div class="def-box">
+        <span class="lbl">Pointer Arithmetic Scales by Type Size</span>
+        <p>When you do <code>p + 1</code> on an <code>int*</code>, the address increases by <code>sizeof(int)</code> = 4 bytes, NOT by 1. The compiler automatically scales by the pointed-to type's size. This is why arrays and pointers work together seamlessly — <code>a[i]</code> and <code>*(a+i)</code> are identical.</p>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">int</span> a[] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>};
+<span class="kw">int</span> *p = a;          <span class="cm">// p points to a[0]</span>
+printf(<span class="str">"%d\n"</span>, *p);    <span class="cm">// 10</span>
+printf(<span class="str">"%d\n"</span>, *(p+<span class="num">1</span>)); <span class="cm">// 20</span>
+p++;                  <span class="cm">// p now points to a[1]</span>
+printf(<span class="str">"%d\n"</span>, *p);    <span class="cm">// 20</span>
+printf(<span class="str">"%d\n"</span>, p[<span class="num">1</span>]);  <span class="cm">// 30  (p[1] = *(p+1))</span></div>
+        <div class="op-ans">Output: 10 / 20 / 20 / 30</div>
+      </div>
+
+      <h3 class="ssh">Pointer to Pointer, const Pointers, Void Pointers</h3>
+      <div class="cb"><span class="cm">// Pointer to pointer</span>
+<span class="kw">int</span> x = <span class="num">5</span>;
+<span class="kw">int</span> *p = &amp;x;
+<span class="kw">int</span> **pp = &amp;p;
+printf(<span class="str">"%d\n"</span>, **pp);  <span class="cm">// 5</span>
+
+<span class="cm">// const variations — very commonly tested</span>
+<span class="kw">int</span> y = <span class="num">10</span>;
+<span class="kw">const int</span> *cp = &amp;y;   <span class="cm">// pointer to const int: *cp can't be changed, cp can</span>
+<span class="kw">int</span> * <span class="kw">const</span> pc = &amp;y;   <span class="cm">// const pointer to int: cp can't be changed, *pc can</span>
+<span class="kw">const int</span> * <span class="kw">const</span> cpc = &amp;y; <span class="cm">// both constant</span>
+
+<span class="cm">// void pointer — generic pointer, must cast before dereferencing</span>
+<span class="kw">void</span> *vp = &amp;x;
+printf(<span class="str">"%d\n"</span>, *(<span class="kw">int</span>*)vp); <span class="cm">// cast to int* first</span></div>
+
+      <h3 class="ssh">Function Pointers</h3>
+      <div class="cb"><span class="cm">// int (*fp)(int, int) — pointer to function taking 2 ints, returning int</span>
+<span class="kw">int</span> add(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> a + b; }
+<span class="kw">int</span> mul(<span class="kw">int</span> a, <span class="kw">int</span> b) { <span class="kw">return</span> a * b; }
+
+<span class="kw">int</span> (*fp)(<span class="kw">int</span>, <span class="kw">int</span>);
+fp = add;
+printf(<span class="str">"%d\n"</span>, fp(<span class="num">3</span>, <span class="num">4</span>));  <span class="cm">// 7</span>
+fp = mul;
+printf(<span class="str">"%d\n"</span>, fp(<span class="num">3</span>, <span class="num">4</span>));  <span class="cm">// 12</span></div>
+
+      <h3 class="ssh">qsort() — The Standard Callback Pattern</h3>
+      <div class="def-box">
+        <span class="lbl">Why qsort() Uses a Function Pointer</span>
+        <p>The C standard library's <code>qsort()</code> doesn't know what type of data you're sorting. Instead of writing a sort for ints, floats, strings, and structs separately, it accepts a comparison function pointer. You supply the "how to compare" logic; qsort supplies the "when to compare" logic. This is the callback pattern — the foundation of generic programming in C.</p>
+      </div>
+      <div class="code-ref">
+        <div class="cb"><span class="cm">// Signature: void qsort(void *base, size_t n, size_t size,</span>
+<span class="cm">//                       int (*compar)(const void*, const void*))</span>
+
+<span class="cm">// Compare function for ascending int sort</span>
+<span class="kw">int</span> cmp_int(<span class="kw">const void</span> *a, <span class="kw">const void</span> *b) {
+    <span class="kw">return</span> (*(<span class="kw">int</span>*)a) - (*(<span class="kw">int</span>*)b);
+    <span class="cm">// Returns negative if a < b (a comes first)</span>
+    <span class="cm">// Returns 0 if equal, positive if a > b</span>
+}
+
+<span class="kw">int</span> arr[] = {<span class="num">5</span>, <span class="num">2</span>, <span class="num">8</span>, <span class="num">1</span>, <span class="num">9</span>};
+qsort(arr, <span class="num">5</span>, <span class="kw">sizeof</span>(<span class="kw">int</span>), cmp_int);
+<span class="cm">// arr is now {1, 2, 5, 8, 9}</span>
+
+<span class="cm">// For DESCENDING order: just swap a and b in the return</span>
+<span class="kw">int</span> cmp_desc(<span class="kw">const void</span> *a, <span class="kw">const void</span> *b) {
+    <span class="kw">return</span> (*(<span class="kw">int</span>*)b) - (*(<span class="kw">int</span>*)a);
+}
+
+<span class="cm">// Sort strings: strcmp already returns the right value</span>
+<span class="kw">int</span> cmp_str(<span class="kw">const void</span> *a, <span class="kw">const void</span> *b) {
+    <span class="kw">return</span> strcmp(*(<span class="kw">char</span>**)a, *(<span class="kw">char</span>**)b);
+}</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="spiral-rule">
+      <h2 class="sh">6.2 &nbsp; The Spiral Rule — Reading Complex Declarations <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">The Clockwise Spiral Rule</span>
+        <p>C declaration syntax can create unreadable chains of <code>*</code>, <code>()</code>, and <code>[]</code>. The spiral rule cuts through this:<br>
+        <strong>Start at the variable name. Spiral clockwise reading tokens in this priority order: (1) [], (2) (), (3) *.</strong><br>
+        In English: read right first, then left, alternating until all tokens are consumed.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>Step-by-step decoding of 5 declarations — from simple to nightmare:</strong></p>
+        <div class="cb"><span class="cm">// Level 1: int *p;</span>
+<span class="cm">// Start at p → left: * → left: int</span>
+<span class="cm">// p is a POINTER TO int</span>
+
+<span class="cm">// Level 2: int *a[5];</span>
+<span class="cm">// Start at a → right: [5] → left: * → left: int</span>
+<span class="cm">// a is an ARRAY OF 5 POINTERS TO int</span>
+
+<span class="cm">// Level 3: int (*a)[5];</span>
+<span class="cm">// Start at a → left: * (parentheses group) → right: [5] → left: int</span>
+<span class="cm">// a is a POINTER TO AN ARRAY OF 5 ints</span>
+
+<span class="cm">// Level 4: int *(*fp)(int *, int);</span>
+<span class="cm">// Start at fp → left: * → right: (int*, int) → left: * → left: int</span>
+<span class="cm">// fp is a POINTER TO A FUNCTION TAKING (int*, int) RETURNING int*</span>
+
+<span class="cm">// Level 5 (nightmare): int (*(*fp)(int *))[10];</span>
+<span class="cm">// Start at fp → left: * → right: (int*) → left: * → right: [10] → left: int</span>
+<span class="cm">// fp is a POINTER TO A FUNCTION TAKING (int*)</span>
+<span class="cm">//    RETURNING A POINTER TO AN ARRAY OF 10 ints</span></div>
+      </div>
+
+      <div class="trick">
+        <p><strong>The practical shortcut — typedef from inside out:</strong> For extremely complex types, build the declaration with typedefs from inside out. Name each layer and compose.<br>
+        <code>typedef int Row[10];</code> — Row is array of 10 ints.<br>
+        <code>typedef Row* (*FP)(int*);</code> — FP is pointer to function(int*) returning Row*.<br>
+        This is how production code handles it. The spiral rule is for reading others' code.</p>
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Declaration</th><th>Reading (plain English)</th></tr></thead>
+          <tbody>
+            <tr><td><code>int *p</code></td><td>p is a pointer to int</td></tr>
+            <tr><td><code>int *a[5]</code></td><td>a is an array of 5 pointers to int</td></tr>
+            <tr><td><code>int (*a)[5]</code></td><td>a is a pointer to an array of 5 ints</td></tr>
+            <tr><td><code>int (*f)(int)</code></td><td>f is a pointer to a function taking int, returning int</td></tr>
+            <tr><td><code>int *(*f)(int)</code></td><td>f is a pointer to a function taking int, returning int*</td></tr>
+            <tr><td><code>int (*f[5])(int)</code></td><td>f is an array of 5 pointers to functions taking int, returning int</td></tr>
+            <tr><td><code>const int *p</code></td><td>p is a pointer to const int (value can't change via p)</td></tr>
+            <tr><td><code>int * const p</code></td><td>p is a const pointer to int (p itself can't be reassigned)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 7 — STRUCTURES ═══════ -->
+<div class="chapter" id="ch7">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 07</div>
+    <div class="ch-title">Structures, Unions <em>&amp; Enums</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="structs">
+      <h2 class="sh">7.1 &nbsp; struct — Grouping Related Data <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cb"><span class="kw">struct</span> Point {
+    <span class="kw">int</span> x, y;
+};
+
+<span class="kw">struct</span> Point p1 = {<span class="num">3</span>, <span class="num">4</span>};
+p1.x = <span class="num">10</span>;                 <span class="cm">// access via dot</span>
+
+<span class="kw">struct</span> Point *ptr = &amp;p1;
+ptr-&gt;y = <span class="num">20</span>;               <span class="cm">// access via arrow (= (*ptr).y)</span>
+
+<span class="cm">// typedef — cleaner syntax</span>
+<span class="kw">typedef struct</span> {
+    <span class="kw">char</span> name[<span class="num">50</span>];
+    <span class="kw">int</span> age;
+    <span class="kw">float</span> gpa;
+} Student;
+
+Student s = {<span class="str">"Aryan"</span>, <span class="num">19</span>, <span class="num">9.2</span>};</div>
+
+      <div class="def-box">
+        <span class="lbl">Structure Padding and Alignment</span>
+        <p>The compiler may insert <strong>padding bytes</strong> between struct members to align them to their natural alignment (e.g., int needs 4-byte alignment). <code>sizeof(struct)</code> may be larger than the sum of member sizes. Rule of thumb: members are padded so each starts at a multiple of its own size. Total struct size is padded to the size of the largest member.<br>
+        Example: <code>struct{char c; int n;}</code> — char at offset 0, 3 padding bytes, int at offset 4. sizeof = 8, not 5.</p>
+      </div>
+
+      <h3 class="ssh">Union — Shared Memory</h3>
+      <div class="def-box">
+        <span class="lbl">Union vs Struct</span>
+        <p>A <code>union</code> allocates memory for its <strong>largest member only</strong> — all members share the same memory location. Writing one member and reading another gives the raw bytes of what was written, interpreted as the other type. sizeof(union) = sizeof(largest member) + any padding. Used for type punning and memory-efficient data representation.</p>
+      </div>
+      <div class="op">
+        <div class="cb"><span class="kw">union</span> U { <span class="kw">int</span> i; <span class="kw">char</span> c; };
+<span class="kw">union</span> U u;
+u.i = <span class="num">65</span>;
+printf(<span class="str">"%c\n"</span>, u.c);  <span class="cm">// reads same memory as char</span>
+printf(<span class="str">"%lu\n"</span>, <span class="kw">sizeof</span>(u));</div>
+        <div class="op-ans">Output: A / 4 (65 in ASCII is 'A'; size = sizeof(int) = 4)</div>
+      </div>
+
+      <h3 class="ssh">__attribute__((packed)) — Defeating Alignment</h3>
+      <div class="def-box">
+        <span class="lbl">__attribute__((packed))</span>
+        <p>A GCC extension that tells the compiler to pack all struct members together with NO padding — even if it causes misalignment. sizeof(packed struct) = exact sum of member sizes.<br>
+        <strong>Why use it:</strong> Network protocol headers, binary file formats, hardware registers where exact byte layout is mandated.<br>
+        <strong>Cost:</strong> Misaligned reads/writes are slower on x86 and can cause bus errors on strict-alignment architectures (ARM in older modes). Never use in performance-critical code.</p>
+      </div>
+      <div class="cb"><span class="kw">struct</span> __attribute__((__packed__)) Packed {
+    <span class="kw">char</span>  a;    <span class="cm">// offset 0 (1 byte)</span>
+    <span class="kw">int</span>   b;    <span class="cm">// offset 1 (4 bytes) ← normally would be offset 4</span>
+    <span class="kw">char</span>  c;    <span class="cm">// offset 5 (1 byte)</span>
+};
+<span class="cm">// sizeof(Packed) = 6 (not 12 as normal struct would give)</span>
+
+<span class="kw">struct</span> Normal { <span class="kw">char</span> a; <span class="kw">int</span> b; <span class="kw">char</span> c; };
+<span class="cm">// sizeof(Normal) = 12: a(1)+pad(3)+b(4)+c(1)+pad(3) = 12</span></div>
+
+      <div class="warn-box">
+        <span class="lbl">Strict Aliasing — The Invisible UB</span>
+        <p>C's strict aliasing rule states: you may NOT access an object through a pointer of a different type (except <code>char*</code>). Doing so is <strong>undefined behaviour</strong> — the compiler may assume it never happens and optimize away safety checks.<br>
+        <code>float f = 3.14f; int i = *(int*)&amp;f;</code> — This is UB. The compiler is allowed to assume the int* and float* never alias the same memory.<br>
+        The SAFE way to reinterpret bytes: use <code>memcpy</code> or a <code>union</code>. Both are defined. GCC's <code>-fno-strict-aliasing</code> disables this rule, but relying on it is non-portable.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 8 — DYNAMIC MEMORY & FILE I/O ═══════ -->
+<div class="chapter" id="ch8">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 08</div>
+    <div class="ch-title">Dynamic Memory <em>&amp; File I/O</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="dynamic-memory">
+      <h2 class="sh">8.1 &nbsp; Heap Memory — malloc, calloc, realloc, free <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="gv">
+        <span class="dv-label">Memory Layout of a C Program</span>
+┌────────────────────┐ High address
+│   Stack            │ ← local variables, function params, return addresses
+│   (grows down ↓)   │   automatically managed
+├────────────────────┤
+│        ↓           │
+│   (free space)     │
+│        ↑           │
+├────────────────────┤
+│   Heap             │ ← dynamic allocation (malloc/calloc/realloc)
+│   (grows up ↑)     │   MANUALLY managed — you must free()
+├────────────────────┤
+│   BSS Segment      │ ← uninitialised global/static variables (zeroed)
+├────────────────────┤
+│   Data Segment     │ ← initialised global/static variables
+├────────────────────┤
+│   Text Segment     │ ← program code (read-only)
+└────────────────────┘ Low address
+      </div>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Function</th><th>Signature</th><th>Initializes?</th><th>Returns</th></tr></thead>
+          <tbody>
+            <tr><td>malloc</td><td>void* malloc(size_t n)</td><td class="bad">No (garbage)</td><td>Pointer to n bytes, or NULL on failure</td></tr>
+            <tr><td>calloc</td><td>void* calloc(size_t count, size_t size)</td><td class="good">Yes (zeros)</td><td>Pointer to count×size bytes zeroed, or NULL</td></tr>
+            <tr><td>realloc</td><td>void* realloc(void* ptr, size_t new_size)</td><td class="bad">No (new bytes uninitialized)</td><td>Pointer to resized block (may move), or NULL</td></tr>
+            <tr><td>free</td><td>void free(void* ptr)</td><td>—</td><td>void. Always call with malloc/calloc pointer</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-ref">
+        <p><strong>Canonical dynamic array pattern:</strong></p>
+        <div class="cb"><span class="kw">int</span> n = <span class="num">10</span>;
+<span class="kw">int</span> *arr = (<span class="kw">int</span>*) malloc(n * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="kw">if</span> (arr == NULL) { fprintf(stderr, <span class="str">"malloc failed\n"</span>); exit(<span class="num">1</span>); }
+
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++) arr[i] = i * i;
+
+<span class="cm">// Resize to 20 elements</span>
+arr = (<span class="kw">int</span>*) realloc(arr, <span class="num">20</span> * <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="kw">if</span> (arr == NULL) { <span class="cm">/* original memory ALREADY FREED on failure */</span> exit(<span class="num">1</span>); }
+
+free(arr);  <span class="cm">// Always free. Don't free twice (double-free = UB)</span>
+arr = NULL; <span class="cm">// Good practice: null the pointer after freeing</span></div>
+      </div>
+
+      <div class="warn-box">
+        <span class="lbl">Four Classic Memory Bugs — GATE Output Traps</span>
+        <p>
+          <strong>Memory leak:</strong> malloc without free. Memory used but never returned to OS. Program still runs but accumulates wasted memory.<br>
+          <strong>Dangling pointer:</strong> Pointer used after free(). Undefined behaviour — may work, may crash, may corrupt.<br>
+          <strong>Double free:</strong> free() called twice on same pointer. Undefined behaviour — corrupts heap.<br>
+          <strong>Buffer overflow:</strong> Writing beyond allocated bounds. Silently corrupts adjacent memory — hardest bug to find.
+        </p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="endianness">
+      <h2 class="sh">8.2 &nbsp; Endianness — Byte Order in Memory <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="def-box">
+        <span class="lbl">Little-Endian vs Big-Endian</span>
+        <p>When a multi-byte value (like a 4-byte int) is stored in memory, the bytes can be arranged in two ways:<br>
+        <strong>Little-Endian (LE):</strong> Least significant byte (LSB) stored at the lowest memory address. Used by x86, x86-64 (Intel, AMD) — the vast majority of modern computers.<br>
+        <strong>Big-Endian (BE):</strong> Most significant byte (MSB) at the lowest address. Used by network protocols (IP, TCP header byte order), SPARC, some ARM modes.<br>
+        The byte ORDER changes; the bit order within each byte does not.</p>
+      </div>
+
+      <div class="eg">
+        <p><strong>How is 0x12345678 stored at address 0x1000?</strong></p>
+        <div class="cb">Value: 0x12345678  (32-bit integer)
+Bytes: 0x12, 0x34, 0x56, 0x78
+
+Memory address:  0x1000  0x1001  0x1002  0x1003
+                 ──────  ──────  ──────  ──────
+Little-Endian:    0x78    0x56    0x34    0x12   (LSB first)
+Big-Endian:       0x12    0x34    0x56    0x78   (MSB first)
+
+Mnemonic: Little-Endian puts the LITTLE end (least significant) first.</div>
+      </div>
+
+      <div class="op">
+        <p><strong>Classic GATE output prediction — endianness via char* cast:</strong></p>
+        <div class="cb"><span class="kw">int</span> x = <span class="num">0x01000000</span>;
+<span class="kw">char</span> *p = (<span class="kw">char</span>*)&amp;x;
+printf(<span class="str">"%d\n"</span>, *p);  <span class="cm">// print FIRST byte at lowest address</span></div>
+        <div class="op-ans">On Little-Endian (x86): first byte = 0x00 = 0. On Big-Endian: first byte = 0x01 = 1.<br>
+        GATE assumes Little-Endian unless specified. Answer: 0</div>
+      </div>
+
+      <div class="op">
+        <p><strong>Check endianness at runtime:</strong></p>
+        <div class="cb"><span class="kw">int</span> check_endian() {
+    <span class="kw">int</span> x = <span class="num">1</span>;
+    <span class="kw">return</span> *(<span class="kw">char</span>*)&amp;x;  <span class="cm">// returns 1 on LE (LSB=1 is first), 0 on BE</span>
+}
+<span class="cm">// If first byte of integer 1 is 1 → little-endian</span>
+<span class="cm">// If first byte of integer 1 is 0 → big-endian (the 1 is in the last byte)</span></div>
+        <div class="op-ans">On Little-Endian: returns 1. On Big-Endian: returns 0.</div>
+      </div>
+
+      <div class="trick">
+        <p><strong>Network byte order = Big-Endian:</strong> Network protocols store multi-byte integers in Big-Endian order (MSB first), regardless of the host system. POSIX provides <code>htons()</code> (host to network short), <code>htonl()</code>, <code>ntohs()</code>, <code>ntohl()</code> to convert between host and network byte order. If you see these functions in GATE code, they're handling endianness conversion.</p>
+      </div>
+    </div>
+
+    <div class="sec" data-m="file-io">
+      <h2 class="sh">8.3 &nbsp; File I/O <span class="tag tg">GATE Tested</span></h2>
+
+      <div class="cb"><span class="kw">FILE</span> *f = fopen(<span class="str">"data.txt"</span>, <span class="str">"r"</span>); <span class="cm">// open for reading</span>
+<span class="kw">if</span> (f == NULL) { perror(<span class="str">"fopen"</span>); exit(<span class="num">1</span>); }
+
+<span class="kw">int</span> x; fscanf(f, <span class="str">"%d"</span>, &amp;x);       <span class="cm">// read integer</span>
+<span class="kw">char</span> line[<span class="num">256</span>]; fgets(line, <span class="num">256</span>, f); <span class="cm">// read a line</span>
+fclose(f);
+
+<span class="cm">// File modes: "r"=read, "w"=write(truncate), "a"=append</span>
+<span class="cm">//            "rb"=binary read, "wb"=binary write</span>
+
+<span class="cm">// feof, fseek, ftell for navigation</span>
+fseek(f, <span class="num">0</span>, SEEK_END);  <span class="cm">// go to end</span>
+<span class="kw">long</span> size = ftell(f);   <span class="cm">// get position = file size</span>
+fseek(f, <span class="num">0</span>, SEEK_SET);  <span class="cm">// go back to start</span></div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 9 — SCOPE, STORAGE & PREPROCESSOR ═══════ -->
+<div class="chapter" id="ch9">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 09</div>
+    <div class="ch-title">Scope, Storage Classes <em>&amp; Preprocessor</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="scope-storage">
+      <h2 class="sh">9.1 &nbsp; Storage Classes &amp; Scope <span class="tag tg">GATE Critical</span></h2>
+
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Storage Class</th><th>Scope</th><th>Lifetime</th><th>Default Value</th><th>Storage</th></tr></thead>
+          <tbody>
+            <tr><td><code>auto</code></td><td>Block (local)</td><td>Function call duration</td><td class="bad">Garbage</td><td>Stack</td></tr>
+            <tr><td><code>register</code></td><td>Block (local)</td><td>Function call duration</td><td class="bad">Garbage</td><td>CPU register (hint only)</td></tr>
+            <tr><td><code>static</code> (local)</td><td>Block (local)</td><td class="good">Entire program</td><td class="good">0</td><td>Data segment</td></tr>
+            <tr><td><code>static</code> (global)</td><td>File only (not extern)</td><td class="good">Entire program</td><td class="good">0</td><td>Data segment</td></tr>
+            <tr><td><code>extern</code></td><td>Multiple files</td><td class="good">Entire program</td><td class="good">0</td><td>Data segment</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="op">
+        <div class="cb"><span class="kw">void</span> counter() {
+    <span class="kw">static int</span> count = <span class="num">0</span>; <span class="cm">// initialized ONCE, persists across calls</span>
+    count++;
+    printf(<span class="str">"%d\n"</span>, count);
+}
+<span class="kw">int</span> main() {
+    counter(); counter(); counter();
+}</div>
+        <div class="op-ans">Output: 1 / 2 / 3 (static local variable retains its value between calls)</div>
+      </div>
+
+      <h3 class="ssh">Preprocessor Directives</h3>
+      <div class="cb"><span class="cm">// #define — textual substitution (NOT a variable, NOT typed)</span>
+#define PI 3.14159
+#define MAX(a,b) ((a) > (b) ? (a) : (b))  <span class="cm">// macro</span>
+<span class="cm">// Always parenthesize macro args to avoid precedence bugs:</span>
+<span class="cm">// MAX(x+1, y) → ((x+1) > (y) ? (x+1) : (y))  ← correct</span>
+<span class="cm">// Without parens: x+1 > y ? x+1 : y  ← operator precedence issue</span>
+
+<span class="cm">// Conditional compilation</span>
+#ifdef DEBUG
+    printf(<span class="str">"debug mode\n"</span>);
+#endif
+
+<span class="cm">// Include guards (prevent double inclusion)</span>
+#ifndef MYHEADER_H
+#define MYHEADER_H
+<span class="cm">// header content</span>
+#endif</div>
+
+      <div class="warn-box">
+        <span class="lbl">Macro Side Effects — Classic GATE Trap</span>
+        <p><code>#define SQUARE(x) (x)*(x)</code>. What is <code>SQUARE(++a)</code>? Expands to <code>(++a)*(++a)</code> — increments a TWICE. This is undefined behaviour and a classic exam trap. Always use inline functions or typed constants instead of macros for computations involving variables that may have side effects.</p>
+      </div>
+
+      <h3 class="ssh">Token Pasting (##) and Stringification (#) — Preprocessor Black Magic</h3>
+      <div class="def-box">
+        <span class="lbl"># — Stringification Operator</span>
+        <p>The <code>#</code> operator before a macro parameter turns the parameter into a string literal at compile time. It converts the token as-is, before any other expansion. Used for debugging macros that print both the expression and its value.</p>
+      </div>
+      <div class="op">
+        <div class="cb">#define STRINGIFY(x) #x
+#define PRINT_VAR(x) printf(#x " = %d\n", x)
+
+printf(<span class="str">"%s\n"</span>, STRINGIFY(<span class="num">42</span>));     <span class="cm">// expands to printf("%s\n", "42")</span>
+printf(<span class="str">"%s\n"</span>, STRINGIFY(hello));  <span class="cm">// expands to printf("%s\n", "hello")</span>
+<span class="kw">int</span> count = <span class="num">5</span>;
+PRINT_VAR(count);  <span class="cm">// expands to printf("count" " = %d\n", count)</span></div>
+        <div class="op-ans">Output: 42 / hello / count = 5</div>
+      </div>
+
+      <div class="def-box">
+        <span class="lbl">## — Token Pasting Operator</span>
+        <p>The <code>##</code> operator concatenates two tokens into a single new token during preprocessing. Used to generate variable names, function names, or struct field names programmatically. The result must be a valid C token.</p>
+      </div>
+      <div class="op">
+        <div class="cb">#define CONCAT(a, b) a##b
+#define MAKE_VAR(n) var##n
+
+<span class="kw">int</span> CONCAT(x, <span class="num">10</span>) = <span class="num">42</span>;   <span class="cm">// becomes: int x10 = 42;</span>
+<span class="kw">int</span> MAKE_VAR(<span class="num">1</span>) = <span class="num">100</span>;    <span class="cm">// becomes: int var1 = 100;</span>
+<span class="kw">int</span> MAKE_VAR(<span class="num">2</span>) = <span class="num">200</span>;    <span class="cm">// becomes: int var2 = 200;</span>
+
+printf(<span class="str">"%d %d\n"</span>, var1, var2);
+
+<span class="cm">// Practical use: generating struct field accessors</span>
+#define GET(type, field) type##_get_##field
+<span class="cm">// GET(student, name) → student_get_name (as a function name)</span></div>
+        <div class="op-ans">Output: 100 200</div>
+      </div>
+
+      <div class="trick">
+        <p><strong>GATE output prediction with ##:</strong> The key insight is that ## happens BEFORE the rest of compilation. <code>CONCAT(var, __LINE__)</code> creates a variable name like <code>var42</code> (where 42 is the line number). In output questions involving ##, first do all textual substitutions, THEN read the resulting C code as normal. Never try to evaluate ## and C semantics simultaneously.</p>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 10 — CODE REFERENCE ═══════ -->
+<div class="chapter" id="ch10">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 10</div>
+    <div class="ch-title">Code Reference — <em>Pattern Library</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="patterns">
+      <h2 class="sh">10.1 &nbsp; Essential Patterns Every C Programmer Must Know <span class="tag tb">Code Heavy</span></h2>
+      <p>These are the building blocks. Once you internalize these patterns, you'll write and read C fluently. Each one has a specific context where it is the correct idiomatic solution.</p>
+
+      <h3 class="ssh">Pattern 1 — Swap Two Variables</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="cm">// Method 1: Temporary variable (safest, most readable)</span>
+<span class="kw">int</span> t = a; a = b; b = t;
+
+<span class="cm">// Method 2: XOR swap (no extra variable — avoid in production)</span>
+a ^= b; b ^= a; a ^= b;
+<span class="cm">// Warning: fails if a and b are the SAME variable!</span>
+
+<span class="cm">// Method 3: Arithmetic (can overflow)</span>
+a = a + b; b = a - b; a = a - b;</div>
+      </div>
+
+      <h3 class="ssh">Pattern 2 — Reverse an Array</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">void</span> reverse(<span class="kw">int</span> a[], <span class="kw">int</span> n) {
+    <span class="kw">int</span> lo = <span class="num">0</span>, hi = n - <span class="num">1</span>;
+    <span class="kw">while</span> (lo &lt; hi) {
+        <span class="kw">int</span> t = a[lo]; a[lo] = a[hi]; a[hi] = t;
+        lo++; hi--;
+    }
+}  <span class="cm">// Time: O(n), Space: O(1)</span></div>
+      </div>
+
+      <h3 class="ssh">Pattern 3 — Binary Search</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">int</span> bsearch(<span class="kw">int</span> a[], <span class="kw">int</span> n, <span class="kw">int</span> key) {
+    <span class="kw">int</span> lo = <span class="num">0</span>, hi = n - <span class="num">1</span>;
+    <span class="kw">while</span> (lo &lt;= hi) {
+        <span class="kw">int</span> mid = lo + (hi - lo) / <span class="num">2</span>; <span class="cm">// Avoid overflow: NOT (lo+hi)/2</span>
+        <span class="kw">if</span> (a[mid] == key) <span class="kw">return</span> mid;
+        <span class="kw">else if</span> (a[mid] &lt; key) lo = mid + <span class="num">1</span>;
+        <span class="kw">else</span> hi = mid - <span class="num">1</span>;
+    }
+    <span class="kw">return</span> -<span class="num">1</span>; <span class="cm">// not found</span>
+}  <span class="cm">// Time: O(log n)</span></div>
+      </div>
+
+      <h3 class="ssh">Pattern 4 — Linked List Operations</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">typedef struct</span> Node {
+    <span class="kw">int</span> data;
+    <span class="kw">struct</span> Node *next;
+} Node;
+
+<span class="cm">// Insert at head</span>
+Node* insert_head(Node *head, <span class="kw">int</span> val) {
+    Node *n = (<span class="kw">Node</span>*) malloc(<span class="kw">sizeof</span>(Node));
+    n-&gt;data = val; n-&gt;next = head;
+    <span class="kw">return</span> n;
+}
+
+<span class="cm">// Traverse and print</span>
+<span class="kw">void</span> print_list(Node *head) {
+    <span class="kw">while</span> (head) {
+        printf(<span class="str">"%d "</span>, head-&gt;data);
+        head = head-&gt;next;
+    }
+}
+
+<span class="cm">// Reverse a linked list (iterative)</span>
+Node* reverse(Node *head) {
+    Node *prev = NULL, *curr = head, *next;
+    <span class="kw">while</span> (curr) {
+        next = curr-&gt;next;
+        curr-&gt;next = prev;
+        prev = curr; curr = next;
+    }
+    <span class="kw">return</span> prev;
+}</div>
+      </div>
+
+      <h3 class="ssh">Pattern 5 — Stack Using Array</h3>
+      <div class="code-ref">
+        <div class="cb">#define MAXN 100
+<span class="kw">int</span> stack[MAXN], top = -<span class="num">1</span>;
+
+<span class="kw">void</span> push(<span class="kw">int</span> x) { stack[++top] = x; }
+<span class="kw">int</span>  pop()        { <span class="kw">return</span> stack[top--]; }
+<span class="kw">int</span>  peek()       { <span class="kw">return</span> stack[top]; }
+<span class="kw">int</span>  empty()      { <span class="kw">return</span> top == -<span class="num">1</span>; }</div>
+      </div>
+
+      <h3 class="ssh">Pattern 6 — GCD and LCM</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">int</span> gcd(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> b == <span class="num">0</span> ? a : gcd(b, a % b);
+}
+<span class="kw">int</span> lcm(<span class="kw">int</span> a, <span class="kw">int</span> b) {
+    <span class="kw">return</span> a / gcd(a, b) * b; <span class="cm">// divide first to avoid overflow</span>
+}</div>
+      </div>
+
+      <h3 class="ssh">Pattern 7 — Prime Sieve (Sieve of Eratosthenes)</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">void</span> sieve(<span class="kw">int</span> n) {
+    <span class="kw">int</span> is_prime[n+<span class="num">1</span>];
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt;= n; i++) is_prime[i] = <span class="num">1</span>;
+    is_prime[<span class="num">0</span>] = is_prime[<span class="num">1</span>] = <span class="num">0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i * i &lt;= n; i++) {
+        <span class="kw">if</span> (is_prime[i])
+            <span class="kw">for</span> (<span class="kw">int</span> j = i*i; j &lt;= n; j += i)
+                is_prime[j] = <span class="num">0</span>;
+    }
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i &lt;= n; i++)
+        <span class="kw">if</span> (is_prime[i]) printf(<span class="str">"%d "</span>, i);
+}  <span class="cm">// Time: O(n log log n), Space: O(n)</span></div>
+      </div>
+
+      <h3 class="ssh">Pattern 8 — Sorting (Bubble, Selection, Insertion)</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="cm">// Bubble Sort — O(n²) worst/avg, O(n) best (already sorted)</span>
+<span class="kw">void</span> bubble(<span class="kw">int</span> a[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n-<span class="num">1</span>; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n-i-<span class="num">1</span>; j++)
+            <span class="kw">if</span> (a[j] &gt; a[j+<span class="num">1</span>]) { <span class="kw">int</span> t=a[j]; a[j]=a[j+<span class="num">1</span>]; a[j+<span class="num">1</span>]=t; }
+}
+
+<span class="cm">// Insertion Sort — O(n²) worst, stable, good for small/nearly-sorted</span>
+<span class="kw">void</span> insertion(<span class="kw">int</span> a[], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">1</span>; i &lt; n; i++) {
+        <span class="kw">int</span> key = a[i], j = i - <span class="num">1</span>;
+        <span class="kw">while</span> (j &gt;= <span class="num">0</span> &amp;&amp; a[j] &gt; key) { a[j+<span class="num">1</span>] = a[j]; j--; }
+        a[j+<span class="num">1</span>] = key;
+    }
+}</div>
+      </div>
+
+      <h3 class="ssh">Pattern 9 — Fibonacci (Iterative vs Recursive)</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="cm">// Recursive — O(2ⁿ) time (exponential!)</span>
+<span class="kw">int</span> fib_rec(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    <span class="kw">return</span> fib_rec(n-<span class="num">1</span>) + fib_rec(n-<span class="num">2</span>);
+}
+
+<span class="cm">// Iterative — O(n) time, O(1) space</span>
+<span class="kw">int</span> fib(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n &lt;= <span class="num">1</span>) <span class="kw">return</span> n;
+    <span class="kw">int</span> a = <span class="num">0</span>, b = <span class="num">1</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i &lt;= n; i++) {
+        <span class="kw">int</span> c = a + b; a = b; b = c;
+    }
+    <span class="kw">return</span> b;
+}</div>
+      </div>
+
+      <h3 class="ssh">Pattern 10 — Matrix Multiplication</h3>
+      <div class="code-ref">
+        <div class="cb"><span class="kw">void</span> matmul(<span class="kw">int</span> A[][N], <span class="kw">int</span> B[][N], <span class="kw">int</span> C[][N], <span class="kw">int</span> n) {
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; n; i++)
+        <span class="kw">for</span> (<span class="kw">int</span> j = <span class="num">0</span>; j &lt; n; j++) {
+            C[i][j] = <span class="num">0</span>;
+            <span class="kw">for</span> (<span class="kw">int</span> k = <span class="num">0</span>; k &lt; n; k++)
+                C[i][j] += A[i][k] * B[k][j];
+        }
+}  <span class="cm">// Time: O(n³)</span></div>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+
+<!-- ═══════ CH 11 — GATE TRAPS ═══════ -->
+<div class="chapter" id="ch11">
+  <div class="ch-head">
+    <div class="ch-ey">Chapter 11</div>
+    <div class="ch-title">GATE Traps <em>&amp; Output Predictions</em></div>
+  </div>
+  <div class="ch-body">
+
+    <div class="sec" data-m="output-predictions">
+      <h2 class="sh">11.1 &nbsp; Output Prediction — 15 Classic GATE Patterns</h2>
+
+      <div class="op">
+        <p><strong>P1 — Comma operator:</strong></p>
+        <div class="cb"><span class="kw">int</span> a = (<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>);   <span class="cm">// comma evaluates left to right, returns last</span>
+printf(<span class="str">"%d\n"</span>, a);</div>
+        <div class="op-ans">Output: 3</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P2 — Pointer to array vs array of pointers:</strong></p>
+        <div class="cb"><span class="kw">int</span> a[<span class="num">5</span>] = {<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>,<span class="num">4</span>,<span class="num">5</span>};
+<span class="kw">int</span> *p = a;
+printf(<span class="str">"%d %d\n"</span>, *p, *(p+<span class="num">2</span>));
+p += <span class="num">3</span>;
+printf(<span class="str">"%d\n"</span>, *p);</div>
+        <div class="op-ans">Output: 1 3 / 4</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P3 — sizeof array vs pointer:</strong></p>
+        <div class="cb"><span class="kw">int</span> a[<span class="num">10</span>];
+<span class="kw">int</span> *p = a;
+printf(<span class="str">"%lu %lu\n"</span>, <span class="kw">sizeof</span>(a), <span class="kw">sizeof</span>(p));</div>
+        <div class="op-ans">Output: 40 8 (sizeof array = 10×4=40; sizeof pointer = 8 on 64-bit)</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P4 — Integer division and modulo with negatives:</strong></p>
+        <div class="cb">printf(<span class="str">"%d %d\n"</span>, -<span class="num">7</span> / <span class="num">2</span>, -<span class="num">7</span> % <span class="num">2</span>);</div>
+        <div class="op-ans">Output: -3 -1 (C truncates toward zero: -7/2 = -3.5 → -3; remainder = -7 - (-3×2) = -7+6 = -1)</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P5 — String literal vs char array:</strong></p>
+        <div class="cb"><span class="kw">char</span> *s = <span class="str">"hello"</span>;   <span class="cm">// pointer to string literal (read-only!)</span>
+<span class="kw">char</span> t[] = <span class="str">"hello"</span>;  <span class="cm">// writable array copy</span>
+<span class="cm">// s[0] = 'H';  ← UNDEFINED BEHAVIOUR (may segfault)</span>
+t[0] = 'H';           <span class="cm">// OK</span>
+printf(<span class="str">"%s %s\n"</span>, s, t);</div>
+        <div class="op-ans">Output: hello Hello</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P6 — Recursive call with printf order:</strong></p>
+        <div class="cb"><span class="kw">int</span> fun(<span class="kw">int</span> n) {
+    <span class="kw">if</span> (n == <span class="num">4</span>) <span class="kw">return</span> n;
+    <span class="kw">return</span> <span class="num">2</span> * fun(n + <span class="num">1</span>);
+}
+printf(<span class="str">"%d\n"</span>, fun(<span class="num">1</span>));</div>
+        <div class="op-ans">Trace: fun(1)=2×fun(2)=2×2×fun(3)=2×2×2×fun(4)=2×2×2×4=32. Output: 32</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P7 — Global vs local variable shadowing:</strong></p>
+        <div class="cb"><span class="kw">int</span> x = <span class="num">10</span>;   <span class="cm">// global</span>
+<span class="kw">void</span> f() {
+    <span class="kw">int</span> x = <span class="num">20</span>; <span class="cm">// local shadows global</span>
+    printf(<span class="str">"%d\n"</span>, x);
+}
+<span class="kw">int</span> main() { f(); printf(<span class="str">"%d\n"</span>, x); }</div>
+        <div class="op-ans">Output: 20 / 10</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P8 — scanf return value:</strong></p>
+        <div class="cb"><span class="kw">int</span> a, b;
+<span class="kw">int</span> r = scanf(<span class="str">"%d %d"</span>, &amp;a, &amp;b);
+<span class="cm">// r = number of successfully matched items</span>
+<span class="cm">// r = 2 if both matched, 1 if only first, 0 if none, EOF if end</span></div>
+        <div class="op-ans">Concept: scanf returns count of successfully read items.</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P9 — Unary minus and increment:</strong></p>
+        <div class="cb"><span class="kw">int</span> a = <span class="num">5</span>;
+printf(<span class="str">"%d\n"</span>, -a++); <span class="cm">// postfix ++ binds tighter than unary -</span>
+printf(<span class="str">"%d\n"</span>, a);</div>
+        <div class="op-ans">Output: -5 / 6 (a++ returns 5, then negated to -5; then a becomes 6)</div>
+      </div>
+
+      <div class="op">
+        <p><strong>P10 — Array passed to function decays:</strong></p>
+        <div class="cb"><span class="kw">void</span> f(<span class="kw">int</span> a[]) {
+    printf(<span class="str">"%lu\n"</span>, <span class="kw">sizeof</span>(a)); <span class="cm">// a is a pointer here!</span>
+}
+<span class="kw">int</span> a[<span class="num">10</span>];
+printf(<span class="str">"%lu\n"</span>, <span class="kw">sizeof</span>(a));  <span class="cm">// 40</span>
+f(a);</div>
+        <div class="op-ans">Output: 40 / 8 (inside f, 'a' is a pointer, sizeof = 8, NOT 40)</div>
+      </div>
+    </div>
+
+    <div class="sec" data-m="c-traps">
+      <h2 class="sh">11.2 &nbsp; All the Traps in One Place</h2>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>#</th><th>Trap</th><th>Correct Understanding</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>= vs == in if condition</td><td><code>if (x = 5)</code> assigns 5 to x and always evaluates to true (5 is nonzero). <code>if (x == 5)</code> compares. This is a legal but almost always wrong statement — compilers warn but it compiles. Write <code>if (5 == x)</code> as a defensive habit (Yoda condition).</td></tr>
+            <tr><td>2</td><td>Array index out of bounds</td><td>C never checks array bounds. <code>a[10]</code> on a 10-element array accesses memory beyond the array — undefined behaviour. It may silently produce wrong output, corrupt memory, or crash. GATE won't ask you to reason about out-of-bounds output.</td></tr>
+            <tr><td>3</td><td>Returning local variable address</td><td>Returning a pointer to a local variable is UB — the local's stack frame is destroyed on return, so the returned pointer is dangling. The output is unpredictable. GATE tests: "What does this print?" when returning &amp;local_var → UB (cannot determine output).</td></tr>
+            <tr><td>4</td><td>sizeof is an operator, not a function</td><td>sizeof evaluates at compile time (mostly). sizeof(a++) does NOT evaluate a++ — no side effect. <code>int a=5; int s=sizeof(a++); printf("%d",a);</code> → prints 5, not 6.</td></tr>
+            <tr><td>5</td><td>char signedness</td><td><code>char</code> may be signed or unsigned depending on implementation. <code>signed char</code>: range −128 to 127. <code>unsigned char</code>: 0 to 255. GATE assumes typical implementation (signed char) unless stated otherwise.</td></tr>
+            <tr><td>6</td><td>Precedence of * in declarations</td><td><code>int *a, b</code> declares a as int* and b as int (NOT both int*). To declare two pointers: <code>int *a, *b</code>. The * binds to the name, not the type.</td></tr>
+            <tr><td>7</td><td>printf with %d for float</td><td><code>printf("%d\n", 3.14)</code> is UB — %d expects int, 3.14 is double. The output is garbage. GATE questions always use correct format specifiers — if they don't, the answer is UB.</td></tr>
+            <tr><td>8</td><td>Macro expansion doubles side effects</td><td><code>#define SQ(x) (x)*(x)</code>. <code>SQ(a++)</code> expands to <code>(a++)*(a++)</code> — a incremented twice, result undefined. Always use inline functions for computations.</td></tr>
+            <tr><td>9</td><td>Short circuit skips evaluation</td><td><code>if (x != 0 &amp;&amp; 1/x > 0)</code> — if x=0, the 1/x is never evaluated (no division by zero). GATE exploits this: "What is the value of y after: <code>if (0 &amp;&amp; (y=5)) {}</code>"? y is unchanged because right side never evaluates.</td></tr>
+            <tr><td>10</td><td>Null pointer dereference</td><td>Dereferencing NULL (<code>*p</code> when p=NULL) is undefined behaviour — typically a segmentation fault. malloc returns NULL on failure. Always check before dereferencing.</td></tr>
+            <tr><td>11</td><td>String comparison with ==</td><td><code>if (s1 == s2)</code> compares ADDRESSES of the strings (pointer comparison), not their content. Use <code>strcmp(s1, s2) == 0</code> to compare content.</td></tr>
+            <tr><td>12</td><td>Implicit int return from main</td><td>In C99+, <code>main</code> implicitly returns 0 if no return statement is present. In older standards, the return value is unspecified. GATE assumes C99: missing return in main = return 0.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <a class="bt" href="#top">↑ back to top</a>
+</div>
+
+<div class="footer">
+  C Programming · From Zero to GATE · GATE CSE Notes
+</div>
+
+</div>
+</body>
+</html>

@@ -1,215 +1,150 @@
 // ExamForge — Unified TypeScript Interfaces
-// Strictly aligned with backend Pydantic models in app/models/*.py
+// Strictly aligned with new Dual-Database Schema (SQLite + Supabase)
 
-// ── User & Profile Models ──────────────────────────────────────────────
+// ── User & Profile Models (Supabase) ──────────────────────────────────────
 
 export interface UserProfile {
-  id: string;
-  firebase_uid: string;
+  id: string;         // Firebase UID
   email: string;
   name: string;
-  avatar_url: string | null;
   role: "free" | "pro" | "admin";
-  college: string | null;
-  gate_year: number | null;
-  target_score: number | null;
-  created_at: string | null;
-
-  // Computed stats
-  total_points: number;
-  chapters_completed: number;
-  quizzes_taken: number;
-  current_streak: number;
-  study_hours: number;
+  bio: string;
+  avatar_url: string | null;
+  streak_days: number;
+  total_score: number;
+  last_active_at: string;
+  created_at: string;
 }
 
 export interface SessionResponse {
+  uid: string;
+  email: string;
   profile_id: string;
   role: string;
   name: string;
-  email: string;
-  is_new_user: boolean;
 }
 
-export interface ProfileUpdateRequest {
-  name?: string;
-  college?: string;
-  gate_year?: number;
-  target_score?: number;
-}
+// ── Content Models (SQLite) ──────────────────────────────────────────────
 
-export interface AvatarUploadResponse {
-  avatar_url: string;
-  ok: boolean;
-}
-
-// ── Subject & Chapter Models (Notes) ───────────────────────────────────
-
-export interface SubjectResponse {
+export interface Subject {
   id: string;
-  slug: string;
   name: string;
-  category: string;
+  slug: string;
+  category: "GATE" | "SKILL";
   icon: string;
-  is_published: boolean;
+  description: string;
   order_index: number;
-  chapter_count: number;
-  completed_chapters: number;
-  progress_pct: number;
 }
 
-export interface ChapterResponse {
+export interface Chapter {
   id: string;
   subject_id: string;
   slug: string;
   title: string;
   order_index: number;
-  is_published: boolean;
   has_notes: boolean;
-  user_status: "not_started" | "in_progress" | "done";
-  time_spent_s: number;
+  notes_file: string | null;
+  has_questions: boolean;
+  
+  // Progress (merged at runtime in frontend or backend)
+  progress_pct?: number;
+  completed?: boolean;
 }
 
-export interface NoteUrlResponse {
-  signed_url: string;
-  chapter_id: string;
-  cached: boolean;
-}
+// ── Practice Models (SQLite / Supabase) ───────────────────────────────
 
-export interface NoteProgressRequest {
-  chapter_id: string;
-  status: "not_started" | "in_progress" | "done";
-  time_spent_s: number;
-}
-
-export interface NoteProgressResponse {
-  ok: boolean;
-}
-
-// ── Practice (Quiz & Flashcard) Models ───────────────────────────────
-
-export interface QuizOption {
-  key: string;
-  text: string;
-}
-
-export interface QuizQuestion {
+export interface Question {
   id: string;
-  type: "MCQ" | "NAT" | "MSQ";
-  marks: number;
+  subject_id: string;
+  chapter_id?: string;
   stem: string;
-  options: QuizOption[];
-  subject: string;
-  chapter?: string;
-  category?: string; // New field
+  type: "MCQ" | "MSQ" | "NAT";
+  option_a?: string;
+  option_b?: string;
+  option_c?: string;
+  option_d?: string;
+  correct_option?: string;    // 'A','B','C','D'
+  correct_options?: string;   // JSON array string '["A","C"]'
+  nat_answer_min?: number;
+  nat_answer_max?: number;
+  explanation: string;
   difficulty: "easy" | "medium" | "hard";
-  is_pyq: boolean;
   gate_year?: number;
+  marks: number;
+  is_pyq: boolean;
 }
 
-export interface QuizSessionResponse {
-  session_id: string;
-  questions: QuizQuestion[];
-  server_deadline?: string;
-  question_count: number;
-}
-
-export interface QuestionResult {
-  question_id: string;
-  user_answer: string | null;
-  correct_answer: string;
-  is_correct: boolean;
-  marks_awarded: number;
-  explanation?: string;
-}
-
-export interface SubjectAnalysis {
-  subject: string;
-  total_questions: number;
-  correct: number;
-  incorrect: number;
-  unanswered: number;
-  marks_obtained: number;
-  marks_possible: number;
-  accuracy_pct: number;
-}
-
-export interface QuizSubmitResponse {
-  session_id: string;
-  total_marks: number;
-  marks_obtained: number;
-  total_questions: number;
-  correct: number;
-  incorrect: number;
-  unanswered: number;
-  accuracy_pct: number;
-  negative_marks: number;
-  time_taken_s?: number;
-  question_results: QuestionResult[];
-  subject_analysis: SubjectAnalysis[];
-}
-
-export interface FlashcardResponse {
+export interface QuizSession {
   id: string;
-  question_id: string;
+  user_id: string;
+  subject_id: string;
+  chapter_id?: string;
+  mode: string;
+  score: number;
+  correct_count: number;
+  total_questions: number;
+  time_taken_s: number;
+  started_at: string;
+  completed_at?: string;
+}
+
+export interface Flashcard {
+  id: string;
+  subject_id: string;
+  chapter_id?: string;
   front: string;
   back: string;
-  subject: string;
-  chapter?: string;
-  ease_factor: number;
-  interval: number;
-  next_review: string;
-  review_count: number;
+  tags: string[]; // Decoded from JSON
 }
 
-export interface FlashcardDueResponse {
-  due_count: number;
-  flashcards: FlashcardResponse[];
-}
-
-export interface FlashcardReviewResponse {
-  ok: boolean;
-  next_review: string;
-  new_interval: number;
-  new_ease_factor: number;
-}
-
-// ── Shared Types ───────────────────────────────────────────────────────
-
-export interface LeaderboardEntry {
-  rank: number;
-  user_id: string;
-  name: string;
-  avatar_url: string | null;
-  college: string | null;
-  total_points: number;
-  weekly_points: number;
-  is_current_user: boolean;
-}
-
-export interface LeaderboardResponse {
-  scope: string;
-  entries: LeaderboardEntry[];
-  total_entries: number;
-  current_user_rank: number | null;
-  page: number;
-  limit: number;
-}
-
-export interface DoubtCreateRequest {
-  chapter_id: string;
-  subject_name: string;
-  selected_text: string;
-  question: string;
-}
-
-export interface BookmarkResponse {
+export interface FlashcardReview {
   id: string;
-  chapter_id: string;
-  chapter_title: string;
+  user_id: string;
+  flashcard_id: string;
+  ease_factor: number;
+  interval_days: number;
+  repetitions: number;
+  next_review_at: string;
+  last_rated?: number;
+}
+
+// ── User State Models (Supabase) ───────────────────────────────────────
+
+export interface UserProgress {
+  chapter_slug: string;
+  subject_id: string;
+  completed: boolean;
+  progress_pct: number;
+  time_spent_s: number;
+  last_read_at: string;
+}
+
+export interface Bookmark {
+  chapter_slug: string;
+  subject_id: string;
   created_at: string;
 }
 
+export interface DoubtHistory {
+  id: string;
+  chapter_slug: string;
+  subject_id: string;
+  question: string;
+  answer: string;
+  selected_text: string;
+  created_at: string;
+}
+
+export interface LeaderboardEntry {
+  user_id: string;
+  total_points: number;
+  weekly_points: number;
+  name?: string;       // Joined from profiles
+  avatar_url?: string; // Joined from profiles
+  rank?: number;
+}
+
+// ── UI Types ───────────────────────────────────────────────────────────
 
 export type ToastType = "success" | "error" | "warning" | "info";
 
