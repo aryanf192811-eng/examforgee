@@ -3,31 +3,8 @@
 /* ── Tailwind v4: Class-based dark mode ── */
 @custom-variant dark (&:where(.dark, .dark *));
 
-<<<<<<< HEAD
-/* ── Theme: Font Families ── */
-@theme {
-  --font-display: "Fraunces", serif;
-  --font-headline: "Newsreader", serif;
-  --font-body: "Inter", sans-serif;
-  --font-label: "Inter", sans-serif;
-  --font-notes: "Lora", serif;
-  --font-mono: "Fira Code", monospace;
-  --font-serif: "Fraunces", serif;
-  --font-manuscript: "Lora", serif;
-}
-
-/* ── Theme: Border Radius (overrides) ── */
-@theme {
-  --radius: 0.125rem;
-  --radius-lg: 0.25rem;
-  --radius-xl: 0.5rem;
-  --radius-full: 0.75rem;
-}
-
-/* ── Theme: Colors (reference CSS variables for dynamic theming) ── */
-=======
 /* ══════════════════════════════════════════════════════════════
-   THEME TOKENS — Font Families (Tailwind v4 @theme directive)
+   THEME TOKENS — Font Families
    ══════════════════════════════════════════════════════════════ */
 @theme {
   --font-display: "Fraunces", Georgia, serif;
@@ -99,9 +76,8 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   THEME TOKENS — Colors (reference CSS variables for dynamic theming)
+   THEME TOKENS — Colors Mapping
    ══════════════════════════════════════════════════════════════ */
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
 @theme inline {
   /* Surfaces */
   --color-surface-dim: var(--color-surface-dim);
@@ -114,10 +90,7 @@
   --color-surface-container-highest: var(--color-surface-container-highest);
   --color-surface-variant: var(--color-surface-variant);
   --color-background: var(--color-background);
-<<<<<<< HEAD
-=======
 
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   /* Primary */
   --color-primary: var(--color-primary);
   --color-primary-dim: var(--color-primary-dim);
@@ -127,10 +100,7 @@
   --color-on-primary: var(--color-on-primary);
   --color-on-primary-container: var(--color-on-primary-container);
   --color-inverse-primary: var(--color-inverse-primary);
-<<<<<<< HEAD
-=======
 
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   /* Secondary */
   --color-secondary: var(--color-secondary);
   --color-secondary-dim: var(--color-secondary-dim);
@@ -139,10 +109,7 @@
   --color-secondary-container: var(--color-secondary-container);
   --color-on-secondary: var(--color-on-secondary);
   --color-on-secondary-container: var(--color-on-secondary-container);
-<<<<<<< HEAD
-=======
 
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   /* Tertiary */
   --color-tertiary: var(--color-tertiary);
   --color-tertiary-dim: var(--color-tertiary-dim);
@@ -150,44 +117,35 @@
   --color-tertiary-fixed-dim: var(--color-tertiary-fixed-dim);
   --color-tertiary-container: var(--color-tertiary-container);
   --color-on-tertiary: var(--color-on-tertiary);
-<<<<<<< HEAD
-  /* Text */
-=======
 
   /* Text / On-Surface */
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   --color-on-background: var(--color-on-background);
   --color-on-surface: var(--color-on-surface);
   --color-on-surface-variant: var(--color-on-surface-variant);
   --color-inverse-surface: var(--color-inverse-surface);
   --color-inverse-on-surface: var(--color-inverse-on-surface);
-<<<<<<< HEAD
-  /* Borders */
-  --color-outline: var(--color-outline);
-  --color-outline-variant: var(--color-outline-variant);
-  --color-surface-tint: var(--color-surface-tint);
-=======
 
   /* Borders / Outlines */
   --color-outline: var(--color-outline);
   --color-outline-variant: var(--color-outline-variant);
   --color-surface-tint: var(--color-surface-tint);
 
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   /* Error */
   --color-error: var(--color-error);
   --color-error-dim: var(--color-error-dim);
   --color-error-container: var(--color-error-container);
   --color-on-error: var(--color-on-error);
   --color-on-error-container: var(--color-on-error-container);
+
+  /* Radius overrides */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
 }
 
 /* ══════════════════════════════════════════════════════════════
-<<<<<<< HEAD
-   LIGHT THEME (Sakura Pastel) — Stitch exact tokens
-=======
-   LIGHT THEME (Sakura Pastel) — :root default
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
+   LIGHT THEME (Sakura Pastel)
    ══════════════════════════════════════════════════════════════ */
 :root {
   --color-surface-dim:               #f8f9ff;
@@ -214,25 +172,6 @@
   --color-secondary-fixed-dim:       #45d4f1;
   --color-secondary-container:       #ebfaff;
   --color-on-secondary:              #ffffff;
-<<<<<<< HEAD
-  --color-on-secondary-container:    #001f24;
-  --color-tertiary:                  #005db6;
-  --color-tertiary-dim:              #0f6df3;
-  --color-tertiary-fixed:            #d7e2ff;
-  --color-tertiary-fixed-dim:        #77a1ff;
-  --color-tertiary-container:        #d7e2ff;
-  --color-on-tertiary:               #ffffff;
-  --color-on-background:             #0a0e14;
-  --color-on-surface:                #1a1c1e;
-  --color-on-surface-variant:        #44474e;
-  --color-inverse-surface:           #2f3033;
-  --color-inverse-on-surface:        #f1f3fc;
-  --color-outline:                   #74777f;
-  --color-outline-variant:           #c4c6cf;
-  --color-surface-tint:              #6834eb;
-  --color-error:                     #ba1a1a;
-  --color-error-dim:                 #ba1a1a;
-=======
   --color-on-secondary-container:    #001f26;
   --color-tertiary:                  #9c4060;
   --color-tertiary-dim:              #e85e88;
@@ -250,67 +189,13 @@
   --color-surface-tint:              #6834eb;
   --color-error:                     #ba1a1a;
   --color-error-dim:                 #de3730;
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   --color-error-container:           #ffdad6;
   --color-on-error:                  #ffffff;
   --color-on-error-container:        #410002;
 }
 
 /* ══════════════════════════════════════════════════════════════
-<<<<<<< HEAD
-   DARK THEME (Tokyo Night) — Stitch exact tokens
-   ══════════════════════════════════════════════════════════════ */
-html.dark {
-  --color-surface-dim:               #0a0e14;
-  --color-surface:                   #0a0e14;
-  --color-surface-bright:            #262c36;
-  --color-surface-container-lowest:  #000000;
-  --color-surface-container-low:     #0f141a;
-  --color-surface-container:         #151a21;
-  --color-surface-container-high:    #1b2028;
-  --color-surface-container-highest: #20262f;
-  --color-surface-variant:           #20262f;
-  --color-background:                #0a0e14;
-  --color-primary:                   #b6a0ff;
-  --color-primary-dim:               #7e51ff;
-  --color-primary-fixed:             #a98fff;
-  --color-primary-fixed-dim:         #9c7eff;
-  --color-primary-container:         #a98fff;
-  --color-on-primary:                #340090;
-  --color-on-primary-container:      #280072;
-  --color-inverse-primary:           #6834eb;
-  --color-secondary:                 #54e0fd;
-  --color-secondary-dim:             #40d2ee;
-  --color-secondary-fixed:           #5be2ff;
-  --color-secondary-fixed-dim:       #45d4f1;
-  --color-secondary-container:       #006879;
-  --color-on-secondary:              #004d5a;
-  --color-on-secondary-container:    #ebfaff;
-  --color-tertiary:                  #6e9bff;
-  --color-tertiary-dim:              #0f6df3;
-  --color-tertiary-fixed:            #8eafff;
-  --color-tertiary-fixed-dim:        #77a1ff;
-  --color-tertiary-container:        #2778fe;
-  --color-on-tertiary:               #001d4e;
-  --color-on-background:             #f1f3fc;
-  --color-on-surface:                #f1f3fc;
-  --color-on-surface-variant:        #a8abb3;
-  --color-inverse-surface:           #f8f9ff;
-  --color-inverse-on-surface:        #51555c;
-  --color-outline:                   #72757d;
-  --color-outline-variant:           #44484f;
-  --color-surface-tint:              #b6a0ff;
-  --color-error:                     #ff6e84;
-  --color-error-dim:                 #d73357;
-  --color-error-container:           #a70138;
-  --color-on-error:                  #490013;
-  --color-on-error-container:        #ffb2b9;
-}
-
-/* ══════════════════════════════════════════════════════════════
-   CUSTOM CSS CLASSES — from Stitch design system
-=======
-   DARK THEME (Tokyo Night) — html.dark override
+   DARK THEME (Tokyo Night)
    ══════════════════════════════════════════════════════════════ */
 html.dark {
   --color-surface-dim:               #10141a;
@@ -361,7 +246,6 @@ html.dark {
 
 /* ══════════════════════════════════════════════════════════════
    CUSTOM CSS CLASSES — Academic Atelier Design System
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
    ══════════════════════════════════════════════════════════════ */
 
 /* Material Symbols rendering — REQUIRED */
@@ -379,37 +263,6 @@ html.dark {
   -webkit-font-smoothing: antialiased;
 }
 
-<<<<<<< HEAD
-/* Glass effect — navbar, overlays, floating cards */
-.glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(16px);
-}
-html.dark .glass {
-  background: rgba(10, 14, 20, 0.7);
-  backdrop-filter: blur(16px);
-}
-
-/* Glassmorphism panel — practice, quiz overlays */
-.glass-panel {
-  background: rgba(15, 20, 26, 0.7);
-  backdrop-filter: blur(12px);
-}
-
-/* Primary CTA gradient */
-.academic-gradient {
-  background: linear-gradient(135deg, #b6a0ff 0%, #7e51ff 100%);
-}
-
-/* Ambient glow for primary CTAs */
-.sakura-glow {
-  box-shadow: 0 0 40px rgba(182, 160, 255, 0.15);
-}
-
-/* Asymmetric clip — hero image container */
-.asymmetric-clip {
-  clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 95%);
-=======
 /* Glassmorphism — navbar, overlays, floating cards */
 .glass {
   backdrop-filter: blur(24px);
@@ -434,7 +287,7 @@ html.dark .glass-panel {
   background: rgba(30, 35, 48, 0.7);
 }
 
-/* Primary CTA gradient — linear-gradient(135deg, primary, primary-container) */
+/* Primary CTA gradient */
 .gradient-cta {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-container));
 }
@@ -457,7 +310,7 @@ html.dark .glow-primary {
   background: #faf7f2 !important;
   color: #1a1a1a !important;
   font-family: 'Lora', Georgia, serif !important;
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
+  position: relative;
 }
 
 /* Paper grain texture — subtle background noise */
@@ -469,23 +322,6 @@ html.dark .glow-primary {
   pointer-events: none;
 }
 
-<<<<<<< HEAD
-/* Paper grain + ivory bg — notes content area */
-.paper-grain {
-  background-color: #faf7f2;
-  color: #1a1a1a;
-  position: relative;
-}
-
-/* Progress bar gradient — Stitch "Progress Quill" */
-.progress-quill {
-  background: linear-gradient(90deg, #b6a0ff 0%, #54e0fd 100%);
-}
-
-/* Tonal shift — dashboard charts */
-.tonal-shift {
-  background: linear-gradient(135deg, rgba(15, 20, 26, 0.5) 0%, rgba(10, 14, 20, 0.5) 100%);
-=======
 /* Skeleton shimmer animation */
 @keyframes shimmer {
   0% { background-position: -200% 0; }
@@ -506,29 +342,20 @@ html.dark .glow-primary {
 /* Spring easing utility */
 .spring-transition {
   transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-<<<<<<< HEAD
-::-webkit-scrollbar-thumb { background: var(--color-outline-variant); border-radius: 2px; }
-=======
 ::-webkit-scrollbar-thumb {
   background: var(--color-outline-variant);
   border-radius: 2px;
 }
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
 
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-<<<<<<< HEAD
-  background: rgba(182, 160, 255, 0.2);
-=======
   background: var(--color-surface-variant);
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   border-radius: 10px;
 }
 
@@ -538,40 +365,22 @@ html.dark .glow-primary {
   color: var(--color-on-primary-container);
 }
 
-<<<<<<< HEAD
-/* Paper content — SACRED, NEVER CHANGES WITH THEME */
-.paper-content {
-  background: #faf7f2 !important;
-  color: #1a1a1a !important;
-  font-family: 'Lora', Georgia, serif !important;
-}
-
-/* Ghost border utility */
-.ghost-border {
-  border: 1px solid rgba(var(--color-outline-variant), 0.15);
-=======
-/* Ghost border — outline-variant at 10% opacity only */
+/* Ghost border */
 .ghost-border {
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-outline-variant) 10%, transparent);
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
 }
 
 /* Base body styles */
 body {
   margin: 0;
   padding: 0;
-<<<<<<< HEAD
-  font-family: 'Inter', sans-serif;
-=======
   font-family: 'Inter', system-ui, sans-serif;
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-background);
   color: var(--color-on-surface);
 }
 
-<<<<<<< HEAD
 /* ── Gold Note Viewer (Standard HTML Tag Restoration) ── */
 .gold-note-viewer {
   line-height: 1.8;
@@ -672,10 +481,8 @@ body {
   padding: 0;
 }
 
-=======
-/* Staggered entry utility (used with Framer Motion in components) */
+/* Staggered entry utility */
 .stagger-enter {
   opacity: 0;
   transform: translateY(20px);
 }
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d

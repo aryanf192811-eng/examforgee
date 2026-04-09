@@ -4,9 +4,7 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "cleanUrls": true,
+  "framework": "vite"
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 2a4a406161fa7f45e9412cad7c14b7e0027c1b2d
